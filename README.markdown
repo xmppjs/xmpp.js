@@ -5,7 +5,8 @@ idiomatic XMPP library for [node.js](http://nodejs.org/)
 
 ## Motivation
 
-You like strophejs? You bought a copy of
+You like [Strophe.js](http://code.stanziq.com/strophe/)? You bought a
+copy of
 [Professional XMPP Programming with JavaScript and jQuery](http://professionalxmpp.com/)?
 You even want to use the same XMPP code for the web and node.js? Then
 *you're wrong here:* go to [xmppjs](http://github.com/mwild1/xmppjs).
