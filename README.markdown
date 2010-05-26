@@ -51,6 +51,8 @@ Desires about the API? Propose them ASAP!
 
 ## TODO
 
+* Documentation
+* Tests ([what framework?](http://wiki.github.com/ry/node/modules#testing)
 * Clean up `Connection.prototype.onStanza()`
 * Support `SASL DIGEST-MD5` authentication
 * Component support (that's trivial)
