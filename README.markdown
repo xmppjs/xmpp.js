@@ -53,4 +53,3 @@ Desires about the API? Propose them ASAP!
 * Clean up `Connection.prototype.onStanza()`
 * Support `SASL DIGEST-MD5` authentication
 * Component support (that's trivial)
-* DNS SRV support

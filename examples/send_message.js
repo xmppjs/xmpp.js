@@ -9,9 +9,7 @@ if (argv.length < 6) {
 }
 
 var cl = new xmpp.Client({ jid: argv[2],
-			   password: argv[3],
-			   host: 'jabber.ccc.de',
-			   port: 5222 });
+			   password: argv[3] });
 cl.addListener('online',
 	       function() {
 		   argv.slice(5).forEach(
