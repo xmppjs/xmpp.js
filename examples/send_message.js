@@ -14,9 +14,9 @@ cl.addListener('online',
 	       function() {
 		   argv.slice(5).forEach(
 		       function(to) {
-			   cl.send(new xmpp.XML.Element('message',
-							{ to: to,
-							  type: 'chat'}).
+			   cl.send(new xmpp.Element('message',
+						    { to: to,
+						      type: 'chat'}).
 				   c('body').
 				   t(argv[4]));
 		       });
