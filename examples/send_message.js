@@ -27,6 +27,11 @@ cl.addListener('authFail',
 		   sys.puts("Authentication failure");
 		   process.exit(1);
 	       });
+cl.addListener('error',
+	       function(e) {
+		   sys.puts("e");
+		   process.exit(1);
+	       });
 cl.addListener('end',
 	       function() {
 		   /* node.js will exit by itself */
