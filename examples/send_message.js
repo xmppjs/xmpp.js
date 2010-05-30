@@ -29,7 +29,7 @@ cl.addListener('authFail',
 	       });
 cl.addListener('error',
 	       function(e) {
-		   sys.puts("e");
+		   sys.puts(e);
 		   process.exit(1);
 	       });
 cl.addListener('end',
