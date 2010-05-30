@@ -53,5 +53,4 @@ Desires about the API? Propose them ASAP!
 
 * Documentation
 * Tests ([what framework?](http://wiki.github.com/ry/node/modules#testing))
-* Support `SASL DIGEST-MD5` authentication
 * Component support (that's trivial)
