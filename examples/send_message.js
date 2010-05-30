@@ -22,3 +22,12 @@ cl.addListener('online',
 		       });
 		   cl.end();
 	       });
+cl.addListener('authFail',
+	       function() {
+		   sys.puts("Authentication failure");
+		   process.exit(1);
+	       });
+cl.addListener('end',
+	       function() {
+		   /* node.js will exit by itself */
+	       });
