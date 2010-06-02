@@ -21,6 +21,15 @@ Objectives of *node-xmpp:*
   we could offer helpers for entity capabilities hashing, etc)
 
 
+## Features
+
+* Client authentication with SASL DIGEST-MD5, PLAIN, ANONYMOUS
+* `_xmpp-client._tcp` SRV record support
+* Simple JID parsing
+* XML builder & serialization, xmlns-aware
+* [Component](http://xmpp.org/extensions/xep-0114.html) connections
+
+
 ## Dependencies
 
 * [node-base64](http://github.com/brainfucker/node-base64)
