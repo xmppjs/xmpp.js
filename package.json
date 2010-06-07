@@ -1,8 +1,8 @@
 { "name": "node-xmpp"
-,"version": "1.0.0"
+,"version": "0.0.3"
 ,"main": "./lib/xmpp"
 ,"description": "CommonJS module for XMPP connections."
-,"author": "Astro"
+,"author": "Stephan Maka"
 ,"dependencies": ["node-base64", "node-expat"]
 ,"contributors": ["Derek Hammer"]
 }
