@@ -53,12 +53,39 @@ Objectives of *node-xmpp:*
     ┗━━━━━━━━━━┛ ┗━━━━━━━━━━━┛
 
 That means you can use the TCP events of `net.Stream` with Client and
-Component objects.
+Component objects. Other than that, hook callbacks to these events:
+
+* `authFail`, distinguished from `error`
+* `online`, when authentication is done and you can send XMPP stanzas
+  (ie. `<presence/>`)
+* `stanza` for each incoming XMPP stanza, with the XML Element as
+  parameter
+* `error` with the `<stream:error/>` as parameter
+
+This foundation is complemented by two basic data structures:
+
+* *JID:* a Jabber-Id, represented as a triple of `user`, `domain`,
+   `resource`
+* *Element:* any XML Element
 
 Desires about the API? Propose them ASAP!
+
+### Building XML Elements
+
+strophejs' XML Builder is very convenient for producing XMPP
+stanzas. node-xmpp includes it in a much more primitive way: the
+`c()`, `cnode()` and `t()` methods can be called on any *Element*
+object, returning the new child element.
+
+This can be confusing: in the end, you will hold the last-added child
+until you use `up()`, a getter for the parent. `Connection.send()`
+first invokes `tree()` to retrieve the uppermost parent, the XMPP
+stanza, before sending it out the wire.
 
 
 ## TODO
 
 * Documentation
 * Tests ([what framework?](http://wiki.github.com/ry/node/modules#testing))
+* Avoid namespace pollution?
+* Fix the [npmjs](http://github.com/isaacs/npm) package
