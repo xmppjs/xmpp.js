@@ -3,6 +3,6 @@
 ,"main": "./lib/xmpp"
 ,"description": "CommonJS module for XMPP connections."
 ,"author": "Stephan Maka"
-,"dependencies": ["node-base64", "node-expat"]
+,"dependencies": ["node-base64@0.0.1", "node-expat"]
 ,"contributors": ["Derek Hammer"]
 }
