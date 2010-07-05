@@ -3,6 +3,11 @@
 idiomatic XMPP library for [node.js](http://nodejs.org/)
 
 
+## Installation with [npm](http://github.com/isaacs/npm)
+
+    npm install node-expat
+
+
 ## Motivation
 
 You like [Strophe.js](http://code.stanziq.com/strophe/)? You bought a
@@ -88,4 +93,3 @@ stanza, before sending it out the wire.
 * Documentation
 * Tests ([what framework?](http://wiki.github.com/ry/node/modules#testing))
 * Avoid namespace pollution?
-* Fix the [npmjs](http://github.com/isaacs/npm) package
