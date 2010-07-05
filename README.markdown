@@ -5,7 +5,7 @@ idiomatic XMPP library for [node.js](http://nodejs.org/)
 
 ## Installation with [npm](http://github.com/isaacs/npm)
 
-    npm install node-expat
+    npm install node-xmpp
 
 
 ## Motivation
