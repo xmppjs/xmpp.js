@@ -1,8 +1,19 @@
 { "name": "node-xmpp"
 ,"version": "0.0.3"
 ,"main": "./lib/xmpp"
-,"description": "CommonJS module for XMPP connections."
+,"description": "Idiomatic XMPP client & component library for node.js"
 ,"author": "Stephan Maka"
 ,"dependencies": {"node-base64": "0.0.1", "node-expat": ""}
+,"repositories": [{ "type": "git"
+		   ,"path": "git://github.com/astro/node-xmpp.git"
+		  }]
+,"homepage": "http://github.com/astro/node-xmpp"
+,"bugs": "http://github.com/astro/node-xmpp/issues"
+,"maintainers": [{ "name": "Astro"
+		  ,"email": "astro@spaceboyz.net"
+		  ,"web": "http://spaceboyz.net/~astro/"
+		 }]
 ,"contributors": ["Derek Hammer"]
+,"licenses": [{ "type": "GPLv3" }]
+,"engine": "node"
 }
