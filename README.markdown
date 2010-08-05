@@ -37,7 +37,6 @@ Objectives of *node-xmpp:*
 
 ## Dependencies
 
-* [node-base64](http://github.com/brainfucker/node-base64)
 * [node-expat](http://github.com/astro/node-expat)
 
 
