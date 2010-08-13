@@ -2,7 +2,6 @@ var vows = require('vows'),
 assert = require('assert'),
 xmpp = require('./../lib/xmpp');
 
-// Create a Test Suite
 vows.describe('JID').addBatch({
 
     'parsing': {
