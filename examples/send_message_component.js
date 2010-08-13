@@ -24,19 +24,12 @@ c.addListener('online',
 				  c('body').
 				  t(argv[4]));
 		       });
+
+		   // nodejs has nothing left to do and will exit
 		   c.end();
-	       });
-c.addListener('authFail',
-	       function() {
-		   sys.puts("Authentication failure");
-		   process.exit(1);
 	       });
 c.addListener('error',
 	       function(e) {
 		   sys.puts(e);
 		   process.exit(1);
-	       });
-c.addListener('end',
-	       function() {
-		   /* node.js will exit by itself */
 	       });

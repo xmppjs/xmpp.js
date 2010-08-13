@@ -34,17 +34,7 @@ cl.on('stanza',
 	      cl.send(stanza);
 	  }
       });
-cl.on('authFail',
-      function() {
-	  sys.puts("Authentication failure");
-	  process.exit(1);
-      });
 cl.on('error',
       function(e) {
 	  sys.puts(e);
-	  process.exit(1);
-      });
-cl.on('end',
-      function() {
-	  /* node.js will exit by itself */
       });

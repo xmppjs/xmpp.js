@@ -30,7 +30,7 @@ Objectives of *node-xmpp:*
 
 * Client authentication with SASL DIGEST-MD5, PLAIN, ANONYMOUS
 * `_xmpp-client._tcp` SRV record support
-* Simple JID parsing
+* Simple JID parsing with Stringprep normalization
 * XML builder & serialization, xmlns-aware
 * [Component](http://xmpp.org/extensions/xep-0114.html) connections
 
@@ -38,6 +38,7 @@ Objectives of *node-xmpp:*
 ## Dependencies
 
 * [node-expat](http://github.com/astro/node-expat)
+* [node-stringprep](http://github.com/astro/node-stringprep)
 
 
 ## Design
@@ -59,7 +60,6 @@ Objectives of *node-xmpp:*
 That means you can use the TCP events of `net.Stream` with Client and
 Component objects. Other than that, hook callbacks to these events:
 
-* `authFail`, distinguished from `error`
 * `online`, when authentication is done and you can send XMPP stanzas
   (ie. `<presence/>`)
 * `stanza` for each incoming XMPP stanza, with the XML Element as
@@ -89,6 +89,6 @@ stanza, before sending it out the wire.
 
 ## TODO
 
-* Documentation
-* Tests ([what framework?](http://wiki.github.com/ry/node/modules#testing))
-* Avoid namespace pollution?
+* More documentation
+* More tests (Using [Vows](http://vowsjs.org/))
+
