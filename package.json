@@ -1,21 +1,21 @@
 { "name": "node-xmpp"
-,"version": "0.0.4"
+,"version": "0.1.0"
 ,"main": "./lib/xmpp"
 ,"description": "Idiomatic XMPP client & component library for node.js"
 ,"author": "Stephan Maka"
-,"dependencies": [{"node-expat": "1.1.0"
-		  ,"node-stringprep": "0.0.1"
-		  }],
-,"repositories": [{ "type": "git"
-		   ,"path": "git://github.com/astro/node-xmpp.git"
+,"dependencies": {"node-expat": "1.1.0"
+		 ,"node-stringprep": "0.0.1"
+		 }
+,"repositories": [{"type": "git"
+		  ,"path": "git://github.com/astro/node-xmpp.git"
 		  }]
 ,"homepage": "http://github.com/astro/node-xmpp"
 ,"bugs": "http://github.com/astro/node-xmpp/issues"
-,"maintainers": [{ "name": "Astro"
-		  ,"email": "astro@spaceboyz.net"
-		  ,"web": "http://spaceboyz.net/~astro/"
+,"maintainers": [{"name": "Astro"
+		 ,"email": "astro@spaceboyz.net"
+		 ,"web": "http://spaceboyz.net/~astro/"
 		 }]
 ,"contributors": ["Stephan Maka", "Derek Hammer", "Daniel Zelisko"]
-,"licenses": [{ "type": "GPLv3" }]
+,"licenses": [{"type": "GPLv3"}]
 ,"engine": "node"
 }
