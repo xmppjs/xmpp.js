@@ -15,7 +15,7 @@
 		  ,"email": "astro@spaceboyz.net"
 		  ,"web": "http://spaceboyz.net/~astro/"
 		 }]
-,"contributors": ["Derek Hammer"]
+,"contributors": ["Stephan Maka", "Derek Hammer", "Daniel Zelisko"]
 ,"licenses": [{ "type": "GPLv3" }]
 ,"engine": "node"
 }
