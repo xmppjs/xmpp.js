@@ -71,8 +71,31 @@ vows.describe('JID').addBatch({
 	    var j1 = new xmpp.JID('foo@bar/baz');
 	    var j2 = new xmpp.JID('quux@bar/baz');
 	    assert.equal(j1.equals(j2), false);
+	},
+	'should ignore case in user':
+	function() {
+	    var j1 = new xmpp.JID('foo@bar/baz');
+	    var j2 = new xmpp.JID('FOO@bar/baz');
+	    assert.equal(j1.equals(j2), true);
+	},
+	'should ignore case in domain':
+	function() {
+	    var j1 = new xmpp.JID('foo@bar/baz');
+	    var j2 = new xmpp.JID('foo@BAR/baz');
+	    assert.equal(j1.equals(j2), true);
+	},
+	'should not ignore case in resource':
+	function() {
+	    var j1 = new xmpp.JID('foo@bar/baz');
+	    var j2 = new xmpp.JID('foo@bar/Baz');
+	    assert.equal(j1.equals(j2), false);
+	},
+	'should ignore international caseness':
+	function() {
+	    var j1 = new xmpp.JID('föö@bär/baß');
+	    var j2 = new xmpp.JID('fÖö@BÄR/baß');
+	    assert.equal(j1.equals(j2), true);
 	}
-
     }
 
 }).run();
