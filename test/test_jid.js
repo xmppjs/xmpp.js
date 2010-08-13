@@ -57,6 +57,22 @@ vows.describe('JID').addBatch({
 	    var j = new xmpp.JID('u', 'd', 'r');
 	    assert.equal(j.toString(), 'u@d/r');
 	}
+    },
+
+    'equality': {
+	'parsed JIDs should be equal':
+	function() {
+	    var j1 = new xmpp.JID('foo@bar/baz');
+	    var j2 = new xmpp.JID('foo@bar/baz');
+	    assert.equal(j1.equals(j2), true);
+	},
+	'parsed JIDs should be not equal':
+	function() {
+	    var j1 = new xmpp.JID('foo@bar/baz');
+	    var j2 = new xmpp.JID('quux@bar/baz');
+	    assert.equal(j1.equals(j2), false);
+	}
+
     }
 
 }).run();
