@@ -4,7 +4,7 @@
 ,"description": "Idiomatic XMPP client & component library for node.js"
 ,"author": "Stephan Maka"
 ,"dependencies": {"node-expat": "1.1.0"
-		 ,"node-stringprep": "0.0.1"
+		 ,"node-stringprep": "0.0.2"
 		 }
 ,"repositories": [{"type": "git"
 		  ,"path": "git://github.com/astro/node-xmpp.git"
