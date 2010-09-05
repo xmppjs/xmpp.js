@@ -1,8 +1,12 @@
 var xmpp = require('../lib/xmpp');
 
 var r = new xmpp.Router();
-r.send(new xmpp.Element('message', { from: 'test@codetu.be',
-				     to: 'astro@spaceboyz.net',
-				     type: 'chat' }).
-       c('body').t('Hello, World')
-      );
+r.register('codetu.be', function(stanza) {
+    console.log("<< "+stanza.toString());
+    if (stanza.attrs.type !== 'error') {
+	var me = stanza.attrs.to;
+	stanza.attrs.to = stanza.attrs.from;
+	stanza.attrs.from = me;
+	r.send(stanza);
+    }
+});
