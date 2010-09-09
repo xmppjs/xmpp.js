@@ -21,7 +21,8 @@ Objectives of *node-xmpp:*
 * Use node.js conventions, especially `EventEmitter`, ie. for write
   buffer control
 * Fast parsing, `node-expat` was written with this library in mind
-* Support for both XMPP clients and components
+* Client support for both XMPP clients and components
+* Optional server infrastructure with `Router`
 * After authentication, leave trivial protocol bits to the user (later
   we could offer helpers for entity capabilities hashing, etc)
 
@@ -43,28 +44,27 @@ Objectives of *node-xmpp:*
 
 ## Design
 
-          ┌────────────┐
-          │ net.Stream │
-          └─────┬──────┘
-                │
-          ┌─────┴──────┐
-          │ Connection │
-          └─────┬──────┘
-                │
-          ┌─────┴──────┐
-          │            │
-    ┏━━━━━┷━━━━┓ ┏━━━━━┷━━━━━┓
-    ┃  Client  ┃ ┃ Component ┃
-    ┗━━━━━━━━━━┛ ┗━━━━━━━━━━━┛
+    ┌────────────┐ has a ┌────────────┐
+    │ net.Stream │←──────┤ Connection │
+    └────────────┘       └─────┬──────┘
+                               │
+          ┌────────────┬───────┴───┐
+          │            │           │
+    ┏━━━━━┷━━━━┓ ┏━━━━━┷━━━━━┓ ┌───┴────┐
+    ┃  Client  ┃ ┃ Component ┃ │ Server │
+    ┗━━━━━━━━━━┛ ┗━━━━━━━━━━━┛ └───┬────┘
+                                   │
+             ┌─────────────────────┤
+             │                     │
+    ┌────────┴───────┐ ┌───────────┴────┐
+    │ OutgoingServer │ │ IncomingServer │
+    └────────────────┘ └────────────────┘
+        has many  ↑        ↑ has many
+          creates │        │ accepts
+                 ┏┷━━━━━━━━┷┓
+                 ┃  Router  ┃
+                 ┗━━━━━━━━━━┛
 
-That means you can use the TCP events of `net.Stream` with Client and
-Component objects. Other than that, hook callbacks to these events:
-
-* `online`, when authentication is done and you can send XMPP stanzas
-  (ie. `<presence/>`)
-* `stanza` for each incoming XMPP stanza, with the XML Element as
-  parameter
-* `error` with the `<stream:error/>` as parameter
 
 This foundation is complemented by two basic data structures:
 
