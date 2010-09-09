@@ -59,7 +59,7 @@ Objectives of *node-xmpp:*
     ┌────────┴───────┐ ┌───────────┴────┐
     │ OutgoingServer │ │ IncomingServer │
     └────────────────┘ └────────────────┘
-        has many  ↑        ↑ has many
+         has many ↑        ↑ has many
           creates │        │ accepts
                  ┏┷━━━━━━━━┷┓
                  ┃  Router  ┃
