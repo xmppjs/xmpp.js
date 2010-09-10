@@ -32,8 +32,10 @@ Objectives of *node-xmpp:*
 * Client authentication with SASL DIGEST-MD5, PLAIN, ANONYMOUS
 * `_xmpp-client._tcp` SRV record support
 * Simple JID parsing with Stringprep normalization
-* XML builder & serialization, xmlns-aware
+* XML builder & serialization
+* xmlns-aware
 * [Component](http://xmpp.org/extensions/xep-0114.html) connections
+* Run your own server/talk to other servers with `xmpp.Router`
 
 
 ## Dependencies
