@@ -1,6 +1,5 @@
-require.paths.push('../lib');
 var sys = require('sys');
-var xmpp = require('xmpp');
+var xmpp = require('../lib/node-xmpp');
 var argv = process.argv;
 
 if (argv.length < 6) {

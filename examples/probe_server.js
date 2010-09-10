@@ -2,7 +2,7 @@
  * This example establishes some s2s connections over time. It is a
  * router test. You must modify it!
  */
-var xmpp = require('../lib/xmpp');
+var xmpp = require('../lib/node-xmpp');
 
 var MY_JID = 'codetu.be';
 var r = new xmpp.Router();

@@ -1,4 +1,4 @@
-var xmpp = require('../lib/xmpp');
+var xmpp = require('../lib/node-xmpp');
 
 var r = new xmpp.Router();
 r.register('codetu.be', function(stanza) {

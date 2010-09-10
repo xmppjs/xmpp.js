@@ -2,7 +2,7 @@
  * Echo Bot - the XMPP Hello World
  **/
 var sys = require('sys');
-var xmpp = require('../lib/xmpp');
+var xmpp = require('../lib/node-xmpp');
 var argv = process.argv;
 
 if (argv.length != 4) {
