@@ -20,8 +20,12 @@ cl.addListener('online',
 				   t(argv[4]));
 		       });
 
-		   // nodejs has nothing left to do and will exit
-		   cl.end();
+		   // if we end too soon, the server will close the
+		   // connection before handling our message
+		   setTimeout(function() {
+		       // nodejs has nothing left to do and will exit
+		       cl.end();
+		   }, 100);
 	       });
 cl.addListener('error',
 	       function(e) {
