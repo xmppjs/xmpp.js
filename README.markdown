@@ -29,7 +29,7 @@ Objectives of *node-xmpp:*
 
 ## Features
 
-* Client authentication with SASL DIGEST-MD5, PLAIN, ANONYMOUS
+* Client authentication with SASL DIGEST-MD5, PLAIN, ANONYMOUS, X-FACEBOOK-PLATFORM
 * `_xmpp-client._tcp` SRV record support
 * Simple JID parsing with Stringprep normalization
 * XML builder & serialization
