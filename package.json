@@ -1,5 +1,5 @@
 { "name": "node-xmpp"
-,"version": "0.2.1"
+,"version": "0.2.2"
 ,"main": "./lib/xmpp"
 ,"description": "Idiomatic XMPP client, component & server library for node.js"
 ,"author": "Stephan Maka"
