@@ -41,7 +41,11 @@ Objectives of *node-xmpp:*
 ## Dependencies
 
 * [node-expat](http://github.com/astro/node-expat)
-* [node-stringprep](http://github.com/astro/node-stringprep)
+* [ltx](http://github.com/astro/ltx)
+
+Optional
+
+* [node-stringprep](http://github.com/astro/node-stringprep): for [icu](http://icu-project.org/)-based string normalization.
 
 
 ## Design
@@ -93,4 +97,3 @@ stanza, before sending it out the wire.
 
 * More documentation
 * More tests (Using [Vows](http://vowsjs.org/))
-
