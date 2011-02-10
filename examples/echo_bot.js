@@ -14,8 +14,7 @@ var cl = new xmpp.Client({ jid: argv[2],
 			   password: argv[3] });
 cl.on('online',
       function() {
-	  cl.send(new xmpp.Element('presence',
-				   { type: 'chat'}).
+	  cl.send(new xmpp.Element('presence', { }).
 		  c('show').t('chat').up().
 		  c('status').t('Happily echoing your <message/> stanzas')
 		 );
