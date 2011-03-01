@@ -15,7 +15,7 @@
 //
 module.exports = function starttls(socket, options, cb) {
 
-  var sslcontext = crypto.createCredentials(options);
+  var sslcontext = require('crypto').createCredentials(options);
 
   var pair = require('tls').createSecurePair(sslcontext, false);
 
