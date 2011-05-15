@@ -3,9 +3,17 @@
 idiomatic XMPP library for [node.js](http://nodejs.org/)
 
 
-## Installation with [npm](http://github.com/isaacs/npm)
+## Installation
+
+With package manager [npm](http://npmjs.org/):
 
     npm install node-xmpp
+
+Or, on Debian wheezy & sid:
+
+    apt-get install libnode-node-xmpp
+
+Thanks to Jonas Smedegaard!
 
 
 ## Motivation
