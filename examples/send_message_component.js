@@ -21,7 +21,7 @@ c.addListener('online',
 						     from: c.jid,
 						     type: 'chat'}).
 				  c('body').
-				  t(argv[4]));
+				  t(argv[6]));
 		       });
 
 		   // nodejs has nothing left to do and will exit
