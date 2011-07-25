@@ -1,5 +1,5 @@
 { "name": "node-xmpp"
-,"version": "0.2.9"
+,"version": "0.2.10"
 ,"main": "./lib/xmpp"
 ,"description": "Idiomatic XMPP client, component & server library for node.js"
 ,"author": "Stephan Maka"
@@ -15,7 +15,7 @@
 		 ,"email": "astro@spaceboyz.net"
 		 ,"web": "http://spaceboyz.net/~astro/"
 		 }]
-,"contributors": ["Stephan Maka", "Derek Hammer", "Daniel Zelisko", "Michael Geers", "Nolan Darilek", "Nathan Rajlich", "Dhruv Matani", "Camilo Aguilar"]
+,"contributors": ["Stephan Maka", "Derek Hammer", "Daniel Zelisko", "Michael Geers", "Nolan Darilek", "Nathan Rajlich", "Dhruv Matani", "Camilo Aguilar", "Henry Chan"]
 ,"licenses": [{"type": "GPLv3"}]
 ,"engine": "node >=0.4.0"
 }
