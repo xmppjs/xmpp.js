@@ -18,7 +18,7 @@ Thanks to Jonas Smedegaard!
 
 ## Motivation
 
-You like [Strophe.js](http://code.stanziq.com/strophe/)? You bought a
+You like [Strophe.js](http://strophe.im/)? You bought a
 copy of
 [Professional XMPP Programming with JavaScript and jQuery](http://professionalxmpp.com/)?
 You even want to use the same XMPP code for the web and node.js? Then
@@ -92,7 +92,7 @@ Desires about the API? Propose them ASAP!
 
 ### Building XML Elements
 
-strophejs' XML Builder is very convenient for producing XMPP
+Strophe.js' XML Builder is very convenient for producing XMPP
 stanzas. node-xmpp includes it in a much more primitive way: the
 `c()`, `cnode()` and `t()` methods can be called on any *Element*
 object, returning the new child element.
