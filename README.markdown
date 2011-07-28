@@ -18,7 +18,7 @@ Thanks to Jonas Smedegaard!
 
 ## Motivation
 
-You like [Strophe.js](http://strophe.im/)? You bought a
+You like [Strophe.js](http://strophe.im/strophejs/)? You bought a
 copy of
 [Professional XMPP Programming with JavaScript and jQuery](http://professionalxmpp.com/)?
 You even want to use the same XMPP code for the web and node.js? Then
