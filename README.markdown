@@ -56,6 +56,13 @@ Optional
 * [node-stringprep](http://github.com/astro/node-stringprep): for [icu](http://icu-project.org/)-based string normalization.
 
 
+## Related Libraries
+
+* [node-xmpp-bosh](http://code.google.com/p/node-xmpp-bosh/): BOSH & websocket server (connection manager)
+* [node-xmpp-via-bosh](https://github.com/anoopc/node-xmpp-via-bosh/): BOSH client connections from node.js
+* [node-simple-xmpp](https://github.com/arunoda/node-simple-xmpp): Simpler high-level client layer
+
+
 ## Design
 
 Inheritance tree and associations:
