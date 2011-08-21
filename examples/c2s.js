@@ -1,5 +1,17 @@
 var xmpp = require('../lib/node-xmpp');
 
+/*
+ *  TODO
+ *  - support for Presence
+ *  - Support for TLS
+ *  - Support for customized auth.
+ *  - Cluster with Redis PubSub.
+ *  - Admin tools
+ *  - Component interface
+ *  - Plugins for 'well-known' services (Roster, PubSub, PEP)
+ */
+
+
 var c2s = new xmpp.C2S({
     port: 5222, 
     host: '127.0.0.1',
@@ -7,7 +19,7 @@ var c2s = new xmpp.C2S({
 });
 
 c2s.on("stanza", function(stanza, client) {
-    // We should provide a bunch of plugins for the functionalities below.
+    // We should provide a bunch of "plugins" for the functionalities below.
     
     // No roster support in this server!
     if (stanza.is('iq') && (session = stanza.getChild('query', 'jabber:iq:roster'))) {
