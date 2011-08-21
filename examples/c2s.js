@@ -14,6 +14,9 @@ var xmpp = require('../lib/node-xmpp');
  *  - In-band registration
  *  - mods :
  *      - offline
+ *      - announce
+ *      - caps
+ *      - muc
  *      - 
  */
 
