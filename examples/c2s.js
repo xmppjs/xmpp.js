@@ -9,6 +9,12 @@ var xmpp = require('../lib/node-xmpp');
  *  - Admin tools
  *  - Component interface
  *  - Plugins for 'well-known' services (Roster, PubSub, PEP)
+ *  - Logging
+ *  - Shapers
+ *  - In-band registration
+ *  - mods :
+ *      - offline
+ *      - 
  */
 
 
