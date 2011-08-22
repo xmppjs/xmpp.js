@@ -20,14 +20,17 @@ var xmpp = require('../lib/node-xmpp');
  *      - 
  */
 
-
+// Sets up the server.
 var c2s = new xmpp.C2S({
     port: 5222, 
     domain: 'zipline.local',
-    keyPath: './examples/zipline.local.pem',
-    certPath: './examples/zipline.local.certificate.pem'
+    // tls: {
+    //     keyPath: './examples/zipline.local.pem',
+    //     certPath: './examples/zipline.local.certificate.pem',
+    // }
 });
 
+// Allows the developer to authenticate users against anything they want.
 c2s.on("authenticate", function(jid, password, client) {
     if(jid.user == "julien" && password == "hello") {
         client.emit("auth-success", jid); 
@@ -37,6 +40,7 @@ c2s.on("authenticate", function(jid, password, client) {
     }
 });
 
+// Most imoortant pieces of code : that is where you can configure your XMPP server to support only what you care about/need.
 c2s.on("stanza", function(stanza, client) {
     var query, vCard;
     // We should provide a bunch of "plugins" for the functionalities below.
@@ -76,10 +80,9 @@ c2s.on("stanza", function(stanza, client) {
         delete stanza.attrs.from;
         client.send(stanza);
     }
-    
     else {
         console.log("---")
-        console.log("DOES THE SERVER SUPPORT THIS FEATURE?");
+        console.log("YOUR SERVER MAYBE NEEDS TO SUPPORT THIS FEATURE?");
         console.log(stanza)
     }
 })
