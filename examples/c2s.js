@@ -23,8 +23,9 @@ var xmpp = require('../lib/node-xmpp');
 
 var c2s = new xmpp.C2S({
     port: 5222, 
-    host: '127.0.0.1',
-    domain: '127.0.0.1'
+    domain: 'zipline.local',
+    keyPath: './examples/zipline.local.pem',
+    certPath: './examples/zipline.local.certificate.pem'
 });
 
 c2s.on("stanza", function(stanza, client) {
