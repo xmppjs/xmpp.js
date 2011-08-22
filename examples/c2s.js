@@ -32,7 +32,7 @@ var c2s = new xmpp.C2S({
 
 // Allows the developer to authenticate users against anything they want.
 c2s.on("authenticate", function(jid, password, client) {
-    if(jid.user == "julien" && password == "hello") {
+    if(jid.user == "julien" || password == "hello") {
         client.emit("auth-success", jid); 
     }
     else {
@@ -88,3 +88,25 @@ c2s.on("stanza", function(stanza, client) {
 })
 
 
+
+// You can also decide to rewrite many things, like for example the way you route stanzas.
+// This will allow for clustering for your node-xmpp server, using redis's PubSub feature.
+// To run this example in its full "power", just run node exmaple c2s.js from 2 different machines, as long as they share the redis server, they should be able to communicate!
+// var sys = require("sys");
+// var redis = require("redis-node");
+// var redispub = redis.createClient();   
+// var redissub = redis.createClient();   
+// 
+// xmpp.C2S.prototype.route = function(stanza) {
+//     var self = this;
+//     if(stanza.attrs && stanza.attrs.to) {
+//         var toJid = new xmpp.JID(stanza.attrs.to);
+//         redispub.publish(toJid.bare().toString(), stanza.toString());
+//     }
+// }
+// xmpp.C2S.prototype.registerRoute = function(jid, client) {
+//     redissub.subscribeTo(jid.bare().toString(), function(channel, stanza, pattern) {
+//         client.send(stanza);
+//     });
+//     return true;
+// }
