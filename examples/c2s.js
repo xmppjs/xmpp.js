@@ -28,6 +28,15 @@ var c2s = new xmpp.C2S({
     certPath: './examples/zipline.local.certificate.pem'
 });
 
+c2s.on("authenticate", function(jid, password, client) {
+    if(jid.user == "julien" && password == "hello") {
+        client.emit("auth-success", jid); 
+    }
+    else {
+        client.emit("auth-fail", jid);
+    }
+});
+
 c2s.on("stanza", function(stanza, client) {
     var query, vCard;
     // We should provide a bunch of "plugins" for the functionalities below.
