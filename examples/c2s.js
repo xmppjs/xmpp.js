@@ -29,6 +29,7 @@ var c2s = new xmpp.C2S({
 });
 
 c2s.on("stanza", function(stanza, client) {
+    var query, vCard;
     // We should provide a bunch of "plugins" for the functionalities below.
     
     // No roster support in this server!
