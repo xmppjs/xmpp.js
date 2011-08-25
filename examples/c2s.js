@@ -1,23 +1,24 @@
 var xmpp = require('../lib/node-xmpp');
+var SoftwareVersion = require('../lib/xmpp/c2s_mods/software_version'); 
 
 /*
  *  TODO
- *  - support for Presence
- *  - Support for TLS
- *  - Support for customized auth.
- *  - Cluster with Redis PubSub.
- *  - Admin tools
- *  - Component interface
+ *  - support for Presence module
+ *  - Support for TLS () : https://groups.google.com/group/nodejs/browse_thread/thread/1e8e6501493d63b8#
+ *  - Admin tools 
+ *  - Component interface 
  *  - Plugins for 'well-known' services (Roster, PubSub, PEP)
  *  - Logging
  *  - Shapers
  *  - In-band registration
  *  - mods :
+ *      - presence
  *      - offline
  *      - announce
  *      - caps
  *      - muc
- *      - 
+ *      - roster
+ *      - PEP
  */
 
 // Sets up the server.
@@ -39,6 +40,13 @@ c2s.on("authenticate", function(jid, password, client) {
         client.emit("auth-fail", jid);
     }
 });
+
+// That's the way you add mods to a given server.
+c2s.supports(SoftwareVersion);
+SoftwareVersion.name = "Node XMPP server example";
+SoftwareVersion.version = "0.0.0.1";
+SoftwareVersion.os = "Mac OS X 10.7 Lion";
+
 
 // Most imoortant pieces of code : that is where you can configure your XMPP server to support only what you care about/need.
 c2s.on("stanza", function(stanza, client) {
@@ -74,16 +82,8 @@ c2s.on("stanza", function(stanza, client) {
         client.send(stanza);
     }
     // No Version support on this server.
-    else if (stanza.is('iq') && (query = stanza.getChild('query', "jabber:iq:version"))) {
-        stanza.attrs.type = "error";
-        stanza.attrs.to = stanza.attrs.from;
-        delete stanza.attrs.from;
-        client.send(stanza);
-    }
     else {
-        console.log("---")
-        console.log("YOUR SERVER MAYBE NEEDS TO SUPPORT THIS FEATURE?");
-        console.log(stanza)
+        
     }
 })
 
