@@ -24,16 +24,16 @@ var SoftwareVersion = require('../lib/xmpp/c2s_mods/software_version');
 // Sets up the server.
 var c2s = new xmpp.C2S({
     port: 5222, 
-    domain: 'zipline.local',
+    domain: 'localhost',
     // tls: {
-    //     keyPath: './examples/zipline.local.pem',
-    //     certPath: './examples/zipline.local.certificate.pem',
+    //     keyPath: './examples/localhost.pem',
+    //     certPath: './examples/localhost.certificate.pem',
     // }
 });
 
 // Allows the developer to authenticate users against anything they want.
 c2s.on("authenticate", function(jid, password, client) {
-    if(jid.user == "julien" || password == "hello") {
+    if(password == "password") {
         client.emit("auth-success", jid); 
     }
     else {
