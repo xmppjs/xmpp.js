@@ -26,8 +26,8 @@ var c2s = new xmpp.C2S({
     port: 5222, 
     domain: 'localhost',
     // tls: {
-    //     keyPath: './examples/localhost.pem',
-    //     certPath: './examples/localhost.certificate.pem',
+    //     keyPath: './examples/localhost-key.pem',
+    //     certPath: './examples/localhost-cert.pem'
     // }
 });
 
