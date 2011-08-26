@@ -41,14 +41,18 @@ c2s.on("authenticate", function(jid, password, client) {
     }
 });
 
-
+// On Connect event. When a client connects.
 c2s.on("connect", function(client) {
     // That's the way you add mods to a given server.
     SoftwareVersion.name = "Node XMPP server example";
     SoftwareVersion.version = "0.0.0.1";
     SoftwareVersion.os = "Mac OS X 10.7 Lion";
     client.addMixin(SoftwareVersion.mod);
-    console.log(SoftwareVersion);
+});
+
+// On Disconnect event. When a client disconnects
+c2s.on("disconnect", function(client) {
+    
 });
 
 // Most imoortant pieces of code : that is where you can configure your XMPP server to support only what you care about/need.
