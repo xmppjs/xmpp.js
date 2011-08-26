@@ -1,5 +1,5 @@
 var xmpp = require('../lib/node-xmpp');
-var SoftwareVersion = require('../lib/xmpp/c2s_mods/software_version'); 
+var SoftwareVersion = require('./c2s_mods/software_version'); 
 
 /*
  *  TODO
@@ -41,12 +41,15 @@ c2s.on("authenticate", function(jid, password, client) {
     }
 });
 
-// That's the way you add mods to a given server.
-c2s.supports(SoftwareVersion);
-SoftwareVersion.name = "Node XMPP server example";
-SoftwareVersion.version = "0.0.0.1";
-SoftwareVersion.os = "Mac OS X 10.7 Lion";
 
+c2s.on("connect", function(client) {
+    // That's the way you add mods to a given server.
+    SoftwareVersion.name = "Node XMPP server example";
+    SoftwareVersion.version = "0.0.0.1";
+    SoftwareVersion.os = "Mac OS X 10.7 Lion";
+    client.addMixin(SoftwareVersion.mod);
+    console.log(SoftwareVersion);
+});
 
 // Most imoortant pieces of code : that is where you can configure your XMPP server to support only what you care about/need.
 c2s.on("stanza", function(stanza, client) {
