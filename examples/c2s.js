@@ -25,10 +25,10 @@ var SoftwareVersion = require('./c2s_mods/software_version');
 var c2s = new xmpp.C2S({
     port: 5222, 
     domain: 'localhost',
-    // tls: {
-    //     keyPath: './examples/localhost-key.pem',
-    //     certPath: './examples/localhost-cert.pem'
-    // }
+    tls: {
+        keyPath: './examples/localhost-key.pem',
+        certPath: './examples/localhost-cert.pem'
+    }
 });
 
 // Allows the developer to authenticate users against anything they want.
