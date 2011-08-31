@@ -6,22 +6,22 @@ var xmpp = require('../lib/node-xmpp');
 // Sets up the server.
 var c2s = new xmpp.C2S({
     port: 5222, 
-    domain: 'localhost',
+    domain: 'localhost'//,
+    // tls: {
+    //     keyPath: './examples/localhost-key.pem',
+    //     certPath: './examples/localhost-cert.pem'
+    // }
+    
 });
 
 // Allows the developer to authenticate users against anything they want.
-c2s.on("authenticate", function(jid, password, client) {
-    if(password == "password") {
-        client.emit("auth-success", jid); 
-    }
-    else {
-        client.emit("auth-fail", jid);
-    }
+c2s.on("authenticate", function(jid, password, client, cb) {
+    cb(true); // cb(false);
 });
 
 // Allows the developer to register the jid against anything they want
 c2s.on("register", function(jid, password, client, cb) {
-    cb(false, {code: "406", type: "modify", text: "not-acceptable"}); // cb(false)
+    cb(true); // cb(false, {code: "406", type: "modify", text: "not-acceptable"}); 
 });
 
 // On Connect event. When a client connects.
