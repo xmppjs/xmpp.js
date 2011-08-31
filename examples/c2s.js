@@ -19,6 +19,11 @@ c2s.on("authenticate", function(jid, password, client) {
     }
 });
 
+// Allows the developer to register the jid against anything they want
+c2s.on("register", function(jid, password, client, cb) {
+    cb(false, {code: "406", type: "modify", text: "not-acceptable"}); // cb(false)
+});
+
 // On Connect event. When a client connects.
 c2s.on("connect", function(client) {
     // That's the way you add mods to a given server.
