@@ -1,6 +1,6 @@
 var vows = require('vows'),
 assert = require('assert'),
-xmpp = require('./../lib/xmpp');
+xmpp = require('xmpp');
 
 vows.describe('JID').addBatch({
 
@@ -97,4 +97,4 @@ vows.describe('JID').addBatch({
 	}
     }
 
-}).run();
+}).export( module );
