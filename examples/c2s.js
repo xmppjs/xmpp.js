@@ -1,7 +1,7 @@
 var xmpp = require('../lib/node-xmpp');
 
 /* This is a very basic C2S example. One of the key design decisions of node-xmpp is to keep it very lightweight */
-/* If you need a full blown server check out https://github.com/superfeedr/node-xmpp-c2s */
+/* If you need a full blown server check out https://github.com/superfeedr/xmpp-server */
 
 // Sets up the server.
 var c2s = new xmpp.C2S({
