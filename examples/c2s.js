@@ -1,6 +1,6 @@
 var xmpp = require('../lib/node-xmpp');
 
-/* This is a very basic C2S example. One of the key design decisions of node-xmpp is to keep it very lightweight */
+/* This is a very basic C2S server example. One of the key design decisions of node-xmpp is to keep it very lightweight */
 /* If you need a full blown server check out https://github.com/superfeedr/xmpp-server */
 
 // Sets up the server.
@@ -27,6 +27,10 @@ c2s.on("register", function(jid, password, client, cb) {
 // On Connect event. When a client connects.
 c2s.on("connect", function(client) {
     // That's the way you add mods to a given server.
+
+    // Per-client stanza handling, alternative to c2s.on("stanza", cb)
+    client.on("stanza", function(stanza) {
+    });
 });
 
 // On Disconnect event. When a client disconnects
