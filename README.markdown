@@ -9,30 +9,17 @@ With package manager [npm](http://npmjs.org/):
 
     npm install node-xmpp
 
-Or, on Debian wheezy & sid:
 
-    apt-get install libnode-node-xmpp
-
-Thanks to Jonas Smedegaard!
-
-
-## Motivation
-
-You like [Strophe.js](http://strophe.im/strophejs/)? You bought a
-copy of
-[Professional XMPP Programming with JavaScript and jQuery](http://professionalxmpp.com/)?
-You even want to use the same XMPP code for the web and node.js? Then
-*you're wrong here:* go to [xmppjs](http://github.com/mwild1/xmppjs).
-
-Objectives of *node-xmpp:*
+## Objectives of *node-xmpp:*
 
 * Use node.js conventions, especially `EventEmitter`, ie. for write
   buffer control
-* Fast parsing, `node-expat` was written with this library in mind
+* Fast parsing, `node-expat` was written for this library
 * Client support for both XMPP clients and components
 * Optional server infrastructure with `Router`
-* After authentication, leave trivial protocol bits to the user (later
-  we could offer helpers for entity capabilities hashing, etc)
+* After authentication, leave trivial protocol bits to the user, that
+  is XML handling according to any
+  [XEP](http://xmpp.org/xmpp-protocols/xmpp-extensions/)
 
 
 ## Features
@@ -40,8 +27,15 @@ Objectives of *node-xmpp:*
 * Client authentication with SASL DIGEST-MD5, PLAIN, ANONYMOUS, X-FACEBOOK-PLATFORM
 * `_xmpp-client._tcp` SRV record support
 * Simple JID parsing with Stringprep normalization
-* XML builder & serialization
-* xmlns-aware
+  * Optional now, you won't need ICU for just node-xmpp
+  * Please be aware if you identify users by JIDs
+  * `npm install node-stringprep`
+* Uses [ltx](http://github.com/astro/ltx)
+  * Much easier to handle than a standard DOM
+  * xmlns-aware
+  * Easy XML builder like Strophe.js (see down)
+  * Non-buffering serialization
+  * Was split out of node-xmpp for modularization and resuability
 * [Component](http://xmpp.org/extensions/xep-0114.html) connections
 * Run your own server/talk to other servers with `xmpp.Router`
 
@@ -95,12 +89,11 @@ This foundation is complemented by two basic data structures:
    `resource`
 * *Element:* any XML Element
 
-Desires about the API? Propose them ASAP!
 
 ### Building XML Elements
 
 Strophe.js' XML Builder is very convenient for producing XMPP
-stanzas. node-xmpp includes it in a much more primitive way: the
+stanzas. ltx includes it in a much more primitive way: the
 `c()`, `cnode()` and `t()` methods can be called on any *Element*
 object, returning the new child element.
 
