@@ -32,6 +32,22 @@ vows.describe('JID').addBatch({
 	    assert.equal(j.user, 'u');
 	    assert.equal(j.domain, 'd');
 	    assert.equal(j.resource, 'r');
+	},
+	'parse an internationalized domain name as unicode':
+	function() {
+	    var j = new xmpp.JID('öko.de');
+	    assert.equal(j.domain, 'öko.de');
+	},
+	'parse an internationalized domain name as ascii/punycode':
+	function() {
+	    var j = new xmpp.JID('xn--ko-eka.de');
+	    assert.equal(j.domain, 'öko.de');
+	},
+	'parse a JID with punycode':
+	function() {
+	    var j = new xmpp.JID('Сергей@xn--lsa92diaqnge.xn--p1ai');
+	    assert.equal(j.user, 'сергей');
+	    assert.equal(j.domain, 'приме́р.рф');
 	}
     },
 
