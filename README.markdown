@@ -54,7 +54,8 @@ Optional
 
 * [node-xmpp-bosh](http://code.google.com/p/node-xmpp-bosh/): BOSH & websocket server (connection manager)
 * [node-xmpp-via-bosh](https://github.com/anoopc/node-xmpp-via-bosh/): BOSH client connections from node.js
-* [node-simple-xmpp](https://github.com/arunoda/node-simple-xmpp): Simpler high-level client layer
+* [node-simple-xmpp](https://github.com/arunoda/node-simple-xmpp/): Simpler high-level client layer
+* [xmpp-server](https://github.com/superfeedr/xmpp-server/): Reusable XMPP server on top of node-xmpp
 
 
 ## Design
