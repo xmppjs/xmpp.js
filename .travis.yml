@@ -4,3 +4,6 @@ node_js:
   - 0.6
 before_script:
 - "apt-get install libicu-dev"
+- "npm i --dev"
+script:
+- "npm test"
