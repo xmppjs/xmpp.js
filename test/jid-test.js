@@ -113,4 +113,4 @@ vows.describe('JID').addBatch({
 	}
     }
 
-}).run();
+}).export(module);
