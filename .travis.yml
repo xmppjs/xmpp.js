@@ -2,8 +2,5 @@ language: node_js
 node_js:
   - 0.4
   - 0.6
-before_script:
+before_install:
   - "apt-get install libicu-dev"
-  - "npm i --dev"
-script:
-  - "npm test"
