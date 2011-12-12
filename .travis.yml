@@ -3,4 +3,4 @@ node_js:
   - 0.4
   - 0.6
 before_install:
-  - "apt-get install libicu-dev"
+  - "sudo apt-get install libicu-dev"
