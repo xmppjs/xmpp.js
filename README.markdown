@@ -56,6 +56,8 @@ Optional
 * [node-xmpp-via-bosh](https://github.com/anoopc/node-xmpp-via-bosh/): BOSH client connections from node.js
 * [node-simple-xmpp](https://github.com/arunoda/node-simple-xmpp/): Simpler high-level client layer
 * [xmpp-server](https://github.com/superfeedr/xmpp-server/): Reusable XMPP server on top of node-xmpp
+* [node-xmpp-joap](https://github.com/flosse/node-xmpp-joap/): Jabber Object Access Protocol (XEP-0075) library for node-xmpp
+* [node-xmpp-serviceadmin](https://github.com/flosse/node-xmpp-serviceadmin/): Service Administration (XEP-0133) library for node-xmpp
 
 
 ## Design
