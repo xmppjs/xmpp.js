@@ -4,7 +4,7 @@
 ,"description": "Idiomatic XMPP client, component & server library for node.js"
 ,"author": "Stephan Maka"
 ,"dependencies": {"node-expat": ">=1.4.1"
-		 ,"ltx": ">= 0.1.1"
+		 ,"ltx": ">= 0.2.0"
 		 }
 ,"devDependencies": {"node-stringprep": ">=0.1.0"
 		    ,"vows": ">=0.5.12"
