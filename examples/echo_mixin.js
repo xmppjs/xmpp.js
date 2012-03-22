@@ -1,14 +1,13 @@
 /**
- * Demonstrates how the echo behavior can be abstracted into a decorator, 
+ * Demonstrates how the echo behavior can be abstracted into a decorator,
  * working equally well on clients, components or S2S.
 */
-var sys = require('sys');
 var xmpp = require('../lib/node-xmpp');
 var argv = process.argv;
 
 if (argv.length < 5 && argv) {
-    sys.puts('Usage: node echo_mixin.js client <my-jid> <my-password>');
-    sys.puts('Or: node echo_mixin.js component <my-jid> <my-password> <host> <port>');
+    console.error('Usage: node echo_mixin.js client <my-jid> <my-password>');
+    console.error('Or: node echo_mixin.js component <my-jid> <my-password> <host> <port>');
     process.exit(1);
 }
 
@@ -30,7 +29,7 @@ function echoMixin(connection) {
 function errorMixin(connection) {
   connection.on('error',
     function(e) {
-      sys.puts(e);
+      console.error(e);
   });
 }
 

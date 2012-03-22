@@ -1,12 +1,11 @@
 /**
  * Echo Component - the XMPP Hello World
  **/
-var sys = require('sys');
 var xmpp = require('../lib/node-xmpp');
 var argv = process.argv;
 
 if (argv.length != 6) {
-    sys.puts('Usage: node echo_bot.js <my-jid> <my-password> <host> <port>');
+    console.error('Usage: node echo_bot.js <my-jid> <my-password> <host> <port>');
     process.exit(1);
 }
 
@@ -38,5 +37,5 @@ cl.on('stanza',
       });
 cl.on('error',
       function(e) {
-	  sys.puts(e);
+	  console.error(e);
       });
