@@ -1,23 +1,20 @@
-var sys = require('sys');
-var xmpp = require('../lib/node-xmpp');
-var argv = process.argv;
-
-if (argv.length < 6) {
-    sys.puts('Usage: node send_message.js <my-jid> <my-password> <my-text> <jid1> [jid2] ... [jidN]');
-    process.exit(1);
+try {
+var xmpp = require('node-xmpp');
+} catch (e) {
+    console.error(e.stack || e);
 }
-
-var cl = new xmpp.Client({ jid: argv[2],
-                           password: argv[3] });
+var cl = new xmpp.Client({ websocketsURL: "ws://localhost:5280/",
+			   jid: 'test@example.com',
+                           password: '***' });
 cl.addListener('online',
                function() {
-                   argv.slice(5).forEach(
+                   ["astro@spaceboyz.net"].forEach(
                        function(to) {
                            cl.send(new xmpp.Element('message',
                                                     { to: to,
                                                       type: 'chat'}).
                                    c('body').
-                                   t(argv[4]));
+                                   t("Hello from browser"));
                        });
 
                    // nodejs has nothing left to do and will exit
@@ -26,5 +23,4 @@ cl.addListener('online',
 cl.addListener('error',
                function(e) {
                    console.error(e);
-                   process.exit(1);
                });

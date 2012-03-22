@@ -1,6 +1,7 @@
 { "name": "node-xmpp"
 ,"version": "0.3.2"
 ,"main": "./lib/node-xmpp"
+,"browserify": "./lib/node-xmpp-browserify"
 ,"description": "Idiomatic XMPP client, component & server library for node.js"
 ,"author": "Stephan Maka"
 ,"dependencies": {"node-expat": ">=1.4.1"
@@ -8,9 +9,11 @@
 		 ,"request": ">= 2.9.153"
 		 ,"browser-request": ">= 0.1.0"
 		 ,"faye-websocket": ">= 0.4.1"
+		 ,"blueimp-md5": ">= 1.0.0"
 		 }
 ,"devDependencies": {"node-stringprep": ">=0.1.0"
 		    ,"vows": ">=0.5.12"
+		    ,"browserify": ">=1.10.4"
 		    }
 ,"repositories": [{"type": "git"
 		  ,"path": "git://github.com/astro/node-xmpp.git"
