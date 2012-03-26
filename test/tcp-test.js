@@ -46,6 +46,8 @@ describe("TCP client/server", function() {
 	});
     });
 
+    // registering client
+
     /*'client fails login': "pending",
 
     'auto reconnect': "pending"*/
