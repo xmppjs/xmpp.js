@@ -21,7 +21,10 @@ describe("TCP client/server", function() {
 		host: '::1',
 		port: C2S_PORT
 	    });
-	    cl.on('online', done);
+	    cl.on('online', function() {
+		assert.ok(svcl.authenticated, "Client should have authenticated");
+		done();
+	    });
 	});
 
 	it("should send a stanza", function(done) {
