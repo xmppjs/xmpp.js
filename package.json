@@ -12,7 +12,7 @@
 		 ,"blueimp-md5": ">= 1.0.0"
 		 }
 ,"devDependencies": {"node-stringprep": ">=0.1.0"
-		    ,"vows": ">=0.5.12"
+		    ,"mocha": ">=1.0.0"
 		    ,"browserify": ">=1.10.4"
 		    }
 ,"repositories": [{"type": "git"
@@ -27,5 +27,5 @@
 ,"contributors": ["Stephan Maka", "Derek Hammer", "Daniel Zelisko", "Michael Geers", "Nolan Darilek", "Nathan Rajlich", "Dhruv Matani", "Camilo Aguilar", "Henry Chan", "Justin Campbell", "Trent Mick", "Alexey Shamrin", "Sonny Piers", "Chaitanya Gupta", "Иван", "Julien Genestoux"]
 ,"licenses": [{"type": "MIT"}]
 ,"engine": "node >=0.4.0"
-,"scripts": {"test": "vows --spec"}
+,"scripts": {"test": "mocha -R spec"}
 }
