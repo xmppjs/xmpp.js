@@ -27,7 +27,7 @@ describe("BOSH client/server", function() {
 		boshURL: "http://localhost:" + BOSH_PORT
 	    });
 	    cl.on('online', function() {
-		assert.ok(svcl.authenticated, "Client should have authenticated");
+		assert.ok(c2s.authenticated, "Client should have authenticated");
 		done();
 	    });
 	});
