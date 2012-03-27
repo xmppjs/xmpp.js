@@ -14,7 +14,7 @@ describe("BOSH client/server", function() {
 	}).listen(BOSH_PORT);
 	sv.on('connect', function(svcl_) {
 	    svcl = svcl_;
-	    c2s = new C2SStream(svcl);
+	    c2s = new C2SStream({ connection: svcl });
 	    c2s.on('authenticate', function(opts, cb) {
 		cb();
 	    });
