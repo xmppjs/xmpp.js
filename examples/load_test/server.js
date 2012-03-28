@@ -35,13 +35,25 @@ bosh.on('connect', function(svcl) {
     var c2s = new C2SStream({ connection: svcl });
     c2s.on('authenticate', function(opts, cb) {
 	authedClients++;
-	c2s.on('close', function() {
+	svcl.on('close', function() {
 	    authedClients--;
 	});
 	cb();
     });
+    c2s.on('error', function(e) {
+	console.error("Error", e);
+    });
 });
 
 setInterval(function() {
-    console.log(tcpClients, "TCP", boshClients, "BOSH", authedClients, "authed", Math.ceil(process.memoryUsage().rss / 1024 / 1024), "MB");
+    console.log("TCP", tcpClients, "BOSH", boshClients, "authed", authedClients, "RSS MB", Math.ceil(process.memoryUsage().rss / 1024 / 1024));
+
+    var inCount = 0, outCount = 0;
+    for(var k in bosh.sessions) {
+	var session = bosh.sessions[k];
+	for(var j in session.inQueue)
+	    inCount++;
+	outCount += session.outQueue.length;
+    }
+    console.log("BOSH inQueue", inCount, "BOSH outQueue", outCount);
 }, 1000);

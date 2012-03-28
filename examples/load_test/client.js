@@ -1,5 +1,7 @@
 var async = require('async');
 var xmpp = require('../../lib/node-xmpp');
+var http = require('http');
+http.globalAgent.maxSockets = 9999999;
 
 function getNow() {
     return new Date().getTime();
@@ -19,7 +21,7 @@ function connectThem(n, opts, cb) {
 }
 
 
-const SIZES = [10, 50, 100, 500, 1000];
+const SIZES = [1, 5, 10, 20, 50, 100, 200, 500, 1000, 2000];
 async.forEachSeries(SIZES, function(n, cb) {
     async.series([function(cb2) {
 	console.log("Connecting", n);
