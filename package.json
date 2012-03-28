@@ -10,10 +10,10 @@
 		 ,"browser-request": ">= 0.1.0"
 		 ,"faye-websocket": ">= 0.4.1"
 		 ,"blueimp-md5": ">= 1.0.0"
+		 ,"browserify": ">=1.10.4"
 		 }
 ,"devDependencies": {"node-stringprep": ">=0.1.0"
 		    ,"mocha": ">=1.0.0"
-		    ,"browserify": ">=1.10.4"
 		    }
 ,"repositories": [{"type": "git"
 		  ,"path": "git://github.com/astro/node-xmpp.git"
@@ -27,5 +27,7 @@
 ,"contributors": ["Stephan Maka", "Derek Hammer", "Daniel Zelisko", "Michael Geers", "Nolan Darilek", "Nathan Rajlich", "Dhruv Matani", "Camilo Aguilar", "Henry Chan", "Justin Campbell", "Trent Mick", "Alexey Shamrin", "Sonny Piers", "Chaitanya Gupta", "Иван", "Julien Genestoux"]
 ,"licenses": [{"type": "MIT"}]
 ,"engine": "node >=0.4.0"
-,"scripts": {"test": "mocha -R spec"}
+,"scripts": { "install": "browserify -d -o node-xmpp-browser.js lib/node-xmpp-browserify.js"
+	     ,"test": "mocha -R spec"
+  	    }
 }
