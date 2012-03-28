@@ -35,8 +35,10 @@ async.forEachSeries(SIZES, function(n, cb) {
 	}, function(e, clients) {
 	    console.log("Connected",n,"in",getNow() - t1,"ms");
 	    async.forEachSeries(clients, function(cl, cb3) {
+		cl.connection.on('close', function() {
+		    cb3()
+		});
 		cl.end();
-		cb3();
 	    }, cb2);
 	});
     }, function(cb2) {
@@ -49,8 +51,10 @@ async.forEachSeries(SIZES, function(n, cb) {
 	}, function(e, clients) {
 	    console.log("Connected",n,"in",getNow() - t1,"ms");
 	    async.forEachSeries(clients, function(cl, cb3) {
+		cl.connection.on('close', function() {
+		    cb3()
+		});
 		cl.end();
-		cb3();
 	    }, cb2);
 	});
     }], cb);
