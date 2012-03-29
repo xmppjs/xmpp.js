@@ -17,6 +17,8 @@ Now usable in browsers too thanks to [Browserify](https://github.com/substack/no
 * Use split-out srv library
 * Ensure tls end/close/drain events
 * Properly disconnect on stream errors, not on connection errors
+* Tests for S2S connections
+* Tests for Component connections (w/ Component server?)
 * Find a browser-based demo app that can be switched from Strophe.js
 
 
