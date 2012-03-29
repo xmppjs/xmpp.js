@@ -7,7 +7,7 @@
 ,"dependencies": {"node-expat": ">=1.4.1"
 		 ,"ltx": ">= 0.2.0"
 		 ,"request": ">= 2.9.153"
-		 ,"browser-request": ">= 0.1.0"
+		 ,"browser-request": "https://github.com/astro/browser-request/tarball/master"
 		 ,"faye-websocket": ">= 0.4.1"
 		 ,"blueimp-md5": ">= 1.0.0"
 		 ,"browserify": ">=1.10.4"
