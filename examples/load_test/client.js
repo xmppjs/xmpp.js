@@ -47,7 +47,7 @@ async.forEachSeries(SIZES, function(n, cb) {
 	connectThem(n, {
 	    jid: "test@localhost",
 	    password: "test",
-	    boshURL: "http://localhost:25280"
+	    boshURL: "http://127.0.0.1:25280"
 	}, function(e, clients) {
 	    console.log("Connected",n,"in",getNow() - t1,"ms");
 	    async.forEachSeries(clients, function(cl, cb3) {
