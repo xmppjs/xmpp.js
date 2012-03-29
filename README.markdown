@@ -7,7 +7,6 @@ Now usable in browsers too thanks to [Browserify](https://github.com/substack/no
 
 ## Roadmap for 0.4.0
 
-* Either make browser-request usable with browserify, or implement request() on top of XHR
 * Events harmonization
 * Common pause/resume/... for any Client/Component/Server session
 * Smoothen reconnect
