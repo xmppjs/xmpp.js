@@ -2,6 +2,23 @@
 
 idiomatic XMPP library for [node.js](http://nodejs.org/)
 
+Now usable in browsers too thanks to [Browserify](https://github.com/substack/node-browserify).
+
+
+## Roadmap for 0.4.0
+
+* Either make browser-request usable with browserify, or implement request() on top of XHR
+* Events harmonization
+* Common pause/resume/... for any Client/Component/Server session
+* Smoothen reconnect
+* Websockets server (at least for testing the client)
+* Lookup BOSH URLs in DNS TXT records
+* Move connecting to connection, use WS/BOSH as TCP fallback
+* Use split-out srv library
+* Ensure tls end/close/drain events
+* Properly disconnect on stream errors, not on connection errors
+* Find a browser-based demo app that can be switched from Strophe.js
+
 
 ## Installation
 
@@ -104,9 +121,3 @@ This can be confusing: in the end, you will hold the last-added child
 until you use `up()`, a getter for the parent. `Connection.send()`
 first invokes `tree()` to retrieve the uppermost parent, the XMPP
 stanza, before sending it out the wire.
-
-
-## TODO
-
-* More documentation
-* More tests (Using [Vows](http://vowsjs.org/))
