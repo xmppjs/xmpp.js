@@ -1,16 +1,12 @@
-try {
-var xmpp = require('node-xmpp');
-} catch (e) {
-    console.error(e.stack || e);
-}
-var cl = new xmpp.Client({ websocketsURL: "ws://localhost:5280/",
+var cl = new XMPP.Client({ /*websocketsURL: "ws://localhost:5280/",*/
+			   boshURL: "https://beta.buddycloud.org/http-bind/",
 			   jid: 'test@example.com',
                            password: '***' });
 cl.addListener('online',
                function() {
                    ["astro@spaceboyz.net"].forEach(
                        function(to) {
-                           cl.send(new xmpp.Element('message',
+                           cl.send(new XMPP.Element('message',
                                                     { to: to,
                                                       type: 'chat'}).
                                    c('body').
