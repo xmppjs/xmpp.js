@@ -61,6 +61,11 @@ With package manager [npm](http://npmjs.org/):
 ## Dependencies
 
 * [node-expat](http://github.com/astro/node-expat)
+Note: You will likely need to install the libraries for node-expat.
+  * Ubuntu / Debian derivatives:
+    `zipp@prospekt:~/node-xmpp$ sudo yum install libexpat1-dev`
+  * Centos / Red Hat derivatives:
+    `[zipp@dominion ~]# sudo yum install expat-devel`
 * [ltx](http://github.com/astro/ltx)
 
 Optional
