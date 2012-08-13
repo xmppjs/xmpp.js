@@ -60,7 +60,7 @@ With package manager [npm](http://npmjs.org/):
 
 ## Dependencies
 
-* [node-expat](http://github.com/astro/node-expat)
+* [node-expat](http://github.com/astro/node-expat) (requires libexpat!)
 * [ltx](http://github.com/astro/ltx)
 
 Optional
