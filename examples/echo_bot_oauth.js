@@ -10,6 +10,7 @@ if (argv.length != 4) {
 }
 
 var cl = new xmpp.Client({ jid: argv[2],
+			   host: 'talk.google.com',
 			   oauth2_token: argv[3],
 			   oauth2_auth: 'http://www.google.com/talk/protocol/auth' });
 cl.on('online',
