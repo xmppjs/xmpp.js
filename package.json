@@ -27,6 +27,6 @@
 ,"licenses": [{"type": "MIT"}]
 ,"engine": "node >=0.4.0"
 ,"scripts": { 
-	     "test": "mocha -R spec"
+	     ,"test": "mocha -R spec"
   	    }
 }
