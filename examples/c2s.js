@@ -20,23 +20,29 @@ c2s.on("connect", function(client) {
 
     // Allows the developer to register the jid against anything they want
     c2s.on("register", function(opts, cb) {
+    	console.log("REGISTER");
 	cb(true);
     });
 
     // Allows the developer to authenticate users against anything they want.
     client.on("authenticate", function(opts, cb) {
+    	console.log("AUTH" + opts.jid + " -> " +opts.password); 
 	cb(null); // cb(false);
     });
+    
     client.on("online", function() {
-	client.send(new xmpp.Message({ type: 'chat' }).c('body').t("Hello there, little client."));
+    	console.log("ONLINE");
+    	client.send(new xmpp.Message({ type: 'chat' }).c('body').t("Hello there, little client."));
     });
 
     // Stanza handling
     client.on("stanza", function(stanza) {
+    	console.log("STANZA" + stanza);
     });
 
     // On Disconnect event. When a client disconnects
     client.on("disconnect", function(client) {
+    	console.log("DISCONNECT");
     });
 
 });
