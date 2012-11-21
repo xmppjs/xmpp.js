@@ -24,7 +24,7 @@
 		 ,"email": "astro@spaceboyz.net"
 		 ,"web": "http://spaceboyz.net/~astro/"
 		 }]
-,"contributors": ["Stephan Maka", "Derek Hammer", "Daniel Zelisko", "Michael Geers", "Nolan Darilek", "Nathan Rajlich", "Dhruv Matani", "Camilo Aguilar", "Henry Chan", "Justin Campbell", "Trent Mick", "Alexey Shamrin", "Sonny Piers", "Chaitanya Gupta", "Иван", "Julien Genestoux", "Ian Langworth"]
+,"contributors": ["Stephan Maka", "Derek Hammer", "Daniel Zelisko", "Michael Geers", "Nolan Darilek", "Nathan Rajlich", "Dhruv Matani", "Camilo Aguilar", "Henry Chan", "Justin Campbell", "Trent Mick", "Alexey Shamrin", "Sonny Piers", "Chaitanya Gupta", "Иван", "Julien Genestoux", "Ian Langworth", "Eelco Cramer"]
 ,"licenses": [{"type": "MIT"}]
 ,"engine": "node >=0.4.0"
 ,"scripts": { "postinstall": "browserify -d -o node-xmpp-browser.js lib/node-xmpp-browserify.js"
