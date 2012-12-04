@@ -4,6 +4,7 @@ idiomatic XMPP library for [node.js](http://nodejs.org/)
 
 Now usable in browsers too thanks to [Browserify](https://github.com/substack/node-browserify).
 
+[![build status](https://secure.travis-ci.org/substack/node-xmpp.png)](http://travis-ci.org/substack/node-xmpp)
 
 ## Roadmap for 0.4.0
 
