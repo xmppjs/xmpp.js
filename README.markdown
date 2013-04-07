@@ -70,6 +70,7 @@ Optional
 
 ## Related Libraries
 
+* [Junction](https://github.com/jaredhanson/junction): An extensible XMPP middleware layer
 * [node-xmpp-bosh](http://code.google.com/p/node-xmpp-bosh/): BOSH & websocket server (connection manager)
 * [node-xmpp-via-bosh](https://github.com/anoopc/node-xmpp-via-bosh/): BOSH client connections from node.js
 * [node-simple-xmpp](https://github.com/arunoda/node-simple-xmpp/): Simpler high-level client layer
