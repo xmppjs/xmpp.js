@@ -1,27 +1,30 @@
-{ "name": "node-xmpp"
-,"version": "0.3.2"
-,"main": "./lib/node-xmpp"
-,"browserify": "./lib/node-xmpp-browserify"
-,"description": "Idiomatic XMPP client, component & server library for node.js + browserify"
-,"author": "Astro"
-,"dependencies": {"node-expat": ">=1.4.1"
-		 ,"ltx": ">= 0.2.0"
-		 ,"request": ">= 2.9.153"
-		 ,"browser-request": ">= 0.2.0"
-		 ,"faye-websocket": ">= 0.4.1"
-		 ,"blueimp-md5": ">= 1.0.0"
-		 ,"browserify": ">=1.10.4"
-		 }
-,"devDependencies": {"node-stringprep": ">=0.1.0"
-		    ,"mocha": ">=1.0.0"
-		    }
-,"repository": {
+{
+    "name": "node-xmpp"
+  , "version": "0.3.2"
+  , "main": "./lib/node-xmpp"
+  , "browserify": "./lib/node-xmpp-browserify"
+  , "description": "Idiomatic XMPP client, component & server library for node.js + browserify"
+  , "author": "Astro"
+  , "dependencies": {
+      "node-expat": ">=1.4.1"
+    , "ltx": ">= 0.2.0"
+    , "request": ">= 2.9.153"
+    , "browser-request": ">= 0.2.0"
+    , "faye-websocket": ">= 0.4.1"
+    , "blueimp-md5": ">= 1.0.0"
+    , "browserify": ">=1.10.4"
+}
+  , "devDependencies": {
+      "node-stringprep": ">=0.1.0"
+    , "mocha": ">=1.0.0"
+}
+  , "repository": {
     "type": "git"
   , "url": "git://github.com/astro/node-xmpp.git"
 }
-,"homepage": "http://github.com/astro/node-xmpp"
-,"bugs": "http://github.com/astro/node-xmpp/issues"
-"maintainers": [
+  , "homepage": "http://github.com/astro/node-xmpp"
+  , "bugs": "http://github.com/astro/node-xmpp/issues"
+  , "maintainers": [
     {
       "name": "Astro",
       "email": "astro@spaceboyz.net",
@@ -32,11 +35,12 @@
       "email": "lloyd@evilprofessor.co.uk",
       "web": "http://www.evilprofessor.co.uk"
     }
-  ],
-,"contributors": ["Stephan Maka", "Derek Hammer", "Daniel Zelisko", "Michael Geers", "Nolan Darilek", "Nathan Rajlich", "Dhruv Matani", "Camilo Aguilar", "Henry Chan", "Justin Campbell", "Trent Mick", "Alexey Shamrin", "Sonny Piers", "Chaitanya Gupta", "Иван", "Julien Genestoux", "Ian Langworth", "Eelco Cramer"]
-,"licenses": [{"type": "MIT"}]
-,"engine": "node >=0.4.0"
-,"scripts": { "postinstall": "browserify -d -o node-xmpp-browser.js lib/node-xmpp-browserify.js"
-	     ,"test": "mocha -R spec"
-  	    }
+  ]
+  , "contributors": ["Stephan Maka", "Derek Hammer", "Daniel Zelisko", "Michael Geers", "Nolan Darilek", "Nathan Rajlich", "Dhruv Matani", "Camilo Aguilar", "Henry Chan", "Justin Campbell", "Trent Mick", "Alexey Shamrin", "Sonny Piers", "Chaitanya Gupta", "Иван", "Julien Genestoux", "Ian Langworth", "Eelco Cramer"]
+  , "licenses": [{"type": "MIT"}]
+  , "engine": "node >=0.4.0"
+  , "scripts": {
+      "postinstall": "browserify -d -o node-xmpp-browser.js lib/node-xmpp-browserify.js"
+    , "test": "mocha -R spec"
+  }
 }
