@@ -15,15 +15,24 @@
 ,"devDependencies": {"node-stringprep": ">=0.1.0"
 		    ,"mocha": ">=1.0.0"
 		    }
-,"repositories": [{"type": "git"
-		  ,"path": "git://github.com/astro/node-xmpp.git"
-		  }]
+,"repository": {
+    "type": "git"
+  , "url": "git://github.com/astro/node-xmpp.git"
+}
 ,"homepage": "http://github.com/astro/node-xmpp"
 ,"bugs": "http://github.com/astro/node-xmpp/issues"
-,"maintainers": [{"name": "Astro"
-		 ,"email": "astro@spaceboyz.net"
-		 ,"web": "http://spaceboyz.net/~astro/"
-		 }]
+"maintainers": [
+    {
+      "name": "Astro",
+      "email": "astro@spaceboyz.net",
+      "web": "http://spaceboyz.net/~astro/"
+    },
+    {
+      "name": "Lloyd Watkin",
+      "email": "lloyd@evilprofessor.co.uk",
+      "web": "http://www.evilprofessor.co.uk"
+    }
+  ],
 ,"contributors": ["Stephan Maka", "Derek Hammer", "Daniel Zelisko", "Michael Geers", "Nolan Darilek", "Nathan Rajlich", "Dhruv Matani", "Camilo Aguilar", "Henry Chan", "Justin Campbell", "Trent Mick", "Alexey Shamrin", "Sonny Piers", "Chaitanya Gupta", "Иван", "Julien Genestoux", "Ian Langworth", "Eelco Cramer"]
 ,"licenses": [{"type": "MIT"}]
 ,"engine": "node >=0.4.0"
