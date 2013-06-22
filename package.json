@@ -11,12 +11,19 @@
     "request": ">= 2.9.153",
     "browser-request": ">= 0.2.0",
     "faye-websocket": ">= 0.4.1",
-    "blueimp-md5": ">= 1.0.0",
-    "browserify": ">=1.10.4"
+    "blueimp-md5": ">= 1.0.0"
   },
   "devDependencies": {
+    "browserify": ">=2.18.1",
     "node-stringprep": ">=0.1.0",
     "mocha": ">=1.0.0"
+  },
+  "browser": {
+    "request": "browser-request",
+    "node-stringprep": false,
+    "faye-websocket": false,
+    "./srv": false,
+    "dns": false
   },
   "repository": {
     "type": "git",
@@ -54,7 +61,8 @@
     "Иван",
     "Julien Genestoux",
     "Ian Langworth",
-    "Eelco Cramer"
+    "Eelco Cramer",
+    "dodo"
   ],
   "licenses": [
     {
@@ -63,7 +71,7 @@
   ],
   "engine": "node >=0.4.0",
   "scripts": {
-    "postinstall": "browserify -d -o node-xmpp-browser.js lib/node-xmpp-browserify.js",
+    "postinstall": "browserify -d -o node-xmpp-browser.js -r request:browser-request -i node-stringprep -i faye-websocket -i ./srv -i dns ./lib/node-xmpp-browserify.js",
     "test": "mocha -R spec"
   }
 }
