@@ -57,6 +57,7 @@ With package manager [npm](http://npmjs.org/):
   * Was split out of node-xmpp for modularization and resuability
 * [Component](http://xmpp.org/extensions/xep-0114.html) connections
 * Run your own server/talk to other servers with `xmpp.Router`
+* Even runs in the Browser.
 
 
 ## Dependencies
@@ -125,3 +126,14 @@ This can be confusing: in the end, you will hold the last-added child
 until you use `up()`, a getter for the parent. `Connection.send()`
 first invokes `tree()` to retrieve the uppermost parent, the XMPP
 stanza, before sending it out the wire.
+
+## Browser Support
+
+node-xmpp now comes with a prebuilt browser bundle:
+
+```html
+<script src="/node_modules/node-xmpp/node-xmpp-browser.js"></script>
+<script type="text/javascript">
+    var client = new XMPP.Client(opts);
+</script>
+```
