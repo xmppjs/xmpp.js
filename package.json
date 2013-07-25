@@ -1,19 +1,18 @@
 {
   "name": "node-xmpp",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "main": "./lib/node-xmpp",
   "browserify": "./lib/node-xmpp-browserify",
   "description": "Idiomatic XMPP client, component & server library for node.js + browserify",
   "author": "Astro",
   "dependencies": {
-    "browserify": ">=2.18.1",
+    "browserify": "~2.18.1",
     "node-expat": ">=1.4.1",
     "ltx": ">= 0.2.0",
     "request": ">= 2.9.153",
     "browser-request": ">= 0.2.0",
     "faye-websocket": ">= 0.4.1",
     "blueimp-md5": ">= 1.0.0",
-    "browserify": "~2.18.1",
     "mocha": ">=1.0.0"
   },
   "devDependencies": {
