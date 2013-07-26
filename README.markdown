@@ -28,6 +28,9 @@ With package manager [npm](http://npmjs.org/):
 
     npm install node-xmpp
 
+## How to use
+
+Please see the various [examples](https://github.com/astro/node-xmpp/tree/master/examples).
 
 ## Objectives of *node-xmpp:*
 
