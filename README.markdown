@@ -6,22 +6,6 @@ Now usable in browsers too thanks to [Browserify](https://github.com/substack/no
 
 [![build status](https://secure.travis-ci.org/astro/node-xmpp.png)](http://travis-ci.org/astro/node-xmpp)
 
-## Roadmap for 0.4.0
-
-* Events harmonization
-* Common pause/resume/... for any Client/Component/Server session
-* Smoothen reconnect
-* Websockets server (at least for testing the client)
-* Lookup BOSH URLs in DNS TXT records
-* Move connecting to connection, use WS/BOSH as TCP fallback
-* Use split-out srv library
-* Ensure tls end/close/drain events
-* Properly disconnect on stream errors, not on connection errors
-* Tests for S2S connections
-* Tests for Component connections (w/ Component server?)
-* Find a browser-based demo app that can be switched from Strophe.js
-
-
 ## Installation
 
 With package manager [npm](http://npmjs.org/):
@@ -140,3 +124,19 @@ node-xmpp now comes with a prebuilt browser bundle:
     var client = new XMPP.Client(opts);
 </script>
 ```
+
+
+## Roadmap for future versions
+
+* Events harmonization
+* Common pause/resume/... for any Client/Component/Server session
+* Smoothen reconnect
+* Websockets server (at least for testing the client)
+* Lookup BOSH URLs in DNS TXT records
+* Move connecting to connection, use WS/BOSH as TCP fallback
+* Use split-out srv library
+* Ensure tls end/close/drain events
+* Properly disconnect on stream errors, not on connection errors
+* Tests for S2S connections
+* Tests for Component connections (w/ Component server?)
+* Find a browser-based demo app that can be switched from Strophe.js
