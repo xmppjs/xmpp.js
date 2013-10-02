@@ -125,6 +125,16 @@ node-xmpp now comes with a prebuilt browser bundle:
 </script>
 ```
 
+# Keepalives
+
+Rather than send empty packets in order to keep any socket alive please try the following:
+
+```
+this.client.connection.socket.setTimeout(0)
+this.client.connection.socket.setKeepAlive(true, 10000)
+```
+
+Where `this.client` is the result of `new require('node-xmpp').Client()`.
 
 ## Roadmap for future versions
 
