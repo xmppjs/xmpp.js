@@ -9,7 +9,8 @@ if (argv.length < 6) {
 var cl = new xmpp.Client({ jid: argv[2],
                            password: argv[3] });
 cl.addListener('online',
-               function() {
+               function(data) {
+                   console.log('Connected as ' + data.jid.user '@' + data.jid.domain + '/' data.jid.resource);
                    argv.slice(5).forEach(
                        function(to) {
                            cl.send(new xmpp.Element('message',
