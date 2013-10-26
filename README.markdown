@@ -12,6 +12,13 @@ With package manager [npm](http://npmjs.org/):
 
     npm install node-xmpp
 
+### Testing
+
+Install the dev dependencies, then...
+
+```npm test```
+
+Also see the tests run in [travis](http://travis-ci.org/astro/node-xmpp)
 ## How to use
 
 Please see the various [examples](https://github.com/astro/node-xmpp/tree/master/examples).
