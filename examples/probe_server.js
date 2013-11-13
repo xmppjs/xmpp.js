@@ -13,45 +13,45 @@ r.register(MY_JID, function(stanza) {
     var query;
 
     if (stanza.is('iq') &&
-	stanza.attrs.type == 'result' &&
-	(query = stanza.getChild('query', 'jabber:iq:version'))) {
+    stanza.attrs.type == 'result' &&
+    (query = stanza.getChild('query', 'jabber:iq:version'))) {
 
-	var name = query.getChildText('name');
-	var version = query.getChildText('version');
-	var os = query.getChildText('os');
-	console.log(time + " >> " + stanza.attrs.from + " " +
-		    [name, version, os].join('/'));
+    var name = query.getChildText('name');
+    var version = query.getChildText('version');
+    var os = query.getChildText('os');
+    console.log(time + " >> " + stanza.attrs.from + " " +
+            [name, version, os].join('/'));
     } else if (stanza.is('iq') &&
-	       stanza.attrs.type == 'error') {
-	console.log(time + " !! " + stanza.attrs.from);
+           stanza.attrs.type == 'error') {
+    console.log(time + " !! " + stanza.attrs.from);
     } else {
-	console.log(time + " ?? " + stanza.toString());
+    console.log(time + " ?? " + stanza.toString());
     }
 });
 process.on('SIGINT', function() {
     r.unregister(MY_JID);
     process.nextTick(function() {
-	process.exit(0);
+    process.exit(0);
     });
 });
 
 
 var PROBE_DOMAINS = ["spaceboyz.net", "jabber.ccc.de",
-		     "gmail.com", "jabber.org",
-		     "jabbim.cz", "jabber.ru",
-		     "process-one.net", "gtalk2voip.com",
-		     "swissjabber.ch", "aspsms.swissjabber.ch",
-		     "icq.hq.c3d2.de", "codetu.be",
-		     "webkeks.org"];
+             "gmail.com", "jabber.org",
+             "jabbim.cz", "jabber.ru",
+             "process-one.net", "gtalk2voip.com",
+             "swissjabber.ch", "aspsms.swissjabber.ch",
+             "icq.hq.c3d2.de", "codetu.be",
+             "webkeks.org"];
 function probe() {
     setTimeout(probe, Math.floor((Math.random() * 15 + 5) * 1000));
 
     var to = PROBE_DOMAINS[Math.floor(Math.random() * PROBE_DOMAINS.length)];
     r.send(new xmpp.Element('iq', { type: 'get',
-				    to: to,
-				    from: MY_JID
-				  }).
-	   c('query', { xmlns: 'jabber:iq:version' })
-	  );
+                    to: to,
+                    from: MY_JID
+                  }).
+       c('query', { xmlns: 'jabber:iq:version' })
+      );
 }
 probe();

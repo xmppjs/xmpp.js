@@ -4,101 +4,101 @@ xmpp = require('./../lib/xmpp');
 describe('JID', function() {
 
     describe('parsing', function() {
-	it('should parse a "domain" JID', function() {
-	    var j = new xmpp.JID('d');
-	    assert.equal(j.user, null);
-	    assert.equal(j.domain, 'd');
-	    assert.equal(j.resource, null);
-	});
-	it('should parse a "user@domain" JID', function() {
-	    var j = new xmpp.JID('u@d');
-	    assert.equal(j.user, 'u');
-	    assert.equal(j.domain, 'd');
-	    assert.equal(j.resource, null);
-	});
-	it('should parse a "domain/resource" JID', function() {
-	    var j = new xmpp.JID('d/r');
-	    assert.equal(j.user, null);
-	    assert.equal(j.domain, 'd');
-	    assert.equal(j.resource, 'r');
-	});
-	it('should parse a "user@domain/resource" JID', function() {
-	    var j = new xmpp.JID('u@d/r');
-	    assert.equal(j.user, 'u');
-	    assert.equal(j.domain, 'd');
-	    assert.equal(j.resource, 'r');
-	});
-	it('should parse an internationalized domain name as unicode', function() {
-	    var j = new xmpp.JID('öko.de');
-	    assert.equal(j.domain, 'öko.de');
-	});
-	
-	try {
-    	require('node-stringprep'); // HACK: these tests fail if node-stringprep is not used.
-    	it('should parse an internationalized domain name as ascii/punycode', function() {
-    	    var j = new xmpp.JID('xn--ko-eka.de');
-    	    assert.equal(j.domain, 'öko.de');
-    	});
-    	it('should parse a JID with punycode', function() {
-    	    var j = new xmpp.JID('Сергей@xn--lsa92diaqnge.xn--p1ai');
-    	    assert.equal(j.user, 'сергей');
-    	    assert.equal(j.domain, 'приме́р.рф');
-    	});
-	} catch (ex) {
-	    //ignore
-	}
+    it('should parse a "domain" JID', function() {
+        var j = new xmpp.JID('d');
+        assert.equal(j.user, null);
+        assert.equal(j.domain, 'd');
+        assert.equal(j.resource, null);
+    });
+    it('should parse a "user@domain" JID', function() {
+        var j = new xmpp.JID('u@d');
+        assert.equal(j.user, 'u');
+        assert.equal(j.domain, 'd');
+        assert.equal(j.resource, null);
+    });
+    it('should parse a "domain/resource" JID', function() {
+        var j = new xmpp.JID('d/r');
+        assert.equal(j.user, null);
+        assert.equal(j.domain, 'd');
+        assert.equal(j.resource, 'r');
+    });
+    it('should parse a "user@domain/resource" JID', function() {
+        var j = new xmpp.JID('u@d/r');
+        assert.equal(j.user, 'u');
+        assert.equal(j.domain, 'd');
+        assert.equal(j.resource, 'r');
+    });
+    it('should parse an internationalized domain name as unicode', function() {
+        var j = new xmpp.JID('öko.de');
+        assert.equal(j.domain, 'öko.de');
+    });
+    
+    try {
+        require('node-stringprep'); // HACK: these tests fail if node-stringprep is not used.
+        it('should parse an internationalized domain name as ascii/punycode', function() {
+            var j = new xmpp.JID('xn--ko-eka.de');
+            assert.equal(j.domain, 'öko.de');
+        });
+        it('should parse a JID with punycode', function() {
+            var j = new xmpp.JID('Сергей@xn--lsa92diaqnge.xn--p1ai');
+            assert.equal(j.user, 'сергей');
+            assert.equal(j.domain, 'приме́р.рф');
+        });
+    } catch (ex) {
+        //ignore
+    }
     });
 
     describe('serialization', function() {
-	it('should serialize a "domain" JID', function() {
-	    var j = new xmpp.JID(null, 'd');
-	    assert.equal(j.toString(), 'd');
-	});
-	it('should serialize a "user@domain" JID', function() {
-	    var j = new xmpp.JID('u', 'd');
-	    assert.equal(j.toString(), 'u@d');
-	});
-	it('should serialize a "domain/resource" JID', function() {
-	    var j = new xmpp.JID(null, 'd', 'r');
-	    assert.equal(j.toString(), 'd/r');
-	});
-	it('should serialize a "user@domain/resource" JID', function() {
-	    var j = new xmpp.JID('u', 'd', 'r');
-	    assert.equal(j.toString(), 'u@d/r');
-	});
+    it('should serialize a "domain" JID', function() {
+        var j = new xmpp.JID(null, 'd');
+        assert.equal(j.toString(), 'd');
+    });
+    it('should serialize a "user@domain" JID', function() {
+        var j = new xmpp.JID('u', 'd');
+        assert.equal(j.toString(), 'u@d');
+    });
+    it('should serialize a "domain/resource" JID', function() {
+        var j = new xmpp.JID(null, 'd', 'r');
+        assert.equal(j.toString(), 'd/r');
+    });
+    it('should serialize a "user@domain/resource" JID', function() {
+        var j = new xmpp.JID('u', 'd', 'r');
+        assert.equal(j.toString(), 'u@d/r');
+    });
     });
 
     describe('equality', function() {
-	it('should parsed JIDs should be equal', function() {
-	    var j1 = new xmpp.JID('foo@bar/baz');
-	    var j2 = new xmpp.JID('foo@bar/baz');
-	    assert.equal(j1.equals(j2), true);
-	});
-	it('should parsed JIDs should be not equal', function() {
-	    var j1 = new xmpp.JID('foo@bar/baz');
-	    var j2 = new xmpp.JID('quux@bar/baz');
-	    assert.equal(j1.equals(j2), false);
-	});
-	it('should should ignore case in user', function() {
-	    var j1 = new xmpp.JID('foo@bar/baz');
-	    var j2 = new xmpp.JID('FOO@bar/baz');
-	    assert.equal(j1.equals(j2), true);
-	});
-	it('should should ignore case in domain', function() {
-	    var j1 = new xmpp.JID('foo@bar/baz');
-	    var j2 = new xmpp.JID('foo@BAR/baz');
-	    assert.equal(j1.equals(j2), true);
-	});
-	it('should should not ignore case in resource', function() {
-	    var j1 = new xmpp.JID('foo@bar/baz');
-	    var j2 = new xmpp.JID('foo@bar/Baz');
-	    assert.equal(j1.equals(j2), false);
-	});
-	it('should should ignore international caseness', function() {
-	    var j1 = new xmpp.JID('föö@bär/baß');
-	    var j2 = new xmpp.JID('fÖö@BÄR/baß');
-	    assert.equal(j1.equals(j2), true);
-	});
+    it('should parsed JIDs should be equal', function() {
+        var j1 = new xmpp.JID('foo@bar/baz');
+        var j2 = new xmpp.JID('foo@bar/baz');
+        assert.equal(j1.equals(j2), true);
+    });
+    it('should parsed JIDs should be not equal', function() {
+        var j1 = new xmpp.JID('foo@bar/baz');
+        var j2 = new xmpp.JID('quux@bar/baz');
+        assert.equal(j1.equals(j2), false);
+    });
+    it('should should ignore case in user', function() {
+        var j1 = new xmpp.JID('foo@bar/baz');
+        var j2 = new xmpp.JID('FOO@bar/baz');
+        assert.equal(j1.equals(j2), true);
+    });
+    it('should should ignore case in domain', function() {
+        var j1 = new xmpp.JID('foo@bar/baz');
+        var j2 = new xmpp.JID('foo@BAR/baz');
+        assert.equal(j1.equals(j2), true);
+    });
+    it('should should not ignore case in resource', function() {
+        var j1 = new xmpp.JID('foo@bar/baz');
+        var j2 = new xmpp.JID('foo@bar/Baz');
+        assert.equal(j1.equals(j2), false);
+    });
+    it('should should ignore international caseness', function() {
+        var j1 = new xmpp.JID('föö@bär/baß');
+        var j2 = new xmpp.JID('fÖö@BÄR/baß');
+        assert.equal(j1.equals(j2), true);
+    });
     });
 
 });

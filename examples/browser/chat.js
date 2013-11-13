@@ -1,6 +1,6 @@
 var cl = new XMPP.Client({ /*websocketsURL: "ws://localhost:5280/",*/
-			   boshURL: "https://beta.buddycloud.org/http-bind/",
-			   jid: 'test@example.com',
+               boshURL: "https://beta.buddycloud.org/http-bind/",
+               jid: 'test@example.com',
                            password: '***' });
 cl.addListener('online',
                function() {

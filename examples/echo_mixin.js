@@ -45,11 +45,11 @@ else
 
 cl.on('online',
       function() {
-	  cl.send(new xmpp.Element('presence',
-				   { type: 'chat'}).
-		  c('show').t('chat').up().
-		  c('status').t('Happily echoing your <message/> stanzas')
-		 );
+      cl.send(new xmpp.Element('presence',
+                   { type: 'chat'}).
+          c('show').t('chat').up().
+          c('status').t('Happily echoing your <message/> stanzas')
+         );
       });
 
 cl.addMixin(echoMixin);
