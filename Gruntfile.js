@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(grunt) {
 
     grunt.initConfig({
@@ -15,13 +17,13 @@ module.exports = function(grunt) {
                 ui: 'tdd'
             }
         }
-    });
+    })
 
-    // Load the plugins.
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-mocha-cli');
+    // Load the plugins
+    grunt.loadNpmTasks('grunt-contrib-jshint')
+    grunt.loadNpmTasks('grunt-mocha-cli')
 
-    // Configure tasks.
-    grunt.registerTask('default', ['test']);
-    grunt.registerTask('test', ['mochacli', 'jshint']);
-};
+    // Configure tasks
+    grunt.registerTask('default', ['test'])
+    grunt.registerTask('test', ['mochacli', 'jshint'])
+}
