@@ -1,11 +1,12 @@
-var xmpp = require('../lib/node-xmpp');
-var fs = require('fs');
-var XOAuth = require('../lib/authentication/xoauth2');
+'use strict';
+
+var xmpp = require('../lib/node-xmpp')
+  , XOAuth = require('../lib/authentication/xoauth2')
 
 var user = {
-    jid: "me@localhost",
-    password: "secret"
-};
+    jid: 'me@localhost',
+    password: 'secret'
+}
 
 function startServer() {
 
@@ -13,53 +14,54 @@ function startServer() {
     var c2s = new xmpp.C2SServer({
         port: 5222,
         domain: 'localhost'
-    });
+    })
 
-    c2s.registerSaslMechanism(new XOAuth());
+    c2s.registerSaslMechanism(new XOAuth())
 
     // On Connect event. When a client connects.
-    c2s.on("connect", function(client) {
+    c2s.on('connect', function(client) {
         // That's the way you add mods to a given server.
 
         // Allows the developer to register the jid against anything they want
-        c2s.on("register", function(opts, cb) {
-            cb(true);
-        });
+        c2s.on('register', function(opts, cb) {
+            cb(true)
+        })
 
         // Allows the developer to authenticate users against anything they want.
-        client.on("authenticate", function(opts, cb) {
-            //console.log("AUTH");
-            //console.log(opts.jid + " -> " + opts.password);
-            //console.log(user.jid + " -> " + user.password);
-            //console.log(opts.saslmech);
-            if (opts.saslmech = 'PLAIN' && opts.jid == user.jid && opts.password == user.password) {
-                cb(false);
-            } else if (opts.saslmech = 'X-OAUTH2' && opts.jid == 'me@gmail.com@gmail.com' && opts.oauth_token == 'xxxx.xxxxxxxxxxx') {
-                cb(false);
+        client.on('authenticate', function(opts, cb) {
+            /*jshint camelcase: false */
+            if ((opts.saslmech = 'PLAIN') &&
+                (opts.jid.toString() === user.jid) &&
+                (opts.password === user.password)) {
+                cb(false)
+            } else if ((opts.saslmech = 'X-OAUTH2') &&
+               (opts.jid.toString() === 'me@gmail.com@gmail.com') &&
+               (opts.oauth_token === 'xxxx.xxxxxxxxxxx')) {
+                cb(false)
             } else {
-                cb(new Error("Authentication failure"));
+                cb(new Error('Authentication failure'))
             }
-        });
+        })
 
-        client.on("online", function() {
+        client.on('online', function() {
             client.send(new xmpp.Message({
                 type: 'chat'
-            }).c('body').t("Hello there, little client."));
-        });
+            }).c('body').t('Hello there, little client.'))
+        })
 
         // Stanza handling
-        client.on("stanza", function(stanza) {
-            //console.log("STANZA" + stanza);
-        });
+        client.on('stanza', function() {
+            //console.log('STANZA' + stanza)
+        })
 
         // On Disconnect event. When a client disconnects
-        client.on("disconnect", function(client) {
-            //console.log("DISCONNECT");
-        });
+        client.on('disconnect', function() {
+            //console.log('DISCONNECT')
+        })
 
-    });
+    })
 
-    return c2s;
+    return c2s
 }
 
 function registerHandler(cl) {
@@ -68,89 +70,83 @@ function registerHandler(cl) {
         function(stanza) {
             if (stanza.is('message') &&
                 // Important: never reply to errors!
-                stanza.attrs.type !== 'error') {
+                (stanza.attrs.type !== 'error')) {
 
                 // Swap addresses...
-                stanza.attrs.to = stanza.attrs.from;
-                delete stanza.attrs.from;
+                stanza.attrs.to = stanza.attrs.from
+                delete stanza.attrs.from
                 // and send back.
-                cl.send(stanza);
+                cl.send(stanza)
             }
-        });
+        })
 }
 
 describe('JID', function() {
 
     before(function(done) {
-        startServer();
-        done();
-    });
+        startServer()
+        done()
+    })
 
     describe('server', function() {
         it('should accept plain authentication', function(done) {
             var cl = new xmpp.Client({
                 jid: user.jid,
                 password: user.password
-            });
+            })
 
-            registerHandler(cl);
+            registerHandler(cl)
 
-            cl.on('online',
-                function() {
-                    done();
-                });
-            cl.on('error',
-                function(e) {
-                    console.log(e);
-                    done(e);
-                });
+            cl.on('online', function() {
+                done()
+            })
+            cl.on('error', function(e) {
+                console.log(e)
+                done(e)
+            })
 
-        });
+        })
 
         it('should not accept plain authentication', function(done) {
             var cl = new xmpp.Client({
                 jid: user.jid,
-                password: "secretsecret"
-            });
+                password: 'secretsecret'
+            })
 
-            registerHandler(cl);
+            registerHandler(cl)
 
-            cl.on('online',
-                function() {
-                    done("user is not valid");
-                });
-            cl.on('error',
-                function(e) {
-                    // this should happen
-                    done();
-                });
+            cl.on('online', function() {
+                done('user is not valid')
+            })
+            cl.on('error', function() {
+                // this should happen
+                done()
+            })
 
-        });
+        })
 
-        /* 
+        /*
          * google talk is replaced by google hangout,
          * but we can support the protocol anyway
          */
         it('should accept google authentication', function(done) {
-
+            /*jshint camelcase: false */
             var gtalk = new xmpp.Client({
                 jid: 'me@gmail.com',
                 oauth2_token: 'xxxx.xxxxxxxxxxx', // from OAuth2
                 oauth2_auth: 'http://www.google.com/talk/protocol/auth',
                 host: 'localhost'
-            });
+            })
 
-            registerHandler(gtalk);
+            registerHandler(gtalk)
 
-            gtalk.on('online',
-                function() {
-                    done();
-                });
-            gtalk.on('error',
-                function(e) {
-                    console.log(e);
-                    done(e);
-                });
-        });
-    });
-});
+            gtalk.on('online', function() {
+                done()
+            })
+            gtalk.on('error', function(e) {
+                console.log(e)
+                done(e)
+            })
+        })
+    })
+})
