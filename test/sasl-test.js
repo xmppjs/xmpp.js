@@ -1,5 +1,6 @@
 var xmpp = require('../lib/node-xmpp');
 var fs = require('fs');
+var XOAuth = require ('../lib/authentication/xoauth2');
 
 var user = {
     jid: "me@localhost",
@@ -14,6 +15,8 @@ function startServer() {
         domain: 'localhost'
     });
 
+    c2s.registerSaslMechanism(new XOAuth());
+
     // On Connect event. When a client connects.
     c2s.on("connect", function(client) {
         // That's the way you add mods to a given server.
@@ -26,13 +29,23 @@ function startServer() {
 
         // Allows the developer to authenticate users against anything they want.
         client.on("authenticate", function(opts, cb) {
+
+
             //console.log("AUTH");
             //console.log(opts.jid + " -> " + opts.password);
             //console.log(user.jid + " -> " + user.password);
             if (opts.jid == user.jid && opts.password == user.password) {
                 console.log("success");
                 cb(false);
-            } else {
+            }
+            // TODO server recognition for xoauth is not correct
+            else if (opts.jid == 'me@gmail.com@gmail.com' && opts.password == 'xxxx.xxxxxxxxxxx') {
+                console.log("success");
+                cb(false);
+            }
+            else {
+                console.log(opts.jid);
+                console.log(opts.password);
                 console.log("error");
                 cb(new Error("Authentication failure"));
             }
