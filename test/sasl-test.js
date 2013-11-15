@@ -1,6 +1,6 @@
 var xmpp = require('../lib/node-xmpp');
 var fs = require('fs');
-var XOAuth = require ('../lib/authentication/xoauth2');
+var XOAuth = require('../lib/authentication/xoauth2');
 
 var user = {
     jid: "me@localhost",
@@ -23,36 +23,25 @@ function startServer() {
 
         // Allows the developer to register the jid against anything they want
         c2s.on("register", function(opts, cb) {
-            console.log("REGISTER");
             cb(true);
         });
 
         // Allows the developer to authenticate users against anything they want.
         client.on("authenticate", function(opts, cb) {
-
-
             //console.log("AUTH");
             //console.log(opts.jid + " -> " + opts.password);
             //console.log(user.jid + " -> " + user.password);
-            if (opts.jid == user.jid && opts.password == user.password) {
-                console.log("success");
+            //console.log(opts.saslmech);
+            if (opts.saslmech = 'PLAIN' && opts.jid == user.jid && opts.password == user.password) {
                 cb(false);
-            }
-            // TODO server recognition for xoauth is not correct
-            else if (opts.jid == 'me@gmail.com@gmail.com' && opts.password == 'xxxx.xxxxxxxxxxx') {
-                console.log("success");
+            } else if (opts.saslmech = 'X-OAUTH2' && opts.jid == 'me@gmail.com@gmail.com' && opts.oauth_token == 'xxxx.xxxxxxxxxxx') {
                 cb(false);
-            }
-            else {
-                console.log(opts.jid);
-                console.log(opts.password);
-                console.log("error");
+            } else {
                 cb(new Error("Authentication failure"));
             }
         });
 
         client.on("online", function() {
-            console.log("ONLINE");
             client.send(new xmpp.Message({
                 type: 'chat'
             }).c('body').t("Hello there, little client."));
@@ -60,12 +49,12 @@ function startServer() {
 
         // Stanza handling
         client.on("stanza", function(stanza) {
-            console.log("STANZA" + stanza);
+            //console.log("STANZA" + stanza);
         });
 
         // On Disconnect event. When a client disconnects
         client.on("disconnect", function(client) {
-            console.log("DISCONNECT");
+            //console.log("DISCONNECT");
         });
 
     });
@@ -93,7 +82,6 @@ function registerHandler(cl) {
 describe('JID', function() {
 
     before(function(done) {
-        console.log("start server");
         startServer();
         done();
     });
@@ -109,7 +97,6 @@ describe('JID', function() {
 
             cl.on('online',
                 function() {
-                    console.log("online");
                     done();
                 });
             cl.on('error',
@@ -130,7 +117,6 @@ describe('JID', function() {
 
             cl.on('online',
                 function() {
-                    console.log("online");
                     done("user is not valid");
                 });
             cl.on('error',
@@ -158,7 +144,6 @@ describe('JID', function() {
 
             gtalk.on('online',
                 function() {
-                    console.log("online");
                     done();
                 });
             gtalk.on('error',
@@ -167,8 +152,5 @@ describe('JID', function() {
                     done(e);
                 });
         });
-
-
     });
-
 });
