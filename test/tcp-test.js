@@ -4,10 +4,16 @@ xmpp = require('./../lib/xmpp');
 const C2S_PORT = 45552;
 
 describe("TCP client/server", function() {
+    var sv = null;
+
+    after(function(done) {
+        sv.shutdown();
+        done();
+    });
   
     describe("client", function() {
       
-      var sv = new xmpp.C2SServer({ port: C2S_PORT })
+      sv = new xmpp.C2SServer({ port: C2S_PORT })
       var svcl;
       sv.on('connect', function(svcl_) {
           svcl = svcl_

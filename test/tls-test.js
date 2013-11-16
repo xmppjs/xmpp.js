@@ -7,14 +7,16 @@ var user = {
 	password: 'secret'
 };
 
+var c2s = null;
+
 function startServer() {
 	// Sets up the server.
-	var c2s = new xmpp.C2SServer({
+	c2s = new xmpp.C2SServer({
 		port: 5222,
 		domain: 'localhost',
 		tls: {
-			keyPath: './files/key.pem',
-			certPath: './files/cert.pem'
+			keyPath: './test/files/key.pem',
+			certPath: './test/files/cert.pem'
 		}
 	});
 
@@ -43,12 +45,17 @@ function startServer() {
 }
 
 
-describe('JID', function() {
+describe('TLS', function() {
 
 	before(function(done) {
 		startServer()
 		done()
 	});
+
+	after(function(done) {
+        c2s.shutdown();
+        done();
+    });
 
 	describe('server', function() {
 		it('should accept plain authentication', function(done) {
