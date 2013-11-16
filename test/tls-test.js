@@ -1,6 +1,7 @@
 'use strict';
 
 var pem = require('pem'),
+assert = require('assert'),
 xmpp = require('../lib/node-xmpp');
 
 var user = {
@@ -13,6 +14,7 @@ before(function (done) {
 	pem.createCertificate({days: 1, selfSigned: true}, function (err, keys) {
 		if (err) return done(err);
 		tls = {key: keys.serviceKey+"\n", cert: keys.certificate+"\n"};
+		tls.ca = tls.cert;
 		done();
 	});
 });
@@ -24,6 +26,8 @@ function startServer() {
 	c2s = new xmpp.C2SServer({
 		port: 5222,
 		domain: 'localhost',
+		requestCert: true,
+		rejectUnauthorized: false,
 		tls: tls
 	});
 
@@ -42,6 +46,7 @@ function startServer() {
 		})
 
 		client.on('online', function() {
+			c2s.emit('test', client);
 			client.send(new xmpp.Message({
 				type: 'chat'
 			}).c('body').t('Hello there, little client.'))
@@ -63,8 +68,24 @@ describe('TLS', function() {
         c2s.shutdown();
         done();
     });
-
 	describe('server', function() {
+
+		it("should go online", function(done) {
+			c2s.once('test', function(client) {
+				assert.ok(cl.connection.socket.authorized, "Client should have working tls");
+				assert.ok(client.connection.socket.authorized, "Server should have working tls");
+				done();
+			});
+			var cl = new xmpp.Client({
+				jid: user.jid,
+				password: user.password,
+				credentials: tls
+			});
+			cl.on('error', function(e) {
+				done(e);
+			});
+		});
+
 		it('should accept plain authentication', function(done) {
 			var cl = new xmpp.Client({
 				jid: user.jid,
