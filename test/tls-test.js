@@ -1,11 +1,21 @@
 'use strict';
 
-var xmpp = require('../lib/node-xmpp');
+var pem = require('pem'),
+xmpp = require('../lib/node-xmpp');
 
 var user = {
 	jid: 'me@localhost',
 	password: 'secret'
 };
+
+var tls, roottls;
+before(function (done) {
+	pem.createCertificate({days: 1, selfSigned: true}, function (err, keys) {
+		if (err) return done(err);
+		tls = {key: keys.serviceKey+"\n", cert: keys.certificate+"\n"};
+		done();
+	});
+});
 
 var c2s = null;
 
@@ -14,10 +24,7 @@ function startServer() {
 	c2s = new xmpp.C2SServer({
 		port: 5222,
 		domain: 'localhost',
-		tls: {
-			keyPath: './test/files/key.pem',
-			certPath: './test/files/cert.pem'
-		}
+		tls: tls
 	});
 
 	c2s.on('connect', function(client) {
