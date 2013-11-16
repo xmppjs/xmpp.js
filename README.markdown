@@ -8,6 +8,8 @@ Now usable in browsers too thanks to [Browserify](https://github.com/substack/no
 
 ## Installation
 
+__Note:__ We now only support nodejs versions 0.8.0 and greater.
+
 With package manager [npm](http://npmjs.org/):
 
     npm install node-xmpp
