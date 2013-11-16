@@ -8,10 +8,12 @@ var user = {
     password: 'secret'
 }
 
+var c2s = null;
+
 function startServer() {
 
     // Sets up the server.
-    var c2s = new xmpp.C2SServer({
+    c2s = new xmpp.C2SServer({
         port: 5222,
         domain: 'localhost'
     })
@@ -81,12 +83,18 @@ function registerHandler(cl) {
         })
 }
 
-describe('JID', function() {
+
+describe('SASL', function() {
 
     before(function(done) {
         startServer()
         done()
-    })
+    });
+
+    after(function(done) {
+        c2s.shutdown();
+        done();
+    });
 
     describe('server', function() {
         it('should accept plain authentication', function(done) {

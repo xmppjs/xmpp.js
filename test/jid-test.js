@@ -2,7 +2,6 @@ var assert = require('assert'),
 xmpp = require('./../lib/xmpp');
 
 describe('JID', function() {
-
     describe('parsing', function() {
     it('should parse a "domain" JID', function() {
         var j = new xmpp.JID('d');
