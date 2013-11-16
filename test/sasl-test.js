@@ -8,7 +8,7 @@ var user = {
     password: 'secret'
 }
 
-var c2s = null;
+var c2s = null
 
 function startServer() {
 
@@ -46,9 +46,10 @@ function startServer() {
         })
 
         client.on('online', function() {
-            client.send(new xmpp.Message({
-                type: 'chat'
-            }).c('body').t('Hello there, little client.'))
+            client.send(new xmpp.Message({ type: 'chat' })
+                .c('body')
+                .t('Hello there, little client.')
+            )
         })
 
         // Stanza handling
@@ -68,7 +69,8 @@ function startServer() {
 
 function registerHandler(cl) {
 
-    cl.on('stanza',
+    cl.on(
+        'stanza',
         function(stanza) {
             if (stanza.is('message') &&
                 // Important: never reply to errors!
@@ -80,7 +82,8 @@ function registerHandler(cl) {
                 // and send back.
                 cl.send(stanza)
             }
-        })
+        }
+    )
 }
 
 
@@ -89,12 +92,12 @@ describe('SASL', function() {
     before(function(done) {
         startServer()
         done()
-    });
+    })
 
     after(function(done) {
-        c2s.shutdown();
-        done();
-    });
+        c2s.shutdown()
+        done()
+    })
 
     describe('server', function() {
         it('should accept plain authentication', function(done) {
