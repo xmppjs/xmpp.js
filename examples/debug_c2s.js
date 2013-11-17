@@ -1,7 +1,9 @@
-var xmpp = require('../lib/node-xmpp');
+'use strict';
 
-var cl = new xmpp.Client({ jid: "julien@localhost", password: "password"});
+var xmpp = require('../lib/node-xmpp')
+
+var cl = new xmpp.Client({ jid: 'julien@localhost', password: 'password' })
+
 cl.on('online', function() {
-    console.log("ONLINE!!! YIHAA");
-});
-
+    console.log('ONLINE!!! YIHAA')
+})
