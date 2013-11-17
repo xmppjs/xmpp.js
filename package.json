@@ -77,6 +77,6 @@
   "engine": "node >=0.8.0",
   "scripts": {
     "postinstall": "browserify -d -o node-xmpp-browser.js -r request:browser-request -i node-stringprep -i faye-websocket -i ./srv -i dns ./lib/node-xmpp-browserify.js",
-    "test": "mocha -R spec"
+    "test": "grunt test"
   }
 }
