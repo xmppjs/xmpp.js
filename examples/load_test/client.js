@@ -23,7 +23,8 @@ function connectThem(n, opts, cb) {
 
     var cls = []
     var done = 0
-    for(var i = 0; i < n; i++) {
+    /* jshint -W083 */
+    for (var i = 0; i < n; i++) {
         queue.push({}, function(err, cl) {
             if (cl) cls.push(cl)
             done++
