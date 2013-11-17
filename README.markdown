@@ -159,3 +159,30 @@ Where `this.client` is the result of `new require('node-xmpp').Client()`.
 * Tests for S2S connections
 * Tests for Component connections (w/ Component server?)
 * Find a browser-based demo app that can be switched from Strophe.js
+
+# Documentation
+
+(Builing up documentation slowly)
+
+## C2S Client to Server 
+
+```
+var client = new xmpp.Client({
+    jid: 'user@example.com',
+    password: 'password'
+})
+
+client.on('connection', function() {
+    console.log('online')
+})
+
+client.on('stanza'), function(stanza) {
+    console.log('Incoming stanza: ', stanza.toString())
+})
+```
+
+### Closing a connection
+
+```
+client.end()
+```
