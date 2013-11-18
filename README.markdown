@@ -20,7 +20,12 @@ Install the dev dependencies, then...
 
 ```npm test```
 
-Also see the tests run in [travis](http://travis-ci.org/astro/node-xmpp)
+To run the tests and the code style checks then use:
+
+```grunt test```
+
+Also see the tests run in [travis](http://travis-ci.org/astro/node-xmpp). The tests in travis run both the code and code style tests.
+
 ## How to use
 
 Please see the various [examples](https://github.com/astro/node-xmpp/tree/master/examples).
