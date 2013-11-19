@@ -16,12 +16,24 @@ module.exports = function(grunt) {
                 reporter: 'spec',
                 ui: 'tdd'
             }
+        },
+        browserify: {
+            dist: {
+                files: {
+                    'node-xmpp-browser.js': ['lib/node-xmpp-browserify.js'],
+                },
+                ignore : ['node-stringprep', 'faye-websocket', 'srv', 'dns'],
+                alias : 'request:browser-request',
+                options: {
+                }
+            }
         }
     })
 
     // Load the plugins
     grunt.loadNpmTasks('grunt-contrib-jshint')
     grunt.loadNpmTasks('grunt-mocha-cli')
+    grunt.loadNpmTasks('grunt-browserify')
 
     // Configure tasks
     grunt.registerTask('default', ['test'])
