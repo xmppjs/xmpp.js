@@ -1,7 +1,9 @@
 # Changelog
 
+* 0.10.5
+  * Adds a fallback for failing `node_stringprep` calls, works as if `node-stringprep` wasn't installed (#93)
 * 0.10.4
-  * Patch for failing browserify post-install task. Now moved to `grunt browserify`
+  * Patch for failing browserify post-install task. Now moved to `grunt browserify` (#188)
 * 0.10.2
   * Patch for CI server (travis) to install grunt-cli when running tests
 * 0.10.1
