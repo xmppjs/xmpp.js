@@ -76,6 +76,7 @@ Optional
 * [Sockethub](http://sockethub.org) by using [node-simple-xmpp](https://github.com/arunoda/node-simple-xmpp/)
 * [hubot-xmpp](https://github.com/markstory/hubot-xmpp/)
 * [superfeedr-node](https://github.com/superfeedr/superfeedr-node)
+* [xmpp-ftw](https://xmpp-ftw.jit.su)
 
 ## Related Libraries
 
