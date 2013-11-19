@@ -73,7 +73,7 @@ Optional
 
 ## Built with node-xmpp
 
-* [![Sockethub](http://sockethub.org/img/sockethub-logo.svg)](http://sockethub.org) by using [node-simple-xmpp](https://github.com/arunoda/node-simple-xmpp/)
+* [Sockethub](http://sockethub.org) by using [node-simple-xmpp](https://github.com/arunoda/node-simple-xmpp/)
 * [hubot-xmpp](https://github.com/markstory/hubot-xmpp/)
 * [superfeedr-node](https://github.com/superfeedr/superfeedr-node)
 
