@@ -35,6 +35,12 @@ describe('JID', function() {
             var j = new xmpp.JID('öko.de')
             assert.equal(j.domain, 'öko.de')
         })
+        it('should parse an empty domain JID (#109)', function() {
+            var j = new xmpp.JID('u@d', '')
+            assert.equal(j.user, 'u')
+            assert.equal(j.domain, 'd')
+            assert.equal(j.resource, null)
+        })
 
         try {
             // HACK: these tests fail if node-stringprep is not used
