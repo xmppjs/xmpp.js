@@ -71,6 +71,12 @@ Optional
 * [node-stringprep](http://github.com/astro/node-stringprep): for [icu](http://icu-project.org/)-based string normalization.
 
 
+## Built with node-xmpp
+
+* [Sockethub](http://sockethub.org) by using [node-simple-xmpp](https://github.com/arunoda/node-simple-xmpp/)
+* [hubot-xmpp](https://github.com/markstory/hubot-xmpp/)
+* [superfeedr-node](https://github.com/superfeedr/superfeedr-node)
+
 ## Related Libraries
 
 * [node-xmpp-bosh](http://code.google.com/p/node-xmpp-bosh/): BOSH & websocket server (connection manager)
@@ -81,7 +87,7 @@ Optional
 * [node-xmpp-serviceadmin](https://github.com/flosse/node-xmpp-serviceadmin/): Service Administration (XEP-0133) library for node-xmpp
 * [Junction](https://github.com/jaredhanson/junction): An extensible XMPP middleware layer
 * [xmpp-ftw](https://github.com/lloydwatkin/xmpp-ftw): XMPP For The Web ::: Powerful XMPP, simple JSON
-
+* [Lightstream](https://github.com/dodo/Lightstream): XMPP Framework
 
 ## Design
 
