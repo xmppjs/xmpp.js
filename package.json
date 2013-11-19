@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "main": "./lib/node-xmpp",
   "browserify": "./lib/node-xmpp-browserify",
   "description": "Idiomatic XMPP client, component & server library for node.js + browserify",
@@ -13,7 +13,7 @@
     "faye-websocket": ">= 0.4.1",
     "blueimp-md5": ">= 1.0.0",
     "browserify": "~2.35.0",
-    "brfs" : "0.0.8"
+    "brfs": "0.0.8"
   },
   "devDependencies": {
     "mocha": ">=1.0.0",
@@ -22,7 +22,7 @@
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-mocha-cli": "~1.3.0",
-    "grunt-browserify" : "~1.2.11"
+    "grunt-browserify": "~1.2.11"
   },
   "browser": {
     "request": "browser-request",
