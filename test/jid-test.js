@@ -35,6 +35,11 @@ describe('JID', function() {
             var j = new xmpp.JID('öko.de')
             assert.equal(j.domain, 'öko.de')
         })
+        it("shouldn't get U_STRINGPREP_PROHIBITED_ERROR (#93)", function() {
+            assert.doesNotThrow(function () {
+                var j = new xmpp.JID('f u@d')
+            })
+        })
 
         try {
             // HACK: these tests fail if node-stringprep is not used
