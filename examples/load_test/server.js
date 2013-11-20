@@ -2,7 +2,7 @@
 
 var http = require('http')
   , xmpp = require('../../lib/node-xmpp')
-  , C2SStream = require('../../lib/xmpp/c2s').C2SStream
+  , C2SStream = require('../../lib/xmpp/c2s/stream')
 
 var tcpClients = 0,
     boshClients = 0,
