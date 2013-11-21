@@ -11,6 +11,9 @@ var xmpp = require('../lib/node-xmpp')
 var c2s = new xmpp.C2SServer({
     port: 5222,
     domain: 'localhost'
+    //     key : "key.pem content",
+    //     cert : "cert.pem content",
+    // // or
     // tls: {
     //     keyPath: './examples/localhost-key.pem',
     //     certPath: './examples/localhost-cert.pem'
