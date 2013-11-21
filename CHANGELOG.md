@@ -1,5 +1,7 @@
 # Changelog
 
+* 0.10.7
+  * Expose used `C2SStream` class in `C2SServer` for possible overwrite (#194)
 * 0.10.6
   * Exposed `C2SStream` on the main `node-xmpp` require (#193)
   * Split `C2SStream` and `C2SServer` into their own files (#193)
