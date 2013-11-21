@@ -3,7 +3,7 @@
 var assert = require('assert')
   , http = require('http')
   , xmpp = require('./../lib/xmpp')
-  , C2SStream = require('./../lib/xmpp/c2s/stream')
+  , C2SStream = require('./../lib/node-xmpp-server/lib/c2s/stream')
 
 var BOSH_PORT = 45580
 
