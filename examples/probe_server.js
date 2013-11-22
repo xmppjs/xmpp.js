@@ -4,7 +4,7 @@
  * This example establishes some s2s connections over time. It is a
  * router test. You must modify it!
  */
-var xmpp = require('../lib/node-xmpp')
+var xmpp = require('../index')
 
 var MY_JID = 'codetu.be'
 

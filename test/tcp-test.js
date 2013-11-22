@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert')
-  , xmpp = require('./../lib/xmpp')
+  , xmpp = require('./../index')
 
 var C2S_PORT = 45552
 

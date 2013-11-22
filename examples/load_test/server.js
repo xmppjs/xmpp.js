@@ -1,8 +1,8 @@
 'use strict';
 
 var http = require('http')
-  , xmpp = require('../../lib/node-xmpp')
-  , C2SStream = require('../../lib/xmpp/c2s/stream')
+  , xmpp = require('../../index')
+  , C2SStream = require('node-xmpp-server/lib/c2s/stream')
 
 var tcpClients = 0,
     boshClients = 0,
