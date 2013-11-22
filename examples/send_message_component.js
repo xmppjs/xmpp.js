@@ -1,6 +1,6 @@
 'use strict';
 
-var xmpp = require('../lib/node-xmpp')
+var xmpp = require('../index')
   , argv = process.argv;
 
 if (argv.length < 6) {

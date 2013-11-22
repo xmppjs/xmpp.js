@@ -3,7 +3,7 @@
 /**
  * Echo Bot - the XMPP Hello World
  **/
-var xmpp = require('../lib/node-xmpp')
+var xmpp = require('../index')
 var argv = process.argv
 
 if (argv.length !== 4) {

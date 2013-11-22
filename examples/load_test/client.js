@@ -1,7 +1,7 @@
 'use strict';
 
 var async = require('async')
-  , xmpp = require('../../lib/node-xmpp')
+  , xmpp = require('../../index')
   , http = require('http')
 
 http.globalAgent.maxSockets = 9999999

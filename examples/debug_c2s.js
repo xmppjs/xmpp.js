@@ -1,6 +1,6 @@
 'use strict';
 
-var xmpp = require('../lib/node-xmpp')
+var xmpp = require('../index')
 
 var cl = new xmpp.Client({ jid: 'julien@localhost', password: 'password' })
 

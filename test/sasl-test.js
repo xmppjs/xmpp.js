@@ -1,7 +1,7 @@
 'use strict';
 
-var xmpp = require('../lib/node-xmpp')
-  , XOAuth = require('../lib/authentication/xoauth2')
+var xmpp = require('../index')
+  , XOAuth = require('node-xmpp-core/lib/authentication/xoauth2')
 
 var user = {
     jid: 'me@localhost',

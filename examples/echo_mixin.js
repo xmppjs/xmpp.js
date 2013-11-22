@@ -4,7 +4,7 @@
  * Demonstrates how the echo behavior can be abstracted into a decorator,
  * working equally well on clients, components or S2S.
 */
-var xmpp = require('../lib/node-xmpp')
+var xmpp = require('../index')
   , argv = process.argv
 
 if ((argv.length < 5) && argv) {

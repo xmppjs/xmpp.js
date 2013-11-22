@@ -2,7 +2,7 @@
 
 var pem = require('pem')
   , assert = require('assert')
-  , xmpp = require('../lib/node-xmpp')
+  , xmpp = require('../index')
 
 var user = {
     jid: 'me@localhost',
@@ -12,7 +12,7 @@ var user = {
 var tls
 
 before(function (done) {
-    pem.createCertificate({days: 1, selfSigned: true}, function (err, keys) {
+    pem.createCertificate({ days: 1, selfSigned: true }, function (err, keys) {
         if (err) return done(err)
         tls = { key: keys.serviceKey + '\n', cert: keys.certificate + '\n' }
         tls.ca = tls.cert
@@ -22,7 +22,7 @@ before(function (done) {
 
 var c2s = null
 
-function startServer() {
+function startServer(done) {
     // Sets up the server.
     c2s = new xmpp.C2SServer({
         port: 5222,
@@ -33,7 +33,6 @@ function startServer() {
     })
 
     c2s.on('connect', function(client) {
-
         // Allows the developer to authenticate users against anything they want.
         client.on('authenticate', function(opts, cb) {
             /*jshint camelcase: false */
@@ -55,21 +54,21 @@ function startServer() {
         })
     })
 
-    return c2s
+    done()
 }
 
 
-describe('TLS', function() {
+describe.only('TLS', function() {
 
     before(function(done) {
-        startServer()
-        done()
+        startServer(done)
     })
 
     after(function(done) {
         c2s.shutdown()
         done()
     })
+
     describe('server', function() {
 
         it('should go online', function(done) {

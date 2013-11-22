@@ -1,6 +1,6 @@
 'use strict';
 
-var xmpp = require('../lib/node-xmpp')
+var xmpp = require('../index')
 
 /* This is a very basic C2S server example. One of the key design decisions
 * of node-xmpp is to keep it very lightweight
