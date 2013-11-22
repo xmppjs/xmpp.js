@@ -1,0 +1,6 @@
+exports.JID = require('./lib/jid')
+exports.Connection = require('./lib/connection')
+exports.Stanza = require('./lib/stanza')
+exports.SRV = require('./lib/srv')
+exports.SASL = require('./lib/sasl')
+exports.StreamParser = require('./lib/stream_parser')
