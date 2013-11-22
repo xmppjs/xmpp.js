@@ -1,0 +1,25 @@
+{
+  "name": "node-xmpp-component",
+  "version": "0.0.1",
+  "description": "Component API for XMPP",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/node-xmpp/node-xmpp-component.git"
+  },
+  "keywords": [
+    "component",
+    "xmpp"
+  ],
+  "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/node-xmpp/node-xmpp-component/issues"
+  },
+  "dependencies": {
+    "ltx": "~0.3.2"
+  }
+}
