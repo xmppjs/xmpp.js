@@ -20,6 +20,7 @@
     "url": "https://github.com/node-xmpp/node-xmpp-component/issues"
   },
   "dependencies": {
-    "ltx": "~0.3.2"
+    "ltx": "~0.3.2",
+    "node-xmpp-core": "0.0.1"
   }
 }
