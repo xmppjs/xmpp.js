@@ -1,0 +1,28 @@
+{
+  "name": "node-xmpp-client",
+  "version": "0.0.1",
+  "description": "XMPP client written in nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:node-xmpp/node-xmpp-client.git"
+  },
+  "keywords": [
+    "client",
+    "xmpp"
+  ],
+  "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/node-xmpp/node-xmpp-client/issues"
+  },
+  "dependencies": {
+    "request": "~2.27.0",
+    "ltx": "~0.3.2",
+    "faye-websocket": "~0.7.0",
+    "node-xmpp-core": "0.0.1"
+  }
+}
