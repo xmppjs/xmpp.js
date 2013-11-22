@@ -1,0 +1,27 @@
+{
+  "name": "node-xmpp-server",
+  "version": "0.0.1",
+  "description": "nodejs-based server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:node-xmpp/node-xmpp-server.git"
+  },
+  "keywords": [
+    "xmpp",
+    "nodejs",
+    "server"
+  ],
+  "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/node-xmpp/node-xmpp-server/issues"
+  },
+  "dependencies": {
+    "ltx": "~0.3.2",
+    "node-xmpp-core": "0.0.1"
+  }
+}
