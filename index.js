@@ -120,7 +120,6 @@ function Client(opts) {
 
     this.availableSaslMechanisms = sasl.detectMechanisms(opts)
 
-
     this.state = STATE_PREAUTH
     this.addListener('end', function() {
         self.state = STATE_PREAUTH
