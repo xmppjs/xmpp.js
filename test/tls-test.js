@@ -53,12 +53,12 @@ function startServer(done) {
             )
         })
     })
-
+    console.log('Server started')
     done()
 }
 
 
-describe.only('TLS', function() {
+describe('TLS', function() {
 
     before(function(done) {
         startServer(done)
