@@ -23,6 +23,6 @@
     "request": "~2.27.0",
     "ltx": "~0.3.2",
     "faye-websocket": "~0.7.0",
-    "node-xmpp-core": "0.0.2"
+    "node-xmpp-core": "0.0.3"
   }
 }
