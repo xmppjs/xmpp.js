@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "ltx": "~0.3.2",
-    "node-xmpp-core": "0.0.2",
+    "node-xmpp-core": "0.0.3",
     "node-stringprep": "~0.1.8"
   }
 }
