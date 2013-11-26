@@ -1,6 +1,6 @@
 # node-xmpp-client
 
-idiomatic client XMPP library for [node.js](http://nodejs.org/)
+Idiomatic XMPP client library for [node.js](http://nodejs.org/)
 
 Now usable in browsers too thanks to [Browserify](https://github.com/substack/node-browserify).
 
