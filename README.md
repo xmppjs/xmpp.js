@@ -88,7 +88,7 @@ var client = new Client({
     password: 'password'
 })
 
-client.on('connection', function() {
+client.on('online', function() {
     console.log('online')
 })
 
