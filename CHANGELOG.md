@@ -1,5 +1,7 @@
 # Changelog
 
+* 0.10.8
+  * Allow user to send a plain text stanza via send() method (#200)
 * 0.10.7
   * Expose used `C2SStream` class in `C2SServer` for possible overwrite (#194)
 * 0.10.6
