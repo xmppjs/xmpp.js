@@ -1,10 +1,10 @@
 'use strict';
 
 var Session = require('./lib/session')
-  , Connection = require('node-xmpp-core/lib/connection')
-  , JID = require('node-xmpp-core/lib/jid')
+  , Connection = require('node-xmpp-core').Connection
+  , JID = require('node-xmpp-core').JID
   , ltx = require('ltx')
-  , sasl = require('node-xmpp-core/lib/sasl')
+  , sasl = require('node-xmpp-core').SASL
   , util = require('util')
 
 var NS_CLIENT = 'jabber:client'
@@ -119,7 +119,6 @@ function Client(opts) {
     }
 
     this.availableSaslMechanisms = sasl.detectMechanisms(opts)
-
 
     this.state = STATE_PREAUTH
     this.addListener('end', function() {
