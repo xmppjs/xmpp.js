@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "ltx": "~0.3.2",
-    "node-xmpp-core": "0.0.5"
+    "node-xmpp-core": "0.1.0"
   },
   "devDependencies": {
     "grunt-mocha-cli": "~1.3.0",
