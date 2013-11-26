@@ -14,10 +14,10 @@
     "blueimp-md5": ">= 1.0.0",
     "browserify": "~2.35.0",
     "brfs": "0.0.8",
-    "node-xmpp-server": "0.0.6",
-    "node-xmpp-component": "0.0.2",
-    "node-xmpp-core": "0.0.6",
-    "node-xmpp-client": "0.0.7"
+    "node-xmpp-server": "~0.1.0",
+    "node-xmpp-component": "~0.1.0",
+    "node-xmpp-core": "~0.1.0",
+    "node-xmpp-client": "~0.1.0"
   },
   "devDependencies": {
     "mocha": ">=1.0.0",
