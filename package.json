@@ -33,5 +33,12 @@
     "grunt-contrib-jshint": "~0.7.2",
     "blueimp-md5": "~1.1.0",
     "brfs": "0.0.8"
+  },
+  "browser": {
+    "request": "browser-request",
+    "node-stringprep": false,
+    "faye-websocket": false,
+    "./srv": false,
+    "dns": false
   }
 }
