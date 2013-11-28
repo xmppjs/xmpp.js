@@ -1,5 +1,5 @@
 exports.Router = require('./lib/router')
 exports.Server = require('./lib/server')
-exports.BOSHServer = require('./bosh_server')
+exports.BOSHServer = require('./lib/bosh/bosh_server')
 exports.C2SServer = require('./lib/c2s/server')
 exports.C2SStream = require('./lib/c2s/stream')
