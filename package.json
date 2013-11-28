@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp-server",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "nodejs-based server",
   "main": "index.js",
   "scripts": {
