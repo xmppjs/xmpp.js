@@ -100,4 +100,5 @@ function sha1Hex(s) {
     return hash.digest('hex')
 }
 
+Component.Component = Component
 module.exports = Component
