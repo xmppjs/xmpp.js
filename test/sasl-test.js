@@ -1,7 +1,7 @@
 'use strict';
 
 var xmpp = require('../index')
-  , XOAuth = require('node-xmpp-core/lib/authentication/xoauth2')
+  , XOAuth = require('node-xmpp-server/lib/authentication/xoauth2')
 
 var user = {
     jid: 'me@localhost',
@@ -37,7 +37,7 @@ function startServer() {
                 (opts.password === user.password)) {
                 cb(false)
             } else if ((opts.saslmech = 'X-OAUTH2') &&
-               (opts.jid.toString() === 'me@gmail.com@gmail.com') &&
+               (opts.jid.toString() === 'me@gmail.com') &&
                (opts.oauth_token === 'xxxx.xxxxxxxxxxx')) {
                 cb(false)
             } else {
