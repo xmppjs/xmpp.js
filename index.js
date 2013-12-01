@@ -4,7 +4,7 @@ var Session = require('./lib/session')
   , Connection = require('node-xmpp-core').Connection
   , JID = require('node-xmpp-core').JID
   , ltx = require('ltx')
-  , sasl = require('node-xmpp-core').SASL
+  , sasl = require('./lib/sasl')
   , util = require('util')
 
 var NS_CLIENT = 'jabber:client'
@@ -309,5 +309,7 @@ Client.prototype.registerSaslMechanism = function () {
     var args = arguments.length > 0 ? Array.prototype.slice.call(arguments) : []
     this.availableSaslMechanisms = this.availableSaslMechanisms.concat(args)
 }
+
+Client.SASL = sasl;
 
 module.exports = Client
