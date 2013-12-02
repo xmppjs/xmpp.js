@@ -1,66 +1,87 @@
 'use strict';
 
-var xmpp = require('../index')
-  , Client = require('node-xmpp-client')
-  , Message = require('node-xmpp-core').Stanza.Message
-  , XOAuth = require('../lib/authentication/xoauth2')
+var xmpp = require('../index'),
+    Client = require('node-xmpp-client'),
+    Message = require('node-xmpp-core').Stanza.Message,
+    Plain = require('../lib/authentication/plain'),
+    XOAuth = require('../lib/authentication/xoauth2'),
+    DigestMD5 = require('../lib/authentication/digestmd5')
 
 var user = {
     jid: 'me@localhost',
     password: 'secret'
 }
 
-var c2s = null
-
-function startServer() {
+function startServer(mechanism) {
 
     // Sets up the server.
-    c2s = new xmpp.C2SServer({
+    var c2s = new xmpp.C2SServer({
         port: 5222,
         domain: 'localhost'
     })
 
-    c2s.registerSaslMechanism(new XOAuth())
+    if (mechanism) {
+        // remove plain
+        c2s.availableSaslMechanisms = [];
+        c2s.registerSaslMechanism(mechanism)
+    }
+
+    // Allows the developer to register the jid against anything they want
+    c2s.on('register', function (opts, cb) {
+        cb(true)
+    })
 
     // On Connect event. When a client connects.
-    c2s.on('connect', function(client) {
+    c2s.on('connect', function (stream) {
         // That's the way you add mods to a given server.
 
-        // Allows the developer to register the jid against anything they want
-        c2s.on('register', function(opts, cb) {
-            cb(true)
-        })
-
         // Allows the developer to authenticate users against anything they want.
-        client.on('authenticate', function(opts, cb) {
+        stream.on('authenticate', function (opts, cb) {
             /*jshint camelcase: false */
-            if ((opts.saslmech = 'PLAIN') &&
+            /*console.log("AUTHENTICATE METHOD")
+            console.log("METHOD: %s", opts.saslmech);
+            console.log("JID: %s", opts.jid);
+            console.log("PASSWORD: %s", opts.password);
+            console.log("OAUTH: %s", opts.oauth_token);
+            */
+
+            if ((opts.saslmech === 'PLAIN') &&
                 (opts.jid.toString() === user.jid) &&
                 (opts.password === user.password)) {
-                cb(false)
-            } else if ((opts.saslmech = 'X-OAUTH2') &&
-               (opts.jid.toString() === 'me@gmail.com') &&
-               (opts.oauth_token === 'xxxx.xxxxxxxxxxx')) {
-                cb(false)
+                //console.log('PLAIN OKAY')
+                cb(null, opts)
+            } else if ((opts.saslmech === 'X-OAUTH2') &&
+                (opts.jid.toString() === 'me@gmail.com') &&
+                (opts.oauth_token === 'xxxx.xxxxxxxxxxx')) {
+                //console.log('OAUTH2 OKAY')
+                cb(null, opts)
+            } else if ((opts.saslmech === 'DIGEST-MD5') &&
+                (opts.jid.toString() === user.jid)) {
+                //console.log('DIGEST-MD5 OKAY')
+
+                opts.password = "secret"
+                cb(null, opts)
             } else {
-                cb(new Error('Authentication failure'))
+                cb(new Error('Authentication failure'), null)
             }
         })
 
-        client.on('online', function() {
-            client.send(new Message({ type: 'chat' })
+        stream.on('online', function () {
+            stream.send(new Message({
+                    type: 'chat'
+                })
                 .c('body')
                 .t('Hello there, little client.')
             )
         })
 
         // Stanza handling
-        client.on('stanza', function() {
+        stream.on('stanza', function () {
             //console.log('STANZA' + stanza)
         })
 
         // On Disconnect event. When a client disconnects
-        client.on('disconnect', function() {
+        stream.on('disconnect', function () {
             //console.log('DISCONNECT')
         })
 
@@ -73,7 +94,7 @@ function registerHandler(cl) {
 
     cl.on(
         'stanza',
-        function(stanza) {
+        function (stanza) {
             if (stanza.is('message') &&
                 // Important: never reply to errors!
                 (stanza.attrs.type !== 'error')) {
@@ -88,39 +109,40 @@ function registerHandler(cl) {
     )
 }
 
+describe('SASL', function () {
+    describe('PLAIN', function () {
+        var c2s = null
 
-describe('SASL', function() {
+        before(function (done) {
+            c2s = startServer(Plain)
+            done()
+        })
 
-    before(function(done) {
-        startServer()
-        done()
-    })
+        after(function (done) {
+            c2s.shutdown()
+            done()
+        })
 
-    after(function(done) {
-        c2s.shutdown()
-        done()
-    })
-
-    describe('server', function() {
-        it('should accept plain authentication', function(done) {
+        it('should accept plain authentication', function (done) {
             var cl = new Client({
                 jid: user.jid,
-                password: user.password
+                password: user.password,
+                preferred: 'PLAIN'
             })
 
             registerHandler(cl)
 
-            cl.on('online', function() {
+            cl.on('online', function () {
                 done()
             })
-            cl.on('error', function(e) {
+            cl.on('error', function (e) {
                 console.log(e)
                 done(e)
             })
 
         })
 
-        it('should not accept plain authentication', function(done) {
+        it('should not accept plain authentication', function (done) {
             var cl = new Client({
                 jid: user.jid,
                 password: 'secretsecret'
@@ -128,21 +150,35 @@ describe('SASL', function() {
 
             registerHandler(cl)
 
-            cl.on('online', function() {
+            cl.on('online', function () {
                 done('user is not valid')
             })
-            cl.on('error', function() {
+            cl.on('error', function () {
                 // this should happen
                 done()
             })
 
+        })
+    })
+
+    describe('XOAUTH-2', function () {
+        var c2s = null
+
+        before(function (done) {
+            c2s = startServer(XOAuth)
+            done()
+        })
+
+        after(function (done) {
+            c2s.shutdown()
+            done()
         })
 
         /*
          * google talk is replaced by google hangout,
          * but we can support the protocol anyway
          */
-        it('should accept google authentication', function(done) {
+        it('should accept google authentication', function (done) {
             /*jshint camelcase: false */
             var gtalk = new Client({
                 jid: 'me@gmail.com',
@@ -153,13 +189,61 @@ describe('SASL', function() {
 
             registerHandler(gtalk)
 
-            gtalk.on('online', function() {
+            gtalk.on('online', function () {
                 done()
             })
-            gtalk.on('error', function(e) {
+            gtalk.on('error', function (e) {
                 console.log(e)
                 done(e)
             })
+        })
+
+    })
+
+    describe('DIGEST MD5', function () {
+        var c2s = null
+
+        before(function (done) {
+            c2s = startServer(DigestMD5);
+
+            c2s.on('connect', function (stream) {
+
+                stream.on('authenticate-digestmd5', function (opts, cb) {
+                    console.log("authenticate-digestmd5 %s", JSON.stringify(opts));
+                    if (opts === 'me') {
+                        cb('secret');
+                    } else {
+                        cb();
+                    }                    
+                });
+            })
+
+            done()
+        })
+
+        after(function (done) {
+            c2s.shutdown()
+            done()
+        })
+
+
+        it('should accept digest md5 authentication', function (done) {
+            var cl = new Client({
+                jid: user.jid,
+                password: user.password,
+                preferred: 'DIGEST-MD5'
+            })
+
+            registerHandler(cl)
+
+            cl.on('online', function () {
+                done()
+            })
+            cl.on('error', function (e) {
+                console.log(e)
+                done(e)
+            })
+
         })
     })
 })

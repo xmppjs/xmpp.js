@@ -28,7 +28,7 @@ function startServer() {
         // allow anything
         client.on('authenticate', function(opts, cb) {
             eventChain.push('authenticate')
-            cb(null)
+            cb(null, opts)
         })
 
         client.on('online', function() {
