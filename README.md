@@ -60,7 +60,7 @@ Optional
 
 * [node-stringprep](http://github.com/node-xmpp/node-stringprep): for [icu](http://icu-project.org/)-based string normalization.
 
-Automatically building the optional library can be turned off by `npm config set optional false` or by setting the environmental variable `export NPM_CONFIG_OPTION=false`. For example on Heroku this is done through `heroku config:set NPM_CONFIG_OPTIONAL=false`.
+Automatically building the optional library can be turned off by `npm config set optional false` or by setting the environmental variable `export NPM_CONFIG_OPTIONAL=false`. On Heroku this is done through `heroku config:set NPM_CONFIG_OPTIONAL=false`, for example.
 
 ### Building XML Elements
 
