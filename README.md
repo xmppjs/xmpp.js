@@ -60,6 +60,8 @@ Optional
 
 * [node-stringprep](http://github.com/node-xmpp/node-stringprep): for [icu](http://icu-project.org/)-based string normalization.
 
+Automatically building the optional library can be turned off by `npm config set optional false` or by setting the environmental variable `export NPM_CONFIG_OPTION=false`. For example on Heroku this is done through `heroku config:set NPM_CONFIG_OPTIONAL=false`.
+
 ### Building XML Elements
 
 Strophe.js' XML Builder is very convenient for producing XMPP
