@@ -39,7 +39,7 @@ function startServer(done) {
             if ((opts.saslmech = 'PLAIN') &&
                 (opts.jid.toString() === user.jid) &&
                 (opts.password === user.password)) {
-                cb(false)
+                cb(null, opts)
             } else {
                 cb(new Error('Authentication failure'))
             }

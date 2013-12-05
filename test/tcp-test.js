@@ -21,7 +21,7 @@ describe('TCP client/server', function() {
             svcl = svcl_
             // Always authenticate
             svcl.on('authenticate', function(opts, cb) {
-                cb()
+                cb(null, opts)
             })
         })
         var cl
