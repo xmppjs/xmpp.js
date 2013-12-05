@@ -10,11 +10,11 @@ var assert = require('assert')
 var BOSH_PORT = 45580
 
 describe('BOSH client/server', function() {
+    var sv, svcl, c2s, cl, server;
 
-    describe('client', function() {
-        var sv = new xmpp.BOSHServer()
-        var svcl, c2s
-        http.createServer(function(req, res) {
+    before(function (done) {
+        sv = new xmpp.BOSHServer()
+        server = http.createServer(function(req, res) {
             sv.handleHTTP(req, res)
         }).listen(BOSH_PORT)
 
@@ -25,8 +25,16 @@ describe('BOSH client/server', function() {
                 cb(null, opts)
             })
         })
+        done();
+    })
 
-        var cl
+    after(function (done) {
+        c2s.end()
+        server.close()
+        done()
+    })
+
+    describe('client', function() {
         it('should go online', function(done) {
             cl = new Client({
                 jid: 'test@example.com',
