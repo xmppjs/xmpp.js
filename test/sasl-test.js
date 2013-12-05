@@ -198,19 +198,6 @@ describe('SASL', function() {
 
         before(function (done) {
             c2s = startServer(DigestMD5);
-
-            c2s.on('connect', function(stream) {
-
-                stream.on('authenticate-digestmd5', function(opts, cb) {
-                    console.log("authenticate-digestmd5 %s", JSON.stringify(opts));
-                    if (opts === 'me') {
-                        cb('secret');
-                    } else {
-                        cb();
-                    }                    
-                });
-            })
-
             done()
         })
 
