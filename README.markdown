@@ -188,7 +188,7 @@ client.on('connection', function() {
     console.log('online')
 })
 
-client.on('stanza'), function(stanza) {
+client.on('stanza', function(stanza) {
     console.log('Incoming stanza: ', stanza.toString())
 })
 ```
