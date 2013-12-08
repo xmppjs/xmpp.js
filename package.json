@@ -38,10 +38,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/astro/node-xmpp.git"
+    "url": "git://github.com/node-xmpp/node-xmpp.git"
   },
-  "homepage": "http://github.com/astro/node-xmpp",
-  "bugs": "http://github.com/astro/node-xmpp/issues",
+  "homepage": "http://github.com/node-xmpp/node-xmpp",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
   "maintainers": [
     {
       "name": "Astro",
