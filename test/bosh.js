@@ -12,7 +12,7 @@ var BOSH_PORT = 45580
 describe('BOSH client/server', function() {
     var sv, svcl, c2s, cl, server;
 
-    before(function (done) {
+    before(function(done) {
         sv = new xmpp.BOSHServer()
         server = http.createServer(function(req, res) {
             sv.handleHTTP(req, res)
@@ -25,13 +25,14 @@ describe('BOSH client/server', function() {
                 cb(null, opts)
             })
         })
-        done();
+        done()
     })
 
-    after(function (done) {
+    after(function(done) {
+        console.log('Running after')
         c2s.end()
         server.close()
-        done()
+        server.on('close', done)
     })
 
     describe('client', function() {
