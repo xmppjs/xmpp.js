@@ -1,9 +1,12 @@
 # Changelog
 
+* 0.12.0
+  * Republish of 0.12.0 as there appeared to be an issue with npm
 * 0.11.0
   * Deprecated `JID.setUser()`, use `JID.setLocal()` [see RFC6122] (node-xmpp/node-xmpp-core#2)
   * Restructured into separate modules (#195)
   * `Connection.send()` is now able to eat strings (#200)
+  * Remove `node-stringprep` from `devDependencies` (#147)
 * 0.10.8
   * Allow user to send a plain text stanza via send() method (#200)
 * 0.10.7
