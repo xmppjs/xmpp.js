@@ -1,5 +1,7 @@
 # Changelog
 
+* Next version
+  * All tests from the `node-xmpp-*` submodules run from `node-xmpp` test setup (#208)
 * 0.12.0
   * Republish of 0.12.0 as there appeared to be an issue with npm
 * 0.11.0
