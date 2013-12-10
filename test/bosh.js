@@ -32,7 +32,7 @@ describe('BOSH client/server', function() {
         console.log('Running after')
         c2s.end()
         server.close()
-        server.on('close', done)
+        done()
     })
 
     describe('client', function() {
