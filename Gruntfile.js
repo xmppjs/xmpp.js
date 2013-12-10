@@ -11,7 +11,7 @@ module.exports = function(grunt) {
             }
         },
         mochacli: {
-            all: ['test/**/*.js'],
+            all: ['test/**/*.js', 'node_modules/node-xmpp-*/test/**/*.js'],
             options: {
                 reporter: 'spec',
                 ui: 'tdd'
