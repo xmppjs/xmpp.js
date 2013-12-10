@@ -10,13 +10,13 @@ Now usable in browsers too thanks to [Browserify](https://github.com/substack/no
 
 We've split `node-xmpp` into a set of submodules, realistically its now one of these that you'll want to use rather than `node-xmpp` itself. This project remains so existing users can continue to use the project, and as a location for integration tests. New users should make use of the sub-modules.
 
-[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-server.png)](http://travis-ci.org/node-xmpp/node-xmpp-server) `node-xmpp-server`
+[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-server.png)](http://travis-ci.org/node-xmpp/node-xmpp-server) [node-xmpp-server](https://github.com/node-xmpp/node-xmpp-server.git)
 
-[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-client.png)](http://travis-ci.org/node-xmpp/node-xmpp-client) `node-xmpp-client`
+[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-client.png)](http://travis-ci.org/node-xmpp/node-xmpp-client) [node-xmpp-client](https://github.com/node-xmpp/node-xmpp-client.git)
 
-[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-component.png)](http://travis-ci.org/node-xmpp/node-xmpp-component) `node-xmpp-component`
+[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-component.png)](http://travis-ci.org/node-xmpp/node-xmpp-component) [node-xmpp-component](https://github.com/node-xmpp/node-xmpp-component.git)
 
-[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-core.png)](http://travis-ci.org/node-xmpp/node-xmpp-core) `node-xmpp-core`
+[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-core.png)](http://travis-ci.org/node-xmpp/node-xmpp-core) [node-xmpp-core](https://github.com/node-xmpp/node-xmpp-core.git)
 
 ## Installation
 
