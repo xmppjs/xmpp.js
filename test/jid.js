@@ -143,9 +143,9 @@ describe('JID', function() {
         })
 
         it('should work with bare JIDs', function() {
-            var j1 = new xmpp.JID('romeo@example.net/9519407536580081').bare();
-            var j2 = new xmpp.JID('romeo@example.net');
-            assert.equal(j1.equals(j2), true)
+            var j1 = new xmpp.JID('romeo@example.net/9519407536580081')
+            var j2 = new xmpp.JID('romeo@example.net')
+            assert.equal(j1.bare().equals(j2), true)
         })
 
     })
