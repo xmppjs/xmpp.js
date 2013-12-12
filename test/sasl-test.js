@@ -1,13 +1,13 @@
 'use strict';
 
-var xmpp = require('../index'),
-    ltx = require('ltx'),
-    net = require('net'),
-    Client = require('node-xmpp-client'),
-    Message = require('node-xmpp-core').Stanza.Message,
-    Plain = require('../lib/authentication/plain'),
-    XOAuth = require('../lib/authentication/xoauth2'),
-    DigestMD5 = require('../lib/authentication/digestmd5')
+var xmpp = require('../index')
+  , ltx = require('ltx')
+  , net = require('net')
+  , Client = require('node-xmpp-client')
+  , Message = require('node-xmpp-core').Stanza.Message
+  , Plain = require('../lib/authentication/plain')
+  , XOAuth = require('../lib/authentication/xoauth2')
+  , DigestMD5 = require('../lib/authentication/digestmd5')
 
 var user = {
     jid: 'me@localhost',
@@ -24,7 +24,7 @@ function startServer(mechanism) {
 
     if (mechanism) {
         // remove plain
-        c2s.availableSaslMechanisms = [];
+        c2s.availableSaslMechanisms = []
         c2s.registerSaslMechanism(mechanism)
     }
 
@@ -100,7 +100,7 @@ function registerHandler(cl) {
                 // and send back.
                 cl.send(stanza)
             } else {
-                console.log('INCLIENT STANZA PRE', stanza.toString());
+                console.log('INCLIENT STANZA PRE', stanza.toString())
             }
         }
     )
@@ -201,7 +201,7 @@ describe('SASL', function() {
         var c2s = null
 
         before(function (done) {
-            c2s = startServer(DigestMD5);
+            c2s = startServer(DigestMD5)
             done()
         })
 
@@ -233,11 +233,16 @@ describe('SASL', function() {
         it('should not allow to skip digest md5 challenges', function(done) {
 
             // preparing a sequence of stanzas to send
-            var handshakeStanza = '<?xml version="1.0" encoding="UTF-8"?><stream:stream to="localhost" xmlns="jabber:client" xmlns:stream="http://etherx.jabber.org/streams" xml:l="en" version="1.0">'
+            var handshakeStanza = '<?xml version="1.0" encoding="UTF-8"?>'
+                + '<stream:stream to="localhost" xmlns="jabber:client" '
+                + 'xmlns:stream="http://etherx.jabber.org/streams" '
+                + 'xml:l="en" version="1.0">'
 
-            var authStanza = '<auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl" mechanism="DIGEST-MD5"/>'
+            var authStanza = '<auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl" '
+                + 'mechanism="DIGEST-MD5"/>'
 
-            var earlyAccessStanza = '<response xmlns="urn:ietf:params:xml:ns:xmpp-sasl"/>'
+            var earlyAccessStanza = '<response '
+                + 'xmlns="urn:ietf:params:xml:ns:xmpp-sasl"/>'
 
             /*
              * we cannot use existing client realization
