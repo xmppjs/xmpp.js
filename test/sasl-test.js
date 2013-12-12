@@ -254,18 +254,18 @@ describe('SASL', function() {
                 })
             })
 
-            var receivedData = '';
+            var receivedData = ''
 
             client.on('data', function(data) {
-                receivedData += data;
+                receivedData += data
             })
 
             client.setTimeout(500, function () {
                 if (/<\/failure>$/.test(receivedData.toString())) {
-                    client.end();
+                    client.end()
                     done()
                 } else {
-                    client.end();
+                    client.end()
                     done('wrong server response')
                 }
             })
