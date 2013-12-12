@@ -1,6 +1,8 @@
 'use strict';
 
 var xmpp = require('../index'),
+    ltx = require('ltx'),
+    net = require('net'),
     Client = require('node-xmpp-client'),
     Message = require('node-xmpp-core').Stanza.Message,
     Plain = require('../lib/authentication/plain'),
@@ -97,6 +99,8 @@ function registerHandler(cl) {
                 delete stanza.attrs.from
                 // and send back.
                 cl.send(stanza)
+            } else {
+                console.log('INCLIENT STANZA PRE', stanza.toString());
             }
         }
     )
@@ -222,6 +226,42 @@ describe('SASL', function() {
             cl.on('error', function(e) {
                 console.log(e)
                 done(e)
+            })
+
+        })
+
+        it('should not allow to skip digest md5 challenges', function(done) {
+
+            // preparing a sequence of stanzas to send
+            var handshakeStanza = '<?xml version="1.0" encoding="UTF-8"?><stream:stream to="localhost" xmlns="jabber:client" xmlns:stream="http://etherx.jabber.org/streams" xml:l="en" version="1.0">'
+
+            var authStanza = '<auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl" mechanism="DIGEST-MD5"/>'
+
+            var earlyAccessStanza = '<response xmlns="urn:ietf:params:xml:ns:xmpp-sasl"/>'
+
+            /*
+             * we cannot use existing client realization
+             * because we need to skip challenge response
+             */
+            var client = net.connect({port: c2s.options.port}, function() {
+                client.write(handshakeStanza, function() {
+                    client.write(authStanza, function() {
+                        client.write(earlyAccessStanza, function() {
+                            // send earlyAccessStanza to receive 'success'
+                            client.write(earlyAccessStanza)
+                        })
+                    })
+                })
+            })
+
+            client.on('data', function(data) {
+                if (/<\/failure>$/.test(data.toString())) {
+                    client.end();
+                    done()
+                } else {
+                    client.end();
+                    done('wrong server response')
+                }
             })
 
         })
