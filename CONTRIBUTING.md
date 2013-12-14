@@ -26,7 +26,7 @@ to change this over time.
 
 ## Tests
 
-All code (unless very trivial, or documentation) should be accompanied by tests. If you are unsure abou testing please make a pull request and we'll try and help you get some tests in place for your code.
+All code (unless very trivial, or documentation) should be accompanied by tests. If you are unsure about testing please make a pull request and we'll try and help you get some tests in place for your code.
 
 Tests are run using `npm test` and should all pass before you make a pull request.
 
