@@ -195,6 +195,7 @@ For the next releases, we will focus on stability and security of `node-xmpp`. P
  * more tests to verify against [RFC3921](http://xmpp.org/rfcs/rfc3921.html)
  * more demo apps to spead the usage
  * develop high-level client-api as seperate project to use json as input and output, see inspiration [xmpp-ftw/xmpp-ftw](https://github.com/xmpp-ftw/xmpp-ftw)
+ * work on early DNSSEC implementation, see [XMPP-DNA](http://tools.ietf.org/html/draft-saintandre-xmpp-dna-01) and [DNSSEC](http://tools.ietf.org/html/draft-miller-xmpp-dnssec-prooftype-04)
 
 `node-xmpp-server`:
 
