@@ -4,7 +4,7 @@
   "description": "XMPP client written in nodejs",
   "main": "index.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
     "browserify": "browserify -d -o node-xmpp-browser.js -r request:browser-request -i node-stringprep -i faye-websocket -i ./srv -i dns ./browserify.js"
   },
   "repository": {
