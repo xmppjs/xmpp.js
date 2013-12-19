@@ -41,17 +41,17 @@ function startServer(mechanism) {
         // Allows the developer to authenticate users against anything they want.
         stream.on('authenticate', function(opts, cb) {
             /*jshint camelcase: false */
-            if ((opts.saslmech === 'PLAIN') &&
+            if ((opts.saslmech === Plain.id) &&
                 (opts.jid.toString() === user.jid) &&
                 (opts.password === user.password)) {
                 // PLAIN OKAY
                 cb(null, opts)
-            } else if ((opts.saslmech === 'X-OAUTH2') &&
+            } else if ((opts.saslmech === XOAuth2.id) &&
                 (opts.jid.toString() === 'me@gmail.com') &&
                 (opts.oauth_token === 'xxxx.xxxxxxxxxxx')) {
                 // OAUTH2 OKAY
                 cb(null, opts)
-            } else if ((opts.saslmech === 'DIGEST-MD5') &&
+            } else if ((opts.saslmech === DigestMD5.id) &&
                 (opts.jid.toString() === user.jid)) {
                 // DIGEST-MD5 OKAY
 
@@ -163,7 +163,7 @@ describe('SASL', function() {
         var c2s = null
 
         before(function(done) {
-            c2s = startServer(XOAuth)
+            c2s = startServer(XOAuth2)
             done()
         })
 
