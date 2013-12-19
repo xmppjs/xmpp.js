@@ -5,9 +5,10 @@ var xmpp = require('../index')
   , net = require('net')
   , Client = require('node-xmpp-client')
   , Message = require('node-xmpp-core').Stanza.Message
-  , Plain = require('../lib/authentication/plain')
-  , XOAuth = require('../lib/authentication/xoauth2')
-  , DigestMD5 = require('../lib/authentication/digestmd5')
+
+  , Plain = require('../index').auth.Plain
+  , XOAuth2 = require('../index').auth.XOAuth2
+  , DigestMD5 = require('../index').auth.DigestMD5
 
 var user = {
     jid: 'me@localhost',
