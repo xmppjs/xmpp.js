@@ -125,7 +125,7 @@ describe('SASL', function() {
             var cl = new Client({
                 jid: user.jid,
                 password: user.password,
-                preferred: 'PLAIN'
+                preferred: Plain.id
             })
 
             registerHandler(cl)
