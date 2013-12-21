@@ -96,6 +96,7 @@ describe('C2Server', function() {
             })
 
         })
+
         it('should ping pong stanza', function(done) {
             eventChain = []
 
@@ -133,6 +134,7 @@ describe('C2Server', function() {
 
             cl.end()
         })
+
     })
 
 })
