@@ -5,9 +5,10 @@ var xmpp = require('../index')
   , net = require('net')
   , Client = require('node-xmpp-client')
   , Message = require('node-xmpp-core').Stanza.Message
-  , Plain = require('../lib/authentication/plain')
-  , XOAuth = require('../lib/authentication/xoauth2')
-  , DigestMD5 = require('../lib/authentication/digestmd5')
+
+  , Plain = require('../index').auth.Plain
+  , XOAuth2 = require('../index').auth.XOAuth2
+  , DigestMD5 = require('../index').auth.DigestMD5
 
 var user = {
     jid: 'me@localhost',
@@ -40,17 +41,17 @@ function startServer(mechanism) {
         // Allows the developer to authenticate users against anything they want.
         stream.on('authenticate', function(opts, cb) {
             /*jshint camelcase: false */
-            if ((opts.saslmech === 'PLAIN') &&
+            if ((opts.saslmech === Plain.id) &&
                 (opts.jid.toString() === user.jid) &&
                 (opts.password === user.password)) {
                 // PLAIN OKAY
                 cb(null, opts)
-            } else if ((opts.saslmech === 'X-OAUTH2') &&
+            } else if ((opts.saslmech === XOAuth2.id) &&
                 (opts.jid.toString() === 'me@gmail.com') &&
                 (opts.oauth_token === 'xxxx.xxxxxxxxxxx')) {
                 // OAUTH2 OKAY
                 cb(null, opts)
-            } else if ((opts.saslmech === 'DIGEST-MD5') &&
+            } else if ((opts.saslmech === DigestMD5.id) &&
                 (opts.jid.toString() === user.jid)) {
                 // DIGEST-MD5 OKAY
 
@@ -124,7 +125,7 @@ describe('SASL', function() {
             var cl = new Client({
                 jid: user.jid,
                 password: user.password,
-                preferred: 'PLAIN'
+                preferred: Plain.id
             })
 
             registerHandler(cl)
@@ -162,7 +163,7 @@ describe('SASL', function() {
         var c2s = null
 
         before(function(done) {
-            c2s = startServer(XOAuth)
+            c2s = startServer(XOAuth2)
             done()
         })
 
