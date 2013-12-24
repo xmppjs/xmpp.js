@@ -20,11 +20,11 @@ module.exports = function(grunt) {
         browserify: {
             dist: {
                 files: {
-                    'node-xmpp-browser.js': ['browserify.js'],
+                    'node-xmpp-browser.js': ['./browserify.js'],
                 },
-                ignore : ['node-stringprep', 'faye-websocket', 'srv', 'dns', 'tls'],
                 alias : 'request:browser-request',
                 options: {
+                    ignore : ['node-stringprep', 'faye-websocket', './srv', 'dns', 'tls']
                 }
             }
         },
