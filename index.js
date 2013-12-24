@@ -65,6 +65,7 @@ if (typeof atob === 'function') {
  *   credentials: Dictionary (optional) - TLS or SSL key and certificate credentials
  *   actAs: String (optional) - if admin user act on behalf of another user (just user)
  *   disallowTLS: Boolean (optional) - prevent upgrading the connection to a secure one via TLS
+ *   preferred: Preferred SASL mechanism to use
  *
  * Examples:
  *   var cl = new xmpp.Client({

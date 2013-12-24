@@ -5,7 +5,8 @@
 var client = new XMPP.Client({
     websocketsURL: "ws://localhost:5280/xmpp-websocket/",
     jid: 'lloyd@evilprofessor.co.uk',
-    password: 'password'
+    password: 'password',
+    preferred: 'PLAIN'
 })
 
 client.addListener(
