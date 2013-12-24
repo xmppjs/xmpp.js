@@ -34,7 +34,8 @@ module.exports = function(grunt) {
                     keepalive: true
                 }
             }
-        }
+        },
+        clean: ['node-xmpp-browser.js']
     })
 
     // Load the plugins
@@ -42,8 +43,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-mocha-cli')
     grunt.loadNpmTasks('grunt-browserify')
     grunt.loadNpmTasks('grunt-contrib-connect')
+    grunt.loadNpmTasks('grunt-contrib-clean')
 
     // Configure tasks
     grunt.registerTask('default', ['test'])
-    grunt.registerTask('test', ['mochacli', 'jshint'])
+    grunt.registerTask('test', ['clean', 'mochacli', 'browserify', 'jshint'])
 }
