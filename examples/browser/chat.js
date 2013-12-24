@@ -1,30 +1,28 @@
 'use strict';
 
 /* global XMPP */
-var cl = new XMPP.Client({
-    /*websocketsURL: "ws://localhost:5280/",*/
-    boshURL: 'https://beta.buddycloud.org/http-bind/',
-    jid: 'test@example.com',
-    password: '***'
+var client = new XMPP.Client({
+    websocketsURL: "ws://localhost:5280/xmpp-websocket/",
+    jid: 'lloyd@evilprofessor.co.uk',
+    password: 'password'
 })
 
-cl.addListener(
+client.addListener(
     'online',
     function() {
+        console.log('online')
         ['astro@spaceboyz.net'].forEach(
            function(to) {
                 var stanza = new XMPP.Element('message', { to: to, type: 'chat'})
                     .c('body')
                     .t('Hello from browser')
-                cl.send(stanza)
+                client.send(stanza)
             }
        )
-        // nodejs has nothing left to do and will exit
-        cl.end()
     }
 )
 
-cl.addListener(
+client.addListener(
     'error',
     function(e) {
         console.error(e)

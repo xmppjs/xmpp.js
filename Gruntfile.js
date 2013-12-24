@@ -22,9 +22,16 @@ module.exports = function(grunt) {
                 files: {
                     'node-xmpp-browser.js': ['browserify.js'],
                 },
-                ignore : ['node-stringprep', 'faye-websocket', 'srv', 'dns'],
+                ignore : ['node-stringprep', 'faye-websocket', 'srv', 'dns', 'tls'],
                 alias : 'request:browser-request',
                 options: {
+                }
+            }
+        },
+        connect: {
+            target: {
+                options: {
+                    keepalive: true
                 }
             }
         }
@@ -34,6 +41,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint')
     grunt.loadNpmTasks('grunt-mocha-cli')
     grunt.loadNpmTasks('grunt-browserify')
+    grunt.loadNpmTasks('grunt-contrib-connect')
 
     // Configure tasks
     grunt.registerTask('default', ['test'])
