@@ -20,22 +20,32 @@ module.exports = function(grunt) {
         browserify: {
             dist: {
                 files: {
-                    'node-xmpp-browser.js': ['browserify.js'],
+                    'node-xmpp-browser.js': ['./browserify.js'],
                 },
-                ignore : ['node-stringprep', 'faye-websocket', 'srv', 'dns'],
                 alias : 'request:browser-request',
                 options: {
+                    ignore : ['node-stringprep', 'faye-websocket', './srv', 'dns', 'tls']
                 }
             }
-        }
+        },
+        connect: {
+            target: {
+                options: {
+                    keepalive: true
+                }
+            }
+        },
+        clean: ['node-xmpp-browser.js']
     })
 
     // Load the plugins
     grunt.loadNpmTasks('grunt-contrib-jshint')
     grunt.loadNpmTasks('grunt-mocha-cli')
     grunt.loadNpmTasks('grunt-browserify')
+    grunt.loadNpmTasks('grunt-contrib-connect')
+    grunt.loadNpmTasks('grunt-contrib-clean')
 
     // Configure tasks
     grunt.registerTask('default', ['test'])
-    grunt.registerTask('test', ['mochacli', 'jshint'])
+    grunt.registerTask('test', ['clean', 'mochacli', 'browserify', 'jshint'])
 }

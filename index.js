@@ -65,6 +65,7 @@ if (typeof atob === 'function') {
  *   credentials: Dictionary (optional) - TLS or SSL key and certificate credentials
  *   actAs: String (optional) - if admin user act on behalf of another user (just user)
  *   disallowTLS: Boolean (optional) - prevent upgrading the connection to a secure one via TLS
+ *   preferred: Preferred SASL mechanism to use
  *
  * Examples:
  *   var cl = new xmpp.Client({
@@ -132,11 +133,13 @@ function Client(opts) {
 
 util.inherits(Client, Session)
 
+Client.NS_CLIENT = NS_CLIENT
+
 Client.prototype.onStanza = function(stanza) {
     /* Actually, we shouldn't wait for <stream:features/> if
        this.streamAttrs.version is missing, but who uses pre-XMPP-1.0
        these days anyway? */
-    if ((this.state !== STATE_ONLINE) && stanza.is('features', Connection.NS_STREAM)) {
+    if ((this.state !== STATE_ONLINE) && stanza.is('features')) {
         this.streamFeatures = stanza
         this.useFeatures()
     } else if (this.state === STATE_PREAUTH) {
