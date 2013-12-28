@@ -3,11 +3,12 @@
 var assert = require('assert')
   , xmpp = require('./../index')
   , ltx = require('ltx')
+  , C2SServer = require('../index').C2SServer
 
 describe('Issues', function() {
 
     it('Shouldn\'t crash on invalid JID', function(done) {
-        var Router = require('../lib/router').Router
+        var Router = require('../index').Router
         var router = new Router()
         var message = new ltx.Element(
             'message', { to: 'foo@localhost', from: 'foo@localhost' }
