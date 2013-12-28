@@ -5,15 +5,15 @@
 var client = new XMPP.Client({
     websocketsURL: 'ws://localhost:5280/xmpp-websocket/',
     jid: 'lloyd@evilprofessor.co.uk',
-    password: 'password',
-    preferred: 'PLAIN'
+    password: 'password'
 })
 
 client.addListener(
     'online',
     function() {
         console.log('online')
-        ['astro@spaceboyz.net'].forEach(
+        var recipients = ['astro@spaceboyz.net']
+        recipients.forEach(
            function(to) {
                 var stanza = new XMPP.Element('message', { to: to, type: 'chat'})
                     .c('body')
