@@ -31,11 +31,23 @@ module.exports = function(grunt) {
         connect: {
             target: {
                 options: {
-                    keepalive: true
+                    keepalive: false
                 }
             }
         },
-        clean: ['node-xmpp-browser.js']
+        clean: ['node-xmpp-browser.js'],
+        watch: {
+            scripts: {
+                files: ['**/*.js'],
+                tasks: [],
+                options: {
+                    spawn: false,
+                },
+            },
+            connect: {
+                files: ['**/*.js']
+            }
+        }
     })
 
     // Load the plugins
@@ -44,8 +56,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-browserify')
     grunt.loadNpmTasks('grunt-contrib-connect')
     grunt.loadNpmTasks('grunt-contrib-clean')
+    grunt.loadNpmTasks('grunt-contrib-watch')
 
     // Configure tasks
     grunt.registerTask('default', ['test'])
     grunt.registerTask('test', ['clean', 'mochacli', 'browserify', 'jshint'])
+    grunt.registerTask('dev', ['browserify', 'connect', 'watch'])
 }
