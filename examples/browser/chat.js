@@ -4,7 +4,7 @@
 /* Note these are connection details for a local dev server :) */
 var client = new XMPP.Client({
     websocketsURL: 'ws://localhost:5280/xmpp-websocket/',
-    jid: 'lloyd@evilprofessor.co.uk',
+    jid: 'lloyd@localhost',
     password: 'password'
 })
 
