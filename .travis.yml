@@ -7,3 +7,9 @@ before_install:
   - "sudo apt-get install libicu-dev"
 before_script:
   - npm install -g grunt-cli
+before_install:
+  # Workaround for a permissions issue with Travis virtual machine images
+  # that breaks Python's multiprocessing:
+  # https://github.com/travis-ci/travis-cookbooks/issues/155
+  - sudo rm -rf /dev/shm
+  - sudo ln -s /run/shm /dev/shm
