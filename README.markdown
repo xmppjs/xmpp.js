@@ -169,20 +169,41 @@ this.client.connection.socket.setKeepAlive(true, 10000)
 
 Where `this.client` is the result of `new require('node-xmpp').Client()`.
 
-## Roadmap for future versions
+## Development Roadmap
 
-* Events harmonization
-* Common pause/resume/... for any Client/Component/Server session
-* Smoothen reconnect
-* Websockets server (at least for testing the client)
-* Lookup BOSH URLs in DNS TXT records
-* Move connecting to connection, use WS/BOSH as TCP fallback
-* Use split-out srv library
-* Ensure tls end/close/drain events
-* Properly disconnect on stream errors, not on connection errors
-* Tests for S2S connections
-* Tests for Component connections (w/ Component server?)
-* Find a browser-based demo app that can be switched from Strophe.js
+For the next releases, we will focus on stability and security of `node-xmpp`. Pull requests are welcome to position `node-xmpp` as the best, most secure and most stable xmpp library for nodejs.
+
+`node-xmpp-core`:
+
+ * manifesto: support the STARTTLS method in XMPP as specified in RFC 6120, including mandatory-to-implement cipher suites and certificate validation consistent with RFC 6125
+ * manifesto: prefer the latest version of TLS (TLS 1.2) #192
+ * manifesto: disable support for the older and less secure SSL standard (SSLv2 and SSLv3)
+ * manifesto: provide configuration options to require channel encryption for client-to-server and server-to-server connections
+ * manifesto: provide configuration options to prefer or require cipher  suites that enable forward secrecy
+ * Events harmonization
+ * Common pause/resume/... for any Client/Component/Server session
+ * Smoothen reconnect
+ * Properly disconnect on stream errors, not on connection errors
+ * more tests to verify against [RFC3920](http://xmpp.org/rfcs/rfc3920.html)
+
+`node-xmpp-client`:
+
+ * Lookup BOSH URLs in DNS TXT records
+ * Move connecting to connection, use WS/BOSH as TCP fallback
+ * Ensure tls end/close/drain events
+ * Possible may to use `strophe` plugins with `node-xmpp`, see [dodo/Lightstream](https://github.com/dodo/Lightstream)
+ * more tests to verify against [RFC3921](http://xmpp.org/rfcs/rfc3921.html)
+ * more demo apps to spead the usage
+ * develop high-level client-api as seperate project to use json as input and output, see inspiration [xmpp-ftw/xmpp-ftw](https://github.com/xmpp-ftw/xmpp-ftw)
+ * work on early DNSSEC implementation, see [XMPP-DNA](http://tools.ietf.org/html/draft-saintandre-xmpp-dna-01) and [DNSSEC](http://tools.ietf.org/html/draft-miller-xmpp-dnssec-prooftype-04)
+
+`node-xmpp-server`:
+
+ * simple Websockets server (at least for testing the client)
+ * Tests for S2S connections
+ * maifesto: prefer authenticated encryption
+ * harmonize c2s, bosh and websocket server components
+
 
 # Documentation
 
