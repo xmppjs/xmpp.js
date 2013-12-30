@@ -1,8 +1,6 @@
 'use strict';
 
-var assert = require('assert')
-  , xmpp = require('./../index')
-  , ltx = require('ltx')
+var ltx = require('ltx')
 
 describe('Issues', function() {
 
