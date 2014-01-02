@@ -19,10 +19,8 @@
     "url": "https://github.com/node-xmpp/node-xmpp-core/issues"
   },
   "dependencies": {
-    "ltx": "~0.3.2"
-  },
-  "optionalDependencies": {
-    "node-stringprep": "~0.1.8"
+    "node-stringprep": "~0.2.0",
+    "ltx": "~0.3.3"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
