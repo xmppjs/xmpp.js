@@ -12,7 +12,12 @@ var user = {
 var tls
 
 before(function (done) {
-    pem.createCertificate({ days: 1, selfSigned: true }, function (err, keys) {
+    var cert_params = {
+        days: 1,
+        selfSigned: true,
+        altNames: ["DNS = localhost", "IP = 127.0.0.1"],
+    }
+    pem.createCertificate(cert_params, function (err, keys) {
         if (err) return done(err)
         tls = { key: keys.serviceKey + '\n', cert: keys.certificate + '\n' }
         tls.ca = tls.cert
