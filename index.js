@@ -314,5 +314,6 @@ Client.prototype.registerSaslMechanism = function () {
 }
 
 Client.SASL = sasl
+Client.Client = Client
 
 module.exports = Client
