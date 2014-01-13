@@ -1,11 +1,9 @@
 'use strict';
 
-var xmpp = require('../index')
+var C2SServer = require('../index').C2SServer
   , ltx = require('ltx')
   , net = require('net')
   , Client = require('node-xmpp-client')
-  , Message = require('node-xmpp-core').Stanza.Message
-
   , Plain = require('../index').auth.Plain
   , XOAuth2 = require('../index').auth.XOAuth2
   , DigestMD5 = require('../index').auth.DigestMD5
@@ -18,7 +16,7 @@ var user = {
 function startServer(mechanism) {
 
     // Sets up the server.
-    var c2s = new xmpp.C2SServer({
+    var c2s = new C2SServer({
         port: 5222,
         domain: 'localhost'
     })
@@ -55,7 +53,7 @@ function startServer(mechanism) {
                 (opts.jid.toString() === user.jid)) {
                 // DIGEST-MD5 OKAY
 
-                opts.password = "secret"
+                opts.password = 'secret'
                 cb(null, opts)
             } else {
                 cb(new Error('Authentication failure'), null)
@@ -63,7 +61,7 @@ function startServer(mechanism) {
         })
 
         stream.on('online', function() {
-            stream.send(new Message({
+            stream.send(new ltx.Element('message', {
                     type: 'chat'
                 })
                 .c('body')
@@ -234,16 +232,16 @@ describe('SASL', function() {
         it('should not allow to skip digest md5 challenges', function(done) {
 
             // preparing a sequence of stanzas to send
-            var handshakeStanza = '<?xml version="1.0" encoding="UTF-8"?>'
-                + '<stream:stream to="localhost" xmlns="jabber:client" '
-                + 'xmlns:stream="http://etherx.jabber.org/streams" '
-                + 'xml:l="en" version="1.0">'
+            var handshakeStanza = '<?xml version="1.0" encoding="UTF-8"?>' +
+                '<stream:stream to="localhost" xmlns="jabber:client" ' +
+                'xmlns:stream="http://etherx.jabber.org/streams" ' +
+                'xml:l="en" version="1.0">'
 
-            var authStanza = '<auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl" '
-                + 'mechanism="DIGEST-MD5"/>'
+            var authStanza = '<auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl" ' +
+                'mechanism="DIGEST-MD5"/>'
 
-            var earlyAccessStanza = '<response '
-                + 'xmlns="urn:ietf:params:xml:ns:xmpp-sasl"/>'
+            var earlyAccessStanza = '<response ' +
+                'xmlns="urn:ietf:params:xml:ns:xmpp-sasl"/>'
 
             /*
              * we cannot use existing client realization

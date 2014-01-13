@@ -79,3 +79,7 @@ stanza, before sending it out the wire.
 # Documentation
 
 (Builing up documentation slowly)
+
+# Licence 
+
+MIT

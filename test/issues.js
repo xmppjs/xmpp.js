@@ -1,9 +1,6 @@
 'use strict';
 
-var assert = require('assert')
-  , xmpp = require('./../index')
-  , ltx = require('ltx')
-  , C2SServer = require('../index').C2SServer
+var ltx = require('ltx')
 
 describe('Issues', function() {
 
