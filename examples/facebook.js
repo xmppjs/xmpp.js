@@ -21,10 +21,11 @@ var Client = require('../index')
 var facebookId = '<< facebook user ID >>'
 var appId = '<< appliction ID >> '
 var appSecret = '<< application secret >>'
-var accessToken = 'Get access token from here (make sure you select your app and check extended xmpp_login permission): https://developers.facebook.com/tools/explorer'
+var accessToken = '<< access token >>'
 
 var otherUserId = '<< send message to ID >>'
 
+/* jshint -W106 */
 var client = new Client({
     jid: '-' + facebookId + '@chat.facebook.com',
     password: '3cQDAUtUg9fF$wP*cYjZfwy&q5Wa%S$tWnU2',
