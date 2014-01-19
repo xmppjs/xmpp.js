@@ -109,6 +109,8 @@ function Client(opts) {
     delete self.did_bind
     delete self.did_session
 
+    opts.jid = ('string' === typeof opts.jid) ? new JID(opts.jid) : opt.jid
+
     Session.call(this, opts)
 
     // If server and client have multiple possible auth mechanisms
