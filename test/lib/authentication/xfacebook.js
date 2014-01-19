@@ -1,6 +1,7 @@
 'use strict';
 
 var XFacebookPlatform = require('../../../lib/authentication/xfacebook')
+  , JID = require('node-xmpp-core').JID
 
 var mech = new XFacebookPlatform()
 
@@ -17,7 +18,7 @@ describe('Facebook authentication', function() {
         })
 
         it('Should return true if options.jid contains \'chat.facebook.com\'', function() {
-            var options = { jid: 'lloyd@' + mech.facebookHost }
+            var options = { jid: new JID('lloyd@' + mech.facebookHost) }
             mech.match(options).should.equal.true
         })
 
@@ -26,7 +27,7 @@ describe('Facebook authentication', function() {
             mech.match(options).should.equal.false
             options = { host: 'buddycloud.org' }
             mech.match(options).should.equal.false
-            options = { host: 'buddycloud.org', jid: 'lloyd@buddycloud.org' }
+            options = { host: 'buddycloud.org', jid: new JID('lloyd@buddycloud.org') }
             mech.match(options).should.equal.false
         })
 
