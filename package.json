@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "node-stringprep": "~0.2.0",
-    "tls-connect": "~0.1.0",
+    "tls-connect": "~0.2.0",
     "ltx": "~0.3.3"
   },
   "devDependencies": {
