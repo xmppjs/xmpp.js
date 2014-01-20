@@ -110,7 +110,8 @@ function Client(opts) {
     delete self.did_session
 
     Session.call(this, opts)
-
+    opts.jid = this.jid
+    
     // If server and client have multiple possible auth mechanisms
     // we try to select the preferred one
     if (opts.preferred) {

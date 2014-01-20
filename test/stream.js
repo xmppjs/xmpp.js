@@ -35,7 +35,7 @@ describe('Authentication', function() {
                 done()
             })
             socket.on('end', function() { // client disconnects
-                done('socket closed')
+                done('error: socket closed')
             })
         })
         var client = new Client(options)
