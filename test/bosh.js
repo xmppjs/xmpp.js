@@ -20,7 +20,7 @@ describe('BOSH client/server', function() {
 
         sv.on('connect', function(svcl_) {
             svcl = svcl_
-            c2s = new C2SStream({ connection: svcl })
+            c2s = new C2SStream({ connection: svcl , server : sv })
             c2s.on('authenticate', function(opts, cb) {
                 cb(null, opts)
             })
