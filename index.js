@@ -123,7 +123,7 @@ function Client(opts) {
     this.availableSaslMechanisms = sasl.detectMechanisms(opts)
 
     this.state = STATE_PREAUTH
-    this.addListener('end', function() {
+    this.on('end', function() {
         self.state = STATE_PREAUTH
         self.emit('offline')
     })
