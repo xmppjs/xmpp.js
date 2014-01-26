@@ -109,9 +109,18 @@ function Client(opts) {
     delete self.did_bind
     delete self.did_session
 
+    this.state = STATE_PREAUTH
+    this.on('end', function() {
+        self.state = STATE_PREAUTH
+        self.emit('offline')
+    })
+    this.on('disconnect', function() {
+        self.state = STATE_PREAUTH
+    })
+
     Session.call(this, opts)
     opts.jid = this.jid
-    
+
     // If server and client have multiple possible auth mechanisms
     // we try to select the preferred one
     if (opts.preferred) {
@@ -121,15 +130,6 @@ function Client(opts) {
     }
 
     this.availableSaslMechanisms = sasl.detectMechanisms(opts)
-
-    this.state = STATE_PREAUTH
-    this.on('end', function() {
-        self.state = STATE_PREAUTH
-        self.emit('offline')
-    })
-    this.on('close', function() {
-        self.state = STATE_PREAUTH
-    })
 }
 
 util.inherits(Client, Session)
