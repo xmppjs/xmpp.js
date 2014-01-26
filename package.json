@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp-client",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "XMPP client written in nodejs",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,7 @@
     "request": "~2.27.0",
     "ltx": "~0.3.2",
     "faye-websocket": "~0.7.0",
-    "node-xmpp-core": "~0.3.1",
+    "node-xmpp-core": "~0.4.0",
     "browser-request": "~0.3.1"
   },
   "devDependencies": {
@@ -40,7 +40,7 @@
     "grunt-contrib-connect": "~0.6.0",
     "grunt-contrib-clean": "~0.5.0",
     "should": "~2.1.1",
-    "node-xmpp-server": "~0.3.3"
+    "node-xmpp-server": "~0.4.0"
   },
   "browser": {
     "request": "browser-request",

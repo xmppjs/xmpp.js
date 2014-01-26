@@ -116,8 +116,7 @@ describe('SASL', function() {
         })
 
         after(function(done) {
-            c2s.shutdown()
-            done()
+            c2s.shutdown(done)
         })
 
         it('should accept plain authentication', function(done) {
@@ -167,8 +166,7 @@ describe('SASL', function() {
         })
 
         after(function(done) {
-            c2s.shutdown()
-            done()
+            c2s.shutdown(done)
         })
 
         /*
@@ -206,8 +204,7 @@ describe('SASL', function() {
         })
 
         after(function(done) {
-            c2s.shutdown()
-            done()
+            c2s.shutdown(done)
         })
 
 
