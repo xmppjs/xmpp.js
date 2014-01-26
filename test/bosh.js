@@ -75,6 +75,18 @@ describe('BOSH client/server', function() {
             svcl.send(new Message({ to: 'bar@bar.org' }).
                   c('body').t('Hello back'))
         })
+
+        it('should disconnect', function(done) {
+            var disconnected = false
+            cl.once('disconnect', function() {
+                disconnected = true
+            })
+            cl.once('end', function () {
+                assert.ok(disconnected, 'client disconnected')
+                done()
+            })
+            cl.end()
+        })
     })
 
 })
