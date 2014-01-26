@@ -13,10 +13,10 @@
     "faye-websocket": ">= 0.4.1",
     "browserify": "~3.19.1",
     "brfs": "0.0.8",
-    "node-xmpp-component": "~0.1.1",
-    "node-xmpp-client": "~0.1.4",
-    "node-xmpp-server": "~0.3.1",
-    "node-xmpp-core": "~0.3.1"
+    "node-xmpp-component": "~0.2.0",
+    "node-xmpp-client": "~0.2.0",
+    "node-xmpp-server": "~0.4.0",
+    "node-xmpp-core": "~0.4.0"
   },
   "devDependencies": {
     "mocha": ">=1.0.0",
