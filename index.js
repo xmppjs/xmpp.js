@@ -11,14 +11,14 @@ var EventEmitter = require('events').EventEmitter
 var NS_COMPONENT = 'jabber:component:accept'
 
 /**
- * params:
+ * opts:
  *   jid: String (required)
  *   password: String (required)
  *   host: String (required)
  *   port: Number (required)
  *   reconnect: Boolean (optional)
  */
-function Component(params) {
+function Component(opts) {
     EventEmitter.call(this)
     var self = this
     var conn = this.connection = new Connection()
@@ -38,40 +38,32 @@ function Component(params) {
         }
     }
 
-    if (typeof params.jid === 'string') {
-        this.connection.jid = new JID(params.jid)
+    if (typeof otps.jid === 'string') {
+        this.connection.jid = new JID(opts.jid)
     } else {
-        this.connection.jid = params.jid
+        this.connection.jid = opts.jid
     }
-    this.connection.password = params.password
+    this.connection.password = opts.password
     this.connection.xmlns[''] = NS_COMPONENT
     this.connection.streamTo = this.connection.jid.domain
 
-    this.connection.addListener('streamStart', function(streamAttrs) {
-        self.onStreamStart(streamAttrs)
-    })
-    this.connection.addListener('stanza', function(stanza) {
-        self.onStanza(stanza)
-    })
-    this.connection.addListener('error', function(e) {
-        self.emit('error', e)
-    })
+    this.connection.on('stanza', this.onStanza.bind(this))
+    this.connection.on('streamStart', this.onStreamStart.bind(this))
+    this.connection.on('error', this.emit.bind(this, 'error'))
 
     var connect = function() {
         var attempt = SRV.connect(
             self.connection.socket,
             [],
-            params.host,
-            params.port
+            opts.host,
+            opts.port
         )
-        attempt.addListener('connect', function() {
+        attempt.on('connect', function() {
             self.connection.startStream()
         })
-        attempt.addListener('error', function(e) {
-            self.emit('error', e)
-        })
+        attempt.on('error', this.emit.bind(this, 'error'))
     }
-    if (params.reconnect) this.connection.reconnect = connect
+    if (opts.reconnect) this.connection.reconnect = connect
     connect()
 }
 
