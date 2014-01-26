@@ -27,6 +27,7 @@ function Component(opts) {
         socket: opts.socket,
     })
 
+    // FIXME WTF is this? why? :cry:
     // proxy the fucntions of the connection instance
     for (var i in conn) {
         var fn = conn[i]
