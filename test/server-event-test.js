@@ -6,7 +6,7 @@ var xmpp = require('../index')
 var eventChain = []
 var c2s = null
 
-function startServer() {
+function startServer(done) {
 
     // Sets up the server.
     c2s = new xmpp.C2SServer({
@@ -74,6 +74,8 @@ function startServer() {
             eventChain.push('error')
         })
     })
+
+    done()
 }
 
 describe('C2Server', function() {
@@ -81,8 +83,7 @@ describe('C2Server', function() {
     var cl = null
 
     before(function(done) {
-        startServer()
-        done()
+        startServer(done)
     })
 
     after(function(done) {
