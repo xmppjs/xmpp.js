@@ -10,7 +10,7 @@ var assert = require('assert')
 var BOSH_PORT = 45580
 
 describe('BOSH client/server', function() {
-    var sv, svcl, c2s, cl, server;
+    var sv, svcl, c2s, cl
 
     before(function(done) {
         sv = new xmpp.BOSHServer({
