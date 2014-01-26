@@ -1,12 +1,12 @@
 'use strict';
 
-var EventEmitter = require('events').EventEmitter
+var util = require('util')
+  , crypto = require('crypto')
+  , EventEmitter = require('events').EventEmitter
   , Connection = require('node-xmpp-core').Connection
   , JID = require('node-xmpp-core').JID
-  , ltx = require('ltx')
-  , util = require('util')
-  , crypto = require('crypto')
   , SRV = require('node-xmpp-core').SRV
+  , ltx = require('ltx')
 
 var NS_COMPONENT = 'jabber:component:accept'
 
