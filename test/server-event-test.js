@@ -33,6 +33,10 @@ function startServer() {
             eventChain.push('online')
         })
 
+        client.on('offline', function() {
+            eventChain.push('offline')
+        })
+
         client.on('stanza', function() {
             eventChain.push('stanza')
             client.send(
@@ -42,8 +46,20 @@ function startServer() {
             )
         })
 
+        client.on('connect', function() {
+            eventChain.push('connect')
+        })
+
+        client.on('reconnect', function() {
+            eventChain.push('reconnect')
+        })
+
         client.on('disconnect', function() {
             eventChain.push('disconnect')
+        })
+
+        client.on('connection', function() {
+            eventChain.push('connection')
         })
 
         client.on('end', function() {
@@ -125,7 +141,7 @@ describe('C2Server', function() {
             // close socket
             cl.on('close', function() {
                 eventChain.push('clientclose')
-                assert.deepEqual(eventChain, ['end', 'close', 'clientend', 'clientclose'])
+                assert.deepEqual(eventChain, ['end', 'disconnect', 'close', 'clientend', 'clientclose'])
                 done()
             })
 
