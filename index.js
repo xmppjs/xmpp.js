@@ -1,28 +1,33 @@
 'use strict';
 
-var EventEmitter = require('events').EventEmitter
+var util = require('util')
+  , crypto = require('crypto')
+  , EventEmitter = require('events').EventEmitter
   , Connection = require('node-xmpp-core').Connection
   , JID = require('node-xmpp-core').JID
-  , ltx = require('ltx')
-  , util = require('util')
-  , crypto = require('crypto')
   , SRV = require('node-xmpp-core').SRV
+  , ltx = require('ltx')
 
 var NS_COMPONENT = 'jabber:component:accept'
 
 /**
- * params:
+ * opts:
  *   jid: String (required)
  *   password: String (required)
  *   host: String (required)
  *   port: Number (required)
  *   reconnect: Boolean (optional)
  */
-function Component(params) {
+function Component(opts) {
     EventEmitter.call(this)
     var self = this
-    var conn = this.connection = new Connection()
+    var conn = this.connection = new Connection({
+        setup: this._addConnectionListeners.bind(this),
+        reconnect: opts.reconnect,
+        socket: opts.socket,
+    })
 
+    // FIXME WTF is this? why? :cry:
     // proxy the fucntions of the connection instance
     for (var i in conn) {
         var fn = conn[i]
@@ -38,41 +43,34 @@ function Component(params) {
         }
     }
 
-    if (typeof params.jid === 'string') {
-        this.connection.jid = new JID(params.jid)
+    if (typeof otps.jid === 'string') {
+        this.connection.jid = new JID(opts.jid)
     } else {
-        this.connection.jid = params.jid
+        this.connection.jid = opts.jid
     }
-    this.connection.password = params.password
+    this.connection.password = opts.password
     this.connection.xmlns[''] = NS_COMPONENT
     this.connection.streamTo = this.connection.jid.domain
 
-    this.connection.addListener('streamStart', function(streamAttrs) {
-        self.onStreamStart(streamAttrs)
-    })
-    this.connection.addListener('stanza', function(stanza) {
-        self.onStanza(stanza)
-    })
-    this.connection.addListener('error', function(e) {
-        self.emit('error', e)
+    this.connection.on('connect', function () {
+        if (this !== self.connection) return
+        // Clients start <stream:stream>, servers reply
+        if (self.connection.startStream)
+            self.connection.startStream()
     })
 
-    var connect = function() {
-        var attempt = SRV.connect(
-            self.connection.socket,
-            [],
-            params.host,
-            params.port
-        )
-        attempt.addListener('connect', function() {
-            self.connection.startStream()
-        })
-        attempt.addListener('error', function(e) {
-            self.emit('error', e)
-        })
+    if (opts.reconnect)
+        this.connection.on('connection', connect)
+    return connect()
+
+    function connect() {
+        self.connection.listen({socket:SRV.connect({
+            connection:  self.connection,
+            services:    [],
+            domain:      opts.host,
+            defaultPort: opts.port
+        })})
     }
-    if (params.reconnect) this.connection.reconnect = connect
-    connect()
 }
 
 util.inherits(Component, EventEmitter)
@@ -88,6 +86,19 @@ Component.prototype.onStanza = function(stanza) {
         return
     }
     this.emit('stanza', stanza)
+}
+
+Component.prototype._addConnectionListeners = function (con) {
+    con.on('streamStart', this.onStreamStart.bind(this))
+    con.on('stanza', this.onStanza.bind(this))
+    con.on('drain', this.emit.bind(this, 'drain'))
+    con.on('data', this.emit.bind(this, 'data'))
+    con.on('end', this.emit.bind(this, 'end'))
+    con.on('close', this.emit.bind(this, 'close'))
+    con.on('error', this.emit.bind(this, 'error'))
+    con.on('connect', this.emit.bind(this, 'connect'))
+    con.on('reconnect', this.emit.bind(this, 'reconnect'))
+    con.on('disconnect', this.emit.bind(this, 'disconnect'))
 }
 
 // Component.prototype.send = function(stanza) {
