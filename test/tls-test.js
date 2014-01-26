@@ -58,7 +58,7 @@ function startServer(done) {
             )
         })
     })
-    console.log('Server started')
+
     done()
 }
 

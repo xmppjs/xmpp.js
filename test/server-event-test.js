@@ -94,7 +94,6 @@ describe('C2Server', function() {
         it('should be in the right order for connecting', function(done) {
             eventChain = []
 
-            //clientCallback = done
             cl = new xmpp.Client({
                 jid: 'bob@example.com',
                 password: 'alice',
