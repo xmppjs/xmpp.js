@@ -9,12 +9,26 @@ require('should')
 describe('Authentication', function() {
 
     var C2S_PORT = 5222
-    var server
+    var onSocket = function () { }
+    var duringafter = false
+    var server = null
 
-    var getServer = function(callback) {
-        server = net.createServer(callback)
+    before(function(done) {
+        server = net.createServer(function (socket) {
+            server.on('shutdown', function () {
+                socket.end()
+            })
+            onSocket(socket)
+        })
         server.listen(C2S_PORT, 'localhost')
-    }
+        done()
+    })
+
+    after(function(done) {
+        duringafter = true
+        server.emit('shutdown')
+        server.close(done)
+    })
 
     it('Sends opening <stream/>', function(done) {
         var options = {
@@ -23,7 +37,7 @@ describe('Authentication', function() {
             host: 'localhost',
             port: C2S_PORT
         }
-        getServer(function(socket) {
+        onSocket = function(socket) {
             socket.once('data', function(d) {
                 var element = new ltx.parse(d.toString('utf8') + '</stream:stream>')
                 element.is('stream').should.be.true
@@ -35,9 +49,10 @@ describe('Authentication', function() {
                 done()
             })
             socket.on('end', function() { // client disconnects
+                if (duringafter) return
                 done('error: socket closed')
             })
-        })
+        }
         var client = new Client(options)
         client.should.exist
     })
