@@ -101,10 +101,6 @@ Component.prototype._addConnectionListeners = function (con) {
     con.on('disconnect', this.emit.bind(this, 'disconnect'))
 }
 
-// Component.prototype.send = function(stanza) {
-//     this.connection.send(stanza);
-// }
-//
 function sha1Hex(s) {
     var hash = crypto.createHash('sha1')
     hash.update(s)
