@@ -21,6 +21,7 @@
     "url": "https://github.com/node-xmpp/node-xmpp-server/issues"
   },
   "dependencies": {
+    "hat": "~0.0.3",
     "ltx": "~0.3.2",
     "node-xmpp-core": "~0.3.1"
   },
