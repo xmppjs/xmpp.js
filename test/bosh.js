@@ -13,14 +13,15 @@ describe('BOSH client/server', function() {
     var sv, svcl, c2s, cl, server;
 
     before(function(done) {
-        sv = new xmpp.BOSHServer()
-        server = http.createServer(function(req, res) {
-            sv.handleHTTP(req, res)
-        }).listen(BOSH_PORT)
+        sv = new xmpp.BOSHServer({
+            server:http.createServer(function(req, res) {
+                sv.handleHTTP(req, res)
+            }).listen(BOSH_PORT)
+        })
 
         sv.on('connect', function(svcl_) {
             svcl = svcl_
-            c2s = new C2SStream({ connection: svcl })
+            c2s = new C2SStream({ connection: svcl, server: sv })
             c2s.on('authenticate', function(opts, cb) {
                 cb(null, opts)
             })
@@ -29,10 +30,10 @@ describe('BOSH client/server', function() {
     })
 
     after(function(done) {
-        console.log('Running after')
+        c2s.once('close', function() {
+            sv.shutdown(done)
+        })
         c2s.end()
-        server.close()
-        done()
     })
 
     describe('client', function() {
