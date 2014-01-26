@@ -10,17 +10,18 @@ var assert = require('assert')
 var BOSH_PORT = 45580
 
 describe('BOSH client/server', function() {
-    var sv, svcl, c2s, cl, server;
+    var sv, svcl, c2s, cl
 
     before(function(done) {
-        sv = new xmpp.BOSHServer()
-        server = http.createServer(function(req, res) {
-            sv.handleHTTP(req, res)
-        }).listen(BOSH_PORT)
+        sv = new xmpp.BOSHServer({
+            server:http.createServer(function(req, res) {
+                sv.handleHTTP(req, res)
+            }).listen(BOSH_PORT)
+        })
 
         sv.on('connect', function(svcl_) {
             svcl = svcl_
-            c2s = new C2SStream({ connection: svcl , server : sv })
+            c2s = new C2SStream({ connection: svcl, server: sv })
             c2s.on('authenticate', function(opts, cb) {
                 cb(null, opts)
             })
@@ -29,10 +30,10 @@ describe('BOSH client/server', function() {
     })
 
     after(function(done) {
-        console.log('Running after')
+        c2s.once('close', function() {
+            sv.shutdown(done)
+        })
         c2s.end()
-        server.close()
-        done()
     })
 
     describe('client', function() {
@@ -73,6 +74,18 @@ describe('BOSH client/server', function() {
             })
             svcl.send(new Message({ to: 'bar@bar.org' }).
                   c('body').t('Hello back'))
+        })
+
+        it('should disconnect', function(done) {
+            var disconnected = false
+            cl.once('disconnect', function() {
+                disconnected = true
+            })
+            cl.once('end', function () {
+                assert.ok(disconnected, 'client disconnected')
+                done()
+            })
+            cl.end()
         })
     })
 

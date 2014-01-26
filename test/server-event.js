@@ -8,7 +8,7 @@ var xmpp = require('../index')
 var eventChain = []
 var c2s = null
 
-function startServer() {
+function startServer(done) {
 
     // Sets up the server.
     c2s = new xmpp.C2SServer({
@@ -60,6 +60,7 @@ function startServer() {
             eventChain.push('error')
         })
     })
+    done()
 }
 
 describe('C2Server', function() {
@@ -67,13 +68,11 @@ describe('C2Server', function() {
     var cl = null
 
     before(function(done) {
-        startServer()
-        done()
+        startServer(done)
     })
 
     after(function(done) {
-        c2s.shutdown()
-        done()
+        c2s.shutdown(done)
     })
 
     describe('events', function() {
@@ -128,7 +127,7 @@ describe('C2Server', function() {
             // close socket
             cl.on('close', function() {
                 eventChain.push('clientclose')
-                assert.deepEqual(eventChain, ['end', 'close', 'clientend', 'clientclose'])
+                assert.deepEqual(eventChain, ['end', 'disconnect', 'close', 'clientend', 'clientclose'])
                 done()
             })
 
