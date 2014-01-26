@@ -87,8 +87,7 @@ describe('C2Server', function() {
     })
 
     after(function(done) {
-        c2s.shutdown()
-        done()
+        c2s.shutdown(done)
     })
 
     describe('events', function() {

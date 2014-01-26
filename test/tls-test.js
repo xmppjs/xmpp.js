@@ -70,8 +70,7 @@ describe('TLS', function() {
     })
 
     after(function(done) {
-        c2s.shutdown()
-        done()
+        c2s.shutdown(done)
     })
 
     describe('server', function() {

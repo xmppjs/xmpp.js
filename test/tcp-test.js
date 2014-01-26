@@ -22,8 +22,7 @@ describe('TCP client/server', function() {
     })
 
     after(function(done) {
-        sv.shutdown()
-        done()
+        sv.shutdown(done)
     })
 
     describe('client', function() {
