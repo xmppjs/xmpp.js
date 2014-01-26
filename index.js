@@ -21,7 +21,11 @@ var NS_COMPONENT = 'jabber:component:accept'
 function Component(opts) {
     EventEmitter.call(this)
     var self = this
-    var conn = this.connection = new Connection()
+    var conn = this.connection = new Connection({
+        setup: this._addConnectionListeners.bind(this),
+        reconnect: opts.reconnect,
+        socket: opts.socket,
+    })
 
     // proxy the fucntions of the connection instance
     for (var i in conn) {
@@ -47,24 +51,25 @@ function Component(opts) {
     this.connection.xmlns[''] = NS_COMPONENT
     this.connection.streamTo = this.connection.jid.domain
 
-    this.connection.on('stanza', this.onStanza.bind(this))
-    this.connection.on('streamStart', this.onStreamStart.bind(this))
-    this.connection.on('error', this.emit.bind(this, 'error'))
-
-    var connect = function() {
-        var attempt = SRV.connect(
-            self.connection.socket,
-            [],
-            opts.host,
-            opts.port
-        )
-        attempt.on('connect', function() {
+    this.connection.on('connect', function () {
+        if (this !== self.connection) return
+        // Clients start <stream:stream>, servers reply
+        if (self.connection.startStream)
             self.connection.startStream()
-        })
-        attempt.on('error', this.emit.bind(this, 'error'))
+    })
+
+    if (opts.reconnect)
+        this.connection.on('connection', connect)
+    return connect()
+
+    function connect() {
+        self.connection.listen({socket:SRV.connect({
+            connection:  self.connection,
+            services:    [],
+            domain:      opts.host,
+            defaultPort: opts.port
+        })})
     }
-    if (opts.reconnect) this.connection.reconnect = connect
-    connect()
 }
 
 util.inherits(Component, EventEmitter)
@@ -80,6 +85,19 @@ Component.prototype.onStanza = function(stanza) {
         return
     }
     this.emit('stanza', stanza)
+}
+
+Component.prototype._addConnectionListeners = function (con) {
+    con.on('streamStart', this.onStreamStart.bind(this))
+    con.on('stanza', this.onStanza.bind(this))
+    con.on('drain', this.emit.bind(this, 'drain'))
+    con.on('data', this.emit.bind(this, 'data'))
+    con.on('end', this.emit.bind(this, 'end'))
+    con.on('close', this.emit.bind(this, 'close'))
+    con.on('error', this.emit.bind(this, 'error'))
+    con.on('connect', this.emit.bind(this, 'connect'))
+    con.on('reconnect', this.emit.bind(this, 'reconnect'))
+    con.on('disconnect', this.emit.bind(this, 'disconnect'))
 }
 
 // Component.prototype.send = function(stanza) {
