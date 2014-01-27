@@ -102,4 +102,34 @@ describe('Authentication', function() {
         })
     })
 
+    it('Handles failed bad handshake', function(done) {
+        var streamError = 'urn:ietf:params:xml:ns:xmpp-streams'
+        var errorMessage = 'Given token does not match calculated token'
+        var badHandshakeStanza = '<stream:error>' +
+            '<not-authorized xmlns="' + streamError + '"/>' +
+            '<text xmlns="' + streamError + '">' + errorMessage + '</text>' +
+        '</stream:error>'
+        onSocket = function(socket) {
+            socket.once('data', function() {
+                socket.once('data', function() {
+                    component.connection.parser.emit('stanza', ltx.parse(badHandshakeStanza))
+                })
+                component.connection.emit('streamStart', { from: 'shakespeare.lit', id: 555 })
+            })
+            socket.on('end', function() { // client disconnects
+                if (duringafter) return
+                done('error: socket closed')
+            })
+        }
+        var component = new Component(options)
+        component.should.exist
+        component.on('error', function(error) {
+            error.is('error').should.be.true
+            error.getChild('not-authorized').should.exist
+            error.getChildText('text', streamError).should.equal(errorMessage)
+            done()
+        })
+
+    })
+
 })
