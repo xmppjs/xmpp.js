@@ -8,8 +8,6 @@ var util = require('util')
   , SRV = require('node-xmpp-core').SRV
   , ltx = require('ltx')
 
-var NS_COMPONENT = 'jabber:component:accept'
-
 /**
  * opts:
  *   jid: String (required)
@@ -23,25 +21,9 @@ function Component(opts) {
     var self = this
     var conn = this.connection = new Connection({
         setup: this._addConnectionListeners.bind(this),
-        reconnect: opts.reconnect,
+        reconnect: opts.reconnect || true,
         socket: opts.socket,
     })
-
-    // FIXME WTF is this? why? :cry:
-    // proxy the fucntions of the connection instance
-    for (var i in conn) {
-        var fn = conn[i]
-        // add to component instance if the function does not exist yet
-        if ((typeof fn === 'function') && (self[i] == null)) {
-            // wrap the function
-            /* jshint -W083 */
-            (function(i){
-                self[i] = function(){
-                    conn[i].apply(conn, arguments)
-                }
-            })(i)
-        }
-    }
 
     if (typeof opts.jid === 'string') {
         this.connection.jid = new JID(opts.jid)
@@ -49,10 +31,10 @@ function Component(opts) {
         this.connection.jid = opts.jid
     }
     this.connection.password = opts.password
-    this.connection.xmlns[''] = NS_COMPONENT
+    this.connection.xmlns[''] = this.NS_COMPONENT
     this.connection.streamTo = this.connection.jid.domain
 
-    this.connection.on('connect', function () {
+    this.connection.on('connect', function() {
         if (this !== self.connection) return
         // Clients start <stream:stream>, servers reply
         if (self.connection.startStream)
@@ -61,22 +43,27 @@ function Component(opts) {
 
     if (opts.reconnect)
         this.connection.on('connection', connect)
-    return connect()
 
     function connect() {
-        self.connection.listen({socket:SRV.connect({
-            connection:  self.connection,
-            services:    [],
-            domain:      opts.host,
-            defaultPort: opts.port
-        })})
+        self.connection.listen({
+            socket:SRV.connect({
+                connection:  self.connection,
+                services:    [],
+                domain:      opts.host,
+                defaultPort: opts.port
+            })
+        })
     }
+
+    return connect()
 }
 
 util.inherits(Component, EventEmitter)
 
+Component.prototype.NS_COMPONENT = 'jabber:component:accept'
+
 Component.prototype.onStreamStart = function(streamAttrs) {
-    var digest = sha1Hex(streamAttrs.id + this.connection.password)
+    var digest = this._sha1Hex(streamAttrs.id + this.connection.password)
     this.connection.send(new ltx.Element('handshake').t(digest))
 }
 
@@ -86,6 +73,10 @@ Component.prototype.onStanza = function(stanza) {
         return
     }
     this.emit('stanza', stanza)
+}
+
+Component.prototype.send = function(stanza) {
+    this.connection.send(stanza)
 }
 
 Component.prototype._addConnectionListeners = function (con) {
@@ -101,7 +92,7 @@ Component.prototype._addConnectionListeners = function (con) {
     con.on('disconnect', this.emit.bind(this, 'disconnect'))
 }
 
-function sha1Hex(s) {
+Component.prototype._sha1Hex = function(s) {
     var hash = crypto.createHash('sha1')
     hash.update(s)
     return hash.digest('hex')
