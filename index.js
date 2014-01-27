@@ -43,7 +43,7 @@ function Component(opts) {
         }
     }
 
-    if (typeof otps.jid === 'string') {
+    if (typeof opts.jid === 'string') {
         this.connection.jid = new JID(opts.jid)
     } else {
         this.connection.jid = opts.jid
