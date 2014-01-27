@@ -114,7 +114,14 @@ describe('Authentication', function() {
                 socket.once('data', function() {
                     component.connection.parser.emit('stanza', ltx.parse(badHandshakeStanza))
                 })
-                component.connection.emit('streamStart', { from: 'shakespeare.lit', id: 555 })
+                component.connection.parser.emit(
+                    'streamStart',
+                    {
+                        from: 'shakespeare.lit',
+                        id: 555,
+                        'xmlns:stream': 'http://etherx.jabber.org/streams'
+                    }
+                )
             })
             socket.on('end', function() { // client disconnects
                 if (duringafter) return
