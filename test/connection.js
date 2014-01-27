@@ -81,4 +81,25 @@ describe('Authentication', function() {
         var component = new Component(options)
         component.should.exist
     })
+
+    it('Reports \'connected\' once connected', function(done) {
+        onSocket = function(socket) {
+            socket.once('data', function() {
+                socket.once('data', function() {
+                    component.connection.emit('stanza', ltx.parse('<handshake/>'))
+                })
+                component.connection.emit('streamStart', { from: 'shakespeare.lit', id: 555 })
+            })
+            socket.on('end', function() { // client disconnects
+                if (duringafter) return
+                done('error: socket closed')
+            })
+        }
+        var component = new Component(options)
+        component.should.exist
+        component.on('online', function() {
+            done()
+        })
+    })
+
 })
