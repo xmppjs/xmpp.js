@@ -1,33 +1,84 @@
 'use strict';
 
-var proxyquire = require('proxyquire')
+var Component = require('../index')
+  , net = require('net')
   , ltx = require('ltx')
+  , crypto = require('crypto')
 
 require('should')
 
 /* jshint -W030 */
-describe('Connects as expected', function() {
+describe('Authentication', function() {
 
-    var Component = proxyquire('../index', {
-        'node-xmpp-core': {
-            Connection: require('./utils/connection')
-        }
+    var COMPONENT_PORT = 5348
+    var onSocket = function () { }
+    var duringafter = false
+    var server = null
+
+    before(function(done) {
+        server = net.createServer(function (socket) {
+            server.on('shutdown', function () {
+                socket.end()
+            })
+            onSocket(socket)
+        })
+        server.listen(COMPONENT_PORT, 'localhost')
+        done()
+    })
+
+    after(function(done) {
+        duringafter = true
+        server.emit('shutdown')
+        server.close(done)
     })
 
     var options = {
         jid: 'component.shakespeare.lit',
+        password: 'shared-password',
         host: 'localhost',
-        password: 'password',
-        port: 5347
+        port: COMPONENT_PORT
     }
 
     it('Sends opening <stream/>', function(done) {
+        onSocket = function(socket) {
+            socket.once('data', function(d) {
+                var element = new ltx.parse(d.toString('utf8') + '</stream:stream>')
+                element.is('stream').should.be.true
+                element.attrs.to.should.equal(options.jid)
+                element.attrs.xmlns.should.equal(component.NS_COMPONENT)
+                element.attrs['xmlns:stream']
+                    .should.equal(component.NS_STREAM)
+                done()
+            })
+            socket.on('end', function() { // client disconnects
+                if (duringafter) return
+                done('error: socket closed')
+            })
+        }
         var component = new Component(options)
-        var openStream = ltx.parse(component.connection.getLastSent() + '</stream:stream>')
-        openStream.is('stream').should.be.true
-        openStream.attrs.xmlns.should.equal(component.NS_COMPONENT)
-        openStream.attrs.to.should.equal(options.jid)
-        done()
+        component.should.exist
     })
 
+    it('Sends handshake', function(done) {
+        onSocket = function(socket) {
+            socket.once('data', function() {
+                socket.once('data', function(d) {
+                    var handshake = ltx.parse(d.toString('utf8'))
+                    handshake.is('handshake').should.be.true
+                    var shasum = crypto.createHash('sha1')
+                    shasum.update(555 + options.password)
+                    var expected = shasum.digest('hex').toLowerCase()
+                    handshake.getText().should.equal(expected)
+                    done()
+                })
+                component.connection.emit('streamStart', { from: 'shakespeare.lit', id: 555 })
+            })
+            socket.on('end', function() { // client disconnects
+                if (duringafter) return
+                done('error: socket closed')
+            })
+        }
+        var component = new Component(options)
+        component.should.exist
+    })
 })

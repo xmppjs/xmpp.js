@@ -32,6 +32,7 @@ function Component(opts) {
     }
     this.connection.password = opts.password
     this.connection.xmlns[''] = this.NS_COMPONENT
+    this.connection.xmlns['stream'] = this.NS_STREAM
     this.connection.streamTo = this.connection.jid.domain
 
     this.connection.on('connect', function() {
@@ -61,6 +62,7 @@ function Component(opts) {
 util.inherits(Component, EventEmitter)
 
 Component.prototype.NS_COMPONENT = 'jabber:component:accept'
+Component.prototype.NS_STREAM = 'http://etherx.jabber.org/streams'
 
 Component.prototype.onStreamStart = function(streamAttrs) {
     var digest = this._sha1Hex(streamAttrs.id + this.connection.password)
