@@ -7,6 +7,9 @@ var C2SServer = require('../index').C2SServer
   , Plain = require('../index').auth.Plain
   , XOAuth2 = require('../index').auth.XOAuth2
   , DigestMD5 = require('../index').auth.DigestMD5
+  , Anonymous = require('../index').auth.Anonymous
+
+require('should')
 
 var user = {
     jid: 'me@localhost',
@@ -54,6 +57,8 @@ function startServer(mechanism) {
                 // DIGEST-MD5 OKAY
 
                 opts.password = 'secret'
+                cb(null, opts)
+            } else if (opts.saslmech === Anonymous.id) {
                 cb(null, opts)
             } else {
                 cb(new Error('Authentication failure'), null)
@@ -275,5 +280,41 @@ describe('SASL', function() {
             })
 
         })
+    })
+
+    describe('ANONYMOUS', function() {
+
+        var c2s = null
+
+        before(function(done) {
+            c2s = startServer(Anonymous)
+            done()
+        })
+
+        after(function(done) {
+            c2s.shutdown()
+            done()
+        })
+
+        it('should accept anonymous authentication', function(done) {
+            var cl = new Client({
+                jid: '@localhost',
+                preferred: Anonymous.id
+            })
+
+            registerHandler(cl)
+
+            cl.on('online', function(online) {
+                online.jid.local.length.should.equal(32)
+                online.jid.resource.length.should.equal(16)
+                done()
+            })
+            cl.on('error', function(e) {
+                console.log(e)
+                done(e)
+            })
+
+        })
+
     })
 })
