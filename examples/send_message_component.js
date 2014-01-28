@@ -42,7 +42,7 @@ component.addListener('online', function() {
     //component.end()
 })
 
-component.addListener('error', function(e) {
+component.on('error', function(e) {
     console.error(e)
     process.exit(1)
 })
