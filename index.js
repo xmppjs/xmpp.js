@@ -21,7 +21,7 @@ function Component(opts) {
     var self = this
     var conn = this.connection = new Connection({
         setup: this._addConnectionListeners.bind(this),
-        reconnect: opts.reconnect || true,
+        reconnect: opts.reconnect,
         socket: opts.socket,
     })
 
