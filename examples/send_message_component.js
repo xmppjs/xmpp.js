@@ -2,8 +2,8 @@
 
 /*
  * example usage:
- * 
- * node examples/send_message_component.js component.evilprofessor.co.uk password localhost 5347 
+ *
+ * node examples/send_message_component.js component.evilprofessor.co.uk password localhost 5347
  *
  * Replies to an incoming chat message with 'hello'
  */
@@ -13,7 +13,7 @@ var Component = require('../index')
   , ltx = require('ltx')
 
 if (argv.length < 6) {
-    console.error('Usage: node send_message.js <my-jid> <my-password> ' +
+    console.error('Usage: node send_message_component.js <my-jid> <my-password> ' +
         '<server> <port>')
     process.exit(1)
 }
@@ -22,10 +22,11 @@ var component = new Component({
     jid: argv[2],
     password: argv[3],
     host: argv[4],
-    port: Number(argv[5])
+    port: Number(argv[5]),
+    reconnect: true
 })
 
-component.addListener('online', function() {
+component.on('online', function() {
 
     console.log('Component is online')
 
@@ -42,7 +43,28 @@ component.addListener('online', function() {
     //component.end()
 })
 
+component.on('offline', function () {
+    console.log("Component is offline")
+})
+
+
+component.on('connect', function () {
+    console.log("Component is connected")
+})
+
+component.on('reconnect', function () {
+    console.log("Component reconnects …")
+})
+
+component.on('disconnect', function (e) {
+    console.log("Component is disconnected", e)
+})
+
 component.on('error', function(e) {
     console.error(e)
     process.exit(1)
+})
+
+process.on('exit', function () {
+    component.end()
 })
