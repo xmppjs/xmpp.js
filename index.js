@@ -65,6 +65,10 @@ Component.prototype.send = function(stanza) {
     this.connection.send(stanza)
 }
 
+Component.prototype.end = function() {
+    this.connection.end()
+}
+
 Component.prototype._addConnectionListeners = function (con) {
     con = con || this.connection
     con.on('connect', function() {
