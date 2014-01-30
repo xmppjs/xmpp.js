@@ -101,21 +101,20 @@ if (typeof atob === 'function') {
  *
  */
 function Client(opts) {
-    var self = this
 
     opts.xmlns = NS_CLIENT
-    self.state = STATE_PREAUTH
+    this.state = STATE_PREAUTH
     /*jshint camelcase: false */
-    delete self.did_bind
-    delete self.did_session
+    delete this.did_bind
+    delete this.did_session
 
     this.state = STATE_PREAUTH
     this.on('end', function() {
-        self.state = STATE_PREAUTH
-        self.emit('offline')
+        this.state = STATE_PREAUTH
+        this.emit('offline')
     })
     this.on('disconnect', function() {
-        self.state = STATE_PREAUTH
+        this.state = STATE_PREAUTH
     })
 
     Session.call(this, opts)
