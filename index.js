@@ -202,8 +202,7 @@ Client.prototype._handleAuthState = function(stanza) {
     } else if (stanza.is('success', NS_XMPP_SASL)) {
         this.mech = null
         this.state = STATE_AUTHED
-        if (this.connection.startParser) this.connection.startParser()
-        if (this.connection.startStream) this.connection.startStream()
+        this.emit('auth')
     } else {
         this.emit('error', 'XMPP authentication failure')
     }
