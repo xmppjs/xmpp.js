@@ -32,13 +32,6 @@ function Component(opts) {
     this.connection.xmlns['stream'] = this.NS_STREAM
     this.connection.streamTo = this.connection.jid.domain
 
-    this.connection.on('connect', function() {
-        if (this !== self.connection) return
-        // Clients start <stream:stream>, servers reply
-        if (self.connection.startStream)
-            self.connection.startStream()
-    })
-
     this.connection.listen({
         socket:SRV.connect({
             services:    [],
@@ -74,6 +67,11 @@ Component.prototype.send = function(stanza) {
 
 Component.prototype._addConnectionListeners = function (con) {
     con = con || this.connection
+    con.on('connect', function() {
+        // Clients start <stream:stream>, servers reply
+        if (con.startStream)
+            con.startStream()
+    })
     con.on('streamStart', this.onStreamStart.bind(this))
     con.on('stanza', this.onStanza.bind(this))
     con.on('drain', this.emit.bind(this, 'drain'))
