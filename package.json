@@ -22,7 +22,8 @@
     "node-stringprep": "~0.2.0",
     "reconnect-core": "git://github.com/dodo/reconnect-core.git#merged",
     "tls-connect": "~0.2.1",
-    "ltx": "~0.3.3"
+    "ltx": "~0.3.3",
+    "debug" :"~0.7.4"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
