@@ -3,7 +3,7 @@
 /*
  * example usage:
  *
- * node examples/send_message_component.js component.evilprofessor.co.uk password localhost 5347
+ * node examples/question_component.js component.evilprofessor.co.uk password localhost 5347
  *
  * Replies to an incoming chat message with 'hello'
  */
@@ -13,7 +13,7 @@ var Component = require('../index')
   , ltx = require('ltx')
 
 if (argv.length < 6) {
-    console.error('Usage: node send_message_component.js <my-jid> <my-password> ' +
+    console.error('Usage: node question_component.js <my-jid> <my-password> ' +
         '<server> <port>')
     process.exit(1)
 }
@@ -33,8 +33,9 @@ component.on('online', function() {
     component.on('stanza', function(stanza) {
         console.log('Received stanza: ', stanza.toString())
         if (stanza.is('message')) {
+            var i = parseInt(stanza.getChildText('body'))
             var reply = new ltx.Element('message', { to: stanza.attrs.from, from: stanza.attrs.to, type: 'chat' })
-            reply.c('body').t('Hello')
+            reply.c('body').t(isNaN(i) ? 'i can count!' : ("" + (i + 1)))
             component.send(reply)
         }
     })

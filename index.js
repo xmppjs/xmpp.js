@@ -19,11 +19,8 @@ var util = require('util')
 function Component(opts) {
     EventEmitter.call(this)
     var self = this
-    var conn = this.connection = new Connection({
-        setup: this._addConnectionListeners.bind(this),
-        reconnect: opts.reconnect,
-        socket: opts.socket,
-    })
+    var conn = this.connection = new Connection(opts)
+    this._addConnectionListeners()
 
     if (typeof opts.jid === 'string') {
         this.connection.jid = new JID(opts.jid)
@@ -35,28 +32,15 @@ function Component(opts) {
     this.connection.xmlns['stream'] = this.NS_STREAM
     this.connection.streamTo = this.connection.jid.domain
 
-    this.connection.on('connect', function() {
-        if (this !== self.connection) return
-        // Clients start <stream:stream>, servers reply
-        if (self.connection.startStream)
-            self.connection.startStream()
+    this.connection.listen({
+        socket:SRV.connect({
+            services:    [],
+            domain:      opts.host,
+            defaultPort: opts.port,
+            socket:      opts.socket
+        })
     })
 
-    if (opts.reconnect)
-        this.connection.on('connection', connect)
-
-    function connect() {
-        self.connection.listen({
-            socket:SRV.connect({
-                connection:  self.connection,
-                services:    [],
-                domain:      opts.host,
-                defaultPort: opts.port
-            })
-        })
-    }
-
-    return connect()
 }
 
 util.inherits(Component, EventEmitter)
@@ -81,7 +65,17 @@ Component.prototype.send = function(stanza) {
     this.connection.send(stanza)
 }
 
+Component.prototype.end = function() {
+    this.connection.end()
+}
+
 Component.prototype._addConnectionListeners = function (con) {
+    con = con || this.connection
+    con.on('connect', function() {
+        // Clients start <stream:stream>, servers reply
+        if (con.startStream)
+            con.startStream()
+    })
     con.on('streamStart', this.onStreamStart.bind(this))
     con.on('stanza', this.onStanza.bind(this))
     con.on('drain', this.emit.bind(this, 'drain'))
