@@ -35,7 +35,7 @@ component.on('online', function() {
         if (stanza.is('message')) {
             var i = parseInt(stanza.getChildText('body'))
             var reply = new ltx.Element('message', { to: stanza.attrs.from, from: stanza.attrs.to, type: 'chat' })
-            reply.c('body').t(isNaN(i) ? 'i can count!' : ("" + (i + 1)))
+            reply.c('body').t(isNaN(i) ? 'i can count!' : ('' + (i + 1)))
             component.send(reply)
         }
     })
@@ -45,20 +45,20 @@ component.on('online', function() {
 })
 
 component.on('offline', function () {
-    console.log("Component is offline")
+    console.log('Component is offline')
 })
 
 
 component.on('connect', function () {
-    console.log("Component is connected")
+    console.log('Component is connected')
 })
 
 component.on('reconnect', function () {
-    console.log("Component reconnects …")
+    console.log('Component reconnects …')
 })
 
 component.on('disconnect', function (e) {
-    console.log("Component is disconnected", e)
+    console.log('Component is disconnected', e)
 })
 
 component.on('error', function(e) {

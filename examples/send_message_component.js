@@ -44,20 +44,20 @@ component.on('online', function() {
 })
 
 component.on('offline', function () {
-    console.log("Component is offline")
+    console.log('Component is offline')
 })
 
 
 component.on('connect', function () {
-    console.log("Component is connected")
+    console.log('Component is connected')
 })
 
 component.on('reconnect', function () {
-    console.log("Component reconnects …")
+    console.log('Component reconnects …')
 })
 
 component.on('disconnect', function (e) {
-    console.log("Component is disconnected", e)
+    console.log('Component is disconnected', e)
 })
 
 component.on('error', function(e) {
