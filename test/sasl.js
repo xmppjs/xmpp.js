@@ -183,7 +183,6 @@ describe('SASL', function() {
                 done()
             })
             gtalk.on('error', function(e) {
-                console.log(e)
                 done(e)
             })
         })
@@ -214,7 +213,6 @@ describe('SASL', function() {
                 done()
             })
             cl.on('error', function(e) {
-                console.log(e)
                 done(e)
             })
 
