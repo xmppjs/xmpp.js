@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "node-stringprep": "~0.2.0",
-    "reconnect-core": "git://github.com/dodo/reconnect-core.git#patched",
+    "reconnect-core": "git://github.com/dodo/reconnect-core.git#merged",
     "tls-connect": "~0.2.0",
     "ltx": "~0.3.3"
   },
