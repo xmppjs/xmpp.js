@@ -125,7 +125,7 @@ describe('C2Server', function() {
             // close socket
             cl.on('close', function() {
                 eventChain.push('clientclose')
-                assert.deepEqual(eventChain, ['end', 'close', 'clientend', 'clientclose'])
+                assert.deepEqual(eventChain, ['end', 'disconnect', 'close', 'clientend', 'clientclose'])
                 done()
             })
 
