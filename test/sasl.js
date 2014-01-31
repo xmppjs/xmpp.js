@@ -14,7 +14,7 @@ var user = {
     password: 'secret'
 }
 
-function startServer(mechanism) {
+function startServer(mechanism, done) {
 
     // Sets up the server.
     var c2s = new C2SServer({
@@ -80,6 +80,10 @@ function startServer(mechanism) {
             // client disconnect
         })
 
+        stream.on('error', function (e) {
+            done(e)
+        })
+
     })
 
     return c2s
@@ -113,7 +117,7 @@ describe('SASL', function() {
         var c2s = null
 
         before(function(done) {
-            c2s = startServer(Plain)
+            c2s = startServer(Plain, done)
             done()
         })
 
