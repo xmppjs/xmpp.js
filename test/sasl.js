@@ -87,9 +87,7 @@ function startServer(mechanism) {
 
 function registerHandler(cl) {
 
-    cl.on(
-        'stanza',
-        function(stanza) {
+    cl.on('stanza', function(stanza) {
             if (stanza.is('message') &&
                 // Important: never reply to errors!
                 (stanza.attrs.type !== 'error')) {
@@ -132,7 +130,6 @@ describe('SASL', function() {
                 done()
             })
             cl.on('error', function(e) {
-                console.log(e)
                 done(e)
             })
 
