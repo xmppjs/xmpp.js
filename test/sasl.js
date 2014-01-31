@@ -86,6 +86,10 @@ function startServer(mechanism, done) {
 
     })
 
+    c2s.on('error', function (e) {
+        done(e)
+    })
+
     return c2s
 }
 
