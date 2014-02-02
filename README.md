@@ -2,7 +2,7 @@
 
 Idiomatic XMPP client library for [node.js](http://nodejs.org/)
 
-Now usable in browsers too thanks to [Browserify](https://github.com/substack/node-browserify).
+Now usable in browsers too thanks to [Browserify](https://github.com/substack/node-browserify). To create a bundle run `grunt browserify`.
 
 [![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-client.png)](http://travis-ci.org/node-xmpp/node-xmpp-client)
 
