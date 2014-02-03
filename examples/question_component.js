@@ -26,8 +26,17 @@ var component = new Component({
     reconnect: true
 })
 
-component.on('online', function() {
+component.on('stanza', function(stanza) {
+//     console.log('Received stanza: ', stanza.toString())
+    if (stanza.is('message') && stanza.attrs.type === 'chat') {
+        var i = parseInt(stanza.getChildText('body'))
+        var reply = new ltx.Element('message', { to: stanza.attrs.from, from: stanza.attrs.to, type: 'chat' })
+        reply.c('body').t(isNaN(i) ? 'i can count!' : ('' + (i + 1)))
+        component.send(reply)
+    }
+})
 
+component.on('online', function() {
     console.log('Component is online')
 
     component.on('stanza', function(stanza) {
