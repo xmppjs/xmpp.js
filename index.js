@@ -71,11 +71,6 @@ Component.prototype.end = function() {
 
 Component.prototype._addConnectionListeners = function (con) {
     con = con || this.connection
-    con.on('connect', function() {
-        // Clients start <stream:stream>, servers reply
-        if (con.startStream)
-            con.startStream()
-    })
     con.on('streamStart', this.onStreamStart.bind(this))
     con.on('stanza', this.onStanza.bind(this))
     con.on('drain', this.emit.bind(this, 'drain'))
@@ -86,6 +81,13 @@ Component.prototype._addConnectionListeners = function (con) {
     con.on('connect', this.emit.bind(this, 'connect'))
     con.on('reconnect', this.emit.bind(this, 'reconnect'))
     con.on('disconnect', this.emit.bind(this, 'disconnect'))
+    con.on('disconnect', this.emit.bind(this, 'offline'))
+    if (con.startStream) {
+        con.on('connect', function() {
+            // Components start <stream:stream>, servers reply
+            con.startStream()
+        })
+    }
 }
 
 Component.prototype._sha1Hex = function(s) {
