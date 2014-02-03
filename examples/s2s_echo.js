@@ -6,14 +6,8 @@ var pem = require('pem');
 
 var r = new xmpp.Router();
 
-var rawmsg =
-    "<message \
-        to='mu@example.com' \
-        from='juliet@nodexmpp.com/balcony' \
-        type='chat' \
-        xml:lang='en'> \
-        <body>Wherefore art thou, mu?</body> \
-    </message>"
+var rawmsg = '<message to=\'mu@example.com\' from=\'juliet@nodexmpp.com/balcony\' ';
+rawmsg =  rawmsg + 'type=\'chat\' xml:lang=\'en\'><body>Wherefore art thou, mu?</body></message>'
 
 pem.createCertificate({
     days: 100,
@@ -24,7 +18,7 @@ pem.createCertificate({
 
 }, function (err, keys) {
     if (err) {
-        logger.error(err);
+        console.error(err);
     } else {
 
         r.loadCredentials(
