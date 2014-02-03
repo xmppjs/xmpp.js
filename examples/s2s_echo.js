@@ -12,9 +12,9 @@ rawmsg =  rawmsg + 'type=\'chat\' xml:lang=\'en\'><body>Wherefore art thou, mu?<
 pem.createCertificate({
     days: 100,
     selfSigned: true,
-    organization: 'xrocket',
+    organization: 'nodexmpp',
     organizationUnit: 'development',
-    commonName: 'xrocket'
+    commonName: 'nodexmpp'
 
 }, function (err, keys) {
     if (err) {
