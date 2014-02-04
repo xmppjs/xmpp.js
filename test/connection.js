@@ -130,10 +130,11 @@ describe('Authentication', function() {
         }
         var component = new Component(options)
         component.should.exist
-        component.on('error', function(error) {
-            error.is('error').should.be.true
-            error.getChild('not-authorized').should.exist
-            error.getChildText('text', streamError).should.equal(errorMessage)
+        component.on('disconnect', function(error) {
+            error.stanza.is('error').should.be.true
+            error.stanza.getChild('not-authorized').should.exist
+            error.stanza.getChildText('text', streamError).should.equal(errorMessage)
+            error.message.should.equal(errorMessage)
             done()
         })
 
