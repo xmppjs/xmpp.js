@@ -103,7 +103,6 @@ if (typeof atob === 'function') {
 function Client(opts) {
 
     opts.xmlns = NS_CLIENT
-    this.state = STATE_PREAUTH
     /*jshint camelcase: false */
     delete this.did_bind
     delete this.did_session
@@ -111,14 +110,19 @@ function Client(opts) {
     this.state = STATE_PREAUTH
     this.on('end', function() {
         this.state = STATE_PREAUTH
-        this.emit('offline')
-    })
-    this.on('disconnect', function() {
-        this.state = STATE_PREAUTH
+        delete this.did_bind
+        delete this.did_session
     })
 
     Session.call(this, opts)
     opts.jid = this.jid
+
+    this.connection.on('disconnect', function() {
+        this.state = STATE_PREAUTH
+        this.emit('offline')
+        delete this.did_bind
+        delete this.did_session
+    }.bind(this))
 
     // If server and client have multiple possible auth mechanisms
     // we try to select the preferred one
@@ -152,7 +156,8 @@ Client.prototype.onStanza = function(stanza) {
         (stanza.attrs.id === IQID_SESSION)) {
         this._handleSessionState(stanza)
     } else if (stanza.name === 'stream:error') {
-        this.emit('error', stanza)
+        if (!this.reconnect)
+            this.emit('error', stanza)
     } else if (this.state === STATE_ONLINE) {
         this.emit('stanza', stanza)
     }
