@@ -89,11 +89,11 @@ function startServer(mechanism) {
     return c2s
 }
 
-function registerHandler(cl) {
+function createClient(opts) {
 
-    cl.on(
-        'stanza',
-        function(stanza) {
+    var cl = new Client(opts)
+
+    cl.on('stanza', function(stanza) {
             if (stanza.is('message') &&
                 // Important: never reply to errors!
                 (stanza.attrs.type !== 'error')) {
@@ -108,6 +108,8 @@ function registerHandler(cl) {
             }
         }
     )
+
+    return cl
 }
 
 describe('SASL', function() {
@@ -120,18 +122,15 @@ describe('SASL', function() {
         })
 
         after(function(done) {
-            c2s.shutdown()
-            done()
+            c2s.shutdown(done)
         })
 
         it('should accept plain authentication', function(done) {
-            var cl = new Client({
+            var cl = createClient({
                 jid: user.jid,
                 password: user.password,
                 preferred: Plain.id
             })
-
-            registerHandler(cl)
 
             cl.on('online', function() {
                 done()
@@ -144,12 +143,10 @@ describe('SASL', function() {
         })
 
         it('should not accept plain authentication', function(done) {
-            var cl = new Client({
+            var cl = createClient({
                 jid: user.jid,
                 password: 'secretsecret'
             })
-
-            registerHandler(cl)
 
             cl.on('online', function() {
                 done('user is not valid')
@@ -171,8 +168,7 @@ describe('SASL', function() {
         })
 
         after(function(done) {
-            c2s.shutdown()
-            done()
+            c2s.shutdown(done)
         })
 
         /*
@@ -181,14 +177,12 @@ describe('SASL', function() {
          */
         it('should accept google authentication', function(done) {
             /*jshint camelcase: false */
-            var gtalk = new Client({
+            var gtalk = createClient({
                 jid: 'me@gmail.com',
                 oauth2_token: 'xxxx.xxxxxxxxxxx', // from OAuth2
                 oauth2_auth: 'http://www.google.com/talk/protocol/auth',
                 host: 'localhost'
             })
-
-            registerHandler(gtalk)
 
             gtalk.on('online', function() {
                 done()
@@ -210,19 +204,16 @@ describe('SASL', function() {
         })
 
         after(function(done) {
-            c2s.shutdown()
-            done()
+            c2s.shutdown(done)
         })
 
 
         it('should accept digest md5 authentication', function(done) {
-            var cl = new Client({
+            var cl = createClient({
                 jid: user.jid,
                 password: user.password,
                 preferred: 'DIGEST-MD5'
             })
-
-            registerHandler(cl)
 
             cl.on('online', function() {
                 done()
@@ -292,17 +283,14 @@ describe('SASL', function() {
         })
 
         after(function(done) {
-            c2s.shutdown()
-            done()
+            c2s.shutdown(done)
         })
 
         it('should accept anonymous authentication', function(done) {
-            var cl = new Client({
+            var cl = createClient({
                 jid: '@localhost',
                 preferred: Anonymous.id
             })
-
-            registerHandler(cl)
 
             cl.on('online', function(online) {
                 online.jid.local.length.should.equal(32)
