@@ -117,9 +117,10 @@ function Client(opts) {
     Session.call(this, opts)
     opts.jid = this.jid
 
-    this.connection.on('disconnect', function() {
+    this.connection.on('disconnect', function(err) {
         this.state = STATE_PREAUTH
         if (!this.connection.reconnect) {
+            if (err) this.emit('error', err)
             this.emit('offline')
         }
         delete this.did_bind
