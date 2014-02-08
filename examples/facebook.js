@@ -28,7 +28,6 @@ var otherUserId = '<< send message to ID >>'
 /* jshint -W106 */
 var client = new Client({
     jid: '-' + facebookId + '@chat.facebook.com',
-    password: '3cQDAUtUg9fF$wP*cYjZfwy&q5Wa%S$tWnU2',
     api_key: appId,
     secret_key: appSecret,
     access_token: accessToken
