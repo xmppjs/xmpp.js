@@ -95,7 +95,8 @@ describe('Reconnect', function() {
                         'server:shutdown', 'server:listen', 'server:online',
                         'reconnect', 'connect', 'online'
                     ])
-                    done()
+                    cl.once('offline', done)
+                    cl.end()
                 })
                 // now lets loose the server connectino
                 c2s.shutdown(function () {
@@ -136,7 +137,8 @@ describe('Reconnect', function() {
                         'server:listen', 'server:online',
                         'reconnect', 'connect', 'online'
                     ])
-                    done()
+                    cl.once('offline', done)
+                    cl.end()
                 })
                 // now lets loose the server connectino
                 c2s.shutdown(function () {
