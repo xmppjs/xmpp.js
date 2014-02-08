@@ -119,7 +119,9 @@ function Client(opts) {
 
     this.connection.on('disconnect', function() {
         this.state = STATE_PREAUTH
-        this.emit('offline')
+        if (!this.connection.reconnect) {
+            this.emit('offline')
+        }
         delete this.did_bind
         delete this.did_session
     }.bind(this))
