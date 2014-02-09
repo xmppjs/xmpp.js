@@ -11,7 +11,7 @@ if (argv.length < 6) {
 
 var cl = new xmpp.Client({ jid: argv[2],  password: argv[3] })
 
-cl.addListener('online', function(data) {
+cl.on('online', function(data) {
     console.log('Connected as ' + data.jid.user + '@' + data.jid.domain + '/' + data.jid.resource)
     argv.slice(5).forEach(function(to) {
         var stanza = new xmpp.Element(
@@ -25,7 +25,7 @@ cl.addListener('online', function(data) {
     cl.end()
 })
 
-cl.addListener('error', function(e) {
+cl.on('error', function(e) {
     console.error(e)
     process.exit(1)
 })
