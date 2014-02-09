@@ -133,7 +133,8 @@ describe('TLS', function() {
                 done(new Error('should not allow any authentication'))
             })
 
-            cl.on('error', function() {
+            cl.on('error', function(err) {
+                assert.equal(err, 'XMPP authentication failure')
                 done()
             })
 
