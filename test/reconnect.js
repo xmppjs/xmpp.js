@@ -3,7 +3,6 @@
 var Client = require('../index')
   , assert = require('assert')
   , C2SServer = require('node-xmpp-server').C2SServer
-  , ltx = require('ltx')
 
 var user = {
     jid: 'me@localhost',
