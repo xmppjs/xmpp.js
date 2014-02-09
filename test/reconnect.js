@@ -3,7 +3,6 @@
 var Client = require('../index')
   , assert = require('assert')
   , C2SServer = require('node-xmpp-server').C2SServer
-  , ltx = require('ltx')
 
 var user = {
     jid: 'me@localhost',
@@ -91,11 +90,12 @@ describe('Reconnect', function() {
             cl.once('online', function() {
                 cl.once('online', function () {
                     assert.deepEqual(eventChain, [
-                        'connect', 'online', 'disconnect', 'offline',
+                        'connect', 'online', 'disconnect',
                         'server:shutdown', 'server:listen', 'server:online',
                         'reconnect', 'connect', 'online'
                     ])
-                    done()
+                    cl.once('offline', done)
+                    cl.end()
                 })
                 // now lets loose the server connectino
                 c2s.shutdown(function () {
@@ -128,15 +128,16 @@ describe('Reconnect', function() {
                 cl.once('online', function () {
                     // expecting 4 reconnects (42ms / 11ms)
                     assert.deepEqual(eventChain, [
-                        'connect', 'online', 'disconnect', 'offline',
+                        'connect', 'online', 'disconnect',
                         'server:shutdown',
-                        'reconnect', 'disconnect', 'offline',
-                        'reconnect', 'disconnect', 'offline',
-                        'reconnect', 'disconnect', 'offline',
+                        'reconnect', 'disconnect',
+                        'reconnect', 'disconnect',
+                        'reconnect', 'disconnect',
                         'server:listen', 'server:online',
                         'reconnect', 'connect', 'online'
                     ])
-                    done()
+                    cl.once('offline', done)
+                    cl.end()
                 })
                 // now lets loose the server connectino
                 c2s.shutdown(function () {
