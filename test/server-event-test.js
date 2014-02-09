@@ -46,6 +46,10 @@ function startServer() {
             eventChain.push('disconnect')
         })
 
+        client.on('offline', function() {
+            eventChain.push('offline')
+        })
+
         client.on('end', function() {
             eventChain.push('end')
         })
@@ -125,7 +129,7 @@ describe('C2Server', function() {
             // close socket
             cl.on('close', function() {
                 eventChain.push('clientclose')
-                assert.deepEqual(eventChain, ['end', 'disconnect', 'close', 'clientend', 'clientclose'])
+                assert.deepEqual(eventChain, ['end', 'disconnect', 'offline', 'close', 'clientend', 'clientclose'])
                 done()
             })
 
