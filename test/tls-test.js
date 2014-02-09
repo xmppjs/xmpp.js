@@ -56,9 +56,10 @@ function startServer(done) {
                 .c('body')
                 .t('Hello there, little client.')
             )
+            client.end()
         })
     })
-    console.log('Server started')
+
     done()
 }
 
@@ -77,7 +78,9 @@ describe('TLS', function() {
     describe('server', function() {
 
         it('should go online', function(done) {
+            var test = 0
             c2s.once('test', function(client) {
+                test++
                 assert.ok(
                     cl.connection.socket.authorized,
                     'Client should have working tls'
@@ -86,7 +89,6 @@ describe('TLS', function() {
                     client.connection.socket.authorized,
                     'Server should have working tls'
                 )
-                done()
             })
             var cl = new xmpp.Client({
                 jid: user.jid,
@@ -96,6 +98,10 @@ describe('TLS', function() {
             cl.on('error', function(e) {
                 done(e)
             })
+            cl.on('offline', function () {
+                assert.equal(test, 1)
+                done()
+            })
         })
 
         it('should accept plain authentication', function(done) {
@@ -103,7 +109,12 @@ describe('TLS', function() {
                 jid: user.jid,
                 password: user.password
             })
+            var online = 0
             cl.on('online', function() {
+                online++
+            })
+            cl.on('offline', function () {
+                assert.equal(online, 1)
                 done()
             })
             cl.on('error', function(e) {
