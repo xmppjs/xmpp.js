@@ -27,7 +27,7 @@
     "request": "~2.27.0",
     "ltx": "~0.3.2",
     "faye-websocket": "~0.7.0",
-    "node-xmpp-core": "~0.4.0",
+    "node-xmpp-core": "https://github.com/node-xmpp/node-xmpp-core/tarball/merged",
     "browser-request": "~0.3.1"
   },
   "devDependencies": {
@@ -41,7 +41,7 @@
     "grunt-contrib-connect": "~0.6.0",
     "grunt-contrib-clean": "~0.5.0",
     "should": "~2.1.1",
-    "node-xmpp-server": "~0.5.1"
+    "node-xmpp-server": "https://github.com/node-xmpp/node-xmpp-server/tarball/merged"
   },
   "browser": {
     "request": "browser-request",
