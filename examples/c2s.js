@@ -30,7 +30,7 @@ c2s.on('register', function(opts, cb) {
 // On Connect event. When a client connects.
 c2s.on('connect', function(client) {
     // That's the way you add mods to a given server.
-    console.log("CONNECT")
+    console.log('CONNECT')
 
 
     // Allows the developer to authenticate users against anything they want.
