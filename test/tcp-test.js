@@ -8,15 +8,9 @@ var C2S_PORT = 45552
 describe('TCP client/server', function() {
     var sv = null
 
-    after(function(done) {
-        sv.shutdown()
-        done()
-    })
-
-    describe('client', function() {
-
+    var svcl
+    before(function(done) {
         sv = new xmpp.C2SServer({ port: C2S_PORT })
-        var svcl
         sv.on('connect', function(svcl_) {
             svcl = svcl_
             // Always authenticate
@@ -24,6 +18,15 @@ describe('TCP client/server', function() {
                 cb(null, opts)
             })
         })
+        done()
+    })
+
+    after(function(done) {
+        sv.shutdown(done)
+    })
+
+    describe('client', function() {
+
         var cl
 
         it('should go online', function(done) {

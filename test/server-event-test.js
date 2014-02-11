@@ -6,7 +6,7 @@ var xmpp = require('../index')
 var eventChain = []
 var c2s = null
 
-function startServer() {
+function startServer(done) {
 
     // Sets up the server.
     c2s = new xmpp.C2SServer({
@@ -33,6 +33,10 @@ function startServer() {
             eventChain.push('online')
         })
 
+        client.on('offline', function() {
+            eventChain.push('offline')
+        })
+
         client.on('stanza', function() {
             eventChain.push('stanza')
             client.send(
@@ -42,8 +46,20 @@ function startServer() {
             )
         })
 
+        client.on('connect', function() {
+            eventChain.push('connect')
+        })
+
+        client.on('reconnect', function() {
+            eventChain.push('reconnect')
+        })
+
         client.on('disconnect', function() {
             eventChain.push('disconnect')
+        })
+
+        client.on('connection', function() {
+            eventChain.push('connection')
         })
 
         client.on('end', function() {
@@ -58,6 +74,8 @@ function startServer() {
             eventChain.push('error')
         })
     })
+
+    done()
 }
 
 describe('C2Server', function() {
@@ -65,20 +83,17 @@ describe('C2Server', function() {
     var cl = null
 
     before(function(done) {
-        startServer()
-        done()
+        startServer(done)
     })
 
     after(function(done) {
-        c2s.shutdown()
-        done()
+        c2s.shutdown(done)
     })
 
     describe('events', function() {
         it('should be in the right order for connecting', function(done) {
             eventChain = []
 
-            //clientCallback = done
             cl = new xmpp.Client({
                 jid: 'bob@example.com',
                 password: 'alice',
