@@ -80,6 +80,10 @@ stanza, before sending it out the wire.
 
 (Builing up documentation slowly)
 
+# Sponsor
+
+ - S2S implementation has been sponsored by [superfeedr](http://superfeedr.com/)
+
 # Licence 
 
 MIT
