@@ -3,6 +3,7 @@
 var C2SServer = require('../index').C2SServer
   , ltx = require('ltx')
   , net = require('net')
+  , rack = require('hat').rack
   , Client = require('node-xmpp-client')
   , Plain = require('../index').auth.Plain
   , XOAuth2 = require('../index').auth.XOAuth2
@@ -292,9 +293,10 @@ describe('SASL', function() {
                 preferred: Anonymous.id
             })
 
+            var defaultHatRackHashLength = rack()().length
             cl.on('online', function(online) {
-                online.jid.local.length.should.equal(32)
-                online.jid.resource.length.should.equal(16)
+                online.jid.local.length.should.equal(defaultHatRackHashLength)
+                online.jid.resource.length.should.equal(defaultHatRackHashLength)
                 done()
             })
             cl.on('error', function(e) {
