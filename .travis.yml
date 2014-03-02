@@ -28,4 +28,4 @@ after_success:
   - git push github master > /dev/null
 env:
   global:
-    - secure: 'EF0sdrfSkfTIjaQwlFyC+Ma9IOwlKh1N7qKDS0RMo7goq+5cFXOMXvlYguuxPX6YnxBFRWhTz5NNMjeCfjchET0Mu5mvD9aS4g38yAYHsqD0pBxgjXx01rkVo45dtrwASHUWhbupAde7ppbYKbjY5spOvFvyI57Vo/9hcrazyVk='
+  - secure: 'EF0sdrfSkfTIjaQwlFyC+Ma9IOwlKh1N7qKDS0RMo7goq+5cFXOMXvlYguuxPX6YnxBFRWhTz5NNMjeCfjchET0Mu5mvD9aS4g38yAYHsqD0pBxgjXx01rkVo45dtrwASHUWhbupAde7ppbYKbjY5spOvFvyI57Vo/9hcrazyVk='
