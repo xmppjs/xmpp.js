@@ -4,6 +4,10 @@ Idiomatic XMPP component library for [node.js](http://nodejs.org/)
 
 [![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-component.png)](http://travis-ci.org/node-xmpp/node-xmpp-component)
 
+## Manual
+
+Please see http://node-xmpp.github.io/doc/nodexmppcomponent.html for instructions on how to use `node-xmpp-component`.
+
 ## Installation
 
 __Note:__ We now only support nodejs versions 0.8.0 and greater.
