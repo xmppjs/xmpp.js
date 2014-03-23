@@ -4,6 +4,10 @@ Idiomatic XMPP server library for [node.js](http://nodejs.org/)
 
 [![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-server.png)](http://travis-ci.org/node-xmpp/node-xmpp-server)
 
+## Manual
+
+Please see http://node-xmpp.github.io/doc/nodexmppserver.html for instructions on how to use `node-xmpp-server`.
+
 ## Installation
 
 __Note:__ We now only support nodejs versions 0.8.0 and greater.
