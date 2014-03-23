@@ -6,6 +6,10 @@ Now usable in browsers too thanks to [Browserify](https://github.com/substack/no
 
 [![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-client.png)](http://travis-ci.org/node-xmpp/node-xmpp-client)
 
+## Manual
+
+See http://node-xmpp.github.io/doc/nodexmppclient.html for instructions on how to use `node-xmpp-client`.
+
 ## Installation
 
 __Note:__ We now only support nodejs versions 0.8.0 and greater.
