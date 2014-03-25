@@ -38,6 +38,15 @@ Please use one of `node-xmpp-client/component/server`
   buffer control
 * Fast parsing, `node-expat` was written for this library
 
+## Configurations
+
+### serialized
+Set this option as `true` to enable the optimization for continuous TCP streams. If your "socket" actually transports frames (WebSockets) and you can't have stanzas split across those, do not enable it.
+
+**type:** boolean
+**default:** `false`
+
+
 ## Features
 
 * Simple JID parsing with Stringprep normalization
