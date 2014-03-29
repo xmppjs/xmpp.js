@@ -80,10 +80,6 @@ until you use `up()`, a getter for the parent. `Connection.send()`
 first invokes `tree()` to retrieve the uppermost parent, the XMPP
 stanza, before sending it out the wire.
 
-# Documentation
-
-(Builing up documentation slowly)
-
 # Sponsor
 
  - S2S implementation has been sponsored by [superfeedr](http://superfeedr.com/)
