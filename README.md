@@ -49,11 +49,3 @@ Please see the various [examples](https://github.com/node-xmpp/node-xmpp/tree/ma
 Optional
 
 * [node-stringprep](http://github.com/node-xmpp/node-stringprep): for [icu](http://icu-project.org/)-based string normalization.
-
-# Documentation
-
-(Builing up documentation slowly)
-
-## Component connection
-
-...coming soon...
