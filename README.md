@@ -83,32 +83,3 @@ this.client.connection.socket.setKeepAlive(true, 10000)
 ```
 
 Where `this.client` is the result of `new require('node-xmpp-client')()`.
-
-# Documentation
-
-(Builing up documentation slowly)
-
-## C2S Client to Server 
-
-```
-var Client = require('node-xmpp-client')
-
-var client = new Client({
-    jid: 'user@example.com',
-    password: 'password'
-})
-
-client.on('online', function() {
-    console.log('online')
-})
-
-client.on('stanza', function(stanza) {
-    console.log('Incoming stanza: ', stanza.toString())
-})
-```
-
-### Closing a connection
-
-```
-client.end()
-```
