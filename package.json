@@ -22,7 +22,7 @@
     "node-stringprep": "~0.2.0",
     "reconnect-core": "https://github.com/dodo/reconnect-core/tarball/merged",
     "tls-connect": "~0.2.1",
-    "ltx": "~0.4.0",
+    "ltx": "~0.x",
     "debug": "~0.7.4"
   },
   "devDependencies": {
