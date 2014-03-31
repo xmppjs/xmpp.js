@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "request": "~2.27.0",
-    "ltx": "~0.3.2",
+    "ltx": "~0.x",
     "faye-websocket": "~0.7.0",
     "node-xmpp-core": "git+https://github.com/node-xmpp/node-xmpp-core.git",
     "browser-request": "~0.3.1"
