@@ -1,12 +1,12 @@
 'use strict';
 
 var xmpp = require('../index')
-var ltx = require('ltx');
-var pem = require('pem');
+  , ltx = require('node-xmpp-core').ltx
+  , pem = require('pem')
 
-var r = new xmpp.Router();
+var r = new xmpp.Router()
 
-var rawmsg = '<message to=\'mu@example.com\' from=\'juliet@nodexmpp.com/balcony\' ';
+var rawmsg = '<message to=\'mu@example.com\' from=\'juliet@nodexmpp.com/balcony\' '
 rawmsg =  rawmsg + 'type=\'chat\' xml:lang=\'en\'><body>Wherefore art thou, mu?</body></message>'
 
 pem.createCertificate({
@@ -16,15 +16,15 @@ pem.createCertificate({
     organizationUnit: 'development',
     commonName: 'nodexmpp'
 
-}, function (err, keys) {
+}, function (error, keys) {
     if (err) {
-        console.error(err);
+        console.error(error)
     } else {
 
         r.loadCredentials(
             'nodexmpp.com',
             keys.serviceKey,
-            keys.certificate);
+            keys.certificate)
 
         r.register('nodexmpp.com', function (stanza) {
             console.log('GOT YA << ' + stanza.toString())
@@ -34,9 +34,9 @@ pem.createCertificate({
                 stanza.attrs.from = me
                 r.send(stanza)
             }
-        });
+        })
 
-        var msg = ltx.parse(rawmsg);
+        var msg = ltx.parse(rawmsg)
         r.send(msg);
     }
 })

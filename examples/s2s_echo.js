@@ -1,11 +1,11 @@
 'use strict';
 
 var xmpp = require('../index')
-var ltx = require('ltx');
+  , ltx = require('node-xmpp-core').ltx
 
-var r = new xmpp.Router();
+var r = new xmpp.Router()
 
-var rawmsg = '<message to=\'mu@example.com\' from=\'juliet@nodexmpp.com/balcony\' ';
+var rawmsg = '<message to=\'mu@example.com\' from=\'juliet@nodexmpp.com/balcony\' '
 rawmsg =  rawmsg + 'type=\'chat\' xml:lang=\'en\'><body>Wherefore art thou, mu?</body></message>'
 
 
@@ -19,5 +19,5 @@ r.register('nodexmpp.com', function (stanza) {
     }
 });
 
-var msg = ltx.parse(rawmsg);
-r.send(msg);
+var msg = ltx.parse(rawmsg)
+r.send(msg)
