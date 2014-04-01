@@ -2,7 +2,7 @@
 
 var Component = require('../index')
   , net = require('net')
-  , ltx = require('ltx')
+  , ltx = require('node-xmpp-core').ltx
   , crypto = require('crypto')
 
 require('should')
