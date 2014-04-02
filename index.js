@@ -7,7 +7,7 @@ var Connection = require('node-xmpp-core').Connection
   , C2SStream = require('node-xmpp-server').C2SStream
   , JID = require('node-xmpp-core').JID
   , Router = require('node-xmpp-server').Router
-  , ltx = require('ltx')
+  , ltx = require('node-xmpp-core').ltx
   , Stanza = require('node-xmpp-core').Stanza
 
 exports.Connection = Connection
