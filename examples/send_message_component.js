@@ -10,7 +10,7 @@
 
 var Component = require('../index')
   , argv = process.argv
-  , ltx = require('ltx')
+  , ltx = require('node-xmpp-core').ltx
 
 if (argv.length < 6) {
     console.error('Usage: node send_message_component.js <my-jid> <my-password> ' +
