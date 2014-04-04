@@ -3,7 +3,7 @@
 var Session = require('./lib/session')
   , Connection = require('node-xmpp-core').Connection
   , JID = require('node-xmpp-core').JID
-  , ltx = require('ltx')
+  , ltx = require('node-xmpp-core').ltx
   , sasl = require('./lib/sasl')
   , util = require('util')
 

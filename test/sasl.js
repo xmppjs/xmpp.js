@@ -2,7 +2,7 @@
 
 var nodexmppserver = require('node-xmpp-server'),
     C2SServer = nodexmppserver.C2SServer
-  , ltx = require('ltx')
+  , ltx = require('node-xmpp-core').ltx
   , net = require('net')
   , Client = require('../index')
   , Plain = nodexmppserver.auth.Plain
