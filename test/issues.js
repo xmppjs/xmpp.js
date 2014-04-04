@@ -1,6 +1,6 @@
 'use strict';
 
-var ltx = require('ltx')
+var ltx = require('node-xmpp-core').ltx
 
 describe('Issues', function() {
 

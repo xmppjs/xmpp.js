@@ -1,7 +1,7 @@
 'use strict';
 
 var C2SServer = require('../index').C2SServer
-  , ltx = require('ltx')
+  , ltx = require('node-xmpp-core').ltx
   , net = require('net')
   , rack = require('hat').rack
   , Client = require('node-xmpp-client')
