@@ -17,7 +17,7 @@ pem.createCertificate({
     commonName: 'nodexmpp'
 
 }, function (error, keys) {
-    if (err) {
+    if (error) {
         console.error(error)
     } else {
 
