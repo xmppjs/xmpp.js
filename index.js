@@ -6,7 +6,7 @@ var util = require('util')
   , Connection = require('node-xmpp-core').Connection
   , JID = require('node-xmpp-core').JID
   , SRV = require('node-xmpp-core').SRV
-  , ltx = require('ltx')
+  , ltx = require('node-xmpp-core').ltx
 
 /**
  * opts:
