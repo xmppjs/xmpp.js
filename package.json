@@ -7,16 +7,16 @@
   "author": "Astro",
   "dependencies": {
     "node-expat": ">=1.4.1",
-    "ltx": ">= 0.2.0",
+    "ltx": "0.x",
     "request": ">= 2.9.153",
     "browser-request": ">= 0.2.0",
     "faye-websocket": ">= 0.4.1",
     "browserify": "~3.19.1",
     "brfs": "0.0.8",
-    "node-xmpp-component": "git+https://github.com/node-xmpp/node-xmpp-component.git",
-    "node-xmpp-client": "git+https://github.com/node-xmpp/node-xmpp-client.git",
-    "node-xmpp-server": "git+https://github.com/node-xmpp/node-xmpp-server.git",
-    "node-xmpp-core": "git+https://github.com/node-xmpp/node-xmpp-core.git"
+    "node-xmpp-component": "1.0.0-alpha1",
+    "node-xmpp-client": "1.0.0-alpha1",
+    "node-xmpp-server": "1.0.0-alpha1",
+    "node-xmpp-core": "1.0.0-alpha1"
   },
   "devDependencies": {
     "mocha": ">=1.0.0",
