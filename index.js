@@ -20,9 +20,9 @@ var STATE_PREAUTH = 0
   , STATE_BIND = 3
   , STATE_SESSION = 4
   , STATE_ONLINE = 5
+
 var IQID_SESSION = 'sess'
   , IQID_BIND = 'bind'
-
 
 /*jshint latedef: false */
 /*jshint -W079 */
@@ -67,7 +67,7 @@ if (typeof atob === 'function') {
  *   actAs: String (optional) - if admin user act on behalf of another user (just user)
  *   disallowTLS: Boolean (optional) - prevent upgrading the connection to a secure one via TLS
  *   preferred: String (optional) - Preferred SASL mechanism to use
- *   prebind: Function(error,data) (optional) - Just prebind a new BOSH session for browser client use
+ *   prebind: Function(error, data) (optional) - Just prebind a new BOSH session for browser client use
  *            error String - Result of XMPP error. Ex : [Error: XMPP authentication failure]
  *            data Object - Result of XMPP BOSH connection.
  *
@@ -92,11 +92,11 @@ if (typeof atob === 'function') {
  *       jid: "me@example.com",
  *       password: "secret",
  *       boshURL: "http://example.com/http-bind",
- *       prebind:function(err,data){
- *           if(err){}
- *           res.send({rid:data.rid,sid:data.sid})
+ *       prebind: function(error, data) {
+ *           if (error) {}
+ *           res.send({ rid: data.rid, sid: data.sid })
  *       }
- *   });
+ *   })
  *
  * Example SASL EXTERNAL:
  *
@@ -114,35 +114,33 @@ if (typeof atob === 'function') {
  *
  */
 function Client(opts) {
-    if(opts.prebind)
-    {
-        var cb = opts.prebind;
-        delete opts.prebind;
-        var cmd = 'node '+process.cwd()+'/node_modules/node-xmpp-client/lib/prebind.js ';
-        for(var o in opts)
-        {
-            cmd += '--'+o+' '+opts[o]+' ';
+    if (opts.prebind) {
+        var cb = opts.prebind
+        delete opts.prebind
+        var cmd = 'node ' + process.cwd() +
+            '/node_modules/node-xmpp-client/lib/prebind.js '
+        for (var o in opts) {
+            cmd += '--' + o + ' ' + opts[o] + ' '
         }
-        exec(cmd,
-          function (error, stdout, stderr) {
-            if(error || stderr)
-            {
-                cb(error || stderr,null);
+        exec(
+            cmd,
+            function (error, stdout, stderr) {
+                if (error || stderr) {
+                cb(error || stderr, null)
+            } else {
+                var r = stdout.match(/rid:+[ 0-9]*/i)
+                r = (r[0].split(':'))[1].trim()
+                var s = stdout.match(/sid:+[ a-z+'"-_A-Z+0-9]*/i)
+                s = (s[0].split(':'))[1]
+                    .replace('\'','')
+                    .replace('\'','')
+                    .trim()
+                cb(null, { rid: r, sid: s })
             }
-            else
-            {
-                var r = stdout.match(/rid:+[ 0-9]*/i);
-                r = (r[0].split(':'))[1].trim();
-                var s = stdout.match(/sid:+[ a-z+'"-_A-Z+0-9]*/i);
-                s = (s[0].split(':'))[1].replace('\'','').replace('\'','').trim();
-                cb(null, {rid:r,sid:s});
-            }
-        });
-    }
-    else
-    {
+        })
+    } else {
         opts.xmlns = NS_CLIENT
-        /*jshint camelcase: false */
+        /* jshint camelcase: false */
         delete this.did_bind
         delete this.did_session
 
@@ -156,10 +154,10 @@ function Client(opts) {
         Session.call(this, opts)
         opts.jid = this.jid
 
-        this.connection.on('disconnect', function(err) {
+        this.connection.on('disconnect', function(error) {
             this.state = STATE_PREAUTH
             if (!this.connection.reconnect) {
-                if (err) this.emit('error', err)
+                if (error) this.emit('error', error)
                 this.emit('offline')
             }
             delete this.did_bind
