@@ -1,5 +1,6 @@
 'use strict';
-var XMPP = require('node-xmpp-client');
+
+var XMPP = require('node-xmpp-client')
 
 (new XMPP({
     jid: 'me@example.com',
@@ -7,12 +8,13 @@ var XMPP = require('node-xmpp-client');
     boshURL: 'http://example.com/http-bind',
     preferred: 'PLAIN',
     wait: '60',
-    prebind:function(err,data){
-        if(err) throw new Error(err);
-        else return data;
+    prebind: function(error, data) {
+        if (error) throw new Error(error)
+        
+        return data
         /*
             data.sid
             data.rid
         */
     }
-}))();
+}))()
