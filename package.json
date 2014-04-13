@@ -27,7 +27,8 @@
     "request": "~2.27.0",
     "faye-websocket": "~0.7.0",
     "node-xmpp-core": "git+https://github.com/node-xmpp/node-xmpp-core.git",
-    "browser-request": "~0.3.1"
+    "browser-request": "~0.3.1",
+    "minimist": "0.0.8"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
