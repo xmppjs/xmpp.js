@@ -1,20 +1,23 @@
 'use strict';
 
-var XMPP = require('node-xmpp-client')
+var XMPP = require('../index')
 
-(new XMPP({
+var prebind = new XMPP({
     jid: 'me@example.com',
     password: 'secret',
-    boshURL: 'http://example.com/http-bind',
     preferred: 'PLAIN',
     wait: '60',
-    prebind: function(error, data) {
-        if (error) throw new Error(error)
-        
-        return data
-        /*
-            data.sid
-            data.rid
-        */
+    bosh: {
+        url: 'http://example.com/http-bind',
+        prebind: function(error, data) {
+            if (error) throw new Error(error)
+            return data
+            /*
+                data.sid
+                data.rid
+             */
+        }
     }
-}))()
+})
+
+prebind.on('online', function() { console.log('Connected') })

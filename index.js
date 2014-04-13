@@ -24,9 +24,9 @@ var STATE_PREAUTH = 0
 var IQID_SESSION = 'sess'
   , IQID_BIND = 'bind'
 
-/*jshint latedef: false */
-/*jshint -W079 */
-/*jshint -W020 */
+/* jshint latedef: false */
+/* jshint -W079 */
+/* jshint -W020 */
 var decode64, encode64, Buffer
 if (typeof btoa === 'undefined') {
     var btoa = null
@@ -67,7 +67,8 @@ if (typeof atob === 'function') {
  *   actAs: String (optional) - if admin user act on behalf of another user (just user)
  *   disallowTLS: Boolean (optional) - prevent upgrading the connection to a secure one via TLS
  *   preferred: String (optional) - Preferred SASL mechanism to use
- *   prebind: Function(error, data) (optional) - Just prebind a new BOSH session for browser client use
+ *   bosh.url: String (optional) - BOSH endpoint to use
+ *   bosh.prebind: Function(error, data) (optional) - Just prebind a new BOSH session for browser client use
  *            error String - Result of XMPP error. Ex : [Error: XMPP authentication failure]
  *            data Object - Result of XMPP BOSH connection.
  *
@@ -91,10 +92,12 @@ if (typeof atob === 'function') {
  *   var prebind = new xmpp.Client({
  *       jid: "me@example.com",
  *       password: "secret",
- *       boshURL: "http://example.com/http-bind",
- *       prebind: function(error, data) {
- *           if (error) {}
- *           res.send({ rid: data.rid, sid: data.sid })
+ *       bosh: {
+ *           url: "http://example.com/http-bind",
+ *           prebind: function(error, data) {
+ *               if (error) {}
+ *               res.send({ rid: data.rid, sid: data.sid })
+ *           }
  *       }
  *   })
  *
@@ -114,9 +117,10 @@ if (typeof atob === 'function') {
  *
  */
 function Client(opts) {
-    if (opts.prebind) {
-        var cb = opts.prebind
-        delete opts.prebind
+
+    if (opts.bosh && opts.bosh.prebind) {
+        var cb = opts.bosh.prebind
+        delete opts.bosh.prebind
         var cmd = 'node ' + process.cwd() +
             '/node_modules/node-xmpp-client/lib/prebind.js '
         for (var o in opts) {
