@@ -21,6 +21,6 @@ exports.Stanza = Stanza.Stanza
 exports.Message = Stanza.Message
 exports.Presence = Stanza.Presence
 exports.Iq = Stanza.Iq
-exports.Router = Router.Router
+exports.Router = Router
 exports.BOSHServer = require('node-xmpp-server').BOSHServer
 exports.StreamParser = require('node-xmpp-core').StreamParser
