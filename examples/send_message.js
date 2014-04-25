@@ -2,7 +2,7 @@
 
 var Client = require('../index')
   , argv = process.argv
-  , ltx  = require('ltx')
+  , ltx  = require('node-xmpp-core').ltx
 
 if (argv.length < 6) {
     console.error('Usage: node send_message.js <my-jid> ' +
@@ -10,7 +10,12 @@ if (argv.length < 6) {
     process.exit(1)
 }
 
-var client = new Client({ jid: argv[2],  password: argv[3] })
+var client = new Client({ jid: argv[2], password: argv[3] })
+
+client.connection.socket.on('error', function(error) {
+    console.error(e)
+    process.exit(1)
+})
 
 client.addListener('online', function(data) {
     console.log('Connected as ' + data.jid.user + '@' + data.jid.domain + '/' + data.jid.resource)
