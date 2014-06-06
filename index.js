@@ -11,6 +11,7 @@ module.exports = {
 
     // SASL
     auth: {
+        AbstractMechanism: require('./lib/authentication/mechanism'),
         Plain: require('./lib/authentication/plain'),
         DigestMD5: require('./lib/authentication/digestmd5'),
         XOAuth2: require('./lib/authentication/xoauth2'),
