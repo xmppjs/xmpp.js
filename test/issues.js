@@ -4,7 +4,7 @@ var ltx = require('node-xmpp-core').ltx
   , C2SServer = require('../index').C2SServer
   , net = require('net')
 
-    require('should')
+require('should')
 
 describe('Issues', function() {
     it('Shouldn\'t crash on invalid JID', function(done) {
@@ -26,7 +26,7 @@ describe('Stream without proper "to" attribute', function() {
 
         var streamData = false
         var streamClosed = false
-        var streamError = ""
+        var streamError = ''
 
         before(function(done) {
             c2s = new C2SServer({
@@ -64,12 +64,12 @@ describe('Stream without proper "to" attribute', function() {
         })
 
         it('Should return error to client', function(done) {
-            streamData.should.be.ok
+            streamData.should.be.exactly(true)
             done()
         })
 
         it('Should close stream', function(done) {
-            streamClosed.should.be.ok
+            streamClosed.should.be.exactly(true)
             done()
         })
 
