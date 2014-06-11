@@ -30,7 +30,7 @@
     "grunt-contrib-jshint": "0.10.0",
     "grunt-mocha-cli": "~1.8.0",
     "node-xmpp-client": "~1.0.0",
-    "should": "~4.04",
+    "should": "~4.0.4",
     "pem": "~1.4.1"
   }
 }
