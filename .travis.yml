@@ -12,4 +12,5 @@ before_install:
   - sudo rm -rf /dev/shm
   - sudo ln -s /run/shm /dev/shm
 before_script:
+  - npm update -g npm
   - npm install -g grunt-cli
