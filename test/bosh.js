@@ -1,5 +1,5 @@
 'use strict';
-
+/*
 var assert = require('assert')
   , http = require('http')
   , xmpp = require('./../index')
@@ -8,7 +8,7 @@ var assert = require('assert')
   , Message = require('node-xmpp-core').Stanza.Message
 
 var BOSH_PORT = 45580
-/*
+
 describe('BOSH client/server', function() {
     var sv, svcl, c2s, cl
 
