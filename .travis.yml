@@ -1,7 +1,6 @@
 language: node_js
 node_js:
   - "0.8"
-  - "0.9"
   - "0.10"
   - "0.11"
 before_install:
@@ -12,4 +11,5 @@ before_install:
   - sudo rm -rf /dev/shm
   - sudo ln -s /run/shm /dev/shm
 before_script:
+  - npm update -g npm
   - npm install -g grunt-cli

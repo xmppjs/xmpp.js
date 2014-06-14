@@ -1,5 +1,5 @@
 'use strict';
-
+/*
 var assert = require('assert')
   , http = require('http')
   , xmpp = require('./../index')
@@ -90,3 +90,4 @@ describe('BOSH client/server', function() {
     })
 
 })
+*/
