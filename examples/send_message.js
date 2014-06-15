@@ -13,7 +13,7 @@ if (argv.length < 6) {
 var client = new Client({ jid: argv[2], password: argv[3] })
 
 client.connection.socket.on('error', function(error) {
-    console.error(e)
+    console.error(error)
     process.exit(1)
 })
 
