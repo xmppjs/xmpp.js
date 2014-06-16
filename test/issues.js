@@ -19,7 +19,6 @@ describe('Issues', function() {
 })
 
 describe('Stream without proper "to" attribute', function() {
-
     function testEmptyTo(to) {
         var port = 5222
         var c2s
@@ -44,7 +43,7 @@ describe('Stream without proper "to" attribute', function() {
                     '<stream:stream ' + to + ' xmlns="jabber:client" ' +
                     'xmlns:stream="http://etherx.jabber.org/streams" ' +
                     'version="1.0">'
-                client = net.connect({ port: port }, function() {
+                client = net.connect({port: port}, function() {
                     client.write(stanza)
                 })
                 client.on('data', function(data) {
@@ -65,23 +64,17 @@ describe('Stream without proper "to" attribute', function() {
         })
 
         it('Should return error to client', function(done) {
-            this.timeout(6000)
-            /*jshint noempty: false */
-            while (streamData !== true) {} 
+            streamData.should.be.exactly(true)
             done()
         })
 
         it('Should close stream', function(done) {
-            this.timeout(6000)
-            /*jshint noempty: false */
-            while (streamClosed !== true) {}
+            streamClosed.should.be.exactly(true)
             done()
         })
 
         it('Should generate error event on server', function(done) {
-            this.timeout(6000)
-            /*jshint noempty: false */
-            while (0 === streamError.message.match(/Empty domain/).length) {}
+            streamError.should.match(/Empty domain/)
             done()
         })
     }
