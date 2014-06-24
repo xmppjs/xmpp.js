@@ -3,71 +3,122 @@
 var Component = require('../../index')
   , ltx = require('node-xmpp-core').ltx
   , Client = require('node-xmpp-client')
-    
+  , exec = require('child_process').exec
+
 require('should')
 
 var component = null
   , client = null
-  , user = (+new Date()).toString(36)
+  , user = null
 
-var options = {
-    jid: 'component.localhost',
-    password: 'mysecretcomponentpassword',
-    host: 'localhost',
-    port: 5347
-}
+var options = {}
 
 /* jshint -W030 */
 describe('Integration tests', function() {
 
-    before(function(done) {
-        var options = {
-            jid: user + '@localhost',
-            password: 'password',
-            host: '127.0.0.1',
-            register: true
+    beforeEach(function(done) {
+        options = {
+            jid: 'component.localhost',
+            password: 'mysecretcomponentpassword',
+            host: 'localhost',
+            port: 5347
         }
-        client = new Client(options)
-        client.on('online', function() {
-            client.send(new ltx.Element('presence'))
-            done()
-        })
-        client.on('error', function(error) {
-            done(error)
+        user = (+new Date()).toString(36)
+        exec('sudo service prosody start', function() {
+            component = new Component(options)
+            component.on('online', function() {
+                var options = {
+                    jid: user + '@localhost',
+                    password: 'password',
+                    host: '127.0.0.1',
+                    register: true
+                }
+                client = new Client(options)
+                client.on('online', function() {
+                    client.send(new ltx.Element('presence'))
+                    done()
+                })
+                client.on('error', function(error) {
+                    done(error)
+                })
+            })
         })
     })
     
-    after(function() {
-        if (client) client.emit('close')
-        if (component) component.emit('close')
+    afterEach(function() {
+        if (client) client.end()
+        if (component) component.end()
+        component = null
+        client = null
     })
 
     it('Can connect and send a message', function(done) {
-        component = new Component(options)
-        component.on('online', function() {
-            var outgoing = new ltx.Element(
-                'message',
-                { to: user + '@localhost', type: 'chat', from: 'component.localhost' }
-            )
-            outgoing.c('body').t('Hello little miss client!')
-            
-            client.on('stanza', function(stanza) {
-                stanza.is('message').should.be.true
-                stanza.attrs.from.should.equal('component.localhost')
-                stanza.attrs.type.should.equal('chat')
-                stanza.getChildText('body').should.equal('Hello little miss client!')
-                done()
-            })
-            component.send(outgoing)
+        client.on('stanza', function(stanza) {
+            if (false === stanza.is('message')) return
+            stanza.is('message').should.be.true
+            stanza.attrs.from.should.equal('component.localhost')
+            stanza.attrs.to.should.equal(user + '@localhost')
+            stanza.attrs.type.should.equal('chat')
+            stanza.getChildText('body').should.equal('Hello little miss client!')
+            done()
         })
-        component.on('error', function(error) {
-            done(error)
-        })
-        component.should.exist
+        var outgoing = new ltx.Element(
+            'message',
+            {
+                to: user + '@localhost',
+                type: 'chat',
+                from: 'component.localhost'
+            }
+        )
+        outgoing.c('body').t('Hello little miss client!')
+        component.send(outgoing)
     })
     
-   // it('Can receive a message', function(done) {
-        
-   // })
+    it('Can receive a message', function(done) {
+        component.on('stanza', function(stanza) {
+            if (false === stanza.is('message')) return
+            stanza.is('message').should.be.true
+            stanza.attrs.to.should.equal('component.localhost')
+            stanza.attrs.from.should.include(user + '@localhost')
+            stanza.attrs.type.should.equal('chat')
+            stanza.getChildText('body')
+                .should.equal('Hello mr component!')
+            done()
+        })
+        var outgoing = new ltx.Element(
+            'message',
+            {
+                from: user + '@localhost',
+                type: 'chat',
+                to: 'component.localhost'
+            }
+        )
+        outgoing.c('body').t('Hello mr component!')
+        client.send(outgoing)
+    })
+    
+    it('Errors if connecting with bad authentication information', function(done) {
+        component.end()
+        component = null
+        options.password = 'incorrect'
+        component = new Component(options)
+        component.on('close', function() {
+            done()
+        })
+        component.on('online', function() {
+            done('Should not connect')
+        })
+    })
+    
+    it('Sends error when server stops', function(done) {
+        client.end()
+        component.on('error', function() {
+            done()
+        })
+        component.on('close', function() {
+            done()
+        })
+        exec('sudo service prosody stop', function() {})
+    })
     
 })
