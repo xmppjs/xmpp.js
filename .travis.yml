@@ -17,3 +17,4 @@ before_install:
   - sleep 1s
 before_script:
   - npm install -g grunt-cli
+script: npm run integration-test
