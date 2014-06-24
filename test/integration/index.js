@@ -2,46 +2,54 @@
 
 var Component = require('../../index')
   , ltx = require('node-xmpp-core').ltx
-
-var C2S_PORT = 8889
-var COMPONENT_PORT = 8888
+  , Client = require('node-xmpp-client')
     
 require('should')
 
 var component = null
   , client = null
+  , user = (+new Date()).toString(36)
 
 var options = {
     jid: 'component.localhost',
     password: 'mysecretcomponentpassword',
     host: 'localhost',
-    port: COMPONENT_PORT
+    port: 5347
 }
 
 /* jshint -W030 */
 describe('Integration tests', function() {
 
     before(function(done) {
-        client = new Client({
-            jid: 'test@localhost',
-            host: 'localhost',
+        var options = {
+            jid: user + '@localhost',
             password: 'password',
-            port: C2S_PORT,
+            host: '127.0.0.1',
             register: true
-        })
+        }
+        client = new Client(options)
         client.on('online', function() {
+            console.log('Connected as ' + user + '@localhost')
             done()
         })
+        client.on('error', function(error) { 
+            done(error)
+        })
+    })
+    
+    after(function() {
+        if (client) client.emit('close')
+        if (component) component.emit('close')
     })
 
     it('Can connect and send a message', function(done) {
-        var component = new Component(options)
-        component.on('online', function(data) {
-            data.should.exist
-            var stanza = new ltx.Element(
+        component = new Component(options)
+        component.on('online', function() {
+            var outgoing = new ltx.Element(
                 'message',
-                { to: 'test@localhost', type: 'chat' }
-            ).c('body').text('Hello little miss client!')
+                { to: user + '@localhost', type: 'chat' }
+            )
+            outgoing.c('body').t('Hello little miss client!')
             
             client.on('stanza', function(stanza) {
                 stanza.is('message').should.be.true
@@ -50,9 +58,17 @@ describe('Integration tests', function() {
                 stanza.getChildText('body').should.equal('Hello little miss client!')
                 done()
             })
-            component.send(stanza)
+            console.log('Sending: ', outgoing.root().toString())
+            component.send(outgoing)
+        })
+        component.on('error', function(error) {
+            done(error)
         })
         component.should.exist    
     })
+    
+   // it('Can receive a message', function(done) {
+        
+   // })
     
 })
