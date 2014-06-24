@@ -35,8 +35,8 @@ c2s.on('connect', function(client) {
 
     // Allows the developer to authenticate users against anything they want.
     client.on('authenticate', function(opts, cb) {
-        console.log('AUTH ' + opts.jid + ' -> ' +opts.password)
-        cb(null) // cb(false)
+        console.log('AUTH' + opts.jid + ' -> ' + opts.password)
+        cb(null, opts) // cb(false)
     })
 
     client.on('online', function() {
