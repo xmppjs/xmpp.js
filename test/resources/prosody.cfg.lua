@@ -1,5 +1,6 @@
 modules_enabled = {
-  "disco"; -- Service discovery
+  "disco";
+  "register";
 };
 
 component_ports = { 8888 }
@@ -7,6 +8,7 @@ c2s_ports       = { 8889 }
 
 VirtualHost "localhost"
   enabled = true
+  allow_registration = true
  
 Component "conference.localhost"
   component_secret = "mysecretcomponentpassword"
