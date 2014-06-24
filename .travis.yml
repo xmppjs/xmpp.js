@@ -13,8 +13,6 @@ before_install:
   - sudo rm -rf /dev/shm
   - sudo ln -s /run/shm /dev/shm
   - sudo cp test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
-  - sudo service prosody start
-  - sleep 1s
 before_script:
   - npm install -g grunt-cli
 script: npm run integration-test
