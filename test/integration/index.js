@@ -26,6 +26,9 @@ describe('Integration tests', function() {
         user = (+new Date()).toString(36)
         exec('sudo service prosody start', function() {
             component = new Component(options)
+            component.on('close', function() {
+                done('Could not connect component')
+            })
             component.on('online', function() {
                 var options = {
                     jid: user + '@localhost',
