@@ -1,11 +1,11 @@
 language: node_js
 node_js:
   - "0.8"
-  - "0.9"
   - "0.10"
   - "0.11"
 before_install:
   - "sudo apt-get install libicu-dev"
+  - npm i -g npm
   # Workaround for a permissions issue with Travis virtual machine images
   # that breaks Python's multiprocessing:
   # https://github.com/travis-ci/travis-cookbooks/issues/155
