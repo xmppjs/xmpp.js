@@ -28,6 +28,10 @@ To run the tests and the code style checks then use:
 
 Also see the tests run in [travis](http://travis-ci.org/node-xmpp/node-xmpp-component). The tests in travis run both the code and code style tests.
 
+#### Integration tests
+
+There are also a small number of integration tests designed to be run against [Prosody](http://prosody.im). To run these ensure the user the test is run as has sudo access. Copy the prosody configuration file from ```test/resources/prosody.cfg.lua``` to ```/etc/prosody/prosody.cfg.lua```.
+
 ## How to use
 
 Please see the various [examples](https://github.com/node-xmpp/node-xmpp/tree/master/examples).
