@@ -10,5 +10,5 @@ VirtualHost "localhost"
   enabled = true
   allow_registration = true
  
-Component "conference.localhost"
+Component "component.localhost"
   component_secret = "mysecretcomponentpassword"
