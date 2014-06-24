@@ -29,10 +29,10 @@ describe('Integration tests', function() {
         }
         client = new Client(options)
         client.on('online', function() {
-            console.log('Connected as ' + user + '@localhost')
+            client.send(new ltx.Element('presence'))
             done()
         })
-        client.on('error', function(error) { 
+        client.on('error', function(error) {
             done(error)
         })
     })
@@ -47,7 +47,7 @@ describe('Integration tests', function() {
         component.on('online', function() {
             var outgoing = new ltx.Element(
                 'message',
-                { to: user + '@localhost', type: 'chat' }
+                { to: user + '@localhost', type: 'chat', from: 'component.localhost' }
             )
             outgoing.c('body').t('Hello little miss client!')
             
@@ -58,13 +58,12 @@ describe('Integration tests', function() {
                 stanza.getChildText('body').should.equal('Hello little miss client!')
                 done()
             })
-            console.log('Sending: ', outgoing.root().toString())
             component.send(outgoing)
         })
         component.on('error', function(error) {
             done(error)
         })
-        component.should.exist    
+        component.should.exist
     })
     
    // it('Can receive a message', function(done) {
