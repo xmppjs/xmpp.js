@@ -4,7 +4,8 @@
   "description": "Component API for XMPP",
   "main": "index.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "integration-test": "grunt integration-test"
   },
   "repository": {
     "type": "git",
