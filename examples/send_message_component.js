@@ -16,7 +16,7 @@ var c = new xmpp.Component({
     port: Number(argv[5])
 })
 
-c.addListener('online', function() {
+c.on('online', function() {
     argv.slice(7).forEach(
        function(to) {
             var stanza = new xmpp.Element(
@@ -31,7 +31,7 @@ c.addListener('online', function() {
     c.end()
 })
 
-c.addListener('error', function(e) {
+c.on('error', function(e) {
     console.error(e)
     process.exit(1)
 })
