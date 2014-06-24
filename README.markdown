@@ -89,6 +89,7 @@ Optional
 * [hubot-xmpp](https://github.com/markstory/hubot-xmpp/)
 * [superfeedr-node](https://github.com/superfeedr/superfeedr-node)
 * [xmpp-ftw](https://xmpp-ftw.jit.su)
+* [xmpp-smtp-gw](https://github.com/chris-rock/xmpp-smtp-gw)
 
 ## Related Libraries
 
