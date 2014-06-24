@@ -1,4 +1,5 @@
 'use strict';
+/* jshint -W030 */
 
 var Component = require('../../index')
   , ltx = require('node-xmpp-core').ltx
@@ -13,7 +14,26 @@ var component = null
 
 var options = {}
 
-/* jshint -W030 */
+var connectClients = function(done) {
+    component = new Component(options)
+    component.on('online', function() {
+        var options = {
+            jid: user + '@localhost',
+            password: 'password',
+            host: '127.0.0.1',
+            register: true
+        }
+        client = new Client(options)
+        client.on('online', function() {
+            client.send(new ltx.Element('presence'))
+            done()
+        })
+        client.on('error', function(error) {
+            done(error)
+        })
+    })
+}
+
 describe('Integration tests', function() {
 
     beforeEach(function(done) {
@@ -25,26 +45,9 @@ describe('Integration tests', function() {
         }
         user = (+new Date()).toString(36)
         exec('sudo service prosody start', function() {
-            component = new Component(options)
-            component.on('close', function() {
-                done('Could not connect component')
-            })
-            component.on('online', function() {
-                var options = {
-                    jid: user + '@localhost',
-                    password: 'password',
-                    host: '127.0.0.1',
-                    register: true
-                }
-                client = new Client(options)
-                client.on('online', function() {
-                    client.send(new ltx.Element('presence'))
-                    done()
-                })
-                client.on('error', function(error) {
-                    done(error)
-                })
-            })
+            setTimeout(function() {
+                connectClients(done)
+            }, 1000)
         })
     })
     
