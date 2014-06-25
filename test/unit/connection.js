@@ -1,6 +1,6 @@
 'use strict';
 
-var Component = require('../index')
+var Component = require('../../index')
   , net = require('net')
   , ltx = require('node-xmpp-core').ltx
   , crypto = require('crypto')

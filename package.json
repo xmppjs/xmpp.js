@@ -4,7 +4,8 @@
   "description": "Component API for XMPP",
   "main": "index.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "integration-test": "grunt integration-test"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "grunt-mocha-cli": "~1.3.0",
     "grunt-contrib-jshint": "~0.7.2",
     "proxyquire": "~0.5.2",
-    "should": "~3.1.0"
+    "should": "~3.1.0",
+    "node-xmpp-client": "^1.0.0-alpha3"
   }
 }

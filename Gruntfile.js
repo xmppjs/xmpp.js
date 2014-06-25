@@ -7,14 +7,20 @@ module.exports = function(grunt) {
         jshint: {
             allFiles: ['gruntfile.js', 'lib/**/*.js', 'examples/**/*.js', 'test/**/*.js'],
             options: {
-                jshintrc: '.jshintrc',
+                jshintrc: '.jshintrc'
             }
         },
         mochacli: {
-            all: ['test/**/*.js'],
+            unit: {
+                options: { files: [ './test/unit/**/*.js' ] }
+            },
+            integration: {
+                options: { files: [ './test/integration/**/*.js' ] }
+            },
             options: {
                 reporter: 'spec',
-                ui: 'tdd'
+                ui: 'tdd',
+                timeout: 60000
             }
         }
     })
@@ -25,5 +31,6 @@ module.exports = function(grunt) {
 
     // Configure tasks
     grunt.registerTask('default', ['test'])
-    grunt.registerTask('test', ['mochacli', 'jshint'])
+    grunt.registerTask('test', ['mochacli:unit', 'jshint'])
+    grunt.registerTask('integration-test', ['mochacli', 'jshint' ])
 }
