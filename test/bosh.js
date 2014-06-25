@@ -1,93 +1,156 @@
 'use strict';
-/*
-var assert = require('assert')
-  , http = require('http')
-  , xmpp = require('./../index')
-  , C2SStream = require('../index').C2SStream
-  , Client = require('node-xmpp-client')
-  , Message = require('node-xmpp-core').Stanza.Message
+
+var assert = require('assert'),
+    http = require('http'),
+    xmpp = require('./../index'),
+    Client = require('node-xmpp-client'),
+    Message = require('node-xmpp-core').Stanza.Message,
+    debug = require('debug')('xmpp:test:bosh')
 
 var BOSH_PORT = 45580
+var eventChain = []
+var bosh = null
 
-describe('BOSH client/server', function() {
-    var sv, svcl, c2s, cl
+function startServer(done) {
 
-    before(function(done) {
-        sv = new xmpp.BOSHServer({
-            server:http.createServer(function(req, res) {
-                sv.handleHTTP(req, res)
-            }).listen(BOSH_PORT)
-        })
-
-        sv.on('connect', function(svcl_) {
-            svcl = svcl_
-            c2s = new C2SStream({ connection: svcl, server: sv })
-            c2s.on('authenticate', function(opts, cb) {
-                cb(null, opts)
-            })
-        })
-        done()
+    // Sets up the server.
+    bosh = new xmpp.BOSHServer({
+        port: BOSH_PORT,
+        domain: 'localhost'
     })
 
-    after(function(done) {
-        c2s.once('close', function() {
-            sv.shutdown(done)
-        })
-        c2s.end()
+    bosh.on('error', function (err) {
+        console.log('c2s error: ' + err.message)
     })
 
-    describe('client', function() {
-        it('should go online', function(done) {
-            cl = new Client({
-                jid: 'test@example.com',
-                password: 'test',
-                boshURL: 'http://localhost:' + BOSH_PORT
-            })
-            cl.on('online', function() {
-                assert.ok(
-                    c2s.authenticated,
-                    'Client should have authenticated'
-                )
-                done()
-            })
+    bosh.on('connect', function (client) {
+        debug('connected bosh client')
+
+        bosh.on('register', function (opts, cb) {
+            cb(new Error('register not supported'))
         })
 
-        it('should send a stanza', function(done) {
-            svcl.once('stanza', function(stanza) {
-                assert.ok(stanza.is('message'), 'Message stanza')
-                assert.equal(stanza.attrs.to, 'foo@bar.org')
-                assert.equal(stanza.getChildText('body'), 'Hello')
-                done()
-            })
-            var stanza = new Message({ to: 'foo@bar.org' })
+        // allow anything
+        client.on('authenticate', function (opts, cb) {
+            eventChain.push('authenticate')
+            debug('server:authenticate')
+            cb(null, opts)
+        })
+
+        client.on('online', function () {
+            debug('client online')
+            eventChain.push('online')
+        })
+
+        client.on('stanza', function (stanza) {
+            debug('server:recieved stanza: ' + stanza.toString())
+            eventChain.push('stanza')
+            client.send(
+                new Message({
+                    type: 'chat'
+                })
                 .c('body')
-                .t('Hello')
-            cl.send(stanza)
+                .t('Hello there, little client.')
+            )
         })
 
-        it('should receive a stanza', function(done) {
-            cl.once('stanza', function(stanza) {
-                assert.ok(stanza.is('message'), 'Message stanza')
-                assert.equal(stanza.attrs.to, 'bar@bar.org')
-                assert.equal(stanza.getChildText('body'), 'Hello back')
-                done()
-            })
-            svcl.send(new Message({ to: 'bar@bar.org' }).
-                  c('body').t('Hello back'))
+        client.on('disconnect', function () {
+            debug('server:disconnect')
+            eventChain.push('disconnect')
         })
 
-        it('should disconnect', function(done) {
-            var disconnected = false
-            cl.once('disconnect', function() {
-                disconnected = true
+        client.on('end', function () {
+            debug('server:end')
+            eventChain.push('end')
+        })
+
+        client.on('close', function () {
+            debug('server:close')
+            eventChain.push('close')
+        })
+
+        client.on('error', function () {
+            debug('server:error')
+            eventChain.push('error')
+        })
+    })
+    done()
+}
+
+describe('BOSH client/server', function () {
+    var cl
+
+    before(function (done) {
+        startServer(done)
+    })
+
+    after(function (done) {
+        bosh.shutdown(done)
+    })
+
+    describe('events', function () {
+        it('should be in the right order for connecting', function (done) {
+            eventChain = []
+
+            //clientCallback = done
+            cl = new Client({
+                jid: 'bob@example.com',
+                password: 'alice',
+                bosh: {
+                    url: 'http://127.0.0.1:' + BOSH_PORT
+                }
             })
-            cl.once('end', function () {
-                assert.ok(disconnected, 'client disconnected')
+            cl.on('online', function () {
+                eventChain.push('clientonline')
+                assert.deepEqual(eventChain, ['authenticate', 'online', 'clientonline'])
                 done()
             })
+            cl.on('error', function (e) {
+                done(e)
+            })
+
+        })
+
+        it('should ping pong stanza', function (done) {
+            eventChain = []
+
+            cl.on('stanza', function () {
+                eventChain.push('clientstanza')
+                assert.deepEqual(eventChain, ['stanza', 'clientstanza'])
+                done()
+            })
+
+            cl.send(
+                new Message({
+                    type: 'chat'
+                })
+                .c('body')
+                .t('Hello there, little server.')
+            )
+
+            cl.on('error', function (e) {
+                done(e)
+            })
+        })
+
+        it('should close the connection', function (done) {
+            eventChain = []
+
+            // end xmpp stream
+            cl.on('end', function () {
+                eventChain.push('clientend')
+            })
+
+            // close socket
+            cl.on('close', function () {
+                eventChain.push('clientclose')
+                assert.deepEqual(eventChain, ['end', 'disconnect', 'close', 'clientend', 'clientclose'])
+                done()
+            })
+
             cl.end()
         })
+
     })
 
 })
-*/
