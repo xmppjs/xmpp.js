@@ -66,7 +66,7 @@ function createChain(cl) {
     return eventChain
 }
 
-describe('Reconnect', function() {
+describe.pending('Reconnect', function() {
     describe('Network problems', function() {
         var c2s = null
 
