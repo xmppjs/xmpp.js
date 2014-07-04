@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "grunt test",
-    "browserify": "grunt browserify"
+    "browserify": "grunt browserify",
+    "integration-test": "grunt integration-test"
   },
   "repository": {
     "type": "git",

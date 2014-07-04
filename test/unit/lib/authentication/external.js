@@ -1,6 +1,6 @@
 'use strict';
 
-var External = require('../../../lib/authentication/external')
+var External = require('../../../../lib/authentication/external')
 
 var mech = new External()
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var Client = require('../index')
+var Client = require('../../index')
   , net = require('net')
   , ltx = require('node-xmpp-core').ltx
 require('should')
