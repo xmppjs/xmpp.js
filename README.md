@@ -6,7 +6,7 @@ Library to handle all the core functionality for:
 * [node-xmpp-component](https://github.com/node-xmpp/node-xmpp-component)
 * [node-xmpp-server](https://github.com/node-xmpp/node-xmpp-server)
 
-[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-core.png)](http://travis-ci.org/node-xmpp/node-xmpp-core)
+[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-core.svg?branch=master)](http://travis-ci.org/node-xmpp/node-xmpp-core)
 
 ## Installation
 
