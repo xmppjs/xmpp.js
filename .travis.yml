@@ -4,9 +4,10 @@ node_js:
   - "0.10"
   - "0.11"
 before_install:
-  - sudo apt-get install prosody lua-bitop
+  - sudo apt-get install prosody
   - npm i -g npm
   - "sudo apt-get install libicu-dev"
+  - "sudo aptitude search lua-bitop"
   # Workaround for a permissions issue with Travis virtual machine images
   # that breaks Python's multiprocessing:
   # https://github.com/travis-ci/travis-cookbooks/issues/155
