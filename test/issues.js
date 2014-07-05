@@ -64,12 +64,18 @@ describe('Stream without proper "to" attribute', function() {
         })
 
         it('Should return error to client', function(done) {
-            streamData.should.be.exactly(true)
+            var end = new Date().getTime() + 2000
+            while (streamData !== true) {
+                if (new Date().getTime() >= end) break
+            }
             done()
         })
 
         it('Should close stream', function(done) {
-            streamClosed.should.be.exactly(true)
+            var end = new Date().getTime() + 2000
+            while (streamClosed !== true) {
+                if (new Date().getTime() >= end) break
+            }
             done()
         })
 
