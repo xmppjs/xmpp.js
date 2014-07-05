@@ -65,18 +65,26 @@ describe('Stream without proper "to" attribute', function() {
 
         it('Should return error to client', function(done) {
             var end = new Date().getTime() + 2000
+            var error = null
             while (streamData !== true) {
-                if (new Date().getTime() >= end) break
+                if (new Date().getTime() >= end) {
+                    error = 'Timeout'
+                    break
+                }
             }
-            done()
+            done(error)
         })
 
         it('Should close stream', function(done) {
             var end = new Date().getTime() + 2000
+            var error = null
             while (streamClosed !== true) {
-                if (new Date().getTime() >= end) break
+                if (new Date().getTime() >= end) {
+                    error = 'Timeout'
+                    break
+                }
             }
-            done()
+            done(error)
         })
 
         it('Should generate error event on server', function(done) {
