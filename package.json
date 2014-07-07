@@ -26,7 +26,7 @@
   "dependencies": {
     "request": "~2.27.0",
     "faye-websocket": "~0.7.0",
-    "node-xmpp-core": "^1.0.0-alpha3",
+    "node-xmpp-core": "1.0.0-alpha3",
     "browser-request": "~0.3.1",
     "minimist": "0.0.8"
   },
