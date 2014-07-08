@@ -4,7 +4,9 @@ var exec = require('child_process').exec
 
 var startServer = function(done) {
     exec('sudo service prosody start', function() {
-        done()
+        setTimeout(function() {
+            done()
+        }, 300)
     })
 }
 
