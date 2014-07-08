@@ -125,5 +125,46 @@ describe('Socket connections', function() {
             })
         })
     })
+    
+    it('Sends error for bad stanza', function(done) {
+        client = new Client({
+            jid: jid,
+            password: password,
+            host: 'localhost'
+        })
+        
+        var badPing = new ltx.Element(
+            'wtf', { id: '123', type: 'get' }
+        ).c('ping', { xmlns: 'urn:xmpp:ping' })
+        
+        client.on('online', function() {
+            client.send(badPing)
+            client.on('stanza', function(stanza) {
+                stanza.attrs.type.should.equal('error')
+                stanza.attrs.id.should.equal('123')
+                done()
+            })
+        })
+    })
+    
+    it('Errors when server is stopped', function(done) {
+        helper.stopServer(function() {
+            client = new Client({
+                jid: jid,
+                password: password,
+                host: 'localhost'
+            })
+            client.on('error', function(error) {
+                error.message.should.equal('connect ECONNREFUSED')
+                error.code.should.equal('ECONNREFUSED')
+                error.errno.should.equal('ECONNREFUSED')
+                error.syscall.should.equal('connect')
+                done()
+            })
+            client.on('online', function() {
+                done('Should not have connected')
+            })
+        })
+    })
 
 })
