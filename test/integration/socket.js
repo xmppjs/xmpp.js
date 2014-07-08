@@ -2,6 +2,7 @@
 
 var Client = require('../../index')
   , helper = require('../helper')
+  , ltx = require('node-xmpp-core').ltx
 
 require('should')
 
@@ -11,6 +12,7 @@ describe('Socket connections', function() {
     var jid = Math.random().toString(36).substring(7) + '@localhost'
     var password = 'password'
     var client = null
+    var resource = 'test'
     
     beforeEach(function(done) {
         helper.startServer(done)
@@ -28,11 +30,100 @@ describe('Socket connections', function() {
             host: 'localhost',
             register: true
         })
-        client.on('online', function() {
+        client.on('online', function(data) {
+            var bareJid = data.jid.local + '@' + data.jid.domain
+            bareJid.should.equal(jid)
+            bareJid = data.jid.user + '@' + data.jid.domain
+            bareJid.should.equal(jid)
             done()
         })
     })
     
+    it('Errors on bad authentication details', function(done) {
+        client = new Client({
+            jid: jid,
+            password: 'not ' + password,
+            host: 'localhost'
+        })
+        client.on('online', function() {
+            done('Should not have connected')
+        })
+        client.on('error', function(error) {
+            error.should.equal(
+                'XMPP authentication failure'
+            )
+            done()
+        })
+    })
     
+    it('Can connect to an account with resource', function(done) {
+        client = new Client({
+            jid: jid + '/' + resource,
+            password: password,
+            host: 'localhost'
+        })
+        client.on('online', function(data) {
+            var bareJid = data.jid.local + '@' + data.jid.domain
+            bareJid.should.equal(jid)
+            bareJid = data.jid.user + '@' + data.jid.domain
+            bareJid.should.equal(jid)
+            data.jid.resource.should.equal(resource)
+            done()
+        })
+    })
+
+    it('Can connect to an account without resource', function(done) {
+        client = new Client({
+            jid: jid,
+            password: password,
+            host: 'localhost'
+        })
+        client.on('online', function(data) {
+            var bareJid = data.jid.local + '@' + data.jid.domain
+            bareJid.should.equal(jid)
+            bareJid = data.jid.user + '@' + data.jid.domain
+            bareJid.should.equal(jid)
+            data.jid.resource.should.exist
+            done()
+        })
+    })
+    
+    it('Fails on registering a duplicate account', function(done) {
+        client = new Client({
+            jid: jid,
+            password: 'not ' + password,
+            host: 'localhost',
+            register: true
+        })
+        client.on('online', function() {
+            done('Should not have connected')
+        })
+        client.on('error', function(error) {
+            error.message.should.equal(
+                'Registration error'
+            )
+            done()
+        })
+    })
+    
+    it('Can send and receive a stanza', function(done) {
+        client = new Client({
+            jid: jid,
+            password: password,
+            host: 'localhost'
+        })
+        
+        var ping = new ltx.Element(
+            'iq', { id: '123', type: 'get' }
+        ).c('ping', { xmlns: 'urn:xmpp:ping' })
+        
+        client.on('online', function() {
+            client.send(ping)
+            client.on('stanza', function(pong) {
+                pong.attrs.id.should.equal('123')
+                done()
+            })
+        })
+    })
 
 })
