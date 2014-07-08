@@ -166,5 +166,26 @@ describe('Socket connections', function() {
             })
         })
     })
+    
+    it('Disconects', function(done) {
+        client = new Client({
+            jid: jid,
+            password: password,
+            host: 'localhost'
+        })
+        
+        var ping = new ltx.Element(
+            'iq', { id: '123', type: 'get' }
+        ).c('ping', { xmlns: 'urn:xmpp:ping' })
+        
+        client.on('online', function() {
+            client.end()
+            client.send(ping)
+            client.on('stanza', function() {
+                done('Unexpected stanza')
+            })
+            done()
+        })
+    })
 
 })
