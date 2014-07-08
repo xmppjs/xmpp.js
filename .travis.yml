@@ -4,15 +4,20 @@ node_js:
   - "0.10"
   - "0.11"
 before_install:
-  - npm i -g npm
-  - "sudo apt-get install libicu-dev"
+  - "npm i -g npm"
+  - "sudo apt-get install libicu-dev prosody luarocks"
+  - "sudo luarocks install luabitop"
   # Workaround for a permissions issue with Travis virtual machine images
   # that breaks Python's multiprocessing:
   # https://github.com/travis-ci/travis-cookbooks/issues/155
   - sudo rm -rf /dev/shm
   - sudo ln -s /run/shm /dev/shm
+  - sudo cp test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
+  - sudo cp test/resources/mod_websocket.lua /usr/lib/prosody/modules/
+  - sudo service prosody stop
 before_script:
   - npm install -g grunt-cli
+script: "npm run integration-test"
 after_success:
   - if [ "master" -ne $TRAVIS_BRANCH ]; then exit 0; fi; 
   - git config --global user.email "deploy@travis-ci.org"
