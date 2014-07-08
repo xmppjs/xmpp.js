@@ -7,6 +7,7 @@ var Session = require('./lib/session')
   , sasl = require('./lib/sasl')
   , exec = require('child_process').exec
   , util = require('util')
+  , debug = require('debug')('xmpp:client')
 
 var NS_CLIENT = 'jabber:client'
 var NS_REGISTER = 'jabber:iq:register'
@@ -119,6 +120,7 @@ if (typeof atob === 'function') {
 function Client(opts) {
 
     if (opts.bosh && opts.bosh.prebind) {
+        debug('load bosh prebind')
         var cb = opts.bosh.prebind
         delete opts.bosh.prebind
         var cmd = 'node ' + process.cwd() +
