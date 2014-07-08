@@ -28,7 +28,7 @@
     "predef": [
       "define", "module", "require",
       "before", "beforeEach", "describe", "it",
-      "after", "window"
+      "after", "window", "afterEach"
   ]
 
 }
