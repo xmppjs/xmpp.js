@@ -2,7 +2,7 @@
 
 Idiomatic XMPP server library for [node.js](http://nodejs.org/)
 
-[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-server.png)](http://travis-ci.org/node-xmpp/node-xmpp-server)
+[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-server.svg?branch=master)](http://travis-ci.org/node-xmpp/node-xmpp-server)
 
 ## Manual
 
