@@ -187,5 +187,18 @@ describe('Socket connections', function() {
             done()
         })
     })
+    
+    it('Errors when the server is stopped', function(done) {
+        client = new Client({
+            jid: jid,
+            password: password,
+            host: 'localhost'
+        })
+        client.on('end', function() {
+            console.log(arguments)
+            done()
+        })
+        helper.stopServer(function() {})
+    })
 
 })
