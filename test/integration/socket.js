@@ -147,7 +147,7 @@ describe('Socket connections', function() {
         })
     })
     
-    it('Errors when server is stopped', function(done) {
+    it('Can\'t connect when server is stopped', function(done) {
         helper.stopServer(function() {
             client = new Client({
                 jid: jid,
@@ -188,17 +188,4 @@ describe('Socket connections', function() {
         })
     })
     
-    it('Errors when the server is stopped', function(done) {
-        client = new Client({
-            jid: jid,
-            password: password,
-            host: 'localhost'
-        })
-        client.on('end', function() {
-            console.log(arguments)
-            done()
-        })
-        helper.stopServer(function() {})
-    })
-
 })
