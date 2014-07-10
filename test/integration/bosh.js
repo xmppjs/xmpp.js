@@ -13,7 +13,6 @@ describe('BOSH connections', function() {
     var password = 'password'
     var client = null
     var resource = 'test'
-    var port = 5280
     
     beforeEach(function(done) {
         helper.startServer(done)
@@ -155,7 +154,7 @@ describe('BOSH connections', function() {
         var counter = 0
         client.on('online', function() {
             client.send(ping)
-            client.on('stanza', function(pong) {
+            client.on('stanza', function() {
                 ++counter
                 if (counter > 6) return done()
                 client.send(ping)
@@ -222,7 +221,7 @@ describe('BOSH connections', function() {
         })
         client.on('online', function() {
             done('Should not have connected')
-        }) 
+        })
     })
     
     it.skip('Disconects', function(done) {
