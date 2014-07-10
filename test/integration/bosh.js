@@ -208,9 +208,21 @@ describe('BOSH connections', function() {
         })
     })
     
-    it.skip('Errors when providing bad BOSH url', function(done) {
-        
-        done('Not done')
+    it('Errors when providing bad BOSH url', function(done) {
+            client = new Client({
+                jid: jid,
+                password: password,
+                bosh: {
+                    url: 'http://localhost:5280/bosh-bind/'
+                }
+            })
+            client.on('error', function(error) {
+                console.log(error)
+                done()
+            })
+            client.on('online', function() {
+                done('Should not have connected')
+            })          
     })
     
     it.skip('Disconects', function(done) {
