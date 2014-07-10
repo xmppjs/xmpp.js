@@ -7,7 +7,7 @@ var Client = require('../../index')
 require('should')
 
 /* jshint -W030 */
-describe('Socket connections', function() {
+describe('BOSH connections', function() {
 
     var jid = Math.random().toString(36).substring(7) + '@localhost'
     var password = 'password'
@@ -19,16 +19,18 @@ describe('Socket connections', function() {
     })
     
     afterEach(function(done) {
-        helper.stopServer(done)
         if (client) client.end()
+        helper.stopServer(done)
     })
     
     it('Can register an account', function(done) {
         client = new Client({
             jid: jid,
             password: password,
-            host: 'localhost',
-            register: true
+            register: true,
+            bosh: {
+                url: 'http://localhost:5280/http-bind/'
+            }
         })
         client.on('online', function(data) {
             var bareJid = data.jid.local + '@' + data.jid.domain
@@ -43,7 +45,9 @@ describe('Socket connections', function() {
         client = new Client({
             jid: jid,
             password: 'not ' + password,
-            host: 'localhost'
+            bosh: {
+                url: 'http://localhost:5280/http-bind/'
+            }
         })
         client.on('online', function() {
             done('Should not have connected')
@@ -60,7 +64,9 @@ describe('Socket connections', function() {
         client = new Client({
             jid: jid + '/' + resource,
             password: password,
-            host: 'localhost'
+            bosh: {
+                url: 'http://localhost:5280/http-bind/'
+            }
         })
         client.on('online', function(data) {
             var bareJid = data.jid.local + '@' + data.jid.domain
@@ -76,7 +82,9 @@ describe('Socket connections', function() {
         client = new Client({
             jid: jid,
             password: password,
-            host: 'localhost'
+            bosh: {
+                url: 'http://localhost:5280/http-bind/'
+            }
         })
         client.on('online', function(data) {
             var bareJid = data.jid.local + '@' + data.jid.domain
@@ -92,7 +100,9 @@ describe('Socket connections', function() {
         client = new Client({
             jid: jid,
             password: 'not ' + password,
-            host: 'localhost',
+            bosh: {
+                url: 'http://localhost:5280/http-bind/'
+            },
             register: true
         })
         client.on('online', function() {
@@ -110,7 +120,9 @@ describe('Socket connections', function() {
         client = new Client({
             jid: jid,
             password: password,
-            host: 'localhost'
+            bosh: {
+                url: 'http://localhost:5280/http-bind/'
+            }
         })
         
         var ping = new ltx.Element(
@@ -126,11 +138,37 @@ describe('Socket connections', function() {
         })
     })
     
+    it('Can send and receive stanzas', function(done) {
+        client = new Client({
+            jid: jid,
+            password: password,
+            bosh: {
+                url: 'http://localhost:5280/http-bind/'
+            }
+        })
+        
+        var ping = new ltx.Element(
+            'iq', { id: '123', type: 'get' }
+        ).c('ping', { xmlns: 'urn:xmpp:ping' })
+        
+        var counter = 0
+        client.on('online', function() {
+            client.send(ping)
+            client.on('stanza', function() {
+                ++counter
+                if (counter > 6) return done()
+                client.send(ping)
+            })
+        })
+    })
+    
     it('Sends error for bad stanza', function(done) {
         client = new Client({
             jid: jid,
             password: password,
-            host: 'localhost'
+            bosh: {
+                url: 'http://localhost:5280/http-bind/'
+            }
         })
         
         var badPing = new ltx.Element(
@@ -147,12 +185,14 @@ describe('Socket connections', function() {
         })
     })
     
-    it('Can\'t connect when server is stopped', function(done) {
+    it('Errors when server is stopped', function(done) {
         helper.stopServer(function() {
             client = new Client({
                 jid: jid,
                 password: password,
-                host: 'localhost'
+                bosh: {
+                    url: 'http://localhost:5280/http-bind/'
+                }
             })
             client.on('error', function(error) {
                 error.message.should.equal('connect ECONNREFUSED')
@@ -167,11 +207,30 @@ describe('Socket connections', function() {
         })
     })
     
-    it('Disconects', function(done) {
+    it('Errors when providing bad BOSH url', function(done) {
         client = new Client({
             jid: jid,
             password: password,
-            host: 'localhost'
+            bosh: {
+                url: 'http://localhost:5280/bosh-bind/'
+            }
+        })
+        client.on('error', function(error) {
+            error.message.should.equal('HTTP status 404')
+            done()
+        })
+        client.on('online', function() {
+            done('Should not have connected')
+        })
+    })
+    
+    it.skip('Disconects', function(done) {
+        client = new Client({
+            jid: jid,
+            password: password,
+            bosh: {
+                url: 'http://localhost:5280/http-bind/'
+            }
         })
         
         var ping = new ltx.Element(
@@ -187,5 +246,5 @@ describe('Socket connections', function() {
             done()
         })
     })
-    
+
 })
