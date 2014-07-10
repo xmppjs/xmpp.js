@@ -13,7 +13,7 @@ describe('Anonymous authentication', function() {
 
         it('Should return true', function() {
             var options = {}
-            mech.match(options).should.equal.true
+            mech.match(options).should.equal(true)
         })
 
     })

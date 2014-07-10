@@ -13,12 +13,12 @@ describe('External authentication', function() {
 
         it('Should return true if \'credentials\' property exists', function() {
             var options = { credentials: 'credentials' }
-            mech.match(options).should.equal.true
+            mech.match(options).should.equal(true)
         })
 
         it('Should return false if \'credentials\' property doesn\'t exist', function() {
             var options = {}
-            mech.match(options).should.equal.false
+            mech.match(options).should.equal(false)
         })
 
     })
