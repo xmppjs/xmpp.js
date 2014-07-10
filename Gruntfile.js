@@ -20,7 +20,7 @@ module.exports = function(grunt) {
             options: {
                 reporter: 'spec',
                 ui: 'tdd',
-                timeout: 4000
+                timeout: 10000
             }
         },
         browserify: {
