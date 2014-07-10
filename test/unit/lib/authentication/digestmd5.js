@@ -13,12 +13,12 @@ describe('Digest-md5 authentication', function() {
 
         it('Should return true if \'password\' property exists', function() {
             var options = { password: 'abracadabra' }
-            mech.match(options).should.equal.true
+            mech.match(options).should.equal(true)
         })
 
         it('Should return false if \'password\' property doesn\'t exist', function() {
             var options = {}
-            mech.match(options).should.equal.false
+            mech.match(options).should.equal(false)
         })
 
     })
