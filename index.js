@@ -62,6 +62,7 @@ if (typeof atob === 'function') {
  *   host: String (optional)
  *   port: Number (optional)
  *   reconnect: Boolean (optional)
+ *   autostart: Boolean (optional) - if we start connecting to a given port
  *   register: Boolean (option) - register account before authentication
  *   legacySSL: Boolean (optional) - connect to the legacy SSL port, requires at least the host to be specified
  *   credentials: Dictionary (optional) - TLS or SSL key and certificate credentials
@@ -117,16 +118,27 @@ if (typeof atob === 'function') {
  * })
  *
  */
-function Client(opts) {
+function Client(options) {
+    this.options = {}
+    if (options) this.options = options
 
-    if (opts.bosh && opts.bosh.prebind) {
+    if (this.options.autostart !== false)
+        this.connect()
+}
+
+util.inherits(Client, Session)
+
+Client.NS_CLIENT = NS_CLIENT
+
+Client.prototype.connect = function() {
+    if (this.options.bosh && this.options.bosh.prebind) {
         debug('load bosh prebind')
-        var cb = opts.bosh.prebind
-        delete opts.bosh.prebind
+        var cb = this.options.bosh.prebind
+        delete this.options.bosh.prebind
         var cmd = 'node ' + process.cwd() +
             '/node_modules/node-xmpp-client/lib/prebind.js '
-        for (var o in opts) {
-            cmd += '--' + o + ' ' + opts[o] + ' '
+        for (var o in this.options) {
+            cmd += '--' + o + ' ' + this.options[o] + ' '
         }
         exec(
             cmd,
@@ -145,7 +157,7 @@ function Client(opts) {
             }
         })
     } else {
-        opts.xmlns = NS_CLIENT
+        this.options.xmlns = NS_CLIENT
         /* jshint camelcase: false */
         delete this.did_bind
         delete this.did_session
@@ -157,8 +169,8 @@ function Client(opts) {
             delete this.did_session
         })
 
-        Session.call(this, opts)
-        opts.jid = this.jid
+        Session.call(this, this.options)
+        this.options.jid = this.jid
 
         this.connection.on('disconnect', function(error) {
             this.state = STATE_PREAUTH
@@ -172,19 +184,15 @@ function Client(opts) {
 
         // If server and client have multiple possible auth mechanisms
         // we try to select the preferred one
-        if (opts.preferred) {
-            this.preferredSaslMechanism = opts.preferred
+        if (this.options.preferred) {
+            this.preferredSaslMechanism = this.options.preferred
         } else {
             this.preferredSaslMechanism = 'DIGEST-MD5'
         }
 
-        this.availableSaslMechanisms = sasl.detectMechanisms(opts)
+        this.availableSaslMechanisms = sasl.detectMechanisms(this.options)
     }
 }
-
-util.inherits(Client, Session)
-
-Client.NS_CLIENT = NS_CLIENT
 
 Client.prototype.onStanza = function(stanza) {
     /* Actually, we shouldn't wait for <stream:features/> if
