@@ -5,6 +5,12 @@ var Session = require('./lib/session')
   , JID = require('node-xmpp-core').JID
   , ltx = require('node-xmpp-core').ltx
   , sasl = require('./lib/sasl')
+  , Anonymous = require('./lib/authentication/anonymous')
+  , Plain = require('./lib/authentication/plain')
+  , DigestMD5 = require('./lib/authentication/digestmd5')
+  , XOAuth2 = require('./lib/authentication/xoauth2')
+  , XFacebookPlatform = require('./lib/authentication/xfacebook')
+  , External = require('./lib/authentication/external')
   , exec = require('child_process').exec
   , util = require('util')
   , debug = require('debug')('xmpp:client')
@@ -121,6 +127,9 @@ if (typeof atob === 'function') {
 function Client(options) {
     this.options = {}
     if (options) this.options = options
+    this.availableSaslMechanisms = [
+        XOAuth2, XFacebookPlatform, External, DigestMD5, Plain, Anonymous
+    ]
 
     if (this.options.autostart !== false)
         this.connect()
@@ -190,7 +199,8 @@ Client.prototype.connect = function() {
             this.preferredSaslMechanism = 'DIGEST-MD5'
         }
 
-        this.availableSaslMechanisms = sasl.detectMechanisms(this.options)
+        var mechs = sasl.detectMechanisms(this.options, this.availableSaslMechanisms)
+        this.availableSaslMechanisms = mechs
     }
 }
 
@@ -367,9 +377,39 @@ Client.prototype.doRegister = function() {
     this.on('stanza:preauth', onReply)
 }
 
-Client.prototype.registerSaslMechanism = function () {
-    var args = arguments.length > 0 ? Array.prototype.slice.call(arguments) : []
-    this.availableSaslMechanisms = this.availableSaslMechanisms.concat(args)
+/**
+ * returns all registered sasl mechanisms
+ */
+Client.prototype.getSaslMechanisms = function() {
+    return this.availableSaslMechanisms
+}
+
+/**
+ * removes all registered sasl mechanisms
+ */
+Client.prototype.clearSaslMechanism = function() {
+    this.availableSaslMechanisms = []
+}
+
+/**
+ * register a new sasl mechanism
+ */
+Client.prototype.registerSaslMechanism = function(method) {
+    // check if method is registered
+    if (this.availableSaslMechanisms.indexOf(method) === -1 ) {
+        this.availableSaslMechanisms.push(method)
+    }
+}
+
+/**
+ * unregister an existing sasl mechanism
+ */
+Client.prototype.unregisterSaslMechanism = function(method) {
+    // check if method is registered
+    var index = this.availableSaslMechanisms.indexOf(method)
+    if (index >= 0) {
+        this.availableSaslMechanisms = this.availableSaslMechanisms.splice(index, 1)
+    }
 }
 
 Client.SASL = sasl
