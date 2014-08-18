@@ -4,10 +4,32 @@ var nodexmppserver = require('node-xmpp-server'),
     C2SServer = nodexmppserver.C2SServer
   , ltx = require('node-xmpp-core').ltx
   , net = require('net')
+  , util = require('util')
   , Client = require('../../index')
   , Plain = nodexmppserver.auth.Plain
   , XOAuth2 = nodexmppserver.auth.XOAuth2
   , DigestMD5 = nodexmppserver.auth.DigestMD5
+
+function ServerCustomMechanism() {}
+util.inherits(ServerCustomMechanism, nodexmppserver.auth.AbstractMechanism)
+ServerCustomMechanism.prototype.extractSasl = function(auth) {
+    var authRequest = {
+        password: auth
+    }
+    return authRequest
+}
+ServerCustomMechanism.prototype.name = 'CUSTOM'
+ServerCustomMechanism.id = 'CUSTOM'
+
+function ClientCustomMechanism() {}
+util.inherits(ClientCustomMechanism, Client.SASL.AbstractMechanism)
+ClientCustomMechanism.prototype.name = 'CUSTOM'
+ClientCustomMechanism.prototype.auth = function() {
+    return this.password
+}
+ClientCustomMechanism.prototype.match = function() {
+    return true
+}
 
 var user = {
     jid: 'me@localhost',
@@ -19,7 +41,8 @@ function startServer(mechanism, done) {
     // Sets up the server.
     var c2s = new C2SServer({
         port: 5222,
-        domain: 'localhost'
+        domain: 'localhost',
+        autostart: false
     })
 
     if (mechanism) {
@@ -27,6 +50,8 @@ function startServer(mechanism, done) {
         c2s.availableSaslMechanisms = []
         c2s.registerSaslMechanism(mechanism)
     }
+
+    c2s.listen()
 
     // Allows the developer to register the jid against anything they want
     c2s.on('register', function(opts, cb) {
@@ -55,6 +80,10 @@ function startServer(mechanism, done) {
                 // DIGEST-MD5 OKAY
 
                 opts.password = 'secret'
+                cb(null, opts)
+            } else if ((opts.saslmech === ServerCustomMechanism.id) &&
+                (opts.password === user.password)) {
+                // CUSTOM OKAY
                 cb(null, opts)
             } else {
                 cb(new Error('Authentication failure'), null)
@@ -269,6 +298,64 @@ describe('SASL', function() {
                     client.end()
                     done('wrong server response')
                 }
+            })
+
+        })
+    })
+
+    describe('CUSTOM', function() {
+        var c2s = null
+
+        before(function(done) {
+            c2s = startServer(ServerCustomMechanism, done)
+            done()
+        })
+
+        after(function(done) {
+            c2s.shutdown(done)
+        })
+
+        it('should accept custom authentication', function(done) {
+            var cl = createClient({
+                jid: user.jid,
+                password: user.password,
+                preferred: ClientCustomMechanism.id,
+                autostart: false
+            })
+
+            cl.clearSaslMechanism()
+            cl.registerSaslMechanism(ClientCustomMechanism)
+
+            cl.connect()
+
+            cl.on('online', function() {
+                done()
+            })
+            cl.on('error', function(e) {
+                done(e)
+            })
+
+        })
+
+        it('should not accept custom authentication', function(done) {
+            var cl = createClient({
+                jid: user.jid,
+                password: 'secretsecret',
+                preferred: ClientCustomMechanism.id,
+                autostart: false
+            })
+
+            cl.clearSaslMechanism()
+            cl.registerSaslMechanism(ClientCustomMechanism)
+
+            cl.connect()
+
+            cl.on('online', function() {
+                done('user is not valid')
+            })
+            cl.on('error', function() {
+                // this should happen
+                done()
             })
 
         })
