@@ -1,5 +1,3 @@
-'use strict';
-
 var assert = require('assert')
   , xmpp = require('../index')
 
