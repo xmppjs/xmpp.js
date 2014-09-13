@@ -79,20 +79,24 @@ describe('JID', function() {
         }
     })
 
+    /* jshint -W044 */
     describe('Escaping', function() {
 
-        it('Should escape correctly - issue 43', function() {
-            var test1 = 'test\32@example.com'
-            var test2 = 'test\32a@example.com'
+        it('Should not change string - issue 43', function() {
+            var test = 'test\32@example.com'
 
-            var jid = new xmpp.JID(test1)
+            var jid = new xmpp.JID(test)
             assert.equal(jid.escapeLocal('test\32'), 'test\32')
-            jid = null 
-            var jid = new xmpp.JID(test2)
-            assert.equal(jid.escapeLocal('test\32a'), 'test\5c3a')
-            
         })
 
+        it('Should escape - issue 43', function() {
+            var test = 'test\32a@example.com'
+
+            /* jshint -W100 */
+            /* jshint -W113 */
+            var jid = new xmpp.JID(test)
+            assert.equal(jid.escapeLocal('test\32a'), 'testa')
+        })
     })
 
     describe('serialization', function() {
