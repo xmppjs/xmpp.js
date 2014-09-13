@@ -79,14 +79,17 @@ describe('JID', function() {
         }
     })
 
-    describe.only('Escaping', function() {
+    describe('Escaping', function() {
 
         it('Should escape correctly - issue 43', function() {
             var test1 = 'test\32@example.com'
             var test2 = 'test\32a@example.com'
 
-            xmpp.JID.escape(test1).should.equal(test1)
-            xmpp.JID.escape(test2).should.equal('test\5c3a@example.com')
+            var jid = new xmpp.JID(test1)
+            assert.equal(jid.escapeLocal('test\32'), 'test\32')
+            jid = null 
+            var jid = new xmpp.JID(test2)
+            assert.equal(jid.escapeLocal('test\32a'), 'test\5c3a')
             
         })
 
