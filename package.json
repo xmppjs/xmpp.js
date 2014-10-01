@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "hat": "~0.0.3",
-    "node-xmpp-core": "^1.0.0-alpha7",
+    "node-xmpp-core": "~1.0.0-alpha7",
     "debug": "~0.7.4"
   },
   "devDependencies": {
