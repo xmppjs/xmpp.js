@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert')
-  , stanza = require('../lib/stanza')
+  , stanza = require('../index').Stanza
 
 describe('Stanza', function() {
 

@@ -1,6 +1,7 @@
 var extend = require('util')._extend
 
-extend(exports, require('./lib/stanza'))
+exports.Stanza = {}
+extend(exports.Stanza, require('./lib/stanza'))
 exports.JID = require('./lib/jid')
 exports.Connection = require('./lib/connection')
 exports.SRV = require('./lib/srv')
