@@ -224,7 +224,7 @@ describe('BOSH connections', function() {
         })
     })
     
-    it.skip('Disconects', function(done) {
+    it.skip('Disconnects', function(done) {
         client = new Client({
             jid: jid,
             password: password,
