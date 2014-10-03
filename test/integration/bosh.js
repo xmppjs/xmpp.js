@@ -250,7 +250,7 @@ describe('BOSH connections', function() {
     describe('Prebind', function() {
       
         it('Returns RID and SID', function(done) {
-
+            this.timeout(30000)
             var prebind = new Client({
                 jid: jid,
                 password: password,
@@ -264,6 +264,7 @@ describe('BOSH connections', function() {
                         data.rid.length.should.be.above(5)
                         data.sid.should.exist
                         data.sid.length.should.be.above(5)
+                        done()
                     }
                 }
             })
