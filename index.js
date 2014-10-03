@@ -145,26 +145,26 @@ Client.prototype.connect = function() {
         var cb = this.options.bosh.prebind
         delete this.options.bosh.prebind
         var cmd = 'node ' + process.cwd() +
-            '/node_modules/node-xmpp-client/lib/prebind.js '
-        for (var o in this.options) {
-            cmd += '--' + o + ' ' + this.options[o] + ' '
-        }
+            '/lib/prebind.js '
+        delete this.options.bosh.prebind
+        cmd += encodeURI(JSON.stringify(this.options))
         exec(
             cmd,
             function (error, stdout, stderr) {
                 if (error || stderr) {
-                cb(error || stderr, null)
-            } else {
-                var r = stdout.match(/rid:+[ 0-9]*/i)
-                r = (r[0].split(':'))[1].trim()
-                var s = stdout.match(/sid:+[ a-z+'"-_A-Z+0-9]*/i)
-                s = (s[0].split(':'))[1]
-                    .replace('\'','')
-                    .replace('\'','')
-                    .trim()
-                cb(null, { rid: r, sid: s })
+                    cb(error || stderr)
+                } else {
+                    var r = stdout.match(/rid:+[ 0-9]*/i)
+                    r = (r[0].split(':'))[1].trim()
+                    var s = stdout.match(/sid:+[ a-z+'"-_A-Z+0-9]*/i)
+                    s = (s[0].split(':'))[1]
+                        .replace('\'','')
+                        .replace('\'','')
+                        .trim()
+                    cb(null, { rid: r, sid: s })
+                }
             }
-        })
+        )
     } else {
         this.options.xmlns = NS_CLIENT
         /* jshint camelcase: false */
