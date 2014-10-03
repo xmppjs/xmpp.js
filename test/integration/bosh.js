@@ -250,8 +250,8 @@ describe('BOSH connections', function() {
     describe('Prebind', function() {
       
         it('Returns RID and SID', function(done) {
-            this.timeout(30000)
-            var prebind = new Client({
+            /* jshint -W031 */
+            new Client({
                 jid: jid,
                 password: password,
                 preferred: 'PLAIN',
@@ -268,6 +268,7 @@ describe('BOSH connections', function() {
                     }
                 }
             })
+
         })
         
     })

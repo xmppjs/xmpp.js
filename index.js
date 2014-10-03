@@ -152,18 +152,19 @@ Client.prototype.connect = function() {
             cmd,
             function (error, stdout, stderr) {
                 if (error || stderr) {
-                cb(error || stderr, null)
-            } else {
-                var r = stdout.match(/rid:+[ 0-9]*/i)
-                r = (r[0].split(':'))[1].trim()
-                var s = stdout.match(/sid:+[ a-z+'"-_A-Z+0-9]*/i)
-                s = (s[0].split(':'))[1]
-                    .replace('\'','')
-                    .replace('\'','')
-                    .trim()
-                cb(null, { rid: r, sid: s })
+                    cb(error || stderr)
+                } else {
+                    var r = stdout.match(/rid:+[ 0-9]*/i)
+                    r = (r[0].split(':'))[1].trim()
+                    var s = stdout.match(/sid:+[ a-z+'"-_A-Z+0-9]*/i)
+                    s = (s[0].split(':'))[1]
+                        .replace('\'','')
+                        .replace('\'','')
+                        .trim()
+                    cb(null, { rid: r, sid: s })
+                }
             }
-        })
+        )
     } else {
         this.options.xmlns = NS_CLIENT
         /* jshint camelcase: false */
