@@ -246,5 +246,29 @@ describe('BOSH connections', function() {
             done()
         })
     })
+    
+    describe('Prebind', function() {
+      
+        it('Returns RID and SID', function(done) {
+
+            var prebind = new Client({
+                jid: jid,
+                password: password,
+                preferred: 'PLAIN',
+                wait: '60',
+                bosh: {
+                    url: 'http://localhost:5280/http-bind',
+                    prebind: function(error, data) {
+                        if (error) return done(error)
+                        data.rid.should.exist
+                        data.rid.length.should.be.above(5)
+                        data.sid.should.exist
+                        data.sid.length.should.be.above(5)
+                    }
+                }
+            })
+        })
+        
+    })
 
 })
