@@ -144,7 +144,7 @@ Client.prototype.connect = function() {
         debug('load bosh prebind')
         var cb = this.options.bosh.prebind
         delete this.options.bosh.prebind
-        var cmd = 'node ' + process.cwd() +
+        var cmd = 'node ' + __dirname +
             '/lib/prebind.js '
         delete this.options.bosh.prebind
         cmd += encodeURI(JSON.stringify(this.options))
