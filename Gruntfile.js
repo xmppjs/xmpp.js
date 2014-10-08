@@ -30,7 +30,7 @@ module.exports = function(grunt) {
                 },
                 options: {
                     alias : 'request:browser-request',
-                    ignore : ['node-stringprep', 'faye-websocket', './srv', 'dns', 'tls']
+                    ignore : ['faye-websocket', './srv', 'dns', 'tls']
                 }
             }
         },

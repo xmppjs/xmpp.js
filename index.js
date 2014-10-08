@@ -144,11 +144,10 @@ Client.prototype.connect = function() {
         debug('load bosh prebind')
         var cb = this.options.bosh.prebind
         delete this.options.bosh.prebind
-        var cmd = 'node ' + process.cwd() +
-            '/node_modules/node-xmpp-client/lib/prebind.js '
-        for (var o in this.options) {
-            cmd += '--' + o + ' ' + this.options[o] + ' '
-        }
+        var cmd = 'node ' + __dirname +
+            '/lib/prebind.js '
+        delete this.options.bosh.prebind
+        cmd += encodeURI(JSON.stringify(this.options))
         exec(
             cmd,
             function (error, stdout, stderr) {
