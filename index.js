@@ -417,5 +417,5 @@ Client.prototype.unregisterSaslMechanism = function(method) {
 
 Client.SASL = sasl
 Client.Client = Client
-
+Client.Element = ltx.Element
 module.exports = Client
