@@ -56,14 +56,14 @@ module.exports = function(grunt) {
         },
         'mocha_istanbul': {
             coveralls: {
-                src: 'test',
+                src: 'test/unit',
                 options: {
                     coverage: true,
                     legend: true,
-                    check: {
+                    /* check: {
                         lines: 90,
                         statements: 90
-                    },
+                    }, */
                     root: './lib',
                     reportFormats: [ 'lcov', 'html' ]
                 }
@@ -93,7 +93,7 @@ module.exports = function(grunt) {
     // Configure tasks
     grunt.registerTask('default', ['test'])
     grunt.registerTask('coveralls', ['mocha_istanbul:coveralls'])
-    grunt.registerTask('test', ['clean', 'mochacli:unit', 'browserify', 'jshint'])
-    grunt.registerTask('integration-test', ['mochacli', 'jshint', 'coveralls' ])
+    grunt.registerTask('test', ['clean', 'mochacli:unit', 'browserify', 'jshint', 'coveralls' ])
+    grunt.registerTask('integration-test', ['mochacli', 'jshint' ])
     grunt.registerTask('dev', ['browserify', 'connect', 'watch'])
 }
