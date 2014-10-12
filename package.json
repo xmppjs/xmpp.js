@@ -31,7 +31,6 @@
     "grunt-contrib-jshint": "0.10.0",
     "grunt-mocha-cli": "~1.8.0",
     "grunt-mocha-istanbul": "^2.1.0",
-    "istanbul": "^0.3.2",
     "mocha": "^1.21.5",
     "node-xmpp-client": "~1.0.0",
     "pem": "~1.4.1",
