@@ -2,7 +2,7 @@
 
 var Client = require('../../index')
   , helper = require('../helper')
-  , ltx = require('node-xmpp-core').ltx
+  , Element = require('node-xmpp-core').Stanza.Element
 
 require('should')
 
@@ -125,7 +125,7 @@ describe('BOSH connections', function() {
             }
         })
         
-        var ping = new ltx.Element(
+        var ping = new Element(
             'iq', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
         
@@ -147,7 +147,7 @@ describe('BOSH connections', function() {
             }
         })
         
-        var ping = new ltx.Element(
+        var ping = new Element(
             'iq', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
         
@@ -171,7 +171,7 @@ describe('BOSH connections', function() {
             }
         })
         
-        var badPing = new ltx.Element(
+        var badPing = new Element(
             'wtf', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
         
@@ -233,7 +233,7 @@ describe('BOSH connections', function() {
             }
         })
         
-        var ping = new ltx.Element(
+        var ping = new Element(
             'iq', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
         
