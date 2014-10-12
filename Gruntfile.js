@@ -53,7 +53,32 @@ module.exports = function(grunt) {
             connect: {
                 files: ['**/*.js']
             }
+        },
+        'mocha_istanbul': {
+            coveralls: {
+                src: 'test',
+                options: {
+                    coverage: true,
+                    legend: true,
+                    check: {
+                        lines: 90,
+                        statements: 90
+                    },
+                    root: './lib',
+                    reportFormats: [ 'lcov', 'html' ]
+                }
+            }
         }
+    })
+    
+    grunt.event.on('coverage', function(lcov, done) {
+        require('coveralls').handleInput(lcov, function(error) {
+            if (error) {
+                console.log(error)
+                return done(error)
+            }
+            done()
+        })
     })
 
     // Load the plugins
@@ -66,7 +91,8 @@ module.exports = function(grunt) {
 
     // Configure tasks
     grunt.registerTask('default', ['test'])
+    grunt.registerTask('coveralls', ['mocha_istanbul:coveralls'])
     grunt.registerTask('test', ['clean', 'mochacli:unit', 'browserify', 'jshint'])
-    grunt.registerTask('integration-test', ['mochacli', 'jshint' ])
+    grunt.registerTask('integration-test', ['mochacli', 'jshint', 'coveralls' ])
     grunt.registerTask('dev', ['browserify', 'connect', 'watch'])
 }

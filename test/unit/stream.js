@@ -2,7 +2,7 @@
 
 var Client = require('../../index')
   , net = require('net')
-  , ltx = require('node-xmpp-core').ltx
+  , ltx = require('ltx')
 require('should')
 
 /* jshint -W030 */

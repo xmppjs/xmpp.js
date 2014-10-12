@@ -3,7 +3,6 @@
 var Session = require('./lib/session')
   , Connection = require('node-xmpp-core').Connection
   , JID = require('node-xmpp-core').JID
-  , ltx = require('node-xmpp-core').ltx
   , Stanza = require ('node-xmpp-core').Stanza
   , sasl = require('./lib/sasl')
   , Anonymous = require('./lib/authentication/anonymous')
@@ -268,7 +267,7 @@ Client.prototype._handleAuthState = function(stanza) {
     if (stanza.is('challenge', NS_XMPP_SASL)) {
         var challengeMsg = decode64(stanza.getText())
         var responseMsg = encode64(this.mech.challenge(challengeMsg))
-        var response = new ltx.Element(
+        var response = new Stanza.Element(
             'response', { xmlns: NS_XMPP_SASL }
         ).t(responseMsg)
         this.send(response)
@@ -308,7 +307,7 @@ Client.prototype._handlePreAuthState = function() {
         var attrs = this.mech.authAttrs()
         attrs.xmlns = NS_XMPP_SASL
         attrs.mechanism = this.mech.name
-        this.send(new ltx.Element('auth', attrs)
+        this.send(new Stanza.Element('auth', attrs)
             .t(authMsg))
     } else {
         this.emit('error', 'No usable SASL mechanism')
@@ -331,7 +330,7 @@ Client.prototype.useFeatures = function() {
                !this.did_bind &&
                this.streamFeatures.getChild('bind', NS_XMPP_BIND)) {
         this.state = STATE_BIND
-        var bindEl = new ltx.Element(
+        var bindEl = new Stanza.Element(
             'iq',
             { type: 'set', id: IQID_BIND }
         ).c('bind', { xmlns: NS_XMPP_BIND })
@@ -342,7 +341,7 @@ Client.prototype.useFeatures = function() {
                !this.did_session &&
                this.streamFeatures.getChild('session', NS_XMPP_SESSION)) {
         this.state = STATE_SESSION
-        var stanza = new ltx.Element(
+        var stanza = new Stanza.Element(
           'iq',
           { type: 'set', to: this.jid.domain, id: IQID_SESSION  }
         ).c('session', { xmlns: NS_XMPP_SESSION })
@@ -357,7 +356,7 @@ Client.prototype.useFeatures = function() {
 
 Client.prototype.doRegister = function() {
     var id = 'register' + Math.ceil(Math.random() * 99999)
-    var iq = new ltx.Element(
+    var iq = new Stanza.Element(
         'iq',
         { type: 'set', id: id, to: this.jid.domain }
     ).c('query', { xmlns: NS_REGISTER })
@@ -418,6 +417,5 @@ Client.prototype.unregisterSaslMechanism = function(method) {
 
 Client.SASL = sasl
 Client.Client = Client
-Client.Element = ltx.Element
 Client.Stanza = Stanza
 module.exports = Client
