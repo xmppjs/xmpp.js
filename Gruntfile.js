@@ -28,7 +28,7 @@ module.exports = function(grunt) {
                         statements: 90
                     }, */
                     root: './lib',
-                    reportFormats: ['lcov']
+                    reportFormats: [ 'lcov', 'html' ]
                 }
             }
         }
