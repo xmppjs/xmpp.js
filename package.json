@@ -44,7 +44,7 @@
     "grunt-mocha-cli": "~1.3.0",
     "grunt-mocha-istanbul": "^2.1.0",
     "ltx": "^0.6.0",
-    "node-xmpp-server": "~1.0.0",
+    "node-xmpp-server": "~1.0.0-alpha7",
     "should": "~2.1.1"
   },
   "browser": {
