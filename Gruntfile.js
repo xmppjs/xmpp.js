@@ -88,6 +88,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect')
     grunt.loadNpmTasks('grunt-contrib-clean')
     grunt.loadNpmTasks('grunt-contrib-watch')
+    grunt.loadNpmTasks('grunt-mocha-istanbul')
 
     // Configure tasks
     grunt.registerTask('default', ['test'])
