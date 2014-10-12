@@ -32,7 +32,7 @@
     "grunt-mocha-cli": "~1.8.0",
     "grunt-mocha-istanbul": "^2.1.0",
     "mocha": "^1.21.5",
-    "node-xmpp-client": "~1.0.0",
+    "node-xmpp-client": "~1.0.0-alpha13",
     "pem": "~1.4.1",
     "should": "~4.0.4"
   }
