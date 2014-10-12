@@ -1,7 +1,7 @@
 'use strict';
 
 var C2SServer = require('../index').C2SServer
-  , ltx = require('node-xmpp-core').ltx
+  , Element = require('node-xmpp-core').Stanza.Element
   , net = require('net')
   , rack = require('hat').rack
   , Client = require('node-xmpp-client')
@@ -67,7 +67,7 @@ function startServer(mechanism) {
         })
 
         stream.on('online', function() {
-            stream.send(new ltx.Element('message', {
+            stream.send(new Element('message', {
                     type: 'chat'
                 })
                 .c('body')

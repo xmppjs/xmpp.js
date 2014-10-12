@@ -15,6 +15,7 @@ module.exports = {
         Plain: require('./lib/authentication/plain'),
         DigestMD5: require('./lib/authentication/digestmd5'),
         XOAuth2: require('./lib/authentication/xoauth2'),
-        Anonymous: require('./lib/authentication/anonymous')
+        Anonymous: require('./lib/authentication/anonymous'),
+        Delegate: require('./lib/authentication/delegate')
     }
 }
