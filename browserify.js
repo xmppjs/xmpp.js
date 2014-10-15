@@ -1,13 +1,13 @@
 var Connection = require('node-xmpp-core').Connection
   , Client = require('./index')
   , JID = require('node-xmpp-core').JID
-  , ltx = require('node-xmpp-core').ltx
+  , Element = require('node-xmpp-core').Stanza.Element
   , Stanza = require('node-xmpp-core').Stanza
 
 exports.Connection = Connection
 exports.Client = Client
 exports.JID = JID
-exports.Element = ltx.Element
+exports.Element = Element
 exports.Stanza = Stanza.Stanza
 exports.Message = Stanza.Message
 exports.Presence = Stanza.Presence
