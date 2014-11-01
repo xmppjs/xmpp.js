@@ -94,6 +94,6 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['test'])
     grunt.registerTask('coveralls', ['mocha_istanbul:coveralls'])
     grunt.registerTask('test', ['clean', 'mochacli:unit', 'browserify', 'jshint', 'coveralls' ])
-    grunt.registerTask('integration-test', ['mochacli', 'jshint', 'coveralls' ])
+    grunt.registerTask('integration-test', ['mochacli:integration', 'test'])
     grunt.registerTask('dev', ['browserify', 'connect', 'watch'])
 }
