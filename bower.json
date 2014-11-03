@@ -1,7 +1,7 @@
 {
   "name": "node-xmpp-client",
   "main": "node-xmpp-browser.js",
-  "version": "1.0.2",
+  "version": "1.0.0-alpha18",
   "homepage": "https://github.com/node-xmpp/node-xmpp-client",
   "authors": [
     "Lloyd Watkin <lloyd@evilprofessor.co.uk>"
@@ -20,5 +20,9 @@
     "bower_components",
     "test",
     "tests"
+  ],
+  "moduleType": [
+    "globals",
+    "node"
   ]
 }
