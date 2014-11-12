@@ -29,7 +29,7 @@ describe('Websocket connections', function() {
             password: password,
             register: true,
             websocket: {
-                url: 'ws://localhost:5281/xmpp-websocket'
+                url: 'http://localhost:5281/xmpp-websocket'
             }
         })
         client.on('online', function(data) {
@@ -46,7 +46,7 @@ describe('Websocket connections', function() {
             jid: jid,
             password: 'not ' + password,
             websocket: {
-                url: 'ws://localhost:5281/xmpp-websocket'
+                url: 'http://localhost:5281/xmpp-websocket'
             }
         })
         client.on('online', function() {
@@ -65,7 +65,7 @@ describe('Websocket connections', function() {
             jid: jid + '/' + resource,
             password: password,
             websocket: {
-                url: 'ws://localhost:5281/xmpp-websocket'
+                url: 'http://localhost:5281/xmpp-websocket'
             }
         })
         client.on('online', function(data) {
@@ -83,7 +83,7 @@ describe('Websocket connections', function() {
             jid: jid,
             password: password,
             websocket: {
-                url: 'ws://localhost:5281/xmpp-websocket'
+                url: 'http://localhost:5281/xmpp-websocket'
             }
         })
         client.on('online', function(data) {
@@ -101,7 +101,7 @@ describe('Websocket connections', function() {
             jid: jid,
             password: 'not ' + password,
             websocket: {
-                url: 'ws://localhost:5281/xmpp-websocket'
+                url: 'http://localhost:5281/xmpp-websocket'
             },
             register: true
         })
@@ -121,7 +121,7 @@ describe('Websocket connections', function() {
             jid: jid,
             password: password,
             websocket: {
-                url: 'ws://localhost:5281/xmpp-websocket'
+                url: 'http://localhost:5281/xmpp-websocket'
             }
         })
         
@@ -143,7 +143,7 @@ describe('Websocket connections', function() {
             jid: jid,
             password: password,
             websocket: {
-                url: 'ws://localhost:5281/xmpp-websocket'
+                url: 'http://localhost:5281/xmpp-websocket'
             }
         })
         
@@ -167,7 +167,7 @@ describe('Websocket connections', function() {
             jid: jid,
             password: password,
             websocket: {
-                url: 'ws://localhost:5281/xmpp-websocket'
+                url: 'http://localhost:5281/xmpp-websocket'
             }
         })
         
@@ -191,7 +191,7 @@ describe('Websocket connections', function() {
                 jid: jid,
                 password: password,
                 websocket: {
-                    url: 'ws://localhost:5281/xmpp-websocket'
+                    url: 'http://localhost:5281/xmpp-websocket'
                 }
             })
             client.on('error', function(error) {
@@ -212,7 +212,7 @@ describe('Websocket connections', function() {
             jid: jid,
             password: password,
             websocket: {
-                url: 'ws://localhost:5281/xmpp-websocket'
+                url: 'http://localhost:5281/xmpp-websocket'
             }
         })
         client.on('error', function(error) {
@@ -229,7 +229,7 @@ describe('Websocket connections', function() {
             jid: jid,
             password: password,
             websocket: {
-                url: 'ws://localhost:5281/xmpp-websocket'
+                url: 'http://localhost:5281/xmpp-websocket'
             }
         })
         
