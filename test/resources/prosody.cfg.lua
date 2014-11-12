@@ -14,7 +14,8 @@ modules_enabled = {
 		"register";
 		"admin_adhoc"; 
 		"posix";
-                "bosh";
+        "bosh";
+        "websocket";
 };
 
 allow_registration = true;
