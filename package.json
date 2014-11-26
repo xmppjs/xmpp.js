@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp-core",
-  "version": "1.0.0-alpha10",
+  "version": "1.0.0-alpha11",
   "description": "Core files in the node-xmpp project",
   "main": "index.js",
   "scripts": {
