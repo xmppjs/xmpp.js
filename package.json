@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp-core",
-  "version": "1.0.0-alpha9",
+  "version": "1.0.0-alpha10",
   "description": "Core files in the node-xmpp project",
   "main": "index.js",
   "scripts": {
@@ -26,8 +26,12 @@
     "debug": "^0.8.1"
   },
   "devDependencies": {
+    "coveralls": "^2.11.2",
     "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.7.2",
     "grunt-mocha-cli": "~1.3.0",
-    "grunt-contrib-jshint": "~0.7.2"
+    "grunt-mocha-istanbul": "^2.1.0",
+    "istanbul": "^0.3.2",
+    "mocha": "^1.21.5"
   }
 }

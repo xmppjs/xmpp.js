@@ -7,6 +7,7 @@ Library to handle all the core functionality for:
 * [node-xmpp-server](https://github.com/node-xmpp/node-xmpp-server)
 
 [![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-core.svg?branch=master)](http://travis-ci.org/node-xmpp/node-xmpp-core)
+[![Coverage Status](https://img.shields.io/coveralls/node-xmpp/node-xmpp-core.svg)](https://coveralls.io/r/node-xmpp/node-xmpp-core)
 
 ## Installation
 
