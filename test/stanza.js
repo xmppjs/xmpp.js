@@ -119,4 +119,30 @@ describe('Stanza', function() {
 
     })
 
+    describe('clone', function() {
+
+        var s = new stanza.Stanza('iq')
+        .c('foo', {xmlns: 'bar'}).up()
+        .c('bar', {xmlns: 'foo'})
+        .root()
+
+        it('clones the stanza', function() {
+            var c = s.clone();
+            assert.equal(s.toString(), c.toString())
+        })
+
+        it('returns a Stanza instance', function() {
+            var c = s.clone();
+            assert(c instanceof stanza.Stanza);
+        })
+
+        it('doesn\'t modify clone if original is modified', function() {
+            var c = s.clone();
+            s.attr('foo', 'bar');
+            assert.equal(c.attr('foo'), undefined)
+            s.c('foobar')
+            assert.equal(c.getChild('foobar'), undefined)
+        })
+    })
+
 })
