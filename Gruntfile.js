@@ -1,11 +1,13 @@
 'use strict';
 
+var helper = require('./test/helper')
+
 module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         jshint: {
-            allFiles: ['gruntfile.js', 'lib/**/*.js', 'examples/**/*.js', 'test/**/*.js'],
+            allFiles: ['gruntfile.js', 'lib/**/*.js', 'examples/**/*.js', 'test/unit/**/*.js', 'test/integration/**/*.js', 'test/browser/**/*.js', 'test/helper.js'],
             options: {
                 jshintrc: '.jshintrc',
             }
@@ -23,6 +25,22 @@ module.exports = function(grunt) {
                 timeout: 10000
             }
         },
+        mocha_phantomjs: {
+          all: ['test/browser/bosh/**/*.html']
+        },
+        connect: {
+          server: {
+            options: {
+              port: 8000,
+              base: '.',
+            },
+            target: {
+              options: {
+                keepalive: false
+              }
+            }
+          }
+        },
         browserify: {
             dist: {
                 files: {
@@ -31,13 +49,6 @@ module.exports = function(grunt) {
                 options: {
                     alias : 'request:browser-request',
                     ignore : ['faye-websocket', './srv', 'dns', 'tls']
-                }
-            }
-        },
-        connect: {
-            target: {
-                options: {
-                    keepalive: false
                 }
             }
         },
@@ -89,11 +100,22 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean')
     grunt.loadNpmTasks('grunt-contrib-watch')
     grunt.loadNpmTasks('grunt-mocha-istanbul')
+    grunt.loadNpmTasks('grunt-mocha-phantomjs')
+    grunt.loadNpmTasks('grunt-contrib-connect')
 
     // Configure tasks
     grunt.registerTask('default', ['test'])
     grunt.registerTask('coveralls', ['mocha_istanbul:coveralls'])
     grunt.registerTask('test', ['clean', 'mochacli:unit', 'browserify', 'jshint', 'coveralls' ])
     grunt.registerTask('integration-test', ['mochacli:integration', 'test'])
+    grunt.registerTask('browser-test', ['browserify', 'connect', 'prosody-start', 'mocha_phantomjs', 'prosody-stop'])
+    grunt.registerTask('full-test', ['test', 'mocha:integration', 'mocha:browser'])
     grunt.registerTask('dev', ['browserify', 'connect', 'watch'])
+    
+    grunt.registerTask('prosody-start', 'Start Prosody', function() {
+        helper.startServer(this.async())
+    })
+    grunt.registerTask('prosody-stop', 'Stop Prosody', function() {
+        helper.stopServer(this.async())
+    })
 }
