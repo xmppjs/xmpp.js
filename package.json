@@ -6,7 +6,8 @@
   "scripts": {
     "test": "grunt test",
     "browserify": "grunt browserify",
-    "integration-test": "grunt integration-test"
+    "integration-test": "grunt integration-test",
+    "full-test": "grunt full-test"
   },
   "repository": {
     "type": "git",
