@@ -1279,6 +1279,7 @@ var EventEmitter = require('events').EventEmitter
   , WebSocket = require('faye-websocket') && require('faye-websocket').Client ?
       require('faye-websocket').Client : window.WebSocket
   , Connection = require('node-xmpp-core').Connection
+  , debug = require('debug')('xmpp:client:websockets')
 
 function WSConnection(opts) {
     EventEmitter.call(this)
@@ -1343,7 +1344,7 @@ WSConnection.prototype.stopParser = function() {
 }
 
 WSConnection.prototype.onmessage = function(msg) {
-    console.log('ws msg <--', msg.data)
+    debug('ws msg <--', msg.data)
     if (msg && msg.data && this.parser)
         this.parser.write(msg.data)
 }
@@ -1391,7 +1392,7 @@ WSConnection.prototype.startStream = function() {
 WSConnection.prototype.send = function(stanza) {
     if (stanza.root) stanza = stanza.root()
     stanza = stanza.toString()
-    console.log('ws send -->', stanza)
+    debug('ws send -->', stanza)
     this.websocket.send(stanza)
 }
 
@@ -1414,7 +1415,7 @@ WSConnection.prototype.onerror = function(e) {
 
 module.exports = WSConnection
 
-},{"events":24,"faye-websocket":16,"node-xmpp-core":39,"util":35}],"B+8hfE":[function(require,module,exports){
+},{"debug":36,"events":24,"faye-websocket":16,"node-xmpp-core":39,"util":35}],"B+8hfE":[function(require,module,exports){
 // Browser Request
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
