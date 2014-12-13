@@ -7,7 +7,7 @@ var Client = require('../../index')
 require('should')
 
 /* jshint -W030 */
-describe('Websocket connections', function() {
+describe.skip('Websocket connections', function() {
 
     var jid = Math.random().toString(36).substring(7) + '@localhost'
     var password = 'password'
