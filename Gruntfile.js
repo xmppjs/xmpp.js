@@ -26,7 +26,7 @@ module.exports = function(grunt) {
             }
         },
         mocha_phantomjs: {
-          all: ['test/browser/bosh/**/*.html']
+          all: ['test/browser/**/*.html']
         },
         connect: {
           server: {

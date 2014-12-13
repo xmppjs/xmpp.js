@@ -205,6 +205,7 @@ describe('BOSH Browser tests', function(){
             preferred: 'PLAIN'
         })
         client.on('error', function(error) {
+            /* jshint -W030 */
             error.message.should.exist
             client.end()
             done()
