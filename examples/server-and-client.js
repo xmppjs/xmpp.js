@@ -18,7 +18,7 @@ var startServer = function(done) {
         // That's the way you add mods to a given server.
 
         // Allows the developer to register the jid against anything they want
-        c2s.on('register', function(opts, cb) {
+        client.on('register', function(opts, cb) {
             debug('REGISTER')
             cb(true)
         })
