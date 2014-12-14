@@ -1415,7 +1415,9 @@ WSConnection.prototype.onerror = function(e) {
 
 module.exports = WSConnection
 
-},{"debug":36,"events":24,"faye-websocket":16,"node-xmpp-core":39,"util":35}],"B+8hfE":[function(require,module,exports){
+},{"debug":36,"events":24,"faye-websocket":16,"node-xmpp-core":39,"util":35}],"browser-request":[function(require,module,exports){
+module.exports=require('B+8hfE');
+},{}],"B+8hfE":[function(require,module,exports){
 // Browser Request
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -1429,6 +1431,23 @@ module.exports = WSConnection
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+// UMD HEADER START 
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define([], factory);
+    } else if (typeof exports === 'object') {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like enviroments that support module.exports,
+        // like Node.
+        module.exports = factory();
+    } else {
+        // Browser globals (root is window)
+        root.returnExports = factory();
+  }
+}(this, function () {
+// UMD HEADER END
 
 var XHR = XMLHttpRequest
 if (!XHR) throw new Error('missing XMLHttpRequest')
@@ -1889,10 +1908,11 @@ function b64_enc (data) {
 
     return enc;
 }
-module.exports = request;
+    return request;
+//UMD FOOTER START
+}));
+//UMD FOOTER END
 
-},{}],"browser-request":[function(require,module,exports){
-module.exports=require('B+8hfE');
 },{}],16:[function(require,module,exports){
 
 },{}],17:[function(require,module,exports){
@@ -6694,6 +6714,19 @@ function Stanza(name, attrs) {
 
 util.inherits(Stanza, ltx.Element)
 
+Stanza.prototype.clone = function() {
+    var clone = new Stanza(this.name, {})
+    for (var k in this.attrs) {
+        if (this.attrs.hasOwnProperty(k))
+            clone.attrs[k] = this.attrs[k]
+    }
+    for (var i = 0; i < this.children.length; i++) {
+        var child = this.children[i]
+        clone.cnode(child.clone ? child.clone() : child)
+    }
+    return clone
+}
+
 /**
  * Common attribute getters/setters for all stanzas
  */
@@ -6765,6 +6798,7 @@ exports.Stanza = Stanza
 exports.Message = Message
 exports.Presence = Presence
 exports.Iq = Iq
+
 },{"ltx":48,"util":35}],44:[function(require,module,exports){
 'use strict';
 
@@ -7138,6 +7172,19 @@ DOMElement.prototype.removeAttribute = function (name) {
     this.attr(name, null)
 }
 
+DOMElement.prototype.removeAttributeNS = function (ns, name) {
+    var prefix
+    if (ns === 'http://www.w3.org/XML/1998/namespace') {
+        prefix = 'xml'
+    } else {
+        var nss = this.getXmlns()
+        prefix = nss[ns] || ''
+    }
+    if (prefix) {
+        this.attr([prefix, name].join(':'), null)
+    }
+}
+
 DOMElement.prototype.appendChild = function (el) {
     this.cnode(el)
 }
@@ -7452,6 +7499,16 @@ Element.prototype.toString = function() {
         s += c
     })
     return s
+}
+
+Element.prototype.toJSON = function() {
+    return {
+        name: this.name,
+        attrs: this.attrs,
+        children: this.children.map(function(child) {
+            return child && child.toJSON ? child.toJSON() : child;
+        })
+    }
 }
 
 Element.prototype._addChildren = function(writer) {
@@ -7836,11 +7893,12 @@ SaxLtx.prototype.end = function(data) {
 
 function unescapeXml(s) {
     return s.
-        replace(/\&amp;/g, '&').
-        replace(/\&lt;/g, '<').
-        replace(/\&gt;/g, '>').
-        replace(/\&quot;/g, '"').
-        replace(/\&apos;/g, '\'')
+        replace(/\&(amp|#38);/g, '&').
+        replace(/\&(lt|#60);/g, '<').
+        replace(/\&(gt|#62);/g, '>').
+        replace(/\&(quot|#34);/g, '"').
+        replace(/\&(apos|#39);/g, '\'').
+        replace(/\&(nbsp|#160);/g, '\n')
 }
 
 },{"events":24,"util":35}],52:[function(require,module,exports){
