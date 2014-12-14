@@ -14,13 +14,15 @@ modules_enabled = {
 		"register";
 		"admin_adhoc"; 
 		"posix";
-                "bosh";
+        "bosh";
+        "websocket";
 };
 
 allow_registration = true;
 daemonize = true;
 consider_websocket_secure = true;
 consider_bosh_secure = true;
+cross_domain_bosh = true;
 pidfile = "/var/run/prosody/prosody.pid";
 
 c2s_require_encryption = false

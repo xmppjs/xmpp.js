@@ -4,6 +4,7 @@ var Connection = require('node-xmpp-core').Connection
   , JID = require('node-xmpp-core').JID
   , Element = require('node-xmpp-core').Stanza.Element
   , Stanza = require('node-xmpp-core').Stanza
+  , ltx = require('node-xmpp-core').ltx
 
 exports.Connection = Connection
 exports.Client = Client
@@ -13,6 +14,7 @@ exports.Stanza = Stanza.Stanza
 exports.Message = Stanza.Message
 exports.Presence = Stanza.Presence
 exports.Iq = Stanza.Iq
+exports.ltx = ltx
 
 window.XMPP = exports
 
@@ -33,6 +35,7 @@ var Session = require('./lib/session')
   , exec = require('child_process').exec
   , util = require('util')
   , debug = require('debug')('xmpp:client')
+  , ltx = require('node-xmpp-core').ltx
 
 var NS_CLIENT = 'jabber:client'
 var NS_REGISTER = 'jabber:iq:register'
@@ -437,6 +440,7 @@ Client.prototype.unregisterSaslMechanism = function(method) {
 Client.SASL = sasl
 Client.Client = Client
 Client.Stanza = Stanza
+Client.ltx = ltx
 module.exports = Client
 },{"./lib/authentication/anonymous":3,"./lib/authentication/digestmd5":4,"./lib/authentication/external":5,"./lib/authentication/plain":7,"./lib/authentication/xfacebook":8,"./lib/authentication/xoauth2":9,"./lib/sasl":11,"./lib/session":12,"buffer":27,"child_process":16,"debug":36,"node-xmpp-core":39,"util":35}],3:[function(require,module,exports){
 'use strict';

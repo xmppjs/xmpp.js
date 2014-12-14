@@ -14,6 +14,7 @@ var Session = require('./lib/session')
   , exec = require('child_process').exec
   , util = require('util')
   , debug = require('debug')('xmpp:client')
+  , ltx = require('node-xmpp-core').ltx
 
 var NS_CLIENT = 'jabber:client'
 var NS_REGISTER = 'jabber:iq:register'
@@ -418,4 +419,5 @@ Client.prototype.unregisterSaslMechanism = function(method) {
 Client.SASL = sasl
 Client.Client = Client
 Client.Stanza = Stanza
+Client.ltx = ltx
 module.exports = Client

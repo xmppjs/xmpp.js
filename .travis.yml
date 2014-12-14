@@ -13,7 +13,7 @@ before_install:
 - sudo service prosody stop
 before_script:
 - npm install -g grunt-cli
-script: npm run integration-test
+script: npm run full-test
 after_success:
 - if [ "master" -ne $TRAVIS_BRANCH ]; then exit 0; fi;
 - git config --global user.email "deploy@travis-ci.org"
