@@ -12,6 +12,7 @@ before_install:
   - npm i -g npm
   - sudo apt-get install libicu-dev prosody luarocks
   - sudo luarocks install luabitop
+before_script:
   - sudo cp node_modules/node-xmpp-client/test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
   - sudo cp node_modules/node-xmpp-client/test/resources/mod_websocket.lua /usr/lib/prosody/modules/
   - sudo service prosody stop
