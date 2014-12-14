@@ -1,3 +1,0 @@
-[submodule "test/resources/es5-shim"]
-	path = test/resources/es5-shim
-	url = https://@github.com/es-shims/es5-shim.git
