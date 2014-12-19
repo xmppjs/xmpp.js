@@ -5,9 +5,14 @@ module.exports = {
     // C2S
     C2SServer: require('./lib/c2s/server'),
     C2SStream: require('./lib/c2s/stream'),
-
+  
     // BOSH
     BOSHServer: require('./lib/bosh/server'),
+    
+    // Component
+    ComponentServer: require('./lib/component/server'),
+    ComponentStream: require('./lib/component/stream'),
+
 
     // SASL
     auth: {
