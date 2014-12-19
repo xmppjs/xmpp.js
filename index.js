@@ -13,7 +13,6 @@ module.exports = {
     ComponentServer: require('./lib/component/server'),
     ComponentStream: require('./lib/component/stream'),
 
-
     // SASL
     auth: {
         AbstractMechanism: require('./lib/authentication/mechanism'),

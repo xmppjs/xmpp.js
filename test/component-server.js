@@ -6,20 +6,20 @@ var xmpp = require('../index')
   , Message = require('node-xmpp-core').Stanza.Message
 
 var eventChain = []
-var cs = null
+var componentSrv = null
 
 function startServer(done) {
 
     // Sets up the server.
-    cs = new xmpp.ComponentServer({
+    componentSrv = new xmpp.ComponentServer({
         port: 5347
     })
 
-    cs.on('error', function(err) {
-        console.log('cs error: ' + err.message)
+    componentSrv.on('error', function(err) {
+        console.log('componentSrv error: ' + err.message)
     })
 
-    cs.on('connect', function(component) {
+    componentSrv.on('connect', function(component) {
         // allow anything
         component.on('verify-component', function(jid, cb) {
             eventChain.push('verify-component')
@@ -67,7 +67,7 @@ describe('ComponentServer', function() {
     })
 
     after(function(done) {
-        cs.shutdown(done)
+        componentSrv.shutdown(done)
     })
 
     describe('events', function() {

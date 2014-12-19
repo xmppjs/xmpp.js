@@ -1,22 +1,22 @@
 'use strict';
 
 var xmpp = require('../index')
-  , cs = null
+  , componentSrv = null
   , debug = require('debug')('server-and-component')
   , Component = require('node-xmpp-component')
   , ltx = require('node-xmpp-core/node_modules/ltx')
 
 var startServer = function(done) {
     // Sets up the server.
-    cs = new xmpp.ComponentServer({
+    componentSrv = new xmpp.ComponentServer({
         port: 5347
     })
-    cs.on('connect', function(client) {
+    componentSrv.on('connect', function(client) {
 	// Component auth is two step: first, verify that the component is allowed to connect at all, then verify the password is correct
         client.on('verify-component', function(jid, cb) {
 	    if(jid.toString() === "component.example.com")
-		return cb(null, "ThePassword");
-	    else return cb ("Unauthorized");
+		return cb(null, "ThePassword")
+	    else return cb ("Unauthorized")
         })
         client.on('online', function() {
             debug('ONLINE')
