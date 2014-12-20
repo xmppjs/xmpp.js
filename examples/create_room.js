@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var xmpp = require('../index')
     ,argv = process.argv
@@ -31,7 +31,7 @@ cl.on('online', function(data) {
         'iq',
         { to: roomJid, type: 'set' })
     .c('query', { xmlns: 'http://jabber.org/protocol/muc#owner' })
-    .c('x', { xmlns: "jabber:x:data", type: "submit"})
+    .c('x', { xmlns: 'jabber:x:data', type: 'submit' })
 
     //set room to be hidden by sending configuration. ref: http://xmpp.org/extensions/xep-0045.html
     iq.c('field', { 'var': 'FORM_TYPE' })

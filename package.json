@@ -19,12 +19,13 @@
     "node-xmpp-core": "git+https://github.com/node-xmpp/node-xmpp-core.git"
   },
   "devDependencies": {
-    "mocha": ">=1.0.0",
-    "pem": "https://github.com/dodo/pem/tarball/altNames",
     "grunt": "~0.4.1",
+    "grunt-browserify": "~1.3.0",
+    "grunt-cli": "^0.1.13",
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-mocha-cli": "~1.3.0",
-    "grunt-browserify": "~1.3.0",
+    "mocha": ">=1.0.0",
+    "pem": "https://github.com/dodo/pem/tarball/altNames",
     "should": "~3.1.0"
   },
   "browser": {
@@ -81,7 +82,7 @@
   ],
   "engine": "node >=0.8.0",
   "scripts": {
-    "test": "grunt test",
+    "test": "./node_modules/.bin/grunt test",
     "browserify": "browserify -d -o node-xmpp-browser.js -r request:browser-request -i node-stringprep -i faye-websocket -i ./srv -i dns ./lib/node-xmpp-browserify.js"
   }
 }

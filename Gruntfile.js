@@ -11,10 +11,11 @@ module.exports = function(grunt) {
             }
         },
         mochacli: {
-            all: ['test/**/*.js', 'node_modules/node-xmpp-*/test/**/*.js'],
+            all: ['test/**/*.js', 'node_modules/node-xmpp-*/test/**/*.js', '!node_modules/node-xmpp-client/test/browser/**/*.js' ],
             options: {
                 reporter: 'spec',
-                ui: 'tdd'
+                ui: 'tdd',
+                timeout: '4000'
             }
         },
         browserify: {

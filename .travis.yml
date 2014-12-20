@@ -1,15 +1,17 @@
 language: node_js
 node_js:
-  - "0.8"
   - "0.10"
   - "0.11"
 before_install:
-  - "sudo apt-get install libicu-dev"
-  - npm i -g npm
   # Workaround for a permissions issue with Travis virtual machine images
   # that breaks Python's multiprocessing:
   # https://github.com/travis-ci/travis-cookbooks/issues/155
   - sudo rm -rf /dev/shm
   - sudo ln -s /run/shm /dev/shm
+  - npm i -g npm
+  - sudo apt-get install libicu-dev prosody luarocks
+  - sudo luarocks install luabitop
 before_script:
-  - npm install -g grunt-cli
+  - sudo cp node_modules/node-xmpp-client/test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
+  - sudo cp node_modules/node-xmpp-client/test/resources/mod_websocket.lua /usr/lib/prosody/modules/
+  - sudo service prosody stop
