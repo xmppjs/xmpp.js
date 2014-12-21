@@ -23,7 +23,7 @@ function startServer(done) {
         // allow anything
         component.on('verify-component', function(jid, cb) {
             eventChain.push('verify-component')
-            cb(null, "alice")
+            cb(null, 'alice')
         })
 
         component.on('online', function() {
