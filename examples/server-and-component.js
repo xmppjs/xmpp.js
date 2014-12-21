@@ -16,9 +16,10 @@ var startServer = function(done) {
         // first, verify that the component is allowed to connect at all, 
         // then verify the password is correct
         client.on('verify-component', function(jid, cb) {
-	    if(jid.toString() === 'component.example.com')
+	    if (jid.toString() === 'component.example.com') {
 		return cb(null, 'ThePassword')
-	    else return cb ('Unauthorized')
+            }
+            return cb ('Unauthorized')
         })
         client.on('online', function() {
             debug('ONLINE')
@@ -49,10 +50,13 @@ startServer(function() {
     })
     component1.on('online', function() {
         debug('component1 is online')
-        component1.send(new ltx.Element('message', {
-            to: 'testguy@example.com',
-            from: 'fake@example.com'
-        }).c('body').t('HelloWorld'))
+        component1
+          .send(new ltx.Element('message', {
+              to: 'testguy@example.com',
+              from: 'fake@example.com'
+          }
+        ).c('body')
+        .t('HelloWorld'))
     })
     component1.on('stanza', function(stanza) {
         debug('component1', 'received stanza', stanza.root().toString())
