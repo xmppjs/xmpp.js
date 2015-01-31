@@ -32,7 +32,7 @@ Also see the tests run in [travis](http://travis-ci.org/node-xmpp/node-xmpp-serv
 
 ## How to use
 
-Please see the various [examples](https://github.com/node-xmpp/node-xmpp/tree/master/examples).
+Please see the various [examples](https://github.com/node-xmpp/node-xmpp-server/tree/master/examples).
 
 ## Objectives of *node-xmpp-server:*
 
