@@ -34,7 +34,7 @@ Also see the tests run in [travis](http://travis-ci.org/node-xmpp/node-xmpp-clie
 
 ## How to use
 
-Please see the various [examples](https://github.com/astro/node-xmpp/tree/master/examples).
+Please see the various [examples](https://github.com/node-xmpp/node-xmpp-client/tree/master/examples).
 
 ## Features
 
