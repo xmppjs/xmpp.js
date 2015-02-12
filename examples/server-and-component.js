@@ -4,7 +4,7 @@ var xmpp = require('../index')
   , componentSrv = null
   , debug = require('debug')('server-and-component')
   , Component = require('node-xmpp-component')
-  , ltx = require('node-xmpp-core/node_modules/ltx')
+  , ltx = require('node-xmpp-core').ltx
 
 var startServer = function(done) {
     // Sets up the server.
