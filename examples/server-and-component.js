@@ -12,8 +12,8 @@ var startServer = function(done) {
         port: 5347
     })
     componentSrv.on('connect', function(client) {
-	    // Component auth is two step: 
-        // first, verify that the component is allowed to connect at all, 
+	    // Component auth is two step:
+        // first, verify that the component is allowed to connect at all,
         // then verify the password is correct
         client.on('verify-component', function(jid, cb) {
 	    if (jid.toString() === 'component.example.com') {
