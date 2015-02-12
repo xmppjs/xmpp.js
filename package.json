@@ -23,7 +23,8 @@
   "dependencies": {
     "hat": "~0.0.3",
     "node-xmpp-core": "^1.0.0-alpha10",
-    "debug": "~0.7.4"
+    "debug": "~0.7.4",
+    "ws": "~0.7.1"
   },
   "devDependencies": {
     "coveralls": "^2.11.2",

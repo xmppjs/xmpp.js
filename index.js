@@ -8,6 +8,9 @@ module.exports = {
   
     // BOSH
     BOSHServer: require('./lib/bosh/server'),
+
+    // Websocket
+    WebSocketServer : require('./lib/websocket/server'),
     
     // Component
     ComponentServer: require('./lib/component/server'),
