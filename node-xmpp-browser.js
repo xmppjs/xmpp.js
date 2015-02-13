@@ -840,7 +840,8 @@ function BOSHConnection(opts) {
     this.xmlnsAttrs = {
         xmlns: 'http://jabber.org/protocol/httpbind',
         'xmlns:xmpp': 'urn:xmpp:xbosh',
-        'xmlns:stream': 'http://etherx.jabber.org/streams'
+        'xmpp:version': '1.0',
+        'xmlns:stream': 'http://etherx.jabber.org/streams',
     }
     if (opts.xmlns) {
         for (var prefix in opts.xmlns) {
@@ -854,14 +855,14 @@ function BOSHConnection(opts) {
     this.currentRequests = 0
     this.queue = []
     this.rid = Math.ceil(Math.random() * 9999999999)
+    this.initialStart = true;
 
     this.request({
             to: this.jid.domain,
             ver: '1.6',
             wait: this.wait,
             hold: '1',
-            content: this.contentType,
-            'xmpp:version': '1.0'
+            content: this.contentType
         },
         [],
         function(err, bodyEl) {
@@ -879,6 +880,7 @@ function BOSHConnection(opts) {
                 }
             }
         })
+
 }
 
 util.inherits(BOSHConnection, EventEmitter)
@@ -888,6 +890,35 @@ BOSHConnection.prototype.contentType = 'text/xml; charset=utf-8'
 BOSHConnection.prototype.send = function(stanza) {
     this.queue.push(stanza.root())
     process.nextTick(this.mayRequest.bind(this))
+}
+
+BOSHConnection.prototype.startStream = function() {
+    var that = this
+
+    if(!this.initialStart) {
+        this.rid++
+        this.request({
+            to: this.jid.domain,
+            'xmpp:restart': 'true'
+        },
+        [],
+        function (err, bodyEl) {
+            if (err) {
+                that.emit('error', err)
+                that.emit('disconnect')
+                that.emit('end')
+                delete that.sid
+                that.emit('close')
+            } else {
+                that.streamOpened = true
+                if (bodyEl) that.processResponse(bodyEl)
+
+                process.nextTick(that.mayRequest.bind(that))
+            }
+        })
+    } else {
+        this.initialStart = false
+    }
 }
 
 BOSHConnection.prototype.processResponse = function(bodyEl) {
@@ -973,6 +1004,8 @@ BOSHConnection.prototype.request = function(attrs, children, cb, retry) {
     for (var i = 0; i < children.length; i++) {
         boshEl.cnode(children[i])
     }
+
+    debug('send bosh request:' + boshEl.toString());
 
     request({
             uri: this.boshURL,
