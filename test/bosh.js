@@ -136,12 +136,12 @@ describe('BOSH client/server', function () {
             eventChain = []
 
             // end xmpp stream
-            cl.on('end', function () {
+            cl.once('end', function () {
                 eventChain.push('clientend')
             })
 
             // close socket
-            cl.on('close', function () {
+            cl.once('close', function () {
                 eventChain.push('clientclose')
                 assert.deepEqual(eventChain, ['end', 'disconnect', 'close', 'clientend', 'clientclose'])
                 done()
