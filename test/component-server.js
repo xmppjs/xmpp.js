@@ -79,7 +79,7 @@ describe('ComponentServer', function() {
                 jid: 'bob.example.com',
                 password: 'alice',
                 host: 'localhost',
-		port: 5347
+                port: 5347
             })
             cl.on('online', function() {
                 eventChain.push('componentonline')
