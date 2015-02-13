@@ -840,8 +840,7 @@ function BOSHConnection(opts) {
     this.xmlnsAttrs = {
         xmlns: 'http://jabber.org/protocol/httpbind',
         'xmlns:xmpp': 'urn:xmpp:xbosh',
-        'xmlns:stream': 'http://etherx.jabber.org/streams',
-        'xmpp:version': '1.0'
+        'xmlns:stream': 'http://etherx.jabber.org/streams'
     }
     if (opts.xmlns) {
         for (var prefix in opts.xmlns) {
@@ -861,7 +860,8 @@ function BOSHConnection(opts) {
             ver: '1.6',
             wait: this.wait,
             hold: '1',
-            content: this.contentType
+            content: this.contentType,
+            'xmpp:version': '1.0'
         },
         [],
         function(err, bodyEl) {
@@ -883,7 +883,7 @@ function BOSHConnection(opts) {
 
 util.inherits(BOSHConnection, EventEmitter)
 
-BOSHConnection.prototype.contentType = 'text/xml charset=utf-8'
+BOSHConnection.prototype.contentType = 'text/xml; charset=utf-8'
 
 BOSHConnection.prototype.send = function(stanza) {
     this.queue.push(stanza.root())
