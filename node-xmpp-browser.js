@@ -840,8 +840,7 @@ function BOSHConnection(opts) {
     this.xmlnsAttrs = {
         xmlns: 'http://jabber.org/protocol/httpbind',
         'xmlns:xmpp': 'urn:xmpp:xbosh',
-        'xmpp:version': '1.0',
-        'xmlns:stream': 'http://etherx.jabber.org/streams',
+        'xmlns:stream': 'http://etherx.jabber.org/streams'
     }
     if (opts.xmlns) {
         for (var prefix in opts.xmlns) {
@@ -855,14 +854,14 @@ function BOSHConnection(opts) {
     this.currentRequests = 0
     this.queue = []
     this.rid = Math.ceil(Math.random() * 9999999999)
-    this.initialStart = true;
 
     this.request({
             to: this.jid.domain,
             ver: '1.6',
             wait: this.wait,
             hold: '1',
-            content: this.contentType
+            content: this.contentType,
+            'xmpp:version': '1.0'
         },
         [],
         function(err, bodyEl) {
@@ -895,30 +894,26 @@ BOSHConnection.prototype.send = function(stanza) {
 BOSHConnection.prototype.startStream = function() {
     var that = this
 
-    if(!this.initialStart) {
-        this.rid++
-        this.request({
-            to: this.jid.domain,
-            'xmpp:restart': 'true'
-        },
-        [],
-        function (err, bodyEl) {
-            if (err) {
-                that.emit('error', err)
-                that.emit('disconnect')
-                that.emit('end')
-                delete that.sid
-                that.emit('close')
-            } else {
-                that.streamOpened = true
-                if (bodyEl) that.processResponse(bodyEl)
+    this.rid++
+    this.request({
+        to: this.jid.domain,
+        'xmpp:restart': 'true'
+    },
+    [],
+    function (err, bodyEl) {
+        if (err) {
+            that.emit('error', err)
+            that.emit('disconnect')
+            that.emit('end')
+            delete that.sid
+            that.emit('close')
+        } else {
+            that.streamOpened = true
+            if (bodyEl) that.processResponse(bodyEl)
 
-                process.nextTick(that.mayRequest.bind(that))
-            }
-        })
-    } else {
-        this.initialStart = false
-    }
+            process.nextTick(that.mayRequest.bind(that))
+        }
+    })
 }
 
 BOSHConnection.prototype.processResponse = function(bodyEl) {
@@ -1226,6 +1221,11 @@ Session.prototype._setupBoshConnection = function(opts) {
         wait: this.wait
     })
     this._addConnectionListeners()
+    this.connection.on('connected', function() {
+        // Clients start <stream:stream>, servers reply
+        if (this.connection.startStream)
+            this.connection.startStream()
+    }.bind(this))
 }
 
 Session.prototype._setupWebsocketConnection = function(opts) {
