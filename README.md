@@ -61,6 +61,8 @@ Please see the various [examples](https://github.com/node-xmpp/node-xmpp-server/
   * Was split out of node-xmpp for modularization and resuability
 * [Component](http://xmpp.org/extensions/xep-0114.html) connections
 * Run your own server/talk to other servers with `xmpp.Router`
+* [XMPP over WebSocket](http://tools.ietf.org/html/rfc7395)
+* [XMPP over BOSH](http://xmpp.org/extensions/xep-0206.html)
 
 ## Dependencies
 
