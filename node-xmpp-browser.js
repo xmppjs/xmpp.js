@@ -840,7 +840,8 @@ function BOSHConnection(opts) {
     this.xmlnsAttrs = {
         xmlns: 'http://jabber.org/protocol/httpbind',
         'xmlns:xmpp': 'urn:xmpp:xbosh',
-        'xmlns:stream': 'http://etherx.jabber.org/streams'
+        'xmlns:stream': 'http://etherx.jabber.org/streams',
+        'xmpp:version': '1.0'
     }
     if (opts.xmlns) {
         for (var prefix in opts.xmlns) {
