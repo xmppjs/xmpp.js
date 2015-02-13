@@ -1,7 +1,6 @@
 'use strict';
 
 var assert = require('assert'),
-    http = require('http'),
     xmpp = require('./../index'),
     Client = require('node-xmpp-client'),
     Message = require('node-xmpp-core').Stanza.Message,
