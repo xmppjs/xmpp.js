@@ -21,7 +21,6 @@
     "url": "https://github.com/node-xmpp/node-xmpp-component/issues"
   },
   "dependencies": {
-    "ltx": "^0.8.0",
     "node-xmpp-core": "^1.0.0-alpha13"
   },
   "devDependencies": {
