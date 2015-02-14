@@ -50,7 +50,7 @@ describe('Integration tests', function() {
             }, 1000)
         })
     })
-    
+
     afterEach(function() {
         if (client) client.end()
         if (component) component.end()
@@ -79,13 +79,13 @@ describe('Integration tests', function() {
         outgoing.c('body').t('Hello little miss client!')
         component.send(outgoing)
     })
-    
+
     it('Can receive a message', function(done) {
         component.on('stanza', function(stanza) {
             if (false === stanza.is('message')) return
             stanza.is('message').should.be.true
             stanza.attrs.to.should.equal('component.localhost')
-            stanza.attrs.from.should.include(user + '@localhost')
+            stanza.attrs.from.should.startWith(user + '@localhost')
             stanza.attrs.type.should.equal('chat')
             stanza.getChildText('body')
                 .should.equal('Hello mr component!')
@@ -102,7 +102,7 @@ describe('Integration tests', function() {
         outgoing.c('body').t('Hello mr component!')
         client.send(outgoing)
     })
-    
+
     it('Errors if connecting with bad authentication information', function(done) {
         component.end()
         component = null
@@ -115,7 +115,7 @@ describe('Integration tests', function() {
             done('Should not connect')
         })
     })
-    
+
     it('Sends error when server stops', function(done) {
         client.end()
         component.on('error', function() {
@@ -126,5 +126,5 @@ describe('Integration tests', function() {
         })
         exec('sudo service prosody stop', function() {})
     })
-    
+
 })
