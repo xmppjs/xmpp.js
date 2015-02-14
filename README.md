@@ -1,4 +1,4 @@
-# node-xmpp
+# node-xmpp-component
 
 Idiomatic XMPP component library for [node.js](http://nodejs.org/)
 
