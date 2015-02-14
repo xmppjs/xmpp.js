@@ -34,7 +34,7 @@ There are also a small number of integration tests designed to be run against [P
 
 ## How to use
 
-Please see the various [examples](https://github.com/node-xmpp/node-xmpp/tree/master/examples).
+Please see the various [examples](https://github.com/node-xmpp/node-xmpp-component/tree/master/examples).
 
 ## Objectives of *node-xmpp:*
 
