@@ -4,7 +4,7 @@ modules_enabled = {
 		"tls";
 		"dialback";
 		"disco";
-		"private"; 
+		"private";
 		"vcard";
 		"version";
 		"uptime";
@@ -12,7 +12,7 @@ modules_enabled = {
 		"ping";
 		"pep";
 		"register";
-		"admin_adhoc"; 
+		"admin_adhoc";
 		"posix";
 };
 
