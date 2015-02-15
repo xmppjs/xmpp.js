@@ -2,63 +2,68 @@
 
 var xmpp = require('../index')
   , assert = require('assert')
-  , Component = require('node-xmpp-component')
+  , Client = require('node-xmpp-client')
   , Message = require('node-xmpp-core').Stanza.Message
 
 var eventChain = []
-var componentSrv = null
+var websocket = null
 
 function startServer(done) {
 
     // Sets up the server.
-    componentSrv = new xmpp.ComponentServer({
-        port: 5347
+    websocket = new xmpp.WebSocketServer({
+        port: 5280,
+        domain: 'localhost'
     })
 
-    componentSrv.on('error', function(err) {
-        console.log('componentSrv error: ' + err.message)
+    websocket.on('error', function(err) {
+        console.log('websocket error: ' + err.message)
     })
 
-    componentSrv.on('connect', function(component) {
-        // allow anything
-        component.on('verify-component', function(jid, cb) {
-            eventChain.push('verify-component')
-            cb(null, 'alice')
+    websocket.on('connect', function(client) {
+        client.on('register', function(opts, cb) {
+            cb(new Error('register not supported'))
         })
 
-        component.on('online', function() {
+        // allow anything
+        client.on('authenticate', function(opts, cb) {
+            eventChain.push('authenticate')
+            cb(null, opts)
+        })
+
+        client.on('online', function() {
             eventChain.push('online')
         })
 
-        component.on('stanza', function() {
+        client.on('stanza', function() {
             eventChain.push('stanza')
-            component.send(
+            client.send(
                 new Message({ type: 'chat' })
                     .c('body')
-                .t('Hello there, little component.')
+                .t('Hello there, little client.')
             )
         })
 
-        component.on('disconnect', function() {
+        client.on('disconnect', function() {
             eventChain.push('disconnect')
         })
 
-        component.on('end', function() {
+        client.on('end', function() {
             eventChain.push('end')
         })
 
-        component.on('close', function() {
+        client.on('close', function() {
             eventChain.push('close')
         })
 
-        component.on('error', function() {
+        client.on('error', function() {
             eventChain.push('error')
         })
     })
     done()
 }
 
-describe('ComponentServer', function() {
+describe('WebSocketServer', function() {
 
     var cl = null
 
@@ -67,23 +72,22 @@ describe('ComponentServer', function() {
     })
 
     after(function(done) {
-        componentSrv.shutdown(done)
+        websocket.shutdown(done)
     })
 
     describe('events', function() {
         it('should be in the right order for connecting', function(done) {
             eventChain = []
 
-            //componentCallback = done
-            cl = new Component({
-                jid: 'bob.example.com',
+            cl = new Client({
+                websocket: { url: 'ws://localhost:5280' },
+                jid: 'bob@example.com',
                 password: 'alice',
-                host: 'localhost',
-                port: 5347
+                host: 'localhost'
             })
             cl.on('online', function() {
-                eventChain.push('componentonline')
-                assert.deepEqual(eventChain, ['verify-component', 'online', 'componentonline'])
+                eventChain.push('clientonline')
+                assert.deepEqual(eventChain, ['authenticate', 'online', 'clientonline'])
                 done()
             })
             cl.on('error', function(e) {
@@ -96,8 +100,8 @@ describe('ComponentServer', function() {
             eventChain = []
 
             cl.on('stanza', function() {
-                eventChain.push('componentstanza')
-                assert.deepEqual(eventChain, ['stanza', 'componentstanza'])
+                eventChain.push('clientstanza')
+                assert.deepEqual(eventChain, ['stanza', 'clientstanza'])
                 done()
             })
 
@@ -117,19 +121,17 @@ describe('ComponentServer', function() {
 
             // end xmpp stream
             cl.on('end', function() {
-                eventChain.push('componentend')
+                eventChain.push('clientend')
             })
 
             // close socket
             cl.on('close', function() {
-                eventChain.push('componentclose')
-                assert.deepEqual(eventChain, ['end', 'disconnect', 'close', 'componentend', 'componentclose'])
+                eventChain.push('clientclose')
+                assert.deepEqual(eventChain, ['clientend','end','disconnect','disconnect','clientclose'])
                 done()
             })
 
             cl.end()
         })
-
     })
-
 })

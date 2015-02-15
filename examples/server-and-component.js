@@ -4,7 +4,7 @@ var xmpp = require('../index')
   , componentSrv = null
   , debug = require('debug')('server-and-component')
   , Component = require('node-xmpp-component')
-  , ltx = require('node-xmpp-core/node_modules/ltx')
+  , ltx = require('node-xmpp-core').ltx
 
 var startServer = function(done) {
     // Sets up the server.
@@ -12,11 +12,14 @@ var startServer = function(done) {
         port: 5347
     })
     componentSrv.on('connect', function(client) {
-	// Component auth is two step: first, verify that the component is allowed to connect at all, then verify the password is correct
+	    // Component auth is two step:
+        // first, verify that the component is allowed to connect at all,
+        // then verify the password is correct
         client.on('verify-component', function(jid, cb) {
-	    if(jid.toString() === "component.example.com")
-		return cb(null, "ThePassword")
-	    else return cb ("Unauthorized")
+	    if (jid.toString() === 'component.example.com') {
+		return cb(null, 'ThePassword')
+            }
+            return cb ('Unauthorized')
         })
         client.on('online', function() {
             debug('ONLINE')
@@ -45,9 +48,15 @@ startServer(function() {
         port: 5347,
         password: 'ThePassword'
     })
-    component1.on('online', function(data) {
+    component1.on('online', function() {
         debug('component1 is online')
-        component1.send(new ltx.Element('message', { to: 'testguy@example.com', from: 'fake@example.com' }).c('body').t('HelloWorld'))
+        component1
+          .send(new ltx.Element('message', {
+              to: 'testguy@example.com',
+              from: 'fake@example.com'
+          }
+        ).c('body')
+        .t('HelloWorld'))
     })
     component1.on('stanza', function(stanza) {
         debug('component1', 'received stanza', stanza.root().toString())
