@@ -6,9 +6,9 @@ var prebind = new XMPP({
     jid: 'me@example.com',
     password: 'secret',
     preferred: 'PLAIN',
-    wait: '60',
     bosh: {
         url: 'http://example.com/http-bind',
+        wait: 60,
         prebind: function(error, data) {
             if (error) throw new Error(error)
             return data
