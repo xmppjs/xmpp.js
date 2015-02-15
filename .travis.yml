@@ -6,7 +6,7 @@ node_js:
 - 'iojs'
 
 before_install:
-- npm i -g npm
+- version=`node -v`; if [[ $version == *"0.8."* ]]; then npm i -g npm; fi
 - sudo apt-get install libicu-dev prosody luarocks
 - sudo luarocks install luabitop
 - sudo rm -rf /dev/shm
@@ -14,9 +14,6 @@ before_install:
 - sudo cp test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
 - sudo cp test/resources/mod_websocket.lua /usr/lib/prosody/modules/
 - sudo service prosody stop
-
-before_script:
-- npm install -g grunt-cli
 
 script: npm run full-test
 
