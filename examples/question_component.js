@@ -8,7 +8,7 @@
  * Replies to an incoming chat message with 'hello'
  */
 
-var Component = require('../index')
+var Component = require('..')
   , argv = process.argv
   , ltx = require('node-xmpp-core').ltx
 
