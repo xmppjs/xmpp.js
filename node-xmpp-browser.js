@@ -8274,7 +8274,7 @@ module.exports={
     "shasum": "dd03b3d8f6f83137754cc1ea1a55675447b0ab92",
     "tarball": "http://registry.npmjs.org/node-stringprep/-/node-stringprep-0.5.4.tgz"
   },
-  "_from": "node-stringprep@>=0.5.2 <0.6.0",
+  "_from": "node-stringprep@^0.5.2",
   "_npmVersion": "1.4.3",
   "_npmUser": {
     "name": "lloydwatkin",
