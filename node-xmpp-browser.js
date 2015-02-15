@@ -836,7 +836,7 @@ function BOSHConnection(opts) {
 
     this.boshURL = opts.bosh.url
     this.jid = opts.jid
-    this.wait = opts.wait;
+    this.wait = opts.bosh.wait || 10;
     this.xmlnsAttrs = {
         xmlns: 'http://jabber.org/protocol/httpbind',
         'xmlns:xmpp': 'urn:xmpp:xbosh',
@@ -1217,8 +1217,7 @@ Session.prototype._performSrvLookup = function(opts) {
 Session.prototype._setupBoshConnection = function(opts) {
     this.connection = new BOSHConnection({
         jid: this.jid,
-        bosh: opts.bosh,
-        wait: this.wait
+        bosh: opts.bosh
     })
     this._addConnectionListeners()
     this.connection.on('connected', function() {
@@ -1251,7 +1250,6 @@ Session.prototype.setOptions = function(opts) {
     this.oauth2_token = opts.oauth2_token
     this.oauth2_auth = opts.oauth2_auth
     this.register = opts.register
-    this.wait = opts.wait || '10'
     if (typeof opts.actAs === 'string') {
         this.actAs = new JID(opts.actAs)
     } else {
