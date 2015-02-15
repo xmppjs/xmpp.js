@@ -1,7 +1,10 @@
 language: node_js
+
 node_js:
   - "0.10"
-  - "0.11"
+  - "0.12"
+  - "iojs"
+
 before_install:
   - npm i -g npm
   - "sudo apt-get install libicu-dev"
@@ -10,5 +13,6 @@ before_install:
   # https://github.com/travis-ci/travis-cookbooks/issues/155
   - sudo rm -rf /dev/shm
   - sudo ln -s /run/shm /dev/shm
+
 before_script:
   - npm install -g grunt-cli
