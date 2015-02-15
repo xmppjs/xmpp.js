@@ -1,14 +1,7 @@
 'use strict';
 
-/*
- * Cluster example
- * You will need an xmpp server with component load balancing support
- * ejabberd or prosody with https://code.google.com/p/prosody-modules/wiki/mod_component_roundrobin
- * edit config then run npm server.js
- */
-
 var Component = require('../..')
-   ,config = require('./config')
+  , config = require('./config')
 
 var component = new Component(config)
 
