@@ -1,7 +1,7 @@
-node-xmpp-component cluster example
+cluster example
 ===================================
 
-> A single instance of Node/ios.js runs in a single thread. To take advantage of multi-core systems the user will sometimes want to launch a cluster of Node processes to handle the load.
+> A single instance of Node/ios.js runs in a single thread. To take advantage of multi-core systems the user will sometimes want to launch a cluster of processes to handle the load.
 
 See
 * [Node.js cluster](http://nodejs.org/api/cluster.html)
