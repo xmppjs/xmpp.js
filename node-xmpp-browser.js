@@ -839,7 +839,7 @@ function BOSHConnection(opts) {
 
     this.boshURL = opts.bosh.url
     this.jid = opts.jid
-    this.wait = opts.bosh.wait || 10;
+    this.wait = opts.bosh.wait || 60
     this.xmlnsAttrs = {
         xmlns: 'http://jabber.org/protocol/httpbind',
         'xmlns:xmpp': 'urn:xmpp:xbosh',
@@ -1003,7 +1003,7 @@ BOSHConnection.prototype.request = function(attrs, children, cb, retry) {
         boshEl.cnode(children[i])
     }
 
-    debug('send bosh request:' + boshEl.toString());
+    debug('send bosh request:' + boshEl.toString())
 
     request({
             uri: this.boshURL,
