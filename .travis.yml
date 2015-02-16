@@ -6,7 +6,7 @@ node_js:
   - "iojs"
 
 before_install:
-  - npm i -g npm
+  - version=`node -v`; if [[ $version == *"0.8."* ]]; then npm i -g npm; fi
   - "sudo apt-get install libicu-dev"
   # Workaround for a permissions issue with Travis virtual machine images
   # that breaks Python's multiprocessing:
