@@ -10,7 +10,7 @@ Now usable in browsers too thanks to [Browserify](https://github.com/substack/no
 
 ## Manual
 
-See http://node-xmpp.github.io/doc/nodexmppclient.html for instructions on how to use `node-xmpp-client`.
+See http://node-xmpp.org/doc/client.html for instructions on how to use `node-xmpp-client`.
 
 ## Installation
 
