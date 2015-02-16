@@ -441,10 +441,7 @@ Client.SASL = sasl
 Client.Client = Client
 Client.Stanza = Stanza
 Client.ltx = ltx
-Client.JID = JID
-
 module.exports = Client
-
 },{"./lib/authentication/anonymous":3,"./lib/authentication/digestmd5":4,"./lib/authentication/external":5,"./lib/authentication/plain":7,"./lib/authentication/xfacebook":8,"./lib/authentication/xoauth2":9,"./lib/sasl":11,"./lib/session":12,"buffer":27,"child_process":16,"debug":36,"node-xmpp-core":39,"util":35}],3:[function(require,module,exports){
 'use strict';
 
@@ -839,7 +836,7 @@ function BOSHConnection(opts) {
 
     this.boshURL = opts.bosh.url
     this.jid = opts.jid
-    this.wait = opts.bosh.wait || 10;
+    this.wait = opts.bosh.wait || 60;
     this.xmlnsAttrs = {
         xmlns: 'http://jabber.org/protocol/httpbind',
         'xmlns:xmpp': 'urn:xmpp:xbosh',
