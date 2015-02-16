@@ -420,4 +420,6 @@ Client.SASL = sasl
 Client.Client = Client
 Client.Stanza = Stanza
 Client.ltx = ltx
+Client.JID = JID
+
 module.exports = Client
