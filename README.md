@@ -6,7 +6,7 @@ Idiomatic XMPP component library for [node.js](http://nodejs.org/)
 
 ## Manual
 
-Please see http://node-xmpp.github.io/doc/nodexmppcomponent.html for instructions on how to use `node-xmpp-component`.
+Please see http://node-xmpp.org/doc/component.html for instructions on how to use `node-xmpp-component`.
 
 ## Installation
 
