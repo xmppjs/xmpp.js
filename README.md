@@ -8,7 +8,7 @@ Idiomatic XMPP server library for [node.js](http://nodejs.org/)
 
 ## Manual
 
-Please see http://node-xmpp.github.io/doc/nodexmppserver.html for instructions on how to use `node-xmpp-server`.
+Please see http://node-xmpp.org/doc/server.html for instructions on how to use `node-xmpp-server`.
 
 ## Installation
 
