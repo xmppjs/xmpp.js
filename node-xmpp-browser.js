@@ -1110,7 +1110,6 @@ var process=require("__browserify_process");'use strict';
 
 var util = require('util')
   , tls = require('tls')
-  , crypto = require('crypto')
   , EventEmitter = require('events').EventEmitter
   , Connection = require('node-xmpp-core').Connection
   , JID = require('node-xmpp-core').JID
@@ -1183,8 +1182,8 @@ Session.prototype._socketConnectionToHost = function(opts) {
         })
     } else {
         if (opts.credentials) {
-            this.connection.credentials = crypto
-                .createCredentials(opts.credentials)
+            this.connection.credentials = tls
+                .createSecureContext(opts.credentials)
         }
         if (opts.disallowTLS) this.connection.allowTLS = false
         this.connection.listen({
@@ -1206,7 +1205,7 @@ Session.prototype._performSrvLookup = function(opts) {
         throw 'LegacySSL mode does not support DNS lookups'
     }
     if (opts.credentials)
-        this.connection.credentials = crypto.createCredentials(opts.credentials)
+        this.connection.credentials = tls.createSecureContext(opts.credentials)
     if (opts.disallowTLS)
         this.connection.allowTLS = false
     this.connection.listen({socket:SRV.connect({
@@ -1304,7 +1303,7 @@ Session.prototype.onStanza = function() {}
 
 module.exports = Session
 
-},{"./bosh":10,"./websockets":13,"__browserify_process":26,"crypto":19,"debug":36,"events":24,"node-xmpp-core":39,"tls":16,"util":35}],13:[function(require,module,exports){
+},{"./bosh":10,"./websockets":13,"__browserify_process":26,"debug":36,"events":24,"node-xmpp-core":39,"tls":16,"util":35}],13:[function(require,module,exports){
 'use strict';
 
 var EventEmitter = require('events').EventEmitter
@@ -8277,7 +8276,7 @@ module.exports={
     "shasum": "dd03b3d8f6f83137754cc1ea1a55675447b0ab92",
     "tarball": "http://registry.npmjs.org/node-stringprep/-/node-stringprep-0.5.4.tgz"
   },
-  "_from": "node-stringprep@^0.5.2",
+  "_from": "node-stringprep@>=0.5.2 <0.6.0",
   "_npmVersion": "1.4.3",
   "_npmUser": {
     "name": "lloydwatkin",
