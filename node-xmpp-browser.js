@@ -1048,7 +1048,7 @@ BOSHConnection.prototype.request = function(attrs, children, cb, retry) {
 
 module.exports = BOSHConnection
 
-},{"__browserify_process":26,"debug":36,"events":24,"node-xmpp-core":39,"request":"ZMLTvq","util":35}],11:[function(require,module,exports){
+},{"__browserify_process":26,"debug":36,"events":24,"node-xmpp-core":39,"request":"B+8hfE","util":35}],11:[function(require,module,exports){
 'use strict';
 
 var Mechanism = require('./authentication/mechanism')
@@ -1449,7 +1449,9 @@ WSConnection.prototype.onerror = function(e) {
 
 module.exports = WSConnection
 
-},{"debug":36,"events":24,"faye-websocket":16,"node-xmpp-core":39,"util":35}],"ZMLTvq":[function(require,module,exports){
+},{"debug":36,"events":24,"faye-websocket":16,"node-xmpp-core":39,"util":35}],"browser-request":[function(require,module,exports){
+module.exports=require('B+8hfE');
+},{}],"B+8hfE":[function(require,module,exports){
 // Browser Request
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -1945,8 +1947,6 @@ function b64_enc (data) {
 }));
 //UMD FOOTER END
 
-},{}],"browser-request":[function(require,module,exports){
-module.exports=require('ZMLTvq');
 },{}],16:[function(require,module,exports){
 
 },{}],17:[function(require,module,exports){
@@ -8294,8 +8294,7 @@ module.exports={
   ],
   "directories": {},
   "_shasum": "dd03b3d8f6f83137754cc1ea1a55675447b0ab92",
-  "_resolved": "https://registry.npmjs.org/node-stringprep/-/node-stringprep-0.5.4.tgz",
-  "readme": "ERROR: No README data found!"
+  "_resolved": "https://registry.npmjs.org/node-stringprep/-/node-stringprep-0.5.4.tgz"
 }
 
 },{}],58:[function(require,module,exports){
