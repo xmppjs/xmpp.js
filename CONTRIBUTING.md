@@ -10,7 +10,7 @@ __Note:__ If there's a feature you'd like, there's a bug you'd like to fix, or y
 
 ## Coding standards
 
-Most of the coding standards are covered by `.jshintrc`. You can also test 
+Most of the coding standards are covered by `.jshintrc`. You can also test
 any changes with `grunt test` (this will also run the tests).
 
 Things not covered by jshint:
@@ -21,7 +21,7 @@ Things not covered by jshint:
 * `exports`/`module.exports` should be at the end of the file
 * Longer, descriptive variable names are preferred, e.g. `error` vs `err`
 
-We acknowledge all the code does not meet these standards but we are working 
+We acknowledge all the code does not meet these standards but we are working
 to change this over time.
 
 ## Tests

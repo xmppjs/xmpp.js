@@ -8,7 +8,7 @@ Idiomatic XMPP server library for [node.js](http://nodejs.org/)
 
 ## Manual
 
-Please see http://node-xmpp.github.io/doc/nodexmppserver.html for instructions on how to use `node-xmpp-server`.
+Please see http://node-xmpp.org/doc/server.html for instructions on how to use `node-xmpp-server`.
 
 ## Installation
 
@@ -32,7 +32,7 @@ Also see the tests run in [travis](http://travis-ci.org/node-xmpp/node-xmpp-serv
 
 ## How to use
 
-Please see the various [examples](https://github.com/node-xmpp/node-xmpp/tree/master/examples).
+Please see the various [examples](https://github.com/node-xmpp/node-xmpp-server/tree/master/examples).
 
 ## Objectives of *node-xmpp-server:*
 
@@ -61,6 +61,8 @@ Please see the various [examples](https://github.com/node-xmpp/node-xmpp/tree/ma
   * Was split out of node-xmpp for modularization and resuability
 * [Component](http://xmpp.org/extensions/xep-0114.html) connections
 * Run your own server/talk to other servers with `xmpp.Router`
+* [XMPP over WebSocket](http://tools.ietf.org/html/rfc7395)
+* [XMPP over BOSH](http://xmpp.org/extensions/xep-0206.html)
 
 ## Dependencies
 
@@ -86,6 +88,6 @@ stanza, before sending it out the wire.
 
  - S2S implementation has been sponsored by [superfeedr](http://superfeedr.com/)
 
-# Licence 
+# Licence
 
 MIT

@@ -4,7 +4,7 @@
   "description": "nodejs-based server",
   "main": "index.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "./node_modules/.bin/grunt test"
   },
   "repository": {
     "type": "git",
@@ -23,17 +23,20 @@
   "dependencies": {
     "hat": "~0.0.3",
     "node-xmpp-core": "^1.0.0-alpha14",
-    "debug": "~0.7.4"
+    "debug": "~2.1.1",
+    "ws": "~0.7.1"
   },
   "devDependencies": {
     "coveralls": "^2.11.2",
-    "grunt": "~0.4.2",
-    "grunt-contrib-jshint": "0.10.0",
-    "grunt-mocha-cli": "~1.8.0",
-    "grunt-mocha-istanbul": "^2.1.0",
-    "mocha": "^1.21.5",
-    "node-xmpp-client": "~1.0.0-alpha13",
-    "pem": "~1.4.1",
-    "should": "~4.0.4"
+    "grunt-cli": "^0.1.13",
+    "grunt": "~0.4.5",
+    "grunt-contrib-jshint": "0.11.0",
+    "grunt-mocha-cli": "~1.12.0",
+    "grunt-mocha-istanbul": "^2.3.1",
+    "mocha": "^2.1.0",
+    "node-xmpp-client": "~1.0.0-alpha19",
+    "node-xmpp-component": "~1.0.0-alpha1",
+    "pem": "~1.5.0",
+    "should": "~5.0.0"
   }
 }

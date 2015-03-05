@@ -6,22 +6,22 @@ var xmpp = require('../index')
   , Message = require('node-xmpp-core').Stanza.Message
 
 var eventChain = []
-var c2s = null
+var websocket = null
 
 function startServer(done) {
 
     // Sets up the server.
-    c2s = new xmpp.C2SServer({
-        port: 5222,
+    websocket = new xmpp.WebSocketServer({
+        port: 5280,
         domain: 'localhost'
     })
 
-    c2s.on('error', function(err) {
-        console.log('c2s error: ' + err.message)
+    websocket.on('error', function(err) {
+        console.log('websocket error: ' + err.message)
     })
 
-    c2s.on('connect', function(client) {
-        c2s.on('register', function(opts, cb) {
+    websocket.on('connect', function(client) {
+        client.on('register', function(opts, cb) {
             cb(new Error('register not supported'))
         })
 
@@ -63,7 +63,7 @@ function startServer(done) {
     done()
 }
 
-describe('C2Server', function() {
+describe('WebSocketServer', function() {
 
     var cl = null
 
@@ -72,15 +72,15 @@ describe('C2Server', function() {
     })
 
     after(function(done) {
-        c2s.shutdown(done)
+        websocket.shutdown(done)
     })
 
     describe('events', function() {
         it('should be in the right order for connecting', function(done) {
             eventChain = []
 
-            //clientCallback = done
             cl = new Client({
+                websocket: { url: 'ws://localhost:5280' },
                 jid: 'bob@example.com',
                 password: 'alice',
                 host: 'localhost'
@@ -127,13 +127,11 @@ describe('C2Server', function() {
             // close socket
             cl.on('close', function() {
                 eventChain.push('clientclose')
-                assert.deepEqual(eventChain, ['end', 'disconnect', 'close', 'clientend', 'clientclose'])
+                assert.deepEqual(eventChain, ['clientend','end','disconnect','disconnect','clientclose'])
                 done()
             })
 
             cl.end()
         })
-
     })
-
 })

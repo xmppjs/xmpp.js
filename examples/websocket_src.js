@@ -8,8 +8,8 @@ var xmpp = require('../index')
 
 var startServer = function(done) {
     // Sets up the server.
-    c2s = new xmpp.C2SServer({
-        port: 5222,
+    c2s = new xmpp.WebSocketServer({
+        port: 5280,
         domain: 'localhost'
     })
 
@@ -59,6 +59,7 @@ var startServer = function(done) {
 
 startServer(function() {
     var client1 = new Client({
+        websocket: { url: 'ws://localhost:5280' },
         jid: 'client1@localhost',
         password: 'secret'
     })
@@ -72,6 +73,7 @@ startServer(function() {
     })
 
     var client2 = new Client({
+        websocket: { url: 'ws://localhost:5280' },
         jid: 'client2@localhost',
         password: 'notsecret'
     })
