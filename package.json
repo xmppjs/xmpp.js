@@ -23,7 +23,7 @@
   "dependencies": {
     "hat": "~0.0.3",
     "node-xmpp-core": "^1.0.0-alpha14",
-    "debug": "~2.1.1",
+    "debug": "~2.1.2",
     "ws": "~0.7.1"
   },
   "devDependencies": {
@@ -34,9 +34,9 @@
     "grunt-mocha-cli": "~1.12.0",
     "grunt-mocha-istanbul": "^2.3.1",
     "mocha": "^2.1.0",
-    "node-xmpp-client": "~1.0.0-alpha19",
+    "node-xmpp-client": "~1.0.0-alpha20",
     "node-xmpp-component": "~1.0.0-alpha1",
-    "pem": "~1.5.0",
-    "should": "~5.0.0"
+    "pem": "~1.7.1",
+    "should": "~5.1.0"
   }
 }
