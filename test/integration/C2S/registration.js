@@ -64,7 +64,7 @@ describe('Stream register', function() {
         server.end(done)
     })
 
-    it('Should redister', function(done) {
+    it('Should register', function(done) {
         server = startServer('unmodified')
         startClient(function(error) {
             if (error) {
