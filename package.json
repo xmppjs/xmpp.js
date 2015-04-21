@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp-component",
-  "version": "1.0.0-alpha1",
+  "version": "1.0.0",
   "description": "Component API for XMPP",
   "main": "index.js",
   "scripts": {
