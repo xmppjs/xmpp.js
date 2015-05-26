@@ -26,7 +26,7 @@
     "url": "https://github.com/node-xmpp/node-xmpp-client/issues"
   },
   "dependencies": {
-    "request": "~2.48.0",
+    "request": "~2.55.0",
     "faye-websocket": "~0.7.0",
     "node-xmpp-core": "~1.0.0-alpha10",
     "browser-request": "~0.3.1",
