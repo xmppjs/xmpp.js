@@ -75,11 +75,7 @@
     "dodo",
     "Markus Kohlhase"
   ],
-  "licenses": [
-    {
-      "type": "MIT"
-    }
-  ],
+  "license": "MIT",
   "engine": "node >=0.8.0",
   "scripts": {
     "test": "./node_modules/.bin/grunt test",
