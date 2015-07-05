@@ -2,7 +2,7 @@
 
 var Client = require('../../index')
   , net = require('net')
-  , ltx = require('ltx')
+  , ltx = Client.ltx
 require('should')
 
 /* jshint -W030 */
