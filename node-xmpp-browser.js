@@ -4397,90 +4397,90 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
 },{}],29:[function(require,module,exports){
-exports.read = function(buffer, offset, isLE, mLen, nBytes) {
-  var e, m,
-      eLen = nBytes * 8 - mLen - 1,
-      eMax = (1 << eLen) - 1,
-      eBias = eMax >> 1,
-      nBits = -7,
-      i = isLE ? (nBytes - 1) : 0,
-      d = isLE ? -1 : 1,
-      s = buffer[offset + i];
+exports.read = function (buffer, offset, isLE, mLen, nBytes) {
+  var e, m
+  var eLen = nBytes * 8 - mLen - 1
+  var eMax = (1 << eLen) - 1
+  var eBias = eMax >> 1
+  var nBits = -7
+  var i = isLE ? (nBytes - 1) : 0
+  var d = isLE ? -1 : 1
+  var s = buffer[offset + i]
 
-  i += d;
+  i += d
 
-  e = s & ((1 << (-nBits)) - 1);
-  s >>= (-nBits);
-  nBits += eLen;
-  for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8);
+  e = s & ((1 << (-nBits)) - 1)
+  s >>= (-nBits)
+  nBits += eLen
+  for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8) {}
 
-  m = e & ((1 << (-nBits)) - 1);
-  e >>= (-nBits);
-  nBits += mLen;
-  for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8);
+  m = e & ((1 << (-nBits)) - 1)
+  e >>= (-nBits)
+  nBits += mLen
+  for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8) {}
 
   if (e === 0) {
-    e = 1 - eBias;
+    e = 1 - eBias
   } else if (e === eMax) {
-    return m ? NaN : ((s ? -1 : 1) * Infinity);
+    return m ? NaN : ((s ? -1 : 1) * Infinity)
   } else {
-    m = m + Math.pow(2, mLen);
-    e = e - eBias;
+    m = m + Math.pow(2, mLen)
+    e = e - eBias
   }
-  return (s ? -1 : 1) * m * Math.pow(2, e - mLen);
-};
+  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
+}
 
-exports.write = function(buffer, value, offset, isLE, mLen, nBytes) {
-  var e, m, c,
-      eLen = nBytes * 8 - mLen - 1,
-      eMax = (1 << eLen) - 1,
-      eBias = eMax >> 1,
-      rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0),
-      i = isLE ? 0 : (nBytes - 1),
-      d = isLE ? 1 : -1,
-      s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0;
+exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
+  var e, m, c
+  var eLen = nBytes * 8 - mLen - 1
+  var eMax = (1 << eLen) - 1
+  var eBias = eMax >> 1
+  var rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0)
+  var i = isLE ? 0 : (nBytes - 1)
+  var d = isLE ? 1 : -1
+  var s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0
 
-  value = Math.abs(value);
+  value = Math.abs(value)
 
   if (isNaN(value) || value === Infinity) {
-    m = isNaN(value) ? 1 : 0;
-    e = eMax;
+    m = isNaN(value) ? 1 : 0
+    e = eMax
   } else {
-    e = Math.floor(Math.log(value) / Math.LN2);
+    e = Math.floor(Math.log(value) / Math.LN2)
     if (value * (c = Math.pow(2, -e)) < 1) {
-      e--;
-      c *= 2;
+      e--
+      c *= 2
     }
     if (e + eBias >= 1) {
-      value += rt / c;
+      value += rt / c
     } else {
-      value += rt * Math.pow(2, 1 - eBias);
+      value += rt * Math.pow(2, 1 - eBias)
     }
     if (value * c >= 2) {
-      e++;
-      c /= 2;
+      e++
+      c /= 2
     }
 
     if (e + eBias >= eMax) {
-      m = 0;
-      e = eMax;
+      m = 0
+      e = eMax
     } else if (e + eBias >= 1) {
-      m = (value * c - 1) * Math.pow(2, mLen);
-      e = e + eBias;
+      m = (value * c - 1) * Math.pow(2, mLen)
+      e = e + eBias
     } else {
-      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen);
-      e = 0;
+      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen)
+      e = 0
     }
   }
 
-  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8);
+  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
 
-  e = (e << mLen) | m;
-  eLen += mLen;
-  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8);
+  e = (e << mLen) | m
+  eLen += mLen
+  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
 
-  buffer[offset + i - d] |= s * 128;
-};
+  buffer[offset + i - d] |= s * 128
+}
 
 },{}],30:[function(require,module,exports){
 var process=require("__browserify_process");// Copyright Joyent, Inc. and other Node contributors.
@@ -5953,7 +5953,7 @@ exports.Connection = require('./lib/connection')
 exports.SRV = require('./lib/srv')
 exports.StreamParser = require('./lib/stream_parser')
 exports.ltx = require('ltx')
-},{"./lib/connection":40,"./lib/jid":41,"./lib/srv":42,"./lib/stanza":43,"./lib/stream_parser":44,"ltx":48,"util":35}],40:[function(require,module,exports){
+},{"./lib/connection":40,"./lib/jid":41,"./lib/srv":42,"./lib/stanza":43,"./lib/stream_parser":44,"ltx":50,"util":35}],40:[function(require,module,exports){
 'use strict';
 
 var net = require('net')
@@ -5970,7 +5970,7 @@ var NS_XMPP_TLS = 'urn:ietf:params:xml:ns:xmpp-tls'
 var NS_STREAM = 'http://etherx.jabber.org/streams'
 var NS_XMPP_STREAMS = 'urn:ietf:params:xml:ns:xmpp-streams'
 
-var INITIAL_RECONNECT_DELAY =  1e3
+var INITIAL_RECONNECT_DELAY = 1e3
 var MAX_RECONNECT_DELAY     = 30e3
 
 function defaultInjection(emitter, opts) {
@@ -5981,10 +5981,10 @@ function defaultInjection(emitter, opts) {
     /* jshint -W014 */
     options.initialDelay = (opts && (opts.initialReconnectDelay
                             ||  opts.reconnectDelay)) || INITIAL_RECONNECT_DELAY
-    options.maxDelay = (opts &&   opts.maxReconnectDelay)  || MAX_RECONNECT_DELAY
-    options.immediate = opts && opts.socket && typeof opts.socket !== 'function'
-    options.type =      opts && opts.delayType
-    options.emitter =   emitter
+    options.maxDelay = (opts && opts.maxReconnectDelay) || MAX_RECONNECT_DELAY
+    options.immediate = opts && opts.socket && (typeof opts.socket !== 'function')
+    options.type = opts && opts.delayType
+    options.emitter = emitter
 
     // return calculated options
     return options
@@ -6009,7 +6009,7 @@ function Connection(opts) {
     this.servername = (opts && opts.servername)
 
     this._setupSocket(defaultInjection(this, opts))
-    this.once('reconnect', function () {
+    this.once('reconnect', function() {
         this.reconnect = opts && opts.reconnect
     })
 }
@@ -6022,10 +6022,10 @@ Connection.prototype.NS_XMPP_STREAMS = NS_XMPP_STREAMS
 // Defaults
 Connection.prototype.allowTLS = true
 
-Connection.prototype._setupSocket = function (options) {
+Connection.prototype._setupSocket = function(options) {
     debug('setup socket')
     var previousOptions = {}
-    var inject = reconnect(function (opts) {
+    var inject = reconnect(function(opts) {
         var previousSocket = this.socket
         /* if this opts.preserve is on
          * the previous options are stored until next time.
@@ -6061,12 +6061,20 @@ Connection.prototype._setupSocket = function (options) {
             }
         }
         this.socket = this.socket || new net.Socket()
-        if (previousSocket !== this.socket)
+        if (previousSocket !== this.socket) {
             this.setupStream()
+        }
         return this.socket
     }.bind(this))
 
     inject(inject.options = options)
+
+    //wrap the end function provided by reconnect-core to trigger the stream end logic
+    var end = this.end
+    this.end = this.disconnect = function() {
+        this.endStream()
+        end()
+    }
 
     this.on('connection', function () {
         if (!this.parser)
@@ -6173,10 +6181,11 @@ Connection.prototype.startParser = function() {
     })
     this.parser.once('end', function() {
         self.stopParser()
-        if (self.reconnect)
+        if (self.reconnect) {
             self.once('reconnect', self.startParser.bind(self))
-        else
+        } else {
             self.end()
+        }
     })
 }
 
@@ -6185,7 +6194,7 @@ Connection.prototype.stopParser = function() {
     if (this.parser) {
         var parser = this.parser
         /* Get GC'ed */
-        delete this.parser
+        this.parser = null
         parser.end()
     }
 }
@@ -6194,15 +6203,17 @@ Connection.prototype.startStream = function() {
     var attrs = {}
     for (var k in this.xmlns) {
         if (this.xmlns.hasOwnProperty(k)) {
-            if (!k)
+            if (!k) {
                 attrs.xmlns = this.xmlns[k]
-            else
+            } else {
                 attrs['xmlns:' + k] = this.xmlns[k]
+            }
         }
     }
     for (k in this.streamAttrs) {
-        if (this.streamAttrs.hasOwnProperty(k))
+        if (this.streamAttrs.hasOwnProperty(k)) {
             attrs[k] = this.streamAttrs[k]
+        }
     }
 
     if (this.streamTo) { // in case of a component connecting
@@ -6218,10 +6229,20 @@ Connection.prototype.startStream = function() {
     this.streamOpened = true
 }
 
+Connection.prototype.endStream = function() {
+    if (this.socket && this.socket.writable) {
+        if (this.streamOpened) {
+            this.socket.write('</stream:stream>')
+            this.streamOpened = false
+        }
+    }
+}
+
 Connection.prototype.onData = function(data) {
     debug('receive: ' + data.toString('utf8'))
-    if (this.parser)
+    if (this.parser) {
         this.parser.write(data)
+    }
 }
 
 Connection.prototype.setSecure = function(credentials, isServer) {
@@ -6231,8 +6252,9 @@ Connection.prototype.setSecure = function(credentials, isServer) {
     this.socket.removeAllListeners('drain')
     this.socket.removeAllListeners('close')
     // remove idle_timeout
-    if (this.socket.clearTimer)
+    if (this.socket.clearTimer) {
         this.socket.clearTimer()
+    }
 
     var cleartext = starttls({
         socket: this.socket,
@@ -6250,15 +6272,15 @@ Connection.prototype.setSecure = function(credentials, isServer) {
     cleartext.on('clientError', this.emit.bind(this, 'error'))
     if (!this.reconnect) {
         this.reconnect = true // need this so stopParser works properly
-        this.once('reconnect', function () {this.reconnect = false})
+        this.once('reconnect', function() { this.reconnect = false })
     }
     this.stopParser()
     // if we reconnect we need to get back to the previous socket creation
-    this.listen({socket:cleartext, preserve:'on'})
+    this.listen({ socket: cleartext, preserve:'on' })
 }
 
 function getAllText(el) {
-    return !el.children ? el : el.children.reduce(function (text, child) {
+    return !el.children ? el : el.children.reduce(function(text, child) {
         return text + getAllText(child)
     }, '')
 }
@@ -6311,8 +6333,9 @@ Connection.prototype.addStreamNs = function(stanza) {
 Connection.prototype.rmXmlns = function(stanza) {
     for (var prefix in this.xmlns) {
         var attr = prefix ? 'xmlns:' + prefix : 'xmlns'
-        if (stanza.attrs[attr] === this.xmlns[prefix])
-            delete stanza.attrs[attr]
+        if (stanza.attrs[attr] === this.xmlns[prefix]) {
+            stanza.attrs[attr] = null
+        }
     }
     return stanza
 }
@@ -6321,19 +6344,16 @@ Connection.prototype.rmXmlns = function(stanza) {
  * XMPP-style end connection for user
  */
 Connection.prototype.onEnd = function() {
-    if (this.socket && this.socket.writable) {
-        if (this.streamOpened) {
-            this.socket.write('</stream:stream>')
-            delete this.streamOpened
-        }
-    }
-    if (!this.reconnect)
+    this.endStream()
+    if (!this.reconnect) {
         this.emit('end')
+    }
 }
 
 Connection.prototype.onClose = function() {
-    if (!this.reconnect)
+    if (!this.reconnect) {
         this.emit('close')
+    }
 }
 
 /**
@@ -6366,7 +6386,7 @@ Connection.prototype.error = function(condition, message) {
 
 module.exports = Connection
 
-},{"./stream_parser":44,"debug":45,"events":24,"ltx":48,"net":16,"reconnect-core":58,"tls-connect":65,"util":35}],41:[function(require,module,exports){
+},{"./stream_parser":44,"debug":45,"events":24,"ltx":50,"net":16,"reconnect-core":60,"tls-connect":67,"util":35}],41:[function(require,module,exports){
 var StringPrep = require('node-stringprep').StringPrep
   , toUnicode = require('node-stringprep').toUnicode
 
@@ -6577,7 +6597,7 @@ if ((typeof exports !== 'undefined') && (exports !== null)) {
     window.JID = JID
 }
 
-},{"node-stringprep":52}],42:[function(require,module,exports){
+},{"node-stringprep":54}],42:[function(require,module,exports){
 'use strict';
 
 
@@ -6837,7 +6857,7 @@ exports.Message = Message
 exports.Presence = Presence
 exports.Iq = Iq
 
-},{"ltx":48,"util":35}],44:[function(require,module,exports){
+},{"ltx":50,"util":35}],44:[function(require,module,exports){
 'use strict';
 
 var util = require('util')
@@ -6982,146 +7002,306 @@ StreamParser.prototype.error = function(condition, message) {
 }
 
 exports.StreamParser = StreamParser
-},{"./stanza":43,"events":24,"ltx":48,"util":35}],45:[function(require,module,exports){
+},{"./stanza":43,"events":24,"ltx":50,"util":35}],45:[function(require,module,exports){
 
 /**
+ * This is the web browser implementation of `debug()`.
+ *
  * Expose `debug()` as the module.
  */
 
-module.exports = debug;
+exports = module.exports = require('./debug');
+exports.log = log;
+exports.formatArgs = formatArgs;
+exports.save = save;
+exports.load = load;
+exports.useColors = useColors;
+exports.storage = 'undefined' != typeof chrome
+               && 'undefined' != typeof chrome.storage
+                  ? chrome.storage.local
+                  : localstorage();
 
 /**
- * Create a debugger with the given `name`.
+ * Colors.
+ */
+
+exports.colors = [
+  'lightseagreen',
+  'forestgreen',
+  'goldenrod',
+  'dodgerblue',
+  'darkorchid',
+  'crimson'
+];
+
+/**
+ * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+ * and the Firebug extension (any Firefox version) are known
+ * to support "%c" CSS customizations.
  *
- * @param {String} name
- * @return {Type}
+ * TODO: add a `localStorage` variable to explicitly enable/disable colors
+ */
+
+function useColors() {
+  // is webkit? http://stackoverflow.com/a/16459606/376773
+  return ('WebkitAppearance' in document.documentElement.style) ||
+    // is firebug? http://stackoverflow.com/a/398120/376773
+    (window.console && (console.firebug || (console.exception && console.table))) ||
+    // is firefox >= v31?
+    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
+}
+
+/**
+ * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+ */
+
+exports.formatters.j = function(v) {
+  return JSON.stringify(v);
+};
+
+
+/**
+ * Colorize log arguments if enabled.
+ *
  * @api public
  */
 
-function debug(name) {
-  if (!debug.enabled(name)) return function(){};
+function formatArgs() {
+  var args = arguments;
+  var useColors = this.useColors;
 
-  return function(fmt){
-    fmt = coerce(fmt);
+  args[0] = (useColors ? '%c' : '')
+    + this.namespace
+    + (useColors ? ' %c' : ' ')
+    + args[0]
+    + (useColors ? '%c ' : ' ')
+    + '+' + exports.humanize(this.diff);
 
-    var curr = new Date;
-    var ms = curr - (debug[name] || curr);
-    debug[name] = curr;
+  if (!useColors) return args;
 
-    fmt = name
-      + ' '
-      + fmt
-      + ' +' + debug.humanize(ms);
+  var c = 'color: ' + this.color;
+  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
 
-    // This hackery is required for IE8
-    // where `console.log` doesn't have 'apply'
-    window.console
-      && console.log
-      && Function.prototype.apply.call(console.log, console, arguments);
+  // the final "%c" is somewhat tricky, because there could be other
+  // arguments passed either before or after the %c, so we need to
+  // figure out the correct index to insert the CSS into
+  var index = 0;
+  var lastC = 0;
+  args[0].replace(/%[a-z%]/g, function(match) {
+    if ('%%' === match) return;
+    index++;
+    if ('%c' === match) {
+      // we only are interested in the *last* %c
+      // (the user may have provided their own)
+      lastC = index;
+    }
+  });
+
+  args.splice(lastC, 0, c);
+  return args;
+}
+
+/**
+ * Invokes `console.log()` when available.
+ * No-op when `console.log` is not a "function".
+ *
+ * @api public
+ */
+
+function log() {
+  // this hackery is required for IE8/9, where
+  // the `console.log` function doesn't have 'apply'
+  return 'object' === typeof console
+    && console.log
+    && Function.prototype.apply.call(console.log, console, arguments);
+}
+
+/**
+ * Save `namespaces`.
+ *
+ * @param {String} namespaces
+ * @api private
+ */
+
+function save(namespaces) {
+  try {
+    if (null == namespaces) {
+      exports.storage.removeItem('debug');
+    } else {
+      exports.storage.debug = namespaces;
+    }
+  } catch(e) {}
+}
+
+/**
+ * Load `namespaces`.
+ *
+ * @return {String} returns the previously persisted debug modes
+ * @api private
+ */
+
+function load() {
+  var r;
+  try {
+    r = exports.storage.debug;
+  } catch(e) {}
+  return r;
+}
+
+/**
+ * Enable namespaces listed in `localStorage.debug` initially.
+ */
+
+exports.enable(load());
+
+/**
+ * Localstorage attempts to return the localstorage.
+ *
+ * This is necessary because safari throws
+ * when a user disables cookies/localstorage
+ * and you attempt to access it.
+ *
+ * @return {LocalStorage}
+ * @api private
+ */
+
+function localstorage(){
+  try {
+    return window.localStorage;
+  } catch (e) {}
+}
+
+},{"./debug":46}],46:[function(require,module,exports){
+arguments[4][37][0].apply(exports,arguments)
+},{"ms":47}],47:[function(require,module,exports){
+/**
+ * Helpers.
+ */
+
+var s = 1000;
+var m = s * 60;
+var h = m * 60;
+var d = h * 24;
+var y = d * 365.25;
+
+/**
+ * Parse or format the given `val`.
+ *
+ * Options:
+ *
+ *  - `long` verbose formatting [false]
+ *
+ * @param {String|Number} val
+ * @param {Object} options
+ * @return {String|Number}
+ * @api public
+ */
+
+module.exports = function(val, options){
+  options = options || {};
+  if ('string' == typeof val) return parse(val);
+  return options.long
+    ? long(val)
+    : short(val);
+};
+
+/**
+ * Parse the given `str` and return milliseconds.
+ *
+ * @param {String} str
+ * @return {Number}
+ * @api private
+ */
+
+function parse(str) {
+  str = '' + str;
+  if (str.length > 10000) return;
+  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(str);
+  if (!match) return;
+  var n = parseFloat(match[1]);
+  var type = (match[2] || 'ms').toLowerCase();
+  switch (type) {
+    case 'years':
+    case 'year':
+    case 'yrs':
+    case 'yr':
+    case 'y':
+      return n * y;
+    case 'days':
+    case 'day':
+    case 'd':
+      return n * d;
+    case 'hours':
+    case 'hour':
+    case 'hrs':
+    case 'hr':
+    case 'h':
+      return n * h;
+    case 'minutes':
+    case 'minute':
+    case 'mins':
+    case 'min':
+    case 'm':
+      return n * m;
+    case 'seconds':
+    case 'second':
+    case 'secs':
+    case 'sec':
+    case 's':
+      return n * s;
+    case 'milliseconds':
+    case 'millisecond':
+    case 'msecs':
+    case 'msec':
+    case 'ms':
+      return n;
   }
 }
 
 /**
- * The currently active debug mode names.
- */
-
-debug.names = [];
-debug.skips = [];
-
-/**
- * Enables a debug mode by name. This can include modes
- * separated by a colon and wildcards.
+ * Short format for `ms`.
  *
- * @param {String} name
- * @api public
- */
-
-debug.enable = function(name) {
-  try {
-    localStorage.debug = name;
-  } catch(e){}
-
-  var split = (name || '').split(/[\s,]+/)
-    , len = split.length;
-
-  for (var i = 0; i < len; i++) {
-    name = split[i].replace('*', '.*?');
-    if (name[0] === '-') {
-      debug.skips.push(new RegExp('^' + name.substr(1) + '$'));
-    }
-    else {
-      debug.names.push(new RegExp('^' + name + '$'));
-    }
-  }
-};
-
-/**
- * Disable debug output.
- *
- * @api public
- */
-
-debug.disable = function(){
-  debug.enable('');
-};
-
-/**
- * Humanize the given `ms`.
- *
- * @param {Number} m
+ * @param {Number} ms
  * @return {String}
  * @api private
  */
 
-debug.humanize = function(ms) {
-  var sec = 1000
-    , min = 60 * 1000
-    , hour = 60 * min;
-
-  if (ms >= hour) return (ms / hour).toFixed(1) + 'h';
-  if (ms >= min) return (ms / min).toFixed(1) + 'm';
-  if (ms >= sec) return (ms / sec | 0) + 's';
+function short(ms) {
+  if (ms >= d) return Math.round(ms / d) + 'd';
+  if (ms >= h) return Math.round(ms / h) + 'h';
+  if (ms >= m) return Math.round(ms / m) + 'm';
+  if (ms >= s) return Math.round(ms / s) + 's';
   return ms + 'ms';
-};
-
-/**
- * Returns true if the given mode name is enabled, false otherwise.
- *
- * @param {String} name
- * @return {Boolean}
- * @api public
- */
-
-debug.enabled = function(name) {
-  for (var i = 0, len = debug.skips.length; i < len; i++) {
-    if (debug.skips[i].test(name)) {
-      return false;
-    }
-  }
-  for (var i = 0, len = debug.names.length; i < len; i++) {
-    if (debug.names[i].test(name)) {
-      return true;
-    }
-  }
-  return false;
-};
-
-/**
- * Coerce `val`.
- */
-
-function coerce(val) {
-  if (val instanceof Error) return val.stack || val.message;
-  return val;
 }
 
-// persist
+/**
+ * Long format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
 
-try {
-  if (window.localStorage) debug.enable(localStorage.debug);
-} catch(e){}
+function long(ms) {
+  return plural(ms, d, 'day')
+    || plural(ms, h, 'hour')
+    || plural(ms, m, 'minute')
+    || plural(ms, s, 'second')
+    || ms + ' ms';
+}
 
-},{}],46:[function(require,module,exports){
+/**
+ * Pluralization helper.
+ */
+
+function plural(ms, n, name) {
+  if (ms < n) return;
+  if (ms < n * 1.5) return Math.floor(ms / n) + ' ' + name;
+  return Math.ceil(ms / n) + ' ' + name + 's';
+}
+
+},{}],48:[function(require,module,exports){
 'use strict';
 
 var util = require('util')
@@ -7233,7 +7413,7 @@ DOMElement.prototype.removeChild = function (el) {
 
 module.exports = DOMElement
 
-},{"./element":47,"util":35}],47:[function(require,module,exports){
+},{"./element":49,"util":35}],49:[function(require,module,exports){
 'use strict';
 
 /**
@@ -7245,8 +7425,8 @@ module.exports = DOMElement
 function Element(name, attrs) {
     this.name = name
     this.parent = null
-    this.attrs = attrs || {}
     this.children = []
+    this.setAttrs(attrs)
 }
 
 /*** Accessors ***/
@@ -7261,10 +7441,11 @@ Element.prototype.is = function(name, xmlns) {
 
 /* without prefix */
 Element.prototype.getName = function() {
-    if (this.name.indexOf(':') >= 0)
+    if (this.name.indexOf(':') >= 0) {
         return this.name.substr(this.name.indexOf(':') + 1)
-    else
+    } else {
         return this.name
+    }
 }
 
 /**
@@ -7274,9 +7455,8 @@ Element.prototype.getNS = function() {
     if (this.name.indexOf(':') >= 0) {
         var prefix = this.name.substr(0, this.name.indexOf(':'))
         return this.findNS(prefix)
-    } else {
-        return this.findNS()
     }
+    return this.findNS()
 }
 
 /**
@@ -7285,17 +7465,19 @@ Element.prototype.getNS = function() {
 Element.prototype.findNS = function(prefix) {
     if (!prefix) {
         /* default namespace */
-        if (this.attrs.xmlns)
+        if (this.attrs.xmlns) {
             return this.attrs.xmlns
-        else if (this.parent)
+        } else if (this.parent) {
             return this.parent.findNS()
+        }
     } else {
         /* prefixed namespace */
         var attr = 'xmlns:' + prefix
-        if (this.attrs[attr])
+        if (this.attrs[attr]) {
             return this.attrs[attr]
-        else if (this.parent)
+        } else if (this.parent) {
             return this.parent.findNS(prefix)
+        }
     }
 }
 
@@ -7305,8 +7487,9 @@ Element.prototype.findNS = function(prefix) {
 Element.prototype.getXmlns = function() {
     var namespaces = {}
 
-    if (this.parent)
+    if (this.parent) {
         namespaces = this.parent.getXmlns()
+    }
 
     for (var attr in this.attrs) {
         var m = attr.match('xmlns:?(.*)')
@@ -7317,18 +7500,31 @@ Element.prototype.getXmlns = function() {
     return namespaces
 }
 
+Element.prototype.setAttrs = function(attrs) {
+    this.attrs = {}
+
+    if (typeof attrs === 'string')
+        this.attrs.xmlns = attrs
+    else if (attrs) {
+        Object.keys(attrs).forEach(function(key) {
+            this.attrs[key] = attrs[key]
+        }, this)
+    }
+}
 
 /**
  * xmlns can be null, returns the matching attribute.
  **/
 Element.prototype.getAttr = function(name, xmlns) {
-    if (!xmlns)
+    if (!xmlns) {
         return this.attrs[name]
+    }
 
     var namespaces = this.getXmlns()
 
-    if (!namespaces[xmlns])
+    if (!namespaces[xmlns]) {
         return null
+    }
 
     return this.attrs[[namespaces[xmlns], name].join(':')]
 }
@@ -7377,7 +7573,9 @@ Element.prototype.getChildrenByAttr = function(attr, val, xmlns, recursive) {
             result.push(child.getChildrenByAttr(attr, val, xmlns, true))
         }
     }
-    if (recursive) result = [].concat.apply([], result)
+    if (recursive) {
+        result = [].concat.apply([], result)
+    }
     return result
 }
 
@@ -7428,19 +7626,19 @@ Element.prototype.getChildElements = function() {
 
 /** returns uppermost parent */
 Element.prototype.root = function() {
-    if (this.parent)
+    if (this.parent) {
         return this.parent.root()
-    else
-        return this
+    }
+    return this
 }
 Element.prototype.tree = Element.prototype.root
 
 /** just parent or itself */
 Element.prototype.up = function() {
-    if (this.parent)
+    if (this.parent) {
         return this.parent
-    else
-        return this
+    }
+    return this
 }
 
 Element.prototype._getElement = function(name, attrs) {
@@ -7455,7 +7653,9 @@ Element.prototype.c = function(name, attrs) {
 
 Element.prototype.cnode = function(child) {
     this.children.push(child)
-    child.parent = this
+    if (typeof child === 'object') {
+        child.parent = this
+    }
     return child
 }
 
@@ -7498,11 +7698,7 @@ Element.prototype.remove = function(el, xmlns) {
  * doing. Building XML with ltx is easy!
  */
 Element.prototype.clone = function() {
-    var clone = this._getElement(this.name, {})
-    for (var k in this.attrs) {
-        if (this.attrs.hasOwnProperty(k))
-            clone.attrs[k] = this.attrs[k]
-    }
+    var clone = this._getElement(this.name, this.attrs)
     for (var i = 0; i < this.children.length; i++) {
         var child = this.children[i]
         clone.cnode(child.clone ? child.clone() : child)
@@ -7544,7 +7740,7 @@ Element.prototype.toJSON = function() {
         name: this.name,
         attrs: this.attrs,
         children: this.children.map(function(child) {
-            return child && child.toJSON ? child.toJSON() : child;
+            return child && child.toJSON ? child.toJSON() : child
         })
     }
 }
@@ -7611,7 +7807,7 @@ function escapeXmlText(s) {
 exports.Element = Element
 exports.escapeXml = escapeXml
 
-},{}],48:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 /* Cause browserify to bundle SAX parsers: */
@@ -7621,7 +7817,7 @@ parse.availableSaxParsers.push(parse.bestSaxParser = require('./sax/sax_ltx'))
 
 /* SHIM */
 module.exports = require('./index')
-},{"./index":49,"./parse":50,"./sax/sax_ltx":51}],49:[function(require,module,exports){
+},{"./index":51,"./parse":52,"./sax/sax_ltx":53}],51:[function(require,module,exports){
 'use strict';
 
 var parse = require('./parse')
@@ -7648,7 +7844,7 @@ exports.Parser = parse.Parser
 exports.availableSaxParsers = parse.availableSaxParsers
 exports.bestSaxParser = parse.bestSaxParser
 
-},{"./dom-element":46,"./element":47,"./parse":50}],50:[function(require,module,exports){
+},{"./dom-element":48,"./element":49,"./parse":52}],52:[function(require,module,exports){
 'use strict';
 
 var events = require('events')
@@ -7767,7 +7963,7 @@ exports.parse = function(data, saxParser) {
     }
 }
 
-},{"./dom-element":46,"events":24,"util":35}],51:[function(require,module,exports){
+},{"./dom-element":48,"events":24,"util":35}],53:[function(require,module,exports){
 'use strict';
 
 var util = require('util')
@@ -7939,7 +8135,7 @@ function unescapeXml(s) {
         replace(/\&(nbsp|#160);/g, '\n')
 }
 
-},{"events":24,"util":35}],52:[function(require,module,exports){
+},{"events":24,"util":35}],54:[function(require,module,exports){
 'use strict';
 
 var log = require('debug')('node-stringprep')
@@ -7951,7 +8147,7 @@ var UIDNA_USE_STD3_RULES = 2
 try {
     var bindings = require('bindings')('node_stringprep.node')
 } catch (ex) {
-    console.warn(
+    log(
         'Cannot load StringPrep-' +
         require('./package.json').version +
         ' bindings (using fallback). You may need to ' +
@@ -8055,7 +8251,7 @@ module.exports = {
     StringPrep: StringPrep
 }
 
-},{"./package.json":57,"bindings":53,"debug":54}],53:[function(require,module,exports){
+},{"./package.json":59,"bindings":55,"debug":56}],55:[function(require,module,exports){
 var process=require("__browserify_process"),__filename="/node_modules/node-xmpp-core/node_modules/node-stringprep/node_modules/bindings/bindings.js";
 /**
  * Module dependencies.
@@ -8154,9 +8350,10 @@ module.exports = exports = bindings
 /**
  * Gets the filename of the JavaScript file that invokes this function.
  * Used to help find the root directory of a module.
+ * Optionally accepts an filename argument to skip when searching for the invoking filename
  */
 
-exports.getFileName = function getFileName () {
+exports.getFileName = function getFileName (calling_file) {
   var origPST = Error.prepareStackTrace
     , origSTL = Error.stackTraceLimit
     , dummy = {}
@@ -8168,7 +8365,13 @@ exports.getFileName = function getFileName () {
     for (var i=0, l=st.length; i<l; i++) {
       fileName = st[i].getFileName()
       if (fileName !== __filename) {
-        return
+        if (calling_file) {
+            if (fileName !== calling_file) {
+              return
+            }
+        } else {
+          return
+        }
       }
     }
   }
@@ -8216,16 +8419,16 @@ exports.getRoot = function getRoot (file) {
   }
 }
 
-},{"__browserify_process":26,"fs":16,"path":30}],54:[function(require,module,exports){
+},{"__browserify_process":26,"fs":16,"path":30}],56:[function(require,module,exports){
 module.exports=require(36)
-},{"./debug":55}],55:[function(require,module,exports){
+},{"./debug":57}],57:[function(require,module,exports){
 module.exports=require(37)
-},{"ms":56}],56:[function(require,module,exports){
+},{"ms":58}],58:[function(require,module,exports){
 module.exports=require(38)
-},{}],57:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 module.exports={
   "name": "node-stringprep",
-  "version": "0.5.4",
+  "version": "0.7.2",
   "main": "index.js",
   "description": "ICU StringPrep profiles",
   "keywords": [
@@ -8238,16 +8441,17 @@ module.exports={
     "install": "node-gyp rebuild"
   },
   "dependencies": {
-    "nan": "~1.2.0",
-    "bindings": "~1.1.1",
-    "debug": "~2.0.0"
+    "bindings": "~1.2.1",
+    "debug": "~2.0.0",
+    "nan": "~1.8.4"
   },
   "devDependencies": {
-    "proxyquire": "~0.5.2",
-    "grunt-mocha-cli": "~1.3.0",
+    "grunt": "~0.4.2",
+    "grunt-cli": "^0.1.13",
     "grunt-contrib-jshint": "~0.7.2",
-    "should": "~2.1.1",
-    "grunt": "~0.4.2"
+    "grunt-mocha-cli": "~1.3.0",
+    "proxyquire": "~0.5.2",
+    "should": "~2.1.1"
   },
   "repository": {
     "type": "git",
@@ -8271,13 +8475,12 @@ module.exports={
     "node": ">=0.8"
   },
   "gypfile": true,
-  "_id": "node-stringprep@0.5.4",
-  "dist": {
-    "shasum": "dd03b3d8f6f83137754cc1ea1a55675447b0ab92",
-    "tarball": "http://registry.npmjs.org/node-stringprep/-/node-stringprep-0.5.4.tgz"
-  },
-  "_from": "node-stringprep@>=0.5.2 <0.6.0",
-  "_npmVersion": "1.4.3",
+  "gitHead": "7f335a70862df38964a91eb8f81241ffd289f049",
+  "_id": "node-stringprep@0.7.2",
+  "_shasum": "371aa203222ccf201e34ec25e5f2136bc6493420",
+  "_from": "node-stringprep@>=0.7.0 <0.8.0",
+  "_npmVersion": "2.9.0",
+  "_nodeVersion": "2.0.1",
   "_npmUser": {
     "name": "lloydwatkin",
     "email": "lloyd@evilprofessor.co.uk"
@@ -8290,14 +8493,25 @@ module.exports={
     {
       "name": "lloydwatkin",
       "email": "lloyd@evilprofessor.co.uk"
+    },
+    {
+      "name": "chris-rock",
+      "email": "chris@lollyrock.com"
+    },
+    {
+      "name": "sonnyp",
+      "email": "sonny@fastmail.net"
     }
   ],
+  "dist": {
+    "shasum": "371aa203222ccf201e34ec25e5f2136bc6493420",
+    "tarball": "http://registry.npmjs.org/node-stringprep/-/node-stringprep-0.7.2.tgz"
+  },
   "directories": {},
-  "_shasum": "dd03b3d8f6f83137754cc1ea1a55675447b0ab92",
-  "_resolved": "https://registry.npmjs.org/node-stringprep/-/node-stringprep-0.5.4.tgz"
+  "_resolved": "https://registry.npmjs.org/node-stringprep/-/node-stringprep-0.7.2.tgz"
 }
 
-},{}],58:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 var EventEmitter = require('events').EventEmitter
 var backoff = require('backoff')
 var noop = function () {}
@@ -8414,7 +8628,7 @@ function (createConnection) {
 
 }
 
-},{"backoff":59,"events":24}],59:[function(require,module,exports){
+},{"backoff":61,"events":24}],61:[function(require,module,exports){
 /*
  * Copyright (c) 2012 Mathieu Turcotte
  * Licensed under the MIT license.
@@ -8465,7 +8679,7 @@ module.exports.call = function(fn, vargs, callback) {
     return new FunctionCall(fn, vargs, callback);
 };
 
-},{"./lib/backoff":60,"./lib/function_call.js":61,"./lib/strategy/exponential":62,"./lib/strategy/fibonacci":63}],60:[function(require,module,exports){
+},{"./lib/backoff":62,"./lib/function_call.js":63,"./lib/strategy/exponential":64,"./lib/strategy/fibonacci":65}],62:[function(require,module,exports){
 /*
  * Copyright (c) 2012 Mathieu Turcotte
  * Licensed under the MIT license.
@@ -8551,7 +8765,7 @@ Backoff.prototype.reset = function() {
 
 module.exports = Backoff;
 
-},{"events":24,"util":35}],61:[function(require,module,exports){
+},{"events":24,"util":35}],63:[function(require,module,exports){
 /*
  * Copyright (c) 2012 Mathieu Turcotte
  * Licensed under the MIT license.
@@ -8780,7 +8994,7 @@ FunctionCall.prototype.handleBackoff_ = function(number, delay, err) {
 
 module.exports = FunctionCall;
 
-},{"./backoff":60,"./strategy/fibonacci":63,"events":24,"util":35}],62:[function(require,module,exports){
+},{"./backoff":62,"./strategy/fibonacci":65,"events":24,"util":35}],64:[function(require,module,exports){
 /*
  * Copyright (c) 2012 Mathieu Turcotte
  * Licensed under the MIT license.
@@ -8816,7 +9030,7 @@ ExponentialBackoffStrategy.prototype.reset_ = function() {
 
 module.exports = ExponentialBackoffStrategy;
 
-},{"./strategy":64,"util":35}],63:[function(require,module,exports){
+},{"./strategy":66,"util":35}],65:[function(require,module,exports){
 /*
  * Copyright (c) 2012 Mathieu Turcotte
  * Licensed under the MIT license.
@@ -8853,7 +9067,7 @@ FibonacciBackoffStrategy.prototype.reset_ = function() {
 
 module.exports = FibonacciBackoffStrategy;
 
-},{"./strategy":64,"util":35}],64:[function(require,module,exports){
+},{"./strategy":66,"util":35}],66:[function(require,module,exports){
 /*
  * Copyright (c) 2012 Mathieu Turcotte
  * Licensed under the MIT license.
@@ -8953,7 +9167,7 @@ BackoffStrategy.prototype.reset_ = function() {
 
 module.exports = BackoffStrategy;
 
-},{"events":24,"util":35}],65:[function(require,module,exports){
+},{"events":24,"util":35}],67:[function(require,module,exports){
 var process=require("__browserify_process");'use strict';
 
 module.exports = connect;
