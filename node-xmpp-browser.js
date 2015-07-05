@@ -8478,7 +8478,7 @@ module.exports={
   "gitHead": "7f335a70862df38964a91eb8f81241ffd289f049",
   "_id": "node-stringprep@0.7.2",
   "_shasum": "371aa203222ccf201e34ec25e5f2136bc6493420",
-  "_from": "node-stringprep@>=0.7.0 <0.8.0",
+  "_from": "node-stringprep@^0.7.0",
   "_npmVersion": "2.9.0",
   "_nodeVersion": "2.0.1",
   "_npmUser": {
