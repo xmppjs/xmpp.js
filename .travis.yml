@@ -19,7 +19,7 @@ before_install:
 script: npm run full-test
 
 after_success:
-- if [ "master" -ne $TRAVIS_BRANCH ]; then exit 0; fi;
+- if [ "master" != "$TRAVIS_BRANCH" ]; then exit 0; fi;
 - git config --global user.email "deploy@travis-ci.org"
 - git config --global user.name "Travis deploy"
 - git remote add github "https://${GH_TOKEN}@github.com/node-xmpp/node-xmpp-client.git"

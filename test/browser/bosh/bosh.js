@@ -215,4 +215,81 @@ describe('BOSH Browser tests', function(){
         })
     })
     
+    describe('Authentication', function() {
+    
+        it('Can connect using PLAIN authentication', function(done) {
+            client = new window.XMPP.Client({
+                jid: jid,
+                password: password,
+                bosh: {
+                    url: 'http://localhost:5280/http-bind/'
+                },
+                preferred: 'PLAIN'
+            })
+
+            var ping = new window.XMPP.ltx.Element(
+                'iq', { id: '123', type: 'get' }
+            ).c('ping', { xmlns: 'urn:xmpp:ping' })
+
+            client.on('online', function() {
+                client.send(ping)
+                client.on('stanza', function(pong) {
+                    pong.attrs.id.should.equal('123')
+                    done()
+                })
+            })
+        })
+    
+        it.skip('Can connect using DIGEST-MD5 authentication', function(done) {
+            client = new window.XMPP.Client({
+                jid: jid,
+                password: password,
+                bosh: {
+                    url: 'http://localhost:5280/http-bind/'
+                },
+                preferred: 'DIGEST-MD5'
+            })
+
+            var ping = new window.XMPP.ltx.Element(
+                'iq', { id: '123', type: 'get' }
+            ).c('ping', { xmlns: 'urn:xmpp:ping' })
+
+            client.on('error', function(error) {
+                done(error)
+            })
+            client.on('online', function() {
+                client.send(ping)
+                client.on('stanza', function(pong) {
+                    pong.attrs.id.should.equal('123')
+                    done()
+                })
+            })
+        })
+        
+        it('Can connect using ANONYMOUS authentication', function(done) {
+            client = new window.XMPP.Client({
+                jid: '@anon.localhost',
+                password: password,
+                host: 'localhost',
+                bosh: {
+                    url: 'http://localhost:5280/http-bind/'
+                },
+                preferred: 'ANONYMOUS'
+            })
+
+            var ping = new window.XMPP.ltx.Element(
+                'iq', { id: '123', type: 'get' }
+            ).c('ping', { xmlns: 'urn:xmpp:ping' })
+
+            client.on('online', function() {
+                client.send(ping)
+                client.on('stanza', function(pong) {
+                    pong.attrs.id.should.equal('123')
+                    done()
+                })
+            })
+        })
+    
+    })
+    
 })

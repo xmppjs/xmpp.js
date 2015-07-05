@@ -46,3 +46,11 @@ VirtualHost "localhost"
 
 Component "component.localhost"
 	component_secret = "mysecretcomponentpassword"
+
+VirtualHost "anon.localhost"
+   authentication = "anonymous"
+   enabled = true
+   ssl = {
+	key = "/etc/prosody/certs/example.com.key";
+	certificate = "/etc/prosody/certs/example.com.crt";
+   }
