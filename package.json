@@ -1,7 +1,7 @@
 {
   "name": "node-xmpp",
   "main": "./lib/node-xmpp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "browserify": "./lib/node-xmpp-browserify",
   "description": "Idiomatic XMPP client, component & server library for node.js + browserify",
   "author": "Astro",
