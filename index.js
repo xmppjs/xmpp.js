@@ -7,20 +7,23 @@ var Connection = require('node-xmpp-core').Connection
   , C2SStream = require('node-xmpp-server').C2SStream
   , JID = require('node-xmpp-core').JID
   , Router = require('node-xmpp-server').Router
-  , ltx = require('ltx')
+  , ltx = require('node-xmpp-core').ltx
   , Stanza = require('node-xmpp-core').Stanza
 
-exports.Connection = Connection
-exports.Client = Client
-exports.Component = Component
-exports.C2SServer = C2SServer
-exports.C2SStream = C2SStream
-exports.JID = JID
-exports.Element = ltx.Element
-exports.Stanza = Stanza.Stanza
-exports.Message = Stanza.Message
-exports.Presence = Stanza.Presence
-exports.Iq = Stanza.Iq
-exports.Router = Router
-exports.BOSHServer = require('node-xmpp-server').BOSHServer
-exports.StreamParser = require('node-xmpp-core').StreamParser
+module.exports = {
+    Connection: Connection,
+    Client: Client,
+    Component: Component,
+    C2SServer: C2SServer,
+    C2SStream: C2SStream,
+    JID: JID,
+    Element: ltx.Element,
+    Stanza: Stanza.Stanza,
+    Message: Stanza.Message,
+    Presence: Stanza.Presence,
+    Iq: Stanza.Iq,
+    ltx: ltx,
+    Router: Router,
+    BOSHServer: require('node-xmpp-server').BOSHServer,
+    StreamParser: require('node-xmpp-core').StreamParser
+}
