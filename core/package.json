@@ -1,0 +1,37 @@
+{
+  "name": "node-xmpp-core",
+  "version": "1.0.0-alpha14",
+  "description": "Core files in the node-xmpp project",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:node-xmpp/node-xmpp-core.git"
+  },
+  "keywords": [
+    "xmpp"
+  ],
+  "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/node-xmpp/node-xmpp-core/issues"
+  },
+  "dependencies": {
+    "node-stringprep": "^0.7.0",
+    "reconnect-core": "https://github.com/dodo/reconnect-core/tarball/merged",
+    "tls-connect": "^0.2.2",
+    "ltx": "^0.9.0",
+    "debug": "^2.1.1"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.2",
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-mocha-cli": "^1.12.0",
+    "grunt-mocha-istanbul": "^2.3.1",
+    "istanbul": "^0.3.5",
+    "mocha": "^2.1.0"
+  }
+}

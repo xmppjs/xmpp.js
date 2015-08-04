@@ -1,0 +1,19 @@
+language: node_js
+
+node_js:
+  - "0.8"
+  - "0.10"
+  - "0.12"
+  - "iojs"
+
+before_install:
+  - version=`node -v`; if [[ $version == *"0.8."* ]]; then npm i -g npm; fi
+  - "sudo apt-get install libicu-dev"
+  # Workaround for a permissions issue with Travis virtual machine images
+  # that breaks Python's multiprocessing:
+  # https://github.com/travis-ci/travis-cookbooks/issues/155
+  - sudo rm -rf /dev/shm
+  - sudo ln -s /run/shm /dev/shm
+
+before_script:
+  - npm install -g grunt-cli
