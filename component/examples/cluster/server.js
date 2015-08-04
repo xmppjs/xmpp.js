@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var cluster = require('cluster')
   , config = require('./config')

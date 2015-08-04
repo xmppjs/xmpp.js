@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var util = require('util')
   , Mechanism = require('./mechanism')
@@ -21,13 +21,14 @@ XFacebookPlatform.prototype.auth = function() {
 XFacebookPlatform.prototype.challenge = function(s) {
     var dict = querystring.parse(s)
 
-    /*jshint camelcase: false */
     var response = {
+        /* eslint-disable camelcase */
         api_key: this.api_key,
         call_id: new Date().getTime(),
+        access_token: this.access_token,
+        /* eslint-enable camelcase */
         method: dict.method,
         nonce: dict.nonce,
-        access_token: this.access_token,
         v: '1.0'
     }
 

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var util = require('util')
   , core = require('../../xmpp').core

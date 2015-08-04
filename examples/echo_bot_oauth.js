@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * Echo Bot - the XMPP Hello World
@@ -15,8 +15,10 @@ if (argv.length !== 4) {
 var cl = new xmpp.Client({
     jid: argv[2],
     host: 'talk.google.com',
+    /* eslint-disable camelcase */
     oauth2_token: argv[3],
     oauth2_auth: 'http://www.google.com/talk/protocol/auth'
+    /* eslint-enable camelcase */
 })
 
 cl.on('online',  function() {

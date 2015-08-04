@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var net = require('net')
   , EventEmitter = require('events').EventEmitter

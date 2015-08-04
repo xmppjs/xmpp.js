@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var util = require('util')
   , crypto = require('crypto')
@@ -6,7 +6,6 @@ var util = require('util')
   , Element = core.Stanza.Element
   , JID = core.JID
   , Mechanism = require('./mechanism')
-
 
 /**
  * Hash a string
@@ -89,7 +88,7 @@ var NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl'
 function DigestMD5(domain) {
     /*jshint camelcase: false */
     this.nonce = generateNonce()
-    this.nonce_count = 0;
+    this.nonceCount = 0
     this.authcid = null
     this.actAs = null
     this.realm = null
@@ -112,7 +111,7 @@ DigestMD5.prototype.auth = function() {
 
 DigestMD5.prototype.getNC = function() {
     /*jshint camelcase: false */
-    return rjust(this.nonce_count.toString(), 8, '0')
+    return rjust(this.nonceCount.toString(), 8, '0')
 }
 
 DigestMD5.prototype.responseValue = function(s, password) {
@@ -123,7 +122,7 @@ DigestMD5.prototype.responseValue = function(s, password) {
     var value
     /*jshint camelcase: false */
     if (dict.nonce && dict.qop) {
-        this.nonce_count++
+        this.nonceCount++
         var a1 = md5(this.authcid + ':' +
             this.realm + ':' +
             password) + ':' +
@@ -186,7 +185,7 @@ DigestMD5.prototype.manageAuth = function(stanza, server) {
     } else if (stanza.is('response', NS_XMPP_SASL) && stanza.getText() !== '') {
         // response from client with challenge
         var responseValid = this.checkResponse(new Buffer(stanza.getText(), 'base64'))
-        var self = this;
+        var self = this
         if (responseValid) {
             var user = {
                 'username': self.authcid
@@ -200,22 +199,22 @@ DigestMD5.prototype.manageAuth = function(stanza, server) {
                         .t(new Buffer('rspauth=ea40f60335c427b5527b84dbabcdfffd').toString('base64'))
                     server.send(challenge)
                     delete user.password
-                    self.user = user;
+                    self.user = user
                 } else {
                     //no authenticated <response xmlns='urn:ietf:params:xml:ns:xmpp-sasl'/>
-                    self.failure(err);
+                    self.failure(err)
                 }
             })
         } else {
             // error if we are not able to authenticate the user
-            self.failure(new Error('Invalid response'));
+            self.failure(new Error('Invalid response'))
         }
     } else if (stanza.is('response', NS_XMPP_SASL) && this.user) {
         // here we are successfully authenticated and are able to call the callback
-        this.success(this.user);
+        this.success(this.user)
     } else if (stanza.is('response', NS_XMPP_SASL)) {
         // client wants to skip mechanism steps
-        this.failure(new Error('Invalid response'));
+        this.failure(new Error('Invalid response'))
     }
 }
 

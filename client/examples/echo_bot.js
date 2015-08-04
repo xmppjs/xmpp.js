@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * Echo Bot - the XMPP Hello World

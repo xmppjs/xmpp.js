@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * Each implemented mechanism offers multiple methods

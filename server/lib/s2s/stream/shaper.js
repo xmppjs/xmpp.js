@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * This is extremely simple and unprecise.

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * Implements http://xmpp.org/extensions/xep-0220.html

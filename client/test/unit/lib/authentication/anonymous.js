@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var Anonymous = require('../../../../lib/authentication/anonymous')
 

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var util = require('util')
   , tls = require('tls')
@@ -39,9 +39,10 @@ Session.prototype._setupSocketConnection = function(opts) {
         },
         serialized: opts.serialized
     }
-    for (var  key in opts)
+    for (var  key in opts) {
         if (!(key in params))
             params[key] = opts[key]
+    }
 
     this.connection = new Connection(params)
     this._addConnectionListeners()
@@ -136,14 +137,15 @@ Session.prototype._setupWebsocketConnection = function(opts) {
 }
 
 Session.prototype.setOptions = function(opts) {
-    /* jshint camelcase: false */
     this.jid = (typeof opts.jid === 'string') ? new JID(opts.jid) : opts.jid
     this.password = opts.password
     this.preferredSaslMechanism = opts.preferredSaslMechanism
+    /* eslint-disable camelcase */
     this.api_key = opts.api_key
     this.access_token = opts.access_token
     this.oauth2_token = opts.oauth2_token
     this.oauth2_auth = opts.oauth2_auth
+    /* eslint-enable camelcase */
     this.register = opts.register
     if (typeof opts.actAs === 'string') {
         this.actAs = new JID(opts.actAs)

@@ -1,9 +1,10 @@
+/* eslint-disable strict */
+
 var StringPrep = require('node-stringprep').StringPrep
   , toUnicode = require('node-stringprep').toUnicode
 
-
 /**
- * JID implements 
+ * JID implements
  * - Xmpp addresses according to RFC6122
  * - XEP-0106: JID Escaping
  *
@@ -101,14 +102,14 @@ JID.prototype.setResource = function(resource) {
 JID.prototype.getLocal = function(unescape) {
     unescape = unescape || false
     var local = null
-    
+
     if (unescape) {
         local = this.unescapeLocal(this.local)
     } else {
         local = this.local
     }
 
-    return local;
+    return local
 }
 
 JID.prototype.prep = function(operation, value) {
@@ -145,7 +146,7 @@ JID.prototype.detectEscape = function (local) {
         .replace(/\\5c/g, '')
 
     // detect if we have unescaped sequences
-    var search = tmp.search(/\\| |\"|\&|\'|\/|:|<|>|@/g);
+    var search = tmp.search(/\\| |\"|\&|\'|\/|:|<|>|@/g)
     if (search === -1) {
         return false
     } else {
@@ -153,7 +154,7 @@ JID.prototype.detectEscape = function (local) {
     }
 }
 
-/** 
+/**
  * Escape the local part of a JID.
  *
  * @see http://xmpp.org/extensions/xep-0106.html
@@ -176,11 +177,9 @@ JID.prototype.escapeLocal = function (local) {
         .replace(/>/g, '\\3e')
         .replace(/@/g, '\\40')
         .replace(/\3a/g, '\5c3a')
-       
-    
 }
 
-/** 
+/**
  * Unescape a local part of a JID.
  *
  * @see http://xmpp.org/extensions/xep-0106.html
@@ -204,6 +203,6 @@ JID.prototype.unescapeLocal = function (local) {
 
 if ((typeof exports !== 'undefined') && (exports !== null)) {
     module.exports = JID
-} else if ((typeof window !== 'undefined') && (window !== null)) {
-    window.JID = JID
+} else if ((typeof window !== 'undefined') && (window !== null)) { // eslint-disable-line
+    window.JID = JID // eslint-disable-line
 }

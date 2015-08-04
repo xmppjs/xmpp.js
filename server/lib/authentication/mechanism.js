@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * Each implemented mechanism offers multiple methods
@@ -36,7 +36,7 @@ Mechanism.prototype = {
     manageAuth : function(stanza) {
         var self = this
 
-        var auth = new Buffer(stanza.getText(), 'base64').toString('utf8');
+        var auth = new Buffer(stanza.getText(), 'base64').toString('utf8')
         this.authenticate(this.extractSasl(auth), function (err, user) {
             if (!err && user) {
                 self.success(user)
@@ -48,8 +48,7 @@ Mechanism.prototype = {
 }
 
 // This method should be overrriden in custom mechanisms
-Mechanism.prototype.extractSasl = function(auth) {
-    /* jshint unused:false */
+Mechanism.prototype.extractSasl = function() {
     throw new Error('This is an abstract method, you should overrride it')
 }
 

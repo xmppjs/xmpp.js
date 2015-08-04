@@ -1,3 +1,5 @@
+/* eslint-disable strict */
+
 var assert = require('assert')
   , xmpp = require('../index')
 

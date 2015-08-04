@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var assert = require('assert')
   , xmpp = require('../index')
@@ -127,8 +127,8 @@ describe('JID', function () {
 
         it('escape `user\\40host@example.com`', function () {
             var esc = new xmpp.JID('user\\40host@example.com')
-            assert.equal(esc.toString(), 'user\\40host@example.com');
-            assert.equal(esc.toString(true), 'user@host@example.com');
+            assert.equal(esc.toString(), 'user\\40host@example.com')
+            assert.equal(esc.toString(true), 'user@host@example.com')
         })
 
         it('escape `c\\3a\\5cnet@example.com`', function () {
@@ -154,6 +154,6 @@ describe('JID', function () {
             assert.equal(esc.toString(), 'c\\3a\\5c5commas@example.com')
             assert.equal(esc.toString(true), 'c:\\5commas@example.com')
         })
-        
+
     })
 })

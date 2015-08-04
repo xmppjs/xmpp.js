@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /* global XMPP */
 /* Note these are connection details for a local dev server :) */

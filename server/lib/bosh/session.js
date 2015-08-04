@@ -188,7 +188,7 @@ BOSHServerSession.prototype.workInQueue = function() { // jshint ignore:line
         this.sendData(
             '<?xml version="1.0" ?>' +
             this.streamOpen({to: to, xmppv: xmppv})
-        );
+        )
     }
     // handle stream reset
     else if (opts.bodyEl.attrs['xmpp:restart'] === 'true') {
@@ -196,7 +196,7 @@ BOSHServerSession.prototype.workInQueue = function() { // jshint ignore:line
         // emulate stream restart for connection
         this.sendData(
             this.streamOpen({to: to, xmppv: xmppv})
-        );
+        )
     }
 
     opts.bodyEl.children.forEach(function(stanza) {

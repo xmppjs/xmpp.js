@@ -53,7 +53,7 @@ BOSHServer.prototype.corsHeaders = {
     headers: [
         'X-Requested-With',
         'Content-Type',
-        'Content-Length',
+        'Content-Length'
     ],
     credentials: false
 }
@@ -81,8 +81,8 @@ BOSHServer.prototype.handleHTTP = function(req, res) {
     debug('handle http')
     this.setCorsHeader(req, res, this.options.cors)
     if (req.method === 'OPTIONS') {
-        res.writeHead(200);
-        res.end();
+        res.writeHead(200)
+        res.end()
     } else if (req.method === 'POST') {
         this._handlePostRequest(req, res)
     } else {

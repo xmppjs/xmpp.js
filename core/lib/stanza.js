@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var util = require('util')
   , ltx = require('ltx')
@@ -34,7 +34,7 @@ Object.defineProperty(Stanza.prototype, 'from', {
     set: function(from) {
         this.attrs.from = from
     }
-});
+})
 
 Object.defineProperty(Stanza.prototype, 'to', {
     get: function() {
@@ -44,7 +44,7 @@ Object.defineProperty(Stanza.prototype, 'to', {
     set: function(to) {
         this.attrs.to = to
     }
-});
+})
 
 Object.defineProperty(Stanza.prototype, 'id', {
     get: function() {
@@ -54,7 +54,7 @@ Object.defineProperty(Stanza.prototype, 'id', {
     set: function(id) {
         this.attrs.id = id
     }
-});
+})
 
 Object.defineProperty(Stanza.prototype, 'type', {
     get: function() {
@@ -64,7 +64,7 @@ Object.defineProperty(Stanza.prototype, 'type', {
     set: function(type) {
         this.attrs.type = type
     }
-});
+})
 
 /**
  * Stanza kinds

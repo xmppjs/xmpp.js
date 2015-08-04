@@ -1,4 +1,6 @@
-'use strict';
+/* eslint-env browser */
+
+'use strict'
 
 describe('BOSH Browser tests', function(){
 

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var util = require('util')
   , Element = require('../../xmpp').core.Stanza.Element
@@ -56,7 +56,7 @@ IncomingServer.prototype.onStanza = function (stanza) {
 
     // emit stanza if it is not handled
     if (!handled) {
-        this.emit('stanza', stanza);
+        this.emit('stanza', stanza)
     }
 }
 

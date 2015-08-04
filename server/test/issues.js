@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var Element = require('../lib/xmpp').core.Stanza.Element
   , C2SServer = require('../index').C2SServer

@@ -1,8 +1,7 @@
-'use strict';
+'use strict'
 
 var Session = require('./lib/session')
   , core = require('./lib/xmpp').core
-  , Connection = core.Connection
   , JID = core.JID
   , Stanza = core.Stanza
   , sasl = require('./lib/sasl')
@@ -160,8 +159,8 @@ Client.prototype.connect = function() {
                     r = (r[0].split(':'))[1].trim()
                     var s = stdout.match(/sid:+[ a-z+'"-_A-Z+0-9]*/i)
                     s = (s[0].split(':'))[1]
-                        .replace('\'','')
-                        .replace('\'','')
+                        .replace('\'', '')
+                        .replace('\'', '')
                         .trim()
                     if (r && s) {
                         return cb(null, { rid: r, sid: s })
@@ -173,14 +172,14 @@ Client.prototype.connect = function() {
     } else {
         this.options.xmlns = NS_CLIENT
         /* jshint camelcase: false */
-        delete this.did_bind
-        delete this.did_session
+        delete this.didBind
+        delete this.didSession
 
         this.state = STATE_PREAUTH
         this.on('end', function() {
             this.state = STATE_PREAUTH
-            delete this.did_bind
-            delete this.did_session
+            delete this.didBind
+            delete this.didSession
         })
 
         Session.call(this, this.options)
@@ -192,8 +191,8 @@ Client.prototype.connect = function() {
                 if (error) this.emit('error', error)
                 this.emit('offline')
             }
-            delete this.did_bind
-            delete this.did_session
+            delete this.didBind
+            delete this.didSession
         }.bind(this))
 
         // If server and client have multiple possible auth mechanisms
@@ -237,7 +236,7 @@ Client.prototype._handleSessionState = function(stanza) {
     if (stanza.attrs.type === 'result') {
         this.state = STATE_AUTHED
         /* jshint camelcase: false */
-        this.did_session = true
+        this.didSession = true
 
         /* no stream restart, but next feature (most probably
            we'll go online next) */
@@ -251,7 +250,7 @@ Client.prototype._handleBindState = function(stanza) {
     if (stanza.attrs.type === 'result') {
         this.state = STATE_AUTHED
         /*jshint camelcase: false */
-        this.did_bind = true
+        this.didBind = true
 
         var bindEl = stanza.getChild('bind', NS_XMPP_BIND)
         if (bindEl && bindEl.getChild('jid')) {
@@ -297,14 +296,15 @@ Client.prototype._handlePreAuthState = function() {
         this.mech.authzid = this.jid.bare().toString()
         this.mech.authcid = this.jid.user
         this.mech.password = this.password
-        /*jshint camelcase: false */
+        /* eslint-disable camelcase */
         this.mech.api_key = this.api_key
         this.mech.access_token = this.access_token
         this.mech.oauth2_token = this.oauth2_token
         this.mech.oauth2_auth = this.oauth2_auth
+        this.mech.digest_uri = 'xmpp/' + this.jid.domain
+        /* eslint-enable camelcase */
         this.mech.realm = this.jid.domain  // anything?
         if (this.actAs) this.mech.actAs = this.actAs.user
-        this.mech.digest_uri = 'xmpp/' + this.jid.domain
         var authMsg = encode64(this.mech.auth())
         var attrs = this.mech.authAttrs()
         attrs.xmlns = NS_XMPP_SASL
@@ -329,7 +329,7 @@ Client.prototype.useFeatures = function() {
         this.streamFeatures.getChild('mechanisms', NS_XMPP_SASL)) {
         this._handlePreAuthState()
     } else if ((this.state === STATE_AUTHED) &&
-               !this.did_bind &&
+               !this.didBind &&
                this.streamFeatures.getChild('bind', NS_XMPP_BIND)) {
         this.state = STATE_BIND
         var bindEl = new Stanza.Element(
@@ -340,7 +340,7 @@ Client.prototype.useFeatures = function() {
             bindEl.c('resource').t(this.jid.resource)
         this.send(bindEl)
     } else if ((this.state === STATE_AUTHED) &&
-               !this.did_session &&
+               !this.didSession &&
                this.streamFeatures.getChild('session', NS_XMPP_SESSION)) {
         this.state = STATE_SESSION
         var stanza = new Stanza.Element(

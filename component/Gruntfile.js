@@ -1,15 +1,9 @@
-'use strict';
+'use strict'
 
 module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        jshint: {
-            allFiles: ['gruntfile.js', 'lib/**/*.js', 'examples/**/*.js', 'test/**/*.js'],
-            options: {
-                jshintrc: '.jshintrc'
-            }
-        },
         mochacli: {
             unit: {
                 options: { files: [ './test/unit/**/*.js' ] }
@@ -26,11 +20,10 @@ module.exports = function(grunt) {
     })
 
     // Load the plugins
-    grunt.loadNpmTasks('grunt-contrib-jshint')
     grunt.loadNpmTasks('grunt-mocha-cli')
 
     // Configure tasks
     grunt.registerTask('default', ['test'])
-    grunt.registerTask('test', ['mochacli:unit', 'jshint'])
-    grunt.registerTask('integration-test', ['mochacli', 'jshint' ])
+    grunt.registerTask('test', ['mochacli:unit'])
+    grunt.registerTask('integration-test', ['mochacli'])
 }

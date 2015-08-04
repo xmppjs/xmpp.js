@@ -1,3 +1,7 @@
+/* eslint-env browser */
+
+'use strict'
+
 var Client = require('./index')
   , core = require('./lib/xmpp').core
   , Connection = core.Connection

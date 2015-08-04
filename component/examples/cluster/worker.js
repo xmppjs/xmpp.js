@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var Component = require('../..')
   , config = require('./config')

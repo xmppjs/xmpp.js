@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var Connection = require('node-xmpp-core').Connection
   , Client = require('node-xmpp-client')

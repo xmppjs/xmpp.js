@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var EventEmitter = require('events').EventEmitter
   , util = require('util')
@@ -7,7 +7,7 @@ var EventEmitter = require('events').EventEmitter
   , StreamParser = core.StreamParser
   , Connection = core.Connection
   , WebSocket = require('faye-websocket') && require('faye-websocket').Client ?
-      require('faye-websocket').Client : window.WebSocket
+      require('faye-websocket').Client : window.WebSocket // eslint-disable-line
   , debug = require('debug')('xmpp:client:websockets')
 
 function WSConnection(opts) {

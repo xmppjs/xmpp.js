@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var util = require('util')
   , Mechanism = require('./mechanism')
@@ -15,7 +15,7 @@ Anonymous.prototype.name = 'ANONYMOUS'
 
 Anonymous.prototype.auth = function() {
     return this.authzid
-};
+}
 
 Anonymous.prototype.match = function() {
     return true

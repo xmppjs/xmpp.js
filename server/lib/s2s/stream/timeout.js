@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * Emulates stream.setTimeout() behaviour, but respects outgoing data

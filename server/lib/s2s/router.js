@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /*
  * Implements http://tools.ietf.org/html/rfc3920#section-14.4

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var EventEmitter = require('events').EventEmitter
   , debug = require('debug')('xmpp:c2s:server')

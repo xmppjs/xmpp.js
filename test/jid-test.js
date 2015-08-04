@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var assert = require('assert')
   , xmpp = require('../index')
@@ -44,7 +44,7 @@ describe('JID', function() {
 
         it('shouldn\'t get U_STRINGPREP_PROHIBITED_ERROR (#93)', function() {
             assert.doesNotThrow(function () {
-                var j = new xmpp.JID('f u@d')
+                new xmpp.JID('f u@d')
             })
         })
 

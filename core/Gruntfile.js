@@ -1,15 +1,9 @@
-'use strict';
+'use strict'
 
 module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        jshint: {
-            allFiles: ['*.js', 'lib/**/*.js', 'examples/**/*.js', 'test/**/*.js'],
-            options: {
-                jshintrc: '.jshintrc',
-            }
-        },
         mochacli: {
             all: ['test/**/*.js'],
             options: {
@@ -33,7 +27,7 @@ module.exports = function(grunt) {
             }
         }
     })
-    
+
     grunt.event.on('coverage', function(lcov, done){
         require('coveralls').handleInput(lcov, function(error) {
             if (error) {
@@ -45,12 +39,11 @@ module.exports = function(grunt) {
     })
 
     // Load the plugins
-    grunt.loadNpmTasks('grunt-contrib-jshint')
     grunt.loadNpmTasks('grunt-mocha-cli')
     grunt.loadNpmTasks('grunt-mocha-istanbul')
 
     // Configure tasks
     grunt.registerTask('coveralls', ['mocha_istanbul:coveralls'])
     grunt.registerTask('default', ['test'])
-    grunt.registerTask('test', ['mochacli', 'jshint', 'coveralls'])
+    grunt.registerTask('test', ['mochacli', 'coveralls'])
 }

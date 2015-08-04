@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var assert = require('assert')
   , xmpp = require('../index')
@@ -19,7 +19,7 @@ describe('Connection', function () {
         it('allows a socket to be provided lazily', function () {
             var socket = new net.Socket()
             var socketFunc = function () {
-                return socket;
+                return socket
             }
             var conn = new xmpp.Connection()
             conn.connect({
@@ -34,7 +34,7 @@ describe('Connection', function () {
 
             assert.equal(conn.socket instanceof net.Socket, true)
         })
-    });
+    })
 
     describe('<stream> handling', function () {
         var conn
@@ -50,13 +50,13 @@ describe('Connection', function () {
                 serverSocket = c
 
                 done()
-            });
+            })
             server.listen(PORT)
 
             conn = new xmpp.Connection()
             var socket = new net.Socket()
             conn.connect({socket: socket})
-            
+
             socket.connect(PORT)
         })
 
@@ -89,7 +89,7 @@ describe('Connection', function () {
         it('sends </stream:stream> to close the stream when the socket is ended from the other side', function (done) {
 
             //If we don't allow halfOpen, the socket will close before it can send </stream>
-            conn.socket.allowHalfOpen = true;
+            conn.socket.allowHalfOpen = true
             conn.socket.on('end', function () {
                 conn.socket.end()
             })

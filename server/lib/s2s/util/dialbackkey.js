@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var Element = require('../../xmpp').core.Stanza.Element
   , crypto = require('crypto')

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var DigestMD5 = require('../../../../lib/authentication/digestmd5')
 

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var Component = require('../../index')
   , net = require('net')
@@ -42,7 +42,7 @@ describe('Authentication', function() {
     it('Sends opening <stream/>', function(done) {
         onSocket = function(socket) {
             socket.once('data', function(d) {
-                var element = new ltx.parse(d.toString('utf8') + '</stream:stream>')
+                var element = ltx.parse(d.toString('utf8') + '</stream:stream>')
                 element.is('stream').should.be.true
                 element.attrs.to.should.equal(options.jid)
                 element.attrs.xmlns.should.equal(component.NS_COMPONENT)

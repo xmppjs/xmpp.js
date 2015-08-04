@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var util = require('util')
   , crypto = require('crypto')
@@ -83,7 +83,7 @@ function generateNonce() {
  */
 function DigestMD5() {
     /*jshint camelcase: false */
-    this.nonce_count = 0
+    this.nonceCount = 0
     this.cnonce = generateNonce()
     this.authcid = null
     this.actAs = null
@@ -101,7 +101,7 @@ DigestMD5.prototype.auth = function() {
 
 DigestMD5.prototype.getNC = function() {
     /*jshint camelcase: false */
-    return rjust(this.nonce_count.toString(), 8, '0')
+    return rjust(this.nonceCount.toString(), 8, '0')
 }
 
 DigestMD5.prototype.responseValue = function(s) {
@@ -112,7 +112,7 @@ DigestMD5.prototype.responseValue = function(s) {
     var value
     /*jshint camelcase: false */
     if (dict.nonce && dict.qop) {
-        this.nonce_count++
+        this.nonceCount++
         var a1 = md5(this.authcid + ':' +
             this.realm + ':' +
             this.password) + ':' +

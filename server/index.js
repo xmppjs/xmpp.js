@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = {
     // S2S
     Router: require('./lib/s2s/router'),

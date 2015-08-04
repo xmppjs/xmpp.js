@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var XFacebookPlatform = require('../../../../lib/authentication/xfacebook')
   , JID = require('../../../../index').JID

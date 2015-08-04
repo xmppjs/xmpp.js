@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var core = require('../xmpp').core
   , JID = core.JID

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var argv = require('minimist')(process.argv.slice(2))
   , Client = require('../index')

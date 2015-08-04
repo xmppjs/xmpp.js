@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var util = require('util')
   , Mechanism = require('./mechanism')
@@ -8,7 +8,9 @@ var util = require('util')
  */
 /*jshint camelcase: false */
 function XOAuth2() {
+    /* eslint-disable camelcase */
     this.oauth2_auth = null
+    /* eslint-enable camelcase */
     this.authzid = null
 }
 

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var util = require('util')
   , crypto = require('crypto')
@@ -39,32 +39,34 @@ ComponentStream.prototype.NS_STREAM = 'http://etherx.jabber.org/streams'
 ComponentStream.prototype.onStreamStart = function(streamAttrs) {
     var self = this
     this.jid = new JID(streamAttrs.to)
-    this.emit('verify-component', this.jid, function(err, password){
-	if(err) {
+    this.emit('verify-component', this.jid, function(err, password) {
+        if (err) {
             self.connection.send(new ltx.Element('host-unknown'))
-	    self.connection.end();
+            self.connection.end()
         } else {
             if(!streamAttrs.id) streamAttrs.id = Date.now()
             self.expectedDigest = self._sha1Hex((streamAttrs.id || '') + password)
-            self.connection.streamAttrs=streamAttrs
-       	    self.connection.startStream()
+            self.connection.streamAttrs = streamAttrs
+            self.connection.startStream()
         }
-    });
+    })
 }
 
 ComponentStream.prototype.onStanza = function(stanza) {
     if (stanza.is('handshake')) {
-	if(stanza.getText() === this.expectedDigest)	{
-         this.emit('auth-success')
-         this.connection.send(new ltx.Element('handshake'))
-         this.emit('online')
-         this.authenticated = true
-      } else {
-	// Per XEP-0114 DO NOT return any errors, just close the connection
- 	 this.end()
-      }
+        if (stanza.getText() === this.expectedDigest) {
+            this.emit('auth-success')
+            this.connection.send(new ltx.Element('handshake'))
+            this.emit('online')
+            this.authenticated = true
+        } else {
+            // Per XEP-0114 DO NOT return any errors, just close the connection
+            this.end()
+        }
     }
-    else this.emit('stanza', stanza)
+    else {
+        this.emit('stanza', stanza)
+    }
 }
 
 ComponentStream.prototype.send = function(stanza) {

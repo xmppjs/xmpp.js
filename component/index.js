@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var util = require('util')
   , crypto = require('crypto')
@@ -19,8 +19,7 @@ var util = require('util')
  */
 function Component(opts) {
     EventEmitter.call(this)
-    var self = this
-    var conn = this.connection = new Connection(opts)
+    this.connection = new Connection(opts)
     this._addConnectionListeners()
 
     if (typeof opts.jid === 'string') {

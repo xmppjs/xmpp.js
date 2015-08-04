@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var util = require('util')
   , Mechanism = require('./mechanism')
@@ -12,7 +12,7 @@ Plain.prototype.name = 'PLAIN'
 Plain.prototype.auth = function() {
     return this.authzid + '\0' +
         this.authcid + '\0' +
-        this.password;
+        this.password
 }
 
 Plain.prototype.match = function(options) {

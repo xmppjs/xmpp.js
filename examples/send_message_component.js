@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
 var xmpp = require('../index')
-  , argv = process.argv;
+  , argv = process.argv
 
 if (argv.length < 6) {
     console.error('Usage: node send_message.js <my-jid> <my-password> ' +

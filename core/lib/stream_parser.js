@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var util = require('util')
   , EventEmitter = require('events').EventEmitter
@@ -16,7 +16,7 @@ function StreamParser(maxStanzaSize) {
     EventEmitter.call(this)
 
     var self = this
-    this.parser = new ltx.bestSaxParser()
+    this.parser = new ltx.bestSaxParser() // eslint-disable-line
 
     /* Count traffic for entire life-time */
     this.bytesParsed = 0
@@ -25,25 +25,24 @@ function StreamParser(maxStanzaSize) {
     this.bytesParsedOnStanzaBegin = 0
 
     this.parser.on('startElement', function(name, attrs) {
-            // TODO: refuse anything but <stream:stream>
-            if (!self.element && (name === 'stream:stream')) {
-                self.emit('streamStart', attrs)
+        // TODO: refuse anything but <stream:stream>
+        if (!self.element && (name === 'stream:stream')) {
+            self.emit('streamStart', attrs)
+        } else {
+            var child
+            if (!self.element) {
+                /* A new stanza */
+                child = new Stanza(name, attrs)
+                self.element = child
+                  /* For maxStanzaSize enforcement */
+                self.bytesParsedOnStanzaBegin = self.bytesParsed
             } else {
-                var child
-                if (!self.element) {
-                    /* A new stanza */
-                    child = new Stanza(name, attrs)
-                    self.element = child
-                      /* For maxStanzaSize enforcement */
-                    self.bytesParsedOnStanzaBegin = self.bytesParsed
-                } else {
-                    /* A child element of a stanza */
-                    child = new ltx.Element(name, attrs)
-                    self.element = self.element.cnode(child)
-                }
+                /* A child element of a stanza */
+                child = new ltx.Element(name, attrs)
+                self.element = self.element.cnode(child)
             }
         }
-    )
+    })
 
     this.parser.on('endElement', function(name) {
         if (!self.element && (name === 'stream:stream')) {
@@ -82,7 +81,7 @@ function StreamParser(maxStanzaSize) {
 util.inherits(StreamParser, EventEmitter)
 
 
-/* 
+/*
  * hack for most usecases, do we have a better idea?
  *   catch the following:
  *   <?xml version="1.0"?>
@@ -91,17 +90,17 @@ util.inherits(StreamParser, EventEmitter)
  */
 StreamParser.prototype.checkXMLHeader = function (data) {
     // check for xml tag
-    var index = data.indexOf('<?xml');
+    var index = data.indexOf('<?xml')
 
     if (index !== -1) {
-        var end = data.indexOf('?>');
+        var end = data.indexOf('?>')
         if (index >= 0 && end >= 0 && index < end+2) {
-            var search = data.substring(index,end+2);
-            data = data.replace(search, '');
+            var search = data.substring(index, end+2)
+            data = data.replace(search, '')
         }
     }
 
-    return data;
+    return data
 }
 
 StreamParser.prototype.write = function(data) {
@@ -109,7 +108,7 @@ StreamParser.prototype.write = function(data) {
     data = data.replace(/\/>$/, ">")
     }*/
     if (this.parser) {
-        
+
         data = data.toString('utf8')
         data = this.checkXMLHeader(data)
 

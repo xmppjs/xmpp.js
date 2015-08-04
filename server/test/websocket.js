@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var xmpp = require('../index')
   , assert = require('assert')
@@ -127,7 +127,13 @@ describe('WebSocketServer', function() {
             // close socket
             cl.on('close', function() {
                 eventChain.push('clientclose')
-                assert.deepEqual(eventChain, ['clientend','end','disconnect','disconnect','clientclose'])
+                assert.deepEqual(eventChain, [
+                    'clientend',
+                    'end',
+                    'disconnect',
+                    'disconnect',
+                    'clientclose'
+                ])
                 done()
             })
 

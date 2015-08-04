@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var Client = require('../../index')
   , net = require('net')
@@ -39,7 +39,7 @@ describe('Authentication', function() {
         }
         onSocket = function(socket) {
             socket.once('data', function(d) {
-                var element = new ltx.parse(d.toString('utf8') + '</stream:stream>')
+                var element = ltx.parse(d.toString('utf8') + '</stream:stream>')
                 element.is('stream').should.be.true
                 element.attrs.to.should.equal(options.host)
                 element.attrs.xmlns.should.equal('jabber:client')

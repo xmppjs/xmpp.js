@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 /*
@@ -20,7 +20,7 @@ if (argv.length < 5) {
 }
 
 var component = argv[4]
-  , client = new Client({
+var client = new Client({
     jid: argv[2],
     password: argv[3],
     host:'localhost',

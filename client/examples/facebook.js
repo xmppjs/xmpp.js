@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * Login to facebook chat via XMPP and send a simple 'hello world' message
@@ -28,9 +28,11 @@ var otherUserId = '<< send message to ID >>'
 /* jshint -W106 */
 var client = new Client({
     jid: '-' + facebookId + '@chat.facebook.com',
+    /* eslint-disable camelcase */
     api_key: appId,
     secret_key: appSecret,
     access_token: accessToken
+    /* eslint-enable camelcase */
 })
 
 client.addListener('online', function(data) {

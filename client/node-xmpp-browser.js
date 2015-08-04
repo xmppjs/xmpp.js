@@ -1,4 +1,8 @@
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+/* eslint-env browser */
+
+'use strict'
+
 var Client = require('./index')
   , core = require('./lib/xmpp').core
   , Connection = core.Connection
@@ -20,11 +24,10 @@ exports.ltx = ltx
 window.XMPP = exports
 
 },{"./index":2,"./lib/xmpp":14}],2:[function(require,module,exports){
-var __dirname="/";'use strict';
+var __dirname="/";'use strict'
 
 var Session = require('./lib/session')
   , core = require('./lib/xmpp').core
-  , Connection = core.Connection
   , JID = core.JID
   , Stanza = core.Stanza
   , sasl = require('./lib/sasl')
@@ -182,8 +185,8 @@ Client.prototype.connect = function() {
                     r = (r[0].split(':'))[1].trim()
                     var s = stdout.match(/sid:+[ a-z+'"-_A-Z+0-9]*/i)
                     s = (s[0].split(':'))[1]
-                        .replace('\'','')
-                        .replace('\'','')
+                        .replace('\'', '')
+                        .replace('\'', '')
                         .trim()
                     if (r && s) {
                         return cb(null, { rid: r, sid: s })
@@ -195,14 +198,14 @@ Client.prototype.connect = function() {
     } else {
         this.options.xmlns = NS_CLIENT
         /* jshint camelcase: false */
-        delete this.did_bind
-        delete this.did_session
+        delete this.didBind
+        delete this.didSession
 
         this.state = STATE_PREAUTH
         this.on('end', function() {
             this.state = STATE_PREAUTH
-            delete this.did_bind
-            delete this.did_session
+            delete this.didBind
+            delete this.didSession
         })
 
         Session.call(this, this.options)
@@ -214,8 +217,8 @@ Client.prototype.connect = function() {
                 if (error) this.emit('error', error)
                 this.emit('offline')
             }
-            delete this.did_bind
-            delete this.did_session
+            delete this.didBind
+            delete this.didSession
         }.bind(this))
 
         // If server and client have multiple possible auth mechanisms
@@ -259,7 +262,7 @@ Client.prototype._handleSessionState = function(stanza) {
     if (stanza.attrs.type === 'result') {
         this.state = STATE_AUTHED
         /* jshint camelcase: false */
-        this.did_session = true
+        this.didSession = true
 
         /* no stream restart, but next feature (most probably
            we'll go online next) */
@@ -273,7 +276,7 @@ Client.prototype._handleBindState = function(stanza) {
     if (stanza.attrs.type === 'result') {
         this.state = STATE_AUTHED
         /*jshint camelcase: false */
-        this.did_bind = true
+        this.didBind = true
 
         var bindEl = stanza.getChild('bind', NS_XMPP_BIND)
         if (bindEl && bindEl.getChild('jid')) {
@@ -319,14 +322,15 @@ Client.prototype._handlePreAuthState = function() {
         this.mech.authzid = this.jid.bare().toString()
         this.mech.authcid = this.jid.user
         this.mech.password = this.password
-        /*jshint camelcase: false */
+        /* eslint-disable camelcase */
         this.mech.api_key = this.api_key
         this.mech.access_token = this.access_token
         this.mech.oauth2_token = this.oauth2_token
         this.mech.oauth2_auth = this.oauth2_auth
+        this.mech.digest_uri = 'xmpp/' + this.jid.domain
+        /* eslint-enable camelcase */
         this.mech.realm = this.jid.domain  // anything?
         if (this.actAs) this.mech.actAs = this.actAs.user
-        this.mech.digest_uri = 'xmpp/' + this.jid.domain
         var authMsg = encode64(this.mech.auth())
         var attrs = this.mech.authAttrs()
         attrs.xmlns = NS_XMPP_SASL
@@ -351,7 +355,7 @@ Client.prototype.useFeatures = function() {
         this.streamFeatures.getChild('mechanisms', NS_XMPP_SASL)) {
         this._handlePreAuthState()
     } else if ((this.state === STATE_AUTHED) &&
-               !this.did_bind &&
+               !this.didBind &&
                this.streamFeatures.getChild('bind', NS_XMPP_BIND)) {
         this.state = STATE_BIND
         var bindEl = new Stanza.Element(
@@ -362,7 +366,7 @@ Client.prototype.useFeatures = function() {
             bindEl.c('resource').t(this.jid.resource)
         this.send(bindEl)
     } else if ((this.state === STATE_AUTHED) &&
-               !this.did_session &&
+               !this.didSession &&
                this.streamFeatures.getChild('session', NS_XMPP_SESSION)) {
         this.state = STATE_SESSION
         var stanza = new Stanza.Element(
@@ -448,7 +452,7 @@ Client.JID = JID
 module.exports = Client
 
 },{"./lib/authentication/anonymous":3,"./lib/authentication/digestmd5":4,"./lib/authentication/external":5,"./lib/authentication/plain":7,"./lib/authentication/xfacebook":8,"./lib/authentication/xoauth2":9,"./lib/sasl":11,"./lib/session":12,"./lib/xmpp":14,"buffer":28,"child_process":17,"debug":37,"util":36}],3:[function(require,module,exports){
-'use strict';
+'use strict'
 
 var util = require('util')
   , Mechanism = require('./mechanism')
@@ -465,15 +469,16 @@ Anonymous.prototype.name = 'ANONYMOUS'
 
 Anonymous.prototype.auth = function() {
     return this.authzid
-};
+}
 
 Anonymous.prototype.match = function() {
     return true
 }
 
 module.exports = Anonymous
+
 },{"./mechanism":6,"util":36}],4:[function(require,module,exports){
-'use strict';
+'use strict'
 
 var util = require('util')
   , crypto = require('crypto')
@@ -558,7 +563,7 @@ function generateNonce() {
  */
 function DigestMD5() {
     /*jshint camelcase: false */
-    this.nonce_count = 0
+    this.nonceCount = 0
     this.cnonce = generateNonce()
     this.authcid = null
     this.actAs = null
@@ -576,7 +581,7 @@ DigestMD5.prototype.auth = function() {
 
 DigestMD5.prototype.getNC = function() {
     /*jshint camelcase: false */
-    return rjust(this.nonce_count.toString(), 8, '0')
+    return rjust(this.nonceCount.toString(), 8, '0')
 }
 
 DigestMD5.prototype.responseValue = function(s) {
@@ -587,7 +592,7 @@ DigestMD5.prototype.responseValue = function(s) {
     var value
     /*jshint camelcase: false */
     if (dict.nonce && dict.qop) {
-        this.nonce_count++
+        this.nonceCount++
         var a1 = md5(this.authcid + ':' +
             this.realm + ':' +
             this.password) + ':' +
@@ -669,7 +674,7 @@ DigestMD5.prototype.match = function(options) {
 module.exports = DigestMD5
 
 },{"./mechanism":6,"crypto":20,"util":36}],5:[function(require,module,exports){
-'use strict';
+'use strict'
 
 var util = require('util')
   , Mechanism = require('./mechanism')
@@ -693,8 +698,9 @@ External.prototype.match = function(options) {
 }
 
 module.exports = External
+
 },{"./mechanism":6,"util":36}],6:[function(require,module,exports){
-'use strict';
+'use strict'
 
 /**
  * Each implemented mechanism offers multiple methods
@@ -718,8 +724,9 @@ Mechanism.prototype.authAttrs = function() {
 }
 
 module.exports = Mechanism
+
 },{"events":25,"util":36}],7:[function(require,module,exports){
-'use strict';
+'use strict'
 
 var util = require('util')
   , Mechanism = require('./mechanism')
@@ -733,7 +740,7 @@ Plain.prototype.name = 'PLAIN'
 Plain.prototype.auth = function() {
     return this.authzid + '\0' +
         this.authcid + '\0' +
-        this.password;
+        this.password
 }
 
 Plain.prototype.match = function(options) {
@@ -742,8 +749,9 @@ Plain.prototype.match = function(options) {
 }
 
 module.exports = Plain
+
 },{"./mechanism":6,"util":36}],8:[function(require,module,exports){
-'use strict';
+'use strict'
 
 var util = require('util')
   , Mechanism = require('./mechanism')
@@ -766,13 +774,14 @@ XFacebookPlatform.prototype.auth = function() {
 XFacebookPlatform.prototype.challenge = function(s) {
     var dict = querystring.parse(s)
 
-    /*jshint camelcase: false */
     var response = {
+        /* eslint-disable camelcase */
         api_key: this.api_key,
         call_id: new Date().getTime(),
+        access_token: this.access_token,
+        /* eslint-enable camelcase */
         method: dict.method,
         nonce: dict.nonce,
-        access_token: this.access_token,
         v: '1.0'
     }
 
@@ -789,8 +798,9 @@ XFacebookPlatform.prototype.match = function(options) {
 }
 
 module.exports = XFacebookPlatform
+
 },{"./mechanism":6,"querystring":34,"util":36}],9:[function(require,module,exports){
-'use strict';
+'use strict'
 
 var util = require('util')
   , Mechanism = require('./mechanism')
@@ -800,7 +810,9 @@ var util = require('util')
  */
 /*jshint camelcase: false */
 function XOAuth2() {
+    /* eslint-disable camelcase */
     this.oauth2_auth = null
+    /* eslint-enable camelcase */
     this.authzid = null
 }
 
@@ -827,7 +839,7 @@ XOAuth2.prototype.match = function(options) {
 module.exports = XOAuth2
 
 },{"./mechanism":6,"util":36}],10:[function(require,module,exports){
-var process=require("__browserify_process");'use strict';
+var process=require("__browserify_process");'use strict'
 
 var EventEmitter = require('events').EventEmitter
   , util = require('util')
@@ -1051,7 +1063,7 @@ BOSHConnection.prototype.request = function(attrs, children, cb, retry) {
 module.exports = BOSHConnection
 
 },{"./xmpp":14,"__browserify_process":27,"debug":37,"events":25,"request":"PVLC7H","util":36}],11:[function(require,module,exports){
-'use strict';
+'use strict'
 
 var Mechanism = require('./authentication/mechanism')
 
@@ -1108,7 +1120,7 @@ exports.detectMechanisms = detectMechanisms
 exports.AbstractMechanism = Mechanism
 
 },{"./authentication/mechanism":6}],12:[function(require,module,exports){
-var process=require("__browserify_process");'use strict';
+var process=require("__browserify_process");'use strict'
 
 var util = require('util')
   , tls = require('tls')
@@ -1149,9 +1161,10 @@ Session.prototype._setupSocketConnection = function(opts) {
         },
         serialized: opts.serialized
     }
-    for (var  key in opts)
+    for (var  key in opts) {
         if (!(key in params))
             params[key] = opts[key]
+    }
 
     this.connection = new Connection(params)
     this._addConnectionListeners()
@@ -1246,14 +1259,15 @@ Session.prototype._setupWebsocketConnection = function(opts) {
 }
 
 Session.prototype.setOptions = function(opts) {
-    /* jshint camelcase: false */
     this.jid = (typeof opts.jid === 'string') ? new JID(opts.jid) : opts.jid
     this.password = opts.password
     this.preferredSaslMechanism = opts.preferredSaslMechanism
+    /* eslint-disable camelcase */
     this.api_key = opts.api_key
     this.access_token = opts.access_token
     this.oauth2_token = opts.oauth2_token
     this.oauth2_auth = opts.oauth2_auth
+    /* eslint-enable camelcase */
     this.register = opts.register
     if (typeof opts.actAs === 'string') {
         this.actAs = new JID(opts.actAs)
@@ -1307,7 +1321,7 @@ Session.prototype.onStanza = function() {}
 module.exports = Session
 
 },{"./bosh":10,"./websockets":13,"./xmpp":14,"__browserify_process":27,"debug":37,"events":25,"tls":17,"util":36}],13:[function(require,module,exports){
-'use strict';
+'use strict'
 
 var EventEmitter = require('events').EventEmitter
   , util = require('util')
@@ -1316,7 +1330,7 @@ var EventEmitter = require('events').EventEmitter
   , StreamParser = core.StreamParser
   , Connection = core.Connection
   , WebSocket = require('faye-websocket') && require('faye-websocket').Client ?
-      require('faye-websocket').Client : window.WebSocket
+      require('faye-websocket').Client : window.WebSocket // eslint-disable-line
   , debug = require('debug')('xmpp:client:websockets')
 
 function WSConnection(opts) {
@@ -1454,7 +1468,7 @@ WSConnection.prototype.onerror = function(e) {
 module.exports = WSConnection
 
 },{"./xmpp":14,"debug":37,"events":25,"faye-websocket":17,"util":36}],14:[function(require,module,exports){
-'use strict';
+'use strict'
 
 module.exports.core = require('../../core')
 // module.exports.core = require(process.env.NODE_XMPP_ENV === 'development' ? '../../core' : 'node-xmpp-core')
@@ -5954,6 +5968,8 @@ function plural(ms, n, name) {
 }
 
 },{}],40:[function(require,module,exports){
+'use strict'
+
 var extend = require('util')._extend
 
 exports.Stanza = {}
@@ -5963,8 +5979,9 @@ exports.Connection = require('./lib/connection')
 exports.SRV = require('./lib/srv')
 exports.StreamParser = require('./lib/stream_parser')
 exports.ltx = require('ltx')
+
 },{"./lib/connection":41,"./lib/jid":42,"./lib/srv":43,"./lib/stanza":44,"./lib/stream_parser":45,"ltx":51,"util":36}],41:[function(require,module,exports){
-'use strict';
+'use strict'
 
 var net = require('net')
   , EventEmitter = require('events').EventEmitter
@@ -6396,12 +6413,13 @@ Connection.prototype.error = function(condition, message) {
 module.exports = Connection
 
 },{"./stream_parser":45,"debug":46,"events":25,"ltx":51,"net":17,"reconnect-core":61,"tls-connect":68,"util":36}],42:[function(require,module,exports){
+/* eslint-disable strict */
+
 var StringPrep = require('node-stringprep').StringPrep
   , toUnicode = require('node-stringprep').toUnicode
 
-
 /**
- * JID implements 
+ * JID implements
  * - Xmpp addresses according to RFC6122
  * - XEP-0106: JID Escaping
  *
@@ -6499,14 +6517,14 @@ JID.prototype.setResource = function(resource) {
 JID.prototype.getLocal = function(unescape) {
     unescape = unescape || false
     var local = null
-    
+
     if (unescape) {
         local = this.unescapeLocal(this.local)
     } else {
         local = this.local
     }
 
-    return local;
+    return local
 }
 
 JID.prototype.prep = function(operation, value) {
@@ -6543,7 +6561,7 @@ JID.prototype.detectEscape = function (local) {
         .replace(/\\5c/g, '')
 
     // detect if we have unescaped sequences
-    var search = tmp.search(/\\| |\"|\&|\'|\/|:|<|>|@/g);
+    var search = tmp.search(/\\| |\"|\&|\'|\/|:|<|>|@/g)
     if (search === -1) {
         return false
     } else {
@@ -6551,7 +6569,7 @@ JID.prototype.detectEscape = function (local) {
     }
 }
 
-/** 
+/**
  * Escape the local part of a JID.
  *
  * @see http://xmpp.org/extensions/xep-0106.html
@@ -6574,11 +6592,9 @@ JID.prototype.escapeLocal = function (local) {
         .replace(/>/g, '\\3e')
         .replace(/@/g, '\\40')
         .replace(/\3a/g, '\5c3a')
-       
-    
 }
 
-/** 
+/**
  * Unescape a local part of a JID.
  *
  * @see http://xmpp.org/extensions/xep-0106.html
@@ -6602,13 +6618,12 @@ JID.prototype.unescapeLocal = function (local) {
 
 if ((typeof exports !== 'undefined') && (exports !== null)) {
     module.exports = JID
-} else if ((typeof window !== 'undefined') && (window !== null)) {
-    window.JID = JID
+} else if ((typeof window !== 'undefined') && (window !== null)) { // eslint-disable-line
+    window.JID = JID // eslint-disable-line
 }
 
 },{"node-stringprep":55}],43:[function(require,module,exports){
-'use strict';
-
+'use strict'
 
 var dns = require('dns')
 
@@ -6770,7 +6785,7 @@ exports.connect = function connect(opts) {
 }
 
 },{"dns":17}],44:[function(require,module,exports){
-'use strict';
+'use strict'
 
 var util = require('util')
   , ltx = require('ltx')
@@ -6806,7 +6821,7 @@ Object.defineProperty(Stanza.prototype, 'from', {
     set: function(from) {
         this.attrs.from = from
     }
-});
+})
 
 Object.defineProperty(Stanza.prototype, 'to', {
     get: function() {
@@ -6816,7 +6831,7 @@ Object.defineProperty(Stanza.prototype, 'to', {
     set: function(to) {
         this.attrs.to = to
     }
-});
+})
 
 Object.defineProperty(Stanza.prototype, 'id', {
     get: function() {
@@ -6826,7 +6841,7 @@ Object.defineProperty(Stanza.prototype, 'id', {
     set: function(id) {
         this.attrs.id = id
     }
-});
+})
 
 Object.defineProperty(Stanza.prototype, 'type', {
     get: function() {
@@ -6836,7 +6851,7 @@ Object.defineProperty(Stanza.prototype, 'type', {
     set: function(type) {
         this.attrs.type = type
     }
-});
+})
 
 /**
  * Stanza kinds
@@ -6867,7 +6882,7 @@ exports.Presence = Presence
 exports.Iq = Iq
 
 },{"ltx":51,"util":36}],45:[function(require,module,exports){
-'use strict';
+'use strict'
 
 var util = require('util')
   , EventEmitter = require('events').EventEmitter
@@ -6885,7 +6900,7 @@ function StreamParser(maxStanzaSize) {
     EventEmitter.call(this)
 
     var self = this
-    this.parser = new ltx.bestSaxParser()
+    this.parser = new ltx.bestSaxParser() // eslint-disable-line
 
     /* Count traffic for entire life-time */
     this.bytesParsed = 0
@@ -6894,25 +6909,24 @@ function StreamParser(maxStanzaSize) {
     this.bytesParsedOnStanzaBegin = 0
 
     this.parser.on('startElement', function(name, attrs) {
-            // TODO: refuse anything but <stream:stream>
-            if (!self.element && (name === 'stream:stream')) {
-                self.emit('streamStart', attrs)
+        // TODO: refuse anything but <stream:stream>
+        if (!self.element && (name === 'stream:stream')) {
+            self.emit('streamStart', attrs)
+        } else {
+            var child
+            if (!self.element) {
+                /* A new stanza */
+                child = new Stanza(name, attrs)
+                self.element = child
+                  /* For maxStanzaSize enforcement */
+                self.bytesParsedOnStanzaBegin = self.bytesParsed
             } else {
-                var child
-                if (!self.element) {
-                    /* A new stanza */
-                    child = new Stanza(name, attrs)
-                    self.element = child
-                      /* For maxStanzaSize enforcement */
-                    self.bytesParsedOnStanzaBegin = self.bytesParsed
-                } else {
-                    /* A child element of a stanza */
-                    child = new ltx.Element(name, attrs)
-                    self.element = self.element.cnode(child)
-                }
+                /* A child element of a stanza */
+                child = new ltx.Element(name, attrs)
+                self.element = self.element.cnode(child)
             }
         }
-    )
+    })
 
     this.parser.on('endElement', function(name) {
         if (!self.element && (name === 'stream:stream')) {
@@ -6951,7 +6965,7 @@ function StreamParser(maxStanzaSize) {
 util.inherits(StreamParser, EventEmitter)
 
 
-/* 
+/*
  * hack for most usecases, do we have a better idea?
  *   catch the following:
  *   <?xml version="1.0"?>
@@ -6960,17 +6974,17 @@ util.inherits(StreamParser, EventEmitter)
  */
 StreamParser.prototype.checkXMLHeader = function (data) {
     // check for xml tag
-    var index = data.indexOf('<?xml');
+    var index = data.indexOf('<?xml')
 
     if (index !== -1) {
-        var end = data.indexOf('?>');
+        var end = data.indexOf('?>')
         if (index >= 0 && end >= 0 && index < end+2) {
-            var search = data.substring(index,end+2);
-            data = data.replace(search, '');
+            var search = data.substring(index, end+2)
+            data = data.replace(search, '')
         }
     }
 
-    return data;
+    return data
 }
 
 StreamParser.prototype.write = function(data) {
@@ -6978,7 +6992,7 @@ StreamParser.prototype.write = function(data) {
     data = data.replace(/\/>$/, ">")
     }*/
     if (this.parser) {
-        
+
         data = data.toString('utf8')
         data = this.checkXMLHeader(data)
 
@@ -7011,6 +7025,7 @@ StreamParser.prototype.error = function(condition, message) {
 }
 
 exports.StreamParser = StreamParser
+
 },{"./stanza":44,"events":25,"ltx":51,"util":36}],46:[function(require,module,exports){
 
 /**

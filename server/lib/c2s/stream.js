@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var EventEmitter = require('events').EventEmitter
   , util = require('util')
@@ -161,10 +161,10 @@ C2SStream.prototype.onStanza = function (stanza) {
 }
 
 C2SStream.prototype.onAuthStanza = function (stanza) {
-    var bind;
+    var bind = stanza.getChild('bind', NS_BIND)
     if (stanza.is('iq') &&
         (stanza.attrs.type === 'set') &&
-        (bind = stanza.getChild('bind', NS_BIND))) {
+        (bind)) {
         this.onBind(stanza)
     } else if (stanza.is('iq') &&
         (stanza.attrs.type === 'set') &&
@@ -198,7 +198,7 @@ C2SStream.prototype.onAuth = function(stanza) {
         })
 
         // TODO handle case where we are not able to match a sasl mechanism
-        this.mechanism = new matchingMechs[0]();
+        this.mechanism = new matchingMechs[0]()
 
         /**
          * Authenticates a user
@@ -236,7 +236,7 @@ C2SStream.prototype.onAuth = function(stanza) {
     }
 
     if (this.mechanism) {
-        this.mechanism.manageAuth(stanza, this);
+        this.mechanism.manageAuth(stanza, this)
     }
 }
 

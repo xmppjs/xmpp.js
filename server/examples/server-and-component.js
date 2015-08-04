@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var xmpp = require('../index')
   , ltx = xmpp.ltx
@@ -12,12 +12,12 @@ var startServer = function(done) {
         port: 5347
     })
     componentSrv.on('connect', function(client) {
-	    // Component auth is two step:
+        // Component auth is two step:
         // first, verify that the component is allowed to connect at all,
         // then verify the password is correct
         client.on('verify-component', function(jid, cb) {
-	    if (jid.toString() === 'component.example.com') {
-		return cb(null, 'ThePassword')
+            if (jid.toString() === 'component.example.com') {
+                return cb(null, 'ThePassword')
             }
             return cb ('Unauthorized')
         })
@@ -26,7 +26,7 @@ var startServer = function(done) {
         })
         client.on('stanza', function(stanza) {
             debug('STANZA', stanza.root().toString())
-	    // Here you could, for example, dispatch this to an existing C2S Server
+            // Here you could, for example, dispatch this to an existing C2S Server
             var from = stanza.attrs.from
             stanza.attrs.from = stanza.attrs.to
             stanza.attrs.to = from
