@@ -10,7 +10,7 @@
 
 var Client = require('node-xmpp-client')
   , argv = process.argv
-  , ltx = require('node-xmpp-core').ltx
+  , ltx = Client.ltx
 
 if (argv.length < 5) {
     console.error('Usage: node answer_bot.js <my-jid> <my-password> ' +

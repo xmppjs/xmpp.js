@@ -3,10 +3,11 @@
 var util = require('util')
   , crypto = require('crypto')
   , EventEmitter = require('events').EventEmitter
-  , Connection = require('node-xmpp-core').Connection
-  , JID = require('node-xmpp-core').JID
-  , SRV = require('node-xmpp-core').SRV
-  , ltx = require('node-xmpp-core').ltx
+  , core = require('./lib/xmpp').core
+  , Connection = core.Connection
+  , JID = core.JID
+  , SRV = core.SRV
+  , ltx = core.ltx
 
 /**
  * opts:
@@ -96,5 +97,6 @@ Component.prototype._sha1Hex = function(s) {
     return hash.digest('hex')
 }
 
+Component.ltx = ltx
 Component.Component = Component
 module.exports = Component

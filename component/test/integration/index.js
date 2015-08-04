@@ -2,8 +2,8 @@
 /* jshint -W030 */
 
 var Component = require('../../index')
-  , ltx = require('node-xmpp-core').ltx
-  , Client = require('node-xmpp-client')
+  , ltx = require('../../lib/xmpp').core.ltx
+  , Client = require('../../lib/xmpp').client
   , exec = require('child_process').exec
 
 require('should')
