@@ -1,9 +1,25 @@
 language: node_js
 
 node_js:
-  - 0.10
-  - 0.12
-  - iojs
+  - '0.10'
+  - '0.12'
+  - 'iojs'
+
+addons:
+  apt:
+    packages:
+    - libicu-dev
+
+before_install:
+  # update npm
+  - npm install -g npm
+
+# install dependencies for each package
+before_script:
+  - 'cd $TRAVIS_BUILD_DIR/client && npm install'
+  - 'cd $TRAVIS_BUILD_DIR/component && npm install'
+  - 'cd $TRAVIS_BUILD_DIR/core && npm install'
+  - 'cd $TRAVIS_BUILD_DIR/server && npm install'
 
 # before_install:
 #   # Workaround for a permissions issue with Travis virtual machine images

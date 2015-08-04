@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         mochacli: {
-            all: ['test/**/*.js', 'node_modules/node-xmpp-*/test/**/*.js', '!node_modules/node-xmpp-client/test/browser/**/*.js' ],
+            all: ['test/**/*.js'],
             options: {
                 reporter: 'spec',
                 ui: 'tdd',
