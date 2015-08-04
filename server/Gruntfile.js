@@ -8,7 +8,8 @@ module.exports = function(grunt) {
             all: ['test/**/*.js'],
             options: {
                 reporter: 'spec',
-                ui: 'tdd'
+                ui: 'tdd',
+                timeout: 3000
             }
         },
         'mocha_istanbul': {

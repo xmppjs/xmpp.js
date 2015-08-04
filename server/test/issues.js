@@ -3,6 +3,7 @@
 var Element = require('../lib/xmpp').core.Stanza.Element
   , C2SServer = require('../index').C2SServer
   , net = require('net')
+  , assert = require('assert')
 
 require('should')
 
@@ -72,7 +73,8 @@ describe('Stream without proper "to" attribute', function() {
                     break
                 }
             }
-            done(error)
+            assert.equal(error, 'Timeout')
+            done()
         })
 
         it('Should close stream', function(done) {
