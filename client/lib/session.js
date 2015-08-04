@@ -3,9 +3,10 @@
 var util = require('util')
   , tls = require('tls')
   , EventEmitter = require('events').EventEmitter
-  , Connection = require('node-xmpp-core').Connection
-  , JID = require('node-xmpp-core').JID
-  , SRV = require('node-xmpp-core').SRV
+  , core = require('./xmpp').core
+  , Connection = core.Connection
+  , JID = core.JID
+  , SRV = core.SRV
   , BOSHConnection = require('./bosh')
   , WSConnection = require('./websockets')
   , debug = require('debug')('xmpp:client:session')

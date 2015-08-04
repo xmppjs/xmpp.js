@@ -1,11 +1,11 @@
 'use strict';
 
-var nodexmppserver = require('node-xmpp-server'),
-    C2SServer = nodexmppserver.C2SServer
-  , Element = require('node-xmpp-core').Stanza.Element
+var nodexmppserver = require('../xmpp').server
+  , C2SServer = nodexmppserver.C2SServer
+  , Client = require('../../index')
+  , Element = Client.Stanza.Element
   , net = require('net')
   , util = require('util')
-  , Client = require('../../index')
   , Plain = nodexmppserver.auth.Plain
   , XOAuth2 = nodexmppserver.auth.XOAuth2
   , DigestMD5 = nodexmppserver.auth.DigestMD5

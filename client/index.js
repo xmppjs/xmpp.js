@@ -1,9 +1,10 @@
 'use strict';
 
 var Session = require('./lib/session')
-  , Connection = require('node-xmpp-core').Connection
-  , JID = require('node-xmpp-core').JID
-  , Stanza = require ('node-xmpp-core').Stanza
+  , core = require('./lib/xmpp').core
+  , Connection = core.Connection
+  , JID = core.JID
+  , Stanza = core.Stanza
   , sasl = require('./lib/sasl')
   , Anonymous = require('./lib/authentication/anonymous')
   , Plain = require('./lib/authentication/plain')
@@ -14,7 +15,7 @@ var Session = require('./lib/session')
   , exec = require('child_process').exec
   , util = require('util')
   , debug = require('debug')('xmpp:client')
-  , ltx = require('node-xmpp-core').ltx
+  , ltx = core.ltx
 
 var NS_CLIENT = 'jabber:client'
 var NS_REGISTER = 'jabber:iq:register'

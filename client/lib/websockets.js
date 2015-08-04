@@ -2,11 +2,12 @@
 
 var EventEmitter = require('events').EventEmitter
   , util = require('util')
-  , ltx = require('node-xmpp-core').ltx
-  , StreamParser = require('node-xmpp-core').StreamParser
+  , core = require('./xmpp').core
+  , ltx = core.ltx
+  , StreamParser = core.StreamParser
+  , Connection = core.Connection
   , WebSocket = require('faye-websocket') && require('faye-websocket').Client ?
       require('faye-websocket').Client : window.WebSocket
-  , Connection = require('node-xmpp-core').Connection
   , debug = require('debug')('xmpp:client:websockets')
 
 function WSConnection(opts) {

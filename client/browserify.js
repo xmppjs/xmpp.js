@@ -1,9 +1,10 @@
-var Connection = require('node-xmpp-core').Connection
-  , Client = require('./index')
-  , JID = require('node-xmpp-core').JID
-  , Element = require('node-xmpp-core').Stanza.Element
-  , Stanza = require('node-xmpp-core').Stanza
-  , ltx = require('node-xmpp-core').ltx
+var Client = require('./index')
+  , core = require('./lib/xmpp').core
+  , Connection = core.Connection
+  , JID = core.JID
+  , Element = core.Stanza.Element
+  , Stanza = core.Stanza
+  , ltx = core.ltx
 
 exports.Connection = Connection
 exports.Client = Client

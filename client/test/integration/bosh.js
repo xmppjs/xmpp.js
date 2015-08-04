@@ -2,7 +2,7 @@
 
 var Client = require('../../index')
   , helper = require('../helper')
-  , Element = require('node-xmpp-core').Stanza.Element
+  , Element = Client.Stanza.Element
 
 require('should')
 
@@ -13,16 +13,16 @@ describe('BOSH connections', function() {
     var password = 'password'
     var client = null
     var resource = 'test'
-    
+
     beforeEach(function(done) {
         helper.startServer(done)
     })
-    
+
     afterEach(function(done) {
         if (client) client.end()
         helper.stopServer(done)
     })
-    
+
     it('Can register an account', function(done) {
         client = new Client({
             jid: jid,
@@ -40,7 +40,7 @@ describe('BOSH connections', function() {
             done()
         })
     })
-    
+
     it('Errors on bad authentication details', function(done) {
         client = new Client({
             jid: jid,
@@ -59,7 +59,7 @@ describe('BOSH connections', function() {
             done()
         })
     })
-    
+
     it('Can connect to an account with resource', function(done) {
         client = new Client({
             jid: jid + '/' + resource,
@@ -95,7 +95,7 @@ describe('BOSH connections', function() {
             done()
         })
     })
-    
+
     it('Fails on registering a duplicate account', function(done) {
         client = new Client({
             jid: jid,
@@ -115,7 +115,7 @@ describe('BOSH connections', function() {
             done()
         })
     })
-    
+
     it('Can send and receive a stanza', function(done) {
         client = new Client({
             jid: jid,
@@ -124,11 +124,11 @@ describe('BOSH connections', function() {
                 url: 'http://localhost:5280/http-bind/'
             }
         })
-        
+
         var ping = new Element(
             'iq', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
-        
+
         client.on('online', function() {
             client.send(ping)
             client.on('stanza', function(pong) {
@@ -137,7 +137,7 @@ describe('BOSH connections', function() {
             })
         })
     })
-    
+
     it('Can send and receive stanzas', function(done) {
         client = new Client({
             jid: jid,
@@ -146,11 +146,11 @@ describe('BOSH connections', function() {
                 url: 'http://localhost:5280/http-bind/'
             }
         })
-        
+
         var ping = new Element(
             'iq', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
-        
+
         var counter = 0
         client.on('online', function() {
             client.send(ping)
@@ -161,7 +161,7 @@ describe('BOSH connections', function() {
             })
         })
     })
-    
+
     it('Sends error for bad stanza', function(done) {
         client = new Client({
             jid: jid,
@@ -170,11 +170,11 @@ describe('BOSH connections', function() {
                 url: 'http://localhost:5280/http-bind/'
             }
         })
-        
+
         var badPing = new Element(
             'wtf', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
-        
+
         client.on('online', function() {
             client.send(badPing)
             client.on('stanza', function(stanza) {
@@ -184,7 +184,7 @@ describe('BOSH connections', function() {
             })
         })
     })
-    
+
     it('Errors when server is stopped', function(done) {
         helper.stopServer(function() {
             client = new Client({
@@ -206,7 +206,7 @@ describe('BOSH connections', function() {
             })
         })
     })
-    
+
     it('Errors when providing bad BOSH url', function(done) {
         client = new Client({
             jid: jid,
@@ -223,7 +223,7 @@ describe('BOSH connections', function() {
             done('Should not have connected')
         })
     })
-    
+
     it.skip('Disconnects', function(done) {
         client = new Client({
             jid: jid,
@@ -232,11 +232,11 @@ describe('BOSH connections', function() {
                 url: 'http://localhost:5280/http-bind/'
             }
         })
-        
+
         var ping = new Element(
             'iq', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
-        
+
         client.on('online', function() {
             client.end()
             client.send(ping)
@@ -246,9 +246,9 @@ describe('BOSH connections', function() {
             done()
         })
     })
-    
+
     describe('Prebind', function() {
-      
+
         it('Returns RID and SID', function(done) {
             /* jshint -W031 */
             new Client({
@@ -270,11 +270,11 @@ describe('BOSH connections', function() {
             })
 
         })
-        
+
     })
-    
+
     describe('Authentication', function() {
-    
+
         it('Can connect using PLAIN authentication', function(done) {
             client = new Client({
                 jid: jid,
@@ -297,7 +297,7 @@ describe('BOSH connections', function() {
                 })
             })
         })
-    
+
         it('Can connect using DIGEST-MD5 authentication', function(done) {
             client = new Client({
                 jid: jid,
@@ -320,7 +320,7 @@ describe('BOSH connections', function() {
                 })
             })
         })
-        
+
         it('Can connect using ANONYMOUS authentication', function(done) {
             client = new Client({
                 jid: '@anon.localhost',
@@ -344,7 +344,7 @@ describe('BOSH connections', function() {
                 })
             })
         })
-        
+
     })
 
 })

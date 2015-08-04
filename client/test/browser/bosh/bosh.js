@@ -6,7 +6,7 @@ describe('BOSH Browser tests', function(){
     var password = 'password'
     var client = null
     var resource = 'test'
-    
+
     it('Can register an account', function(done) {
         client = new window.XMPP.Client({
             jid: jid,
@@ -29,7 +29,7 @@ describe('BOSH Browser tests', function(){
             done()
         })
     })
-    
+
     it('Errors on bad authentication details', function(done) {
         client = new window.XMPP.Client({
             jid: jid,
@@ -51,7 +51,7 @@ describe('BOSH Browser tests', function(){
         })
     })
 
-    
+
     it('Can connect to an account with resource', function(done) {
         client = new window.XMPP.Client({
             jid: jid + '/' + resource,
@@ -92,7 +92,7 @@ describe('BOSH Browser tests', function(){
             done()
         })
     })
-    
+
     it('Fails on registering a duplicate account', function(done) {
         client = new window.XMPP.Client({
             jid: jid,
@@ -114,7 +114,7 @@ describe('BOSH Browser tests', function(){
             done()
         })
     })
-    
+
     it('Can send and receive a stanza', function(done) {
         client = new window.XMPP.Client({
             jid: jid,
@@ -124,11 +124,11 @@ describe('BOSH Browser tests', function(){
             },
             preferred: 'PLAIN'
         })
-        
+
         var ping = new window.XMPP.ltx.Element(
             'iq', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
-        
+
         client.on('online', function() {
             client.send(ping)
             client.on('stanza', function(pong) {
@@ -138,7 +138,7 @@ describe('BOSH Browser tests', function(){
             })
         })
     })
-    
+
     it('Can send and receive stanzas', function(done) {
         client = new window.XMPP.Client({
             jid: jid,
@@ -148,11 +148,11 @@ describe('BOSH Browser tests', function(){
             },
             preferred: 'PLAIN'
         })
-        
+
         var ping = new window.XMPP.ltx.Element(
             'iq', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
-        
+
         var counter = 0
         client.on('online', function() {
             client.send(ping)
@@ -169,7 +169,7 @@ describe('BOSH Browser tests', function(){
             done(error)
         })
     })
-    
+
     it('Sends error for bad stanza', function(done) {
         client = new window.XMPP.Client({
             jid: jid,
@@ -179,11 +179,11 @@ describe('BOSH Browser tests', function(){
             },
             preferred: 'PLAIN'
         })
-        
+
         var badPing = new window.XMPP.ltx.Element(
             'wtf', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
-        
+
         client.on('online', function() {
             client.send(badPing)
             client.on('stanza', function(stanza) {
@@ -194,7 +194,7 @@ describe('BOSH Browser tests', function(){
             })
         })
     })
-    
+
     it('Errors when providing bad BOSH url', function(done) {
         client = new window.XMPP.Client({
             jid: jid,
@@ -214,9 +214,9 @@ describe('BOSH Browser tests', function(){
             done('Should not have connected')
         })
     })
-    
+
     describe('Authentication', function() {
-    
+
         it('Can connect using PLAIN authentication', function(done) {
             client = new window.XMPP.Client({
                 jid: jid,
@@ -239,7 +239,7 @@ describe('BOSH Browser tests', function(){
                 })
             })
         })
-    
+
         it.skip('Can connect using DIGEST-MD5 authentication', function(done) {
             client = new window.XMPP.Client({
                 jid: jid,
@@ -265,7 +265,7 @@ describe('BOSH Browser tests', function(){
                 })
             })
         })
-        
+
         it('Can connect using ANONYMOUS authentication', function(done) {
             client = new window.XMPP.Client({
                 jid: '@anon.localhost',
@@ -289,7 +289,7 @@ describe('BOSH Browser tests', function(){
                 })
             })
         })
-    
+
     })
-    
+
 })

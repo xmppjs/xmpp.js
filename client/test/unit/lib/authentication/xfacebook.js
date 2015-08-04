@@ -1,7 +1,7 @@
 'use strict';
 
 var XFacebookPlatform = require('../../../../lib/authentication/xfacebook')
-  , JID = require('node-xmpp-core').JID
+  , JID = require('../../../../index').JID
 
 var mech = new XFacebookPlatform()
 

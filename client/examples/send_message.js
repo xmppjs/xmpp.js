@@ -2,7 +2,7 @@
 
 var Client = require('../index')
   , argv = process.argv
-  , ltx  = require('node-xmpp-core').ltx
+  , ltx  = Client.ltx
 
 if (argv.length < 6) {
     console.error('Usage: node send_message.js <my-jid> ' +

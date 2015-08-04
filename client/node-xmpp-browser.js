@@ -1,10 +1,11 @@
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var Connection = require('node-xmpp-core').Connection
-  , Client = require('./index')
-  , JID = require('node-xmpp-core').JID
-  , Element = require('node-xmpp-core').Stanza.Element
-  , Stanza = require('node-xmpp-core').Stanza
-  , ltx = require('node-xmpp-core').ltx
+var Client = require('./index')
+  , core = require('./lib/xmpp').core
+  , Connection = core.Connection
+  , JID = core.JID
+  , Element = core.Stanza.Element
+  , Stanza = core.Stanza
+  , ltx = core.ltx
 
 exports.Connection = Connection
 exports.Client = Client
@@ -18,13 +19,14 @@ exports.ltx = ltx
 
 window.XMPP = exports
 
-},{"./index":2,"node-xmpp-core":39}],2:[function(require,module,exports){
+},{"./index":2,"./lib/xmpp":14}],2:[function(require,module,exports){
 var __dirname="/";'use strict';
 
 var Session = require('./lib/session')
-  , Connection = require('node-xmpp-core').Connection
-  , JID = require('node-xmpp-core').JID
-  , Stanza = require ('node-xmpp-core').Stanza
+  , core = require('./lib/xmpp').core
+  , Connection = core.Connection
+  , JID = core.JID
+  , Stanza = core.Stanza
   , sasl = require('./lib/sasl')
   , Anonymous = require('./lib/authentication/anonymous')
   , Plain = require('./lib/authentication/plain')
@@ -35,7 +37,7 @@ var Session = require('./lib/session')
   , exec = require('child_process').exec
   , util = require('util')
   , debug = require('debug')('xmpp:client')
-  , ltx = require('node-xmpp-core').ltx
+  , ltx = core.ltx
 
 var NS_CLIENT = 'jabber:client'
 var NS_REGISTER = 'jabber:iq:register'
@@ -445,7 +447,7 @@ Client.JID = JID
 
 module.exports = Client
 
-},{"./lib/authentication/anonymous":3,"./lib/authentication/digestmd5":4,"./lib/authentication/external":5,"./lib/authentication/plain":7,"./lib/authentication/xfacebook":8,"./lib/authentication/xoauth2":9,"./lib/sasl":11,"./lib/session":12,"buffer":27,"child_process":16,"debug":36,"node-xmpp-core":39,"util":35}],3:[function(require,module,exports){
+},{"./lib/authentication/anonymous":3,"./lib/authentication/digestmd5":4,"./lib/authentication/external":5,"./lib/authentication/plain":7,"./lib/authentication/xfacebook":8,"./lib/authentication/xoauth2":9,"./lib/sasl":11,"./lib/session":12,"./lib/xmpp":14,"buffer":28,"child_process":17,"debug":37,"util":36}],3:[function(require,module,exports){
 'use strict';
 
 var util = require('util')
@@ -470,7 +472,7 @@ Anonymous.prototype.match = function() {
 }
 
 module.exports = Anonymous
-},{"./mechanism":6,"util":35}],4:[function(require,module,exports){
+},{"./mechanism":6,"util":36}],4:[function(require,module,exports){
 'use strict';
 
 var util = require('util')
@@ -666,7 +668,7 @@ DigestMD5.prototype.match = function(options) {
 
 module.exports = DigestMD5
 
-},{"./mechanism":6,"crypto":19,"util":35}],5:[function(require,module,exports){
+},{"./mechanism":6,"crypto":20,"util":36}],5:[function(require,module,exports){
 'use strict';
 
 var util = require('util')
@@ -691,7 +693,7 @@ External.prototype.match = function(options) {
 }
 
 module.exports = External
-},{"./mechanism":6,"util":35}],6:[function(require,module,exports){
+},{"./mechanism":6,"util":36}],6:[function(require,module,exports){
 'use strict';
 
 /**
@@ -716,7 +718,7 @@ Mechanism.prototype.authAttrs = function() {
 }
 
 module.exports = Mechanism
-},{"events":24,"util":35}],7:[function(require,module,exports){
+},{"events":25,"util":36}],7:[function(require,module,exports){
 'use strict';
 
 var util = require('util')
@@ -740,7 +742,7 @@ Plain.prototype.match = function(options) {
 }
 
 module.exports = Plain
-},{"./mechanism":6,"util":35}],8:[function(require,module,exports){
+},{"./mechanism":6,"util":36}],8:[function(require,module,exports){
 'use strict';
 
 var util = require('util')
@@ -787,7 +789,7 @@ XFacebookPlatform.prototype.match = function(options) {
 }
 
 module.exports = XFacebookPlatform
-},{"./mechanism":6,"querystring":33,"util":35}],9:[function(require,module,exports){
+},{"./mechanism":6,"querystring":34,"util":36}],9:[function(require,module,exports){
 'use strict';
 
 var util = require('util')
@@ -824,13 +826,13 @@ XOAuth2.prototype.match = function(options) {
 
 module.exports = XOAuth2
 
-},{"./mechanism":6,"util":35}],10:[function(require,module,exports){
+},{"./mechanism":6,"util":36}],10:[function(require,module,exports){
 var process=require("__browserify_process");'use strict';
 
 var EventEmitter = require('events').EventEmitter
   , util = require('util')
   , request = require('request')
-  , ltx = require('node-xmpp-core').ltx
+  , ltx = require('./xmpp').core.ltx
   , debug = require('debug')('xmpp:client:bosh')
 
 function BOSHConnection(opts) {
@@ -1048,7 +1050,7 @@ BOSHConnection.prototype.request = function(attrs, children, cb, retry) {
 
 module.exports = BOSHConnection
 
-},{"__browserify_process":26,"debug":36,"events":24,"node-xmpp-core":39,"request":"B+8hfE","util":35}],11:[function(require,module,exports){
+},{"./xmpp":14,"__browserify_process":27,"debug":37,"events":25,"request":"PVLC7H","util":36}],11:[function(require,module,exports){
 'use strict';
 
 var Mechanism = require('./authentication/mechanism')
@@ -1111,9 +1113,10 @@ var process=require("__browserify_process");'use strict';
 var util = require('util')
   , tls = require('tls')
   , EventEmitter = require('events').EventEmitter
-  , Connection = require('node-xmpp-core').Connection
-  , JID = require('node-xmpp-core').JID
-  , SRV = require('node-xmpp-core').SRV
+  , core = require('./xmpp').core
+  , Connection = core.Connection
+  , JID = core.JID
+  , SRV = core.SRV
   , BOSHConnection = require('./bosh')
   , WSConnection = require('./websockets')
   , debug = require('debug')('xmpp:client:session')
@@ -1303,16 +1306,17 @@ Session.prototype.onStanza = function() {}
 
 module.exports = Session
 
-},{"./bosh":10,"./websockets":13,"__browserify_process":26,"debug":36,"events":24,"node-xmpp-core":39,"tls":16,"util":35}],13:[function(require,module,exports){
+},{"./bosh":10,"./websockets":13,"./xmpp":14,"__browserify_process":27,"debug":37,"events":25,"tls":17,"util":36}],13:[function(require,module,exports){
 'use strict';
 
 var EventEmitter = require('events').EventEmitter
   , util = require('util')
-  , ltx = require('node-xmpp-core').ltx
-  , StreamParser = require('node-xmpp-core').StreamParser
+  , core = require('./xmpp').core
+  , ltx = core.ltx
+  , StreamParser = core.StreamParser
+  , Connection = core.Connection
   , WebSocket = require('faye-websocket') && require('faye-websocket').Client ?
       require('faye-websocket').Client : window.WebSocket
-  , Connection = require('node-xmpp-core').Connection
   , debug = require('debug')('xmpp:client:websockets')
 
 function WSConnection(opts) {
@@ -1449,9 +1453,15 @@ WSConnection.prototype.onerror = function(e) {
 
 module.exports = WSConnection
 
-},{"debug":36,"events":24,"faye-websocket":16,"node-xmpp-core":39,"util":35}],"browser-request":[function(require,module,exports){
-module.exports=require('B+8hfE');
-},{}],"B+8hfE":[function(require,module,exports){
+},{"./xmpp":14,"debug":37,"events":25,"faye-websocket":17,"util":36}],14:[function(require,module,exports){
+'use strict';
+
+module.exports.core = require('../../core')
+// module.exports.core = require(process.env.NODE_XMPP_ENV === 'development' ? '../../core' : 'node-xmpp-core')
+
+},{"../../core":40}],"browser-request":[function(require,module,exports){
+module.exports=require('PVLC7H');
+},{}],"PVLC7H":[function(require,module,exports){
 // Browser Request
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -1947,9 +1957,9 @@ function b64_enc (data) {
 }));
 //UMD FOOTER END
 
-},{}],16:[function(require,module,exports){
-
 },{}],17:[function(require,module,exports){
+
+},{}],18:[function(require,module,exports){
 // http://wiki.commonjs.org/wiki/Unit_Testing/1.0
 //
 // THIS IS NOT TESTED NOR LIKELY TO WORK OUTSIDE V8!
@@ -2311,7 +2321,7 @@ var objectKeys = Object.keys || function (obj) {
   return keys;
 };
 
-},{"util/":35}],18:[function(require,module,exports){
+},{"util/":36}],19:[function(require,module,exports){
 var Buffer = require('buffer').Buffer;
 var intSize = 4;
 var zeroBuffer = new Buffer(intSize); zeroBuffer.fill(0);
@@ -2348,7 +2358,7 @@ function hash(buf, fn, hashSize, bigEndian) {
 
 module.exports = { hash: hash };
 
-},{"buffer":27}],19:[function(require,module,exports){
+},{"buffer":28}],20:[function(require,module,exports){
 var Buffer = require('buffer').Buffer
 var sha = require('./sha')
 var sha256 = require('./sha256')
@@ -2447,7 +2457,7 @@ each(['createCredentials'
   }
 })
 
-},{"./md5":20,"./rng":21,"./sha":22,"./sha256":23,"buffer":27}],20:[function(require,module,exports){
+},{"./md5":21,"./rng":22,"./sha":23,"./sha256":24,"buffer":28}],21:[function(require,module,exports){
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
  * Digest Algorithm, as defined in RFC 1321.
@@ -2612,7 +2622,7 @@ module.exports = function md5(buf) {
   return helpers.hash(buf, core_md5, 16);
 };
 
-},{"./helpers":18}],21:[function(require,module,exports){
+},{"./helpers":19}],22:[function(require,module,exports){
 // Original code adapted from Robert Kieffer.
 // details at https://github.com/broofa/node-uuid
 (function() {
@@ -2645,7 +2655,7 @@ module.exports = function md5(buf) {
 
 }())
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 /*
  * A JavaScript implementation of the Secure Hash Algorithm, SHA-1, as defined
  * in FIPS PUB 180-1
@@ -2748,7 +2758,7 @@ module.exports = function sha1(buf) {
   return helpers.hash(buf, core_sha1, 20, true);
 };
 
-},{"./helpers":18}],23:[function(require,module,exports){
+},{"./helpers":19}],24:[function(require,module,exports){
 
 /**
  * A JavaScript implementation of the Secure Hash Algorithm, SHA-256, as defined
@@ -2829,7 +2839,7 @@ module.exports = function sha256(buf) {
   return helpers.hash(buf, core_sha256, 32, true);
 };
 
-},{"./helpers":18}],24:[function(require,module,exports){
+},{"./helpers":19}],25:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -3132,7 +3142,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -3157,7 +3167,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -3212,7 +3222,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 var base64 = require('base64-js')
 var ieee754 = require('ieee754')
 
@@ -4270,7 +4280,7 @@ function assert (test, message) {
   if (!test) throw new Error(message || 'Failed assertion')
 }
 
-},{"base64-js":28,"ieee754":29}],28:[function(require,module,exports){
+},{"base64-js":29,"ieee754":30}],29:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -4396,7 +4406,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -4482,7 +4492,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 var process=require("__browserify_process");// Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4708,7 +4718,7 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-},{"__browserify_process":26}],31:[function(require,module,exports){
+},{"__browserify_process":27}],32:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4794,7 +4804,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4881,20 +4891,20 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":31,"./encode":32}],34:[function(require,module,exports){
+},{"./decode":32,"./encode":33}],35:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 var process=require("__browserify_process"),global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};// Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -5482,7 +5492,7 @@ function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-},{"./support/isBuffer":34,"__browserify_process":26,"inherits":25}],36:[function(require,module,exports){
+},{"./support/isBuffer":35,"__browserify_process":27,"inherits":26}],37:[function(require,module,exports){
 
 /**
  * This is the web browser implementation of `debug()`.
@@ -5631,7 +5641,7 @@ function load() {
 
 exports.enable(load());
 
-},{"./debug":37}],37:[function(require,module,exports){
+},{"./debug":38}],38:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -5830,7 +5840,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":38}],38:[function(require,module,exports){
+},{"ms":39}],39:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -5943,7 +5953,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 var extend = require('util')._extend
 
 exports.Stanza = {}
@@ -5953,7 +5963,7 @@ exports.Connection = require('./lib/connection')
 exports.SRV = require('./lib/srv')
 exports.StreamParser = require('./lib/stream_parser')
 exports.ltx = require('ltx')
-},{"./lib/connection":40,"./lib/jid":41,"./lib/srv":42,"./lib/stanza":43,"./lib/stream_parser":44,"ltx":50,"util":35}],40:[function(require,module,exports){
+},{"./lib/connection":41,"./lib/jid":42,"./lib/srv":43,"./lib/stanza":44,"./lib/stream_parser":45,"ltx":51,"util":36}],41:[function(require,module,exports){
 'use strict';
 
 var net = require('net')
@@ -5995,7 +6005,6 @@ function defaultInjection(emitter, opts) {
  The socket parameter is optional for incoming connections.
 */
 function Connection(opts) {
-    
     EventEmitter.call(this)
 
     this.streamAttrs = (opts && opts.streamAttrs) || {}
@@ -6386,7 +6395,7 @@ Connection.prototype.error = function(condition, message) {
 
 module.exports = Connection
 
-},{"./stream_parser":44,"debug":45,"events":24,"ltx":50,"net":16,"reconnect-core":60,"tls-connect":67,"util":35}],41:[function(require,module,exports){
+},{"./stream_parser":45,"debug":46,"events":25,"ltx":51,"net":17,"reconnect-core":61,"tls-connect":68,"util":36}],42:[function(require,module,exports){
 var StringPrep = require('node-stringprep').StringPrep
   , toUnicode = require('node-stringprep').toUnicode
 
@@ -6597,7 +6606,7 @@ if ((typeof exports !== 'undefined') && (exports !== null)) {
     window.JID = JID
 }
 
-},{"node-stringprep":54}],42:[function(require,module,exports){
+},{"node-stringprep":55}],43:[function(require,module,exports){
 'use strict';
 
 
@@ -6760,7 +6769,7 @@ exports.connect = function connect(opts) {
     return tryServices
 }
 
-},{"dns":16}],43:[function(require,module,exports){
+},{"dns":17}],44:[function(require,module,exports){
 'use strict';
 
 var util = require('util')
@@ -6857,7 +6866,7 @@ exports.Message = Message
 exports.Presence = Presence
 exports.Iq = Iq
 
-},{"ltx":50,"util":35}],44:[function(require,module,exports){
+},{"ltx":51,"util":36}],45:[function(require,module,exports){
 'use strict';
 
 var util = require('util')
@@ -7002,7 +7011,7 @@ StreamParser.prototype.error = function(condition, message) {
 }
 
 exports.StreamParser = StreamParser
-},{"./stanza":43,"events":24,"ltx":50,"util":35}],45:[function(require,module,exports){
+},{"./stanza":44,"events":25,"ltx":51,"util":36}],46:[function(require,module,exports){
 
 /**
  * This is the web browser implementation of `debug()`.
@@ -7172,9 +7181,9 @@ function localstorage(){
   } catch (e) {}
 }
 
-},{"./debug":46}],46:[function(require,module,exports){
-arguments[4][37][0].apply(exports,arguments)
-},{"ms":47}],47:[function(require,module,exports){
+},{"./debug":47}],47:[function(require,module,exports){
+arguments[4][38][0].apply(exports,arguments)
+},{"ms":48}],48:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -7301,7 +7310,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 'use strict';
 
 var util = require('util')
@@ -7413,7 +7422,7 @@ DOMElement.prototype.removeChild = function (el) {
 
 module.exports = DOMElement
 
-},{"./element":49,"util":35}],49:[function(require,module,exports){
+},{"./element":50,"util":36}],50:[function(require,module,exports){
 'use strict';
 
 /**
@@ -7807,7 +7816,7 @@ function escapeXmlText(s) {
 exports.Element = Element
 exports.escapeXml = escapeXml
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 /* Cause browserify to bundle SAX parsers: */
@@ -7817,7 +7826,7 @@ parse.availableSaxParsers.push(parse.bestSaxParser = require('./sax/sax_ltx'))
 
 /* SHIM */
 module.exports = require('./index')
-},{"./index":51,"./parse":52,"./sax/sax_ltx":53}],51:[function(require,module,exports){
+},{"./index":52,"./parse":53,"./sax/sax_ltx":54}],52:[function(require,module,exports){
 'use strict';
 
 var parse = require('./parse')
@@ -7844,7 +7853,7 @@ exports.Parser = parse.Parser
 exports.availableSaxParsers = parse.availableSaxParsers
 exports.bestSaxParser = parse.bestSaxParser
 
-},{"./dom-element":48,"./element":49,"./parse":52}],52:[function(require,module,exports){
+},{"./dom-element":49,"./element":50,"./parse":53}],53:[function(require,module,exports){
 'use strict';
 
 var events = require('events')
@@ -7963,7 +7972,7 @@ exports.parse = function(data, saxParser) {
     }
 }
 
-},{"./dom-element":48,"events":24,"util":35}],53:[function(require,module,exports){
+},{"./dom-element":49,"events":25,"util":36}],54:[function(require,module,exports){
 'use strict';
 
 var util = require('util')
@@ -8135,7 +8144,7 @@ function unescapeXml(s) {
         replace(/\&(nbsp|#160);/g, '\n')
 }
 
-},{"events":24,"util":35}],54:[function(require,module,exports){
+},{"events":25,"util":36}],55:[function(require,module,exports){
 'use strict';
 
 var log = require('debug')('node-stringprep')
@@ -8251,8 +8260,8 @@ module.exports = {
     StringPrep: StringPrep
 }
 
-},{"./package.json":59,"bindings":55,"debug":56}],55:[function(require,module,exports){
-var process=require("__browserify_process"),__filename="/node_modules/node-xmpp-core/node_modules/node-stringprep/node_modules/bindings/bindings.js";
+},{"./package.json":60,"bindings":56,"debug":57}],56:[function(require,module,exports){
+var process=require("__browserify_process"),__filename="/../core/node_modules/node-stringprep/node_modules/bindings/bindings.js";
 /**
  * Module dependencies.
  */
@@ -8419,13 +8428,13 @@ exports.getRoot = function getRoot (file) {
   }
 }
 
-},{"__browserify_process":26,"fs":16,"path":30}],56:[function(require,module,exports){
-module.exports=require(36)
-},{"./debug":57}],57:[function(require,module,exports){
+},{"__browserify_process":27,"fs":17,"path":31}],57:[function(require,module,exports){
 module.exports=require(37)
-},{"ms":58}],58:[function(require,module,exports){
+},{"./debug":58}],58:[function(require,module,exports){
 module.exports=require(38)
-},{}],59:[function(require,module,exports){
+},{"ms":59}],59:[function(require,module,exports){
+module.exports=require(39)
+},{}],60:[function(require,module,exports){
 module.exports={
   "name": "node-stringprep",
   "version": "0.7.2",
@@ -8478,7 +8487,7 @@ module.exports={
   "gitHead": "7f335a70862df38964a91eb8f81241ffd289f049",
   "_id": "node-stringprep@0.7.2",
   "_shasum": "371aa203222ccf201e34ec25e5f2136bc6493420",
-  "_from": "node-stringprep@^0.7.0",
+  "_from": "node-stringprep@>=0.7.0 <0.8.0",
   "_npmVersion": "2.9.0",
   "_nodeVersion": "2.0.1",
   "_npmUser": {
@@ -8508,10 +8517,11 @@ module.exports={
     "tarball": "http://registry.npmjs.org/node-stringprep/-/node-stringprep-0.7.2.tgz"
   },
   "directories": {},
-  "_resolved": "https://registry.npmjs.org/node-stringprep/-/node-stringprep-0.7.2.tgz"
+  "_resolved": "https://registry.npmjs.org/node-stringprep/-/node-stringprep-0.7.2.tgz",
+  "readme": "ERROR: No README data found!"
 }
 
-},{}],60:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 var EventEmitter = require('events').EventEmitter
 var backoff = require('backoff')
 var noop = function () {}
@@ -8628,7 +8638,7 @@ function (createConnection) {
 
 }
 
-},{"backoff":61,"events":24}],61:[function(require,module,exports){
+},{"backoff":62,"events":25}],62:[function(require,module,exports){
 /*
  * Copyright (c) 2012 Mathieu Turcotte
  * Licensed under the MIT license.
@@ -8679,7 +8689,7 @@ module.exports.call = function(fn, vargs, callback) {
     return new FunctionCall(fn, vargs, callback);
 };
 
-},{"./lib/backoff":62,"./lib/function_call.js":63,"./lib/strategy/exponential":64,"./lib/strategy/fibonacci":65}],62:[function(require,module,exports){
+},{"./lib/backoff":63,"./lib/function_call.js":64,"./lib/strategy/exponential":65,"./lib/strategy/fibonacci":66}],63:[function(require,module,exports){
 /*
  * Copyright (c) 2012 Mathieu Turcotte
  * Licensed under the MIT license.
@@ -8765,7 +8775,7 @@ Backoff.prototype.reset = function() {
 
 module.exports = Backoff;
 
-},{"events":24,"util":35}],63:[function(require,module,exports){
+},{"events":25,"util":36}],64:[function(require,module,exports){
 /*
  * Copyright (c) 2012 Mathieu Turcotte
  * Licensed under the MIT license.
@@ -8994,7 +9004,7 @@ FunctionCall.prototype.handleBackoff_ = function(number, delay, err) {
 
 module.exports = FunctionCall;
 
-},{"./backoff":62,"./strategy/fibonacci":65,"events":24,"util":35}],64:[function(require,module,exports){
+},{"./backoff":63,"./strategy/fibonacci":66,"events":25,"util":36}],65:[function(require,module,exports){
 /*
  * Copyright (c) 2012 Mathieu Turcotte
  * Licensed under the MIT license.
@@ -9030,7 +9040,7 @@ ExponentialBackoffStrategy.prototype.reset_ = function() {
 
 module.exports = ExponentialBackoffStrategy;
 
-},{"./strategy":66,"util":35}],65:[function(require,module,exports){
+},{"./strategy":67,"util":36}],66:[function(require,module,exports){
 /*
  * Copyright (c) 2012 Mathieu Turcotte
  * Licensed under the MIT license.
@@ -9067,7 +9077,7 @@ FibonacciBackoffStrategy.prototype.reset_ = function() {
 
 module.exports = FibonacciBackoffStrategy;
 
-},{"./strategy":66,"util":35}],66:[function(require,module,exports){
+},{"./strategy":67,"util":36}],67:[function(require,module,exports){
 /*
  * Copyright (c) 2012 Mathieu Turcotte
  * Licensed under the MIT license.
@@ -9167,7 +9177,7 @@ BackoffStrategy.prototype.reset_ = function() {
 
 module.exports = BackoffStrategy;
 
-},{"events":24,"util":35}],67:[function(require,module,exports){
+},{"events":25,"util":36}],68:[function(require,module,exports){
 var process=require("__browserify_process");'use strict';
 
 module.exports = connect;
@@ -9583,4 +9593,4 @@ function legacyPipe(pair, socket) {
   return cleartext;
 };
 
-},{"__browserify_process":26,"assert":17,"crypto":19,"net":16,"tls":16,"util":35}]},{},[1])
+},{"__browserify_process":27,"assert":18,"crypto":20,"net":17,"tls":17,"util":36}]},{},[1])
