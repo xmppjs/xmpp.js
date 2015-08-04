@@ -1,0 +1,5 @@
+node_modules
+npm-debug.log
+node-xmpp-browser.js
+coverage
+.brackets.json

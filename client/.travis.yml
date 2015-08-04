@@ -1,0 +1,37 @@
+language: node_js
+
+node_js:
+- '0.8'
+- '0.10'
+- '0.12'
+- 'iojs'
+
+before_install:
+- version=`node -v`; if [[ $version == *"0.8."* ]]; then npm i -g npm; fi
+- sudo apt-get install libicu-dev prosody luarocks
+- sudo luarocks install luabitop
+- sudo rm -rf /dev/shm
+- sudo ln -s /run/shm /dev/shm
+- sudo cp test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
+- sudo cp test/resources/mod_websocket.lua /usr/lib/prosody/modules/
+- sudo service prosody stop
+
+script: npm run full-test
+
+after_success:
+- if [ "master" != "$TRAVIS_BRANCH" ]; then exit 0; fi;
+- git config --global user.email "deploy@travis-ci.org"
+- git config --global user.name "Travis deploy"
+- git remote add github "https://${GH_TOKEN}@github.com/node-xmpp/node-xmpp-client.git"
+  > /dev/null
+- git fetch github
+- git checkout master
+- git add -f node-xmpp-browser.js
+- echo "Added browserified file"
+- git config credential.helper "store --file=.git/credentials"
+- echo "https://${GH_TOKEN}@github.com" > .git/credentials
+- git commit -a -m "Updating browserified file - build number $TRAVIS_BUILD_NUMBER\n\n[skip ci]"
+- git push github master > /dev/null
+env:
+  global:
+    secure: BFnBzl9L23ZCluLh5S/CuvhfNTUi6oyHx7UTOgbIzobKR8l+1Xo3cDrS8nnAWrR1KljedKh4eSFEA1o5n773tXEtFN4Qqg+MKuTkU+2I3a6wMjZ9REFMyvT2+hCfWs16lE3e5HWR+TEvcUHtPPzm1IiaaZy7qf31QjnPTgOiCZU=
