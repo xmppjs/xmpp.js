@@ -1,7 +1,8 @@
 'use strict';
 
-var JID = require('node-xmpp-core').JID
-  , ltx = require('node-xmpp-core').ltx
+var core = require('../xmpp').core
+  , JID = core.JID
+  , ltx = core.ltx
   , nameprep = require('./util/nameprep')
   , dialbackkey = require('./util/dialbackkey')
   , OutgoingServer = require('./session/outgoing')

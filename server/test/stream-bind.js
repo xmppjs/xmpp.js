@@ -1,9 +1,9 @@
 'use strict';
 
 var C2SServer = require('../index').C2SServer
-  , Client = require('node-xmpp-client')
+  , Client = require('../lib/xmpp').client
   , Plain = require('../index').auth.Plain
-  , JID = require('node-xmpp-core').JID
+  , JID = require('../lib/xmpp').core.JID
 
 var port = 5222
 var user = {

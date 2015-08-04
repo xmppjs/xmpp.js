@@ -1,9 +1,9 @@
 'use strict';
 
 var assert = require('assert'),
-    xmpp = require('./../index'),
-    Client = require('node-xmpp-client'),
-    Message = require('node-xmpp-core').Stanza.Message,
+    xmpp = require('../index'),
+    Client = require('../lib/xmpp').client,
+    Message = require('../lib/xmpp').core.Stanza.Message,
     debug = require('debug')('xmpp:test:bosh')
 
 var BOSH_PORT = 45580

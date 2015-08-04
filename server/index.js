@@ -23,5 +23,7 @@ module.exports = {
         DigestMD5: require('./lib/authentication/digestmd5'),
         XOAuth2: require('./lib/authentication/xoauth2'),
         Anonymous: require('./lib/authentication/anonymous')
-    }
+    },
+
+    ltx: require('./lib/xmpp').core.ltx
 }

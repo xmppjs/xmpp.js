@@ -2,10 +2,11 @@
 
 var EventEmitter = require('events').EventEmitter
   , util = require('util')
-  , Element = require('node-xmpp-core').Stanza.Element
+  , core = require('../xmpp').core
+  , JID = core.JID
+  , Connection = core.Connection
+  , Element = core.Stanza.Element
   , rack = require('hat').rack
-  , JID = require('node-xmpp-core').JID
-  , Connection = require('node-xmpp-core').Connection
 
 var NS_CLIENT = 'jabber:client'
 var NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl'

@@ -1,8 +1,9 @@
 'use strict';
 
 var util = require('util')
-  , SRV = require('node-xmpp-core').SRV
-  , Connection = require('node-xmpp-core').Connection
+  , core = require('../../xmpp').core
+  , SRV = core.SRV
+  , Connection = core.Connection
   , Server = require('./server')
   , debug = require('debug')('xmpp:s2s:outserver')
 

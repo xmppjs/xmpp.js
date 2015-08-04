@@ -3,9 +3,10 @@
 var util = require('util')
   , crypto = require('crypto')
   , EventEmitter = require('events').EventEmitter
-  , Connection = require('node-xmpp-core').Connection
-  , JID = require('node-xmpp-core').JID
-  , ltx = require('node-xmpp-core').ltx
+  , core = require('../xmpp').core
+  , Connection = core.Connection
+  , JID = core.JID
+  , ltx = core.ltx
 
 function ComponentStream(opts) {
     EventEmitter.call(this)

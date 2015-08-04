@@ -1,7 +1,7 @@
 'use strict';
 
 var util = require('util')
-  , Element = require('node-xmpp-core').Stanza.Element
+  , Element = require('../../xmpp').core.Stanza.Element
   , hat = require('hat')
   , debug = require('debug')('xmpp:s2s:inserver')
   , Server = require('./server')

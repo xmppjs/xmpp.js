@@ -4,8 +4,9 @@
  * Implements http://xmpp.org/extensions/xep-0220.html
  */
 var util = require('util')
-  , ltx = require('node-xmpp-core').ltx
-  , Connection = require('node-xmpp-core').Connection
+  , core = require('../../xmpp').core
+  , ltx = core.ltx
+  , Connection = core.Connection
   , StreamShaper = require('../stream/shaper')
   , IdleTimeout = require('../stream/timeout')
   , debug = require('debug')('xmpp:s2s:server')

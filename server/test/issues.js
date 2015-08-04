@@ -1,6 +1,6 @@
 'use strict';
 
-var Element = require('node-xmpp-core').Stanza.Element
+var Element = require('../lib/xmpp').core.Stanza.Element
   , C2SServer = require('../index').C2SServer
   , net = require('net')
 

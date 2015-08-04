@@ -2,8 +2,8 @@
 
 var xmpp = require('../index')
   , assert = require('assert')
-  , Component = require('node-xmpp-component')
-  , Message = require('node-xmpp-core').Stanza.Message
+  , Component = require('../lib/xmpp').component
+  , Message = require('../lib/xmpp').core.Stanza.Message
 
 var eventChain = []
 var componentSrv = null

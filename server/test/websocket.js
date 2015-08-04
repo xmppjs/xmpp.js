@@ -2,8 +2,8 @@
 
 var xmpp = require('../index')
   , assert = require('assert')
-  , Client = require('node-xmpp-client')
-  , Message = require('node-xmpp-core').Stanza.Message
+  , Client = require('../lib/xmpp').client
+  , Message = require('../lib/xmpp').core.Stanza.Message
 
 var eventChain = []
 var websocket = null

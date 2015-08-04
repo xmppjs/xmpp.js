@@ -1,10 +1,10 @@
 'use strict';
 
 var C2SServer = require('../index').C2SServer
-  , Element = require('node-xmpp-core').Stanza.Element
+  , Element = require('../lib/xmpp').core.Stanza.Element
   , net = require('net')
   , rack = require('hat').rack
-  , Client = require('node-xmpp-client')
+  , Client = require('../lib/xmpp').client
   , Plain = require('../index').auth.Plain
   , XOAuth2 = require('../index').auth.XOAuth2
   , DigestMD5 = require('../index').auth.DigestMD5

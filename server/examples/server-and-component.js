@@ -1,10 +1,10 @@
 'use strict';
 
 var xmpp = require('../index')
+  , ltx = xmpp.ltx
   , componentSrv = null
   , debug = require('debug')('server-and-component')
   , Component = require('node-xmpp-component')
-  , ltx = require('node-xmpp-core').ltx
 
 var startServer = function(done) {
     // Sets up the server.

@@ -12,7 +12,7 @@
 var util = require('util'),
     EventEmitter = require('events').EventEmitter
 
-    // Mechanisms
+// Mechanisms
 function Mechanism() {}
 
 util.inherits(Mechanism, EventEmitter)

@@ -1,7 +1,7 @@
 'use strict';
 
 var xmpp = require('../index')
-  , ltx = require('node-xmpp-core').ltx
+  , ltx = xmpp.ltx
   , pem = require('pem')
 
 var r = new xmpp.Router()

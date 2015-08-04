@@ -2,9 +2,10 @@
 
 var util = require('util')
   , crypto = require('crypto')
-  , Element = require('node-xmpp-core').Stanza.Element
+  , core = require('../xmpp').core
+  , Element = core.Stanza.Element
+  , JID = core.JID
   , Mechanism = require('./mechanism')
-  , JID = require('node-xmpp-core').JID
 
 
 /**

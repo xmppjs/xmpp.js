@@ -1,6 +1,6 @@
 'use strict';
 
-var Element = require('node-xmpp-core').Stanza.Element
+var Element = require('../../xmpp').core.Stanza.Element
   , crypto = require('crypto')
   , debug = require('debug')('xmpp:s2s:util:dialbackkey')
 
