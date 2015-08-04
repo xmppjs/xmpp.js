@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+  - "0.8"
+  - "0.10"
+  - "0.11"
+before_install:
+  - sudo apt-get install prosody
+  - npm i -g npm
+  - "sudo apt-get install libicu-dev"
+  # Workaround for a permissions issue with Travis virtual machine images
+  # that breaks Python's multiprocessing:
+  # https://github.com/travis-ci/travis-cookbooks/issues/155
+  - sudo rm -rf /dev/shm
+  - sudo ln -s /run/shm /dev/shm
+  - sudo cp test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
+  - sudo service prosody stop
+before_script:
+  - npm install -g grunt-cli
+script: "npm run integration-test"
