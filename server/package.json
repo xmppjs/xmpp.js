@@ -6,10 +6,9 @@
   "scripts": {
     "test": "./node_modules/.bin/grunt test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:node-xmpp/node-xmpp-server.git"
-  },
+  "homepage": "https://github.com/node-xmpp/node-xmpp",
+  "repository": "github:node-xmpp/node-xmpp",
+  "bugs": "https://github.com/node-xmpp/node-xmpp/issues",
   "keywords": [
     "xmpp",
     "nodejs",
@@ -17,9 +16,6 @@
   ],
   "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/node-xmpp/node-xmpp-server/issues"
-  },
   "dependencies": {
     "hat": "~0.0.3",
     "node-xmpp-core": "^1.0.0-alpha14",

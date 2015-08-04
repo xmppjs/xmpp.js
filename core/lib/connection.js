@@ -39,7 +39,6 @@ function defaultInjection(emitter, opts) {
  The socket parameter is optional for incoming connections.
 */
 function Connection(opts) {
-    
     EventEmitter.call(this)
 
     this.streamAttrs = (opts && opts.streamAttrs) || {}

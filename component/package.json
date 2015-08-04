@@ -7,19 +7,15 @@
     "test": "grunt test",
     "integration-test": "grunt integration-test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/node-xmpp/node-xmpp-component.git"
-  },
+  "homepage": "https://github.com/node-xmpp/node-xmpp",
+  "repository": "github:node-xmpp/node-xmpp",
+  "bugs": "https://github.com/node-xmpp/node-xmpp/issues",
   "keywords": [
     "component",
     "xmpp"
   ],
   "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/node-xmpp/node-xmpp-component/issues"
-  },
   "dependencies": {
     "node-xmpp-core": "^1.0.0-alpha13"
   },
