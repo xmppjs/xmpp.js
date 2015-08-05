@@ -1,6 +1,6 @@
 'use strict'
 
-var Session = require('./lib/session')
+var EventEmitter = require('events').EventEmitter
   , core = require('./lib/xmpp').core
   , JID = core.JID
   , Stanza = core.Stanza
@@ -9,11 +9,13 @@ var Session = require('./lib/session')
   , Plain = require('./lib/authentication/plain')
   , DigestMD5 = require('./lib/authentication/digestmd5')
   , XOAuth2 = require('./lib/authentication/xoauth2')
-  , XFacebookPlatform = require('./lib/authentication/xfacebook')
   , External = require('./lib/authentication/external')
   , exec = require('child_process').exec
   , util = require('util')
   , debug = require('debug')('xmpp:client')
+  , BOSHConnection = require('./lib/transports/BOSH')
+  , WebSocketConnection = require('./lib/transports/WebSocket')
+  , TCPConnection = require('./lib/transports/TCP')
   , ltx = core.ltx
 
 var NS_CLIENT = 'jabber:client'
@@ -86,12 +88,6 @@ if (typeof atob === 'function') {
  *       jid: "me@example.com",
  *       password: "secret"
  *   })
- *   var facebook = new xmpp.Client({
- *       jid: '-' + fbUID + '@chat.facebook.com',
- *       api_key: '54321', // api key of your facebook app
- *       access_token: 'abcdefg', // user access token
- *       host: 'chat.facebook.com'
- *   })
  *   var gtalk = new xmpp.Client({
  *       jid: 'me@gmail.com',
  *       oauth2_token: 'xxxx.xxxxxxxxxxx', // from OAuth2
@@ -126,17 +122,31 @@ if (typeof atob === 'function') {
  *
  */
 function Client(options) {
+    EventEmitter.call(this)
+    this.setOptions(options)
+
+    if (options.websocket && options.websocket.url) {
+        debug('start WebSocket connection')
+        this._setupWebSocketConnection(options)
+    } else if (options.bosh && options.bosh.url) {
+        debug('start BOSH connection')
+        this._setupBOSHConnection(options)
+    } else {
+        debug('start TCP connection')
+        this._setupTCPConnection(options)
+    }
+
     this.options = {}
     if (options) this.options = options
     this.availableSaslMechanisms = [
-        XOAuth2, XFacebookPlatform, External, DigestMD5, Plain, Anonymous
+        XOAuth2, External, DigestMD5, Plain, Anonymous
     ]
 
     if (this.options.autostart !== false)
         this.connect()
 }
 
-util.inherits(Client, Session)
+util.inherits(Client, EventEmitter)
 
 Client.NS_CLIENT = NS_CLIENT
 
@@ -182,7 +192,7 @@ Client.prototype.connect = function() {
             delete this.didSession
         })
 
-        Session.call(this, this.options)
+        this._setupConnection()
         this.options.jid = this.jid
 
         this.connection.on('disconnect', function(error) {
@@ -209,9 +219,6 @@ Client.prototype.connect = function() {
 }
 
 Client.prototype.onStanza = function(stanza) {
-    /* Actually, we shouldn't wait for <stream:features/> if
-       this.streamAttrs.version is missing, but who uses pre-XMPP-1.0
-       these days anyway? */
     if ((this.state !== STATE_ONLINE) && stanza.is('features')) {
         this.streamFeatures = stanza
         this.useFeatures()
@@ -283,10 +290,10 @@ Client.prototype._handleAuthState = function(stanza) {
 
 Client.prototype._handlePreAuthState = function() {
     this.state = STATE_AUTH
-    var offeredMechs = this.streamFeatures.
-        getChild('mechanisms', NS_XMPP_SASL).
-        getChildren('mechanism', NS_XMPP_SASL).
-        map(function(el) { return el.getText() })
+    var offeredMechs = this.streamFeatures
+        .getChild('mechanisms', NS_XMPP_SASL)
+        .getChildren('mechanism', NS_XMPP_SASL)
+        .map(function(el) {return el.getText() })
     this.mech = sasl.selectMechanism(
         offeredMechs,
         this.preferredSaslMechanism,
@@ -415,6 +422,104 @@ Client.prototype.unregisterSaslMechanism = function(method) {
     if (index >= 0) {
         this.availableSaslMechanisms = this.availableSaslMechanisms.splice(index, 1)
     }
+}
+
+Client.prototype._setupConnection = function() {
+    this.state = STATE_PREAUTH
+    this.connection = new this.Connection(this.connectionOptions)
+    // this.connection.on('connect', function() {
+    //     // Clients start <stream:stream>, servers reply
+    //     if (this.connection.startStream)
+    //         this.connection.startStream()
+    // }.bind(this))
+    this._addConnectionListeners()
+}
+
+Client.prototype._setupTCPConnection = function(opts) {
+    this.Connection = TCPConnection
+    this.connectionOptions = {
+        jid: this.jid,
+        host: opts.host,
+        port: opts.port,
+        legacySSL: opts.legacySSL,
+        disallowTLS: opts.disallowTLS,
+        credentials: opts.credentials,
+        xmlns: NS_CLIENT
+    }
+}
+
+Client.prototype._setupBOSHConnection = function(opts) {
+    this.Connection = BOSHConnection
+    this.connectionOptions = {
+        jid: this.jid,
+        bosh: opts.bosh
+    }
+}
+
+Client.prototype._setupWebSocketConnection = function(opts) {
+    this.Connection = WebSocketConnection
+    this.connectionOptions = {
+        jid: this.jid,
+        websocket: opts.websocket
+    }
+}
+
+Client.prototype.setOptions = function(opts) {
+    this.jid = (typeof opts.jid === 'string') ? new JID(opts.jid) : opts.jid
+    this.password = opts.password
+    this.preferredSaslMechanism = opts.preferredSaslMechanism
+    /* eslint-disable camelcase */
+    this.api_key = opts.api_key
+    this.access_token = opts.access_token
+    this.oauth2_token = opts.oauth2_token
+    this.oauth2_auth = opts.oauth2_auth
+    /* eslint-enable camelcase */
+    this.register = opts.register
+    if (typeof opts.actAs === 'string') {
+        this.actAs = new JID(opts.actAs)
+    } else {
+        this.actAs = opts.actAs
+    }
+}
+
+Client.prototype._addConnectionListeners = function (con) {
+    con = con || this.connection
+    con.on('stanza', this.onStanza.bind(this))
+    con.on('drain', this.emit.bind(this, 'drain'))
+    con.on('end', this.emit.bind(this, 'end'))
+    con.on('close', this.emit.bind(this, 'close'))
+    con.on('error', this.emit.bind(this, 'error'))
+    con.on('connected', this.emit.bind(this, 'connect'))
+    con.on('reconnect', this.emit.bind(this, 'reconnect'))
+    con.on('disconnect', this.emit.bind(this, 'disconnect'))
+    if (con.startStream) {
+        con.on('connected', function () {
+            // Clients start <stream:stream>, servers reply
+            con.startStream()
+        })
+        this.on('auth', function () {
+            con.startStream()
+        })
+    }
+}
+
+Client.prototype.pause = function() {
+    if (this.connection && this.connection.pause)
+        this.connection.pause()
+}
+
+Client.prototype.resume = function() {
+    if (this.connection && this.connection.resume)
+        this.connection.resume()
+}
+
+Client.prototype.send = function(stanza) {
+    return this.connection ? this.connection.send(stanza) : false
+}
+
+Client.prototype.end = function() {
+    if (this.connection)
+        this.connection.end()
 }
 
 Client.SASL = sasl

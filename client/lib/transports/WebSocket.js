@@ -2,15 +2,15 @@
 
 var EventEmitter = require('events').EventEmitter
   , util = require('util')
-  , core = require('./xmpp').core
+  , core = require('../xmpp').core
   , ltx = core.ltx
   , StreamParser = core.StreamParser
   , Connection = core.Connection
   , WebSocket = require('faye-websocket') && require('faye-websocket').Client ?
       require('faye-websocket').Client : window.WebSocket // eslint-disable-line
-  , debug = require('debug')('xmpp:client:websockets')
+  , debug = require('debug')('xmpp:client:WebSocket')
 
-function WSConnection(opts) {
+function WebSocketConnection(opts) {
     EventEmitter.call(this)
 
     this.url = opts.websocket.url
@@ -23,17 +23,17 @@ function WSConnection(opts) {
     this.websocket.onerror = this.onerror.bind(this)
 }
 
-util.inherits(WSConnection, EventEmitter)
+util.inherits(WebSocketConnection, EventEmitter)
 
-WSConnection.prototype.maxStanzaSize = 65535
-WSConnection.prototype.xmppVersion = '1.0'
+WebSocketConnection.prototype.maxStanzaSize = 65535
+WebSocketConnection.prototype.xmppVersion = '1.0'
 
-WSConnection.prototype.onopen = function() {
+WebSocketConnection.prototype.onopen = function() {
     this.startParser()
     this.emit('connected')
 }
 
-WSConnection.prototype.startParser = function() {
+WebSocketConnection.prototype.startParser = function() {
     var self = this
     this.parser = new StreamParser.StreamParser(this.maxStanzaSize)
 
@@ -64,7 +64,7 @@ WSConnection.prototype.startParser = function() {
     })
 }
 
-WSConnection.prototype.stopParser = function() {
+WebSocketConnection.prototype.stopParser = function() {
     /* No more events, please (may happen however) */
     if (this.parser) {
         /* Get GC'ed */
@@ -72,13 +72,13 @@ WSConnection.prototype.stopParser = function() {
     }
 }
 
-WSConnection.prototype.onmessage = function(msg) {
-    debug('ws msg <--', msg.data)
+WebSocketConnection.prototype.onmessage = function(msg) {
+    debug('input', msg.data)
     if (msg && msg.data && this.parser)
         this.parser.write(msg.data)
 }
 
-WSConnection.prototype.onStanza = function(stanza) {
+WebSocketConnection.prototype.onStanza = function(stanza) {
     if (stanza.is('error', Connection.NS_STREAM)) {
         /* TODO: extract error text */
         this.emit('error', stanza)
@@ -87,7 +87,7 @@ WSConnection.prototype.onStanza = function(stanza) {
     }
 }
 
-WSConnection.prototype.startStream = function() {
+WebSocketConnection.prototype.startStream = function() {
     var attrs = {}
     for(var k in this.xmlns) {
         if (this.xmlns.hasOwnProperty(k)) {
@@ -118,19 +118,19 @@ WSConnection.prototype.startStream = function() {
     this.streamOpened = true
 }
 
-WSConnection.prototype.send = function(stanza) {
+WebSocketConnection.prototype.send = function(stanza) {
     if (stanza.root) stanza = stanza.root()
     stanza = stanza.toString()
-    debug('ws send -->', stanza)
+    debug('output', stanza)
     this.websocket.send(stanza)
 }
 
-WSConnection.prototype.onclose = function() {
+WebSocketConnection.prototype.onclose = function() {
     this.emit('disconnect')
     this.emit('close')
 }
 
-WSConnection.prototype.end = function() {
+WebSocketConnection.prototype.end = function() {
     this.send('</stream:stream>')
     this.emit('disconnect')
     this.emit('end')
@@ -138,8 +138,8 @@ WSConnection.prototype.end = function() {
         this.websocket.close()
 }
 
-WSConnection.prototype.onerror = function(e) {
+WebSocketConnection.prototype.onerror = function(e) {
     this.emit('error', e)
 }
 
-module.exports = WSConnection
+module.exports = WebSocketConnection

@@ -43,8 +43,7 @@ describe('Authentication', function() {
                 element.is('stream').should.be.true
                 element.attrs.to.should.equal(options.host)
                 element.attrs.xmlns.should.equal('jabber:client')
-                element.attrs['xmlns:stream']
-                    .should.equal('http://etherx.jabber.org/streams')
+                element.attrs['xmlns:stream'].should.equal('http://etherx.jabber.org/streams')
                 element.attrs.version.should.equal('1.0')
                 done()
             })
