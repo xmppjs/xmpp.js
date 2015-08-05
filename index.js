@@ -6,6 +6,7 @@ var core = require('./core')
   , server = require('./server')
   , ltx = require('ltx')
 
+exports.ltx = ltx
 exports.Element = ltx.Element
 
 exports.Client = Client
@@ -14,6 +15,8 @@ exports.Component = Component
 
 exports.C2SServer = server.C2SServer
 exports.C2SStream = server.C2SStream
+exports.TCPServer = server.TCPServer
+exports.TCPStream = server.TCPStream
 exports.BOSHServer = server.BOSHServer
 exports.WebSocketServer = server.WebSocketServer
 exports.Router = server.Router

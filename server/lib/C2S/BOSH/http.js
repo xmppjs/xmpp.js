@@ -2,8 +2,8 @@
 
 var EventEmitter = require('events').EventEmitter
   , util = require('util')
-  , ltx = require('../xmpp').core.ltx
-  , BOSHServerSession = require('./session')
+  , ltx = require('../../xmpp').core.ltx
+  , BOSHStream = require('./session')
   , debug = require('debug')('xmpp:bosh:http')
 
 var NS_HTTPBIND = 'http://jabber.org/protocol/httpbind'
@@ -151,7 +151,7 @@ BOSHServer.prototype._createSession = function(req, res, bodyEl) {
     var self = this
     var session
     do {
-        session = new BOSHServerSession(
+        session = new BOSHStream(
             { req: req, res: res, bodyEl: bodyEl }
         )
     } while (this.sessions[session.sid])
@@ -164,7 +164,7 @@ BOSHServer.prototype._createSession = function(req, res, bodyEl) {
     res.boshAttrs = {'xmpp:restartlogic': true}
 
     // emit new connection
-    this.emit('connect', session)
+    this.emit('connection', session)
 }
 
 module.exports = BOSHServer

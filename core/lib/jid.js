@@ -176,7 +176,7 @@ JID.prototype.escapeLocal = function (local) {
         .replace(/</g, '\\3c')
         .replace(/>/g, '\\3e')
         .replace(/@/g, '\\40')
-        .replace(/\3a/g, '\5c3a')
+        // .replace(/\3a/g, '\5c3a') // FIXME
 }
 
 /**

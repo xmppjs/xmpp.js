@@ -2,7 +2,7 @@
 
 var util = require('util')
   , crypto = require('crypto')
-  , core = require('../xmpp').core
+  , core = require('../../xmpp').core
   , Element = core.Stanza.Element
   , JID = core.JID
   , Mechanism = require('./mechanism')

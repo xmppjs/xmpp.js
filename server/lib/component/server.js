@@ -3,7 +3,7 @@
 var debug = require('debug')('xmpp:component:server')
   , util = require('util')
   , net = require('net')
-  , C2SServer = require('../c2s/server')
+  , TCPServer = require('../C2S/TCP/server')
 
 /**
  * params:
@@ -23,9 +23,9 @@ function ComponentServer(options) {
 
 }
 
-util.inherits(ComponentServer, C2SServer)
+util.inherits(ComponentServer, TCPServer)
 
-ComponentServer.prototype.C2SStream = require('./stream')
+ComponentServer.prototype.TCPStream = require('./stream')
 
 ComponentServer.prototype.C2S_PORT = 5347
 
@@ -55,7 +55,6 @@ ComponentServer.prototype._addConnectionListener = function (con) {
     con.on('error', this.emit.bind(this, 'error'))
     con.on('end', this.emit.bind(this, 'end'))
 }
-
 
 ComponentServer.prototype.shutdown = function(callback) {
     debug('shutdown')

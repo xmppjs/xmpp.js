@@ -20,7 +20,7 @@
     "debug": "^2.2.0",
     "hat": "^0.0.3",
     "node-xmpp-core": "^1.0.0-alpha14",
-    "ws": "^0.7.1"
+    "ws": "^0.7.2"
   },
   "devDependencies": {
     "coveralls": "^2.11.2",

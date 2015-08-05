@@ -2,7 +2,7 @@
 
 var EventEmitter = require('events').EventEmitter
   , util = require('util')
-  , ltx = require('../xmpp').core.ltx
+  , ltx = require('../../xmpp').core.ltx
   , hat = require('hat')
   , debug = require('debug')('xmpp:bosh:session')
 
