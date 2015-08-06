@@ -37,14 +37,37 @@ describe('Connection', function () {
         })
     })
 
+    describe('streamOpen', function() {
+        it('defaults to stream:stream', function() {
+            var conn = new Connection()
+            assert.equal(conn.streamOpen, 'stream:stream')
+        })
+        it('is configurable', function() {
+            var conn = new Connection({streamOpen: 'open'})
+            assert.equal(conn.streamOpen, 'open')
+        })
+    })
+
+    describe('streamClose', function() {
+        it('defaults to </stream:stream>', function() {
+            var conn = new Connection()
+            assert.equal(conn.streamClose, '</stream:stream>')
+        })
+        it('is configurable', function() {
+            var conn = new Connection({streamClose: '<close/>'})
+            assert.equal(conn.streamClose, '<close/>')
+        })
+    })
+
     // http://xmpp.org/rfcs/rfc6120.html#streams-open
     describe('openStream', function() {
-        it('calls send with <stream:stream >', function() {
+        it('calls send with <streamOpen >', function() {
             var conn = new Connection()
+            conn.streamOpen = 'foo'
             var send = sinon.stub(conn, 'send')
             conn.openStream()
             assert(send.calledOnce)
-            assert.equal(send.args[0][0].indexOf('<stream:stream '), 0)
+            assert.equal(send.args[0][0].indexOf('<' + conn.streamOpen + ' '), 0)
         })
 
         it('alias to startStream', function() {
@@ -55,13 +78,14 @@ describe('Connection', function () {
 
     // http://xmpp.org/rfcs/rfc6120.html#streams-close
     describe('closeStream', function() {
-        it('calls sends with </stream:stream>', function() {
+        it('calls sends with streamClose', function() {
             var conn = new Connection()
             conn.openStream()
+            conn.streamClose = '</bar>'
             var send = sinon.stub(conn, 'send')
             conn.closeStream()
             assert(send.calledOnce)
-            assert(send.calledWith('</stream:stream>'))
+            assert(send.calledWith(conn.streamClose))
         })
 
         it('alias to endStream', function() {
