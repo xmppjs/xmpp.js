@@ -1,23 +1,29 @@
 {
   "name": "node-xmpp-core",
   "version": "1.0.0-alpha14",
-  "description": "Core files in the node-xmpp project",
+  "description": "core files for the node-xmpp project",
   "main": "index.js",
   "scripts": {
-    "test": "grunt test"
+    "unit": "./node_modules/.bin/mocha --recursive test/",
+    "lint": "./node_modules/.bin/eslint .",
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls && rm -rf ./coverage",
+    "test": "npm run unit && npm run lint && npm run coverage"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:node-xmpp/node-xmpp-core.git"
-  },
+  "homepage": "https://github.com/node-xmpp/node-xmpp-core",
+  "repository": "github:node-xmpp/node-xmpp-core",
+  "bugs": "https://github.com/node-xmpp/node-xmpp-core/issues",
   "keywords": [
-    "xmpp"
+    "XMPP",
+    "JID",
+    "SRV",
+    "Stanza",
+    "iq",
+    "message",
+    "presence"
   ],
   "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/node-xmpp/node-xmpp-core/issues"
-  },
   "dependencies": {
     "node-stringprep": "^0.7.0",
     "reconnect-core": "https://github.com/dodo/reconnect-core/tarball/merged",
@@ -27,11 +33,8 @@
   },
   "devDependencies": {
     "coveralls": "^2.11.2",
-    "grunt": "^0.4.5",
-    "grunt-contrib-jshint": "^0.11.0",
-    "grunt-mocha-cli": "^1.12.0",
-    "grunt-mocha-istanbul": "^2.3.1",
+    "eslint": "^1.0.0",
     "istanbul": "^0.3.5",
-    "mocha": "^2.1.0"
+    "mocha": "^2.2.5"
   }
 }
