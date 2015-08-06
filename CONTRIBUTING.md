@@ -2,7 +2,7 @@
 
 ## Thank you
 
-Firstly, thanks for thinking about contributing to `node-xmpp-core`!
+Firstly, thanks for thinking about contributing!
 
 Here's some guidelines that will help you get your pull requests merged more quickly/easily.
 
