@@ -1,42 +1,45 @@
 {
   "name": "node-xmpp-server",
   "version": "1.0.0-alpha12",
-  "description": "nodejs-based server",
+  "description": "XMPP server libraries for Node.js",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/grunt test"
+    "unit": "./node_modules/.bin/mocha --recursive test/ -t 3000",
+    "lint": "./node_modules/.bin/eslint .",
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec -t 3000",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls && rm -rf ./coverage",
+    "test": "npm run unit && npm run lint && npm run coverage"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:node-xmpp/node-xmpp-server.git"
-  },
+  "homepage": "https://github.com/node-xmpp/node-xmpp-server",
+  "repository": "github:node-xmpp/node-xmpp-server",
+  "bugs": "https://github.com/node-xmpp/node-xmpp-server/issues",
   "keywords": [
-    "xmpp",
-    "nodejs",
-    "server"
+    "XMPP",
+    "server",
+    "C2S",
+    "component",
+    "S2S",
+    "BOSH",
+    "WebSocket",
+    "TCP"
   ],
   "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/node-xmpp/node-xmpp-server/issues"
-  },
   "dependencies": {
-    "hat": "~0.0.3",
-    "node-xmpp-core": "^1.0.0-alpha14",
-    "debug": "~2.1.2",
-    "ws": "~0.7.1"
+    "debug": "^2.2.0",
+    "hat": "0.0.3",
+    "node-xmpp-core": "^1.0.0",
+    "ws": "^0.7.2"
   },
   "devDependencies": {
-    "coveralls": "^2.11.2",
-    "grunt-cli": "^0.1.13",
-    "grunt": "~0.4.5",
-    "grunt-contrib-jshint": "0.11.0",
-    "grunt-mocha-cli": "~1.12.0",
-    "grunt-mocha-istanbul": "^2.3.1",
-    "mocha": "^2.1.0",
-    "node-xmpp-client": "~1.0.0-alpha20",
-    "node-xmpp-component": "~1.0.0-alpha1",
-    "pem": "~1.7.1",
-    "should": "~5.1.0"
+    "coveralls": "^2.11.3",
+    "eslint": "^1.0.0",
+    "grunt": "^0.4.5",
+    "istanbul": "^0.3.17",
+    "mocha": "^2.2.5",
+    "node-xmpp-client": "^1.0.0-alpha23",
+    "node-xmpp-component": "^1.0.0-alpha2",
+    "pem": "^1.7.2",
+    "should": "^7.0.2"
   }
 }

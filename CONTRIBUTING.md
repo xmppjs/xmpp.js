@@ -2,7 +2,7 @@
 
 ## Thank you
 
-Firstly, thanks for thinking about contributing to `node-xmpp-server`!
+Firstly, thanks for thinking about contributing!
 
 Here's some guidelines that will help you get your pull requests merged more quickly/easily.
 
@@ -10,8 +10,8 @@ __Note:__ If there's a feature you'd like, there's a bug you'd like to fix, or y
 
 ## Coding standards
 
-Most of the coding standards are covered by `.jshintrc`. You can also test
-any changes with `grunt test` (this will also run the tests).
+Most of the coding standards are covered by `.eslintrc`. You can also test
+any changes with `npm test` (this will also run the tests).
 
 Things not covered by jshint:
 

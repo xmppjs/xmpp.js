@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var C2SServer = require('../index').C2SServer
   , Client = require('node-xmpp-client')
@@ -31,7 +31,7 @@ function startServer(action) {
             } else {
                 cb(null, action === 'modified' ? resource + '-' + 'mod' : resource)
             }
-        });
+        })
     })
 
     return c2s
@@ -56,7 +56,6 @@ function startClient(cb) {
 
 describe('Stream resource bind', function() {
     var c2s
-    var client
 
     afterEach(function(done) {
         c2s.shutdown(done)
@@ -64,7 +63,7 @@ describe('Stream resource bind', function() {
 
     it('Should bind unmodified', function(done) {
         c2s = startServer('unmodified')
-        client = startClient(function(error, resource) {
+        startClient(function(error, resource) {
             if (error) {
                 done(error)
             } else if (resource !== user.jid.resource) {
@@ -77,7 +76,7 @@ describe('Stream resource bind', function() {
 
     it('Should bind modified', function(done) {
         c2s = startServer('modified')
-        client = startClient(function(error, resource) {
+        startClient(function(error, resource) {
             if (error) {
                 done(error)
             } else if (resource !== user.jid.resource + '-' + 'mod') {
@@ -90,8 +89,7 @@ describe('Stream resource bind', function() {
 
     it('Should not bind', function(done) {
         c2s = startServer('fail')
-        client = startClient(function(error, resource) {
-            /* jshint unused:false */
+        startClient(function(error) {
             if (!error) {
                 done(new Error('No error'))
             } else {

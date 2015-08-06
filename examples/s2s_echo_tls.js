@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var xmpp = require('../index')
   , ltx = require('node-xmpp-core').ltx
@@ -37,6 +37,6 @@ pem.createCertificate({
         })
 
         var msg = ltx.parse(rawmsg)
-        r.send(msg);
+        r.send(msg)
     }
 })

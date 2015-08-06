@@ -1,8 +1,9 @@
-'use strict';
+'use strict'
 
 var Element = require('node-xmpp-core').Stanza.Element
   , C2SServer = require('../index').C2SServer
   , net = require('net')
+  , assert = require('assert')
 
 require('should')
 
@@ -72,7 +73,8 @@ describe('Stream without proper "to" attribute', function() {
                     break
                 }
             }
-            done(error)
+            assert.equal(error, 'Timeout')
+            done()
         })
 
         it('Should close stream', function(done) {
@@ -84,7 +86,8 @@ describe('Stream without proper "to" attribute', function() {
                     break
                 }
             }
-            done(error)
+            assert.equal(error, null)
+            done()
         })
 
         it('Should generate error event on server', function(done) {

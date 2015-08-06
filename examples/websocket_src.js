@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var xmpp = require('../index')
   , c2s = null
@@ -49,7 +49,7 @@ var startServer = function(done) {
 
         // On Disconnect event. When a client disconnects
         client.on('disconnect', function() {
-           debug('DISCONNECT')
+            debug('DISCONNECT')
         })
 
     })
