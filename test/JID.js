@@ -1,52 +1,54 @@
+/* eslint-disable strict */
+
 var assert = require('assert')
-  , xmpp = require('../index')
+  , JID = require('..').JID
 
 describe('JID', function() {
 
     describe('parsing', function() {
 
         it('should parse a "domain" JID', function() {
-            var j = new xmpp.JID('d')
+            var j = new JID('d')
             assert.equal(j.getLocal(), null)
             assert.equal(j.getDomain(), 'd')
             assert.equal(j.getResource(), null)
         })
         it('should parse a "user@domain" JID', function() {
-            var j = new xmpp.JID('u@d')
+            var j = new JID('u@d')
             assert.equal(j.getLocal(), 'u')
             assert.equal(j.getDomain(), 'd')
             assert.equal(j.getResource(), null)
         })
         it('should parse a "domain/resource" JID', function() {
-            var j = new xmpp.JID('d/r')
+            var j = new JID('d/r')
             assert.equal(j.getLocal(), null)
             assert.equal(j.getDomain(), 'd')
             assert.equal(j.getResource(), 'r')
         })
         it('should parse a "user@domain/resource" JID', function() {
-            var j = new xmpp.JID('u@d/r')
+            var j = new JID('u@d/r')
             assert.equal(j.getLocal(), 'u')
             assert.equal(j.getDomain(), 'd')
             assert.equal(j.getResource(), 'r')
         })
         it('should parse an internationalized domain name as unicode', function() {
-            var j = new xmpp.JID('öko.de')
+            var j = new JID('öko.de')
             assert.equal(j.getDomain(), 'öko.de')
         })
         it('should parse an empty domain JID (#109)', function() {
-            var j = new xmpp.JID('u@d', '')
+            var j = new JID('u@d', '')
             assert.equal(j.getLocal(), 'u')
             assert.equal(j.getDomain(), 'd')
             assert.equal(j.getResource(), null)
         })
         it('should allow access to jid parts using (old) keys', function() {
-            var j = new xmpp.JID('u@d/r', '')
+            var j = new JID('u@d/r', '')
             assert.equal(j.user, 'u')
             assert.equal(j.domain, 'd')
             assert.equal(j.resource, 'r')
         })
         it('should allow access to jid parts using (old) keys', function() {
-            var j = new xmpp.JID('u@d/r', '')
+            var j = new JID('u@d/r', '')
             assert.equal(j.local, 'u')
             assert.equal(j.domain, 'd')
             assert.equal(j.resource, 'r')
@@ -54,7 +56,7 @@ describe('JID', function() {
 
         it('shouldn\'t get U_STRINGPREP_PROHIBITED_ERROR (#93)', function() {
             assert.doesNotThrow(function () {
-                var j = new xmpp.JID('f u@d')
+                var j = new JID('f u@d')
                 j.toString()
             })
         })
@@ -64,12 +66,12 @@ describe('JID', function() {
             require('node-stringprep')
 
             it('should parse an internationalized domain name as ascii/punycode', function() {
-                var j = new xmpp.JID('xn--ko-eka.de')
+                var j = new JID('xn--ko-eka.de')
                 assert.equal(j.getDomain(), 'öko.de')
             })
 
             it('should parse a JID with punycode', function() {
-                var j = new xmpp.JID('Сергей@xn--lsa92diaqnge.xn--p1ai')
+                var j = new JID('Сергей@xn--lsa92diaqnge.xn--p1ai')
                 assert.equal(j.getLocal(), 'сергей')
                 assert.equal(j.getDomain(), 'приме́р.рф')
             })
@@ -79,22 +81,19 @@ describe('JID', function() {
         }
     })
 
-    /* jshint -W044 */
     describe('Escaping', function() {
 
         it('Should not change string - issue 43', function() {
             var test = 'test\32@example.com'
 
-            var jid = new xmpp.JID(test)
+            var jid = new JID(test)
             assert.equal(jid.escapeLocal('test\32'), 'test\32')
         })
 
         it('Should escape - issue 43', function() {
             var test = 'test\32a@example.com'
 
-            /* jshint -W100 */
-            /* jshint -W113 */
-            var jid = new xmpp.JID(test)
+            var jid = new JID(test)
             assert.equal(jid.escapeLocal('test\32a'), 'testa')
         })
     })
@@ -102,22 +101,22 @@ describe('JID', function() {
     describe('serialization', function() {
 
         it('should serialize a "domain" JID', function() {
-            var j = new xmpp.JID(null, 'd')
+            var j = new JID(null, 'd')
             assert.equal(j.toString(), 'd')
         })
 
         it('should serialize a "user@domain" JID', function() {
-            var j = new xmpp.JID('u', 'd')
+            var j = new JID('u', 'd')
             assert.equal(j.toString(), 'u@d')
         })
 
         it('should serialize a "domain/resource" JID', function() {
-            var j = new xmpp.JID(null, 'd', 'r')
+            var j = new JID(null, 'd', 'r')
             assert.equal(j.toString(), 'd/r')
         })
 
         it('should serialize a "user@domain/resource" JID', function() {
-            var j = new xmpp.JID('u', 'd', 'r')
+            var j = new JID('u', 'd', 'r')
             assert.equal(j.toString(), 'u@d/r')
         })
 
@@ -126,44 +125,44 @@ describe('JID', function() {
     describe('equality', function() {
 
         it('should parsed JIDs should be equal', function() {
-            var j1 = new xmpp.JID('foo@bar/baz')
-            var j2 = new xmpp.JID('foo@bar/baz')
+            var j1 = new JID('foo@bar/baz')
+            var j2 = new JID('foo@bar/baz')
             assert.equal(j1.equals(j2), true)
         })
 
         it('should parsed JIDs should be not equal', function() {
-            var j1 = new xmpp.JID('foo@bar/baz')
-            var j2 = new xmpp.JID('quux@bar/baz')
+            var j1 = new JID('foo@bar/baz')
+            var j2 = new JID('quux@bar/baz')
             assert.equal(j1.equals(j2), false)
         })
 
         it('should should ignore case in user', function() {
-            var j1 = new xmpp.JID('foo@bar/baz')
-            var j2 = new xmpp.JID('FOO@bar/baz')
+            var j1 = new JID('foo@bar/baz')
+            var j2 = new JID('FOO@bar/baz')
             assert.equal(j1.equals(j2), true)
         })
 
         it('should should ignore case in domain', function() {
-            var j1 = new xmpp.JID('foo@bar/baz')
-            var j2 = new xmpp.JID('foo@BAR/baz')
+            var j1 = new JID('foo@bar/baz')
+            var j2 = new JID('foo@BAR/baz')
             assert.equal(j1.equals(j2), true)
         })
 
         it('should should not ignore case in resource', function() {
-            var j1 = new xmpp.JID('foo@bar/baz')
-            var j2 = new xmpp.JID('foo@bar/Baz')
+            var j1 = new JID('foo@bar/baz')
+            var j2 = new JID('foo@bar/Baz')
             assert.equal(j1.equals(j2), false)
         })
 
         it('should should ignore international caseness', function() {
-            var j1 = new xmpp.JID('föö@bär/baß')
-            var j2 = new xmpp.JID('fÖö@BÄR/baß')
+            var j1 = new JID('föö@bär/baß')
+            var j2 = new JID('fÖö@BÄR/baß')
             assert.equal(j1.equals(j2), true)
         })
 
         it('should work with bare JIDs', function() {
-            var j1 = new xmpp.JID('romeo@example.net/9519407536580081')
-            var j2 = new xmpp.JID('romeo@example.net')
+            var j1 = new JID('romeo@example.net/9519407536580081')
+            var j2 = new JID('romeo@example.net')
             assert.equal(j1.bare().equals(j2), true)
         })
 

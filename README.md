@@ -6,12 +6,12 @@ Library to handle all the core functionality for:
 * [node-xmpp-component](https://github.com/node-xmpp/node-xmpp-component)
 * [node-xmpp-server](https://github.com/node-xmpp/node-xmpp-server)
 
-[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-core.svg?branch=master)](http://travis-ci.org/node-xmpp/node-xmpp-core)
-[![Coverage Status](https://img.shields.io/coveralls/node-xmpp/node-xmpp-core.svg)](https://coveralls.io/r/node-xmpp/node-xmpp-core)
+[![build status](https://img.shields.io/travis/node-xmpp/node-xmpp-core/master.svg?style=flat-square)](http://travis-ci.org/node-xmpp/node-xmpp-core)
+[![Coverage Status](https://img.shields.io/coveralls/node-xmpp/node-xmpp-core.svg?style=flat-square)](https://coveralls.io/r/node-xmpp/node-xmpp-core)
 
 ## Installation
 
-__Note:__ We now only support nodejs versions 0.8.0 and greater.
+__Note:__ We now only support Node.js versions 0.8.0 and greater.
 
 With package manager [npm](http://npmjs.org/):
 
@@ -22,10 +22,6 @@ With package manager [npm](http://npmjs.org/):
 Install the dev dependencies, then...
 
 ```npm test```
-
-To run the tests and the code style checks then use:
-
-```grunt test```
 
 Also see the tests run in [travis](http://travis-ci.org/node-xmpp/node-xmpp-core). The tests in travis run both the code and code style tests.
 
