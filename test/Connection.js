@@ -1,7 +1,8 @@
 'use strict'
 
 var assert = require('assert')
-  , xmpp = require('../index')
+  , Connection = require('..').Connection
+  , sinon = require('sinon')
   , net = require('net')
   , ltx = require('ltx')
 
@@ -11,7 +12,7 @@ describe('Connection', function () {
     describe('socket config', function () {
         it('allows a socket to be provided', function () {
             var socket = new net.Socket()
-            var conn = new xmpp.Connection()
+            var conn = new Connection()
             conn.connect({socket: socket})
 
             assert.equal(conn.socket, socket)
@@ -21,7 +22,7 @@ describe('Connection', function () {
             var socketFunc = function () {
                 return socket
             }
-            var conn = new xmpp.Connection()
+            var conn = new Connection()
             conn.connect({
                 socket: socketFunc
             })
@@ -29,10 +30,43 @@ describe('Connection', function () {
             assert.equal(conn.socket, socket)
         })
         it('defaults to using a net.Socket', function () {
-            var conn = new xmpp.Connection()
+            var conn = new Connection()
             conn.connect({})
 
             assert.equal(conn.socket instanceof net.Socket, true)
+        })
+    })
+
+    // http://xmpp.org/rfcs/rfc6120.html#streams-open
+    describe('openStream', function() {
+        it('calls send with <stream:stream >', function() {
+            var conn = new Connection()
+            var send = sinon.stub(conn, 'send')
+            conn.openStream()
+            assert(send.calledOnce)
+            assert.equal(send.args[0][0].indexOf('<stream:stream '), 0)
+        })
+
+        it('alias to startStream', function() {
+            var conn = new Connection()
+            assert.equal(conn.startStream, conn.openStream)
+        })
+    })
+
+    // http://xmpp.org/rfcs/rfc6120.html#streams-close
+    describe('closeStream', function() {
+        it('calls sends with </stream:stream>', function() {
+            var conn = new Connection()
+            conn.openStream()
+            var send = sinon.stub(conn, 'send')
+            conn.closeStream()
+            assert(send.calledOnce)
+            assert(send.calledWith('</stream:stream>'))
+        })
+
+        it('alias to endStream', function() {
+            var conn = new Connection()
+            assert.equal(conn.endStream, conn.closeStream)
         })
     })
 
@@ -44,7 +78,7 @@ describe('Connection', function () {
         beforeEach(function (done) {
             serverSocket = null
             server = net.createServer(function (c) {
-                if(serverSocket) {
+                if (serverSocket) {
                     assert.fail('Multiple connections to server; test case fail')
                 }
                 serverSocket = c
@@ -53,7 +87,7 @@ describe('Connection', function () {
             })
             server.listen(PORT)
 
-            conn = new xmpp.Connection()
+            conn = new Connection()
             var socket = new net.Socket()
             conn.connect({socket: socket})
 
@@ -66,9 +100,9 @@ describe('Connection', function () {
         })
 
         it('sends <stream:stream > to start the stream', function (done) {
-            conn.startStream()
+            conn.openStream()
 
-            serverSocket.on('data', function (data) {
+            serverSocket.on('data', function(data) {
                 assert.equal(data.toString().indexOf('<stream:stream '), 0)
                 done()
             })
@@ -81,7 +115,7 @@ describe('Connection', function () {
                 done()
             })
 
-            conn.startStream()
+            conn.openStream()
 
             conn.end()
         })
