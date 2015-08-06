@@ -4,6 +4,7 @@ var util = require('util')
   , ws = require('ws')
   , WebSocketStream = require('./socket')
   , C2SServer = require('../server')
+  , FrameConnection = require('../../xmpp').core.FrameConnection
   , debug = require('debug')('xmpp:server:C2S:WebSocket')
 
 function WebSocketServer(options) {
@@ -48,10 +49,13 @@ WebSocketServer.prototype.listen = function(port, bindAddress, fn) {
 WebSocketServer.prototype.acceptConnection = function(socket) {
   debug('new connection')
   var self = this
+  var connection = new FrameConnection({socket: socket})
   var stream = new this.C2SStream({
     server: self,
-    socket: socket
+    socket: socket,
+    connection: connection
   })
+  socket.connection = connection
   this.emit('connection', stream)
 }
 

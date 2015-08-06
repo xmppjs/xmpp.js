@@ -3,6 +3,7 @@
 var EventEmitter = require('events').EventEmitter
   , util = require('util')
   , debug = require('debug')('xmpp:server:websocket')
+  , ltx = require('../../xmpp').core.ltx
 
 function WsSocket() {
   EventEmitter.call(this)
@@ -32,22 +33,29 @@ WsSocket.prototype.init = function (ws) {
     self.emit('close')
   })
 
-  ws.on('message', function (body, flags) {
-    var content = null
+  ws.on('message', function(message, flags) {
+    var connection = self.connection
 
+    var body = null
     if (flags && (flags.binary || flags.masked)) {
-      content = body.toString('utf8')
+      body = message.toString('utf8')
     } else {
-      content = body
+      body = message
     }
 
-    if (content.match(/<stream:stream .*\/>/)) {
-      content = content.replace('/>', '>')
+    var stanza
+    try {
+        stanza = ltx.parse(body)
+    }
+    catch (e) {
+        connection.error('xml-not-well-formed', 'XML parse error')
+        return
     }
 
-    debug(body)
-
-    self.emit('data', content)
+    if (stanza.is('open'))
+        connection.emit('streamStart', stanza.attrs)
+    else
+        connection.emit('stanza', stanza)
   })
 
   ws.on('error', function () {
@@ -58,8 +66,8 @@ WsSocket.prototype.init = function (ws) {
   self.emit('connect')
 }
 
-WsSocket.prototype.serializeStanza = function (s, clbk) {
-  clbk(s.toString()) // No specific serialization
+WsSocket.prototype.serializeStanza = function(stanza, fn) {
+  fn(stanza.toString()) // No specific serialization
 }
 
 WsSocket.prototype.write = function (data) {
