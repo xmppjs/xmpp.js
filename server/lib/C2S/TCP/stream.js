@@ -14,6 +14,7 @@ var NS_REGISTER = 'jabber:iq:register'
 var NS_SESSION = 'urn:ietf:params:xml:ns:xmpp-session'
 var NS_BIND = 'urn:ietf:params:xml:ns:xmpp-bind'
 var NS_STANZAS = 'urn:ietf:params:xml:ns:xmpp-stanzas'
+var NS_STREAM = 'http://etherx.jabber.org/streams'
 
 function C2SStream(opts) {
     var self = this
@@ -104,7 +105,7 @@ C2SStream.prototype.decode64 = function (encoded) {
 }
 
 C2SStream.prototype.sendFeatures = function () {
-    var features = new Element('stream:features')
+    var features = new Element('features', {'xmlns': NS_STREAM})
     if (!this.authenticated) {
         if (this.server && this.server.availableSaslMechanisms) {
             // TLS

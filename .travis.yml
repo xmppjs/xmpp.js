@@ -10,7 +10,7 @@ node_js:
 addons:
   apt:
     packages:
-    - libicu-dev
+      - libicu-dev
 
 before_install:
   # update npm

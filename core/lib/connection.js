@@ -337,10 +337,10 @@ Connection.prototype.onStanza = function(stanza) {
         var error = new Error('' + getAllText(stanza))
         error.stanza = stanza
         this.socket.emit('error', error)
-    } else if (stanza.is('features', this.NS_STREAM) &&
+    } else if (stanza.is('features', NS_STREAM) &&
         this.allowTLS &&
         !this.isSecure &&
-        stanza.getChild('starttls', this.NS_XMPP_TLS)) {
+        stanza.getChild('starttls', NS_XMPP_TLS)) {
         /* Signal willingness to perform TLS handshake */
         this.send(new ltx.Element('starttls', { xmlns: this.NS_XMPP_TLS }))
     } else if (this.allowTLS &&
