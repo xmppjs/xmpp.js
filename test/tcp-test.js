@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var assert = require('assert')
   , xmpp = require('./../index')
@@ -63,13 +63,13 @@ describe('TCP client/server', function() {
         })
 
         it('Can send plain text stanza', function(done) {
-             svcl.once('stanza', function(stanza) {
-                 assert.ok(stanza.is('message'), 'Message stanza')
-                 assert.equal(stanza.attrs.to, 'foo@bar.org')
-                 assert.equal(stanza.getChildText('body'), 'Hello')
-                 done()
-             })
-             cl.send('<message to="foo@bar.org"><body>Hello</body></message>')
+            svcl.once('stanza', function(stanza) {
+                assert.ok(stanza.is('message'), 'Message stanza')
+                assert.equal(stanza.attrs.to, 'foo@bar.org')
+                assert.equal(stanza.getChildText('body'), 'Hello')
+                done()
+            })
+            cl.send('<message to="foo@bar.org"><body>Hello</body></message>')
         })
 
     })

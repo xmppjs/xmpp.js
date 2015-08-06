@@ -1,0 +1,62 @@
+{
+  "name": "node-xmpp-client",
+  "version": "1.0.0-alpha23",
+  "description": "XMPP client written in nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/grunt test",
+    "browserify": "./node_modules/.bin/grunt browserify",
+    "integration-test": "./node_modules/.bin/grunt integration-test",
+    "full-test": "./node_modules/.bin/grunt full-test"
+  },
+  "homepage": "https://github.com/node-xmpp/node-xmpp",
+  "repository": "github:node-xmpp/node-xmpp",
+  "bugs": "https://github.com/node-xmpp/node-xmpp/issues",
+  "keywords": [
+    "client",
+    "xmpp"
+  ],
+  "author": {
+    "name": "Lloyd Watkin",
+    "email": "lloyd@evilprofessor.co.uk"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.55.0",
+    "faye-websocket": "^0.10.0",
+    "node-xmpp-core": "^1.0.0-alpha10",
+    "browser-request": "^0.3.1",
+    "minimist": "^1.1.2",
+    "debug": "^2.2.0"
+  },
+  "devDependencies": {
+    "brfs": "^1.4.0",
+    "browserify": "^11.0.1",
+    "coveralls": "^2.11.2",
+    "grunt": "^0.4.2",
+    "grunt-browserify": "^4.0.0",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-connect": "^0.11.2",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-cli": "^1.3.0",
+    "grunt-mocha-istanbul": "^2.1.0",
+    "grunt-mocha-phantomjs": "^1.0.0",
+    "ltx": "^0.9.1",
+    "node-xmpp-server": "^1.0.0-alpha7",
+    "should": "^7.0.2"
+  },
+  "browser": {
+    "request": "browser-request",
+    "node-stringprep": false,
+    "faye-websocket": false,
+    "./srv": false,
+    "dns": false,
+    "node-xmpp-server": false,
+    "../server": false
+  },
+  "readme": "# node-xmpp-client\n\nIdiomatic XMPP client library for [node.js](http://nodejs.org/)\n\nNow usable in browsers too thanks to [Browserify](https://github.com/substack/node-browserify).\n\n[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-client.png)](http://travis-ci.org/node-xmpp/node-xmpp-client)\n\n## Installation\n\n__Note:__ We now only support nodejs versions 0.8.0 and greater.\n\nWith package manager [npm](http://npmjs.org/):\n\n    npm install node-xmpp-client\n\n### Testing\n\nInstall the dev dependencies, then...\n\n```npm test```\n\nTo run the tests and the code style checks then use:\n\n```grunt test```\n\nAlso see the tests run in [travis](http://travis-ci.org/node-xmpp/node-xmpp-client). The tests in travis run both the code and code style tests.\n\n## How to use\n\nPlease see the various [examples](https://github.com/astro/node-xmpp/tree/master/examples).\n\n## Features\n\n* Client authentication with SASL DIGEST-MD5, PLAIN, ANONYMOUS, X-FACEBOOK-PLATFORM\n* `_xmpp-client._tcp` SRV record support\n* Even runs in the Browser.\n\n## Dependencies\n\n* [node-xmpp-core](https://github.com/node-xmpp/ltx): `node-xmpp` core libraries\n\nOptional\n\n* [node-stringprep](http://github.com/node-xmpp/node-stringprep): for [icu](http://icu-project.org/)-based string normalization.\n\nAutomatically building the optional library can be turned off by `npm config set optional false` or by setting the environmental variable `export NPM_CONFIG_OPTIONAL=false`. On Heroku this is done through `heroku config:set NPM_CONFIG_OPTIONAL=false`, for example.\n\n### Building XML Elements\n\nStrophe.js' XML Builder is very convenient for producing XMPP\nstanzas. ltx includes it in a much more primitive way: the\n`c()`, `cnode()` and `t()` methods can be called on any *Element*\nobject, returning the new child element.\n\nThis can be confusing: in the end, you will hold the last-added child\nuntil you use `up()`, a getter for the parent. `Connection.send()`\nfirst invokes `tree()` to retrieve the uppermost parent, the XMPP\nstanza, before sending it out the wire.\n\n## Browser Support\n\n`node-xmpp-client` now comes with a prebuilt browser bundle:\n\n```html\n<script src=\"/node_modules/node-xmpp/node-xmpp-browser.js\"></script>\n<script type=\"text/javascript\">\n    var client = new XMPP.Client(opts);\n</script>\n```\n\n# Keepalives\n\nRather than send empty packets in order to keep any socket alive please try the following:\n\n```\nthis.client.connection.socket.setTimeout(0)\nthis.client.connection.socket.setKeepAlive(true, 10000)\n```\n\nWhere `this.client` is the result of `new require('node-xmpp-client')()`.\n\n# Documentation\n\n(Builing up documentation slowly)\n\n## C2S Client to Server \n\n```\nvar Client = require('node-xmpp-client')\n\nvar client = new Client({\n    jid: 'user@example.com',\n    password: 'password'\n})\n\nclient.on('online', function() {\n    console.log('online')\n})\n\nclient.on('stanza'), function(stanza) {\n    console.log('Incoming stanza: ', stanza.toString())\n})\n```\n\n### Closing a connection\n\n```\nclient.end()\n```\n",
+  "readmeFilename": "README.md",
+  "_id": "node-xmpp-client@0.1.3",
+  "_from": "node-xmpp-client@~0.1.2"
+}

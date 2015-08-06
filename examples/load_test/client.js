@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var async = require('async')
   , xmpp = require('../../index')
@@ -46,7 +46,7 @@ async.forEachSeries(SIZES, function(n, cb) {
             host: '::1',
             port: 25222
         }, function(e, clients) {
-            console.log('Connected',n,'in',getNow() - t1,'ms')
+            console.log('Connected', n, 'in', getNow() - t1, 'ms')
             async.forEachSeries(clients, function(cl, cb3) {
                 cl.on('close', function() {
                     cb3()
@@ -62,7 +62,7 @@ async.forEachSeries(SIZES, function(n, cb) {
             password: 'test',
             boshURL: 'http://127.0.0.1:25280'
         }, function(e, clients) {
-            console.log('Connected',n,'in',getNow() - t1,'ms')
+            console.log('Connected', n, 'in', getNow() - t1, 'ms')
             async.forEachSeries(clients, function(cl, cb3) {
                 cl.on('close', function() {
                     cb3()

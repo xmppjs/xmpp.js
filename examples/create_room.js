@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
 var xmpp = require('../index')
-    ,argv = process.argv
+  , argv = process.argv
 
 if (argv.length < 5) {
     console.error('Usage: node create_room.js <my-jid> <my-password> <room-name>')

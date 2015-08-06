@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var http = require('http')
   , xmpp = require('../../index')
@@ -67,8 +67,7 @@ setInterval(function() {
 
     for (var k in bosh.sessions) {
         var session = bosh.sessions[k]
-        /* jshint unused: false */
-        for (var j in session.inQueue) inCount++
+        inCount += Object.keys(session.inQueue).length
         outCount += session.outQueue.length
     }
     console.log('BOSH inQueue', inCount, 'BOSH outQueue', outCount)

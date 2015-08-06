@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /* global XMPP */
 var cl = new XMPP.Client({

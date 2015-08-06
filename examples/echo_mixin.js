@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * Demonstrates how the echo behavior can be abstracted into a decorator,

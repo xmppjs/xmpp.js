@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * Echo Component - the XMPP Hello World

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var pem = require('pem')
   , assert = require('assert')
@@ -12,12 +12,12 @@ var user = {
 var tls
 
 before(function (done) {
-    var cert_params = {
+    var certParams = {
         days: 1,
         selfSigned: true,
-        altNames: ["DNS = localhost", "IP = 127.0.0.1"],
+        altNames: ["DNS = localhost", "IP = 127.0.0.1"]
     }
-    pem.createCertificate(cert_params, function (err, keys) {
+    pem.createCertificate(certParams, function (err, keys) {
         if (err) return done(err)
         tls = { key: keys.serviceKey + '\n', cert: keys.certificate + '\n' }
         tls.ca = tls.cert
@@ -41,7 +41,7 @@ function startServer(done) {
         // Allows the developer to authenticate users against anything they want.
         client.on('authenticate', function(opts, cb) {
             /*jshint camelcase: false */
-            if ((opts.saslmech = 'PLAIN') &&
+            if ((opts.saslmech === 'PLAIN') &&
                 (opts.jid.toString() === user.jid) &&
                 (opts.password === user.password)) {
                 cb(null, opts)

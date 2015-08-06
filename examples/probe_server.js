@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * This example establishes some s2s connections over time. It is a
