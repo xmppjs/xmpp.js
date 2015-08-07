@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var C2SServer = require('../index').C2SServer
   , Element = require('node-xmpp-core').Stanza.Element
@@ -180,8 +180,10 @@ describe('SASL', function() {
             /*jshint camelcase: false */
             var gtalk = createClient({
                 jid: 'me@gmail.com',
+                /* eslint-disable camelcase */
                 oauth2_token: 'xxxx.xxxxxxxxxxx', // from OAuth2
                 oauth2_auth: 'http://www.google.com/talk/protocol/auth',
+                /* eslint-enable camelcase */
                 host: 'localhost'
             })
 

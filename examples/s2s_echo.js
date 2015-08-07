@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var xmpp = require('../index')
   , ltx = require('node-xmpp-core').ltx
@@ -17,7 +17,7 @@ r.register('nodexmpp.com', function (stanza) {
         stanza.attrs.from = me
         r.send(stanza)
     }
-});
+})
 
 var msg = ltx.parse(rawmsg)
 r.send(msg)

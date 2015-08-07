@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var C2SServer = require('../index').C2SServer
   , Client = require('node-xmpp-client')
@@ -32,7 +32,7 @@ function startServer(action) {
             } else {
                 cb(null)
             }
-        });
+        })
     })
 
     return c2s
@@ -58,7 +58,6 @@ function startClient(cb) {
 
 describe('Stream register', function() {
     var c2s
-    var client
 
     afterEach(function(done) {
         c2s.shutdown(done)
@@ -66,7 +65,7 @@ describe('Stream register', function() {
 
     it('Should redister', function(done) {
         c2s = startServer('unmodified')
-        client = startClient(function(error) {
+        startClient(function(error) {
             if (error) {
                 done(error)
             } else {
@@ -77,7 +76,7 @@ describe('Stream register', function() {
 
     it('Should not register', function(done) {
         c2s = startServer('fail')
-        client = startClient(function(error) {
+        startClient(function(error) {
             if (!error) {
                 done(new Error('No error'))
             } else {

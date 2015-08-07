@@ -1,6 +1,2 @@
-node_modules
-npm-debug.log
-coverage
-.brackets.json
-!.editorconfig
-!.gitignore
+coverage/
+node_modules/

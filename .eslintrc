@@ -1,0 +1,36 @@
+root: true
+
+# http://eslint.org/docs/user-guide/configuring.html#extending-configuration-files
+extends:
+  - eslint:recommended
+
+# http://eslint.org/docs/user-guide/configuring.html#specifying-environments
+env:
+  node: true
+
+# http://eslint.org/docs/rules/
+rules:
+  # http://eslint.org/docs/rules/#possible-errors
+  no-console: 0
+  valid-jsdoc: 0
+  no-unexpected-multiline: 2
+
+  # http://eslint.org/docs/rules/#best-practices
+
+
+  # http://eslint.org/docs/rules/#strict-mode
+  strict: [2, global]
+
+  # http://eslint.org/docs/rules/#variables
+
+
+  # http://eslint.org/docs/rules/#nodejs
+
+
+  # http://eslint.org/docs/rules/#stylistic-issues
+  camelcase: 2
+  comma-spacing: 2
+  eqeqeq: 2
+  indent: [2, 4]
+  new-cap: 2
+  semi: [2, never]
