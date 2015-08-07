@@ -6,7 +6,7 @@
   "scripts": {
     "unit": "./node_modules/.bin/mocha --recursive test/ -t 3000",
     "lint": "./node_modules/.bin/eslint .",
-    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec -t 3000",
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec -t 3000 --recursive",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls && rm -rf ./coverage",
     "test": "npm run unit && npm run lint && npm run coverage"
   },
@@ -27,19 +27,21 @@
   "license": "MIT",
   "dependencies": {
     "debug": "^2.2.0",
+    "es6-collections": "^0.5.4",
     "hat": "0.0.3",
     "node-xmpp-core": "^1.0.0",
     "ws": "^0.7.2"
   },
   "devDependencies": {
     "coveralls": "^2.11.3",
-    "eslint": "^1.0.0",
+    "eslint": "^1.1.0",
     "grunt": "^0.4.5",
     "istanbul": "^0.3.17",
     "mocha": "^2.2.5",
     "node-xmpp-client": "^1.0.0-alpha23",
     "node-xmpp-component": "^1.0.0-alpha2",
     "pem": "^1.7.2",
-    "should": "^7.0.2"
+    "should": "^7.0.2",
+    "sinon": "^1.15.4"
   }
 }
