@@ -1,0 +1,12 @@
+coverage/
+examples/
+node_modules/
+test/
+
+.editorconfig
+.eslintignore
+.eslintrc
+.gitignore
+.npmignore
+.travis.yml
+CONTRIBUTING.md
