@@ -1,46 +1,46 @@
 'use strict'
 
 var xmpp = require('../index')
-  , c2s = null
-  , debug = require('debug')('server-and-client')
+  , server = null
   , Client = require('node-xmpp-client')
-  , ltx = require('node-xmpp-core').ltx
 
 var startServer = function(done) {
     // Sets up the server.
-    c2s = new xmpp.C2SServer({
+    server = new xmpp.C2S.TCPServer({
         port: 5222,
         domain: 'localhost'
     })
 
-    // On Connect event. When a client connects.
-    c2s.on('connect', function(client) {
+    // On connection event. When a client connects.
+    server.on('connection', function(client) {
         // That's the way you add mods to a given server.
 
         // Allows the developer to register the jid against anything they want
         client.on('register', function(opts, cb) {
-            debug('REGISTER')
+            console.log('REGISTER')
             cb(true)
         })
 
         // Allows the developer to authenticate users against anything they want.
         client.on('authenticate', function(opts, cb) {
-            debug('AUTH ' + opts.jid + ' -> ' + opts.password)
-            if ('secret' === opts.password) {
-                debug('SUCCESS')
-                return cb(null, opts)
+            console.log('server:', opts.username, opts.password, 'AUTHENTICATING')
+            if (opts.password === 'secret') {
+                console.log('server:', opts.username, 'AUTH OK')
+                cb(null, opts)
             }
-            debug('FAIL')
-            cb(false)
+            else {
+                console.log('server:', opts.username, 'AUTH FAIL')
+                cb(false)
+            }
         })
 
         client.on('online', function() {
-            debug('ONLINE')
+            console.log('server:', client.jid.local, 'ONLINE')
         })
 
         // Stanza handling
         client.on('stanza', function(stanza) {
-            debug('STANZA', stanza.root().toString())
+            console.log('server:', client.jid.local, 'stanza', stanza.toString())
             var from = stanza.attrs.from
             stanza.attrs.from = stanza.attrs.to
             stanza.attrs.to = from
@@ -49,12 +49,12 @@ var startServer = function(done) {
 
         // On Disconnect event. When a client disconnects
         client.on('disconnect', function() {
-            debug('DISCONNECT')
+            console.log('server:', client.jid.local, 'DISCONNECT')
         })
 
     })
 
-    if (done) done()
+    server.on('listening', done)
 }
 
 startServer(function() {
@@ -62,13 +62,12 @@ startServer(function() {
         jid: 'client1@localhost',
         password: 'secret'
     })
-    client1.on('online', function(data) {
-        debug('client1 is online')
-        debug('client1', data)
-        client1.send(new ltx.Element('message', { to: 'localhost' }).c('body').t('HelloWorld'))
+    client1.on('online', function() {
+        console.log('client1: online')
+        client1.send(new xmpp.Stanza('message', { to: 'localhost' }).c('body').t('HelloWorld'))
     })
     client1.on('stanza', function(stanza) {
-        debug('client1', 'received stanza', stanza.root().toString())
+        console.log('client1: stanza', stanza.root().toString())
     })
 
     var client2 = new Client({
@@ -76,7 +75,6 @@ startServer(function() {
         password: 'notsecret'
     })
     client2.on('error', function(error) {
-        debug('client2 auth failed')
-        debug('client2', error)
+        console.log('client2', error)
     })
 })

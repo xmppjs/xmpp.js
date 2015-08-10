@@ -2,37 +2,49 @@
 
 var BOSHServer = require('./lib/C2S/BOSH/Server')
   , TCPServer = require('./lib/C2S/TCP/Server')
-  , TCPStream = require('./lib/C2S/TCP/Stream')
+  , C2SServer = require('./lib/C2S/Server')
+  , C2SSession = require('./lib/C2S/Session')
   , WebSocketServer = require('./lib/C2S/WebSocket/Server')
+  , ComponentServer = require('./lib/component/Server')
+  , ComponentSession = require('./lib/component/Session')
+  , core = require('node-xmpp-core')
+  , util = require('util')
 
 module.exports = {
+    _Server: require('./lib/Server'),
+
     // S2S
     Router: require('./lib/S2S/Router'),
 
     // C2S
-    C2SServer: TCPServer,
-    C2SStream: TCPStream,
     C2S: {
+        _Server: C2SServer,
+        _Session: C2SSession,
+
         // TCP
         TCPServer: TCPServer,
-        TCPStream: TCPStream,
 
         // BOSH
         BOSHServer: BOSHServer,
+        _BOSHSocket: require('./lib/C2S/BOSH/Socket'),
+        _BOSHServer: require('./lib/C2S/BOSH/BOSHServer'),
 
         // WebSocket
-        WebSocketServer: WebSocketServer
+        WebSocketServer: WebSocketServer,
+        _WebSocketSocket: require('./lib/C2S/WebSocket/Socket')
     },
-
-    // BOSH
+    C2SServer: TCPServer,
+    C2SStream: C2SSession,
     BOSHServer: BOSHServer,
-
-    // Websocket
     WebSocketServer: WebSocketServer,
 
     // Component
-    ComponentServer: require('./lib/component/Server'),
-    ComponentStream: require('./lib/component/Stream'),
+    component: {
+        Server: ComponentServer,
+        Session: ComponentSession
+    },
+    ComponentServer: ComponentServer,
+    ComponentStream: ComponentSession,
 
     // SASL
     auth: {
@@ -44,3 +56,5 @@ module.exports = {
         Anonymous: require('./lib/C2S/authentication/Anonymous')
     }
 }
+
+util._extend(module.exports, core)

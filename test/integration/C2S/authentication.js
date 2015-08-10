@@ -1,14 +1,15 @@
 'use strict'
 
-var C2SServer = require('../index').C2SServer
+var XMPP = require('../../..')
+  , Server = XMPP.C2S.TCPServer
   , Element = require('node-xmpp-core').Stanza.Element
   , net = require('net')
   , rack = require('hat').rack
   , Client = require('node-xmpp-client')
-  , Plain = require('../index').auth.Plain
-  , XOAuth2 = require('../index').auth.XOAuth2
-  , DigestMD5 = require('../index').auth.DigestMD5
-  , Anonymous = require('../index').auth.Anonymous
+  , Plain = XMPP.auth.Plain
+  , XOAuth2 = XMPP.auth.XOAuth2
+  , DigestMD5 = XMPP.auth.DigestMD5
+  , Anonymous = XMPP.auth.Anonymous
 
 require('should')
 
@@ -20,7 +21,7 @@ var user = {
 function startServer(mechanism) {
 
     // Sets up the server.
-    var c2s = new C2SServer({
+    var c2s = new Server({
         port: 5222,
         domain: 'localhost'
     })
@@ -68,8 +69,8 @@ function startServer(mechanism) {
 
         stream.on('online', function() {
             stream.send(new Element('message', {
-                    type: 'chat'
-                })
+                type: 'chat'
+            })
                 .c('body')
                 .t('Hello there, little client.')
             )
@@ -123,7 +124,7 @@ describe('SASL', function() {
         })
 
         after(function(done) {
-            c2s.shutdown(done)
+            c2s.end(done)
         })
 
         it('should accept plain authentication', function(done) {
@@ -169,7 +170,7 @@ describe('SASL', function() {
         })
 
         after(function(done) {
-            c2s.shutdown(done)
+            c2s.end(done)
         })
 
         /*
@@ -207,7 +208,7 @@ describe('SASL', function() {
         })
 
         after(function(done) {
-            c2s.shutdown(done)
+            c2s.end(done)
         })
 
 
@@ -286,7 +287,7 @@ describe('SASL', function() {
         })
 
         after(function(done) {
-            c2s.shutdown(done)
+            c2s.end(done)
         })
 
         it('should accept anonymous authentication', function(done) {

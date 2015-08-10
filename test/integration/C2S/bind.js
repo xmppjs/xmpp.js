@@ -1,9 +1,10 @@
 'use strict'
 
-var C2SServer = require('../index').C2SServer
+var XMPP = require('../../..')
+  , Server = XMPP.C2S.TCPServer
+  , Plain = XMPP.auth.Plain
+  , JID = XMPP.JID
   , Client = require('node-xmpp-client')
-  , Plain = require('../index').auth.Plain
-  , JID = require('node-xmpp-core').JID
 
 var port = 5222
 var user = {
@@ -12,12 +13,12 @@ var user = {
 }
 
 function startServer(action) {
-    var c2s = new C2SServer({
+    var server = new Server({
         port: port,
         domain: 'localhost'
     })
 
-    c2s.on('connect', function(stream) {
+    server.on('connect', function(stream) {
         stream.on('authenticate', function(opts, cb) {
             cb(null, opts)
         })
@@ -34,7 +35,7 @@ function startServer(action) {
         })
     })
 
-    return c2s
+    return server
 }
 
 function startClient(cb) {
@@ -55,14 +56,14 @@ function startClient(cb) {
 }
 
 describe('Stream resource bind', function() {
-    var c2s
+    var server
 
     afterEach(function(done) {
-        c2s.shutdown(done)
+        server.end(done)
     })
 
     it('Should bind unmodified', function(done) {
-        c2s = startServer('unmodified')
+        server = startServer('unmodified')
         startClient(function(error, resource) {
             if (error) {
                 done(error)
@@ -75,7 +76,7 @@ describe('Stream resource bind', function() {
     })
 
     it('Should bind modified', function(done) {
-        c2s = startServer('modified')
+        server = startServer('modified')
         startClient(function(error, resource) {
             if (error) {
                 done(error)
@@ -88,7 +89,7 @@ describe('Stream resource bind', function() {
     })
 
     it('Should not bind', function(done) {
-        c2s = startServer('fail')
+        server = startServer('fail')
         startClient(function(error) {
             if (!error) {
                 done(new Error('No error'))
