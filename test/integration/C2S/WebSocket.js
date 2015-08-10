@@ -19,7 +19,7 @@ server.on('connection', function(connection) {
     })
 })
 
-describe('C2S WebSocket server client', function() {
+describe.skip('C2S WebSocket server client', function() {
 
     describe('server', function() {
         it('should listen', function(done) {
