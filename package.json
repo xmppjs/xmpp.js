@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp-server",
-  "version": "1.0.0-alpha12",
+  "version": "1.0.0",
   "description": "XMPP server libraries for Node.js",
   "main": "index.js",
   "scripts": {
