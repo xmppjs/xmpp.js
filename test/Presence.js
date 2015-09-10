@@ -15,7 +15,6 @@ describe('Presence', function() {
     it('has "iq" as node name', function() {
         var s = new Presence()
         assert(s.is('presence'))
-        assert.equal(s.nodeName, 'presence')
         assert.equal(s.name, 'presence')
     })
 
