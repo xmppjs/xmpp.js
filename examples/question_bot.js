@@ -11,7 +11,6 @@
 
 var Client = require('node-xmpp-client')
   , argv = process.argv
-  , ltx = require('ltx')
 
 if (argv.length < 4) {
     console.error('Usage: node answer_bot.js <my-jid> <my-password>')
@@ -40,7 +39,7 @@ client.on('stanza', function(stanza) {
     if (stanza.is('message') && stanza.attrs.type === 'chat') {
         var i = parseInt(stanza.getChildText('body'))
         x = i
-        var reply = new ltx.Element('message', {
+        var reply = new Client.Stanza('message', {
             to: stanza.attrs.from,
             from: stanza.attrs.to,
             type: 'chat'
