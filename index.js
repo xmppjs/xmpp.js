@@ -9,7 +9,6 @@ var Session = require('./lib/session')
   , Plain = require('./lib/authentication/plain')
   , DigestMD5 = require('./lib/authentication/digestmd5')
   , XOAuth2 = require('./lib/authentication/xoauth2')
-  , XFacebookPlatform = require('./lib/authentication/xfacebook')
   , External = require('./lib/authentication/external')
   , exec = require('child_process').exec
   , util = require('util')
@@ -86,12 +85,6 @@ if (typeof atob === 'function') {
  *       jid: "me@example.com",
  *       password: "secret"
  *   })
- *   var facebook = new xmpp.Client({
- *       jid: '-' + fbUID + '@chat.facebook.com',
- *       api_key: '54321', // api key of your facebook app
- *       access_token: 'abcdefg', // user access token
- *       host: 'chat.facebook.com'
- *   })
  *   var gtalk = new xmpp.Client({
  *       jid: 'me@gmail.com',
  *       oauth2_token: 'xxxx.xxxxxxxxxxx', // from OAuth2
@@ -129,7 +122,7 @@ function Client(options) {
     this.options = {}
     if (options) this.options = options
     this.availableSaslMechanisms = [
-        XOAuth2, XFacebookPlatform, External, DigestMD5, Plain, Anonymous
+        XOAuth2, External, DigestMD5, Plain, Anonymous
     ]
 
     if (this.options.autostart !== false)

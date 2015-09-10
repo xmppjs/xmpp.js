@@ -2,7 +2,6 @@
 
 var Client = require('../index')
   , argv = process.argv
-  , ltx  = require('node-xmpp-core').ltx
 
 if (argv.length < 6) {
     console.error('Usage: node send_message.js <my-jid> ' +
@@ -20,7 +19,7 @@ client.connection.socket.on('error', function(error) {
 client.addListener('online', function(data) {
     console.log('Connected as ' + data.jid.user + '@' + data.jid.domain + '/' + data.jid.resource)
     argv.slice(5).forEach(function(to) {
-        var stanza = new ltx.Element(
+        var stanza = new Client.Stanza(
             'message',
             { to: to, type: 'chat' }
         ).c('body').t(argv[4])

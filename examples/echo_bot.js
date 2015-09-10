@@ -5,7 +5,6 @@
  **/
 var Client = require('../index')
   , argv = process.argv
-  , ltx = require('ltx')
 
 if (4 !== argv.length) {
     console.error(
@@ -21,7 +20,7 @@ var client = new Client({
 
 client.on('online', function() {
     console.log('online')
-    client.send(new ltx.Element('presence', { })
+    client.send(new Client.Stanza('presence', { })
       .c('show').t('chat').up()
       .c('status').t('Happily echoing your <message/> stanzas')
     )

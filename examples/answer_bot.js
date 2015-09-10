@@ -11,7 +11,6 @@
 
 var Client = require('node-xmpp-client')
   , argv = process.argv
-  , ltx = require('ltx')
 
 if (argv.length < 5) {
     console.error('Usage: node answer_bot.js <my-jid> <my-password> ' +
@@ -48,7 +47,7 @@ client.on('stanza', function(stanza) {
         firstMessage = false
         var i = parseInt(stanza.getChildText('body'))
         x = i
-        var reply = new ltx.Element('message', {
+        var reply = new Client.Stanza('message', {
             to: stanza.attrs.from,
             from: stanza.attrs.to,
             type: 'chat'
@@ -68,7 +67,7 @@ client.on('online', function() {
         if (!firstMessage) return
 //         firstMessage = false
         console.log('Start chatting …')
-        var reply = new ltx.Element('message', {
+        var reply = new Client.Stanza('message', {
             to: component,
             type: 'chat'
         })
