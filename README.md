@@ -59,7 +59,6 @@ Set this option as `true` to enable the optimization for continuous TCP streams.
 
 ## Dependencies
 
-* [node-expat](http://github.com/node-xmpp/node-expat) (requires libexpat!)
 * [ltx](http://github.com/node-xmpp/ltx)
 
 Optional

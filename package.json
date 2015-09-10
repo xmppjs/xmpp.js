@@ -25,11 +25,13 @@
   "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
   "license": "MIT",
   "dependencies": {
+    "debug": "^2.1.1",
+    "inherits": "^2.0.1",
+    "lodash.assign": "^3.2.0",
+    "ltx": "^2.0.0",
     "node-stringprep": "^0.7.0",
     "reconnect-core": "https://github.com/dodo/reconnect-core/tarball/merged",
-    "tls-connect": "^0.2.2",
-    "ltx": "^0.9.0",
-    "debug": "^2.1.1"
+    "tls-connect": "^0.2.2"
   },
   "devDependencies": {
     "coveralls": "^2.11.2",
