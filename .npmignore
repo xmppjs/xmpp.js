@@ -1,0 +1,7 @@
+test/
+
+.editorconfig
+.eslintrc
+.npmignore
+
+JID.js
