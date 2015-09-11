@@ -3,5 +3,6 @@
 !.eslintrc
 !.gitignore
 !.npmignore
+!.travis.yml
 
 /JID.js
