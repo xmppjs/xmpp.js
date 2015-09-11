@@ -4,4 +4,4 @@
 !.gitignore
 !.npmignore
 
-JID.js
+/JID.js
