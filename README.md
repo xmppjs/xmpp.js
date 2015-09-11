@@ -1,9 +1,9 @@
 JID
 ===
 
-![Travis branch](https://img.shields.io/travis/node-xmpp/JID/master.svg?style=flat-square)]
+![Travis branch](https://img.shields.io/travis/node-xmpp/JID/master.svg?style=flat-square)
 
 ```
-npm install jid
+npm install node-xmpp-jid
 ```
 
