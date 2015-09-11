@@ -41,19 +41,12 @@ describe('JID', function() {
             assert.equal(j.getDomain(), 'd')
             assert.equal(j.getResource(), null)
         })
-        it('should allow access to jid parts using (old) keys', function() {
-            var j = new JID('u@d/r', '')
-            assert.equal(j.user, 'u')
-            assert.equal(j.domain, 'd')
-            assert.equal(j.resource, 'r')
-        })
-        it('should allow access to jid parts using (old) keys', function() {
+        it('should allow access to jid parts using keys', function() {
             var j = new JID('u@d/r', '')
             assert.equal(j.local, 'u')
             assert.equal(j.domain, 'd')
             assert.equal(j.resource, 'r')
         })
-
         it('shouldn\'t get U_STRINGPREP_PROHIBITED_ERROR (#93)', function() {
             assert.doesNotThrow(function () {
                 var j = new JID('f u@d')
