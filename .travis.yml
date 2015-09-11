@@ -11,3 +11,6 @@ node_js:
 before_install:
   # npm shipped with Node.js 0.8 doesn't support carret so let's update it
   - 'if [ "$TRAVIS_NODE_VERSION" == "0.8" ]; then npm i -g npm; fi'
+
+before_script:
+  - npm install -g mocha eslint browserify
