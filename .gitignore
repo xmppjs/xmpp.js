@@ -1,2 +1,8 @@
-coverage/
-node_modules/
+!.editorconfig
+!.eslintignore
+!.eslintrc
+!.gitignore
+!.npmignore
+!.travis.yml
+
+/JID.js
