@@ -1,4 +1,4 @@
-/* eslint-disable strict */
+'use strict'
 
 var assert = require('assert')
   , JID = require('..').JID
@@ -77,17 +77,17 @@ describe('JID', function() {
     describe('Escaping', function() {
 
         it('Should not change string - issue 43', function() {
-            var test = 'test\32@example.com'
+            var test = 'test\u001a@example.com'
 
             var jid = new JID(test)
-            assert.equal(jid.escapeLocal('test\32'), 'test\32')
+            assert.equal(jid.escapeLocal('test\u001a'), 'test\u001a')
         })
 
         it('Should escape - issue 43', function() {
-            var test = 'test\32a@example.com'
+            var test = 'test\u001a@example.com'
 
             var jid = new JID(test)
-            assert.equal(jid.escapeLocal('test\32a'), 'testa')
+            assert.equal(jid.escapeLocal('test\u001a'), 'testa')
         })
     })
 
