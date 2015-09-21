@@ -18,7 +18,5 @@
   "license": "MIT",
   "bugs": "https://github.com/node-xmpp/JID/issues",
   "homepage": "https://github.com/node-xmpp/JID",
-  "dependencies": {
-    "node-stringprep": "^0.7.2"
-  }
+  "dependencies": {}
 }

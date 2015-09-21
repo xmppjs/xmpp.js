@@ -129,25 +129,25 @@ describe('JID', function() {
             assert.equal(j1.equals(j2), false)
         })
 
-        it('should should ignore case in user', function() {
+        it('should ignore case in user', function() {
             var j1 = new JID('foo@bar/baz')
             var j2 = new JID('FOO@bar/baz')
             assert.equal(j1.equals(j2), true)
         })
 
-        it('should should ignore case in domain', function() {
+        it('should ignore case in domain', function() {
             var j1 = new JID('foo@bar/baz')
             var j2 = new JID('foo@BAR/baz')
             assert.equal(j1.equals(j2), true)
         })
 
-        it('should should not ignore case in resource', function() {
+        it('should not ignore case in resource', function() {
             var j1 = new JID('foo@bar/baz')
             var j2 = new JID('foo@bar/Baz')
             assert.equal(j1.equals(j2), false)
         })
 
-        it('should should ignore international caseness', function() {
+        it('should ignore international caseness', function() {
             var j1 = new JID('föö@bär/baß')
             var j2 = new JID('fÖö@BÄR/baß')
             assert.equal(j1.equals(j2), true)
