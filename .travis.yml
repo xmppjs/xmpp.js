@@ -3,19 +3,9 @@ sudo: false
 language: node_js
 
 node_js:
-  - '0.8'
   - '0.10'
   - '0.12'
   - '4.0'
-
-addons:
-  apt:
-    packages:
-      - libicu-dev
-
-before_install:
-  # npm shipped with Node.js 0.8 doesn't support carret so let's update it
-  - 'if [ "$TRAVIS_NODE_VERSION" == "0.8" ]; then npm i -g npm; fi'
 
 after_script:
   - npm run coveralls
