@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp-client",
-  "version": "1.0.0-alpha23",
+  "version": "1.0.0",
   "description": "XMPP client written in nodejs",
   "main": "index.js",
   "scripts": {
