@@ -29,7 +29,7 @@
     "inherits": "^2.0.1",
     "lodash.assign": "^3.2.0",
     "ltx": "^2.0.0",
-    "node-stringprep": "^0.7.0",
+    "node-xmpp-jid": "^1.0.0",
     "reconnect-core": "https://github.com/dodo/reconnect-core/tarball/merged",
     "tls-connect": "^0.2.2"
   },
