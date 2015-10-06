@@ -3,7 +3,7 @@
 var assert = require('assert')
   , JID = require('..').JID
 
-describe('JID', function () {
+describe('JID escaping', function () {
 
     describe('escaping', function() {
 

@@ -84,10 +84,10 @@ describe('JID', function() {
         })
 
         it('Should escape - issue 43', function() {
-            var test = 'test\u001a@example.com'
+            var test = 'test\u001aa@example.com'
 
             var jid = new JID(test)
-            assert.equal(jid.escapeLocal('test\u001a'), 'testa')
+            assert.equal(jid.escapeLocal('test\u001aa'), 'testa')
         })
     })
 
