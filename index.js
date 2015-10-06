@@ -14,7 +14,7 @@ Stanza.Element = ltx.Element
 Stanza.Stanza = Stanza
 
 exports.Stanza = Stanza
-exports.JID = require('./lib/JID')
+exports.JID = require('node-xmpp-jid')
 exports.Connection = require('./lib/Connection')
 exports.SRV = require('./lib/SRV')
 exports.StreamParser = require('./lib/StreamParser')
