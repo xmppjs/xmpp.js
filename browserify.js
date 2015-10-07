@@ -1,6 +1,8 @@
+'use strict';
+
 var Connection = require('node-xmpp-core').Connection
   , Client = require('./index')
-  , JID = require('node-xmpp-core').JID
+  , JID = require('node-xmpp-jid')
   , Element = require('node-xmpp-core').Stanza.Element
   , Stanza = require('node-xmpp-core').Stanza
   , ltx = require('node-xmpp-core').ltx

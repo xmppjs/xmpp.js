@@ -13,16 +13,16 @@ describe.skip('Websocket connections', function() {
     var password = 'password'
     var client = null
     var resource = 'test'
-    
+
     beforeEach(function(done) {
         helper.startServer(done)
     })
-    
+
     afterEach(function(done) {
         if (client) client.end()
         helper.stopServer(done)
     })
-    
+
     it('Can register an account', function(done) {
         client = new Client({
             jid: jid,
@@ -35,12 +35,12 @@ describe.skip('Websocket connections', function() {
         client.on('online', function(data) {
             var bareJid = data.jid.local + '@' + data.jid.domain
             bareJid.should.equal(jid)
-            bareJid = data.jid.user + '@' + data.jid.domain
+            bareJid = data.jid.local + '@' + data.jid.domain
             bareJid.should.equal(jid)
             done()
         })
     })
-    
+
     it('Errors on bad authentication details', function(done) {
         client = new Client({
             jid: jid,
@@ -59,7 +59,7 @@ describe.skip('Websocket connections', function() {
             done()
         })
     })
-    
+
     it('Can connect to an account with resource', function(done) {
         client = new Client({
             jid: jid + '/' + resource,
@@ -71,7 +71,7 @@ describe.skip('Websocket connections', function() {
         client.on('online', function(data) {
             var bareJid = data.jid.local + '@' + data.jid.domain
             bareJid.should.equal(jid)
-            bareJid = data.jid.user + '@' + data.jid.domain
+            bareJid = data.jid.local + '@' + data.jid.domain
             bareJid.should.equal(jid)
             data.jid.resource.should.equal(resource)
             done()
@@ -89,13 +89,13 @@ describe.skip('Websocket connections', function() {
         client.on('online', function(data) {
             var bareJid = data.jid.local + '@' + data.jid.domain
             bareJid.should.equal(jid)
-            bareJid = data.jid.user + '@' + data.jid.domain
+            bareJid = data.jid.local + '@' + data.jid.domain
             bareJid.should.equal(jid)
             data.jid.resource.should.exist
             done()
         })
     })
-    
+
     it('Fails on registering a duplicate account', function(done) {
         client = new Client({
             jid: jid,
@@ -115,7 +115,7 @@ describe.skip('Websocket connections', function() {
             done()
         })
     })
-    
+
     it('Can send and receive a stanza', function(done) {
         client = new Client({
             jid: jid,
@@ -124,11 +124,11 @@ describe.skip('Websocket connections', function() {
                 url: 'ws://localhost:5280/xmpp-websocket'
             }
         })
-        
+
         var ping = new Element(
             'iq', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
-        
+
         client.on('online', function() {
             client.send(ping)
             client.on('stanza', function(pong) {
@@ -137,7 +137,7 @@ describe.skip('Websocket connections', function() {
             })
         })
     })
-    
+
     it('Can send and receive stanzas', function(done) {
         client = new Client({
             jid: jid,
@@ -146,11 +146,11 @@ describe.skip('Websocket connections', function() {
                 url: 'ws://localhost:5280/xmpp-websocket'
             }
         })
-        
+
         var ping = new Element(
             'iq', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
-        
+
         var counter = 0
         client.on('online', function() {
             client.send(ping)
@@ -161,7 +161,7 @@ describe.skip('Websocket connections', function() {
             })
         })
     })
-    
+
     it('Sends error for bad stanza', function(done) {
         client = new Client({
             jid: jid,
@@ -170,11 +170,11 @@ describe.skip('Websocket connections', function() {
                 url: 'ws://localhost:5280/xmpp-websocket'
             }
         })
-        
+
         var badPing = new Element(
             'wtf', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
-        
+
         client.on('online', function() {
             client.send(badPing)
             client.on('stanza', function(stanza) {
@@ -184,7 +184,7 @@ describe.skip('Websocket connections', function() {
             })
         })
     })
-    
+
     it('Errors when server is stopped', function(done) {
         helper.stopServer(function() {
             client = new Client({
@@ -206,7 +206,7 @@ describe.skip('Websocket connections', function() {
             })
         })
     })
-    
+
     it('Errors when providing bad BOSH url', function(done) {
         client = new Client({
             jid: jid,
@@ -223,7 +223,7 @@ describe.skip('Websocket connections', function() {
             done('Should not have connected')
         })
     })
-    
+
     it.skip('Disconnects', function(done) {
         client = new Client({
             jid: jid,
@@ -232,11 +232,11 @@ describe.skip('Websocket connections', function() {
                 url: 'ws://localhost:5280/xmpp-websocket'
             }
         })
-        
+
         var ping = new Element(
             'iq', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
-        
+
         client.on('online', function() {
             client.end()
             client.send(ping)
@@ -246,5 +246,5 @@ describe.skip('Websocket connections', function() {
             done()
         })
     })
-    
+
 })
