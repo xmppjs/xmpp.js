@@ -10,24 +10,28 @@ describe('JID', function() {
         it('should parse a "domain" JID', function() {
             var j = new JID('d')
             assert.equal(j.getLocal(), null)
+            assert.equal(j.getUser(), null) // DEPRECATED
             assert.equal(j.getDomain(), 'd')
             assert.equal(j.getResource(), null)
         })
         it('should parse a "user@domain" JID', function() {
             var j = new JID('u@d')
             assert.equal(j.getLocal(), 'u')
+            assert.equal(j.getUser(), 'u') // DEPRECATED
             assert.equal(j.getDomain(), 'd')
             assert.equal(j.getResource(), null)
         })
         it('should parse a "domain/resource" JID', function() {
             var j = new JID('d/r')
             assert.equal(j.getLocal(), null)
+            assert.equal(j.getUser(), null) // DEPRECATED
             assert.equal(j.getDomain(), 'd')
             assert.equal(j.getResource(), 'r')
         })
         it('should parse a "user@domain/resource" JID', function() {
             var j = new JID('u@d/r')
             assert.equal(j.getLocal(), 'u')
+            assert.equal(j.getUser(), 'u') // DEPRECATED
             assert.equal(j.getDomain(), 'd')
             assert.equal(j.getResource(), 'r')
         })
@@ -38,12 +42,14 @@ describe('JID', function() {
         it('should parse an empty domain JID (#109)', function() {
             var j = new JID('u@d', '')
             assert.equal(j.getLocal(), 'u')
+            assert.equal(j.getUser(), 'u') // DEPRECATED
             assert.equal(j.getDomain(), 'd')
             assert.equal(j.getResource(), null)
         })
         it('should allow access to jid parts using keys', function() {
             var j = new JID('u@d/r', '')
             assert.equal(j.local, 'u')
+            assert.equal(j.user, 'u') // DEPRECATED
             assert.equal(j.domain, 'd')
             assert.equal(j.resource, 'r')
         })

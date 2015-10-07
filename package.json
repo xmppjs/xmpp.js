@@ -17,6 +17,5 @@
   "author": "Sonny Piers <sonny@fastmail.net>",
   "license": "MIT",
   "bugs": "https://github.com/node-xmpp/JID/issues",
-  "homepage": "https://github.com/node-xmpp/JID",
-  "dependencies": {}
+  "homepage": "https://github.com/node-xmpp/JID"
 }
