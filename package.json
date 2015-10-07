@@ -4,7 +4,7 @@
   "description": "XMPP identifiers (JID) for JavaScript",
   "main": "index.js",
   "scripts": {
-    "prepublish": "npm test",
+    "preversion": "npm test",
     "lint": "eslint .",
     "unit": "mocha test/",
     "browserify": "browserify -s JID index -o JID.js",
