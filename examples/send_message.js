@@ -17,7 +17,7 @@ client.connection.socket.on('error', function(error) {
 })
 
 client.addListener('online', function(data) {
-    console.log('Connected as ' + data.jid.user + '@' + data.jid.domain + '/' + data.jid.resource)
+    console.log('Connected as ' + data.jid.local + '@' + data.jid.domain + '/' + data.jid.resource)
     argv.slice(5).forEach(function(to) {
         var stanza = new Client.Stanza(
             'message',

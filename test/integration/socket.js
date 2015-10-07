@@ -13,16 +13,16 @@ describe('Socket connections', function() {
     var password = 'password'
     var client = null
     var resource = 'test'
-    
+
     beforeEach(function(done) {
         helper.startServer(done)
     })
-    
+
     afterEach(function(done) {
         helper.stopServer(done)
         if (client) client.end()
     })
-    
+
     it('Can register an account', function(done) {
         client = new Client({
             jid: jid,
@@ -33,12 +33,12 @@ describe('Socket connections', function() {
         client.on('online', function(data) {
             var bareJid = data.jid.local + '@' + data.jid.domain
             bareJid.should.equal(jid)
-            bareJid = data.jid.user + '@' + data.jid.domain
+            bareJid = data.jid.local + '@' + data.jid.domain
             bareJid.should.equal(jid)
             done()
         })
     })
-    
+
     it('Errors on bad authentication details', function(done) {
         client = new Client({
             jid: jid,
@@ -55,7 +55,7 @@ describe('Socket connections', function() {
             done()
         })
     })
-    
+
     it('Can connect to an account with resource', function(done) {
         client = new Client({
             jid: jid + '/' + resource,
@@ -65,7 +65,7 @@ describe('Socket connections', function() {
         client.on('online', function(data) {
             var bareJid = data.jid.local + '@' + data.jid.domain
             bareJid.should.equal(jid)
-            bareJid = data.jid.user + '@' + data.jid.domain
+            bareJid = data.jid.local + '@' + data.jid.domain
             bareJid.should.equal(jid)
             data.jid.resource.should.equal(resource)
             done()
@@ -81,13 +81,13 @@ describe('Socket connections', function() {
         client.on('online', function(data) {
             var bareJid = data.jid.local + '@' + data.jid.domain
             bareJid.should.equal(jid)
-            bareJid = data.jid.user + '@' + data.jid.domain
+            bareJid = data.jid.local + '@' + data.jid.domain
             bareJid.should.equal(jid)
             data.jid.resource.should.exist
             done()
         })
     })
-    
+
     it('Fails on registering a duplicate account', function(done) {
         client = new Client({
             jid: jid,
@@ -105,18 +105,18 @@ describe('Socket connections', function() {
             done()
         })
     })
-    
+
     it('Can send and receive a stanza', function(done) {
         client = new Client({
             jid: jid,
             password: password,
             host: 'localhost'
         })
-        
+
         var ping = new Element(
             'iq', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
-        
+
         client.on('online', function() {
             client.send(ping)
             client.on('stanza', function(pong) {
@@ -125,18 +125,18 @@ describe('Socket connections', function() {
             })
         })
     })
-    
+
     it('Sends error for bad stanza', function(done) {
         client = new Client({
             jid: jid,
             password: password,
             host: 'localhost'
         })
-        
+
         var badPing = new Element(
             'wtf', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
-        
+
         client.on('online', function() {
             client.send(badPing)
             client.on('stanza', function(stanza) {
@@ -146,7 +146,7 @@ describe('Socket connections', function() {
             })
         })
     })
-    
+
     it('Can\'t connect when server is stopped', function(done) {
         helper.stopServer(function() {
             client = new Client({
@@ -166,18 +166,18 @@ describe('Socket connections', function() {
             })
         })
     })
-    
+
     it('Disconects', function(done) {
         client = new Client({
             jid: jid,
             password: password,
             host: 'localhost'
         })
-        
+
         var ping = new Element(
             'iq', { id: '123', type: 'get' }
         ).c('ping', { xmlns: 'urn:xmpp:ping' })
-        
+
         client.on('online', function() {
             client.end()
             client.send(ping)
@@ -187,10 +187,10 @@ describe('Socket connections', function() {
             done()
         })
     })
-    
-    
+
+
     describe('Authentication', function() {
-    
+
         it('Can connect using PLAIN authentication', function(done) {
             client = new Client({
                 jid: jid,
@@ -211,7 +211,7 @@ describe('Socket connections', function() {
                 })
             })
         })
-    
+
         it('Can connect using DIGEST-MD5 authentication', function(done) {
             client = new Client({
                 jid: jid,
@@ -232,7 +232,7 @@ describe('Socket connections', function() {
                 })
             })
         })
-    
+
         it('Can connect using ANONYMOUS authentication', function(done) {
             client = new Client({
                 jid: '@anon.localhost',
@@ -254,5 +254,5 @@ describe('Socket connections', function() {
             })
         })
     })
-    
+
 })

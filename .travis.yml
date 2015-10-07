@@ -1,13 +1,11 @@
 language: node_js
 
 node_js:
-- '0.8'
 - '0.10'
 - '0.12'
-- 'iojs'
+- '4.0'
 
 before_install:
-- version=`node -v`; if [[ $version == *"0.8."* ]]; then npm i -g npm; fi
 - sudo apt-get install libicu-dev prosody luarocks
 - sudo luarocks install luabitop
 - sudo cp test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
