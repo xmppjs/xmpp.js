@@ -79,6 +79,9 @@ module.exports = function(grunt) {
                     reportFormats: [ 'lcov', 'html' ]
                 }
             }
+        },
+        'validate-package': {
+            files: [ './package.json' ]
         }
     })
     
@@ -102,6 +105,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-mocha-istanbul')
     grunt.loadNpmTasks('grunt-mocha-phantomjs')
     grunt.loadNpmTasks('grunt-contrib-connect')
+    grunt.loadNpmTasks('grunt-nsp-package')
 
     // Configure tasks
     grunt.registerTask('default', ['test'])
@@ -109,7 +113,7 @@ module.exports = function(grunt) {
     grunt.registerTask('test', ['clean', 'mochacli:unit', 'browserify', 'jshint', 'coveralls' ])
     grunt.registerTask('integration-test', ['mochacli:integration', 'test'])
     grunt.registerTask('browser-test', ['browserify', 'connect', 'prosody-start', 'mocha_phantomjs', 'prosody-stop'])
-    grunt.registerTask('full-test', ['test', 'integration-test', 'browser-test'])
+    grunt.registerTask('full-test', ['test', 'validate-package', 'integration-test', 'browser-test'])
     grunt.registerTask('dev', ['browserify', 'connect', 'watch'])
     
     grunt.registerTask('prosody-start', 'Start Prosody', function() {
