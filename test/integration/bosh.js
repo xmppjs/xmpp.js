@@ -195,10 +195,10 @@ describe('BOSH connections', function() {
                 }
             })
             client.on('error', function(error) {
-                error.message.should.equal('connect ECONNREFUSED')
-                error.code.should.equal('ECONNREFUSED')
-                error.errno.should.equal('ECONNREFUSED')
-                error.syscall.should.equal('connect')
+                error.message.should.containEql('connect ECONNREFUSED')
+                error.code.should.containEql('ECONNREFUSED')
+                error.errno.should.containEql('ECONNREFUSED')
+                error.syscall.should.containEql('connect')
                 done()
             })
             client.on('online', function() {
