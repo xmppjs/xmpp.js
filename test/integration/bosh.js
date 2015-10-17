@@ -247,7 +247,7 @@ describe('BOSH connections', function() {
         })
     })
 
-    describe.skip('Prebind', function() {
+    describe('Prebind', function() {
 
         it('Returns RID and SID', function(done) {
             /* jshint -W031 */

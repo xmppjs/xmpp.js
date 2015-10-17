@@ -6,13 +6,15 @@ var startServer = function(done) {
     exec('sudo service prosody start', function() {
         setTimeout(function() {
             done()
-        }, 1000)
+        }, 500)
     })
 }
 
 var stopServer = function(done) {
     exec('sudo service prosody stop', function() {
-        done()
+        setTimeout(function() {
+            done()
+        }, 100)
     })
 }
 
