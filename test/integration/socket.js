@@ -155,10 +155,10 @@ describe('Socket connections', function() {
                 host: 'localhost'
             })
             client.on('error', function(error) {
-                error.message.should.equal('connect ECONNREFUSED')
-                error.code.should.equal('ECONNREFUSED')
-                error.errno.should.equal('ECONNREFUSED')
-                error.syscall.should.equal('connect')
+                error.message.should.match(/connect ECONNREFUSED/)
+                error.code.should.match(/ECONNREFUSED/)
+                error.errno.should.match(/ECONNREFUSED/)
+                error.syscall.should.match(/connect/)
                 done()
             })
             client.on('online', function() {
