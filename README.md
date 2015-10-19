@@ -2,6 +2,7 @@ JID
 ===
 
 [![Travis](https://img.shields.io/travis/node-xmpp/JID/master.svg?style=flat-square)](https://travis-ci.org/node-xmpp/JID/branches)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com/)
 
 XMPP identifiers (JID) for JavaScript
 
