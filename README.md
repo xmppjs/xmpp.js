@@ -13,8 +13,8 @@ alice   @ wonderland.net /  rabbithole
 # Usage
 
 ```javascript
-var jid = new JID('alice', 'wonderland.net', 'rabbithole')
-var jid = new JID('alice@wonderland.net/rabbithole')
+var jid = new JID('alice@wonderland.net/rabbithole') // OK
+var jid = new JID('alice', 'wonderland.net', 'rabbithole') // BETTER; see section on escaping below
 
 jid.local      // alice
 jid.getLocal() // alice
@@ -28,12 +28,31 @@ jid.resource      // rabbithole
 jid.getResource() // rabbithole
 jid.setResource('rabbithole')
 
+jid.toString() // alice@wonderland.net/rabbithole
 
 // DEPRECATED! use local/getLocal/setLocal
 jid.user      // alice
 jid.getUser() // alice
 jid.setUser('alice')
 ```
+
+# Escaping
+
+The [XEP-0106](http://xmpp.org/extensions/xep-0106.html) defines a method to escape and unescape characters that aren't allowed in the local part of the JID. This library fully implement it but because `@` and `/` are ones of them and used as JID separators, you should always prefer the following syntax
+
+```javascript
+// GOOD
+new JID(local, domain, resource)
+```
+
+over
+
+```javascript
+// BAD
+new JID(local@domain/resource)
+```
+
+for user input.
 
 # References
 
