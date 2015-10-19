@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "preversion": "npm test",
-    "lint": "eslint .",
+    "lint": "standard",
     "unit": "mocha test/",
     "browserify": "browserify -s JID index -o JID.js",
     "test": "npm run unit && npm run lint && npm run browserify"
