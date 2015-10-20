@@ -39,6 +39,22 @@ describe('JID', function () {
       assert.equal(j.getResource(), 'r')
     })
 
+    it('should parse a "user@domain/resource@thing" JID', function () {
+      var j = new JID('u@d/r@foo')
+      assert.equal(j.getLocal(), 'u')
+      assert.equal(j.getUser(), 'u') // DEPRECATED
+      assert.equal(j.getDomain(), 'd')
+      assert.equal(j.getResource(), 'r@foo')
+    })
+
+    it('should parse a "user@domain/resource/thing" JID', function () {
+      var j = new JID('u@d/r/foo')
+      assert.equal(j.getLocal(), 'u')
+      assert.equal(j.getUser(), 'u') // DEPRECATED
+      assert.equal(j.getDomain(), 'd')
+      assert.equal(j.getResource(), 'r/foo')
+    })
+
     it('should parse an internationalized domain name as unicode', function () {
       var j = new JID('öko.de')
       assert.equal(j.getDomain(), 'öko.de')
