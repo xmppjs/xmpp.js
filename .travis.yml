@@ -1,15 +1,21 @@
 language: node_js
 
 node_js:
-- '0.10'
-- '0.12'
-- '4.0'
+  - '0.10'
+  - '0.12'
+  - '4.0'
+  - '4.1'
+  - '4.2'
+  - 'stable'
 
 before_install:
-- sudo apt-get install libicu-dev prosody luarocks
-- sudo luarocks install luabitop
-- sudo cp test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
-- sudo cp test/resources/mod_websocket.lua /usr/lib/prosody/modules/
-- sudo service prosody stop
+  - sudo apt-get install libicu-dev prosody luarocks
+  - sudo luarocks install luabitop
+  - sudo cp test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
+  - sudo cp test/resources/mod_websocket.lua /usr/lib/prosody/modules/
+  - sudo service prosody stop
+
+before_script:
+  - npm install -g grunt-cli
 
 script: npm run full-test

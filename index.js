@@ -1,14 +1,23 @@
 'use strict'
 
 var Client = require('./lib/Client')
-var JID = require('node-xmpp-jid')
-var Stanza = require ('node-xmpp-core').Stanza
 var SASL = require('./lib/sasl')
-var ltx = require('node-xmpp-core').ltx
+var core = require('node-xmpp-core')
 
 module.exports = Client
-module.exports.SASL = SASL
 module.exports.Client = Client
-module.exports.Stanza = Stanza
-module.exports.ltx = ltx
-module.exports.JID = JID
+module.exports.SASL = SASL
+
+module.exports.core = core
+module.exports.Connection = core.Connection
+module.exports.Stanza = core.Stanza
+module.exports.Presence = core.Presence
+module.exports.IQ = core.IQ
+module.exports.Iq = core.IQ
+module.exports.Message = core.Message
+module.exports.ltx = core.ltx
+module.exports.Element = core.Element
+module.exports.parse = core.parse
+module.exports.createElement = core.createElement
+module.exports.createStanza = core.createStanza
+module.exports.JID = core.JID

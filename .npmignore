@@ -1,0 +1,10 @@
+coverage/
+examples/
+test/
+
+.editorconfig
+.gitingore
+.npmignore
+.travis.yml
+
+Gruntfile.js
