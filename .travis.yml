@@ -11,7 +11,7 @@ node_js:
   - 'stable'
 
 before_script:
-  - npm install -g standard
+  - npm install -g mocha standard
 
 after_script:
   - npm run coveralls
