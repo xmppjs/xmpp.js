@@ -10,5 +10,8 @@ node_js:
   - '4.2'
   - 'stable'
 
+before_script:
+  - npm install -g standard
+
 after_script:
   - npm run coveralls

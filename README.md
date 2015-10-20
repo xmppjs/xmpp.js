@@ -8,6 +8,7 @@ Library to handle all the core functionality for:
 
 [![build status](https://img.shields.io/travis/node-xmpp/node-xmpp-core/master.svg?style=flat-square)](http://travis-ci.org/node-xmpp/node-xmpp-core)
 [![Coverage Status](https://img.shields.io/coveralls/node-xmpp/node-xmpp-core.svg?style=flat-square)](https://coveralls.io/r/node-xmpp/node-xmpp-core)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com/)
 
 ## Installation
 

@@ -1,169 +1,168 @@
+/* global describe, it, beforeEach, afterEach */
+
 'use strict'
 
 var assert = require('assert')
-  , Connection = require('..').Connection
-  , sinon = require('sinon')
-  , net = require('net')
-  , ltx = require('ltx')
+var Connection = require('..').Connection
+var sinon = require('sinon')
+var net = require('net')
+var ltx = require('ltx')
 
-var PORT = 8084 //Tests create a server on this port to attach sockets to
+var PORT = 8084 // Tests create a server on this port to attach sockets to
 
 describe('Connection', function () {
-    describe('socket config', function () {
-        it('allows a socket to be provided', function () {
-            var socket = new net.Socket()
-            var conn = new Connection()
-            conn.connect({socket: socket})
+  describe('socket config', function () {
+    it('allows a socket to be provided', function () {
+      var socket = new net.Socket()
+      var conn = new Connection()
+      conn.connect({socket: socket})
 
-            assert.equal(conn.socket, socket)
-        })
-        it('allows a socket to be provided lazily', function () {
-            var socket = new net.Socket()
-            var socketFunc = function () {
-                return socket
-            }
-            var conn = new Connection()
-            conn.connect({
-                socket: socketFunc
-            })
+      assert.equal(conn.socket, socket)
+    })
+    it('allows a socket to be provided lazily', function () {
+      var socket = new net.Socket()
+      var socketFunc = function () {
+        return socket
+      }
+      var conn = new Connection()
+      conn.connect({
+        socket: socketFunc
+      })
 
-            assert.equal(conn.socket, socket)
-        })
-        it('defaults to using a net.Socket', function () {
-            var conn = new Connection()
-            conn.connect({})
+      assert.equal(conn.socket, socket)
+    })
+    it('defaults to using a net.Socket', function () {
+      var conn = new Connection()
+      conn.connect({})
 
-            assert.equal(conn.socket instanceof net.Socket, true)
-        })
+      assert.equal(conn.socket instanceof net.Socket, true)
+    })
+  })
+
+  describe('streamOpen', function () {
+    it('defaults to stream:stream', function () {
+      var conn = new Connection()
+      assert.equal(conn.streamOpen, 'stream:stream')
+    })
+    it('is configurable', function () {
+      var conn = new Connection({streamOpen: 'open'})
+      assert.equal(conn.streamOpen, 'open')
+    })
+  })
+
+  describe('streamClose', function () {
+    it('defaults to </stream:stream>', function () {
+      var conn = new Connection()
+      assert.equal(conn.streamClose, '</stream:stream>')
+    })
+    it('is configurable', function () {
+      var conn = new Connection({streamClose: '<close/>'})
+      assert.equal(conn.streamClose, '<close/>')
+    })
+  })
+
+  // http://xmpp.org/rfcs/rfc6120.html#streams-open
+  describe('openStream', function () {
+    it('calls send with <streamOpen >', function () {
+      var conn = new Connection()
+      conn.streamOpen = 'foo'
+      var send = sinon.stub(conn, 'send')
+      conn.openStream()
+      assert(send.calledOnce)
+      assert.equal(send.args[0][0].indexOf('<' + conn.streamOpen + ' '), 0)
     })
 
-    describe('streamOpen', function() {
-        it('defaults to stream:stream', function() {
-            var conn = new Connection()
-            assert.equal(conn.streamOpen, 'stream:stream')
-        })
-        it('is configurable', function() {
-            var conn = new Connection({streamOpen: 'open'})
-            assert.equal(conn.streamOpen, 'open')
-        })
+    it('alias to startStream', function () {
+      var conn = new Connection()
+      assert.equal(conn.startStream, conn.openStream)
+    })
+  })
+
+  // http://xmpp.org/rfcs/rfc6120.html#streams-close
+  describe('closeStream', function () {
+    it('calls sends with streamClose', function () {
+      var conn = new Connection()
+      conn.openStream()
+      conn.streamClose = '</bar>'
+      var send = sinon.stub(conn, 'send')
+      conn.closeStream()
+      assert(send.calledOnce)
+      assert(send.calledWith(conn.streamClose))
     })
 
-    describe('streamClose', function() {
-        it('defaults to </stream:stream>', function() {
-            var conn = new Connection()
-            assert.equal(conn.streamClose, '</stream:stream>')
-        })
-        it('is configurable', function() {
-            var conn = new Connection({streamClose: '<close/>'})
-            assert.equal(conn.streamClose, '<close/>')
-        })
+    it('alias to endStream', function () {
+      var conn = new Connection()
+      assert.equal(conn.endStream, conn.closeStream)
+    })
+  })
+
+  describe('<stream> handling', function () {
+    var conn
+    var server
+    var serverSocket
+
+    beforeEach(function (done) {
+      serverSocket = null
+      server = net.createServer(function (c) {
+        if (serverSocket) {
+          assert.fail('Multiple connections to server; test case fail')
+        }
+        serverSocket = c
+
+        done()
+      })
+      server.listen(PORT)
+
+      conn = new Connection()
+      var socket = new net.Socket()
+      conn.connect({socket: socket})
+
+      socket.connect(PORT)
     })
 
-    // http://xmpp.org/rfcs/rfc6120.html#streams-open
-    describe('openStream', function() {
-        it('calls send with <streamOpen >', function() {
-            var conn = new Connection()
-            conn.streamOpen = 'foo'
-            var send = sinon.stub(conn, 'send')
-            conn.openStream()
-            assert(send.calledOnce)
-            assert.equal(send.args[0][0].indexOf('<' + conn.streamOpen + ' '), 0)
-        })
-
-        it('alias to startStream', function() {
-            var conn = new Connection()
-            assert.equal(conn.startStream, conn.openStream)
-        })
+    afterEach(function (done) {
+      serverSocket.end()
+      server.close(done)
     })
 
-    // http://xmpp.org/rfcs/rfc6120.html#streams-close
-    describe('closeStream', function() {
-        it('calls sends with streamClose', function() {
-            var conn = new Connection()
-            conn.openStream()
-            conn.streamClose = '</bar>'
-            var send = sinon.stub(conn, 'send')
-            conn.closeStream()
-            assert(send.calledOnce)
-            assert(send.calledWith(conn.streamClose))
-        })
+    it('sends <stream:stream > to start the stream', function (done) {
+      conn.openStream()
 
-        it('alias to endStream', function() {
-            var conn = new Connection()
-            assert.equal(conn.endStream, conn.closeStream)
-        })
+      serverSocket.on('data', function (data) {
+        assert.equal(data.toString().indexOf('<stream:stream '), 0)
+        done()
+      })
     })
 
-    describe('<stream> handling', function () {
-        var conn
-        var server
-        var serverSocket
+    it('sends </stream:stream> to close the stream when the connection is ended', function (done) {
+      serverSocket.on('data', function (data) {
+        var parsed = ltx.parse(data)
+        assert.equal(parsed.name, 'stream:stream')
+        done()
+      })
 
-        beforeEach(function (done) {
-            serverSocket = null
-            server = net.createServer(function (c) {
-                if (serverSocket) {
-                    assert.fail('Multiple connections to server; test case fail')
-                }
-                serverSocket = c
+      conn.openStream()
 
-                done()
-            })
-            server.listen(PORT)
-
-            conn = new Connection()
-            var socket = new net.Socket()
-            conn.connect({socket: socket})
-
-            socket.connect(PORT)
-        })
-
-        afterEach(function (done) {
-            serverSocket.end()
-            server.close(done)
-        })
-
-        it('sends <stream:stream > to start the stream', function (done) {
-            conn.openStream()
-
-            serverSocket.on('data', function(data) {
-                assert.equal(data.toString().indexOf('<stream:stream '), 0)
-                done()
-            })
-        })
-
-        it('sends </stream:stream> to close the stream when the connection is ended', function (done) {
-            serverSocket.on('data', function (data) {
-                var parsed = ltx.parse(data)
-                assert.equal(parsed.name, 'stream:stream')
-                done()
-            })
-
-            conn.openStream()
-
-            conn.end()
-        })
-
-        it('sends </stream:stream> to close the stream when the socket is ended from the other side', function (done) {
-
-            //If we don't allow halfOpen, the socket will close before it can send </stream>
-            conn.socket.allowHalfOpen = true
-            conn.socket.on('end', function () {
-                conn.socket.end()
-            })
-
-            serverSocket.on('data', function (data) {
-                if(data.toString().indexOf('<stream:stream ') === 0) {
-                    serverSocket.end()
-                } else {
-                    assert.equal(data.toString(), '</stream:stream>')
-                    done()
-                }
-            })
-
-            conn.startStream()
-        })
-
-
+      conn.end()
     })
+
+    it('sends </stream:stream> to close the stream when the socket is ended from the other side', function (done) {
+      // If we don't allow halfOpen, the socket will close before it can send </stream>
+      conn.socket.allowHalfOpen = true
+      conn.socket.on('end', function () {
+        conn.socket.end()
+      })
+
+      serverSocket.on('data', function (data) {
+        if (data.toString().indexOf('<stream:stream ') === 0) {
+          serverSocket.end()
+        } else {
+          assert.equal(data.toString(), '</stream:stream>')
+          done()
+        }
+      })
+
+      conn.startStream()
+    })
+  })
 })
