@@ -5,6 +5,19 @@ var assert = require('assert')
 
 describe('Stanza', function() {
 
+    describe('createStanza', function() {
+        it('creates a new stanza and set children', function() {
+            var c = new stanza.Stanza('bar')
+            var e = stanza.createStanza('foo', {'foo': 'bar'}, 'foo', c)
+            assert(e instanceof stanza.Stanza)
+            assert(e.is('foo'))
+            assert.equal(e.attrs.foo, 'bar')
+            assert.equal(e.children.length, 2)
+            assert.equal(e.children[0], 'foo')
+            assert.equal(e.children[1], c)
+        })
+    })
+
     describe('create', function() {
 
         describe('iq', function() {
