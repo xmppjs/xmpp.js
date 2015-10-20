@@ -4,6 +4,7 @@
   "description": "core files for the node-xmpp project",
   "main": "index.js",
   "scripts": {
+    "preversion": "npm test",
     "unit": "mocha --recursive test/",
     "lint": "standard",
     "coverage": "istanbul cover _mocha --report lcovonly -- -R spec",
