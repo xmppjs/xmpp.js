@@ -1,9 +1,10 @@
 'use strict'
 
 var IQ = require('./lib/IQ')
-  , Presence = require('./lib/Presence')
-  , Message = require('./lib/Message')
-  , ltx = require('ltx')
+var Presence = require('./lib/Presence')
+var Message = require('./lib/Message')
+var ltx = require('ltx')
+var inherits = require('inherits')
 
 var Stanza = require('./lib/Stanza')
 // deprecated, let's remove them at some point
@@ -23,3 +24,5 @@ exports.Element = ltx.Element
 exports.IQ = IQ
 exports.Presence = Presence
 exports.Message = Message
+exports.inherits = inherits
+exports.createElement = ltx.createElement
