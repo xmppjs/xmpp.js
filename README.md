@@ -1,11 +1,10 @@
 # node-xmpp-client
 
-Idiomatic XMPP client library for [node.js](http://nodejs.org/)
+XMPP client for JavaScript.
 
-Now usable in browsers too thanks to [Browserify](https://github.com/substack/node-browserify). To create a bundle run `grunt browserify`.
-
-[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-client.svg?branch=master)](http://travis-ci.org/node-xmpp/node-xmpp-client)
-[![Coverage Status](https://img.shields.io/coveralls/node-xmpp/node-xmpp-client.svg)](https://coveralls.io/r/node-xmpp/node-xmpp-client)
+[![build status](https://img.shields.io/travis/node-xmpp/node-xmpp-client/master.svg)](https://travis-ci.org/node-xmpp/node-xmpp-client/branches)
+[![Coverage Status](https://img.shields.io/coveralls/node-xmpp/node-xmpp-client.svg?style=flat-square)](https://coveralls.io/r/node-xmpp/node-xmpp-client)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com/)
 
 
 ## Manual
@@ -14,7 +13,7 @@ See http://node-xmpp.org/doc/client.html for instructions on how to use `node-xm
 
 ## Installation
 
-__Note:__ We now only support nodejs versions 0.8.0 and greater.
+__Note:__ We now only support nodejs versions 0.10.0 and greater.
 
 With package manager [npm](http://npmjs.org/):
 
