@@ -13,11 +13,9 @@ See http://node-xmpp.org/doc/client.html for instructions on how to use `node-xm
 
 ## Installation
 
-__Note:__ We now only support nodejs versions 0.10.0 and greater.
-
-With package manager [npm](http://npmjs.org/):
-
-    npm install node-xmpp-client
+```
+npm install node-xmpp-client
+```
 
 ### Testing
 
@@ -37,19 +35,23 @@ Please see the various [examples](https://github.com/node-xmpp/node-xmpp-client/
 
 ## Features
 
-* Client authentication with SASL DIGEST-MD5, PLAIN, ANONYMOUS, X-FACEBOOK-PLATFORM
+* Node.js and browsers
+* Client authentication with SASL
+  - DIGEST-MD5
+  - PLAIN
+  - ANONYMOUS
+  - EXTERNAL
+  - [X-OAUTH2](https://developers.google.com/talk/jep_extensions/oauth)
+  - ~~X-FACEBOOK-PLATFORM~~ ([removed](https://developers.facebook.com/docs/chat) by Facebook)
+* Multiple transports
+  - TCP
+  - BOSH
+  - WebSocket
 * `_xmpp-client._tcp` SRV record support
-* Even runs in the Browser.
 
 ## Dependencies
 
 * [node-xmpp-core](https://github.com/node-xmpp/ltx): `node-xmpp` core libraries
-
-Optional
-
-* [node-stringprep](http://github.com/node-xmpp/node-stringprep): for [icu](http://icu-project.org/)-based string normalization.
-
-Automatically building the optional library can be turned off by `npm config set optional false` or by setting the environmental variable `export NPM_CONFIG_OPTIONAL=false`. On Heroku this is done through `heroku config:set NPM_CONFIG_OPTIONAL=false`, for example.
 
 ### Building XML Elements
 
