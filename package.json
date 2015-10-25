@@ -3,30 +3,26 @@
   "version": "1.0.0",
   "description": "Component API for XMPP",
   "main": "index.js",
+  "homepage": "https://github.com/node-xmpp/node-xmpp-component",
   "scripts": {
-    "test": "grunt test",
-    "integration-test": "grunt integration-test"
+    "preversion": "npm test",
+    "lint": "standard",
+    "unit": "mocha --recursive test/unit",
+    "integration": "mocha --recursive -t 60000 test/integration",
+    "test": "npm run unit && npm run lint"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/node-xmpp/node-xmpp-component.git"
-  },
+  "repository": "github:node-xmpp/node-xmpp-component",
   "keywords": [
     "component",
-    "xmpp"
+    "XMPP"
   ],
   "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/node-xmpp/node-xmpp-component/issues"
-  },
+  "bugs": "https://github.com/node-xmpp/node-xmpp-component/issues",
   "dependencies": {
-    "node-xmpp-core": "^3.0.0"
+    "node-xmpp-core": "^4.0.0"
   },
   "devDependencies": {
-    "grunt-mocha-cli": "^1.14.0",
-    "grunt-contrib-jshint": "^0.11.3",
-    "proxyquire": "^1.7.3",
     "should": "^7.1.0",
     "node-xmpp-client": "^2.0.0"
   }

@@ -4,14 +4,17 @@ node_js:
   - '0.10'
   - '0.12'
   - '4.0'
+  - '4.1'
+  - '4.2'
+  - 'stable'
 
 before_install:
   - sudo apt-get install prosody
   - sudo service prosody stop
   - sudo cp test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
 
-before_script:
-  - npm install -g grunt-cli
+before_script: npm install -g mocha standard
 
 script:
-  - npm run integration-test
+  - npm run test
+  - npm run integration

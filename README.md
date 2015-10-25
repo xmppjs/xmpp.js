@@ -1,8 +1,9 @@
 # node-xmpp-component
 
-Idiomatic XMPP component library for [node.js](http://nodejs.org/)
+XMPP component for Node.js
 
-[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-component.png)](http://travis-ci.org/node-xmpp/node-xmpp-component)
+[![build status](https://img.shields.io/travis/node-xmpp/node-xmpp-component/master.svg?style=flat-square)](https://travis-ci.org/node-xmpp/node-xmpp-component/branches)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com/)
 
 ## Manual
 
@@ -49,7 +50,3 @@ Please see the various [examples](https://github.com/node-xmpp/node-xmpp-compone
 ## Dependencies
 
 * [node-xmpp-core](http://github.com/node-xmpp/node-xmpp-core)
-
-Optional
-
-* [node-stringprep](http://github.com/node-xmpp/node-stringprep): for [icu](http://icu-project.org/)-based string normalization.

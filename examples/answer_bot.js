@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /*
  * example usage:
@@ -9,88 +9,85 @@
  */
 
 var Client = require('node-xmpp-client')
-  , argv = process.argv
-  , ltx = require('node-xmpp-core').ltx
+var Stanza = require('node-xmpp-core').Stanza
+
+var argv = process.argv
 
 if (argv.length < 5) {
-    console.error('Usage: node answer_bot.js <my-jid> <my-password> ' +
-        '<component-jid>')
-    process.exit(1)
+  console.error('Usage: node answer_bot.js <my-jid> <my-password> ' +
+    '<component-jid>')
+  process.exit(1)
 }
 
 var component = argv[4]
-  , client = new Client({
-    jid: argv[2],
-    password: argv[3],
-    host:'localhost',
-    reconnect: true
+var client = new Client({
+  jid: argv[2],
+  password: argv[3],
+  host: 'localhost',
+  reconnect: true
 })
-
 
 var interval
 var firstMessage = true
 
-var c  = 0
-client.on('stanza', function(stanza) {
-    console.log('Received stanza: ', c++, stanza.toString())
-    if (stanza.is('message') && stanza.attrs.type === 'chat' && !stanza.getChild('delay')) {
-        clearInterval(interval)
-        if (firstMessage) console.log('Someone started chatting …')
-        firstMessage = false
-        var i = parseInt(stanza.getChildText('body'))
-        var reply = new ltx.Element('message', {
-            to: stanza.attrs.from,
-            from: stanza.attrs.to,
-            type: 'chat'
-        })
-        reply.c('body').t(isNaN(i) ? 'i can count!' : ('' + (i + 1)))
-        setTimeout(function () {
-            client.send(reply)
-        }, 321)
-    }
+var c = 0
+client.on('stanza', function (stanza) {
+  console.log('Received stanza: ', c++, stanza.toString())
+  if (stanza.is('message') && stanza.attrs.type === 'chat' && !stanza.getChild('delay')) {
+    clearInterval(interval)
+    if (firstMessage) console.log('Someone started chatting …')
+    firstMessage = false
+    var i = parseInt(stanza.getChildText('body'), 10)
+    var reply = new Stanza('message', {
+      to: stanza.attrs.from,
+      from: stanza.attrs.to,
+      type: 'chat'
+    })
+    reply.c('body').t(isNaN(i) ? 'i can count!' : ('' + (i + 1)))
+    setTimeout(function () {
+      client.send(reply)
+    }, 321)
+  }
 })
 
-client.on('online', function() {
-    console.log('Client is online')
-    firstMessage = true
-    client.send('<presence/>')
-    interval = setInterval(function () {
-        if (!firstMessage) return
-//         firstMessage = false
-        console.log('Start chatting …')
-        var reply = new ltx.Element('message', {
-            to: component,
-            type: 'chat'
-        })
-        reply.c('body').t('0')
-        client.send(reply)
-    }, 321)
-
+client.on('online', function () {
+  console.log('Client is online')
+  firstMessage = true
+  client.send('<presence/>')
+  interval = setInterval(function () {
+    if (!firstMessage) return
+    //         firstMessage = false
+    console.log('Start chatting …')
+    var reply = new Stanza('message', {
+      to: component,
+      type: 'chat'
+    })
+    reply.c('body').t('0')
+    client.send(reply)
+  }, 321)
 })
 
 client.on('offline', function () {
-    console.log('Client is offline')
+  console.log('Client is offline')
 })
 
-
 client.on('connect', function () {
-    console.log('Client is connected')
+  console.log('Client is connected')
 })
 
 client.on('reconnect', function () {
-    console.log('Client reconnects …')
+  console.log('Client reconnects …')
 })
 
 client.on('disconnect', function (e) {
-    console.log('Client is disconnected', e)
+  console.log('Client is disconnected', e)
 })
 
-
-client.on('error', function(e) {
-    console.error(e)
-    process.exit(1)
+client.on('error', function (e) {
+  console.error(e)
+  process.exit(1)
 })
 
 process.on('exit', function () {
-    client.end()
+  client.end()
 })
