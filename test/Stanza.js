@@ -3,14 +3,18 @@
 'use strict'
 
 var assert = require('assert')
-var stanza = require('..').Stanza
+var core = require('..')
+var Stanza = core.Stanza
+var IQ = core.IQ
+var Presence = core.Presence
+var Message = core.Message
 
 describe('Stanza', function () {
   describe('createStanza', function () {
     it('creates a new stanza and set children', function () {
-      var c = new stanza.Stanza('bar')
-      var e = stanza.createStanza('foo', {'foo': 'bar'}, 'foo', c)
-      assert(e instanceof stanza.Stanza)
+      var c = new Stanza('bar')
+      var e = Stanza.createStanza('foo', {'foo': 'bar'}, 'foo', c)
+      assert(e instanceof Stanza)
       assert(e.is('foo'))
       assert.equal(e.attrs.foo, 'bar')
       assert.equal(e.children.length, 2)
@@ -20,51 +24,51 @@ describe('Stanza', function () {
   })
 
   describe('create', function () {
-    describe('iq', function () {
+    describe('IQ', function () {
       it('should return an iq stanza', function () {
-        var s = new stanza.Stanza('iq')
-        assert(s instanceof stanza.Stanza)
+        var s = new Stanza('iq')
+        assert(s instanceof Stanza)
         assert(s.is('iq'))
       })
 
       it('should return an iq stanza', function () {
-        var s = new stanza.Iq()
-        assert(s instanceof stanza.Stanza)
+        var s = new IQ()
+        assert(s instanceof Stanza)
         assert(s.is('iq'))
       })
     })
 
     describe('message', function () {
       it('should return a message stanza', function () {
-        var s = new stanza.Stanza('message')
-        assert(s instanceof stanza.Stanza)
+        var s = new Stanza('message')
+        assert(s instanceof Stanza)
         assert(s.is('message'))
       })
 
       it('should return an iq stanza', function () {
-        var s = new stanza.Message()
-        assert(s instanceof stanza.Stanza)
+        var s = new Message()
+        assert(s instanceof Stanza)
         assert(s.is('message'))
       })
     })
 
     describe('presence', function () {
       it('should return a presence stanza', function () {
-        var s = new stanza.Stanza('presence')
-        assert(s instanceof stanza.Stanza)
+        var s = new Stanza('presence')
+        assert(s instanceof Stanza)
         assert(s.is('presence'))
       })
 
       it('should return a presence stanza', function () {
-        var s = new stanza.Presence()
-        assert(s instanceof stanza.Stanza)
+        var s = new Presence()
+        assert(s instanceof Stanza)
         assert(s.is('presence'))
       })
     })
   })
 
   describe('common attributes as properties', function () {
-    var s = new stanza.Stanza('iq')
+    var s = new Stanza('iq')
 
     describe('from', function () {
       it('should set "from" attribute', function () {
@@ -116,7 +120,7 @@ describe('Stanza', function () {
   })
 
   describe('clone', function () {
-    var originalStanza = new stanza.Stanza('iq')
+    var originalStanza = new Stanza('iq')
       .c('foo', { xmlns: 'bar' })
       .up()
       .c('bar', { xmlns: 'foo' })
@@ -129,7 +133,7 @@ describe('Stanza', function () {
 
     it('returns a Stanza instance', function () {
       var cloned = originalStanza.clone()
-      assert(cloned instanceof stanza.Stanza)
+      assert(cloned instanceof Stanza)
     })
 
     it("doesn't modify clone if original is modified", function () {
