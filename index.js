@@ -8,7 +8,6 @@ var WebSocketServer = require('./lib/C2S/WebSocket/Server')
 var ComponentServer = require('./lib/component/Server')
 var ComponentSession = require('./lib/component/Session')
 var core = require('node-xmpp-core')
-var util = require('util')
 
 module.exports = {
   _Server: require('./lib/Server'),
@@ -57,4 +56,4 @@ module.exports = {
   }
 }
 
-util._extend(module.exports, core)
+core.exportCoreUtils(module.exports)
