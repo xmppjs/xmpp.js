@@ -4,6 +4,7 @@
   "description": "XMPP server libraries for Node.js",
   "main": "index.js",
   "scripts": {
+    "preversion": "npm test",
     "unit": "mocha --recursive test/ -t 3000",
     "lint": "standard .",
     "coverage": "istanbul cover _mocha --report lcovonly -- -R spec -t 3000 --recursive",
