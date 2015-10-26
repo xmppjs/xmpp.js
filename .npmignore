@@ -7,4 +7,5 @@ test/
 .npmignore
 .travis.yml
 
+CONTRIBUTING.md
 Gruntfile.js
