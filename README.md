@@ -1,9 +1,10 @@
 # node-xmpp-server
 
-Idiomatic XMPP server library for [node.js](http://nodejs.org/)
+Idiomatic XMPP server library for [Node.js](http://nodejs.org/)
 
-[![build status](https://secure.travis-ci.org/node-xmpp/node-xmpp-server.svg?branch=master)](http://travis-ci.org/node-xmpp/node-xmpp-server)
-[![Coverage Status](https://img.shields.io/coveralls/node-xmpp/node-xmpp-server.svg)](https://coveralls.io/r/node-xmpp/node-xmpp-server)
+[![build status](https://img.shields.io/travis/node-xmpp/node-xmpp-server/master.svg?style=flat-square)](https://travis-ci.org/node-xmpp/node-xmpp-server/branches)
+[![Coverage Status](https://img.shields.io/coveralls/node-xmpp/node-xmpp-server.svg?style=flat-square)](https://coveralls.io/r/node-xmpp/node-xmpp-server)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com/)
 
 
 ## Manual
@@ -23,10 +24,6 @@ With package manager [npm](http://npmjs.org/):
 Install the dev dependencies, then...
 
 ```npm test```
-
-To run the tests and the code style checks then use:
-
-```grunt test```
 
 Also see the tests run in [travis](http://travis-ci.org/node-xmpp/node-xmpp-server). The tests in travis run both the code and code style tests.
 
@@ -84,9 +81,10 @@ until you use `up()`, a getter for the parent. `Connection.send()`
 first invokes `tree()` to retrieve the uppermost parent, the XMPP
 stanza, before sending it out the wire.
 
-# Sponsor
+# Sponsors
 
- - S2S implementation has been sponsored by [superfeedr](http://superfeedr.com/)
+ - [superfeedr](http://superfeedr.com/): S2S implementation
+ - [Redbooth](https://redbooth.com/a/): BOSH fixes, WebSocket RFC 7395, maintenance
 
 # Licence
 
