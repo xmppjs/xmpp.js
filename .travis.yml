@@ -1,3 +1,5 @@
+sudo: required
+
 language: node_js
 
 node_js:
@@ -6,16 +8,23 @@ node_js:
   - '4.0'
   - '4.1'
   - '4.2'
+  - '5.0'
   - 'stable'
 
 before_install:
-  - sudo apt-get install libicu-dev prosody luarocks
-  - sudo luarocks install luabitop
-  - sudo cp test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
-  - sudo cp test/resources/mod_websocket.lua /usr/lib/prosody/modules/
-  - sudo service prosody stop
+  - sudo apt-get install lua5.1 luarocks libexpat-dev libidn11-dev libssl-dev
+  - sudo luarocks install luaexpat
+  - sudo luarocks install luasocket
+  - sudo luarocks install luafilesystem
+  - mkdir prosody
+  - hg clone https://hg.prosody.im/0.10 prosody-0.10
+  - cd prosody-0.10
+  - ./configure --with-lua-include=/usr/include/lua5.1 --prefix=$HOME/prosody
+  - make
+  - make install
+  - cd $TRAVIS_BUILD_DIR
+  - cp test/resources/prosody.cfg.lua ~/prosody/etc/prosody/prosody.cfg.lua
 
-before_script:
-  - npm install -g grunt-cli
+before_script: npm install -g grunt-cli
 
 script: npm run full-test
