@@ -31,7 +31,7 @@
     "faye-websocket": "^0.10.0",
     "istanbul": "^0.4.0",
     "minimist": "^1.2.0",
-    "node-xmpp-core": "^4.0.0",
+    "node-xmpp-core": "^4.1.0",
     "request": "^2.65.0"
   },
   "devDependencies": {
@@ -46,10 +46,9 @@
     "grunt-mocha-cli": "^2.0.0",
     "grunt-mocha-istanbul": "^3.0.1",
     "grunt-mocha-phantomjs": "^2.0.0",
-    "grunt-nsp-package": "^0.0.5",
-    "grunt-standard": "^1.0.2",
+    "grunt-standard": "^2.0.0",
     "mocha": "^2.3.3",
-    "node-xmpp-server": "^2.0.0",
+    "node-xmpp-server": "^2.1.0",
     "should": "^7.1.1"
   },
   "browser": {
