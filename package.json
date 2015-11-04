@@ -46,7 +46,6 @@
     "grunt-mocha-cli": "^2.0.0",
     "grunt-mocha-istanbul": "^3.0.1",
     "grunt-mocha-phantomjs": "^2.0.0",
-    "grunt-nsp-package": "^0.0.5",
     "grunt-standard": "^1.0.2",
     "mocha": "^2.3.3",
     "node-xmpp-server": "^2.0.0",
