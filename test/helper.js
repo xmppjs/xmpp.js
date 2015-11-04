@@ -3,7 +3,7 @@
 var exec = require('child_process').exec
 
 var startServer = function (done) {
-  exec('~/prosody/bin/prosodyctl start', function () {
+  exec('sudo service prosody start', function () {
     setTimeout(function () {
       done()
     }, 500)
@@ -11,7 +11,7 @@ var startServer = function (done) {
 }
 
 var stopServer = function (done) {
-  exec('~/prosody/bin/prosodyctl stop', function () {
+  exec('sudo service prosody stop', function () {
     setTimeout(function () {
       done()
     }, 100)
