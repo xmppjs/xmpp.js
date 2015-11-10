@@ -1,0 +1,29 @@
+{
+  "name": "node-xmpp-stanza",
+  "version": "0.0.0",
+  "description": "XMPP stanza for JavaScript",
+  "scripts": {
+    "prepublish": "npm run bundle",
+    "preversion": "npm test",
+    "unit": "mocha --recursive test/",
+    "bundle": "browserify index.js -S stanza -o bundle.js",
+    "lint": "standard",
+    "test": "npm run unit && npm run lint && npm run bundle"
+  },
+  "homepage": "https://github.com/node-xmpp/stanza",
+  "repository": "github:node-xmpp/stanza",
+  "bugs": "https://github.com/node-xmpp/stanza/issues",
+  "keywords": [
+    "XMPP",
+    "stanza",
+    "iq",
+    "message",
+    "presence"
+  ],
+  "author": "Sonny Piers <sonny@fastmail.net>",
+  "license": "MIT",
+  "dependencies": {
+    "inherits": "^2.0.1",
+    "ltx": "^2.0.1"
+  }
+}
