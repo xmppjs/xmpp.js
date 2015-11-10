@@ -3,4 +3,4 @@
 !.npmignore
 !.travis.yml
 
-/JID.js
+bundle.js

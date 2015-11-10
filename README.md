@@ -13,8 +13,9 @@ alice   @ wonderland.net /  rabbithole
 # Usage
 
 ```javascript
-var jid = new JID('alice@wonderland.net/rabbithole') // OK
-var jid = new JID('alice', 'wonderland.net', 'rabbithole') // BETTER; see section on escaping below
+var jid = 'alice' + '@' + 'wonderland.net' + '/' + 'rabbithole' // BAD !
+var jid = new JID('alice@wonderland.net/rabbithole')            // OK
+var jid = new JID('alice', 'wonderland.net', 'rabbithole')      // BEST; see section on escaping below
 
 jid.local      // alice
 jid.getLocal() // alice

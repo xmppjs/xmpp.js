@@ -2,12 +2,11 @@
   "name": "node-xmpp-jid",
   "version": "2.0.0",
   "description": "XMPP identifiers (JID) for JavaScript",
-  "main": "index.js",
   "scripts": {
     "preversion": "npm test",
     "lint": "standard",
     "unit": "mocha test/",
-    "browserify": "browserify -s JID index -o JID.js",
+    "browserify": "browserify index.js -s JID -o bundle.js",
     "test": "npm run unit && npm run lint && npm run browserify"
   },
   "repository": "github:node-xmpp/JID",
