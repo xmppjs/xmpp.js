@@ -17,17 +17,20 @@ var jid = 'alice' + '@' + 'wonderland.net' + '/' + 'rabbithole' // BAD !
 var jid = new JID('alice@wonderland.net/rabbithole')            // OK
 var jid = new JID('alice', 'wonderland.net', 'rabbithole')      // BEST; see section on escaping below
 
+jid.local = 'alice'
 jid.local      // alice
-jid.getLocal() // alice
 jid.setLocal('alice')
+jid.getLocal() // alice
 
+jid.domain = 'wonderland.net'
 jid.domain      // wonderland.net
-jid.getDomain() // wonderland.net
 jid.setDomain('wonderland.net')
+jid.getDomain() // wonderland.net
 
+jid.resource = 'rabbithole'
 jid.resource      // rabbithole
-jid.getResource() // rabbithole
 jid.setResource('rabbithole')
+jid.getResource() // rabbithole
 
 jid.toString() // alice@wonderland.net/rabbithole
 
@@ -60,7 +63,7 @@ for user input.
 * https://tools.ietf.org/html/rfc7622 (work in progress)
 * http://xmpp.org/extensions/xep-0106.html (implemented)
 
-# Deprecated
+## Deprecated
 
 * http://xmpp.org/extensions/xep-0029.html (2003)
 * https://tools.ietf.org/html/rfc3920#section-3 (2004)
