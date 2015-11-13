@@ -6,7 +6,7 @@
   "scripts": {
     "preversion": "npm test",
     "unit": "mocha --recursive test/ -t 3000",
-    "lint": "standard .",
+    "lint": "standard",
     "coverage": "istanbul cover _mocha --report lcovonly -- -R spec -t 3000 --recursive",
     "coveralls": "cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "test": "npm run unit && npm run lint && npm run coverage"
@@ -29,15 +29,15 @@
   "dependencies": {
     "debug": "^2.2.0",
     "es6-collections": "^0.5.5",
-    "hat": "0.0.3",
-    "node-xmpp-core": "^4.1.0",
+    "hat": "^0.0.3",
+    "node-xmpp-core": "^4.2.0",
     "ws": "^0.8.0"
   },
   "devDependencies": {
     "coveralls": "^2.11.4",
     "istanbul": "^0.4.0",
     "mocha": "^2.3.3",
-    "node-xmpp-client": "^2.0.2",
+    "node-xmpp-client": "^2.1.0",
     "node-xmpp-component": "^1.0.0",
     "pem": "^1.8.1",
     "should": "^7.1.1",
