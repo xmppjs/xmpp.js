@@ -1,6 +1,6 @@
 'use strict'
 
-/* global describe, it, before, after */
+/* global describe, it, before, after, afterEach */
 
 var XMPP = require('../../..')
 var Server = XMPP.C2S.TCPServer
@@ -114,6 +114,12 @@ function createClient (opts) {
 describe('SASL', function () {
   describe('PLAIN', function () {
     var c2s = null
+    var cl = null
+
+    afterEach(function (done) {
+      cl.once('offline', done)
+      cl.end()
+    })
 
     before(function (done) {
       c2s = startServer(Plain)
@@ -125,7 +131,7 @@ describe('SASL', function () {
     })
 
     it('should accept plain authentication', function (done) {
-      var cl = createClient({
+      cl = createClient({
         jid: user.jid,
         password: user.password,
         preferred: Plain.id
@@ -141,7 +147,7 @@ describe('SASL', function () {
     })
 
     it('should not accept plain authentication', function (done) {
-      var cl = createClient({
+      cl = createClient({
         jid: user.jid,
         password: 'secretsecret'
       })
@@ -158,6 +164,12 @@ describe('SASL', function () {
 
   describe('XOAUTH-2', function () {
     var c2s = null
+    var cl = null
+
+    afterEach(function (done) {
+      cl.once('offline', done)
+      cl.end()
+    })
 
     before(function (done) {
       c2s = startServer(XOAuth2)
@@ -173,7 +185,7 @@ describe('SASL', function () {
      * but we can support the protocol anyway
      */
     it('should accept google authentication', function (done) {
-      var gtalk = createClient({
+      cl = createClient({
         jid: 'me@gmail.com',
         /* eslint-disable camelcase */
         oauth2_token: 'xxxx.xxxxxxxxxxx', // from OAuth2
@@ -182,10 +194,10 @@ describe('SASL', function () {
         host: 'localhost'
       })
 
-      gtalk.on('online', function () {
+      cl.on('online', function () {
         done()
       })
-      gtalk.on('error', function (e) {
+      cl.on('error', function (e) {
         console.log(e)
         done(e)
       })
@@ -194,6 +206,12 @@ describe('SASL', function () {
 
   describe('DIGEST MD5', function () {
     var c2s = null
+    var cl = null
+
+    afterEach(function (done) {
+      cl.once('offline', done)
+      cl.end()
+    })
 
     before(function (done) {
       c2s = startServer(DigestMD5)
@@ -205,7 +223,7 @@ describe('SASL', function () {
     })
 
     it('should accept digest md5 authentication', function (done) {
-      var cl = createClient({
+      cl = createClient({
         jid: user.jid,
         password: user.password,
         preferred: 'DIGEST-MD5'
@@ -268,6 +286,12 @@ describe('SASL', function () {
 
   describe('ANONYMOUS', function () {
     var c2s = null
+    var cl = null
+
+    afterEach(function (done) {
+      cl.once('offline', done)
+      cl.end()
+    })
 
     before(function (done) {
       c2s = startServer(Anonymous)
@@ -279,7 +303,7 @@ describe('SASL', function () {
     })
 
     it('should accept anonymous authentication', function (done) {
-      var cl = createClient({
+      cl = createClient({
         jid: '@localhost',
         preferred: Anonymous.id
       })
