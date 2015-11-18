@@ -37,7 +37,7 @@
     "coveralls": "^2.11.4",
     "istanbul": "^0.4.0",
     "mocha": "^2.3.3",
-    "node-xmpp-client": "^2.1.0",
+    "node-xmpp-client": "^3.0.0",
     "node-xmpp-component": "^1.0.0",
     "pem": "^1.8.1",
     "should": "^7.1.1",
