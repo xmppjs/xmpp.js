@@ -163,7 +163,8 @@ describe('SASL', function () {
       })
 
       cl.on('online', function () {
-        done()
+        cl.once('offline', done)
+        cl.end()
       })
       cl.on('error', function (e) {
         done(e)
@@ -211,7 +212,8 @@ describe('SASL', function () {
       })
 
       gtalk.on('online', function () {
-        done()
+        gtalk.once('offline', done)
+        gtalk.end()
       })
       gtalk.on('error', function (e) {
         done(e)
@@ -239,7 +241,8 @@ describe('SASL', function () {
       })
 
       cl.on('online', function () {
-        done()
+        cl.once('offline', done)
+        cl.end()
       })
       cl.on('error', function (e) {
         done(e)
@@ -318,7 +321,8 @@ describe('SASL', function () {
       cl.connect()
 
       cl.on('online', function () {
-        done()
+        cl.once('offline', done)
+        cl.end()
       })
       cl.on('error', function (e) {
         done(e)
