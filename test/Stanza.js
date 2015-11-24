@@ -3,26 +3,30 @@
 'use strict'
 
 var assert = require('assert')
-var Stanza = require('..').Stanza
+var stanza = require('..')
+var Element = stanza.Element
+var Stanza = stanza.Stanza
+var IQ = stanza.IQ
+var Presence = stanza.Presence
+var Message = stanza.Message
 
 describe('Stanza', function () {
-  describe('createStanza', function () {
-    it('creates a new stanza and set children', function () {
-      var c = new Stanza('bar')
-      var e = Stanza.createStanza('foo', {'foo': 'bar'}, 'foo', c)
-      assert(e instanceof Stanza)
-      assert(e.is('foo'))
-      assert.equal(e.attrs.foo, 'bar')
-      assert.equal(e.children.length, 2)
-      assert.equal(e.children[0], 'foo')
-      assert.equal(e.children[1], c)
-    })
+  it('is an instance of Element', function () {
+    var s = new Stanza('foobar')
+    assert(s instanceof Stanza)
+    assert(s instanceof Element)
   })
 
   describe('create', function () {
     describe('IQ', function () {
       it('should return an iq stanza', function () {
         var s = new Stanza('iq')
+        assert(s instanceof Stanza)
+        assert(s.is('iq'))
+      })
+
+      it('should return an iq stanza', function () {
+        var s = new IQ()
         assert(s instanceof Stanza)
         assert(s.is('iq'))
       })
@@ -34,11 +38,23 @@ describe('Stanza', function () {
         assert(s instanceof Stanza)
         assert(s.is('message'))
       })
+
+      it('should return an iq stanza', function () {
+        var s = new Message()
+        assert(s instanceof Stanza)
+        assert(s.is('message'))
+      })
     })
 
     describe('presence', function () {
       it('should return a presence stanza', function () {
         var s = new Stanza('presence')
+        assert(s instanceof Stanza)
+        assert(s.is('presence'))
+      })
+
+      it('should return a presence stanza', function () {
+        var s = new Presence()
         assert(s instanceof Stanza)
         assert(s.is('presence'))
       })

@@ -24,6 +24,6 @@
   "license": "MIT",
   "dependencies": {
     "inherits": "^2.0.1",
-    "ltx": "^2.0.1"
+    "ltx": "^2.2.0"
   }
 }
