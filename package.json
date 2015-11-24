@@ -6,7 +6,7 @@
     "prepublish": "npm run bundle",
     "preversion": "npm test",
     "unit": "mocha --recursive test/",
-    "bundle": "browserify index.js -S stanza -o bundle.js",
+    "bundle": "browserify index.js -s stanza -o bundle.js",
     "lint": "standard",
     "test": "npm run unit && npm run lint && npm run bundle"
   },
