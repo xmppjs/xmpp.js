@@ -2,7 +2,6 @@
   "name": "node-xmpp-core",
   "version": "4.2.0",
   "description": "core files for the node-xmpp project",
-  "main": "index.js",
   "scripts": {
     "preversion": "npm test",
     "unit": "mocha --recursive test/",
@@ -18,7 +17,7 @@
     "XMPP",
     "JID",
     "SRV",
-    "Stanza",
+    "stanza",
     "iq",
     "message",
     "presence"
@@ -29,8 +28,9 @@
     "debug": "^2.2.0",
     "inherits": "^2.0.1",
     "lodash.assign": "^3.2.0",
-    "ltx": "^2.0.1",
+    "ltx": "^2.2.0",
     "node-xmpp-jid": "^2.0.0",
+    "node-xmpp-stanza": "^1.1.0",
     "reconnect-core": "https://github.com/dodo/reconnect-core/tarball/merged",
     "tls-connect": "^0.2.2"
   },
