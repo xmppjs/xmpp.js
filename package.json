@@ -24,6 +24,6 @@
   },
   "devDependencies": {
     "should": "^7.1.0",
-    "node-xmpp-client": "^2.0.0"
+    "node-xmpp-client": "^3.0.0"
   }
 }
