@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp-stanza",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "XMPP stanza for JavaScript",
   "scripts": {
     "prepublish": "npm run bundle",
