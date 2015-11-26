@@ -30,7 +30,7 @@
     "debug": "^2.2.0",
     "es6-collections": "^0.5.5",
     "hat": "^0.0.3",
-    "node-xmpp-core": "^4.2.0",
+    "node-xmpp-core": "^5.0.0",
     "ws": "^0.8.0"
   },
   "devDependencies": {
