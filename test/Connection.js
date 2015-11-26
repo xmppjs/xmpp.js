@@ -6,7 +6,7 @@ var assert = require('assert')
 var Connection = require('..').Connection
 var sinon = require('sinon')
 var net = require('net')
-var ltx = require('ltx')
+var stanza = require('node-xmpp-stanza')
 
 var PORT = 8084 // Tests create a server on this port to attach sockets to
 
@@ -136,7 +136,7 @@ describe('Connection', function () {
 
     it('sends </stream:stream> to close the stream when the connection is ended', function (done) {
       serverSocket.on('data', function (data) {
-        var parsed = ltx.parse(data)
+        var parsed = stanza.parse(data)
         assert.equal(parsed.name, 'stream:stream')
         done()
       })
