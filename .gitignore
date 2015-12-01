@@ -1,4 +1,8 @@
-.DS_Store
-node_modules
-npm-debug.log
-node-xmpp-browser.js
+node_modules/
+
+!.editorconfig
+!.gitignore
+!.npmignore
+!.travis.yml
+
+bundle.js

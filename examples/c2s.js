@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var xmpp = require('../index')
 
@@ -9,47 +9,46 @@ var xmpp = require('../index')
 
 // Sets up the server.
 var c2s = new xmpp.C2SServer({
-    port: 5222,
-    domain: 'localhost'
-    //     key : "key.pem content",
-    //     cert : "cert.pem content",
-    // // or
-    // tls: {
-    //     keyPath: './examples/localhost-key.pem',
-    //     certPath: './examples/localhost-cert.pem'
-    // }
+  port: 5222,
+  domain: 'localhost'
+  //     key : "key.pem content",
+  //     cert : "cert.pem content",
+  // // or
+  // tls: {
+  //     keyPath: './examples/localhost-key.pem',
+  //     certPath: './examples/localhost-cert.pem'
+  // }
 
 })
 
 // On Connect event. When a client connects.
-c2s.on('connect', function(client) {
-    // That's the way you add mods to a given server.
+c2s.on('connect', function (client) {
+  // That's the way you add mods to a given server.
 
-    // Allows the developer to register the jid against anything they want
-    client.on('register', function(opts, cb) {
-        console.log('REGISTER')
-        cb(true)
-    })
+  // Allows the developer to register the jid against anything they want
+  client.on('register', function (opts, cb) {
+    console.log('REGISTER')
+    cb(true)
+  })
 
-    // Allows the developer to authenticate users against anything they want.
-    client.on('authenticate', function(opts, cb) {
-        console.log('AUTH' + opts.jid + ' -> ' +opts.password)
-        cb(null, opts) // cb(false)
-    })
+  // Allows the developer to authenticate users against anything they want.
+  client.on('authenticate', function (opts, cb) {
+    console.log('AUTH' + opts.jid + ' -> ' + opts.password)
+    cb(null, opts) // cb(false)
+  })
 
-    client.on('online', function() {
-        console.log('ONLINE')
-        client.send(new xmpp.Message({ type: 'chat' }).c('body').t('Hello there, little client.'))
-    })
+  client.on('online', function () {
+    console.log('ONLINE')
+    client.send(new xmpp.Message({ type: 'chat' }).c('body').t('Hello there, little client.'))
+  })
 
-    // Stanza handling
-    client.on('stanza', function(stanza) {
-        console.log('STANZA' + stanza)
-    })
+  // Stanza handling
+  client.on('stanza', function (stanza) {
+    console.log('STANZA' + stanza)
+  })
 
-    // On Disconnect event. When a client disconnects
-    client.on('disconnect', function() {
-        console.log('DISCONNECT')
-    })
-
+  // On Disconnect event. When a client disconnects
+  client.on('disconnect', function () {
+    console.log('DISCONNECT')
+  })
 })
