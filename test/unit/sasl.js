@@ -4,7 +4,7 @@
 
 var nodexmppserver = require('node-xmpp-server')
 var C2SServer = nodexmppserver.C2SServer
-var Element = require('node-xmpp-core').Stanza.Element
+var Stanza = require('node-xmpp-core').Stanza
 var net = require('net')
 var util = require('util')
 var Client = require('../../index')
@@ -91,7 +91,7 @@ function startServer (mechanism, done) {
     })
 
     stream.on('online', function () {
-      stream.send(new Element('message', {
+      stream.send(new Stanza('message', {
         type: 'chat'
       })
         .c('body')

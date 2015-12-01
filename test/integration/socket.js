@@ -4,7 +4,7 @@
 
 var Client = require('../../index')
 var helper = require('../helper')
-var Element = require('node-xmpp-core').Stanza.Element
+var Stanza = require('node-xmpp-core').Stanza
 
 require('should')
 
@@ -113,9 +113,9 @@ describe('Socket connections', function () {
       host: 'localhost'
     })
 
-    var ping = new Element(
-      'iq', { id: '123', type: 'get' }
-    ).c('ping', { xmlns: 'urn:xmpp:ping' })
+    var ping = new Stanza('iq', {
+      id: '123', type: 'get'
+    }).c('ping', { xmlns: 'urn:xmpp:ping' })
 
     client.on('online', function () {
       client.send(ping)
@@ -133,7 +133,7 @@ describe('Socket connections', function () {
       host: 'localhost'
     })
 
-    var badPing = new Element(
+    var badPing = new Stanza(
       'wtf', { id: '123', type: 'get' }
     ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
@@ -174,7 +174,7 @@ describe('Socket connections', function () {
       host: 'localhost'
     })
 
-    var ping = new Element(
+    var ping = new Stanza(
       'iq', { id: '123', type: 'get' }
     ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
@@ -197,7 +197,7 @@ describe('Socket connections', function () {
         preferred: 'PLAIN'
       })
 
-      var ping = new Element(
+      var ping = new Stanza(
         'iq', { id: '123', type: 'get' }
       ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
@@ -218,7 +218,7 @@ describe('Socket connections', function () {
         preferred: 'DIGEST-MD5'
       })
 
-      var ping = new Element(
+      var ping = new Stanza(
         'iq', { id: '123', type: 'get' }
       ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
@@ -239,7 +239,7 @@ describe('Socket connections', function () {
         preferred: 'ANONYMOUS'
       })
 
-      var ping = new Element(
+      var ping = new Stanza(
         'iq', { id: '123', type: 'get' }
       ).c('ping', { xmlns: 'urn:xmpp:ping' })
 

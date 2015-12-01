@@ -7,6 +7,5 @@ var core = require('node-xmpp-core')
 module.exports = Client
 module.exports.Client = Client
 module.exports.SASL = SASL
-module.exports.Iq = core.IQ
 
 core.exportCoreUtils(module.exports)
