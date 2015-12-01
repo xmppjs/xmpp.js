@@ -22,9 +22,7 @@
     "email": "lloyd@evilprofessor.co.uk"
   },
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/node-xmpp/node-xmpp-client/issues"
-  },
+  "bugs": "https://github.com/node-xmpp/node-xmpp-client/issues",
   "dependencies": {
     "browser-request": "^0.3.3",
     "debug": "^2.2.0",

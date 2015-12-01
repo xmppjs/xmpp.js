@@ -4,7 +4,7 @@
 
 var Client = require('../../index')
 var helper = require('../helper')
-var Element = require('node-xmpp-core').Stanza.Element
+var Stanza = require('node-xmpp-core').Stanza
 
 require('should')
 
@@ -125,7 +125,7 @@ describe.skip('Websocket connections', function () {
       }
     })
 
-    var ping = new Element(
+    var ping = new Stanza(
       'iq', { id: '123', type: 'get' }
     ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
@@ -147,7 +147,7 @@ describe.skip('Websocket connections', function () {
       }
     })
 
-    var ping = new Element(
+    var ping = new Stanza(
       'iq', { id: '123', type: 'get' }
     ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
@@ -171,7 +171,7 @@ describe.skip('Websocket connections', function () {
       }
     })
 
-    var badPing = new Element(
+    var badPing = new Stanza(
       'wtf', { id: '123', type: 'get' }
     ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
@@ -233,7 +233,7 @@ describe.skip('Websocket connections', function () {
       }
     })
 
-    var ping = new Element(
+    var ping = new Stanza(
       'iq', { id: '123', type: 'get' }
     ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
