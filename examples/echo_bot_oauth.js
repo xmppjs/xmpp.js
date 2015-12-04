@@ -11,7 +11,6 @@ if (argv.length !== 4) {
   process.exit(1)
 }
 
-/* jshint camelcase: false */
 var cl = new xmpp.Client({
   jid: argv[2],
   host: 'talk.google.com',
