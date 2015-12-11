@@ -59,6 +59,24 @@ describe('component server - component', function () {
       component.on('error', done)
       component.on('disconnect', function (err) {
         assert.equal(err.message, 'unknown host')
+        assert.equal(err.stanza.children[0].name, 'host-unknown')
+        done()
+      })
+    })
+  })
+
+  describe('component supplied invalid credentials', function () {
+    it('should connect', function (done) {
+      var component = new Component({
+        jid: 'foo.localhost',
+        password: 'notthepassword',
+        host: 'localhost',
+        port: 5347
+      })
+      component.on('error', done)
+      component.on('disconnect', function (err) {
+        assert.equal(err.message, 'not authorized')
+        assert.equal(err.stanza.children[0].name, 'not-authorized')
         done()
       })
     })
@@ -85,6 +103,7 @@ describe('component server - component', function () {
       component.on('error', done)
       component.on('disconnect', function (err) {
         assert.equal(err.message, "invalid namespace 'jabber:component:wrong'")
+        assert.equal(err.stanza.children[0].name, 'invalid-namespace')
         done()
       })
     })
