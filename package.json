@@ -2,7 +2,6 @@
   "name": "node-xmpp-server",
   "version": "2.1.2",
   "description": "XMPP server libraries for Node.js",
-  "main": "index.js",
   "scripts": {
     "preversion": "npm test",
     "unit": "mocha --recursive test/ -t 3000",
@@ -36,7 +35,6 @@
   "devDependencies": {
     "coveralls": "^2.11.4",
     "istanbul": "^0.4.0",
-    "mocha": "^2.3.3",
     "node-xmpp-client": "^3.0.0",
     "node-xmpp-component": "^2.0.0",
     "pem": "^1.8.1",
