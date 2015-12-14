@@ -30,7 +30,7 @@ client.on('stanza', function (stanza) {
 
     /*
     If you get error code 403
-    {access, register} to {access_from, register}
+    change {access, register} to {access_from, register}
 
     and
 
