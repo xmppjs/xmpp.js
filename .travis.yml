@@ -10,6 +10,7 @@ node_js:
   - 'stable'
 
 before_install:
+  - sudo apt-get update
   - sudo apt-get install prosody luarocks
   - sudo service prosody stop
   - sudo luarocks install luabitop
