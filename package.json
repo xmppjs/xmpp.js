@@ -47,7 +47,7 @@
     "grunt-standard": "^2.0.0",
     "mocha": "^2.3.3",
     "node-xmpp-server": "^2.1.0",
-    "should": "^7.1.1"
+    "should": "^8.0.2"
   },
   "browser": {
     "request": "browser-request",
