@@ -11,22 +11,20 @@ client.connection.socket.on('error', function (error) {
   process.exit(1)
 })
 
-
 client.on('online', function (data) {
   // stanza to be sent to the server
-  var stanza = new Client.Stanza('iq', { type:'set', id:'reg1', to:'some.server.org' })
-   .c('query',{ xmlns: 'jabber:iq:register'})
+  var stanza = new Client.Stanza('iq', {type: 'set', id: 'reg1', to: 'some.server.org'})
+   .c('query', {xmlns: 'jabber:iq:register'})
    .c('username').t('user').up()  // Give a username
    .c('password').t('1234')  // Give a password
   client.send(stanza) // send a stanza
-
 })
 
 // response stanzas
 client.on('stanza', function (stanza) {
   if (stanza.attrs.type === 'error') {
-   console.log('[error] ' + stanza);
-   return;
+    console.log('[error] ' + stanza)
+    return
   }
   /*
   For ejabberd users:
