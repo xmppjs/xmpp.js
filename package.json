@@ -29,7 +29,7 @@
     "faye-websocket": "^0.10.0",
     "istanbul": "^0.4.1",
     "minimist": "^1.2.0",
-    "node-xmpp-core": "^4.1.0",
+    "node-xmpp-core": "^5.0.0",
     "request": "^2.65.0"
   },
   "devDependencies": {
