@@ -32,7 +32,7 @@
     "node-xmpp-jid": "^2.0.0",
     "node-xmpp-stanza": "^1.1.0",
     "reconnect-core": "https://github.com/dodo/reconnect-core/tarball/merged",
-    "tls-connect": "^0.2.2"
+    "node-xmpp-tls-connect": "^1.0.1"
   },
   "devDependencies": {
     "coveralls": "^2.11.4",
