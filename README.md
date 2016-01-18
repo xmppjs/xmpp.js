@@ -15,6 +15,7 @@ alice   @ wonderland.net /  rabbithole
 ```javascript
 var jid = 'alice' + '@' + 'wonderland.net' + '/' + 'rabbithole' // BAD !
 var jid = new JID('alice@wonderland.net/rabbithole')            // OK
+var jid = JID`${'alice'}@${'wonderland.net'}/${'rabbithole'}`   // OK, es6 tagged template string
 var jid = new JID('alice', 'wonderland.net', 'rabbithole')      // BEST; see section on escaping below
 
 jid.local = 'alice'
