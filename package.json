@@ -31,7 +31,7 @@
     "es6-collections": "^0.5.5",
     "hat": "^0.0.3",
     "node-xmpp-core": "^5.0.0",
-    "ws": "^0.8.0"
+    "ws": "^1.0.1"
   },
   "devDependencies": {
     "coveralls": "^2.11.4",
