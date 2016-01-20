@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp-jid",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "XMPP identifiers (JID) for JavaScript",
   "scripts": {
     "preversion": "npm test",
