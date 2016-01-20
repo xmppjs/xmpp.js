@@ -57,5 +57,11 @@ describe('index', function () {
       assert(addr instanceof JID)
       assert.strictEqual(addr.toString(), 'foo@bar/baz')
     })
+
+    it('works as expected with new operator', function () {
+      var addr = new index('foo', 'bar', 'baz') // eslint-disable-line
+      assert(addr instanceof JID)
+      assert.strictEqual(addr.toString(), 'foo@bar/baz')
+    })
   })
 })
