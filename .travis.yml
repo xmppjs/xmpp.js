@@ -7,10 +7,9 @@ node_js:
   - '0.12'
   - '4'
   - '5'
-  - 'stable'
 
 before_script:
-  - npm install -g standard
+  - npm install -g standard mocha
 
 after_script:
   - npm run coveralls
