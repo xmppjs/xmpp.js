@@ -1,0 +1,9 @@
+examples/
+test/
+
+.editorconfig
+.gitingore
+.npmignore
+.travis.yml
+
+CONTRIBUTING.md

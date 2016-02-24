@@ -20,10 +20,10 @@
   "license": "MIT",
   "bugs": "https://github.com/node-xmpp/node-xmpp-component/issues",
   "dependencies": {
-    "node-xmpp-core": "^5.0.0"
+    "node-xmpp-core": "^5.0.1"
   },
   "devDependencies": {
     "node-xmpp-client": "^3.0.0",
-    "should": "^8.0.0"
+    "should": "^8.2.2"
   }
 }

@@ -3,13 +3,14 @@
 /* global describe, it, before, after */
 
 var Component = require('../../index')
+var parse = Component.parse
 var net = require('net')
-var ltx = require('node-xmpp-core').ltx
 var crypto = require('crypto')
+var assert = require('assert')
 
 require('should')
 
-describe('Authentication', function () {
+describe('connection', function () {
   var COMPONENT_PORT = 5348
   var onSocket = function () {}
   var duringafter = false
@@ -42,7 +43,7 @@ describe('Authentication', function () {
   it('Sends opening <stream/>', function (done) {
     onSocket = function (socket) {
       socket.once('data', function (d) {
-        var element = ltx.parse(d.toString('utf8') + '</stream:stream>')
+        var element = parse(d.toString('utf8') + '</stream:stream>')
         element.is('stream').should.be.true
         element.attrs.to.should.equal(options.jid)
         element.attrs.xmlns.should.equal(component.NS_COMPONENT)
@@ -63,7 +64,7 @@ describe('Authentication', function () {
     onSocket = function (socket) {
       socket.once('data', function () {
         socket.once('data', function (d) {
-          var handshake = ltx.parse(d.toString('utf8'))
+          var handshake = parse(d.toString('utf8'))
           handshake.is('handshake').should.be.true
           var shasum = crypto.createHash('sha1')
           shasum.update(555 + options.password)
@@ -86,7 +87,7 @@ describe('Authentication', function () {
     onSocket = function (socket) {
       socket.once('data', function () {
         socket.once('data', function () {
-          component.connection.emit('stanza', ltx.parse('<handshake/>'))
+          component.connection.emit('stanza', parse('<handshake/>'))
         })
         component.connection.emit('streamStart', { from: 'shakespeare.lit', id: 555 })
       })
@@ -112,7 +113,7 @@ describe('Authentication', function () {
     onSocket = function (socket) {
       socket.once('data', function () {
         socket.once('data', function () {
-          component.connection.parser.emit('stanza', ltx.parse(badHandshakeStanza))
+          component.connection.parser.emit('stanza', parse(badHandshakeStanza))
         })
         component.connection.parser.emit(
           'streamStart',
@@ -136,6 +137,48 @@ describe('Authentication', function () {
       error.stanza.getChildText('text', streamError).should.equal(errorMessage)
       error.message.should.equal(errorMessage)
       done()
+    })
+  })
+
+  describe('send', function () {
+    it('adds the from attribute if missing', function (done) {
+      var component = new Component(options)
+      onSocket = function (socket) {
+        socket.once('data', function (d) {
+          component.emit('online')
+          socket.on('data', function (data) {
+            var stanza = parse(data.toString())
+            assert(stanza.is('foo'))
+            var from = stanza.attrs.from
+            assert.equal(typeof from, 'string')
+            assert(from.length > 0)
+            assert.equal(from, component.connection.jid.toString())
+            done()
+          })
+        })
+      }
+      component.once('online', function () {
+        component.send(parse('<foo/>'))
+      })
+    })
+
+    it('does not set the from attribute if present', function (done) {
+      var component = new Component(options)
+      onSocket = function (socket) {
+        socket.once('data', function (d) {
+          component.emit('online')
+          socket.on('data', function (data) {
+            var stanza = parse(data.toString())
+            assert(stanza.is('foo'))
+            var from = stanza.attrs.from
+            assert.equal(from, 'foo@bar')
+            done()
+          })
+        })
+      }
+      component.once('online', function () {
+        component.send(parse('<foo from="foo@bar"/>'))
+      })
     })
   })
 })
