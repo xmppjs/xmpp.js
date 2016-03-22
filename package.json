@@ -27,18 +27,18 @@
   "license": "MIT",
   "dependencies": {
     "debug": "^2.2.0",
-    "es6-collections": "^0.5.5",
+    "es6-collections": "^0.5.6",
     "hat": "^0.0.3",
     "node-xmpp-core": "^5.0.1",
     "ws": "^1.0.1"
   },
   "devDependencies": {
-    "coveralls": "^2.11.6",
+    "coveralls": "^2.11.8",
     "istanbul": "^0.4.2",
     "node-xmpp-client": "^3.0.0",
-    "node-xmpp-component": "^2.0.0",
+    "node-xmpp-component": "^2.0.1",
     "pem": "^1.8.1",
-    "should": "^8.2.0",
-    "sinon": "^1.17.2"
+    "should": "^8.2.2",
+    "sinon": "^1.17.3"
   }
 }
