@@ -39,7 +39,7 @@ describe('Stanza', function () {
         assert(s.is('message'))
       })
 
-      it('should return an iq stanza', function () {
+      it('should return a message stanza', function () {
         var s = new Message()
         assert(s instanceof Stanza)
         assert(s.is('message'))
