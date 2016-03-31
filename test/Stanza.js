@@ -115,19 +115,23 @@ describe('Stanza', function () {
 
   describe('clone', function () {
     var originalStanza = new Stanza('iq')
-      .c('foo', { xmlns: 'bar' })
-      .up()
-      .c('bar', { xmlns: 'foo' })
-      .root()
+      .c('foo', { xmlns: 'bar' }).up()
+      .c('bar', { xmlns: 'foo' }).root()
 
     it('clones the stanza', function () {
       var cloned = originalStanza.clone()
       assert.equal(originalStanza.toString(), cloned.toString())
+      assert(originalStanza.equals(cloned))
     })
 
     it('returns a Stanza instance', function () {
       var cloned = originalStanza.clone()
       assert(cloned instanceof Stanza)
+    })
+
+    it('uses the correct constructor for children', function () {
+      var cloned = originalStanza.clone()
+      assert(cloned.children[0] instanceof Element)
     })
 
     it("doesn't modify clone if original is modified", function () {
