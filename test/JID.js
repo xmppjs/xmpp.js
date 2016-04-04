@@ -122,24 +122,6 @@ describe('JID', function () {
     })
   })
 
-  describe('toJSON', function () {
-    it('returns an object with local, domain, resource properties', function () {
-      var jid = new JID('foo@bar/baz')
-      assert.deepEqual(jid.toJSON(), {local: 'foo', domain: 'bar', resource: 'baz'})
-    })
-
-    it('does not unescape local if a falsy argument is passed', function () {
-      var jid = new JID('foo@lol', 'bar', 'baz')
-      assert.strictEqual(jid.toJSON().local, 'foo\\40lol')
-      assert.strictEqual(jid.toJSON(false).local, 'foo\\40lol')
-    })
-
-    it('unescapes local if true is passed', function () {
-      var jid = new JID('foo@lol', 'bar', 'baz')
-      assert.strictEqual(jid.toJSON(true).local, 'foo@lol')
-    })
-  })
-
   describe('equality', function () {
     it('should parsed JIDs should be equal', function () {
       var j1 = new JID('foo@bar/baz')
