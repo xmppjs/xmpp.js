@@ -17,7 +17,7 @@ before(function (done) {
   var cert_params = {
     days: 1,
     selfSigned: true,
-    altNames: ['DNS = localhost', 'IP = 127.0.0.1']
+    altNames: ['localhost', '127.0.0.1']
   }
   pem.createCertificate(cert_params, function (err, keys) {
     if (err) return done(err)

@@ -10,7 +10,7 @@
     "node-xmpp-server": "^2.1.2"
   },
   "devDependencies": {
-    "pem": "https://github.com/dodo/pem/tarball/altNames"
+    "pem": "^1.8.1"
   },
   "repository": "github:node-xmpp/node-xmpp",
   "homepage": "http://github.com/node-xmpp/node-xmpp",
