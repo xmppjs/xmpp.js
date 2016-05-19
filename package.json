@@ -23,7 +23,7 @@
     "node-xmpp-core": "^5.0.1"
   },
   "devDependencies": {
-    "node-xmpp-client": "^3.0.0",
-    "should": "^8.2.2"
+    "node-xmpp-client": "^3.0.1",
+    "should": "^8.3.2"
   }
 }
