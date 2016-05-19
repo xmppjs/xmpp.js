@@ -5,15 +5,15 @@ language: node_js
 node_js:
   - '0.10'
   - '0.12'
-  - '4.0'
-  - '5.0'
-  - 'stable'
+  - '4'
+  - '5'
+  - '6'
 
 before_install:
   - sudo apt-get update
-  - sudo apt-get install prosody luarocks
+  - sudo apt-get install prosody # luarocks
   - sudo service prosody stop
-  - sudo luarocks install luabitop
+  # - sudo luarocks install luabitop
   - sudo cp test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
   - sudo cp test/resources/mod_websocket.lua /usr/lib/prosody/modules/
 
