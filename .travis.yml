@@ -5,14 +5,14 @@ node_js:
   - '0.12'
   - '4'
   - '5'
-  - 'stable'
+  - '6'
 
 before_install:
   - sudo apt-get install prosody
   - sudo service prosody stop
   - sudo cp test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
 
-before_script: npm install -g mocha standard
+before_script: npm install mocha standard
 
 script:
   - npm run test
