@@ -46,7 +46,7 @@
     "grunt-mocha-phantomjs": "^2.0.0",
     "grunt-standard": "^2.0.0",
     "mocha": "^2.3.3",
-    "node-xmpp-server": "^2.1.0",
+    "node-xmpp-server": "^2.1.3",
     "should": "^8.0.2"
   },
   "browser": {
