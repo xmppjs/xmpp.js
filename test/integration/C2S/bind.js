@@ -58,7 +58,7 @@ function startClient (cb) {
 }
 
 describe('Stream resource bind', function () {
-  var server
+  var server, client
 
   afterEach(function (done) {
     server.end(done)
@@ -66,7 +66,7 @@ describe('Stream resource bind', function () {
 
   it('Should bind unmodified', function (done) {
     server = startServer('unmodified')
-    startClient(function (error, resource) {
+    client = startClient(function (error, resource) {
       if (error) {
         done(error)
       } else if (resource !== user.jid.resource) {
@@ -74,12 +74,13 @@ describe('Stream resource bind', function () {
       } else {
         done()
       }
+      client.end()
     })
   })
 
   it('Should bind modified', function (done) {
     server = startServer('modified')
-    startClient(function (error, resource) {
+    client = startClient(function (error, resource) {
       if (error) {
         done(error)
       } else if (resource !== user.jid.resource + '-' + 'mod') {
@@ -87,17 +88,19 @@ describe('Stream resource bind', function () {
       } else {
         done()
       }
+      client.end()
     })
   })
 
   it('Should not bind', function (done) {
     server = startServer('fail')
-    startClient(function (error) {
+    client = startClient(function (error) {
       if (!error) {
         done(new Error('No error'))
       } else {
         done()
       }
+      client.end()
     })
   })
 })

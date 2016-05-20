@@ -1,6 +1,6 @@
 'use strict'
 
-/* global describe, it */
+/* global describe, it, afterEach */
 
 var assert = require('assert')
 var TCPServer = require('../../../lib/C2S/TCP/Server')
@@ -25,6 +25,11 @@ describe('server end', function () {
   var client
 
   describe('TCP server', function () {
+    afterEach(function () {
+      client.end()
+      client = null
+    })
+
     it('disconnects all clients', function (done) {
       server = makeServer(TCPServer)
       server.listen(function (err) {
@@ -36,6 +41,7 @@ describe('server end', function () {
           host: 'localhost'
         })
         client.on('online', function () {
+          client.on('error', function () { })
           server.end()
           client.on('close', done)
         })

@@ -60,7 +60,7 @@ function startClient (cb) {
 }
 
 describe('Stream register', function () {
-  var server
+  var server, client
 
   afterEach(function (done) {
     server.end(done)
@@ -68,23 +68,25 @@ describe('Stream register', function () {
 
   it('Should register', function (done) {
     server = startServer('unmodified')
-    startClient(function (error) {
+    client = startClient(function (error) {
       if (error) {
         done(error)
       } else {
         done()
       }
+      client.end()
     })
   })
 
   it('Should not register', function (done) {
     server = startServer('fail')
-    startClient(function (error) {
+    client = startClient(function (error) {
       if (!error) {
         done(new Error('No error'))
       } else {
         done()
       }
+      client.end()
     })
   })
 })
