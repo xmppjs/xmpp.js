@@ -42,7 +42,9 @@ function startServer (action) {
 
 function startClient (cb) {
   var client = new Client({
+    host: 'localhost',
     jid: user.jid,
+    port: port,
     password: user.password,
     preferred: Plain.id
   })
