@@ -7,6 +7,18 @@ var assert = require('assert')
 var sinon = require('sinon')
 
 describe('S2S Router', function () {
+  describe('constructor', function () {
+    it('sets up secure domains using passed in as opts.secureDomains', function () {
+      var router = new Router(5269, 'localhost', {
+        secureDomains: ['nodexmpp.com', 'example.com']
+      })
+
+      assert.equal(router.getContext('nodexmpp.com').secureDomain, true)
+      assert.equal(router.getContext('example.com').secureDomain, true)
+      assert.equal(router.getContext('someotherdomain.com').secureDomain, undefined)
+    })
+  })
+
   describe('Incoming Server sendFeatures', function () {
     var attrs = {'xmlns:db': 'jabber:server:dialback',
     'xmlns:stream': 'http://etherx.jabber.org/streams',
