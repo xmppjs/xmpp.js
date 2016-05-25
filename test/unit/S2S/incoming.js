@@ -151,12 +151,12 @@ describe('S2S IncomingServer', function () {
       server.socket = {
         getPeerCertificate: sinon.stub().returns(
           { subject: {
-              C: 'US',
-              ST: 'NC',
-              L: 'Raleigh',
-              O: 'Example.com',
-              CN: 'example.com'
-            },
+            C: 'US',
+            ST: 'NC',
+            L: 'Raleigh',
+            O: 'Example.com',
+            CN: 'example.com'
+          },
             issuer: { C: 'US',
               ST: 'NC',
               L: 'Durham',
