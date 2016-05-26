@@ -6,6 +6,7 @@ var IncomingServer = require('../../../lib/S2S/session/incoming')
 var sinon = require('sinon')
 var assert = require('assert')
 var Element = require('node-xmpp-core').ltx.Element
+var tls = require('tls')
 
 describe('S2S IncomingServer', function () {
   var server = null
@@ -53,6 +54,23 @@ describe('S2S IncomingServer', function () {
   })
 
   describe('verifyCertificate', function () {
+    function FakeSocket () {}
+
+    // good aproximation of the server identity check in TLS wrapper
+    FakeSocket.prototype.checkServerIdentity = function () {
+      var cert = this.getPeerCertificate()
+      var verifyError = tls.checkServerIdentity(this.servername, cert)
+
+      if (verifyError) {
+        this.authorized = false
+        this.authorizationError = verifyError.code || verifyError.message
+      } else {
+        this.authorized = true
+      }
+    }
+
+    FakeSocket.prototype.getPeerCertificate = function () { throw new Error('Unimplemented Fake Socket Stub') }
+
     it('should call unauthorized method if fails TLS authorization', function () {
       server.socket = {
         authorized: false,
@@ -71,16 +89,17 @@ describe('S2S IncomingServer', function () {
     })
 
     it('should call unauthorized method if fails certificate identity check', function () {
-      server.fromDomain = 'xmpp.example.com'
-      server.socket = {
-        authorized: true,
-        getPeerCertificate: sinon.stub().returns({
-          subject: {CN: 'example.com'}
-        })
-      }
+      server.socket = new FakeSocket()
+      server.socket.servername = 'xmpp.example.com'
+
+      sinon.stub(server.socket, 'getPeerCertificate').returns({
+        subject: {CN: 'example.com'}
+      })
 
       var sendNotAuthorizedStub = sinon.stub(server, 'sendNotAuthorizedAndClose')
       var emitStub = sinon.stub(server, 'emit')
+
+      server.socket.checkServerIdentity()
 
       server.verifyCertificate()
 
@@ -90,17 +109,16 @@ describe('S2S IncomingServer', function () {
     })
 
     it('should call unauthorized method if fails certificate identity check 2', function () {
-      server.fromDomain = 'example.com'
-      server.socket = {
-        authorized: true,
-        getPeerCertificate: sinon.stub().returns({
-          subject: {CN: '*.example.com'}
-        })
-      }
+      server.socket = new FakeSocket()
+      server.socket.servername = 'example.com'
+      sinon.stub(server.socket, 'getPeerCertificate').returns({
+        subject: {CN: '*.example.com'}
+      })
 
       var sendNotAuthorizedStub = sinon.stub(server, 'sendNotAuthorizedAndClose')
       var emitStub = sinon.stub(server, 'emit')
 
+      server.socket.checkServerIdentity()
       server.verifyCertificate()
 
       sinon.assert.calledOnce(sendNotAuthorizedStub)
@@ -109,18 +127,17 @@ describe('S2S IncomingServer', function () {
     })
 
     it('should emit auth if passes authorization and identity check', function () {
-      server.fromDomain = 'example.com'
-      server.socket = {
-        authorized: true,
-        getPeerCertificate: sinon.stub().returns({
-          subjectaltname: 'DNS:example.com',
-          subject: {CN: '*.example.com'}
-        })
-      }
+      server.socket = new FakeSocket()
+      server.socket.servername = 'example.com'
+      sinon.stub(server.socket, 'getPeerCertificate').returns({
+        subjectaltname: 'DNS:example.com',
+        subject: {CN: '*.example.com'}
+      })
 
       var sendNotAuthorizedStub = sinon.stub(server, 'sendNotAuthorizedAndClose')
       var emitStub = sinon.stub(server, 'emit')
 
+      server.socket.checkServerIdentity()
       server.verifyCertificate()
 
       sinon.assert.notCalled(sendNotAuthorizedStub)
@@ -157,11 +174,11 @@ describe('S2S IncomingServer', function () {
             O: 'Example.com',
             CN: 'example.com'
           },
-            issuer: { C: 'US',
-              ST: 'NC',
-              L: 'Durham',
-              O: 'Realtime',
-            CN: '*.nodexmpp.com' }
+          issuer: { C: 'US',
+            ST: 'NC',
+            L: 'Durham',
+            O: 'Realtime',
+          CN: '*.nodexmpp.com' }
           }),
         renegotiate: sinon.stub().yields(null)
       }
@@ -231,7 +248,7 @@ describe('S2S IncomingServer', function () {
       assert(server.handleTlsNegotiation(new Element('starttls', { xmlns: server.NS_XMPP_TLS })))
 
       assertStanza(sendStub, '<proceed xmlns="urn:ietf:params:xml:ns:xmpp-tls"/>')
-      sinon.assert.calledWithExactly(setSecureStub, credentials, true)
+      sinon.assert.calledWithExactly(setSecureStub, credentials, true, undefined)
     })
   })
 
