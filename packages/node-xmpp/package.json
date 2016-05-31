@@ -1,0 +1,18 @@
+{
+  "name": "node-xmpp",
+  "version": "1.0.2",
+  "description": "XMPP for JavaScript",
+  "dependencies": {
+    "node-xmpp-client": "^3.0.0",
+    "node-xmpp-component": "^2.0.0",
+    "node-xmpp-core": "^5.0.0",
+    "node-xmpp-server": "^2.1.2"
+  },
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "http://github.com/node-xmpp/node-xmpp",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "license": "MIT",
+  "scripts": {
+    "preversion": "npm test"
+  }
+}

@@ -1,59 +1,15 @@
 {
-  "name": "node-xmpp",
-  "version": "1.0.2",
-  "description": "XMPP for JavaScript",
-  "author": "Astro",
-  "dependencies": {
-    "node-xmpp-client": "^3.0.0",
-    "node-xmpp-component": "^2.0.0",
-    "node-xmpp-core": "^5.0.0",
-    "node-xmpp-server": "^2.1.2"
-  },
+  "private": true,
   "devDependencies": {
-    "pem": "^1.8.1"
+    "lerna": "2.0.0-beta.15",
+    "mocha": "^2.5.3",
+    "pem": "^1.8.3",
+    "standard": "^7.1.1"
   },
-  "repository": "github:node-xmpp/node-xmpp",
-  "homepage": "http://github.com/node-xmpp/node-xmpp",
-  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
-  "maintainers": [
-    {
-      "name": "Astro",
-      "email": "astro@spaceboyz.net",
-      "web": "http://spaceboyz.net/~astro/"
-    },
-    {
-      "name": "Lloyd Watkin",
-      "email": "lloyd@evilprofessor.co.uk",
-      "web": "http://www.evilprofessor.co.uk"
-    }
-  ],
-  "contributors": [
-    "Stephan Maka",
-    "Derek Hammer",
-    "Daniel Zelisko",
-    "Michael Geers",
-    "Nolan Darilek",
-    "Nathan Rajlich",
-    "Dhruv Matani",
-    "Camilo Aguilar",
-    "Henry Chan",
-    "Justin Campbell",
-    "Trent Mick",
-    "Alexey Shamrin",
-    "Sonny Piers",
-    "Chaitanya Gupta",
-    "Иван",
-    "Julien Genestoux",
-    "Ian Langworth",
-    "Eelco Cramer",
-    "dodo",
-    "Markus Kohlhase"
-  ],
-  "license": "MIT",
   "scripts": {
-    "preversion": "npm test",
-    "unit": "mocha --recursive test/ -t 3000",
     "lint": "standard",
+    "unit": "mocha --recursive packages/*/test/ -t 5000",
+    "bootstrap": "lerna bootstrap",
     "test": "npm run unit && npm run lint"
   }
 }
