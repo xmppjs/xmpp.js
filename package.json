@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp-core",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "core files for the node-xmpp project",
   "scripts": {
     "preversion": "npm test",
