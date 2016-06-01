@@ -2,8 +2,8 @@
 
 Idiomatic XMPP server library for [Node.js](http://nodejs.org/)
 
-[![build status](https://img.shields.io/travis/node-xmpp/node-xmpp-server/master.svg?style=flat-square)](https://travis-ci.org/node-xmpp/node-xmpp-server/branches)
-[![Coverage Status](https://img.shields.io/coveralls/node-xmpp/node-xmpp-server.svg?style=flat-square)](https://coveralls.io/r/node-xmpp/node-xmpp-server)
+[![build status](https://img.shields.io/travis/node-xmpp/server/master.svg?style=flat-square)](https://travis-ci.org/node-xmpp/node-xmpp-server/branches)
+[![Coverage Status](https://img.shields.io/coveralls/node-xmpp/server.svg?style=flat-square)](https://coveralls.io/r/node-xmpp/node-xmpp-server)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com/)
 
 
