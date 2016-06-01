@@ -80,10 +80,6 @@ describe('TLS', function () {
           cl.connection.socket.authorized,
           'Client should have working tls'
         )
-        assert.ok(
-          client.connection.socket.authorized,
-          'Server should have working tls'
-        )
         done()
       })
       var cl = new xmpp.Client({

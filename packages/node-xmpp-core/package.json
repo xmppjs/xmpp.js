@@ -22,8 +22,7 @@
     "ltx": "^2.2.0",
     "node-xmpp-jid": "^2.3.0",
     "node-xmpp-stanza": "^1.1.0",
-    "reconnect-core": "https://github.com/dodo/reconnect-core/tarball/merged",
-    "node-xmpp-tls-connect": "^1.0.1"
+    "reconnect-core": "https://github.com/dodo/reconnect-core/tarball/merged"
   },
   "scripts": {
     "preversion": "npm test"
