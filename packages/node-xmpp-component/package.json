@@ -6,7 +6,6 @@
   "homepage": "https://github.com/node-xmpp/node-xmpp-component",
   "scripts": {
     "preversion": "npm test",
-    "lint": "standard",
     "unit": "mocha --recursive test/unit",
     "integration": "mocha --recursive -t 60000 test/integration",
     "test": "npm run unit && npm run lint"
@@ -16,14 +15,12 @@
     "component",
     "XMPP"
   ],
-  "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
   "license": "MIT",
   "bugs": "https://github.com/node-xmpp/node-xmpp-component/issues",
   "dependencies": {
     "node-xmpp-core": "^5.0.1"
   },
   "devDependencies": {
-    "node-xmpp-client": "^3.0.1",
-    "should": "^8.3.2"
+    "node-xmpp-client": "^3.0.1"
   }
 }

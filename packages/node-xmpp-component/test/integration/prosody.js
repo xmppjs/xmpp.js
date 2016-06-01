@@ -35,7 +35,7 @@ var connectClients = function (done) {
   })
 }
 
-describe('Integration tests', function () {
+describe.skip('Integration tests', function () {
   beforeEach(function (done) {
     options = {
       jid: 'component.localhost',

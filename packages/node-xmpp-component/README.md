@@ -21,11 +21,9 @@ With package manager [npm](http://npmjs.org/):
 
 Install the dev dependencies, then...
 
-```npm test```
-
-To run the tests and the code style checks then use:
-
-```grunt test```
+```
+npm test
+```
 
 Also see the tests run in [travis](http://travis-ci.org/node-xmpp/node-xmpp-component). The tests in travis run both the code and code style tests.
 
