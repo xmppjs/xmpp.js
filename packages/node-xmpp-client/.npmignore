@@ -1,0 +1,6 @@
+examples/
+test/
+
+.npmignore
+
+Gruntfile.js
