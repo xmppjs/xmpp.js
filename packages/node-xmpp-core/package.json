@@ -1,0 +1,31 @@
+{
+  "name": "node-xmpp-core",
+  "version": "5.0.2",
+  "description": "core files for the node-xmpp project",
+  "homepage": "https://github.com/node-xmpp/node-xmpp-core",
+  "repository": "github:node-xmpp/node-xmpp-core",
+  "bugs": "https://github.com/node-xmpp/node-xmpp-core/issues",
+  "keywords": [
+    "XMPP",
+    "JID",
+    "SRV",
+    "stanza",
+    "iq",
+    "message",
+    "presence"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "debug": "^2.2.0",
+    "inherits": "^2.0.1",
+    "lodash.assign": "^4.0.0",
+    "ltx": "^2.2.0",
+    "node-xmpp-jid": "^2.3.0",
+    "node-xmpp-stanza": "^1.1.0",
+    "reconnect-core": "https://github.com/dodo/reconnect-core/tarball/merged",
+    "node-xmpp-tls-connect": "^1.0.1"
+  },
+  "scripts": {
+    "preversion": "npm test"
+  }
+}

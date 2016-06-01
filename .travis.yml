@@ -9,3 +9,5 @@ node_js:
   - '6'
 
 before_script: npm run bootstrap
+
+after_script: npm run coveralls
