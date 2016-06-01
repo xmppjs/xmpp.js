@@ -43,8 +43,7 @@
     "./srv": false,
     "dns": false,
     "tls": false,
-    "path": false,
-    "crypto": false
+    "path": false
   },
   "homepage": "https://github.com/node-xmpp/node-xmpp-client"
 }
