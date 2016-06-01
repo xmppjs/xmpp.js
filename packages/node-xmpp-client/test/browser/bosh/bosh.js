@@ -2,8 +2,9 @@
 
 'use strict'
 
-describe.skip('BOSH Browser tests', function () {
+describe('BOSH Browser tests', function () {
   var jid = Math.random().toString(36).substring(7) + '@localhost'
+  var url = 'http://localhost:5280/http-bind'
   var password = 'password'
   var client = null
   var resource = 'test'
@@ -14,7 +15,7 @@ describe.skip('BOSH Browser tests', function () {
       password: password,
       register: true,
       bosh: {
-        url: 'http://localhost:5280/http-bind'
+        url: url
       },
       preferred: 'PLAIN'
     })
@@ -36,7 +37,7 @@ describe.skip('BOSH Browser tests', function () {
       jid: jid,
       password: 'not ' + password,
       bosh: {
-        url: 'http://localhost:5280/http-bind/'
+        url: url
       },
       preferred: 'PLAIN'
     })
@@ -57,7 +58,7 @@ describe.skip('BOSH Browser tests', function () {
       jid: jid + '/' + resource,
       password: password,
       bosh: {
-        url: 'http://localhost:5280/http-bind/'
+        url: url
       },
       preferred: 'PLAIN'
     })
@@ -77,7 +78,7 @@ describe.skip('BOSH Browser tests', function () {
       jid: jid,
       password: password,
       bosh: {
-        url: 'http://localhost:5280/http-bind/'
+        url: url
       },
       preferred: 'PLAIN'
     })
@@ -97,7 +98,7 @@ describe.skip('BOSH Browser tests', function () {
       jid: jid,
       password: 'not ' + password,
       bosh: {
-        url: 'http://localhost:5280/http-bind/'
+        url: url
       },
       register: true,
       preferred: 'PLAIN'
@@ -119,7 +120,7 @@ describe.skip('BOSH Browser tests', function () {
       jid: jid,
       password: password,
       bosh: {
-        url: 'http://localhost:5280/http-bind/'
+        url: url
       },
       preferred: 'PLAIN'
     })
@@ -143,7 +144,7 @@ describe.skip('BOSH Browser tests', function () {
       jid: jid,
       password: password,
       bosh: {
-        url: 'http://localhost:5280/http-bind/'
+        url: url
       },
       preferred: 'PLAIN'
     })
@@ -174,7 +175,7 @@ describe.skip('BOSH Browser tests', function () {
       jid: jid,
       password: password,
       bosh: {
-        url: 'http://localhost:5280/http-bind/'
+        url: url
       },
       preferred: 'PLAIN'
     })
@@ -199,7 +200,7 @@ describe.skip('BOSH Browser tests', function () {
       jid: jid,
       password: password,
       bosh: {
-        url: 'http://localhost:5280/bosh-bind/'
+        url: url
       },
       preferred: 'PLAIN'
     })
@@ -219,7 +220,7 @@ describe.skip('BOSH Browser tests', function () {
         jid: jid,
         password: password,
         bosh: {
-          url: 'http://localhost:5280/http-bind/'
+          url: url
         },
         preferred: 'PLAIN'
       })
@@ -242,7 +243,7 @@ describe.skip('BOSH Browser tests', function () {
         jid: jid,
         password: password,
         bosh: {
-          url: 'http://localhost:5280/http-bind/'
+          url: url
         },
         preferred: 'DIGEST-MD5'
       })
@@ -269,7 +270,7 @@ describe.skip('BOSH Browser tests', function () {
         password: password,
         host: 'localhost',
         bosh: {
-          url: 'http://localhost:5280/http-bind/'
+          url: url
         },
         preferred: 'ANONYMOUS'
       })

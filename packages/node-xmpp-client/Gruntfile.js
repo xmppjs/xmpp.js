@@ -33,48 +33,21 @@ module.exports = function (grunt) {
           }
         }
       }
-    },
-    browserify: {
-      dist: {
-        files: {
-          'bundle.js': ['./browserify.js']
-        },
-        options: {
-          alias: 'request:browser-request',
-          ignore: ['faye-websocket', './srv', 'dns', 'tls']
-        }
-      }
-    },
-    clean: ['bundle.js'],
-    watch: {
-      scripts: {
-        files: ['**/*.js'],
-        tasks: ['browserify', 'connect'],
-        options: {
-          spawn: false
-        }
-      },
-      connect: {
-        files: ['**/*.js']
-      }
     }
   })
 
   // Load the plugins
   grunt.loadNpmTasks('grunt-mocha-cli')
-  grunt.loadNpmTasks('grunt-browserify')
-  grunt.loadNpmTasks('grunt-contrib-connect')
-  grunt.loadNpmTasks('grunt-contrib-clean')
   grunt.loadNpmTasks('grunt-mocha-phantomjs')
   grunt.loadNpmTasks('grunt-contrib-connect')
 
   // Configure tasks
   grunt.registerTask('default', ['test'])
-  grunt.registerTask('test', ['clean', 'mochacli:unit', 'browserify'])
+  grunt.registerTask('test', ['mochacli:unit'])
   grunt.registerTask('integration-test', ['mochacli:integration', 'test'])
-  grunt.registerTask('browser-test', ['browserify', 'connect', 'prosody-start', 'mocha_phantomjs', 'prosody-stop'])
+  grunt.registerTask('browser-test', ['connect', 'prosody-start', 'mocha_phantomjs', 'prosody-stop'])
   grunt.registerTask('full-test', ['test', 'integration-test', 'browser-test'])
-  grunt.registerTask('dev', ['browserify', 'connect', 'watch'])
+  grunt.registerTask('dev', ['connect'])
 
   grunt.registerTask('prosody-start', 'Start Prosody', function () {
     helper.startServer(this.async())
