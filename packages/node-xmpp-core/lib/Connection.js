@@ -6,7 +6,7 @@ var inherits = require('inherits')
 var Element = require('node-xmpp-stanza').Element
 var reconnect = require('reconnect-core')
 var StreamParser = require('./StreamParser')
-var starttls = require('node-xmpp-tls-connect')
+var tls = require('tls')
 var debug = require('debug')('xmpp:connection')
 var assign = require('lodash.assign')
 
@@ -324,20 +324,33 @@ Connection.prototype.setSecure = function (credentials, isServer, servername) {
     this.socket.clearTimer()
   }
 
-  var cleartext = starttls({
-    socket: this.socket,
-    rejectUnauthorized: this.rejectUnauthorized,
-    credentials: credentials || this.credentials,
-    requestCert: this.requestCert,
-    isServer: !!isServer,
-    servername: isServer && servername
-  }, function () {
-    this.isSecure = true
-    this.once('disconnect', function () {
-      this.isSecure = false
+  var cleartext
+  var self = this
+
+  function callback () {
+    self.isSecure = true
+    self.once('disconnect', function () {
+      self.isSecure = false
     })
     cleartext.emit('connect', cleartext)
-  }.bind(this))
+  }
+
+  if (!isServer) {
+    cleartext = tls.connect(assign(this._credentials, {
+      socket: this.socket,
+      rejectUnauthorized: this.rejectUnauthorized,
+      servername: servername
+    }), callback)
+  } else {
+    cleartext = new tls.TLSSocket(this.socket, {
+      secureContext: credentials,
+      rejectUnauthorized: this.rejectUnauthorized,
+      requestCert: this.requestCert,
+      isServer: true,
+      servername: servername
+    })
+    cleartext.once('secureConnect', callback)
+  }
   cleartext.on('clientError', this.emit.bind(this, 'error'))
   if (!this.reconnect) {
     this.reconnect = true // need this so stopParser works properly

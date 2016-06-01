@@ -80,6 +80,7 @@ Session.prototype._socketConnectionToHost = function (opts) {
     })
   } else {
     if (opts.credentials) {
+      this.connection._credentials = opts.credentials
       this.connection.credentials = tls
         .createSecureContext(opts.credentials)
     }
