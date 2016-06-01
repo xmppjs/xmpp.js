@@ -2,7 +2,7 @@
 
 'use strict'
 
-describe('BOSH Browser tests', function () {
+describe.skip('BOSH Browser tests', function () {
   var jid = Math.random().toString(36).substring(7) + '@localhost'
   var url = 'http://localhost:5280/http-bind'
   var password = 'password'
