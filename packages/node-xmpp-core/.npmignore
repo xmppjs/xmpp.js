@@ -1,0 +1,10 @@
+coverage/
+examples/
+test/
+
+.editorconfig
+.gitignore
+.npmignore
+.travis.yml
+
+CONTRIBUTING.md
