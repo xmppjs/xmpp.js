@@ -4,12 +4,17 @@
     "lerna": "2.0.0-beta.15",
     "mocha": "^2.5.3",
     "pem": "^1.8.3",
-    "standard": "^7.1.1"
+    "standard": "^7.1.1",
+    "coveralls": "^2.11.6",
+    "istanbul": "^0.4.2",
+    "sinon": "^1.17.1"
   },
   "scripts": {
     "lint": "standard",
     "unit": "mocha --recursive packages/*/test/ -t 5000",
     "bootstrap": "lerna bootstrap",
-    "test": "npm run unit && npm run lint"
+    "test": "npm run unit && npm run lint && npm run coverage",
+    "coverage": "istanbul cover _mocha --report lcovonly -- -R spec --recursive packages/*/test/ -t 5000",
+    "coveralls": "cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   }
 }

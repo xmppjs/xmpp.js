@@ -22,7 +22,9 @@ With package manager [npm](http://npmjs.org/):
 
 Install the dev dependencies, then...
 
-```npm test```
+```
+npm test
+```
 
 Also see the tests run in [travis](http://travis-ci.org/node-xmpp/node-xmpp-core). The tests in travis run both the code and code style tests.
 
