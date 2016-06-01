@@ -63,6 +63,7 @@ describe('Stream resource bind', function () {
   var server, client
 
   afterEach(function (done) {
+    client.end()
     server.end(done)
   })
 
@@ -76,7 +77,6 @@ describe('Stream resource bind', function () {
       } else {
         done()
       }
-      client.end()
     })
   })
 
@@ -90,7 +90,6 @@ describe('Stream resource bind', function () {
       } else {
         done()
       }
-      client.end()
     })
   })
 
@@ -102,7 +101,6 @@ describe('Stream resource bind', function () {
       } else {
         done()
       }
-      client.end()
     })
   })
 })

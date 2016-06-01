@@ -65,6 +65,7 @@ describe('Stream register', function () {
   var server, client
 
   afterEach(function (done) {
+    client.end()
     server.end(done)
   })
 
@@ -76,7 +77,6 @@ describe('Stream register', function () {
       } else {
         done()
       }
-      client.end()
     })
   })
 
@@ -88,7 +88,6 @@ describe('Stream register', function () {
       } else {
         done()
       }
-      client.end()
     })
   })
 })
