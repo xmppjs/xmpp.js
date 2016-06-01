@@ -11,6 +11,7 @@
     "should": "^8.2.2"
   },
   "scripts": {
+    "postinstall": "npm run bootstrap",
     "lint": "standard",
     "unit": "mocha --recursive packages/*/test/ -t 5000",
     "bootstrap": "lerna bootstrap",
