@@ -70,7 +70,7 @@ stanza, before sending it out the wire.
 `node-xmpp-client` now comes with a prebuilt browser bundle:
 
 ```html
-<script src="/node_modules/node-xmpp-client/node-xmpp-browser.js"></script>
+<script src="/node_modules/node-xmpp-client/bundle.js"></script>
 <script type="text/javascript">
     var client = new XMPP.Client(opts);
 </script>
