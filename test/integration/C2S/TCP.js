@@ -38,6 +38,7 @@ describe('C2S TCP server client', function () {
       })
       client.on('error', done)
       client.on('online', function () {
+        client.removeListener('error', done)
         done()
       })
     })

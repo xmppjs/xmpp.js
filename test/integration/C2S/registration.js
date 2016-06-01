@@ -8,7 +8,7 @@ var Plain = XMPP.auth.Plain
 var JID = XMPP.JID
 var Client = require('node-xmpp-client')
 
-var port = 5222
+var port = 5223
 var user = {
   jid: new JID('me@localhost/res'),
   password: 'secret'
@@ -43,6 +43,8 @@ function startServer (action) {
 
 function startClient (cb) {
   var client = new Client({
+    host: 'localhost',
+    port: port,
     jid: user.jid,
     password: user.password,
     preferred: Plain.id,
@@ -60,15 +62,16 @@ function startClient (cb) {
 }
 
 describe('Stream register', function () {
-  var server
+  var server, client
 
   afterEach(function (done) {
+    client.end()
     server.end(done)
   })
 
   it('Should register', function (done) {
     server = startServer('unmodified')
-    startClient(function (error) {
+    client = startClient(function (error) {
       if (error) {
         done(error)
       } else {
@@ -79,7 +82,7 @@ describe('Stream register', function () {
 
   it('Should not register', function (done) {
     server = startServer('fail')
-    startClient(function (error) {
+    client = startClient(function (error) {
       if (!error) {
         done(new Error('No error'))
       } else {
