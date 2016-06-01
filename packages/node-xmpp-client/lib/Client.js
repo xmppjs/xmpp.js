@@ -14,6 +14,7 @@ var XOAuth2 = require('./authentication/xoauth2')
 var External = require('./authentication/external')
 var exec = require('child_process').exec
 var debug = require('debug')('xmpp:client')
+var path = require('path')
 
 var NS_CLIENT = 'jabber:client'
 var NS_REGISTER = 'jabber:iq:register'
@@ -178,8 +179,7 @@ Client.prototype._connectViaBosh = function () {
   debug('load bosh prebind')
   var cb = this.options.bosh.prebind
   delete this.options.bosh.prebind
-  var cmd = 'node ' + __dirname +
-    '/prebind.js '
+  var cmd = 'node ' + path.join(__dirname, 'prebind.js')
   delete this.options.bosh.prebind
   cmd += encodeURI(JSON.stringify(this.options))
   exec(

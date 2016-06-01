@@ -8,7 +8,7 @@ var Stanza = require('node-xmpp-core').Stanza
 
 require('should')
 
-describe('Socket connections', function () {
+describe.skip('Socket connections', function () {
   var jid = Math.random().toString(36).substring(7) + '@localhost'
   var password = 'password'
   var client = null

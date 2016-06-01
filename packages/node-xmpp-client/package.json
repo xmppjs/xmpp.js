@@ -54,7 +54,8 @@
     "node-stringprep": false,
     "faye-websocket": false,
     "./srv": false,
-    "dns": false
+    "dns": false,
+    "path": false
   },
   "homepage": "https://github.com/node-xmpp/node-xmpp-client"
 }

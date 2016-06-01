@@ -8,7 +8,7 @@ var Element = require('node-xmpp-core').Element
 
 require('should')
 
-describe('BOSH connections', function () {
+describe.skip('BOSH connections', function () {
   var jid = Math.random().toString(36).substring(7) + '@localhost'
   var password = 'password'
   var client = null
