@@ -5,13 +5,6 @@ var helper = require('./test/helper')
 module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    standard: {
-      app: {
-        src: [
-          '{,examples/,lib/,test/}**/*.js'
-        ]
-      }
-    },
     mochacli: {
       unit: {
         options: { files: [ './test/unit/**/*.js' ] }
@@ -44,7 +37,7 @@ module.exports = function (grunt) {
     browserify: {
       dist: {
         files: {
-          'node-xmpp-browser.js': ['./browserify.js']
+          'bundle.js': ['./browserify.js']
         },
         options: {
           alias: 'request:browser-request',
@@ -52,7 +45,7 @@ module.exports = function (grunt) {
         }
       }
     },
-    clean: ['node-xmpp-browser.js'],
+    clean: ['bundle.js'],
     watch: {
       scripts: {
         files: ['**/*.js'],
@@ -64,49 +57,20 @@ module.exports = function (grunt) {
       connect: {
         files: ['**/*.js']
       }
-    },
-    'mocha_istanbul': {
-      coveralls: {
-        src: 'test/unit',
-        options: {
-          coverage: true,
-          legend: true,
-          /* check: {
-              lines: 90,
-              statements: 90
-          }, */
-          root: './lib',
-          reportFormats: [ 'lcov', 'html' ]
-        }
-      }
     }
   })
 
-  grunt.event.on('coverage', function (lcov, done) {
-    require('coveralls').handleInput(lcov, function (error) {
-      if (error) {
-        console.log(error)
-        return done(error)
-      }
-      done()
-    })
-  })
-
   // Load the plugins
-  grunt.loadNpmTasks('grunt-standard')
   grunt.loadNpmTasks('grunt-mocha-cli')
   grunt.loadNpmTasks('grunt-browserify')
   grunt.loadNpmTasks('grunt-contrib-connect')
   grunt.loadNpmTasks('grunt-contrib-clean')
-  grunt.loadNpmTasks('grunt-contrib-watch')
-  grunt.loadNpmTasks('grunt-mocha-istanbul')
   grunt.loadNpmTasks('grunt-mocha-phantomjs')
   grunt.loadNpmTasks('grunt-contrib-connect')
 
   // Configure tasks
   grunt.registerTask('default', ['test'])
-  grunt.registerTask('coveralls', ['mocha_istanbul:coveralls'])
-  grunt.registerTask('test', ['clean', 'mochacli:unit', 'standard', 'browserify', 'coveralls'])
+  grunt.registerTask('test', ['clean', 'mochacli:unit', 'browserify'])
   grunt.registerTask('integration-test', ['mochacli:integration', 'test'])
   grunt.registerTask('browser-test', ['browserify', 'connect', 'prosody-start', 'mocha_phantomjs', 'prosody-stop'])
   grunt.registerTask('full-test', ['test', 'integration-test', 'browser-test'])
