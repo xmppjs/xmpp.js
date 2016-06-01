@@ -12,6 +12,7 @@ var user = {
 }
 
 var tls
+var C2S_PORT = 45552
 
 before(function (done) {
   var certParams = {
@@ -32,11 +33,11 @@ var c2s = null
 function startServer (done) {
   // Sets up the server.
   c2s = new xmpp.server.C2S.TCPServer({
-    port: 5222,
     domain: 'localhost',
     requestCert: true,
     rejectUnauthorized: false,
-    tls: tls
+    tls: tls,
+    port: C2S_PORT
   })
 
   c2s.on('connection', function (client) {
@@ -88,7 +89,9 @@ describe('TLS', function () {
       var cl = new xmpp.Client({
         jid: user.jid,
         password: user.password,
-        credentials: tls
+        credentials: tls,
+        port: C2S_PORT,
+        host: 'localhost'
       })
       cl.on('error', function (e) {
         done(e)
@@ -98,7 +101,9 @@ describe('TLS', function () {
     it('should accept plain authentication', function (done) {
       var cl = new xmpp.Client({
         jid: user.jid,
-        password: user.password
+        password: user.password,
+        port: C2S_PORT,
+        host: 'localhost'
       })
       cl.once('online', function () {
         done()
@@ -111,7 +116,9 @@ describe('TLS', function () {
     it('should not accept plain authentication', function (done) {
       var cl = new xmpp.Client({
         jid: user.jid,
-        password: user.password + 'abc'
+        password: user.password + 'abc',
+        port: C2S_PORT,
+        host: 'localhost'
       })
 
       cl.once('online', function () {

@@ -5,11 +5,13 @@
     "mocha": "^2.5.3",
     "pem": "^1.8.3",
     "standard": "^7.1.1",
-    "coveralls": "^2.11.6",
+    "coveralls": "^2.11.8",
     "istanbul": "^0.4.2",
-    "sinon": "^1.17.1"
+    "sinon": "^1.17.3",
+    "should": "^8.2.2"
   },
   "scripts": {
+    "postinstall": "npm run bootstrap",
     "lint": "standard",
     "unit": "mocha --recursive packages/*/test/ -t 5000",
     "bootstrap": "lerna bootstrap",
