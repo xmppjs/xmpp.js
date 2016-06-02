@@ -3,7 +3,7 @@
 /* global describe, it, beforeEach, afterEach */
 
 var Server = require('node-xmpp-server').C2S.WebSocketServer
-var Client = require('../../index')
+var Client = require('../index')
 
 var PORT = 5290
 var server

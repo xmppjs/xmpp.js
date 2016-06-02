@@ -15,7 +15,8 @@
     "lint": "standard",
     "unit": "mocha --recursive packages/*/test/ -t 5000",
     "bootstrap": "lerna bootstrap",
-    "test": "npm run unit && npm run lint && lerna run test && npm run coverage",
+    "integration": "mocha --recursive test/integration -t 5000",
+    "test": "npm run coverage && npm run lint && lerna run test",
     "coverage": "istanbul cover _mocha --report lcovonly -- -R spec --recursive packages/*/test/ -t 5000",
     "coveralls": "cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   }

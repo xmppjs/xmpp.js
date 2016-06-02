@@ -2,7 +2,7 @@
 
 'use strict'
 
-var Anonymous = require('../../../../lib/authentication/anonymous')
+var Anonymous = require('../../lib/authentication/anonymous')
 
 var mech = new Anonymous()
 

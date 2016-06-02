@@ -1,4 +1,4 @@
-sudo: false
+sudo: required
 
 language: node_js
 
@@ -7,5 +7,17 @@ node_js:
   - '4'
   - '5'
   - '6'
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install prosody # luarocks
+  - sudo service prosody stop
+  # - sudo luarocks install luabitop
+  - sudo cp test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
+  - sudo cp test/resources/mod_websocket.lua /usr/lib/prosody/modules/
+
+script:
+  - npm run test
+  - npm run integration
 
 after_script: npm run coveralls

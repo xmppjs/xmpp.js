@@ -10,7 +10,7 @@ module.exports = function (server) {
     }
 
     connections.add(connection)
-    connection.on('close', function () {
+    connection.once('close', function () {
       connections.delete(connection)
     })
   })
