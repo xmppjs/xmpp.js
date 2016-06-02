@@ -2,7 +2,7 @@
 
 'use strict'
 
-var Client = require('../../index')
+var Client = require('../index')
 var assert = require('assert')
 var C2SServer = require('node-xmpp-server').C2SServer
 

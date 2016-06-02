@@ -2,7 +2,7 @@
 
 'use strict'
 
-var XOAuth2 = require('../../../../lib/authentication/xoauth2')
+var XOAuth2 = require('../../lib/authentication/xoauth2')
 
 var mech = new XOAuth2()
 

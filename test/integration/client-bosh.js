@@ -2,13 +2,13 @@
 
 'use strict'
 
-var Client = require('../../index')
+var Client = require('../../packages/node-xmpp-client')
 var helper = require('../helper')
-var Stanza = require('node-xmpp-core').Stanza
+var Element = Client.Element
 
 require('should')
 
-describe.skip('Socket connections', function () {
+describe('BOSH connections', function () {
   var jid = Math.random().toString(36).substring(7) + '@localhost'
   var password = 'password'
   var client = null
@@ -19,16 +19,18 @@ describe.skip('Socket connections', function () {
   })
 
   afterEach(function (done) {
-    helper.stopServer(done)
     if (client) client.end()
+    helper.stopServer(done)
   })
 
   it('Can register an account', function (done) {
     client = new Client({
       jid: jid,
       password: password,
-      host: 'localhost',
-      register: true
+      register: true,
+      bosh: {
+        url: 'http://localhost:5280/http-bind/'
+      }
     })
     client.on('online', function (data) {
       var bareJid = data.jid.local + '@' + data.jid.domain
@@ -43,7 +45,9 @@ describe.skip('Socket connections', function () {
     client = new Client({
       jid: jid,
       password: 'not ' + password,
-      host: 'localhost'
+      bosh: {
+        url: 'http://localhost:5280/http-bind/'
+      }
     })
     client.on('online', function () {
       done('Should not have connected')
@@ -60,7 +64,9 @@ describe.skip('Socket connections', function () {
     client = new Client({
       jid: jid + '/' + resource,
       password: password,
-      host: 'localhost'
+      bosh: {
+        url: 'http://localhost:5280/http-bind/'
+      }
     })
     client.on('online', function (data) {
       var bareJid = data.jid.local + '@' + data.jid.domain
@@ -76,7 +82,9 @@ describe.skip('Socket connections', function () {
     client = new Client({
       jid: jid,
       password: password,
-      host: 'localhost'
+      bosh: {
+        url: 'http://localhost:5280/http-bind/'
+      }
     })
     client.on('online', function (data) {
       var bareJid = data.jid.local + '@' + data.jid.domain
@@ -92,7 +100,9 @@ describe.skip('Socket connections', function () {
     client = new Client({
       jid: jid,
       password: 'not ' + password,
-      host: 'localhost',
+      bosh: {
+        url: 'http://localhost:5280/http-bind/'
+      },
       register: true
     })
     client.on('online', function () {
@@ -110,12 +120,14 @@ describe.skip('Socket connections', function () {
     client = new Client({
       jid: jid,
       password: password,
-      host: 'localhost'
+      bosh: {
+        url: 'http://localhost:5280/http-bind/'
+      }
     })
 
-    var ping = new Stanza('iq', {
-      id: '123', type: 'get'
-    }).c('ping', { xmlns: 'urn:xmpp:ping' })
+    var ping = new Element(
+      'iq', { id: '123', type: 'get' }
+    ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
     client.on('online', function () {
       client.send(ping)
@@ -126,14 +138,40 @@ describe.skip('Socket connections', function () {
     })
   })
 
+  it('Can send and receive stanzas', function (done) {
+    client = new Client({
+      jid: jid,
+      password: password,
+      bosh: {
+        url: 'http://localhost:5280/http-bind/'
+      }
+    })
+
+    var ping = new Element(
+      'iq', { id: '123', type: 'get' }
+    ).c('ping', { xmlns: 'urn:xmpp:ping' })
+
+    var counter = 0
+    client.on('online', function () {
+      client.send(ping)
+      client.on('stanza', function () {
+        ++counter
+        if (counter > 6) return done()
+        client.send(ping)
+      })
+    })
+  })
+
   it('Sends error for bad stanza', function (done) {
     client = new Client({
       jid: jid,
       password: password,
-      host: 'localhost'
+      bosh: {
+        url: 'http://localhost:5280/http-bind/'
+      }
     })
 
-    var badPing = new Stanza(
+    var badPing = new Element(
       'wtf', { id: '123', type: 'get' }
     ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
@@ -147,12 +185,14 @@ describe.skip('Socket connections', function () {
     })
   })
 
-  it("Can't connect when server is stopped", function (done) {
+  it('Errors when server is stopped', function (done) {
     helper.stopServer(function () {
       client = new Client({
         jid: jid,
         password: password,
-        host: 'localhost'
+        bosh: {
+          url: 'http://localhost:5280/http-bind/'
+        }
       })
       client.on('error', function (error) {
         error.message.should.match(/connect ECONNREFUSED/)
@@ -167,14 +207,33 @@ describe.skip('Socket connections', function () {
     })
   })
 
-  it('Disconects', function (done) {
+  it('Errors when providing bad BOSH url', function (done) {
     client = new Client({
       jid: jid,
       password: password,
-      host: 'localhost'
+      bosh: {
+        url: 'http://localhost:5280/bosh-bind/'
+      }
+    })
+    client.on('error', function (error) {
+      error.message.should.equal('HTTP status 404')
+      done()
+    })
+    client.on('online', function () {
+      done('Should not have connected')
+    })
+  })
+
+  it('Disconnects', function (done) {
+    client = new Client({
+      jid: jid,
+      password: password,
+      bosh: {
+        url: 'http://localhost:5280/http-bind/'
+      }
     })
 
-    var ping = new Stanza(
+    var ping = new Element(
       'iq', { id: '123', type: 'get' }
     ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
@@ -188,16 +247,40 @@ describe.skip('Socket connections', function () {
     })
   })
 
+  describe('Prebind', function () {
+    it('Returns RID and SID', function (done) {
+      new Client({ // eslint-disable-line
+        jid: jid,
+        password: password,
+        preferred: 'PLAIN',
+        wait: '60',
+        bosh: {
+          url: 'http://localhost:5280/http-bind',
+          prebind: function (error, data) {
+            if (error) return done(error)
+            data.rid.should.exist
+            data.rid.length.should.be.above(5)
+            data.sid.should.exist
+            data.sid.length.should.be.above(5)
+            done()
+          }
+        }
+      })
+    })
+  })
+
   describe('Authentication', function () {
     it('Can connect using PLAIN authentication', function (done) {
       client = new Client({
         jid: jid,
         password: password,
-        host: 'localhost',
+        bosh: {
+          url: 'http://localhost:5280/http-bind/'
+        },
         preferred: 'PLAIN'
       })
 
-      var ping = new Stanza(
+      var ping = new Element(
         'iq', { id: '123', type: 'get' }
       ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
@@ -214,11 +297,13 @@ describe.skip('Socket connections', function () {
       client = new Client({
         jid: jid,
         password: password,
-        host: 'localhost',
+        bosh: {
+          url: 'http://localhost:5280/http-bind/'
+        },
         preferred: 'DIGEST-MD5'
       })
 
-      var ping = new Stanza(
+      var ping = new Element(
         'iq', { id: '123', type: 'get' }
       ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
@@ -236,10 +321,13 @@ describe.skip('Socket connections', function () {
         jid: '@anon.localhost',
         password: password,
         host: 'localhost',
+        bosh: {
+          url: 'http://localhost:5280/http-bind/'
+        },
         preferred: 'ANONYMOUS'
       })
 
-      var ping = new Stanza(
+      var ping = new Element(
         'iq', { id: '123', type: 'get' }
       ).c('ping', { xmlns: 'urn:xmpp:ping' })
 

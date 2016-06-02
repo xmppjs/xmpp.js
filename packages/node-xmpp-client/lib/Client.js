@@ -179,9 +179,7 @@ Client.prototype._connectViaBosh = function () {
   debug('load bosh prebind')
   var cb = this.options.bosh.prebind
   delete this.options.bosh.prebind
-  var cmd = 'node ' + path.join(__dirname, 'prebind.js')
-  delete this.options.bosh.prebind
-  cmd += encodeURI(JSON.stringify(this.options))
+  var cmd = 'node ' + path.join(__dirname, 'prebind.js') + ' ' + encodeURI(JSON.stringify(this.options))
   exec(
     cmd,
     function (error, stdout, stderr) {
