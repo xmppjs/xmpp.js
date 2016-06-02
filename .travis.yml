@@ -1,4 +1,5 @@
 sudo: required
+
 dist: trusty
 
 language: node_js
@@ -9,11 +10,16 @@ node_js:
   - '5'
   - '6'
 
+addons:
+  apt:
+    packages:
+    - prosody
+    - lua-bitop
+    - lua-sec
+    - lua-event
+
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y prosody # luarocks
   - sudo service prosody stop
-  # - sudo luarocks install luabitop
   - sudo cp test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
   - sudo cp test/resources/mod_websocket.lua /usr/lib/prosody/modules/
 
