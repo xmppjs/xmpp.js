@@ -10,7 +10,7 @@ var MD5 = require('md5.js')
  */
 function md5 (s, encoding) {
   // we ignore crypto in the browser field of package.json
-  var hash = crypto ? crypto.createHash('md5') : new MD5()
+  var hash = crypto.createHash ? crypto.createHash('md5') : new MD5()
   return hash.update(s, 'binary').digest(encoding || 'binary')
 }
 function md5Hex (s) {
