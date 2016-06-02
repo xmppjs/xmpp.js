@@ -2,10 +2,10 @@
 
 /* global describe, it, beforeEach, afterEach */
 
-var Component = require('../../index')
-var Stanza = require('node-xmpp-core').Stanza
-var Client = require('node-xmpp-client')
-var exec = require('child_process').exec
+var Component = require('../../packages/node-xmpp-component')
+var Stanza = require('../../packages/node-xmpp-core').Stanza
+var Client = require('../../packages/node-xmpp-client')
+var helper = require('../helper')
 
 require('should')
 
@@ -35,7 +35,7 @@ var connectClients = function (done) {
   })
 }
 
-describe.skip('Integration tests', function () {
+describe('Component', function () {
   beforeEach(function (done) {
     options = {
       jid: 'component.localhost',
@@ -44,10 +44,8 @@ describe.skip('Integration tests', function () {
       port: 5347
     }
     user = (+new Date()).toString(36)
-    exec('sudo service prosody start', function () {
-      setTimeout(function () {
-        connectClients(done)
-      }, 1000)
+    helper.startServer(function () {
+      connectClients(done)
     })
   })
 
@@ -117,6 +115,6 @@ describe.skip('Integration tests', function () {
     component.on('close', function () {
       done()
     })
-    exec('sudo service prosody stop', function () {})
+    helper.stopServer()
   })
 })
