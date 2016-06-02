@@ -9,7 +9,7 @@ var inherits = core.inherits
 var ws = require('ws')
  // we ignore ws in the browser field of package.json
 var WebSocket = ws.Server ? ws : window.WebSocket
-var debug = require('debug')('xmpp:client:websockets')
+var debug = require('debug')('xmpp:client:websocket')
 
 var NS_FRAMING = 'urn:ietf:params:xml:ns:xmpp-framing'
 
@@ -18,7 +18,9 @@ function WSConnection (opts) {
 
   this.url = opts.websocket.url
   this.jid = opts.jid
-  this.xmlns = {}
+  this.xmlns = {
+    '': NS_FRAMING
+  }
   this.websocket = new WebSocket(this.url, ['xmpp'])
   this.websocket.onopen = this.onopen.bind(this)
   this.websocket.onmessage = this.onmessage.bind(this)
@@ -105,7 +107,6 @@ WSConnection.prototype.startStream = function () {
   if (this.xmppVersion) attrs.version = this.xmppVersion
   if (this.streamTo) attrs.to = this.streamTo
   if (this.jid) attrs.to = this.jid.domain
-  attrs['xmlns:stream'] = Connection.NS_STREAM
 
   this.send(new Element('open', attrs))
 
@@ -114,6 +115,11 @@ WSConnection.prototype.startStream = function () {
 
 WSConnection.prototype.send = function (stanza) {
   if (stanza.root) stanza = stanza.root()
+
+  if (!stanza.attrs.xmlns && (stanza.is('iq') || stanza.is('presence') || stanza.is('message'))) {
+    stanza.attrs.xmlns = 'jabber:client'
+  }
+
   stanza = stanza.toString()
   debug('ws send -->', stanza)
   this.websocket.send(stanza)

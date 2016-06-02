@@ -4,28 +4,22 @@ modules_enabled = {
   "tls";
   "dialback";
   "disco";
-  "private";
-  "vcard";
-  "version";
-  "uptime";
-  "time";
   "ping";
-  "pep";
   "register";
-  "admin_adhoc";
   "posix";
   "bosh";
   "websocket";
 };
 
-allow_registration = true;
 daemonize = true;
+pidfile = "/var/run/prosody/prosody.pid";
+
+allow_registration = true;
+
 consider_websocket_secure = true;
 consider_bosh_secure = true;
 cross_domain_bosh = true;
-pidfile = "/var/run/prosody/prosody.pid";
-
-c2s_require_encryption = false
+cross_domain_websocket = true;
 
 authentication = "internal_plain"
 
@@ -35,10 +29,9 @@ log = {
 }
 
 VirtualHost "localhost"
-  enabled = true
   ssl = {
-    key = "/etc/prosody/certs/example.com.key";
-    certificate = "/etc/prosody/certs/example.com.crt";
+    certificate = "/var/lib/prosody/localhost.crt";
+    key = "/var/lib/prosody/localhost.key";
   }
 
 Component "component.localhost"
@@ -46,8 +39,7 @@ Component "component.localhost"
 
 VirtualHost "anon.localhost"
   authentication = "anonymous"
-  enabled = true
   ssl = {
-    key = "/etc/prosody/certs/example.com.key";
-    certificate = "/etc/prosody/certs/example.com.crt";
+    certificate = "/var/lib/prosody/localhost.crt";
+    key = "/var/lib/prosody/localhost.key";
   }

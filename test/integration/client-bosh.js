@@ -1,26 +1,21 @@
-/* global describe, it, beforeEach, afterEach */
+/* global describe, it, afterEach */
 
 'use strict'
 
 var Client = require('../../packages/node-xmpp-client')
-var helper = require('../helper')
 var Element = Client.Element
 
 require('should')
 
-describe('BOSH connections', function () {
+describe('client BOSH', function () {
   var jid = Math.random().toString(36).substring(7) + '@localhost'
   var password = 'password'
   var client = null
   var resource = 'test'
 
-  beforeEach(function (done) {
-    helper.startServer(done)
-  })
-
   afterEach(function (done) {
     if (client) client.end()
-    helper.stopServer(done)
+    done()
   })
 
   it('Can register an account', function (done) {
@@ -138,7 +133,7 @@ describe('BOSH connections', function () {
     })
   })
 
-  it('Can send and receive stanzas', function (done) {
+  it.skip('Can send and receive stanzas', function (done) {
     client = new Client({
       jid: jid,
       password: password,
@@ -162,7 +157,7 @@ describe('BOSH connections', function () {
     })
   })
 
-  it('Sends error for bad stanza', function (done) {
+  it.skip('Sends error for bad stanza', function (done) {
     client = new Client({
       jid: jid,
       password: password,
@@ -186,24 +181,22 @@ describe('BOSH connections', function () {
   })
 
   it('Errors when server is stopped', function (done) {
-    helper.stopServer(function () {
-      client = new Client({
-        jid: jid,
-        password: password,
-        bosh: {
-          url: 'http://localhost:5280/http-bind/'
-        }
-      })
-      client.on('error', function (error) {
-        error.message.should.match(/connect ECONNREFUSED/)
-        error.code.should.match(/ECONNREFUSED/)
-        error.errno.should.match(/ECONNREFUSED/)
-        error.syscall.should.match(/connect/)
-        done()
-      })
-      client.on('online', function () {
-        done('Should not have connected')
-      })
+    client = new Client({
+      jid: jid,
+      password: password,
+      bosh: {
+        url: 'http://localhost:1234/http-bind/'
+      }
+    })
+    client.on('error', function (error) {
+      error.message.should.match(/connect ECONNREFUSED/)
+      error.code.should.match(/ECONNREFUSED/)
+      error.errno.should.match(/ECONNREFUSED/)
+      error.syscall.should.match(/connect/)
+      done()
+    })
+    client.on('online', function () {
+      done('Should not have connected')
     })
   })
 
