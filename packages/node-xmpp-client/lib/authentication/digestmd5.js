@@ -1,16 +1,17 @@
 'use strict'
 
 var inherits = require('node-xmpp-core').inherits
-var crypto = require('crypto')
 var Mechanism = require('./mechanism')
+var crypto = require('crypto')
+var MD5 = require('md5.js')
 
 /**
  * Hash a string
  */
 function md5 (s, encoding) {
-  var hash = crypto.createHash('md5')
-  hash.update(s, 'binary')
-  return hash.digest(encoding || 'binary')
+  // we ignore crypto in the browser field of package.json
+  var hash = crypto ? crypto.createHash('md5') : new MD5()
+  return hash.update(s, 'binary').digest(encoding || 'binary')
 }
 function md5Hex (s) {
   return md5(s, 'hex')
