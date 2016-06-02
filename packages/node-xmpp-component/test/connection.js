@@ -2,7 +2,7 @@
 
 /* global describe, it, before, after */
 
-var Component = require('../../index')
+var Component = require('../index')
 var parse = Component.parse
 var net = require('net')
 var crypto = require('crypto')
