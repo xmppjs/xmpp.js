@@ -2,13 +2,13 @@
 
 'use strict'
 
-var Plain = require('../../../../lib/authentication/plain')
+var DigestMD5 = require('../../lib/authentication/digestmd5')
 
-var mech = new Plain()
+var mech = new DigestMD5()
 
 require('should')
 
-describe('Plain authentication', function () {
+describe('Digest-md5 authentication', function () {
   describe('Detect SASL mechanisms', function () {
     it("Should return true if 'password' property exists", function () {
       var options = { password: 'abracadabra' }

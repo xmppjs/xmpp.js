@@ -2,7 +2,7 @@
 
 'use strict'
 
-var Client = require('../../index')
+var Client = require('../index')
 var net = require('net')
 var ltx = Client.ltx
 require('should')

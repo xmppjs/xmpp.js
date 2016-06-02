@@ -12,7 +12,7 @@ describe('TCP client/server', function () {
   var svcl = null
 
   beforeEach(function (done) {
-    sv = new xmpp.server.C2S.TCPServer({port: C2S_PORT})
+    sv = new xmpp.server.C2S.TCPServer({port: C2S_PORT, autostart: false})
     sv.on('connection', function (conn) {
       svcl = conn
       // Always authenticate
@@ -25,7 +25,7 @@ describe('TCP client/server', function () {
       cl = new xmpp.Client({
         jid: 'test@localhost',
         password: 'test',
-        host: '::1',
+        host: 'localhost',
         port: C2S_PORT
       })
       cl.on('online', function () {
@@ -56,6 +56,7 @@ describe('TCP client/server', function () {
       })
       cl.send(message)
     })
+
     it('should receive a stanza', function (done) {
       cl.once('stanza', function (stanza) {
         assert.ok(stanza.is('message'), 'Message stanza')

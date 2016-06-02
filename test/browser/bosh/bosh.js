@@ -1,53 +1,45 @@
-/* global describe, it, beforeEach, afterEach */
+/* global describe, it */
 
 'use strict'
 
-var Client = require('../../index')
-var helper = require('../helper')
-var Stanza = require('node-xmpp-core').Stanza
-
-require('should')
-
-describe.skip('Websocket connections', function () {
+describe('BOSH Browser tests', function () {
   var jid = Math.random().toString(36).substring(7) + '@localhost'
+  var url = 'http://localhost:5280/http-bind'
   var password = 'password'
   var client = null
   var resource = 'test'
 
-  beforeEach(function (done) {
-    helper.startServer(done)
-  })
-
-  afterEach(function (done) {
-    if (client) client.end()
-    helper.stopServer(done)
-  })
-
   it('Can register an account', function (done) {
-    client = new Client({
+    client = new window.XMPP.Client({
       jid: jid,
       password: password,
       register: true,
-      websocket: {
-        url: 'ws://localhost:5280/xmpp-websocket'
-      }
+      bosh: {
+        url: url
+      },
+      preferred: 'PLAIN'
+    })
+    client.on('error', function (error) {
+      done(error)
     })
     client.on('online', function (data) {
       var bareJid = data.jid.local + '@' + data.jid.domain
       bareJid.should.equal(jid)
       bareJid = data.jid.local + '@' + data.jid.domain
       bareJid.should.equal(jid)
+      client.end()
       done()
     })
   })
 
   it('Errors on bad authentication details', function (done) {
-    client = new Client({
+    client = new window.XMPP.Client({
       jid: jid,
       password: 'not ' + password,
-      websocket: {
-        url: 'ws://localhost:5280/xmpp-websocket'
-      }
+      bosh: {
+        url: url
+      },
+      preferred: 'PLAIN'
     })
     client.on('online', function () {
       done('Should not have connected')
@@ -56,17 +48,19 @@ describe.skip('Websocket connections', function () {
       error.should.equal(
         'XMPP authentication failure'
       )
+      client.end()
       done()
     })
   })
 
   it('Can connect to an account with resource', function (done) {
-    client = new Client({
+    client = new window.XMPP.Client({
       jid: jid + '/' + resource,
       password: password,
-      websocket: {
-        url: 'ws://localhost:5280/xmpp-websocket'
-      }
+      bosh: {
+        url: url
+      },
+      preferred: 'PLAIN'
     })
     client.on('online', function (data) {
       var bareJid = data.jid.local + '@' + data.jid.domain
@@ -74,17 +68,19 @@ describe.skip('Websocket connections', function () {
       bareJid = data.jid.local + '@' + data.jid.domain
       bareJid.should.equal(jid)
       data.jid.resource.should.equal(resource)
+      client.end()
       done()
     })
   })
 
   it('Can connect to an account without resource', function (done) {
-    client = new Client({
+    client = new window.XMPP.Client({
       jid: jid,
       password: password,
-      websocket: {
-        url: 'ws://localhost:5280/xmpp-websocket'
-      }
+      bosh: {
+        url: url
+      },
+      preferred: 'PLAIN'
     })
     client.on('online', function (data) {
       var bareJid = data.jid.local + '@' + data.jid.domain
@@ -92,18 +88,20 @@ describe.skip('Websocket connections', function () {
       bareJid = data.jid.local + '@' + data.jid.domain
       bareJid.should.equal(jid)
       data.jid.resource.should.exist
+      client.end()
       done()
     })
   })
 
   it('Fails on registering a duplicate account', function (done) {
-    client = new Client({
+    client = new window.XMPP.Client({
       jid: jid,
       password: 'not ' + password,
-      websocket: {
-        url: 'ws://localhost:5280/xmpp-websocket'
+      bosh: {
+        url: url
       },
-      register: true
+      register: true,
+      preferred: 'PLAIN'
     })
     client.on('online', function () {
       done('Should not have connected')
@@ -112,20 +110,22 @@ describe.skip('Websocket connections', function () {
       error.message.should.equal(
         'Registration error'
       )
+      client.end()
       done()
     })
   })
 
   it('Can send and receive a stanza', function (done) {
-    client = new Client({
+    client = new window.XMPP.Client({
       jid: jid,
       password: password,
-      websocket: {
-        url: 'ws://localhost:5280/xmpp-websocket'
-      }
+      bosh: {
+        url: url
+      },
+      preferred: 'PLAIN'
     })
 
-    var ping = new Stanza(
+    var ping = new window.XMPP.ltx.Element(
       'iq', { id: '123', type: 'get' }
     ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
@@ -133,21 +133,23 @@ describe.skip('Websocket connections', function () {
       client.send(ping)
       client.on('stanza', function (pong) {
         pong.attrs.id.should.equal('123')
+        client.end()
         done()
       })
     })
   })
 
   it('Can send and receive stanzas', function (done) {
-    client = new Client({
+    client = new window.XMPP.Client({
       jid: jid,
       password: password,
-      websocket: {
-        url: 'ws://localhost:5280/xmpp-websocket'
-      }
+      bosh: {
+        url: url
+      },
+      preferred: 'PLAIN'
     })
 
-    var ping = new Stanza(
+    var ping = new window.XMPP.ltx.Element(
       'iq', { id: '123', type: 'get' }
     ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
@@ -156,22 +158,29 @@ describe.skip('Websocket connections', function () {
       client.send(ping)
       client.on('stanza', function () {
         ++counter
-        if (counter > 6) return done()
+        if (counter > 6) {
+          client.end()
+          return done()
+        }
         client.send(ping)
       })
+    })
+    client.on('error', function (error) {
+      done(error)
     })
   })
 
   it('Sends error for bad stanza', function (done) {
-    client = new Client({
+    client = new window.XMPP.Client({
       jid: jid,
       password: password,
-      websocket: {
-        url: 'ws://localhost:5280/xmpp-websocket'
-      }
+      bosh: {
+        url: url
+      },
+      preferred: 'PLAIN'
     })
 
-    var badPing = new Stanza(
+    var badPing = new window.XMPP.ltx.Element(
       'wtf', { id: '123', type: 'get' }
     ).c('ping', { xmlns: 'urn:xmpp:ping' })
 
@@ -180,43 +189,24 @@ describe.skip('Websocket connections', function () {
       client.on('stanza', function (stanza) {
         stanza.attrs.type.should.equal('error')
         stanza.attrs.id.should.equal('123')
+        client.end()
         done()
-      })
-    })
-  })
-
-  it('Errors when server is stopped', function (done) {
-    helper.stopServer(function () {
-      client = new Client({
-        jid: jid,
-        password: password,
-        websocket: {
-          url: 'ws://localhost:5280/xmpp-websocket'
-        }
-      })
-      client.on('error', function (error) {
-        error.message.should.equal('connect ECONNREFUSED')
-        error.code.should.equal('ECONNREFUSED')
-        error.errno.should.equal('ECONNREFUSED')
-        error.syscall.should.equal('connect')
-        done()
-      })
-      client.on('online', function () {
-        done('Should not have connected')
       })
     })
   })
 
   it('Errors when providing bad BOSH url', function (done) {
-    client = new Client({
+    client = new window.XMPP.Client({
       jid: jid,
       password: password,
-      websocket: {
-        url: 'ws://localhost:5280/xmpp-websocket'
-      }
+      bosh: {
+        url: url
+      },
+      preferred: 'PLAIN'
     })
     client.on('error', function (error) {
-      error.message.should.equal('HTTP status 404')
+      error.message.should.exist
+      client.end()
       done()
     })
     client.on('online', function () {
@@ -224,26 +214,78 @@ describe.skip('Websocket connections', function () {
     })
   })
 
-  it.skip('Disconnects', function (done) {
-    client = new Client({
-      jid: jid,
-      password: password,
-      websocket: {
-        url: 'ws://localhost:5280/xmpp-websocket'
-      }
+  describe('Authentication', function () {
+    it('Can connect using PLAIN authentication', function (done) {
+      client = new window.XMPP.Client({
+        jid: jid,
+        password: password,
+        bosh: {
+          url: url
+        },
+        preferred: 'PLAIN'
+      })
+
+      var ping = new window.XMPP.ltx.Element(
+        'iq', { id: '123', type: 'get' }
+      ).c('ping', { xmlns: 'urn:xmpp:ping' })
+
+      client.on('online', function () {
+        client.send(ping)
+        client.on('stanza', function (pong) {
+          pong.attrs.id.should.equal('123')
+          done()
+        })
+      })
     })
 
-    var ping = new Stanza(
-      'iq', { id: '123', type: 'get' }
-    ).c('ping', { xmlns: 'urn:xmpp:ping' })
-
-    client.on('online', function () {
-      client.end()
-      client.send(ping)
-      client.on('stanza', function () {
-        done('Unexpected stanza')
+    it.skip('Can connect using DIGEST-MD5 authentication', function (done) {
+      client = new window.XMPP.Client({
+        jid: jid,
+        password: password,
+        bosh: {
+          url: url
+        },
+        preferred: 'DIGEST-MD5'
       })
-      done()
+
+      var ping = new window.XMPP.ltx.Element(
+        'iq', { id: '123', type: 'get' }
+      ).c('ping', { xmlns: 'urn:xmpp:ping' })
+
+      client.on('error', function (error) {
+        done(error)
+      })
+      client.on('online', function () {
+        client.send(ping)
+        client.on('stanza', function (pong) {
+          pong.attrs.id.should.equal('123')
+          done()
+        })
+      })
+    })
+
+    it('Can connect using ANONYMOUS authentication', function (done) {
+      client = new window.XMPP.Client({
+        jid: '@anon.localhost',
+        password: password,
+        host: 'localhost',
+        bosh: {
+          url: url
+        },
+        preferred: 'ANONYMOUS'
+      })
+
+      var ping = new window.XMPP.ltx.Element(
+        'iq', { id: '123', type: 'get' }
+      ).c('ping', { xmlns: 'urn:xmpp:ping' })
+
+      client.on('online', function () {
+        client.send(ping)
+        client.on('stanza', function (pong) {
+          pong.attrs.id.should.equal('123')
+          done()
+        })
+      })
     })
   })
 })
