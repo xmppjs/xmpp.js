@@ -27,5 +27,9 @@
   },
   "scripts": {
     "preversion": "npm test"
+  },
+  "browser": {
+    "node-xmpp-tls-connect": false,
+    "./lib/SRV": false
   }
 }
