@@ -14,7 +14,6 @@ __Note:__ If there's a feature you'd like, there's a bug you'd like to fix, or y
 git@github.com:node-xmpp/node-xmpp.git
 cd node-xmpp
 npm install
-npm run bootstrap # see https://github.com/lerna/lerna#bootstrap
 npm test
 ```
 
