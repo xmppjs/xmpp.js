@@ -6,7 +6,9 @@ var Element = core.Element
 var StreamParser = core.StreamParser
 var Connection = core.Connection
 var inherits = core.inherits
-var WebSocket = require('faye-websocket') && require('faye-websocket').Client ? require('faye-websocket').Client : window.WebSocket
+var ws = require('ws')
+ // we ignore ws in the browser field of package.json
+var WebSocket = ws.Server ? ws : window.WebSocket
 var debug = require('debug')('xmpp:client:websockets')
 
 var NS_FRAMING = 'urn:ietf:params:xml:ns:xmpp-framing'
