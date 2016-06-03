@@ -2,18 +2,17 @@
   "name": "node-xmpp-component",
   "version": "2.0.2",
   "description": "Component API for XMPP",
-  "main": "index.js",
-  "homepage": "https://github.com/node-xmpp/node-xmpp-component",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "http://github.com/node-xmpp/node-xmpp",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
   "scripts": {
     "preversion": "npm test"
   },
-  "repository": "github:node-xmpp/node-xmpp-component",
   "keywords": [
     "component",
     "XMPP"
   ],
   "license": "MIT",
-  "bugs": "https://github.com/node-xmpp/node-xmpp-component/issues",
   "dependencies": {
     "node-xmpp-core": "^5.0.1"
   },

@@ -2,13 +2,14 @@
   "name": "node-xmpp-client",
   "version": "3.0.1",
   "description": "XMPP client for JavaScript",
-  "main": "index.js",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "http://github.com/node-xmpp/node-xmpp",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
   "scripts": {
     "preversion": "npm test",
     "test": "npm run bundle",
     "bundle": "browserify -s XMPP index.js -o bundle.js"
   },
-  "repository": "github:node-xmpp/node-xmpp-client",
   "keywords": [
     "client",
     "XMPP",
@@ -17,7 +18,6 @@
     "BOSH"
   ],
   "license": "MIT",
-  "bugs": "https://github.com/node-xmpp/node-xmpp-client/issues",
   "dependencies": {
     "browser-request": "^0.3.3",
     "debug": "^2.2.0",
@@ -36,6 +36,5 @@
     "ws": false,
     "path": false,
     "crypto": false
-  },
-  "homepage": "https://github.com/node-xmpp/node-xmpp-client"
+  }
 }

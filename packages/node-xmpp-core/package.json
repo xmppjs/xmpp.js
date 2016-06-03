@@ -2,9 +2,9 @@
   "name": "node-xmpp-core",
   "version": "5.0.2",
   "description": "core files for the node-xmpp project",
-  "homepage": "https://github.com/node-xmpp/node-xmpp-core",
-  "repository": "github:node-xmpp/node-xmpp-core",
-  "bugs": "https://github.com/node-xmpp/node-xmpp-core/issues",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "http://github.com/node-xmpp/node-xmpp",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
   "keywords": [
     "XMPP",
     "JID",
