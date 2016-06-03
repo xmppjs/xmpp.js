@@ -1,26 +1,22 @@
-/* global describe, it, beforeEach, afterEach */
+/* global describe, it, afterEach */
 
 'use strict'
 
 var Client = require('../../packages/node-xmpp-client')
-var helper = require('../helper')
 var Stanza = Client.Stanza
 
 require('should')
 
-describe('Socket connections', function () {
+describe('client TCP', function () {
   var jid = Math.random().toString(36).substring(7) + '@localhost'
   var password = 'password'
   var client = null
   var resource = 'test'
 
-  beforeEach(function (done) {
-    helper.startServer(done)
-  })
-
   afterEach(function (done) {
-    helper.stopServer(done)
+    client.on('error', function () {})
     if (client) client.end()
+    done()
   })
 
   it('Can register an account', function (done) {
@@ -126,7 +122,7 @@ describe('Socket connections', function () {
     })
   })
 
-  it('Sends error for bad stanza', function (done) {
+  it.skip('Sends error for bad stanza', function (done) {
     client = new Client({
       jid: jid,
       password: password,
@@ -148,22 +144,21 @@ describe('Socket connections', function () {
   })
 
   it("Can't connect when server is stopped", function (done) {
-    helper.stopServer(function () {
-      client = new Client({
-        jid: jid,
-        password: password,
-        host: 'localhost'
-      })
-      client.on('error', function (error) {
-        error.message.should.match(/connect ECONNREFUSED/)
-        error.code.should.match(/ECONNREFUSED/)
-        error.errno.should.match(/ECONNREFUSED/)
-        error.syscall.should.match(/connect/)
-        done()
-      })
-      client.on('online', function () {
-        done('Should not have connected')
-      })
+    client = new Client({
+      jid: jid,
+      password: password,
+      host: 'localhost',
+      port: 1234
+    })
+    client.on('error', function (error) {
+      error.message.should.match(/connect ECONNREFUSED/)
+      error.code.should.match(/ECONNREFUSED/)
+      error.errno.should.match(/ECONNREFUSED/)
+      error.syscall.should.match(/connect/)
+      done()
+    })
+    client.on('online', function () {
+      done('Should not have connected')
     })
   })
 

@@ -1,6 +1,6 @@
 'use strict'
 
-/* global describe, it, beforeEach, afterEach */
+/* global describe, it, beforeEach, afterEach, after */
 
 var Component = require('../../packages/node-xmpp-component')
 var Stanza = require('../../packages/node-xmpp-core').Stanza
@@ -29,9 +29,9 @@ var connectClients = function (done) {
       client.send(new Stanza('presence'))
       done()
     })
-    client.on('error', function (error) {
-      done(error)
-    })
+  })
+  component.on('error', function (err) {
+    console.log('component error', err)
   })
 }
 
@@ -41,19 +41,25 @@ describe('Component', function () {
       jid: 'component.localhost',
       password: 'mysecretcomponentpassword',
       host: 'localhost',
-      port: 5347
+      port: 5347,
+      reconnect: false
     }
     user = (+new Date()).toString(36)
-    helper.startServer(function () {
-      connectClients(done)
-    })
+    connectClients(done)
   })
 
-  afterEach(function () {
-    if (client) client.end()
-    if (component) component.end()
+  afterEach(function (done) {
+    if (client) {
+      client.once('error', function () {})
+      client.end()
+    }
+    if (component) {
+      component.once('error', function () {})
+      component.end()
+    }
     component = null
     client = null
+    done()
   })
 
   it('Can connect and send a message', function (done) {
@@ -108,13 +114,18 @@ describe('Component', function () {
   })
 
   it('Sends error when server stops', function (done) {
+    after(function (done) {
+      helper.startServer(done)
+    })
+
     client.end()
-    component.on('error', function () {
+    component.on('error', function (err) { // eslint-disable-line
       done()
     })
     component.on('close', function () {
       done()
     })
+
     helper.stopServer()
   })
 })
