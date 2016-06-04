@@ -1,0 +1,14 @@
+{
+  "name": "@xmpp/client-sasl-digest-md5",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "http://github.com/node-xmpp/node-xmpp",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "version": "0.0.0",
+  "license": "ISC",
+  "dependencies": {
+    "alt-sasl-digest-md5": "^1.0.2"
+  },
+  "browser": {
+    "crypto": false
+  }
+}

@@ -7,17 +7,6 @@ class Client extends Connection {
     this.uri = ''
   }
 
-  send (element, ...args) {
-    if (
-      (this.socket.NS && this.socket.NS !== 'jabber:client') &&
-      !element.attrs.xmlns &&
-      (element.is('iq') || element.is('message') || element.is('presence'))
-    ) {
-      element.attrs.xmlns = 'jabber:client'
-    }
-    super.send(element, ...args)
-  }
-
   connect (uri) {
     let params
     const Transport = this.transports.find(Transport => {
@@ -30,10 +19,9 @@ class Client extends Connection {
     const sock = this.socket = new Transport()
 
     ;[
-      'error', 'close', 'connect', 'open',
-      'feature', 'element', 'stanza', 'send',
-      'nonza', 'fragment', 'online', 'ready',
-      'authenticated', 'authenticate'
+      'error', 'close', 'connect',
+      'features', 'element', 'stanza',
+      'nonza', 'fragment'
     ].forEach(e => {
       sock.on(e, (...args) => this.emit(e, ...args))
     })
