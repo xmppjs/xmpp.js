@@ -1,0 +1,19 @@
+extends:
+  - standard
+  - eslint:recommended
+  - plugin:ava/recommended
+
+plugins:
+  - promise
+  - react # TODO configure https://www.npmjs.com/package/eslint-plugin-react
+  - ava
+
+rules:
+  promise/param-names: error
+  promise/always-return: error
+  promise/catch-or-return: error
+  promise/no-native: off
+  no-console: off # FIXME
+  jsx-quotes: ['error', 'prefer-single']
+  ava/no-ignored-test-files: off # FIXME
+  react/jsx-space-before-closing: [error, never]

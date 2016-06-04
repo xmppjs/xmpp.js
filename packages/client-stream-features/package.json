@@ -1,0 +1,11 @@
+{
+  "name": "@xmpp/client-stream-features",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "http://github.com/node-xmpp/node-xmpp",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "version": "0.0.0",
+  "license": "ISC",
+  "devDependencies": {
+    "@xmpp/xml": "^0.0.0"
+  }
+}

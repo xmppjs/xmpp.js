@@ -52,11 +52,6 @@ WSConnection.prototype.startParser = function () {
         self.streamNsAttrs[k] = attrs[k]
       }
     }
-
-    /* Notify in case we don't wait for <stream:features/>
-       (Component or non-1.0 streams)
-     */
-    self.emit('streamStart', attrs)
   })
   this.parser.on('stanza', function (stanza) {
     // self.onStanza(self.addStreamNs(stanza))

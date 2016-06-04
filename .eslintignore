@@ -1,0 +1,8 @@
+packages/*/index.js
+packages/*/lib/
+!packages/node-xmpp*/index.js
+!packages/node-xmpp*/lib/
+
+node_modules/
+bundle.js
+browserify.js

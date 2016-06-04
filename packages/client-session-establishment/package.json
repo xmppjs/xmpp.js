@@ -1,0 +1,13 @@
+{
+  "name": "@xmpp/client-session-establishment",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "http://github.com/node-xmpp/node-xmpp",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "version": "0.0.0",
+  "license": "ISC",
+  "dependencies": {
+    "@xmpp/client-iq-caller": "^0.0.0",
+    "@xmpp/client-stream-features": "^0.0.0",
+    "@xmpp/xml": "^0.0.0"
+  }
+}
