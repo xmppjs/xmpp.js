@@ -1,0 +1,21 @@
+{
+  "name": "@xmpp/client",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "http://github.com/node-xmpp/node-xmpp",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "version": "0.0.0",
+  "license": "ISC",
+  "dependencies": {
+    "@xmpp/client-core": "^0.0.0",
+    "@xmpp/jid": "^0.0.1",
+    "@xmpp/plugins": "^0.0.1",
+    "@xmpp/xml": "^0.1.0"
+  },
+  "browser": {
+    "@xmpp/client-tcp": false,
+    "@xmpp/srv": false,
+    "crypto": false,
+    "url": false,
+    "node-fetch": false
+  }
+}

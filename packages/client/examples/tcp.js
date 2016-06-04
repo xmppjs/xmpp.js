@@ -2,8 +2,8 @@
 
 'use strict'
 
-const {xml, Component} = require('.') // require('@xmpp/component')
-const entity = new Component()
+const {Client, xml} = require('..') // require('@xmpp/client')
+const entity = new Client()
 
 // emitted for any error
 entity.on('error', (err) => {
@@ -77,7 +77,7 @@ entity.on('online', (jid) => {
 })
 
 // "start" opens the socket and the XML stream
-entity.start('xmpp:component.localhost:5347')
+entity.start('xmpp:localhost:5222')
   // resolves once online
   .then((jid) => {
     console.log('started', jid.toString())
@@ -89,7 +89,7 @@ entity.start('xmpp:component.localhost:5347')
 
 // emitted when authentication is required
 entity.on('authenticate', authenticate => {
-  authenticate('mysecretcomponentpassword')
+  authenticate('node-xmpp', 'foobar')
     .then(() => {
       console.log('authenticated')
     })

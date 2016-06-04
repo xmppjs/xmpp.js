@@ -24,6 +24,7 @@ addons:
     - prosody-0.10
     - lua-bitop # websocket
     - lua-sec # tls
+    - liblua5.1-expat0 # https://prosody.im/doc/depends#luaexpat
 
 before_install:
   - sudo service prosody stop
@@ -37,6 +38,7 @@ script:
   - nohup python2 -m SimpleHTTPServer &
 
   - sudo prosodyctl start
+  - sudo prosodyctl register node-xmpp localhost foobar
   - npm run integration
   - sudo prosodyctl restart
   - npm run ava:integration

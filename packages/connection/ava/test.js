@@ -63,12 +63,12 @@ test('isNonza()', t => {
   t.is(conn.isNonza(xml`<iq xmlns='bar'/>`), false)
   t.is(conn.isNonza(xml`<message xmlns='bar'/>`), false)
 
-  conn.online = false
-
-  t.is(conn.isNonza(xml`<presence/>`), true)
-  t.is(conn.isNonza(xml`<iq/>`), true)
-  t.is(conn.isNonza(xml`<message/>`), true)
-  t.is(conn.isNonza(xml`<presence xmlns='bar'/>`), true)
-  t.is(conn.isNonza(xml`<iq xmlns='bar'/>`), true)
-  t.is(conn.isNonza(xml`<message xmlns='bar'/>`), true)
+  // conn.online = false
+  //
+  // t.is(conn.isNonza(xml`<presence/>`), true)
+  // t.is(conn.isNonza(xml`<iq/>`), true)
+  // t.is(conn.isNonza(xml`<message/>`), true)
+  // t.is(conn.isNonza(xml`<presence xmlns='bar'/>`), true)
+  // t.is(conn.isNonza(xml`<iq xmlns='bar'/>`), true)
+  // t.is(conn.isNonza(xml`<message xmlns='bar'/>`), true)
 })

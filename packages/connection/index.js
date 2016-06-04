@@ -74,13 +74,13 @@ class Connection extends EventEmitter {
     // parser
     this.parser = parser
     const elementListener = (element) => {
-      if (element.name === 'stream:error') {
-        const condition = element.children[0].name
-        const textEl = element.getChild('text', 'urn:ietf:params:xml:ns:xmpp-streams')
-        this.emit('error', error(condition, textEl.text()))
-      }
       this.emit('element', element)
       this.emit(this.isStanza(element) ? 'stanza' : 'nonza', element)
+      if (element.name === 'stream:error') {
+        const condition = element.children[0].name
+        const text = element.getChildText('text', 'urn:ietf:params:xml:ns:xmpp-streams')
+        this.emit('error', error(condition, text || ''))
+      }
     }
     parser.on('element', elementListener)
     parser.on('error', errorListener)
@@ -149,16 +149,12 @@ class Connection extends EventEmitter {
    * opens the stream
    */
   open (domain, lang = 'en') {
-    return new Promise((resolve, reject) => {
+    this.write(this.header(domain, lang))
       // FIXME timeout
-      this.waitHeader(domain, lang, (err, el) => {
-        if (err) return reject(err)
-        this._domain = domain
-        this.lang = lang
-        this.emit('open', el)
-        resolve(el)
-      })
-      this.write(this.header(domain, lang))
+    return this.waitHeader(domain, lang).then((el) => {
+      this._domain = domain
+      this.lang = lang
+      this.emit('open', el)
     })
   }
 

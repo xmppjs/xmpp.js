@@ -12,6 +12,8 @@
   ],
   "dependencies": {
     "@xmpp/component-core": "^0.0.4",
-    "@xmpp/plugins": "^0.0.1"
+    "@xmpp/jid": "^0.0.1",
+    "@xmpp/plugins": "^0.0.1",
+    "@xmpp/xml": "^0.1.2"
   }
 }

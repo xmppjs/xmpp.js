@@ -31,6 +31,7 @@ function StreamParser (options) {
   this.parser.on('startElement', function (name, attrs) {
     if (!self.element) {
       self.emit('startElement', name, attrs)
+      self.emit('start', new Element(name, attrs))
     }
 
     // TODO: refuse anything but <stream:stream>

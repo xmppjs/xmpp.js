@@ -9,5 +9,17 @@
   "keywords": [
     "XMPP",
     "plugins"
-  ]
+  ],
+  "dependencies": {
+    "@xmpp/connection": "^0.0.4",
+    "@xmpp/connection-tcp": "^0.0.4",
+    "@xmpp/xml": "^0.1.2",
+    "saslmechanisms": "^0.1.1",
+    "sasl-scram-sha-1": "^1.2.0",
+    "sasl-plain": "^0.1.0",
+    "ws": "^1.1.0"
+  },
+  "browser": {
+    "ws": false
+  }
 }

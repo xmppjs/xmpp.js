@@ -1,22 +1,22 @@
 const test = require('ava')
-const xmpp = require('../../packages/component')
+const xmpp = require('../../packages/client')
 
-test.cb('component', t => {
+test.cb('client websocket', t => {
   t.plan(9)
 
-  const entity = new xmpp.Component()
+  const entity = new xmpp.Client()
 
   entity.on('connect', () => {
     t.pass()
   })
 
-  entity.on('open', (el) => {
+  entity.once('open', (el) => {
     t.true(el instanceof xmpp.xml.Element)
   })
 
   entity.on('authenticate', auth => {
     t.is(typeof auth, 'function')
-    auth('mysecretcomponentpassword')
+    auth('node-xmpp', 'foobar')
       .then(() => {
         t.pass('authenticated')
       })
@@ -28,13 +28,13 @@ test.cb('component', t => {
 
   entity.on('online', (jid) => {
     t.true(jid instanceof xmpp.jid.JID)
-    t.is(jid.toString(), 'component.localhost')
+    t.is(jid.bare().toString(), 'node-xmpp@localhost')
   })
 
-  entity.start('xmpp:component.localhost:5347')
+  entity.start('xmpp:localhost:5222')
     .then((jid) => {
       t.true(jid instanceof xmpp.jid.JID)
-      t.is(jid.toString(), 'component.localhost')
+      t.is(jid.bare().toString(), 'node-xmpp@localhost')
     })
     .then(() => {
       t.end()
