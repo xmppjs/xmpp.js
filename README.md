@@ -14,10 +14,16 @@ XMPP identifiers (JID) for JavaScript
 
 https://en.wikipedia.org/wiki/XMPP#Decentralization_and_addressing
 
-# Usage
+## Install
+
+```
+npm install node-xmpp-jid
+```
+
+## Usage
 
 ```javascript
-var JID = require('jid')
+var JID = require('node-xmpp-jid')
 
 /*
  * All return an instance of JID.JID, the new operator is optional.
@@ -68,7 +74,7 @@ JID.equal(addr, some_jid)
 JID.is(addr) // returns true if the passed argument is an instance of JID.JID, false otherwise
 ```
 
-# Escaping
+## Escaping
 
 The [XEP-0106](http://xmpp.org/extensions/xep-0106.html) defines a method to escape and unescape characters that aren't allowed in the local part of the JID. This library fully implement it but because `@` and `/` are ones of them and used as JID separators, you should always prefer the following syntax
 
@@ -86,12 +92,12 @@ new JID(local@domain/resource)
 
 for user input.
 
-# References
+## References
 
 * [RFC 7622 XMPP Address Format](https://tools.ietf.org/html/rfc7622) mostly implemented, l10n WIP
 * [XEP-0106 JID Escaping](https://xmpp.org/extensions/xep-0106.html) implemented
 
-## Deprecated
+### Deprecated
 
 * [XEP-0029 Definition of Jabber Identifiers (JIDs)](https://xmpp.org/extensions/xep-0029.html) 2003
 * [RFC 3920 XMPP addressing](https://tools.ietf.org/html/rfc3920#section-3) 2004
