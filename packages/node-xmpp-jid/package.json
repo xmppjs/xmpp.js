@@ -2,23 +2,18 @@
   "name": "node-xmpp-jid",
   "version": "2.3.0",
   "description": "XMPP identifiers (JID) for JavaScript",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "http://github.com/node-xmpp/node-xmpp",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
   "scripts": {
     "preversion": "npm test",
-    "lint": "standard",
-    "unit": "mocha test/",
-    "browserify": "browserify index.js -s JID -o bundle.js",
-    "test": "npm run unit && npm run lint && npm run browserify"
+    "prepublish": "npm run bundle",
+    "bundle": "browserify index.js -s JID -o bundle.js",
+    "test": "npm run bundle"
   },
-  "repository": "github:node-xmpp/JID",
   "keywords": [
     "XMPP",
     "JID"
   ],
-  "author": "Sonny Piers <sonny@fastmail.net>",
-  "license": "MIT",
-  "bugs": "https://github.com/node-xmpp/JID/issues",
-  "homepage": "https://github.com/node-xmpp/JID",
-  "devDependencies": {
-    "sinon": "^1.17.2"
-  }
+  "license": "MIT"
 }
