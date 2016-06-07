@@ -28,7 +28,6 @@
     "ws": "^1.1.0"
   },
   "devDependencies": {
-    "browserify": "^13.0.1",
     "node-xmpp-server": "^2.1.3"
   },
   "browser": {
