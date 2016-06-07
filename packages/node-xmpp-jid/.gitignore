@@ -1,0 +1,6 @@
+!.editorconfig
+!.gitignore
+!.npmignore
+!.travis.yml
+
+bundle.js
