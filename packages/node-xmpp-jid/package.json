@@ -1,0 +1,19 @@
+{
+  "name": "node-xmpp-jid",
+  "version": "2.3.0",
+  "description": "XMPP identifiers (JID) for JavaScript",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "http://github.com/node-xmpp/node-xmpp",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "scripts": {
+    "preversion": "npm test",
+    "prepublish": "npm run bundle",
+    "bundle": "browserify index.js -s JID -o bundle.js",
+    "test": "npm run bundle"
+  },
+  "keywords": [
+    "XMPP",
+    "JID"
+  ],
+  "license": "MIT"
+}
