@@ -17,7 +17,7 @@ module.exports.detect = function (local) {
     .replace(/\\5c/g, '')
 
   // detect if we have unescaped sequences
-  var search = tmp.search(/\\| |\"|\&|\'|\/|:|<|>|@/g)
+  var search = tmp.search(/\\| |"|&|'|\/|:|<|>|@/g)
   if (search === -1) {
     return false
   } else {
@@ -39,9 +39,9 @@ module.exports.escape = function (local) {
     .replace(/^\s+|\s+$/g, '')
     .replace(/\\/g, '\\5c')
     .replace(/ /g, '\\20')
-    .replace(/\"/g, '\\22')
-    .replace(/\&/g, '\\26')
-    .replace(/\'/g, '\\27')
+    .replace(/"/g, '\\22')
+    .replace(/&/g, '\\26')
+    .replace(/'/g, '\\27')
     .replace(/\//g, '\\2f')
     .replace(/:/g, '\\3a')
     .replace(/</g, '\\3c')
@@ -62,7 +62,7 @@ module.exports.unescape = function (local) {
 
   return local
     .replace(/\\20/g, ' ')
-    .replace(/\\22/g, '\"')
+    .replace(/\\22/g, '"')
     .replace(/\\26/g, '&')
     .replace(/\\27/g, '\'')
     .replace(/\\2f/g, '/')

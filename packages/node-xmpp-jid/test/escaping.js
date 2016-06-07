@@ -13,10 +13,10 @@ describe('JID escaping', function () {
       assert.equal(esc.toString(true), 'space cadet@example.com')
     })
 
-    it('escape `call me \"ishmael\"@example.com`', function () {
-      var esc = new JID('call me \"ishmael\"', 'example.com')
+    it('escape `call me "ishmael"@example.com`', function () {
+      var esc = new JID('call me "ishmael"', 'example.com')
       assert.equal(esc.toString(), 'call\\20me\\20\\22ishmael\\22@example.com')
-      assert.equal(esc.toString(true), 'call me \"ishmael\"@example.com')
+      assert.equal(esc.toString(true), 'call me "ishmael"@example.com')
     })
 
     it('escape `at&t guy@example.com`', function () {
@@ -87,10 +87,10 @@ describe('JID escaping', function () {
       assert.equal(esc.toString(true), 'space cadet@example.com')
     })
 
-    it('escape `call me \"ishmael\"@example.com`', function () {
-      var esc = new JID('call me \"ishmael\"', 'example.com')
+    it('escape `call me "ishmael"@example.com`', function () {
+      var esc = new JID('call me "ishmael"', 'example.com')
       assert.equal(esc.toString(), 'call\\20me\\20\\22ishmael\\22@example.com')
-      assert.equal(esc.toString(true), 'call me \"ishmael\"@example.com')
+      assert.equal(esc.toString(true), 'call me "ishmael"@example.com')
     })
 
     it('escape `at\\26t\\20guy@example.com`', function () {
