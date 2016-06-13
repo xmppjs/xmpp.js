@@ -25,9 +25,6 @@
     "reconnect-core": "https://github.com/dodo/reconnect-core/tarball/merged",
     "node-xmpp-tls-connect": "^1.0.1"
   },
-  "scripts": {
-    "preversion": "npm test"
-  },
   "browser": {
     "node-xmpp-tls-connect": false,
     "./lib/SRV": false

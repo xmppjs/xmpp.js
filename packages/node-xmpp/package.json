@@ -11,8 +11,5 @@
     "node-xmpp-core": "^5.0.0",
     "node-xmpp-server": "^2.1.2"
   },
-  "license": "MIT",
-  "scripts": {
-    "preversion": "npm test"
-  }
+  "license": "MIT"
 }

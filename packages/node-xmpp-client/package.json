@@ -6,9 +6,8 @@
   "homepage": "http://github.com/node-xmpp/node-xmpp",
   "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
   "scripts": {
-    "preversion": "npm test",
-    "test": "npm run bundle",
-    "bundle": "browserify -s XMPP index.js -o bundle.js"
+    "prepublish": "npm run bundle",
+    "bundle": "../../node_modules/.bin/browserify -s XMPP index.js -o bundle.js"
   },
   "keywords": [
     "client",
