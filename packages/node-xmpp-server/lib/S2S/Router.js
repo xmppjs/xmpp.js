@@ -34,7 +34,7 @@ function Router (s2sPort, bindAddress, opts) {
   }
 
   // start tcp socket
-  net.createServer(function (socket) {
+  this._server = net.createServer(function (socket) {
     this.acceptConnection(socket)
   }.bind(this)).listen(s2sPort || 5269, bindAddress || '::')
 }
@@ -48,23 +48,29 @@ Router.prototype.keepAlive = 30 * 1000 // 30s
 Router.prototype.streamTimeout = 5 * 60 * 1000 // 5min
 Router.prototype.credentials = {} // TLS credentials per domain
 
+Router.prototype.close = function (callback) {
+  debug('closing server')
+  this._server.close(callback)
+}
+
 /*
  * little helper, because dealing with crypto & fs gets unwieldy
  */
-Router.prototype.loadCredentials = function (domain, key, cert) {
-  var creds = tls.createSecureContext({
+Router.prototype.loadCredentials = function (domain, key, cert, ca) {
+  var creds = {
     key: key,
-    cert: cert
-  })
-
-  this.getContext(domain).setCredentials(creds)
+    cert: cert,
+    ca: ca
+  }
+  this.getContext(domain).setCredentials(tls.createSecureContext(creds))
 }
 
-Router.prototype.loadCredentialsFromFile = function (domain, keyPath, certPath) {
+Router.prototype.loadCredentialsFromFile = function (domain, keyPath, certPath, caPath) {
   var key = fs.readFileSync(keyPath, 'ascii')
   var cert = fs.readFileSync(certPath, 'ascii')
+  var ca = caPath ? fs.readFileSync(caPath, 'ascii') : undefined
 
-  this.loadCredentials(domain, key, cert)
+  this.loadCredentials(domain, key, cert, ca)
 }
 
 Router.prototype.addSecureDomain = function (domain) {
@@ -81,6 +87,7 @@ Router.prototype.acceptConnection = function (socket) {
   var inStream = new IncomingServer({
     streamId: this.generateId(),
     reconnect: false,
+    requestCert: true,
     socket: socket
   })
 
