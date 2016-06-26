@@ -240,6 +240,29 @@ describe('client BOSH', function () {
     })
   })
 
+  it('Not sending and receiving any packets after destroy', function (done) {
+    client = new Client({
+      jid: jid,
+      password: password,
+      bosh: {
+        url: 'http://localhost:5280/http-bind/'
+      }
+    })
+
+    var ping = new Element(
+      'iq', { id: '123', type: 'get' }
+    ).c('ping', { xmlns: 'urn:xmpp:ping' })
+
+    client.on('online', function () {
+      client.destroy()
+      client.send(ping)
+      client.on('stanza', function () {
+        done('Unexpected stanza')
+      })
+      done()
+    })
+  })
+
   describe('Prebind', function () {
     it('Returns RID and SID', function (done) {
       new Client({ // eslint-disable-line
