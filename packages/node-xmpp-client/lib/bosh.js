@@ -29,6 +29,7 @@ function BOSHConnection (opts) {
     }
   }
   this.currentRequests = 0
+  this.activeRequests = []
   this.queue = []
   this.rid = Math.ceil(Math.random() * 9999999999)
 
@@ -161,6 +162,19 @@ BOSHConnection.prototype.end = function (stanzas) {
   }.bind(this))
 }
 
+BOSHConnection.prototype.destroy = function () {
+  delete this.sid
+  this.activeRequests.forEach(function (request) {
+    request.abort()
+  })
+  this.activeRequests = []
+  this.shutdown = true
+  this.queue = []
+  this.emit('disconnect')
+  this.emit('end')
+  this.emit('close')
+}
+
 BOSHConnection.prototype.maxHTTPRetries = 5
 
 BOSHConnection.prototype.request = function (attrs, children, cb, retry) {
@@ -180,7 +194,7 @@ BOSHConnection.prototype.request = function (attrs, children, cb, retry) {
 
   debug('send bosh request:' + boshEl.toString())
 
-  request({
+  var currentRequest = request({
     uri: this.boshURL,
     method: 'POST',
     headers: { 'Content-Type': this.contentType },
@@ -188,7 +202,10 @@ BOSHConnection.prototype.request = function (attrs, children, cb, retry) {
   },
     function (err, res, body) {
       that.currentRequests--
-
+      var currentRequestIndex = that.activeRequests.indexOf(currentRequest)
+      if (currentRequestIndex != -1) {
+        that.activeRequests.splice(currentRequestIndex, 1)
+      }
       if (err) {
         if (retry < that.maxHTTPRetries) {
           return that.request(attrs, children, cb, retry + 1)
@@ -218,6 +235,7 @@ BOSHConnection.prototype.request = function (attrs, children, cb, retry) {
       }
     }
   )
+  this.activeRequests.push(currentRequest)
   this.currentRequests++
 }
 
