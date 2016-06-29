@@ -1,5 +1,6 @@
 'use strict'
 
+require('es6-collections')
 var EventEmitter = require('events').EventEmitter
 var core = require('node-xmpp-core')
 var inherits = core.inherits
@@ -29,7 +30,7 @@ function BOSHConnection (opts) {
     }
   }
   this.currentRequests = 0
-  this.activeRequests = []
+  this.activeRequests = new Set()
   this.queue = []
   this.rid = Math.ceil(Math.random() * 9999999999)
 
@@ -167,7 +168,7 @@ BOSHConnection.prototype.destroy = function () {
   this.activeRequests.forEach(function (request) {
     request.abort()
   })
-  this.activeRequests = []
+  this.activeRequests.clear();
   this.shutdown = true
   this.queue = []
   this.emit('disconnect')
@@ -202,10 +203,7 @@ BOSHConnection.prototype.request = function (attrs, children, cb, retry) {
   },
     function (err, res, body) {
       that.currentRequests--
-      var currentRequestIndex = that.activeRequests.indexOf(currentRequest)
-      if (currentRequestIndex != -1) {
-        that.activeRequests.splice(currentRequestIndex, 1)
-      }
+      this.activeRequests.delete(currentRequest);
       if (err) {
         if (retry < that.maxHTTPRetries) {
           return that.request(attrs, children, cb, retry + 1)
@@ -235,7 +233,7 @@ BOSHConnection.prototype.request = function (attrs, children, cb, retry) {
       }
     }
   )
-  this.activeRequests.push(currentRequest)
+  this.activeRequests.add(currentRequest)
   this.currentRequests++
 }
 
