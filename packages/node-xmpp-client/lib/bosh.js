@@ -202,7 +202,7 @@ BOSHConnection.prototype.request = function (attrs, children, cb, retry) {
   },
     function (err, res, body) {
       that.currentRequests--
-      this.activeRequests.delete(currentRequest);
+      that.activeRequests.delete(currentRequest);
       if (err) {
         if (retry < that.maxHTTPRetries) {
           return that.request(attrs, children, cb, retry + 1)
