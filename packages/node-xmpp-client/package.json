@@ -24,8 +24,7 @@
     "minimist": "^1.2.0",
     "node-xmpp-core": "^5.0.0",
     "request": "^2.65.0",
-    "ws": "^1.1.0",
-    "es6-collections": "^0.5.6"
+    "ws": "^1.1.0"
   },
   "devDependencies": {
     "node-xmpp-server": "^2.1.3"

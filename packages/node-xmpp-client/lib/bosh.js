@@ -1,6 +1,5 @@
 'use strict'
 
-require('es6-collections')
 var EventEmitter = require('events').EventEmitter
 var core = require('node-xmpp-core')
 var inherits = core.inherits
