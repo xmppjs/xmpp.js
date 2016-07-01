@@ -2,7 +2,6 @@
 
 /* global describe, it */
 
-require('es6-collections')
 var assert = require('assert')
 var Server = require('../../lib/Server')
 var EventEmitter = require('events').EventEmitter

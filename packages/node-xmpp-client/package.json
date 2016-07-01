@@ -7,7 +7,7 @@
   "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
   "scripts": {
     "prepublish": "npm run bundle",
-    "bundle": "../../node_modules/.bin/browserify -s XMPP index.js -o bundle.js"
+    "bundle": "../../node_modules/.bin/browserify -s XMPP index.js -o browserify.js"
   },
   "keywords": [
     "client",
@@ -24,7 +24,7 @@
     "minimist": "^1.2.0",
     "node-xmpp-core": "^5.0.0",
     "request": "^2.65.0",
-    "ws": "^1.1.0"
+    "ws": "^1.1.1"
   },
   "devDependencies": {
     "node-xmpp-server": "^2.1.3"
