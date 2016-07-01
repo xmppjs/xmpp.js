@@ -3,7 +3,7 @@ coverage/
 
 !.editorconfig
 !.gitignore
-!.npmignore
 !.travis.yml
 
 bundle.js
+browserify.js

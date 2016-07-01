@@ -1,6 +1,5 @@
 'use strict'
 
-require('es6-collections')
 var EventEmitter = require('events').EventEmitter
 var util = require('util')
 var ltx = require('node-xmpp-core').ltx

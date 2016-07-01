@@ -1,7 +1,5 @@
 'use strict'
 
-require('es6-collections')
-
 module.exports = function (server) {
   var connections = server.__connections = new Set()
   server.on('connection', function (connection) {
