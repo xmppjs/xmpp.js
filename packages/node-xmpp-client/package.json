@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp-client",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "XMPP client for JavaScript",
   "repository": "github:node-xmpp/node-xmpp",
   "homepage": "http://github.com/node-xmpp/node-xmpp",
