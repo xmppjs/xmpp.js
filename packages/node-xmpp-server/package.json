@@ -26,5 +26,8 @@
     "async": "^2.0.0-rc.5",
     "node-xmpp-client": "^3.0.0",
     "node-xmpp-component": "^2.0.1"
+  },
+  "engines" : {
+    "node" : ">=0.12.15"
   }
 }
