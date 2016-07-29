@@ -34,5 +34,8 @@
     "ws": false,
     "path": false,
     "crypto": false
+  },
+  "engines" : {
+    "node" : ">=0.12.15"
   }
 }
