@@ -2,11 +2,13 @@
 
 'use strict'
 
-var nodexmppserver = require('node-xmpp-server')
-var C2SServer = nodexmppserver.C2SServer
-var Stanza = require('node-xmpp-core').Stanza
-var net = require('net')
-var util = require('util')
+const nodexmppserver = require('node-xmpp-server')
+const C2SServer = nodexmppserver.C2SServer
+const Stanza = require('node-xmpp-core').Stanza
+const net = require('net')
+const util = require('util')
+const path = require('path')
+const fs = require('fs')
 var Client = require('../index')
 var Plain = nodexmppserver.auth.Plain
 var XOAuth2 = nodexmppserver.auth.XOAuth2
@@ -38,13 +40,15 @@ var user = {
   password: 'secret'
 }
 
-function startServer (mechanism, done) {
+function startServer (mechanism, done, extraOpts) {
   // Sets up the server.
-  var c2s = new C2SServer({
+  var opts = {
     port: 5222,
     domain: 'localhost',
     autostart: false
-  })
+  }
+  Object.assign(opts, extraOpts)
+  var c2s = new C2SServer(opts)
 
   if (mechanism) {
     // remove plain
@@ -183,6 +187,60 @@ describe('SASL', function () {
       cl.on('error', function () {
         // this should happen
         done()
+      })
+    })
+  })
+
+  describe('DIRECT_TLS_PLAIN', function () {
+    var c2s = null
+
+    before(function (done) {
+      var serverOptions = {
+        port: 5223,
+        domain: 'example.com',
+        tls: {
+          direct: true,
+          keyPath: path.join(__dirname, 'certs/example.com.key'),
+          certPath: path.join(__dirname, 'certs/example.com.crt')
+        }
+      }
+      c2s = startServer(Plain, done, serverOptions)
+
+      done()
+    })
+
+    after(function (done) {
+      c2s.shutdown(done)
+    })
+
+    it('should accept plain authentication, direct TLS', function (done) {
+      // alternatively, edit /etc/hosts and don't pass a custom checkServerIdentity
+      var checkServerIdentity = function (servername, cert) {
+        if (servername == 'localhost') {
+          return undefined
+        } else {
+          return 'test, expected localhost instead of example.com as in cert'
+        }
+      };
+
+      var cl = createClient({
+        jid: user.jid,
+        password: user.password,
+        preferred: Plain.id,
+        credentials: {
+          ca: fs.readFileSync(path.join(__dirname, 'certs/ca.crt')),
+          checkServerIdentity: checkServerIdentity
+        },
+        legacySSL: true,
+        host: 'localhost'
+      })
+
+      cl.on('online', function () {
+        cl.once('offline', done)
+        cl.end()
+      })
+      cl.on('error', function (e) {
+        done(e)
       })
     })
   })

@@ -12,7 +12,7 @@ var Session = require('./Session')
  *   options.domain : domain of xmpp server
  *   options.autostart : if we start listening at given port
  *   options.requestCert : expect a client certificate (see tls.createSecurePair for more)
- *   options.rejectUnauthorized : reject when client cert missmatches (see tls.createSecurePair for more)
+ *   options.rejectUnauthorized : reject when client cert mismatches (see tls.createSecurePair for more)
  *   options.tls : wrapper object for tlc config
  *   options.tls.key : private key string
  *   options.tls.cert : certificate string

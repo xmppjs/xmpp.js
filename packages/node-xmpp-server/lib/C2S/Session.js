@@ -40,6 +40,10 @@ function Session (opts) {
   if (this.connection.connect) {
     this.connection.connect({socket: opts.socket})
   }
+
+  if (this.server.options && this.server.options.tls && this.server.options.tls.direct) {
+    this.connection.setSecure(this.server.credentials, true)
+  }
 }
 
 util.inherits(Session, EventEmitter)

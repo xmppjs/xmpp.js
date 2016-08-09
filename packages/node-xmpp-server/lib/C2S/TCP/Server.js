@@ -11,13 +11,14 @@ var TCP_PORT = 5222
 
 /**
  * params:
- *   options : port on which to listen to C2S connections
- *   options.port : xmpp tcp socket port
+ *   options : server options
+ *   options.port : port on which to listen to C2S connections
  *   options.domain : domain of xmpp server
  *   options.autostart : if we start listening at given port
  *   options.requestCert : expect a client certificate (see tls.createSecurePair for more)
- *   options.rejectUnauthorized : reject when client cert missmatches (see tls.createSecurePair for more)
- *   options.tls : wrapper object for tlc config
+ *   options.rejectUnauthorized : reject when client cert mismatches (see tls.createSecurePair for more)
+ *   options.tls : wrapper object for tls config
+ *   options.tls.direct : direct SSL/TLS handshake when accepting a connection, not after STARTTLS
  *   options.tls.key : private key string
  *   options.tls.cert : certificate string
  *   options.tls.keyPath : path to key
