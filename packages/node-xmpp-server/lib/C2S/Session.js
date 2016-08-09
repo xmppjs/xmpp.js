@@ -41,7 +41,7 @@ function Session (opts) {
     this.connection.connect({socket: opts.socket})
   }
 
-  if (this.server.options && this.server.options.tls && this.server.options.tls.direct) {
+  if (this.server && this.server.options && this.server.options.tls && this.server.options.tls.direct) {
     this.connection.setSecure(this.server.credentials, true)
   }
 }
