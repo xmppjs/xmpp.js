@@ -186,6 +186,7 @@ describe('SASL', function () {
       })
       cl.on('error', function () {
         // this should happen
+        cl.end()
         done()
       })
     })
@@ -405,6 +406,7 @@ describe('SASL', function () {
       })
       cl.on('error', function () {
         // this should happen
+        cl.end()
         done()
       })
     })
