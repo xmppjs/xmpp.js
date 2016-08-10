@@ -217,12 +217,12 @@ describe('SASL', function () {
     it('should accept plain authentication, direct TLS', function (done) {
       // alternatively, edit /etc/hosts and don't pass a custom checkServerIdentity
       var checkServerIdentity = function (servername, cert) {
-        if (servername == 'localhost') {
+        if (servername === 'localhost') {
           return undefined
         } else {
           return 'test, expected localhost instead of example.com as in cert'
         }
-      };
+      }
 
       var cl = createClient({
         jid: user.jid,
