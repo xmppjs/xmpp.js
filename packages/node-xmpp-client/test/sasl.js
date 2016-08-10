@@ -2,13 +2,13 @@
 
 'use strict'
 
-const nodexmppserver = require('node-xmpp-server')
-const C2SServer = nodexmppserver.C2SServer
-const Stanza = require('node-xmpp-core').Stanza
-const net = require('net')
-const util = require('util')
-const path = require('path')
-const fs = require('fs')
+var nodexmppserver = require('node-xmpp-server')
+var C2SServer = nodexmppserver.C2SServer
+var Stanza = require('node-xmpp-core').Stanza
+var net = require('net')
+var util = require('util')
+var path = require('path')
+var fs = require('fs')
 var Client = require('../index')
 var Plain = nodexmppserver.auth.Plain
 var XOAuth2 = nodexmppserver.auth.XOAuth2
