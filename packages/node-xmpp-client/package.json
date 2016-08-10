@@ -27,7 +27,8 @@
     "ws": "^1.1.1"
   },
   "devDependencies": {
-    "node-xmpp-server": "^2.1.3"
+    "node-xmpp-server": "^2.1.3",
+    "lodash.assign": "^4.0.0"
   },
   "browser": {
     "request": "browser-request",

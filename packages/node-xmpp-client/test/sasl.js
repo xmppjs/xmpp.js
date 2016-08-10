@@ -10,6 +10,7 @@ var util = require('util')
 var path = require('path')
 var fs = require('fs')
 var Client = require('../index')
+var assign = require('lodash.assign')
 var Plain = nodexmppserver.auth.Plain
 var XOAuth2 = nodexmppserver.auth.XOAuth2
 var DigestMD5 = nodexmppserver.auth.DigestMD5
@@ -47,7 +48,7 @@ function startServer (mechanism, done, extraOpts) {
     domain: 'localhost',
     autostart: false
   }
-  Object.assign(opts, extraOpts)
+  assign(opts, extraOpts)
   var c2s = new C2SServer(opts)
 
   if (mechanism) {
