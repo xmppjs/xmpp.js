@@ -106,7 +106,7 @@ Session.prototype.decode64 = function (encoded) {
 }
 
 Session.prototype.sendFeatures = function () {
-  // trilian requires features to be prefixed https://github.com/node-xmpp/node-xmpp-server/pull/125
+  // Trillian requires features to be prefixed https://github.com/node-xmpp/node-xmpp-server/pull/125
   var features = new Element('stream:features', {xmlns: NS_STREAMS, 'xmlns:stream': NS_STREAMS})
   if (!this.authenticated) {
     if (this.server && this.server.availableSaslMechanisms) {
@@ -194,7 +194,7 @@ Session.prototype.onAuth = function (stanza) {
 
     /**
      * Authenticates a user
-     * @param  Object authRequest obejct with credentials like {user: 'bob', password: 'secret'}
+     * @param  user authRequest object with credentials like {username: 'bob', password: 'secret'}
      */
     this.mechanism.authenticate = function (user, cb) {
       if (!user.saslmech) {
