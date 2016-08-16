@@ -140,6 +140,30 @@ describe('connection', function () {
     })
   })
 
+  it('includes jid resource in \'to\' if provided', function (done) {
+    var jidResourceOpts = {
+      jid: 'component.shakespeare.lit/instanceId-1337',
+      password: 'shared-password',
+      host: 'localhost',
+      port: COMPONENT_PORT
+    }
+
+    onSocket = function (socket) {
+      socket.once('data', function (d) {
+        var parsed = parse(d.toString('utf8') + '</stream:stream>')
+        parsed.attrs.to.should.equal(jidResourceOpts.jid)
+        done()
+      })
+      socket.on('end', function () { // client disconnects
+        if (duringafter) return
+        done('error: socket closed')
+      })
+    }
+
+    var component = new Component(jidResourceOpts)
+    component.should.exist
+  })
+
   describe('send', function () {
     it('adds the from attribute if missing', function (done) {
       var component = new Component(options)
