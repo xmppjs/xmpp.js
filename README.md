@@ -12,9 +12,10 @@ node-xmpp is a set of XMPP libraries for JavaScript.
 
 ## packages
 
-- [server](https://github.com/node-xmpp/node-xmpp/tree/master/packages/node-xmpp-server)
-- [client](https://github.com/node-xmpp/node-xmpp/tree/master/packages/node-xmpp-client)
-- [component](https://github.com/node-xmpp/node-xmpp/tree/master/packages/node-xmpp-component)
-- [xml](https://github.com/node-xmpp/node-xmpp/tree/master/packages/xml)
-- [jid](https://github.com/node-xmpp/node-xmpp/tree/master/packages/jid)
-- [core](https://github.com/node-xmpp/node-xmpp/tree/master/packages/node-xmpp-core)
+- [node-xmpp-server](https://github.com/node-xmpp/node-xmpp/tree/master/packages/node-xmpp-server)
+- [node-xmpp-client](https://github.com/node-xmpp/node-xmpp/tree/master/packages/node-xmpp-client)
+- [node-xmpp-component](https://github.com/node-xmpp/node-xmpp/tree/master/packages/node-xmpp-component)
+- [node-xmpp-core](https://github.com/node-xmpp/node-xmpp/tree/master/packages/node-xmpp-core)
+- [@xmpp/xml](https://github.com/node-xmpp/node-xmpp/tree/master/packages/xml)
+- [@xmpp/streamparser](https://github.com/node-xmpp/node-xmpp/tree/master/packages/streamparser)
+- [@xmpp/jid](https://github.com/node-xmpp/node-xmpp/tree/master/packages/jid)

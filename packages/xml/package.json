@@ -13,10 +13,6 @@
     "message",
     "presence"
   ],
-  "scripts": {
-    "prepublish": "npm run bundle",
-    "bundle": "../../node_modules/.bin/browserify index.js -s XML -o bundle.js"
-  },
   "dependencies": {
     "inherits": "^2.0.1",
     "ltx": "^2.5.0"

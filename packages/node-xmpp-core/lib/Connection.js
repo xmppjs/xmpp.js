@@ -5,7 +5,7 @@ var EventEmitter = require('events').EventEmitter
 var inherits = require('inherits')
 var Element = require('@xmpp/xml').Element
 var reconnect = require('reconnect-core')
-var StreamParser = require('./StreamParser')
+var StreamParser = require('@xmpp/streamparser')
 var starttls = require('node-xmpp-tls-connect')
 var debug = require('debug')('xmpp:connection')
 var assign = require('lodash.assign')
@@ -211,7 +211,7 @@ Connection.prototype.send = function (stanza) {
 
 Connection.prototype.startParser = function () {
   var self = this
-  this.parser = new StreamParser.StreamParser(this.maxStanzaSize)
+  this.parser = new StreamParser(this.maxStanzaSize)
 
   this.parser.on('streamStart', function (attrs) {
     /* We need those xmlns often, store them extra */

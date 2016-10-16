@@ -1,7 +1,7 @@
 'use strict'
 
 var Connection = require('./lib/Connection')
-var StreamParser = require('./lib/StreamParser')
+var StreamParser = require('@xmpp/streamparser')
 
 var JID = require('@xmpp/jid')
 var xml = require('@xmpp/xml')
