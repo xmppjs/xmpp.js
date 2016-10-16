@@ -1,15 +1,15 @@
 {
   "name": "node-xmpp",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "XMPP for JavaScript",
   "repository": "github:node-xmpp/node-xmpp",
   "homepage": "http://github.com/node-xmpp/node-xmpp",
   "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
   "dependencies": {
-    "node-xmpp-client": "^3.0.0",
-    "node-xmpp-component": "^2.0.0",
-    "node-xmpp-core": "^5.0.0",
-    "node-xmpp-server": "^2.1.2"
+    "node-xmpp-client": "^3.0.3",
+    "node-xmpp-component": "^2.0.3",
+    "node-xmpp-core": "^5.0.3",
+    "node-xmpp-server": "^2.2.1"
   },
   "license": "MIT"
 }

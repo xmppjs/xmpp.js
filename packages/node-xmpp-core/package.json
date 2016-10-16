@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp-core",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "description": "core files for the node-xmpp project",
   "repository": "github:node-xmpp/node-xmpp",
   "homepage": "http://github.com/node-xmpp/node-xmpp",
@@ -20,10 +20,10 @@
     "inherits": "^2.0.1",
     "lodash.assign": "^4.0.0",
     "ltx": "^2.2.0",
-    "node-xmpp-stanza": "^1.1.0",
+    "node-xmpp-stanza": "^1.1.1",
     "reconnect-core": "https://github.com/dodo/reconnect-core/tarball/merged",
     "node-xmpp-tls-connect": "^1.0.1",
-    "@xmpp/jid": "^0.0.0"
+    "@xmpp/jid": "^0.0.1"
   },
   "browser": {
     "node-xmpp-tls-connect": false,

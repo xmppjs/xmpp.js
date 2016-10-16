@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp-jid",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "XMPP identifiers (JID) for JavaScript",
   "repository": "github:node-xmpp/node-xmpp",
   "homepage": "http://github.com/node-xmpp/node-xmpp",
@@ -11,6 +11,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@xmpp/jid": "^0.0.0"
+    "@xmpp/jid": "^0.0.1"
   }
 }

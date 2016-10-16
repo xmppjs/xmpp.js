@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp-stanza",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "XMPP stanza for JavaScript",
   "repository": "github:node-xmpp/node-xmpp",
   "homepage": "http://github.com/node-xmpp/node-xmpp",
