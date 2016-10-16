@@ -5,13 +5,12 @@
   "repository": "github:node-xmpp/node-xmpp",
   "homepage": "http://github.com/node-xmpp/node-xmpp",
   "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
-  "scripts": {
-    "prepublish": "npm run bundle",
-    "bundle": "../../node_modules/.bin/browserify index.js -s JID -o bundle.js"
-  },
   "keywords": [
     "XMPP",
     "JID"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@xmpp/jid": "^0.0.0"
+  }
 }

@@ -3,9 +3,6 @@ JID
 
 XMPP identifiers (JID) for JavaScript
 
-[![Travis](https://img.shields.io/travis/node-xmpp/JID/master.svg?style=flat-square)](https://travis-ci.org/node-xmpp/JID/branches)
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com/)
-
 | JID type | local | @ |     domain     | / |  resource  |          usage         |
 |:--------:|:-----:|:-:|:--------------:|:-:|:----------:|:----------------------:|
 |  domain  |       |   | wonderland.net |   |            | servers and components |
@@ -17,13 +14,13 @@ https://en.wikipedia.org/wiki/XMPP#Decentralization_and_addressing
 ## Install
 
 ```
-npm install node-xmpp-jid
+npm install @xmpp/jid
 ```
 
 ## Usage
 
 ```javascript
-var JID = require('node-xmpp-jid')
+var JID = require('@xmpp/jid')
 
 /*
  * All return an instance of JID.JID, the new operator is optional.
