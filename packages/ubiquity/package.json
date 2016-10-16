@@ -1,0 +1,22 @@
+{
+  "name": "@xmpp/ubiquity",
+  "description": "Component service to show your XMPP status on any webpage.",
+  "repository": "github:node-xmpp/ubiquity",
+  "homepage": "https://github.com/node-xmpp/node-xmpp/tree/master/packages/ubiquity",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "version": "0.0.0",
+  "license": "ISC",
+  "keywords": [
+    "XMPP",
+    "status",
+    "presence"
+  ],
+  "dependencies": {
+    "@xmpp/component": "^0.0.0",
+    "@xmpp/jid": "^0.0.1",
+    "@xmpp/plugins": "^0.0.0",
+    "@xmpp/xml": "^0.0.1",
+    "express": "^4.14.0",
+    "level": "^1.5.0"
+  }
+}
