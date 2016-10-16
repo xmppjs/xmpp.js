@@ -201,7 +201,9 @@ class Connection extends EventEmitter {
 
   send (element) {
     return new Promise((resolve, reject) => {
-      this.write(element.root()).then(resolve, reject)
+      element = element.root()
+      this.emit('send', element)
+      this.write(element).then(resolve, reject)
     })
   }
 
@@ -263,6 +265,7 @@ class Connection extends EventEmitter {
     if (!this.plugins[plugin.name]) {
       this.plugins[plugin.name] = plugin.plugin(this)
     }
+    if (this.plugins[plugin.name].register) this.plugins[plugin.name].register()
     return this.plugins[plugin.name]
   }
 

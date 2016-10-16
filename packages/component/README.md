@@ -2,7 +2,7 @@
 
 XMPP component for JavaScript
 
-Includes `@xmpp/component-core` and `@xmpp/reconnect`.
+Includes `@xmpp/component-core` and `@xmpp/plugin-reconnect`.
 
 ## Install
 
