@@ -25,13 +25,13 @@ describe('S2S Router Integration', function () {
       .withArgs('_xmpp-server._tcp.nodexmpp.com').yields(null, [{
         priority: 10,
         weight: 5,
-        port: 5270,
+        port: 5271,
         name: 'localhost'
       }])
       .withArgs('_xmpp-server._tcp.example.com').yields(null, [{
         priority: 10,
         weight: 5,
-        port: 5269,
+        port: 5272,
         name: 'localhost'
       }])
 
@@ -65,8 +65,8 @@ describe('S2S Router Integration', function () {
   }
 
   beforeEach(function () {
-    exampleRouter = new Router(5269, 'localhost')
-    nodeXmppRouter = new Router(5270, 'localhost')
+    exampleRouter = new Router(5272, 'localhost')
+    nodeXmppRouter = new Router(5271, 'localhost')
   })
 
   afterEach(function (done) {

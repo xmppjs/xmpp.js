@@ -35,5 +35,8 @@
     "files": [
       "packages/*/ava/**/*.js"
     ]
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.16.0"
   }
 }

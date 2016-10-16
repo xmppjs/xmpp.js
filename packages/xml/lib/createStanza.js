@@ -7,7 +7,7 @@ var Element = require('ltx').Element
  * JSX compatible API, use this function as pragma
  * https://facebook.github.io/jsx/
  * Returns a Stanza if name is presence, message or iq an ltx Element otherwise.
- *a
+ *
  * @param  {string} name  name of the element
  * @param  {object} attrs object of attribute key/value pairs
  * @return {Element}      Stanza or Element

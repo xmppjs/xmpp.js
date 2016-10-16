@@ -8,7 +8,7 @@ var ltx = Client.ltx
 require('should')
 
 describe('Authentication', function () {
-  var C2S_PORT = 5222
+  var C2S_PORT = 5225
   var onSocket = function () {}
   var duringafter = false
   var server = null
@@ -34,8 +34,8 @@ describe('Authentication', function () {
     var options = {
       jid: 'test@localhost',
       password: 'test',
-      host: 'localhost',
-      port: C2S_PORT
+      port: C2S_PORT,
+      host: 'localhost'
     }
     onSocket = function (socket) {
       socket.once('data', function (d) {

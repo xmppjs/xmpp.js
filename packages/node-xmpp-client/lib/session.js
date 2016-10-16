@@ -48,7 +48,7 @@ Session.prototype._setupSocketConnection = function (opts) {
   this.connection = new Connection(params)
   this._addConnectionListeners()
 
-  if (opts.host) {
+  if (opts.host || opts.port) {
     this._socketConnectionToHost(opts)
   } else if (!SRV) {
     throw new Error('Cannot load SRV')
@@ -66,7 +66,7 @@ Session.prototype._socketConnectionToHost = function (opts) {
       socket: function () {
         return tls.connect(
           opts.port || 5223,
-          opts.host,
+          opts.host || 'localhost',
           opts.credentials || {},
           function () {
             if (this.socket.authorized) {

@@ -11,7 +11,7 @@ var c2s = null
 function startServer () {
   // Sets up the server.
   c2s = new xmpp.server.C2S.TCPServer({
-    port: 5222,
+    port: 5225,
     domain: 'localhost'
   })
 
@@ -82,7 +82,8 @@ describe.skip('C2Server', function () {
       cl = new xmpp.Client({
         jid: 'bob@example.com',
         password: 'alice',
-        host: 'localhost'
+        host: 'localhost',
+        port: 5225
       })
       cl.on('online', function () {
         eventChain.push('clientonline')
