@@ -3,9 +3,9 @@
 var inherits = require('inherits')
 var EventEmitter = require('events').EventEmitter
 var LtxParser = require('ltx/lib/parsers/ltx')
-var stanza = require('node-xmpp-stanza')
-var Stanza = stanza.Stanza
-var Element = stanza.Element
+var xml = require('@xmpp/xml')
+var Stanza = xml.Stanza
+var Element = xml.Element
 
 /**
  * Recognizes <stream:stream> and collects stanzas used for ordinary

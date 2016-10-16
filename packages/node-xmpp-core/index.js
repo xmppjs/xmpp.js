@@ -4,7 +4,7 @@ var Connection = require('./lib/Connection')
 var StreamParser = require('./lib/StreamParser')
 
 var JID = require('@xmpp/jid')
-var stanza = require('node-xmpp-stanza')
+var xml = require('@xmpp/xml')
 var inherits = require('inherits')
 
 exports.SRV = require('./lib/SRV')
@@ -20,22 +20,22 @@ exports.exportCoreUtils = function (obj) {
   // inherits
   obj.inherits = inherits
 
-  // stanza
-  obj.stanza = stanza
-  obj.Stanza = stanza.Stanza
-  obj.createStanza = stanza.createStanza
-  obj.IQ = stanza.IQ
-  obj.Presence = stanza.Presence
-  obj.Message = stanza.Message
-  obj.Parser = stanza.Parser
-  obj.parse = stanza.parse
+  // xml
+  obj.stanza = xml
+  obj.Stanza = xml.Stanza
+  obj.createStanza = xml.createStanza
+  obj.IQ = xml.IQ
+  obj.Presence = xml.Presence
+  obj.Message = xml.Message
+  obj.Parser = xml.Parser
+  obj.parse = xml.parse
 
   // ltx
-  obj.ltx = stanza.ltx
-  obj.createElement = stanza.createElement
-  obj.Element = stanza.Element
-  obj.escapeXML = stanza.escapeXML
-  obj.escapeXMLText = stanza.escapeXMLText
+  obj.ltx = xml.ltx
+  obj.createElement = xml.createElement
+  obj.Element = xml.Element
+  obj.escapeXML = xml.escapeXML
+  obj.escapeXMLText = xml.escapeXMLText
 }
 
 exports.exportCoreUtils(exports)
