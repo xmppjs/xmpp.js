@@ -5,7 +5,9 @@
     "ignore": [
       "ava/",
       "examples/",
-      "test/"
+      "test/",
+      "example.js",
+      "test.js"
     ]
   }
 }

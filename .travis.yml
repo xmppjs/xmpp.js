@@ -39,6 +39,8 @@ script:
   - sudo prosodyctl start
   - npm run integration
   - sudo prosodyctl restart
+  - npm run ava:integration
+  - sudo prosodyctl restart
   - npm run bundle
   - npm run test:browser
 
