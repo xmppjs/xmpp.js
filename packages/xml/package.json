@@ -1,0 +1,24 @@
+{
+  "name": "@xmpp/xml",
+  "description": "XMPP XML for JavaScript",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "https://github.com/node-xmpp/node-xmpp/tree/master/packages/xml",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "version": "0.0.0",
+  "license": "ISC",
+  "keywords": [
+    "XMPP",
+    "stanza",
+    "iq",
+    "message",
+    "presence"
+  ],
+  "scripts": {
+    "prepublish": "npm run bundle",
+    "bundle": "../../node_modules/.bin/browserify index.js -s XML -o bundle.js"
+  },
+  "dependencies": {
+    "inherits": "^2.0.1",
+    "ltx": "^2.5.0"
+  }
+}
