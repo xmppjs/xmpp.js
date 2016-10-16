@@ -42,4 +42,4 @@ script:
   - npm run bundle
   - npm run test:browser
 
-after_script: npm run coveralls
+# after_script: npm run coveralls
