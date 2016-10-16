@@ -40,7 +40,7 @@ WSConnection.prototype.onopen = function () {
 
 WSConnection.prototype.startParser = function () {
   var self = this
-  this.parser = new StreamParser.StreamParser(this.maxStanzaSize)
+  this.parser = new StreamParser(this.maxStanzaSize)
 
   this.parser.on('start', function (attrs) {
     self.streamAttrs = attrs

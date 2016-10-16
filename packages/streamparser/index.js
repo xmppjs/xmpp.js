@@ -140,7 +140,4 @@ StreamParser.prototype.error = function (condition, message) {
   this.emit('error', e)
 }
 
-// deprecated, let's remove it at some point
-StreamParser.StreamParser = StreamParser
-
 module.exports = StreamParser
