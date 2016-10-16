@@ -20,10 +20,10 @@
     "inherits": "^2.0.1",
     "lodash.assign": "^4.0.0",
     "ltx": "^2.2.0",
-    "node-xmpp-jid": "^2.3.0",
     "node-xmpp-stanza": "^1.1.0",
     "reconnect-core": "https://github.com/dodo/reconnect-core/tarball/merged",
-    "node-xmpp-tls-connect": "^1.0.1"
+    "node-xmpp-tls-connect": "^1.0.1",
+    "@xmpp/jid": "^0.0.0"
   },
   "browser": {
     "node-xmpp-tls-connect": false,

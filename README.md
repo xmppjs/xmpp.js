@@ -16,5 +16,5 @@ node-xmpp is a set of XMPP libraries for JavaScript.
 - [client](https://github.com/node-xmpp/node-xmpp/tree/master/packages/node-xmpp-client)
 - [component](https://github.com/node-xmpp/node-xmpp/tree/master/packages/node-xmpp-component)
 - [stanza](https://github.com/node-xmpp/node-xmpp/tree/master/packages/node-xmpp-stanza)
-- [jid](https://github.com/node-xmpp/node-xmpp/tree/master/packages/node-xmpp-jid)
+- [jid](https://github.com/node-xmpp/node-xmpp/tree/master/packages/jid)
 - [core](https://github.com/node-xmpp/node-xmpp/tree/master/packages/node-xmpp-core)

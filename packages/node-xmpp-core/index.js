@@ -3,7 +3,7 @@
 var Connection = require('./lib/Connection')
 var StreamParser = require('./lib/StreamParser')
 
-var JID = require('node-xmpp-jid')
+var JID = require('@xmpp/jid')
 var stanza = require('node-xmpp-stanza')
 var inherits = require('inherits')
 
