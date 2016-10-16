@@ -1,6 +1,6 @@
 {
   "name": "node-xmpp-component",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Component API for XMPP",
   "repository": "github:node-xmpp/node-xmpp",
   "homepage": "http://github.com/node-xmpp/node-xmpp",
@@ -11,9 +11,9 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "node-xmpp-core": "^5.0.3"
+    "node-xmpp-core": "^5.0.4"
   },
   "devDependencies": {
-    "node-xmpp-client": "^3.0.3"
+    "node-xmpp-client": "^3.0.4"
   }
 }
