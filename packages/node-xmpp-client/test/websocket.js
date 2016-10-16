@@ -35,9 +35,13 @@ describe('C2S WebSocket with node-xmpp-server', function () {
   })
 
   it('connects', function (done) {
-    var client = new Client({jid: 'sonny@localhost', password: 'foo', websocket: {
-      url: 'ws://localhost:' + PORT
-    }})
+    var client = new Client({
+      jid: 'sonny@localhost',
+      password: 'foo',
+      websocket: {
+        url: 'ws://localhost:' + PORT
+      }
+    })
     client.on('online', function () {
       done()
     })
