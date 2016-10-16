@@ -7,3 +7,5 @@ coverage/
 
 bundle.js
 browserify.js
+npm-debug.log
+lerna-debug.log
