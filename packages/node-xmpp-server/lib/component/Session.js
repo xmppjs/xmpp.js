@@ -50,9 +50,9 @@ ComponentSession.prototype.onStanza = function (stanza) {
   }
 
   if (stanza.getText() === this.expectedDigest) {
-    this.emit('auth-success')
+    this.emit('auth-success', stanza.attrs.from)
     this.connection.send(new Element('handshake'))
-    this.emit('online')
+    this.emit('online', stanza.attrs.from)
     this.authenticated = true
   } else {
     this.connection.error('not-authorized', 'not authorized')
