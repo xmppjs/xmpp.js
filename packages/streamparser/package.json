@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "@xmpp/xml": "^0.0.1",
+    "inherits": "^2.0.3",
     "ltx": "^2.5.0"
   }
 }

@@ -3,6 +3,7 @@
   "version": "independent",
   "publishConfig": {
     "ignore": [
+      "ava/",
       "examples/",
       "test/"
     ]

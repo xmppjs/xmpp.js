@@ -12,7 +12,7 @@ var Element = require('ltx').Element
  * @param  {object} attrs object of attribute key/value pairs
  * @return {Element}      Stanza or Element
  */
-module.exports = function createStanza (name, attrs /*, child1, child2, ...*/) {
+module.exports = function createStanza (name, attrs /*, child1, child2, ... */) {
   var el
 
   switch (name) {
