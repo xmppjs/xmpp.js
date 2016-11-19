@@ -1,3 +1,5 @@
+'use strict'
+
 const test = require('ava')
 const _Connection = require('../../../packages/connection')
 const Connection = require('..')

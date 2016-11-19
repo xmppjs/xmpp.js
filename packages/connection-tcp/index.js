@@ -1,3 +1,5 @@
+'use strict'
+
 const Socket = require('net').Socket
 const Connection = require('@xmpp/connection')
 const StreamParser = require('./lib/StreamParser')

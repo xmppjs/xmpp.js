@@ -11,7 +11,7 @@
     "component"
   ],
   "dependencies": {
-    "@xmpp/connection-tcp": "^0.0.0",
-    "@xmpp/xml": "^0.0.1"
+    "@xmpp/component-core": "^0.0.0",
+    "@xmpp/reconnect": "^0.0.0"
   }
 }
