@@ -7,9 +7,22 @@ const Component = require('../component') // require('@xmpp/component')
 const entity = new Component()
 
 // emitted for any error
-entity.once('error', (err) => {
+entity.on('error', (err) => {
   console.error('error', err)
 })
+
+entity.on('close', () => {
+  console.log('closed')
+})
+
+entity.on('reconnecting', () => {
+  console.log('reconnecting')
+})
+
+entity.on('reconnected', () => {
+  console.log('reconnected')
+})
+
 
 // emitted for incoming stanza _only_ (iq/presence/message) qualified with the right namespace
 // entity.on('stanza', (stanza) => {

@@ -1,3 +1,5 @@
+'use strict'
+
 const _StreamParser = require('@xmpp/streamparser')
 
 /*

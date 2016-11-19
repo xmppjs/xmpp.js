@@ -1,3 +1,5 @@
+'use strict'
+
 const EventEmitter = require('events')
 const StreamParser = require('@xmpp/streamparser')
 const JID = require('@xmpp/jid')
@@ -29,7 +31,8 @@ class Connection extends EventEmitter {
     this.jid = null
     this.timeout = 2000
     this.options = typeof options === 'object' ? options : {}
-    this.plugins = []
+    this.plugins = Object.create(null)
+    this.startOptions = null
 
     if (this.Socket && this.Parser) {
       this._handle(new this.Socket(), new this.Parser())
@@ -109,6 +112,7 @@ class Connection extends EventEmitter {
    * opens the socket then opens the stream
    */
   start (options) {
+    this.startOptions = options
     return new Promise((resolve, reject) => {
       if (typeof options === 'string') {
         options = {uri: options}
@@ -255,10 +259,11 @@ class Connection extends EventEmitter {
     })
   }
 
-  use (plugin) {
-    if (this.plugins.includes(plugin)) return
-    this.plugins.push(plugin)
-    plugin(this)
+  plugin (plugin) {
+    if (!this.plugins[plugin.name]) {
+      this.plugins[plugin.name] = plugin.plugin(this)
+    }
+    return this.plugins[plugin.name]
   }
 
   // override
