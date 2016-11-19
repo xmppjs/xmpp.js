@@ -8,7 +8,8 @@ var Server = XMPP.component.Server
 var Component = require('node-xmpp-component')
 
 var server = new Server({
-  autostart: false
+  autostart: false,
+  port: 5343
 })
 server.on('connection', function (connection) {
   connection.on('verify-component', function (jid, cb) {
@@ -41,7 +42,7 @@ describe('component server - component', function () {
         jid: 'foo.localhost',
         password: 'password',
         host: 'localhost',
-        port: 5347
+        port: 5343
       })
       component.on('error', done)
       component.on('online', done)
@@ -54,7 +55,7 @@ describe('component server - component', function () {
         jid: 'unknown.localhost',
         password: 'password',
         host: 'localhost',
-        port: 5347
+        port: 5343
       })
       component.on('error', done)
       component.on('disconnect', function (err) {
@@ -71,7 +72,7 @@ describe('component server - component', function () {
         jid: 'foo.localhost',
         password: 'notthepassword',
         host: 'localhost',
-        port: 5347
+        port: 5343
       })
       component.on('error', done)
       component.on('disconnect', function (err) {
@@ -98,7 +99,7 @@ describe('component server - component', function () {
         jid: 'foo.localhost',
         password: 'password',
         host: 'localhost',
-        port: 5347
+        port: 5343
       })
       component.on('error', done)
       component.on('disconnect', function (err) {

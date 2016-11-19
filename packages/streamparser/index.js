@@ -29,6 +29,10 @@ function StreamParser (options) {
   this.bytesParsedOnStanzaBegin = 0
 
   this.parser.on('startElement', function (name, attrs) {
+    if (!self.element) {
+      self.emit('startElement', name, attrs)
+    }
+
     // TODO: refuse anything but <stream:stream>
     if (!self.element && (name === 'stream:stream')) {
       self.emit('streamStart', attrs)
@@ -49,14 +53,19 @@ function StreamParser (options) {
   })
 
   this.parser.on('endElement', function (name) {
+    if (!self.element) {
+      self.emit('endElement', name)
+    }
+
     if (!self.element && (name === 'stream:stream')) {
       self.end()
     } else if (self.element && (name === self.element.name)) {
       if (self.element.parent) {
         self.element = self.element.parent
       } else {
-        /* Stanza complete */
-        self.emit('stanza', self.element)
+        /* element complete */
+        self.emit('element', self.element)
+        self.emit('stanza', self.element) // FIXME deprecate
         delete self.element
         /* maxStanzaSize doesn't apply until next startElement */
         delete self.bytesParsedOnStanzaBegin

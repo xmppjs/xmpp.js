@@ -23,7 +23,7 @@ var user = {
 function startServer (mechanism) {
   // Sets up the server.
   var c2s = new Server({
-    port: 5222,
+    port: 5225,
     domain: 'localhost'
   })
 
@@ -91,6 +91,7 @@ function startServer (mechanism) {
 }
 
 function createClient (opts) {
+  opts.port = 5225
   var cl = new Client(opts)
 
   cl.on('stanza', function (stanza) {

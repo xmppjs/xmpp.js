@@ -41,7 +41,7 @@ var user = {
 function startServer (mechanism, done) {
   // Sets up the server.
   var c2s = new C2SServer({
-    port: 5222,
+    port: 5225,
     domain: 'localhost',
     autostart: false
   })
@@ -122,6 +122,7 @@ function startServer (mechanism, done) {
 }
 
 function createClient (opts) {
+  opts.port = 5225
   var cl = new Client(opts)
 
   cl.on('stanza', function (stanza) {
@@ -159,7 +160,8 @@ describe('SASL', function () {
       var cl = createClient({
         jid: user.jid,
         password: user.password,
-        preferred: Plain.id
+        preferred: Plain.id,
+        port: 5225
       })
 
       cl.on('online', function () {
@@ -237,7 +239,8 @@ describe('SASL', function () {
       var cl = createClient({
         jid: user.jid,
         password: user.password,
-        preferred: 'DIGEST-MD5'
+        preferred: 'DIGEST-MD5',
+        port: 5225
       })
 
       cl.on('online', function () {

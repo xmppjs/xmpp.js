@@ -7,7 +7,8 @@ var Server = XMPP.C2S.TCPServer
 var Client = require('node-xmpp-client')
 
 var server = new Server({
-  autostart: false
+  autostart: false,
+  port: 5225
 })
 server.on('connection', function (connection) {
   connection.on('authenticate', function (opts, cb) {
@@ -34,7 +35,8 @@ describe('C2S TCP server client', function () {
     it('should connect', function (done) {
       client = new Client({
         jid: 'foo@localhost',
-        password: 'password'
+        password: 'password',
+        port: 5225
       })
       client.on('error', done)
       client.on('online', function () {

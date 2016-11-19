@@ -7,7 +7,8 @@ var Server = XMPP.C2S.BOSHServer
 var Client = require('node-xmpp-client')
 
 var server = new Server({
-  autostart: false
+  autostart: false,
+  port: 5285
 })
 server.on('connection', function (connection) {
   connection.on('authenticate', function (opts, cb) {
@@ -36,7 +37,7 @@ describe('C2S BOSH server client', function () {
         jid: 'foo@localhost',
         password: 'password',
         bosh: {
-          url: 'http://localhost:5280/http-bind'
+          url: 'http://localhost:5285/http-bind'
         }
       })
       client.once('error', done)

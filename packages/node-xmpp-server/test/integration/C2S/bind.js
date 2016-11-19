@@ -8,7 +8,7 @@ var Plain = XMPP.auth.Plain
 var JID = XMPP.JID
 var Client = require('node-xmpp-client')
 
-var port = 5222
+var port = 5225
 var user = {
   jid: new JID('me@localhost/res'),
   password: 'secret'

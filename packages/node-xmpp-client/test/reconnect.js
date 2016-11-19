@@ -14,7 +14,7 @@ var user = {
 function startServer (done) {
   // Sets up the server.
   var c2s = new C2SServer({
-    port: 5222,
+    port: 5225,
     domain: 'localhost'
   })
 
@@ -81,7 +81,8 @@ describe.skip('Reconnect', function () {
       var cl = new Client({
         jid: user.jid,
         password: user.password,
-        reconnect: true
+        reconnect: true,
+        port: 5225
       })
       var eventChain = createChain(cl)
 
@@ -118,7 +119,8 @@ describe.skip('Reconnect', function () {
         password: user.password,
         reconnect: true,
         initialReconnectDelay: 10,
-        maxReconnectDelay: 11
+        maxReconnectDelay: 11,
+        port: 5225
       })
       var eventChain = createChain(cl)
 
