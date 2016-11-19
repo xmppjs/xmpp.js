@@ -20,7 +20,7 @@ const discoInfo = entity.plugin(plugins['disco-info'])
   'http://jabber.org/protocol/activity+notify',
   'http://jabber.org/protocol/mood+notify',
   'http://jabber.org/protocol/geoloc+notify',
-  'http://jabber.org/protocol/nick+notify',
+  'http://jabber.org/protocol/nick+notify'
 ].forEach(f => discoInfo.addFeature(f))
 
 ;[
@@ -78,30 +78,24 @@ entity.on('stanza', (stanza) => {
     if (type === 'subscribe') {
       entity.send(xml`<presence to='${from}' type='subscribed'/>`)
       entity.send(xml`<presence to='${from}' type='subscribe'/>`)
-
     } else if (type === 'unsubscribed') {
       entity.send(xml`<presence to='${from}' type='unsubscribe'/>`)
       cache.del(from)
       presences.forget(hash)
-
     } else if (type === 'subscribed') {
       cache.put(from, {})
-
     } else if (type === 'unavailable') {
       presences.set(hash, 'show', 'unavailable')
-
     } else if (type === 'probe') {
       entity.send(xml`<presence to='${from}'/>`)
-
     } else if (type === undefined || type === 'available') {
       presences.set(hash, 'show', stanza.getChildText('show') || 'available')
-      presences.set(hash, 'status',  stanza.getChildText('status') || '')
+      presences.set(hash, 'status', stanza.getChildText('status') || '')
       const vcardEl = stanza.getChild('x', 'vcard-temp:x:update')
       if (vcardEl && vcardEl.getChildText('photo')) {
         updateAvatar(hash, jid, vcardEl.getChildText('photo'))
       }
     }
-
   } else if (stanza.is('message') && type === 'headline') {
     const eventEl = stanza.getChild('event', 'http://jabber.org/protocol/pubsub#event')
     const itemsEl = eventEl.getChild('items')
