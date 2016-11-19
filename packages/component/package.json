@@ -1,0 +1,17 @@
+{
+  "name": "@xmpp/component",
+  "description": "XMPP component for JavaScript",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "https://github.com/node-xmpp/node-xmpp/tree/master/packages/component",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "version": "0.0.0",
+  "license": "ISC",
+  "keywords": [
+    "XMPP",
+    "component"
+  ],
+  "dependencies": {
+    "@xmpp/connection-tcp": "^0.0.0",
+    "@xmpp/xml": "^0.0.1"
+  }
+}

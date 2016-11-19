@@ -1,0 +1,19 @@
+{
+  "name": "@xmpp/connection-tcp",
+  "description": "XMPP TCP connection for JavaScript",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "https://github.com/node-xmpp/node-xmpp/tree/master/packages/connection-tcp",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "version": "0.0.0",
+  "license": "ISC",
+  "keywords": [
+    "XMPP",
+    "connection",
+    "TCP"
+  ],
+  "dependencies": {
+    "@xmpp/connection": "^0.0.0",
+    "@xmpp/streamparser": "^0.0.1",
+    "@xmpp/xml": "^0.0.1"
+  }
+}
