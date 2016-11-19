@@ -40,12 +40,12 @@ function plugin (entity) {
     get(to, el, options) {
       const iq = xml`<iq type='get' to='${to}'/>`
       iq.cnode(el)
-      return this.request(this.entity, iq, options)
+      return this.request(iq, options)
     },
     set(to, el, options) {
       const iq = xml`<iq type='set' to='${to}'/>`
       iq.cnode(el)
-      return this.request(this.entity, iq, options)
+      return this.request(iq, options)
     },
     request(stanza, options = {}) {
       return new Promise((resolve, reject) => {
