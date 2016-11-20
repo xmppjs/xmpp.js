@@ -6,7 +6,6 @@
   "version": "0.0.0",
   "license": "ISC",
   "dependencies": {
-    "@xmpp/client-iq-caller": "^0.0.0",
     "@xmpp/client-stream-features": "^0.0.0",
     "@xmpp/xml": "^0.0.0"
   }

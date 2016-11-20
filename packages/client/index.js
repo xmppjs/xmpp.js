@@ -1,7 +1,11 @@
 'use strict'
 
-import Client from './lib/Client'
-import xml from '@xmpp/xml'
-import jid from '@xmpp/jid'
+const Client = require('./lib/Client')
+const xml = require('@xmpp/xml')
+const jid = require('@xmpp/jid')
 
-export {Client, xml, jid}
+module.exports = {
+  Client,
+  xml,
+  jid,
+}

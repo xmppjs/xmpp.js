@@ -1,4 +1,4 @@
-export function authenticate (client, creds, features) {
+function authenticate (client, creds, features) {
   const auth = client.authenticators.find(auth => auth.match(features, client))
 
   if (!auth) return Promise.reject(new Error('no compatible authentication'))
@@ -6,22 +6,22 @@ export function authenticate (client, creds, features) {
   return auth.authenticate(client, creds, features)
 }
 
-export function addAuthenticator (client, mech) {
+function addAuthenticator (client, mech) {
   client.authenticators.push(mech)
 }
 
-export function plugin (client) {
+function plugin (client) {
   client.authenticators = []
   if (client.registerStreamFeature) {
     client.registerStreamFeature(streamFeature)
   }
 }
 
-export function match (features, client) {
+function match (features, client) {
   return client.authenticators.some(auth => auth.match(features))
 }
 
-export const streamFeature = {
+const streamFeature = {
   priority: 2500,
   match,
   restart: true,
@@ -43,4 +43,9 @@ export const streamFeature = {
   }
 }
 
-export default {authenticate, addAuthenticator, plugin, streamFeature}
+module.exports = {
+  authenticate,
+  addAuthenticator,
+  plugin,
+  streamFeature
+}

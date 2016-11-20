@@ -1,15 +1,17 @@
-import _Client from '@xmpp/client-core'
-import plugins from './plugins'
+'use strict'
 
-import {addAuthenticator} from '@xmpp/client-authentication'
-import sasl from '@xmpp/client-sasl'
-import legacy_authentication from '@xmpp/client-legacy-authentication'
+const ClientCore = require('@xmpp/client-core')
+const plugins = require('./plugins')
+
+const {addAuthenticator} = require('@xmpp/client-authentication')
+const sasl = require('@xmpp/client-sasl')
+const legacy_authentication = require('@xmpp/client-legacy-authentication')
 
 // import {bindStreamFeature} from '@xmpp/client-bind'
 // import {SASLStreamFeature} from '@xmpp/client-sasl'
 // import {legacyAuthenticationStreamFeature} from '@xmpp/client-legacy-authentication'
 
-class Client extends _Client {
+class Client extends ClientCore {
   constructor () {
     super()
     // TODO move to client-connection ?
@@ -45,4 +47,4 @@ class Client extends _Client {
   // }
 }
 
-export default Client
+module.exports = Client

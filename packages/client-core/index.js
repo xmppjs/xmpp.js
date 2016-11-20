@@ -1,4 +1,4 @@
-import Connection from '@xmpp/connection'
+const Connection = require('@xmpp/connection')
 
 class Client extends Connection {
   constructor (options) {
@@ -52,4 +52,4 @@ class Client extends Connection {
 
 Client.prototype.NS = 'jabber:client'
 
-export default Client
+module.exports = Client

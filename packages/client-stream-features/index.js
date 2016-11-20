@@ -55,5 +55,9 @@ function plugin (client) {
   client.registerStreamFeature = registerClient
 }
 
-export {register, plugin, selectFeature, selectFeatures}
-export default plugin
+module.exports = {
+  register,
+  plugin,
+  selectFeature,
+  selectFeatures
+}
