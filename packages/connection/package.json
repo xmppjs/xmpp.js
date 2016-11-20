@@ -4,7 +4,7 @@
   "repository": "github:node-xmpp/node-xmpp",
   "homepage": "https://github.com/node-xmpp/node-xmpp/tree/master/packages/connection",
   "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "ISC",
   "keywords": [
     "XMPP",
@@ -12,10 +12,10 @@
   ],
   "dependencies": {
     "@xmpp/jid": "^0.0.1",
-    "@xmpp/streamparser": "^0.0.1"
+    "@xmpp/streamparser": "^0.0.2"
   },
   "devDependencies": {
-    "@xmpp/xml": "^0.0.1"
+    "@xmpp/xml": "^0.1.0"
   },
   "browser": {
     "url": false
