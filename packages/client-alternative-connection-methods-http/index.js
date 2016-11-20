@@ -8,20 +8,20 @@
  * https://github.com/xsf/xeps/pull/198
  */
 
-import {parse as parseXML} from '@xmpp/xml'
-import http from '@xmpp/client-http'
+const {parse, parseXML} = require('@xmpp/xml')
+const http = require('@xmpp/client-http')
 
-export const NS_XRD = 'http://docs.oasis-open.org/ns/xri/xrd-1.0'
-export const REL_BOSH = 'urn:xmpp:alt-connections:xbosh'
-export const REL_WS = 'urn:xmpp:alt-connections:websocket'
-export const HOST_META = '/.well-known/host-meta'
+const NS_XRD = 'http://docs.oasis-open.org/ns/xri/xrd-1.0'
+const REL_BOSH = 'urn:xmpp:alt-connections:xbosh'
+const REL_WS = 'urn:xmpp:alt-connections:websocket'
+const HOST_META = '/.well-known/host-meta'
 
-export function parse (doc) {
+function parse (doc) {
   if (typeof doc === 'string') doc = parseXML(doc)
   if (!doc.is('XRD', NS_XRD)) throw new Error('invalid XRD document')
 }
 
-export function read (doc) {
+function read (doc) {
   const bosh = []
   const websocket = []
 
@@ -34,7 +34,7 @@ export function read (doc) {
   return {bosh, websocket}
 }
 
-export function getAltnernativeConnectionsMethods (domain, secure) {
+function getAltnernativeConnectionsMethods (domain, secure) {
   return http(`http${secure ? 's' : ''}://${domain}${HOST_META}`, {
     headers: {
       accept: 'application/xrd+xml'
@@ -43,4 +43,14 @@ export function getAltnernativeConnectionsMethods (domain, secure) {
   .then(response => response.text())
   .then(parse)
   .then(read)
+}
+
+module.exports = {
+  NS_XRD,
+  REL_BOSH,
+  REL_WS,
+  HOST_META,
+  parse,
+  read,
+  getAltnernativeConnectionsMethods,
 }
