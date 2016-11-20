@@ -217,9 +217,9 @@ class Connection extends EventEmitter {
 
   send (element) {
     return new Promise((resolve, reject) => {
-      element = element.root()
-      this.emit('send', element)
-      this.write(element).then(resolve, reject)
+      const root = element.root()
+      this.emit('send', root)
+      this.write(root).then(resolve, reject)
     })
   }
 
