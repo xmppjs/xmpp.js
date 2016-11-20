@@ -149,8 +149,10 @@ BOSHConnection.prototype.end = function (stanzas) {
   this.queue = []
   this.rid++
   this.request({ type: 'terminate' }, stanzas, function (err, bodyEl) {
-    if (err) return
-    else if (bodyEl) this.processResponse(bodyEl)
+    if (err) {
+    } else if (bodyEl) {
+      this.processResponse(bodyEl)
+    }
 
     this.emit('disconnect')
     this.emit('end')
