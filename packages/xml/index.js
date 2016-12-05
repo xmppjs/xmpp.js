@@ -2,7 +2,7 @@
 
 var ltx = require('ltx')
 
-var exports = module.exports = ltx.tag
+var exports = module.exports = ltx.tag.bind(null)
 
 Object.assign(exports, ltx)
 
