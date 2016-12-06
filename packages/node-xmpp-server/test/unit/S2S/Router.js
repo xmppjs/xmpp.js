@@ -70,7 +70,7 @@ describe('S2S Router', function () {
       'from': 'example.com',
       'to': 'nodexmpp.com',
       'version': '1.0',
-    'xmlns': 'jabber:server'}
+      'xmlns': 'jabber:server'}
 
     it('should not offer TLS to incoming connections without credentials', function () {
       var router = new Router()

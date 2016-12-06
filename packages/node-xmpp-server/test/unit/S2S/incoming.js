@@ -167,18 +167,21 @@ describe('S2S IncomingServer', function () {
 
       server.socket = {
         getPeerCertificate: sinon.stub().returns(
-          { subject: {
-            C: 'US',
-            ST: 'NC',
-            L: 'Raleigh',
-            O: 'Example.com',
-            CN: 'example.com'
-          },
-          issuer: { C: 'US',
-            ST: 'NC',
-            L: 'Durham',
-            O: 'Realtime',
-          CN: '*.nodexmpp.com' }
+          {
+            subject: {
+              C: 'US',
+              ST: 'NC',
+              L: 'Raleigh',
+              O: 'Example.com',
+              CN: 'example.com'
+            },
+            issuer: {
+              C: 'US',
+              ST: 'NC',
+              L: 'Durham',
+              O: 'Realtime',
+              CN: '*.nodexmpp.com'
+            }
           }),
         renegotiate: sinon.stub().yields(null)
       }
