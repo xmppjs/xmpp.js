@@ -1,10 +1,10 @@
 {
-  "name": "@xmpp/reconnect",
+  "name": "@xmpp/plugin-reconnect",
   "description": "XMPP reconnect for JavaScript",
   "repository": "github:node-xmpp/node-xmpp",
-  "homepage": "https://github.com/node-xmpp/node-xmpp/tree/master/packages/reconnect",
+  "homepage": "https://github.com/node-xmpp/node-xmpp/tree/master/packages/plugin-reconnect",
   "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "license": "ISC",
   "keywords": [
     "XMPP",
