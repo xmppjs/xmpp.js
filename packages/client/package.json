@@ -1,0 +1,35 @@
+{
+  "name": "@xmpp/client",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "http://github.com/node-xmpp/node-xmpp",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "version": "0.0.0",
+  "license": "ISC",
+  "dependencies": {
+    "@xmpp/client-alternative-connection-methods-http": "^0.0.0",
+    "@xmpp/client-authentication": "^0.0.0",
+    "@xmpp/client-bind": "^0.0.0",
+    "@xmpp/client-core": "^0.0.0",
+    "@xmpp/client-http": "^0.0.0",
+    "@xmpp/client-legacy-authentication": "^0.0.0",
+    "@xmpp/client-sasl": "^0.0.0",
+    "@xmpp/client-sasl-anonymous": "^0.0.0",
+    "@xmpp/client-sasl-digest-md5": "^0.0.0",
+    "@xmpp/client-sasl-plain": "^0.0.0",
+    "@xmpp/client-sasl-scram-sha-1": "^0.0.0",
+    "@xmpp/client-session-establishment": "^0.0.0",
+    "@xmpp/client-stream-features": "^0.0.0",
+    "@xmpp/client-stream-management": "^0.0.0",
+    "@xmpp/client-tcp": "^0.0.0",
+    "@xmpp/client-websocket": "^0.0.0",
+    "@xmpp/jid": "^0.0.1",
+    "@xmpp/xml": "^0.1.0"
+  },
+  "browser": {
+    "@xmpp/client-tcp": false,
+    "@xmpp/srv": false,
+    "crypto": false,
+    "url": false,
+    "node-fetch": false
+  }
+}

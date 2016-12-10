@@ -1,0 +1,14 @@
+{
+  "name": "@xmpp/client-sasl-anonymous",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "http://github.com/node-xmpp/node-xmpp",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "version": "0.0.0",
+  "license": "ISC",
+  "dependencies": {
+    "sasl-anonymous": "^0.1.0"
+  },
+  "devDependencies": {
+    "@xmpp/xml": "^0.0.0"
+  }
+}

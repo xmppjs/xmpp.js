@@ -1,0 +1,12 @@
+{
+  "name": "@xmpp/client-alternative-connection-methods-http",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "http://github.com/node-xmpp/node-xmpp",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "version": "0.0.0",
+  "license": "ISC",
+  "dependencies": {
+    "@xmpp/client-http": "^0.0.0",
+    "@xmpp/xml": "^0.0.0"
+  }
+}
