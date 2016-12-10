@@ -7,13 +7,13 @@ Included in `@xmpp/component`.
 ## Install
 
 ```
-npm install @xmpp/plugin-reconnect
+npm install @xmpp/plugins
 ```
 
 ## Usage
 
 ```javascript
-const reconnect = require('@xmpp/plugin-reconnect')
+const reconnect = require('@xmpp/plugins/reconnect')
 const entity = ...
 
 const plugin = entity.plugin(reconnect)
