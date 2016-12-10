@@ -1,8 +1,11 @@
 'use strict'
 
 var ltx = require('ltx')
+var tag = require('./lib/tag')
 
-var exports = module.exports = ltx.tag.bind(null)
+exports = module.exports = function xml () {
+  return tag.apply(null, arguments)
+}
 
 Object.assign(exports, ltx)
 
@@ -15,5 +18,6 @@ exports.createStanza = require('./lib/createStanza')
 
 exports.parse = require('./lib/parse')
 exports.Parser = require('./lib/Parser')
+exports.tag = require('./lib/tag')
 
 exports.ltx = ltx
