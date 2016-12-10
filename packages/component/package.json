@@ -12,6 +12,6 @@
   ],
   "dependencies": {
     "@xmpp/component-core": "^0.0.3",
-    "@xmpp/plugin-reconnect": "^0.0.0"
+    "@xmpp/plugins": "^0.0.0"
   }
 }

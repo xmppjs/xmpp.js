@@ -22,5 +22,5 @@ function plugin (entity) {
   }
 }
 
-module.exports.plugin = plugin
 module.exports.name = 'router'
+module.exports.plugin = plugin

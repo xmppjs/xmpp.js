@@ -1,7 +1,7 @@
 'use strict'
 
 const xml = require('@xmpp/xml')
-const stanzaRouter = require('@xmpp/plugin-stanza-router')
+const Router = require('../router')
 
 const makeId = function () {
   return Math.random().toString().substr(2)
@@ -18,7 +18,7 @@ const match = function (stanza) {
 function plugin (entity) {
   const handlers = new Map()
 
-  const router = entity.plugin(stanzaRouter)
+  const router = entity.plugin(Router)
   router.add(match, (stanza) => {
     const {id} = stanza.attrs
 
