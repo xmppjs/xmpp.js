@@ -12,6 +12,9 @@
   ],
   "scripts": {
     "prepublish": "npm run bundle",
-    "bundle": "../../node_modules/.bin/browserify index.js -s JID -o bundle.js"
+    "bundle": "compat '../../node_modules/.bin/browserify index.js -s JID -o bundle.js'"
+  },
+  "devDependencies": {
+    "compat": "^1.0.4"
   }
 }
