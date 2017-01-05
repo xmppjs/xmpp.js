@@ -28,7 +28,7 @@
   },
   "devDependencies": {
 	"compat": "^1.0.4",
-    "node-xmpp-server": "^2.2.5",
+    "node-xmpp-server": "^2.2.5"
   },
   "browser": {
     "request": "browser-request",
