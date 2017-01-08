@@ -76,6 +76,12 @@ entity.on('online', (jid) => {
   `)
 })
 
+entity.on('starttls', (starttls) => {
+  starttls({
+    rejectUnauthorized: false,
+  })
+})
+
 // "start" opens the socket and the XML stream
 entity.start('xmpp:localhost:5222')
   // resolves once online

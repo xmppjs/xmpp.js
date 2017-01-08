@@ -48,7 +48,7 @@ function authenticate (client, credentials, features) {
         mech.challenge(decode(element.text()))
         const resp = mech.response(creds)
         client.send(xml`
-          <response xmlns={NS} mechanism={mech.name}>
+          <response xmlns='${NS}' mechanism='${mech.name}'>
             ${typeof resp === 'string' ? encode(resp) : ''}
           </response>
         `)

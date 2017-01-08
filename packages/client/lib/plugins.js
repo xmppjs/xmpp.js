@@ -10,7 +10,8 @@
   'sasl-scram-sha-1',
   'websocket',
   'tcp',
-  'reconnect'
+  'reconnect',
+  'starttls',
 ].forEach((pkg) => {
   module.exports[pkg] = require('@xmpp/plugins/' + pkg)
 })

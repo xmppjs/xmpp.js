@@ -51,16 +51,15 @@ class Component extends Connection {
   authenticate (id, password) {
     const hash = crypto.createHash('sha1')
     hash.update(id + password, 'binary')
-    return this.sendReceive(tag`<handshake>${hash.digest('hex')}</handshake>`)
-      .then((el) => {
-        if (el.name !== 'handshake') {
-          throw new Error('unexpected stanza')
-        }
-        this._authenticated()
-        this._jid(this._domain)
-        this._ready()
-        this._online() // FIXME should be emitted after promise resolve
-      })
+    return this.sendReceive(tag`<handshake>${hash.digest('hex')}</handshake>`).then((el) => {
+      if (el.name !== 'handshake') {
+        throw new Error('unexpected stanza')
+      }
+      this._authenticated()
+      this._jid(this._domain)
+      this._ready()
+      this._online() // FIXME should be emitted after promise resolve
+    })
   }
 }
 

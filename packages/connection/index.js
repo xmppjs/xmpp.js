@@ -33,9 +33,18 @@ class Connection extends EventEmitter {
     this.options = typeof options === 'object' ? options : {}
     this.plugins = Object.create(null)
     this.startOptions = null
+    this.socketListeners = Object.create(null)
 
-    if (this.Socket && this.Parser) {
-      this._handle(new this.Socket(), new this.Parser())
+    if (this.Parser) {
+      this._attachParser(new this.Parser())
+    } else if (this.parser) {
+      this._attachParser(this.parser)
+    }
+
+    if (this.Socket) {
+      this._attachSocket(new this.Socket())
+    } else if (this.socket) {
+      this._attachsocket(this.socket)
     }
   }
 
@@ -44,34 +53,45 @@ class Connection extends EventEmitter {
       .then(() => this.close())
   }
 
-  _handle (socket, parser) {
-    const errorListener = (error) => {
-      this.emit('error', error)
-    }
-
-    // socket
+  _attachSocket(socket) {
     const sock = this.socket = socket
-    const dataListener = (data) => {
+    const listeners = this.socketListeners
+    listeners.data = (data) => {
       data = data.toString('utf8')
       this.parser.write(data)
       // FIXME only if parser.write ok
       this.emit('fragment', data)
     }
-    const closeListener = () => {
+    listeners.close = () => {
       this._domain = ''
       this.online = false
       this.emit('close')
     }
-    const connectListener = () => {
+    listeners.connect = () => {
       this.online = true
       this.emit('connect')
     }
-    sock.on('data', dataListener)
-    sock.on('error', errorListener)
-    sock.on('close', closeListener)
-    sock.on('connect', connectListener)
+    listeners.error = (error) => {
+      this.emit('error', error)
+    }
+    sock.on('data', listeners.data)
+    sock.on('error', listeners.error)
+    sock.on('close', listeners.close)
+    sock.on('connect', listeners.connect)
+  }
 
-    // parser
+  _detachSocket (socket) {
+    const listeners = this.socketListeners
+    Object.entries(listeners).forEach(([k, v]) => {
+      this.socket.removeListener(k, v)
+    })
+  }
+
+  _attachParser (parser) {
+    const errorListener = (error) => {
+      this.emit('error', error)
+    }
+
     this.parser = parser
     const elementListener = (element) => {
       this.emit('element', element)
