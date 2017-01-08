@@ -3,7 +3,7 @@
 const Connection = require('@xmpp/connection-tcp')
 const url = require('url')
 const crypto = require('crypto')
-const {tagString, Element, tag} = require('@xmpp/xml')
+const {tagString, tag} = require('@xmpp/xml')
 
 /*
  * References
@@ -25,28 +25,32 @@ class Component extends Connection {
     `
   }
 
-  waitHeader (domain, lang, fn) {
-    const handler = (name, attrs) => {
-      if (name !== 'stream:stream') return // FIXME error
-      // disabled because component doesn't use this
-      // if (attrs.version !== '1.0') return // FIXME error
-      if (attrs.xmlns !== this.NS) return // FIXME error
-      if (attrs['xmlns:stream'] !== super.NS) return // FIXME error
-      if (attrs.from !== domain) return // FIXME error
-      if (!attrs.id) return // FIXME error
-      this.id = attrs.id
-      fn(null, new Element(name, attrs))
-      this.emit('authenticate', (secret) => {
-        return this.authenticate(secret)
+  waitHeader (domain, lang) {
+    return new Promise((resolve, reject) => {
+      this.parser.once('start', (el) => {
+        const {name, attrs} = el
+        if (
+          name === 'stream:stream' &&
+          attrs.xmlns === this.NS &&
+          attrs['xmlns:stream'] === super.NS &&
+          attrs.from === domain &&
+          attrs.id
+        ) {
+          resolve(el)
+          this.emit('authenticate', (secret) => {
+            return this.authenticate(attrs.id, secret)
+          })
+        } else {
+          reject()
+        }
       })
-    }
-    this.parser.once('startElement', handler)
+    })
   }
 
   // FIXME move to module?
-  authenticate (password) {
+  authenticate (id, password) {
     const hash = crypto.createHash('sha1')
-    hash.update(this.id + password, 'binary')
+    hash.update(id + password, 'binary')
     return this.sendReceive(tag`<handshake>${hash.digest('hex')}</handshake>`)
       .then((el) => {
         if (el.name !== 'handshake') {

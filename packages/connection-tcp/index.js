@@ -3,7 +3,7 @@
 const Socket = require('net').Socket
 const Connection = require('@xmpp/connection')
 const StreamParser = require('./lib/StreamParser')
-const {tagString, Element} = require('@xmpp/xml')
+const {tagString} = require('@xmpp/xml')
 
 const NS_STREAM = 'http://etherx.jabber.org/streams'
 
@@ -14,18 +14,25 @@ const NS_STREAM = 'http://etherx.jabber.org/streams'
 class TCP extends Connection {
   // FIXME is lang useful?
   // https://xmpp.org/rfcs/rfc6120.html#streams-open
-  waitHeader (domain, lang, fn) {
-    const handler = (name, attrs) => {
-      if (name !== 'stream:stream') return // FIXME error
-      // disabled because component doesn't use this
-      // if (attrs.version !== '1.0') return // FIXME error
-      if (attrs.xmlns !== this.NS) return // FIXME error
-      if (attrs['xmlns:stream'] !== NS_STREAM) return // FIXME error
-      if (attrs.from !== domain) return // FIXME error
-      if (!attrs.id) return // FIXME error
-      fn(null, new Element(name, attrs))
-    }
-    this.parser.once('startElement', handler)
+  waitHeader (domain, lang) {
+    return new Promise((resolve, reject) => {
+      this.parser.once('start', (el) => {
+        const {name, attrs} = el
+
+        if (
+          name === 'stream:stream' &&
+          attrs.xmlns === this.NS &&
+          attrs['xmlns:stream'] === NS_STREAM &&
+          attrs.from === domain &&
+          attrs.version === '1.0' &&
+          attrs.id
+        ) {
+          resolve(el)
+        } else {
+          reject()
+        }
+      })
+    })
   }
 
   // https://xmpp.org/rfcs/rfc6120.html#streams-open

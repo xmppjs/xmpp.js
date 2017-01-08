@@ -1,9 +1,9 @@
 'use strict'
 
-const Component = require('./lib/Component')
+const Client = require('./lib/Client')
 const xml = require('@xmpp/xml')
 const jid = require('@xmpp/jid')
 
-module.exports.Component = Component
+module.exports.Client = Client
 module.exports.xml = xml
 module.exports.jid = jid

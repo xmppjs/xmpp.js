@@ -38,12 +38,14 @@ function plugin (entity) {
     entity,
     handlers,
     get (to, el, options) {
-      const iq = xml`<iq type='get' to='${to}'/>`
+      const iq = xml`<iq type='get'/>`
+      if (to && typeof to === 'string') iq.attrs.to = to
       iq.cnode(el)
       return this.request(iq, options)
     },
     set (to, el, options) {
-      const iq = xml`<iq type='set' to='${to}'/>`
+      const iq = xml`<iq type='set'/>`
+      if (to && typeof to === 'string') iq.attrs.to = to
       iq.cnode(el)
       return this.request(iq, options)
     },

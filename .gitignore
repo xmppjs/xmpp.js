@@ -9,5 +9,4 @@ bundle.js
 browserify.js
 npm-debug.log
 lerna-debug.log
-yarn.lock
 yarn-error.log
