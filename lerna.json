@@ -1,5 +1,5 @@
 {
-  "lerna": "2.0.0-beta.30",
+  "lerna": "2.0.0-beta.34",
   "version": "independent",
   "publishConfig": {
     "ignore": [
@@ -9,5 +9,8 @@
       "example.js",
       "test.js"
     ]
-  }
+  },
+  "packages": [
+    "packages/*"
+  ]
 }
