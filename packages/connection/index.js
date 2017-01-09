@@ -53,7 +53,7 @@ class Connection extends EventEmitter {
       .then(() => this.close())
   }
 
-  _attachSocket(socket) {
+  _attachSocket (socket) {
     const sock = this.socket = socket
     const listeners = this.socketListeners
     listeners.data = (data) => {
@@ -82,8 +82,8 @@ class Connection extends EventEmitter {
 
   _detachSocket (socket) {
     const listeners = this.socketListeners
-    Object.entries(listeners).forEach(([k, v]) => {
-      this.socket.removeListener(k, v)
+    Object.getOwnPropertyNames(listeners).forEach(k => {
+      this.socket.removeListener(k, listeners[k])
     })
   }
 
@@ -251,9 +251,10 @@ class Connection extends EventEmitter {
 
   isStanza (element) {
     const {name} = element
+    const NS = element.findNS()
     return (
       this.online &&
-      (element.findNS() ? element.findNS() === this.NS : true) &&
+      (NS ? NS === this.NS : true) &&
       (name === 'iq' || name === 'message' || name === 'presence')
     )
   }

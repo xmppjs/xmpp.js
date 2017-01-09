@@ -19,7 +19,7 @@ class WebSocket extends Connection {
         if (
           name === 'open' &&
           attrs.version === '1.0' &&
-          attrs.xmlns === this.NS &&
+          attrs.xmlns === NS_FRAMING &&
           attrs.from === domain &&
           attrs.id
         ) {
@@ -47,7 +47,7 @@ class WebSocket extends Connection {
 }
 
 WebSocket.prototype.Socket = Socket
-WebSocket.prototype.NS = NS_FRAMING
+WebSocket.prototype.NS = 'NS_FRAMING'
 
 module.exports = WebSocket
 module.exports.NS_FRAMING = NS_FRAMING

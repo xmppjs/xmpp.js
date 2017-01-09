@@ -3,7 +3,7 @@
 const dns = require('dns')
 const compareAltConnections = require('./alt-connections').compare
 
-function lookup(domain, options = {}) {
+function lookup (domain, options = {}) {
   options.all = true
   return new Promise((resolve, reject) => {
     dns.lookup(domain, options, (err, addresses) => {
@@ -13,7 +13,7 @@ function lookup(domain, options = {}) {
   })
 }
 
-function resolveTxt(domain, {owner = '_xmppconnect'}) {
+function resolveTxt (domain, {owner = '_xmppconnect'}) {
   return new Promise((resolve, reject) => {
     dns.resolveTxt(`${owner}.${domain}`, (err, records) => {
       if (err && err.code === 'ENOTFOUND') resolve([])
@@ -25,7 +25,7 @@ function resolveTxt(domain, {owner = '_xmppconnect'}) {
             attribute,
             value,
             method: attribute.split('-').pop(),
-            url: value,
+            url: value
           }
         }).sort(compareAltConnections))
       }
@@ -33,7 +33,7 @@ function resolveTxt(domain, {owner = '_xmppconnect'}) {
   })
 }
 
-function resolveSrv(domain, {service, protocol}) {
+function resolveSrv (domain, {service, protocol}) {
   return new Promise((resolve, reject) => {
     dns.resolveSrv(`_${service}._${protocol}.${domain}`, (err, addresses) => {
       if (err && err.code === 'ENOTFOUND') resolve([])
@@ -43,7 +43,7 @@ function resolveSrv(domain, {service, protocol}) {
   })
 }
 
-function sortSrv(records) {
+function sortSrv (records) {
   return records.sort((a, b) => {
     const priority = a.priority - b.priority
     if (priority !== 0) return priority
@@ -55,7 +55,7 @@ function sortSrv(records) {
   })
 }
 
-function lookupSrvs(srvs, options) {
+function lookupSrvs (srvs, options) {
   const addresses = []
   return Promise.all(srvs.map((srv) => {
     return lookup(srv.name, options).then((srvAddresses) => {
@@ -66,49 +66,51 @@ function lookupSrvs(srvs, options) {
   })).then(() => addresses)
 }
 
-function resolve(domain, options = {}) {
-  if (!options.srv) options.srv = [
-    {
-      service: 'xmpps-client',
-      protocol: 'tcp',
-    },
-    {
-      service: 'xmpp-client',
-      protocol: 'tcp',
-    },
-    {
-      service: 'xmpps-server',
-      protocol: 'tcp',
-    },
-    {
-      service: 'xmpp-server',
-      protocol: 'tcp',
-    },
-    {
-      service: 'stun',
-      protocol: 'tcp',
-    },
-    {
-      service: 'stun',
-      protocol: 'udp',
-    },
-    {
-      service: 'stuns ',
-      protcol: 'tcp',
-    },
-    {
-      service: 'turn',
-      protocol: 'tcp',
-    },
-    {
-      service: 'turn',
-      protocol: 'udp',
-    },
-    {
-      service: 'turns',
-      protcol: 'tcp',
-    },
-  ]
+function resolve (domain, options = {}) {
+  if (!options.srv) {
+    options.srv = [
+      {
+        service: 'xmpps-client',
+        protocol: 'tcp'
+      },
+      {
+        service: 'xmpp-client',
+        protocol: 'tcp'
+      },
+      {
+        service: 'xmpps-server',
+        protocol: 'tcp'
+      },
+      {
+        service: 'xmpp-server',
+        protocol: 'tcp'
+      },
+      {
+        service: 'stun',
+        protocol: 'tcp'
+      },
+      {
+        service: 'stun',
+        protocol: 'udp'
+      },
+      {
+        service: 'stuns ',
+        protcol: 'tcp'
+      },
+      {
+        service: 'turn',
+        protocol: 'tcp'
+      },
+      {
+        service: 'turn',
+        protocol: 'udp'
+      },
+      {
+        service: 'turns',
+        protcol: 'tcp'
+      }
+    ]
+  }
   const family = {options}
   return lookup(domain, options).then((addresses) => {
     return Promise.all(options.srv.map((srv) => {

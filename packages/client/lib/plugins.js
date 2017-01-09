@@ -13,7 +13,7 @@
   'tls',
   'reconnect',
   'starttls',
-  'session-establishment',
+  'session-establishment'
 ].forEach((pkg) => {
   module.exports[pkg] = require('@xmpp/plugins/' + pkg)
 })

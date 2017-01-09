@@ -3,7 +3,7 @@
 const dns = require('./lib/dns')
 const http = require('./lib/http')
 
-module.exports = function resolve(...args) {
+module.exports = function resolve (...args) {
   return Promise.all([
     dns.resolve ? dns.resolve(...args) : Promise.resolve([]),
     http.resolve(...args)

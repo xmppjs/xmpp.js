@@ -24,6 +24,8 @@ addons:
     - prosody-0.10
     - lua-bitop # websocket
     - lua-sec # tls
+  hosts:
+    - component.localhost
 
 before_install:
   - sudo service prosody stop
