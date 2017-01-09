@@ -1,5 +1,5 @@
 const test = require('ava')
-const caps = require('..')
+const caps = require('../entity-capabilities')
 const xml = require('@xmpp/xml')
 
 test('5.2 Simple Generation Example', t => {
@@ -69,8 +69,6 @@ test.skip('multiple forms', t => {
       </x>
     </query>
   `
-
-  console.log(caps.hash(query))
 
   t.is(caps.hash(query), 'q07IKJEyjvHSyhy//CH0CxmKi8w=')
 })
