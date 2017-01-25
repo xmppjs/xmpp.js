@@ -193,7 +193,7 @@ DigestMD5.prototype.manageAuth = function (stanza, server) {
       }
       this.authenticate(user, function (err, user) {
         // send final challenge and wait for response from user
-        if (self.response === self.responseValue(new Buffer(stanza.getText(), 'base64'), user.password)) {
+        if (self.checkResponse(new Buffer(stanza.getText(), 'base64'))) {
           var challenge = new Element('challenge', {
             xmlns: NS_XMPP_SASL
           })
