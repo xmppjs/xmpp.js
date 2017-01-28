@@ -22,3 +22,4 @@ node-xmpp is a set of XMPP libraries for JavaScript.
 - [@xmpp/jid](https://github.com/node-xmpp/node-xmpp/tree/master/packages/jid)
 - [@xmpp/time](https://github.com/node-xmpp/node-xmpp/tree/master/packages/time)
 - [@xmpp/console](https://github.com/node-xmpp/node-xmpp/tree/master/packages/console)
+- [@xmpp/resolve](https://github.com/node-xmpp/node-xmpp/tree/master/packages/resolve)
