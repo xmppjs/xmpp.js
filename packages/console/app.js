@@ -34,11 +34,16 @@ function send (line) {
   entity.send(el)
 }
 
-const rl = readline.createInterface({
+const options = {
   input: process.stdin,
   output: process.stdout,
   prompt: chalk.magenta.bold('✏ ')
-})
+}
+if (parseInt(process.env.NODE_NO_READLINE)) {
+  options.terminal = false;
+}
+
+const rl = readline.createInterface(options)
 
 rl.prompt(true)
 
