@@ -12,6 +12,7 @@
   'tcp',
   'reconnect',
   'starttls',
+  'session-establishment',
 ].forEach((pkg) => {
   module.exports[pkg] = require('@xmpp/plugins/' + pkg)
 })
