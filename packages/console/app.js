@@ -2,6 +2,8 @@
 
 'use strict'
 
+const url = require('url')
+
 const readline = require('readline')
 const chalk = require('chalk')
 
@@ -11,7 +13,8 @@ const xml = require('@xmpp/xml')
 const jid = require('@xmpp/jid')
 
 const [,, uri, password] = process.argv
-const address = jid(uri.split('xmpp:')[1])
+const protocol = url.parse(uri).protocol
+const address = jid(uri.split(protocol + '//')[1])
 const entity = address.local ? client() : component()
 
 function beautify (el) {
