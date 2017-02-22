@@ -17,10 +17,10 @@ npm install -g @xmpp/console
 ###### Component
 
 ```
-xmpp-console xmpp:component.localhost:5347 password
+xmpp-console xmpp://component.localhost:5347 password
 ```
 
 ###### Client
 ```
-xmpp-console xmpp:user@locacalhost[/resource] password
+xmpp-console xmpp://user@locacalhost[/resource] password
 ```

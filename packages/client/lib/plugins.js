@@ -10,6 +10,7 @@
   'sasl-scram-sha-1',
   'websocket',
   'tcp',
+  'tls',
   'reconnect',
   'starttls',
   'session-establishment',

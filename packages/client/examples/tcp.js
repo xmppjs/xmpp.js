@@ -70,7 +70,7 @@ entity.on('online', (jid) => {
   console.log('5. online', jid.toString())
 
   entity.send(xml`
-    <iq to='localhost' id='ping' type='get'>
+    <iq id='ping' type='get'>
       <ping xmlns='urn:xmpp:ping'/>
     </iq>
   `)
@@ -83,7 +83,7 @@ entity.on('starttls', (starttls) => {
 })
 
 // "start" opens the socket and the XML stream
-entity.start('xmpp:localhost:5222')
+entity.start('xmpp://localhost:5222')
   // resolves once online
   .then((jid) => {
     console.log('started', jid.toString())

@@ -70,7 +70,7 @@ entity.on('online', (jid) => {
   console.log('5. online', jid.toString())
 
   entity.send(xml`
-    <iq to='localhost' id='ping' type='get'>
+    <iq id='ping' type='get'>
       <ping xmlns='urn:xmpp:ping'/>
     </iq>
   `)
