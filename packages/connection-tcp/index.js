@@ -55,10 +55,6 @@ class TCP extends Connection {
   footer () {
     return '<stream:stream/>'
   }
-
-  static match (uri) {
-    return uri.startsWith('xmpp:') ? uri : false
-  }
 }
 
 TCP.NS = NS_STREAM

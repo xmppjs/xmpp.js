@@ -15,7 +15,7 @@ const NS = 'jabber:component:accept'
 class Component extends Connection {
   connect (uri) {
     const {hostname, port} = url.parse(uri)
-    return super.connect({port: port || 5347, hostname})
+    return super.connect({port: port || 5347, host: hostname})
   }
 
   header (domain, lang) {

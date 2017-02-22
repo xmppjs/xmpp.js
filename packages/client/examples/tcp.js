@@ -70,7 +70,7 @@ entity.on('online', (jid) => {
   console.log('5. online', jid.toString())
 
   entity.send(xml`
-    <iq to='localhost' id='ping' type='get'>
+    <iq id='ping' type='get'>
       <ping xmlns='urn:xmpp:ping'/>
     </iq>
   `)
@@ -83,7 +83,8 @@ entity.on('starttls', (starttls) => {
 })
 
 // "start" opens the socket and the XML stream
-entity.start('xmpp:localhost:5222')
+// entity.start('xmpp://jabberfr.org:5222')
+entity.start('xmpps://jabberfr.org:5223')
   // resolves once online
   .then((jid) => {
     console.log('started', jid.toString())
@@ -95,7 +96,7 @@ entity.start('xmpp:localhost:5222')
 
 // emitted when authentication is required
 entity.on('authenticate', authenticate => {
-  authenticate('node-xmpp', 'foobar')
+  authenticate('sonny', 'sdfg4445')
     .then(() => {
       console.log('authenticated')
     })

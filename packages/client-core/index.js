@@ -38,7 +38,7 @@ class Client extends Connection {
       sock.on(e, (...args) => this.emit(e, ...args))
     })
 
-    return sock.connect(uri)
+    return sock.connect(params)
       .then(() => {
         this.uri = uri
         return params

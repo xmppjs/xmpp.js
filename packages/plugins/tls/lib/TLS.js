@@ -1,15 +1,18 @@
 const URL = require('url').URL
+const tls = require('tls')
 const Connection = require('@xmpp/connection-tcp')
 
-class TCP extends Connection {
+class TLS extends Connection {
   static match (uri) {
     const {protocol, hostname, port} = new URL(uri)
-    if (protocol !== 'xmpp:') return false
+    if (protocol !== 'xmpps:') return false
 
     return {host: hostname, port}
   }
 }
 
-TCP.prototype.NS = 'jabber:client'
+TLS.prototype.Socket = tls.TLSSocket
 
-module.exports = TCP
+TLS.prototype.NS = 'jabber:client'
+
+module.exports = TLS
