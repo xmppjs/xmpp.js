@@ -18,7 +18,7 @@
     "standard": "^8.6.0"
   },
   "scripts": {
-    "ava": "ava -v",
+    "ava": "ava",
     "ava:integration": "ava -v test/ava/**/*.js",
     "postinstall": "npm run bootstrap",
     "lint": "standard",
