@@ -1,14 +1,14 @@
 {
   "private": true,
   "devDependencies": {
-    "ava": "^0.17.0",
-    "babel-polyfill": "^6.22.0",
+    "ava": "^0.18.2",
+    "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.22.0",
-    "babel-register": "^6.22.0",
-    "browserify": "^14.0.0",
-    "coveralls": "^2.11.15",
+    "babel-register": "^6.23.0",
+    "browserify": "^14.1.0",
+    "coveralls": "^2.11.16",
     "istanbul": "^0.4.5",
-    "lerna": "2.0.0-beta.34",
+    "lerna": "2.0.0-beta.37",
     "mocha": "^3.2.0",
     "mocha-phantomjs-core": "^2.1.1",
     "pem": "^1.9.4",
@@ -18,8 +18,8 @@
     "standard": "^8.6.0"
   },
   "scripts": {
-    "ava": "ava --timeout=5s",
-    "ava:integration": "ava --timeout=5s test/ava/**/*.js",
+    "ava": "ava -v",
+    "ava:integration": "ava -v test/ava/**/*.js",
     "postinstall": "npm run bootstrap",
     "lint": "standard",
     "unit": "mocha --recursive packages/*/test/ -t 5000",

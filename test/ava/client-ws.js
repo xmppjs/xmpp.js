@@ -1,7 +1,7 @@
 const test = require('ava')
 const xmpp = require('../../packages/client')
 
-test.cb('client websocket', t => {
+test.cb('client ws://', t => {
   t.plan(9)
 
   const entity = new xmpp.Client()
@@ -31,7 +31,7 @@ test.cb('client websocket', t => {
     t.is(jid.bare().toString(), 'node-xmpp@localhost')
   })
 
-  entity.start('xmpp:localhost:5222')
+  entity.start('ws://localhost:5280/xmpp-websocket')
     .then((jid) => {
       t.true(jid instanceof xmpp.jid.JID)
       t.is(jid.bare().toString(), 'node-xmpp@localhost')

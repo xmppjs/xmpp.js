@@ -52,23 +52,23 @@ test('5.3 Complex Generation Example', t => {
 
   t.is(caps.hash(query), 'q07IKJEyjvHSyhy//CH0CxmKi8w=')
 })
-
-test.skip('multiple forms', t => {
-  const query = xml`
-    <query xmlns='http://jabber.org/protocol/disco#info'>
-      <feature var='http://jabber.org/protocol/disco#info'/>
-      <x xmlns='jabber:x:data' type='result'>
-        <field var='FORM_TYPE' type='hidden'>
-          <value>b</value>
-        </field>
-      </x>
-      <x xmlns='jabber:x:data' type='result'>
-        <field var='FORM_TYPE' type='hidden'>
-          <value>a</value>
-        </field>
-      </x>
-    </query>
-  `
-
-  t.is(caps.hash(query), 'q07IKJEyjvHSyhy//CH0CxmKi8w=')
-})
+//
+// test.skip('multiple forms', t => {
+//   const query = xml`
+//     <query xmlns='http://jabber.org/protocol/disco#info'>
+//       <feature var='http://jabber.org/protocol/disco#info'/>
+//       <x xmlns='jabber:x:data' type='result'>
+//         <field var='FORM_TYPE' type='hidden'>
+//           <value>b</value>
+//         </field>
+//       </x>
+//       <x xmlns='jabber:x:data' type='result'>
+//         <field var='FORM_TYPE' type='hidden'>
+//           <value>a</value>
+//         </field>
+//       </x>
+//     </query>
+//   `
+//
+//   t.is(caps.hash(query), 'q07IKJEyjvHSyhy//CH0CxmKi8w=')
+// })

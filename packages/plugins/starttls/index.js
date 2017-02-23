@@ -3,6 +3,7 @@
 const xml = require('@xmpp/xml')
 const streamfeatures = require('../stream-features')
 const tls = require('tls')
+const net = require('net')
 
 /*
  * References
@@ -11,11 +12,12 @@ const tls = require('tls')
 
 const NS = 'urn:ietf:params:xml:ns:xmpp-tls'
 
-function match (features) {
-  return features.getChild('starttls', NS)
+function match (features, entity) {
+  return features.getChild('starttls', NS) &&
+    entity.socket.Socket === net.Socket // https://prosody.im/issues/issue/837
 }
 
-function proceed(entity, options) {
+function proceed (entity, options) {
   return new Promise((resolve, reject) => {
     options.socket = entity.socket.socket
     const tlsSocket = tls.connect(options, function (err) {
@@ -46,7 +48,7 @@ function starttls (entity) {
 }
 
 module.exports.name = 'starttls'
-module.exports.plugin = function plugin(entity) {
+module.exports.plugin = function plugin (entity) {
   const streamFeature = {
     priority: 5000,
     match,

@@ -1,7 +1,9 @@
 const test = require('ava')
 const xmpp = require('../../packages/client')
 
-test.cb('client websocket', t => {
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
+test.cb('client wss://', t => {
   t.plan(9)
 
   const entity = new xmpp.Client()
@@ -31,7 +33,7 @@ test.cb('client websocket', t => {
     t.is(jid.bare().toString(), 'node-xmpp@localhost')
   })
 
-  entity.start('ws://localhost:5280/xmpp-websocket')
+  entity.start('wss://localhost:5281/xmpp-websocket')
     .then((jid) => {
       t.true(jid instanceof xmpp.jid.JID)
       t.is(jid.bare().toString(), 'node-xmpp@localhost')

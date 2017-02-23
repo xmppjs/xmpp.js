@@ -23,23 +23,21 @@ cross_domain_websocket = true;
 
 authentication = "internal_plain"
 
+legacy_ssl_ports = { 5223 };
+
 log = {
   debug = "/var/log/prosody/prosody.log";
   error = "/var/log/prosody/prosody.err";
 }
 
-VirtualHost "localhost"
-  ssl = {
-    certificate = "/var/lib/prosody/localhost.crt";
-    key = "/var/lib/prosody/localhost.key";
-  }
+ssl = {
+  certificate = "/var/lib/prosody/localhost.crt";
+  key = "/var/lib/prosody/localhost.key";
+}
 
+VirtualHost "localhost"
 Component "component.localhost"
   component_secret = "mysecretcomponentpassword"
 
 VirtualHost "anon.localhost"
   authentication = "anonymous"
-  ssl = {
-    certificate = "/var/lib/prosody/localhost.crt";
-    key = "/var/lib/prosody/localhost.key";
-  }

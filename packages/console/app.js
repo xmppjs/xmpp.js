@@ -43,7 +43,7 @@ const options = {
   prompt: chalk.magenta.bold('✏ ')
 }
 if (parseInt(process.env.NODE_NO_READLINE)) {
-  options.terminal = false;
+  options.terminal = false
 }
 
 const rl = readline.createInterface(options)
@@ -101,7 +101,7 @@ entity.on('authenticate', auth => {
 
 entity.on('starttls', (starttls) => {
   starttls({
-    rejectUnauthorized: false,
+    rejectUnauthorized: false
   })
 })
 

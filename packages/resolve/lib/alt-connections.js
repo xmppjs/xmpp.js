@@ -1,10 +1,10 @@
 'use strict'
 
-function isSecure(url) {
+function isSecure (url) {
   return url.startsWith('https') || url.startsWith('wss')
 }
 
-module.exports.compare = function sort(a, b) {
+module.exports.compare = function sort (a, b) {
   let secure
   if (isSecure(a.url) && !isSecure(b.url)) secure = -1
   else if (!isSecure(a.url) && isSecure(b.url)) secure = 1

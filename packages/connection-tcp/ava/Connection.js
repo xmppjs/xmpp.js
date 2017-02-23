@@ -62,15 +62,3 @@ test('footer()', t => {
   const conn = new Connection()
   t.is(conn.footer(), '<stream:stream/>')
 })
-
-test('match()', t => {
-  t.is(Connection.match('xmpp:foobar'), 'xmpp:foobar')
-  t.is(Connection.match('xmpp://foobar'), 'xmpp://foobar')
-  t.is(Connection.match('xmpp:foobar:5222'), 'xmpp:foobar:5222')
-
-  t.is(Connection.match('foobar:2222'), false)
-  t.is(Connection.match('ws://foobar:2222'), false)
-  t.is(Connection.match('wss://foobar:2222'), false)
-  t.is(Connection.match('http://foobar:2222'), false)
-  t.is(Connection.match('https://foobar:2222'), false)
-})
