@@ -1,3 +1,5 @@
+'use strict'
+
 const Socket = require('./Socket')
 const Connection = require('@xmpp/connection')
 const xml = require('@xmpp/xml')

@@ -5,6 +5,10 @@
   "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
   "version": "0.0.1",
   "license": "ISC",
+  "scripts": {
+    "prepublish": "npm run bundle",
+    "bundle": "../../node_modules/.bin/browserify -s xmpp index.js -o dist/xmpp.js"
+  },
   "dependencies": {
     "@xmpp/client-core": "^0.0.1",
     "@xmpp/jid": "^0.0.1",
@@ -12,9 +16,8 @@
     "@xmpp/xml": "^0.1.0"
   },
   "browser": {
-    "@xmpp/client-tcp": false,
-    "crypto": false,
-    "url": false,
-    "node-fetch": false
+    "@xmpp/plugins/tcp": false,
+    "@xmpp/plugins/tls": false,
+    "@xmpp/plugins/starttls": false
   }
 }

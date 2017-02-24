@@ -169,7 +169,7 @@ class Connection extends EventEmitter {
    * opens the stream
    */
   open (domain, lang = 'en') {
-    this.write(this.header(domain, lang))
+    this.promiseWrite(this.header(domain, lang))
       // FIXME timeout
     return this.waitHeader(domain, lang).then((el) => {
       this._domain = domain
@@ -219,7 +219,7 @@ class Connection extends EventEmitter {
     return new Promise((resolve, reject) => {
       const root = element.root()
       this.emit('send', root)
-      this.write(root).then(resolve, reject)
+      this.promiseWrite(root).then(resolve, reject)
     })
   }
 
@@ -230,21 +230,28 @@ class Connection extends EventEmitter {
     })
   }
 
-  write (data) {
+  promiseWrite (data) {
     return new Promise((resolve, reject) => {
-      data = data.toString('utf8').trim()
-      this.socket.write(data, (err) => {
+      this.write(data, (err) => {
         if (err) return reject(err)
-        this.emit('fragment', undefined, data)
-        resolve()
+        else resolve()
       })
+    })
+  }
+
+  write (data, fn) {
+    data = data.toString('utf8').trim()
+    this.socket.write(data, (err) => {
+      if (err) return fn(err)
+      this.emit('fragment', undefined, data)
+      fn()
     })
   }
 
   // FIXME maybe move to connection-tcp
   writeReceive (data, timeout = this.timeout) {
     return new Promise((resolve, reject) => {
-      this.write(data).catch(reject)
+      this.promiseWrite(data).catch(reject)
       this._promise('element', timeout).then(resolve, reject)
     })
   }
@@ -264,7 +271,7 @@ class Connection extends EventEmitter {
   }
 
   end () {
-    return this.write(this.footer())
+    return this.promiseWrite(this.footer())
   }
 
   close () {

@@ -9,6 +9,7 @@ class Client extends ClientCore {
     // TODO move to client-connection ?
     Object.keys(plugins).forEach(name => {
       const plugin = plugins[name]
+      if (!plugin.plugin) return // browserify stub
       this.plugin(plugin)
     })
   }
