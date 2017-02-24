@@ -11,7 +11,7 @@ function resolve (domain) {
       'urn:xmpp:alt-connections:websocket',
       'urn:xmpp:alt-connections:httppoll',
       'urn:xmpp:alt-connections:xbosh'
-    ].includes(link.attrs.rel)
+    ].indexOf(link.attrs.rel) > -1
     )
     .map(({attrs}) => ({
       rel: attrs.rel,

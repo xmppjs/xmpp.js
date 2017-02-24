@@ -20,9 +20,9 @@ function match (features, entity) {
 function proceed (entity, options) {
   return new Promise((resolve, reject) => {
     options.socket = entity.socket.socket
+    entity.socket._detachSocket()
     const tlsSocket = tls.connect(options, function (err) {
       if (err) return reject(err)
-      entity.socket._detachSocket()
       entity.socket._attachSocket(tlsSocket)
       resolve()
     })
@@ -34,15 +34,7 @@ function starttls (entity) {
     if (element.is('failure', NS)) {
       throw new Error('STARTTLS_FAILURE')
     } else if (element.is('proceed', NS)) {
-      return new Promise((resolve, reject) => {
-        if (!entity.listenerCount('starttls')) {
-          proceed(entity, {}).then(resolve).catch(reject)
-        } else {
-          entity.emit('starttls', (options) => {
-            proceed(entity, options).then(resolve).catch(reject)
-          })
-        }
-      })
+      return proceed(entity, {})
     }
   })
 }
@@ -50,6 +42,7 @@ function starttls (entity) {
 module.exports.name = 'starttls'
 module.exports.plugin = function plugin (entity) {
   const streamFeature = {
+    name: 'starttls',
     priority: 5000,
     match,
     restart: true,

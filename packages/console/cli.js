@@ -7,14 +7,23 @@ const chalk = require('chalk')
 
 const component = require('@xmpp/component')
 const client = require('@xmpp/client')
-const jid = require('@xmpp/jid')
 const Console = require('./lib/Console')
 
-module.exports = function (flags, params) {
-  const address = jid(params.jid)
+module.exports = function (flags, endpoint) {
+  const options = {
+    input: process.stdin,
+    output: process.stdout,
+    prompt: chalk.magenta.bold('✏ ')
+  }
+  if (parseInt(process.env.NODE_NO_READLINE)) {
+    options.terminal = false
+  }
+  const rl = readline.createInterface(options)
 
-  const entity = address.local ? client() : component()
-  const xconsole = new Console(entity, address)
+  let prevent = false
+
+  const entity = flags.type === 'component' ? component() : client()
+  const xconsole = new Console(entity)
   xconsole.resetInput = function () {
     rl.prompt()
   }
@@ -33,22 +42,31 @@ module.exports = function (flags, params) {
     this.log(chalk.red.bold('❌') + ' error\n', ...args)
   }
   xconsole.input = function (el) {
-    this.log(chalk.green.bold('⮈ IN\n') + this.beautify(el))
+    this.log(chalk.green.bold('⮈ IN\n') + (typeof el === 'string' ? el : this.beautify(el)))
   }
   xconsole.output = function (el) {
-    this.log(chalk.magenta.bold('⮊ OUT\n') + this.beautify(el))
+    this.log(chalk.magenta.bold('⮊ OUT\n') + (typeof el === 'string' ? el : this.beautify(el)))
   }
-
-  const options = {
-    input: process.stdin,
-    output: process.stdout,
-    prompt: chalk.magenta.bold('✏ ')
+  xconsole.choose = function (options) {
+    return new Promise((resolve) => {
+      this.log(chalk.yellow.bold('?'), options.text, ':', options.choices.join(', '))
+      prevent = true
+      rl.on('line', (line) => {
+        prevent = false
+        resolve(line)
+      })
+    })
   }
-  if (parseInt(process.env.NODE_NO_READLINE)) {
-    options.terminal = false
+  xconsole.ask = function (options) {
+    return new Promise((resolve) => {
+      this.log(chalk.yellow.bold('?'), options.text)
+      prevent = true
+      rl.on('line', (line) => {
+        prevent = false
+        resolve(line)
+      })
+    })
   }
-
-  const rl = readline.createInterface(options)
 
   rl.prompt(true)
 
@@ -57,20 +75,12 @@ module.exports = function (flags, params) {
     readline.moveCursor(process.stdout, 0, -1)
     readline.clearLine(process.stdout, 0)
 
-    line = line.trim()
-    if (line) xconsole.send(line)
-    else rl.prompt()
+    if (!prevent) {
+      line = line.trim()
+      if (line) xconsole.send(line)
+      else rl.prompt()
+    }
   })
 
-  entity.on('authenticate', auth => {
-    address.local ? auth(address.local, params.password) : auth(params.password)
-  })
-
-  entity.on('starttls', (starttls) => {
-    starttls({
-      rejectUnauthorized: false
-    })
-  })
-
-  entity.start(params.endpoint)
+  entity.start(endpoint)
 }

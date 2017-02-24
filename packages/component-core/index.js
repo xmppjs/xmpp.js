@@ -57,7 +57,6 @@ class Component extends Connection {
       }
       this._authenticated()
       this._jid(this._domain)
-      this._ready()
       this._online() // FIXME should be emitted after promise resolve
     })
   }

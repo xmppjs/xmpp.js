@@ -1,9 +1,9 @@
 'use strict'
 
 const Console = require('../lib/Console')
-const {Client, jid} = require('@xmpp/client')
+const client = require('@xmpp/client')
 const editor = require('./editor')
-const {Prism, fetch} = global
+const {Prism, fetch, notie} = global
 
 Prism.plugins.toolbar.registerButton('edit', {
   text: 'edit',
@@ -30,7 +30,7 @@ Prism.plugins.toolbar.registerButton('select', {
   }
 })
 
-const entity = new Client()
+const entity = client()
 
 const xconsole = new Console(entity)
 xconsole.resetInput = function () {
@@ -60,15 +60,31 @@ xconsole.log = function (subject, body) {
     outputEl.appendChild(div)
   }
 }
+xconsole.ask = function (options) {
+  return new Promise((resolve, reject) => {
+    options.submitCallback = resolve
+    options.cancelCallback = reject
+    notie.input(options)
+  })
+}
+xconsole.choose = function (options) {
+  return new Promise((resolve, reject) => {
+    options.cancelCallback = reject
+    options.choices = options.choices.map((choice) => {
+      return {
+        text: choice,
+        handler () {
+          resolve(choice)
+        }
+      }
+    })
+    notie.select(options)
+  })
+}
 
 fetch('/params').then((res) => {
   return res.json()
 }).then((params) => {
-  const address = jid(params.jid)
-  entity.on('authenticate', auth => {
-    auth(address.local, params.password)
-  })
-  xconsole.address = address
   entity.start(params.endpoint)
 })
 
@@ -80,7 +96,7 @@ document.getElementById('input').addEventListener('submit', function (e) {
 window.addEventListener('keydown', function (e) {
   if (e.defaultPrevented) return
   if (e.key === 'Enter' && e.ctrlKey) {
-    xconsole.send(editor.getValue())
     e.preventDefault()
+    xconsole.send(editor.getValue())
   }
 })

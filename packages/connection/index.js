@@ -14,7 +14,8 @@ function error (name, message) {
 // we ignore url module from the browser bundle to reduce its size
 function getHostname (uri) {
   if (url.parse) {
-    return url.parse(uri).hostname
+    const parsed = url.parse(uri)
+    return parsed.hostname || parsed.pathname
   } else {
     const el = document.createElement('a')
     el.href = uri
@@ -112,10 +113,6 @@ class Connection extends EventEmitter {
     return jid
   }
 
-  _ready () {
-    this.emit('ready', this.jid)
-  }
-
   _online () {
     this.emit('online', this.jid)
   }
@@ -142,14 +139,12 @@ class Connection extends EventEmitter {
         options.domain = getHostname(options.uri)
       }
 
-      this.connect(options.uri)
-        .then(() => {
-          this.open(options.domain, options.lang)
-            .then(() => {
-              // FIXME reject on error ?
-              this.once('ready', resolve)
-            }, reject)
-        }, reject)
+      this.once('online', (jid) => {
+        resolve(jid)
+      })
+      this.connect(options.uri).then(() => {
+        return this.open(options.domain, options.lang)
+      }, reject)
     })
   }
 
@@ -169,8 +164,8 @@ class Connection extends EventEmitter {
    * opens the stream
    */
   open (domain, lang = 'en') {
-    this.promiseWrite(this.header(domain, lang))
-      // FIXME timeout
+    // FIXME timeout
+    this.write(this.header(domain, lang))
     return this.waitHeader(domain, lang).then((el) => {
       this._domain = domain
       this.lang = lang
@@ -216,10 +211,9 @@ class Connection extends EventEmitter {
   }
 
   send (element) {
-    return new Promise((resolve, reject) => {
-      const root = element.root()
+    const root = element.root()
+    return this.promiseWrite(root).then(() => {
       this.emit('send', root)
-      this.promiseWrite(root).then(resolve, reject)
     })
   }
 
@@ -240,6 +234,7 @@ class Connection extends EventEmitter {
   }
 
   write (data, fn) {
+    fn = fn || function () {}
     data = data.toString('utf8').trim()
     this.socket.write(data, (err) => {
       if (err) return fn(err)

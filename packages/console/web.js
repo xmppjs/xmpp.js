@@ -5,14 +5,14 @@
 const express = require('express')
 const opn = require('opn')
 
-module.exports = function (flags, params) {
+module.exports = function (flags, endpoint) {
   const port = flags.port || 8080
 
   const app = express()
 
   app.use(express.static('public'))
   app.get('/params', (req, res, next) => {
-    res.json(params)
+    res.json({endpoint})
   })
   app.use((req, res, next) => {
     if (req.method === 'GET' && req.accepts('html')) {

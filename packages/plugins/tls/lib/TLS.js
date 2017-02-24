@@ -1,3 +1,5 @@
+'use strict'
+
 const URL = require('url').URL
 const tls = require('tls')
 const Connection = require('@xmpp/connection-tcp')

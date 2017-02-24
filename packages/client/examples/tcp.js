@@ -2,6 +2,8 @@
 
 'use strict'
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 const {Client, xml} = require('..') // require('@xmpp/client')
 const entity = new Client()
 
@@ -60,26 +62,15 @@ entity.on('authenticated', () => {
   console.log('3. authenticated')
 })
 
-// emitted when the XMPP entity is ready
-entity.on('ready', () => {
-  console.log('4. ready')
-})
-
-// emitted when ready, authenticated and bound
+// emitted when authenticated and bound
 entity.on('online', (jid) => {
-  console.log('5. online', jid.toString())
+  console.log('4. online', jid.toString())
 
   entity.send(xml`
     <iq id='ping' type='get'>
       <ping xmlns='urn:xmpp:ping'/>
     </iq>
   `)
-})
-
-entity.on('starttls', (starttls) => {
-  starttls({
-    rejectUnauthorized: false,
-  })
 })
 
 // "start" opens the socket and the XML stream
