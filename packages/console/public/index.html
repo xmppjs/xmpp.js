@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>@xmpp/console</title>
+    <link rel="stylesheet" type="text/css" href="/vendor/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/vendor/prismjs/themes/prism-solarizedlight.css">
+    <link rel="stylesheet" type="text/css" href="/vendor/prismjs/plugins/autolinker/prism-autolinker.css">
+    <link rel="stylesheet" type="text/css" href="/vendor/prismjs/plugins/toolbar/prism-toolbar.css">
+    <link rel="stylesheet" type="text/css" href="/vendor/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" type="text/css" href="/vendor/codemirror/theme/solarized.css">
+    <link rel="stylesheet" type="text/css" href="/vendor/codemirror/addon/lint/lint.css">
+    <link rel="stylesheet" type="text/css" href="/vendor/codemirror/addon/fold/foldgutter.css">
+    <link rel="stylesheet" type="text/css" href="/vendor/codemirror/addon/hint/show-hint.css">
+    <link rel="stylesheet" type="text/css" href="/style.css">
+  </head>
+  <body>
+    <form id="input">
+      <textarea name="data" id="editor"></textarea>
+      <input type="submit" value="send" class="btn btn-secondary" data-toggle="tooltip" data-placement="left" title="Ctrl + Enter"/>
+    </form>
+    <div id="output"></div>
+
+    <!-- bootstrap -->
+    <script src="/vendor/jquery/dist/jquery.slim.js"></script>
+    <script src="/vendor/tether/dist/js/tether.js"></script>
+    <script src="/vendor/bootstrap/dist/js/bootstrap.js"></script>
+
+    <!-- prism -->
+    <script src="/vendor/clipboard/dist/clipboard.js"></script>
+    <script src="/vendor/prismjs/prism.js"></script>
+    <script src="/vendor/prismjs/plugins/autolinker/prism-autolinker.js"></script>
+    <script src="/vendor/prismjs/plugins/toolbar/prism-toolbar.js"></script>
+    <script src="/vendor/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js"></script>
+
+    <!-- codemirror -->
+    <script src="/vendor/codemirror/lib/codemirror.js"></script>
+    <script src="/vendor/codemirror/mode/xml/xml.js"></script>
+    <!-- xml hint -->
+    <script src="/vendor/codemirror/addon/hint/show-hint.js"></script>
+    <script src="/vendor/codemirror/addon/hint/xml-hint.js"></script>
+    <!-- code folding -->
+    <script src="/vendor/codemirror/addon/fold/foldcode.js"></script>
+    <script src="/vendor/codemirror/addon/fold/foldgutter.js"></script>
+    <script src="/vendor/codemirror/addon/fold/xml-fold.js"></script>
+    <!-- hightlighting -->
+    <script src="/vendor/codemirror/addon/edit/matchtags.js"></script>
+    <!-- edit -->
+    <script src="/vendor/codemirror/addon/edit/closetag.js"></script>
+
+    <script src="/bundle.js"></script>
+  </body>
+</html>

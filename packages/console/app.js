@@ -2,124 +2,43 @@
 
 'use strict'
 
-const url = require('url')
+process.title = '@xmpp/console'
 
-const readline = require('readline')
-const chalk = require('chalk')
+const meow = require('meow')
 
-const component = require('@xmpp/component')
-const client = require('@xmpp/client')
-const xml = require('@xmpp/xml')
-const jid = require('@xmpp/jid')
+const cli = meow(`
+    Usage
+      $ xmpp-console jid [password] [endpoint]
 
-const [,, uri, password] = process.argv
-const protocol = url.parse(uri).protocol
-const address = jid(uri.split(protocol + '//')[1])
-const entity = address.local ? client() : component()
+    Options
+      --port, -p 8080 port for the web interface
+      --web, -w use web interface
+      --no-open, prevents opening the url for the web interface
+      --type, -t client, component, c2s or s2s
 
-function beautify (el) {
-  return xml.stringify(el, '  ').trim()
-}
-
-function send (line) {
-  let el
-  try {
-    el = xml.parse(line)
-  } catch (err) {
-    log(`${chalk.red.bold('❌')} invalid XML "${line}"`, err)
-    return
+    Examples
+      $ xmpp-console user@localhost[/resource] password --no-open --port 8000 --web
+      $ xmpp-console anon.localhost '' xmpp://localhost:5222
+      $ xmpp-console user@localhost[/resource] password xmpp://localhost[:port]
+      $ xmpp-console user@localhost[/resource] password xmpps://localhost[:port]
+      $ xmpp-console user@localhost[/resource] password ws://localhost:5280/xmpp-websocket
+      $ xmpp-console user@localhost[/resource] password wss://localhost:5281/xmpp-websocket
+      $ xmpp-console component.localhost password
+`, {
+  alias: {
+    p: 'port',
+    w: 'web',
+    t: 'type'
   }
-
-  if (!address.local && !el.attrs.to) {
-    const domain = entity._domain
-    el.attrs.to = domain.substr(domain.indexOf('.') + 1) // FIXME in component-core
-  }
-  entity.send(el)
-}
-
-const options = {
-  input: process.stdin,
-  output: process.stdout,
-  prompt: chalk.magenta.bold('✏ ')
-}
-if (parseInt(process.env.NODE_NO_READLINE)) {
-  options.terminal = false
-}
-
-const rl = readline.createInterface(options)
-
-rl.prompt(true)
-
-rl.on('line', (line) => {
-  // clear stdin - any better idea? please contribute
-  readline.moveCursor(process.stdout, 0, -1)
-  readline.clearLine(process.stdout, 0)
-
-  line = line.trim()
-  if (line) send(line)
-  rl.prompt()
 })
 
-function log (...args) {
-  readline.cursorTo(process.stdout, 0)
-  console.log(...args)
-  rl.prompt()
-}
+const [jid, password, endpoint] = cli.input
+const params = {jid, password, endpoint}
 
-function info (...args) {
-  log(chalk.cyan.bold('🛈'), ...args)
-}
-
-// function warning (...args) {
-//   log(chalk.yellow.bold('⚠'), ...args)
-// }
-
-function error (...args) {
-  log(chalk.red.bold('❌'), ...args)
-}
-
-entity.on('connect', () => {
-  info('connected')
-})
-
-entity.on('open', () => {
-  info('open')
-})
-
-entity.on('authenticated', () => {
-  info('authenticated')
-})
-
-entity.on('online', (jid) => {
-  info('online', chalk.grey(jid.toString()))
-})
-
-entity.on('authenticate', auth => {
-  info('authenticating')
-  address.local ? auth(address.local, password) : auth(password)
-})
-
-entity.on('starttls', (starttls) => {
-  starttls({
-    rejectUnauthorized: false
-  })
-})
-
-entity.on('nonza', el => {
-  log(chalk.green.bold('⮈ IN\n') + beautify(el))
-})
-
-entity.on('stanza', el => {
-  log(chalk.green.bold('⮈ IN\n') + beautify(el))
-})
-
-entity.on('send', el => {
-  log(chalk.magenta.bold('⮊ OUT\n') + beautify(el))
-})
-
-entity.start(uri)
+const int = cli.flags.web ? './web' : './cli'
+require(int)(cli.flags, params)
 
 process.on('unhandledRejection', (reason) => {
-  error(reason)
+  console.error(reason)
   process.exit(1)
 })

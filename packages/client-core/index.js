@@ -15,7 +15,7 @@ class Client extends Connection {
     ) {
       element.attrs.xmlns = 'jabber:client'
     }
-    super.send(element, ...args)
+    return super.send(element, ...args)
   }
 
   connect (uri) {

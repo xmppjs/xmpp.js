@@ -1,6 +1,9 @@
 node_modules/
 coverage/
+**/dist/*
+vendor/
 
+!.gitkeep
 !.editorconfig
 !.gitignore
 !.travis.yml
