@@ -21,7 +21,7 @@ function WSConnection (opts) {
   this.xmlns = {
     '': NS_FRAMING
   }
-  this.websocket = new WebSocket(this.url, ['xmpp'])
+  this.websocket = new WebSocket(this.url, ['xmpp'], opts.websocket.options)
   this.websocket.onopen = this.onopen.bind(this)
   this.websocket.onmessage = this.onmessage.bind(this)
   this.websocket.onclose = this.onclose.bind(this)
