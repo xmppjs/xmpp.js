@@ -82,10 +82,26 @@ xconsole.choose = function (options) {
   })
 }
 
+function gotParams (params) {
+  if (params.endpoint) {
+    return entity.connect(params.endpoint)
+  } else {
+    return xconsole.ask({
+      text: 'Enter endpoint',
+      value: 'ws://localhost:5280/xmpp-websocket',
+      type: 'url'
+    }).then((endpoint) => {
+      return entity.connect(endpoint)
+    })
+  }
+}
+
 fetch('/params').then((res) => {
   return res.json()
 }).then((params) => {
-  entity.start(params.endpoint)
+  return gotParams(params)
+}, () => {
+  return gotParams({})
 })
 
 document.getElementById('input').addEventListener('submit', function (e) {

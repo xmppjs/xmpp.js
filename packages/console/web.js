@@ -4,13 +4,14 @@
 
 const express = require('express')
 const opn = require('opn')
+const path = require('path')
 
 module.exports = function (flags, endpoint) {
   const port = flags.port || 8080
 
   const app = express()
 
-  app.use(express.static('public'))
+  app.use(express.static(path.join(__dirname, 'public')))
   app.get('/params', (req, res, next) => {
     res.json({endpoint})
   })

@@ -6,10 +6,11 @@ module.exports.plugin = function plugin (entity) {
 
   function reconnect () {
     entity.emit('reconnecting')
-    entity.start(entity.startOptions)
-      .then(() => {
-        entity.emit('reconnected')
-      })
+    entity.connect(entity.connectOptions).then(() => {
+      return entity.open(entity.openOptions)
+    }).then(() => {
+      entity.emit('reconnected')
+    })
       .catch((err) => {
         entity.emit('error', err)
         setTimeout(() => {
@@ -18,11 +19,19 @@ module.exports.plugin = function plugin (entity) {
       })
   }
 
-  entity.on('close', () => {
-    setTimeout(() => {
-      reconnect()
-    }, delay)
-  })
+  function online () {
+    entity.on('close', () => {
+      setTimeout(() => {
+        reconnect()
+      }, delay)
+    })
+  }
+
+  if (entity.jid) {
+    online()
+  } else {
+    entity.once('online', online)
+  }
 
   return {
     entity,

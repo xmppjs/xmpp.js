@@ -127,6 +127,15 @@ class Console extends EventEmitter {
         text: 'Enter password'
       }).then(auth)
     })
+
+    entity.on('connect', () => {
+      this.ask({
+        text: 'Enter domain',
+        value: 'localhost'
+      }).then((domain) => {
+        entity.open({domain})
+      })
+    })
   }
 
   input (el) {

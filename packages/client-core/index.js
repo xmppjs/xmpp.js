@@ -19,6 +19,7 @@ class Client extends Connection {
   }
 
   connect (uri) {
+    this.connectOptions = uri
     let params
     const Transport = this.transports.find(Transport => {
       return params = Transport.match(uri) // eslint-disable-line no-return-assign
@@ -39,18 +40,19 @@ class Client extends Connection {
     })
 
     return sock.connect(params)
-      .then(() => {
-        this.uri = uri
-        return params
-      })
   }
 
   write (...args) {
     return this.socket.write(...args)
   }
 
-  open (...args) {
-    return this.socket.open(...args)
+  open (options) {
+    this.openOptions = options
+    return this.socket.open(options)
+  }
+
+  restart (...args) {
+    return this.socket.restart(...args)
   }
 
   close (...args) {
