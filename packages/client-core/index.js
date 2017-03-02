@@ -32,7 +32,7 @@ class Client extends Connection {
     ;[
       'error', 'close', 'connect', 'open',
       'feature', 'element', 'stanza', 'send',
-      'nonza', 'fragment', 'online', 'ready',
+      'nonza', 'fragment', 'online',
       'authenticated', 'authenticate'
     ].forEach(e => {
       sock.on(e, (...args) => this.emit(e, ...args))
@@ -43,6 +43,10 @@ class Client extends Connection {
         this.uri = uri
         return params
       })
+  }
+
+  write (...args) {
+    return this.socket.write(...args)
   }
 
   open (...args) {

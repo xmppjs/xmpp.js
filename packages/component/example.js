@@ -60,14 +60,9 @@ entity.on('authenticated', () => {
   console.log('3. authenticated')
 })
 
-// emitted when the XMPP entity is ready
-entity.on('ready', () => {
-  console.log('4. ready')
-})
-
-// emitted when ready, authenticated and bound
+// emitted when authenticated and bound
 entity.on('online', (jid) => {
-  console.log('5. online', jid.toString())
+  console.log('4. online', jid.toString())
 
   entity.send(xml`
     <iq to='localhost' id='ping' type='get'>

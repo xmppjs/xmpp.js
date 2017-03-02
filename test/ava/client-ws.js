@@ -1,10 +1,16 @@
+'use strict'
+
 const test = require('ava')
 const xmpp = require('../../packages/client')
+const debug = require('../../packages/debug')
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 test.cb('client ws://', t => {
-  t.plan(9)
+  t.plan(7)
 
   const entity = new xmpp.Client()
+  debug(entity)
 
   entity.on('connect', () => {
     t.pass()
@@ -17,13 +23,6 @@ test.cb('client ws://', t => {
   entity.on('authenticate', auth => {
     t.is(typeof auth, 'function')
     auth('node-xmpp', 'foobar')
-      .then(() => {
-        t.pass('authenticated')
-      })
-  })
-
-  entity.on('ready', () => {
-    t.pass()
   })
 
   entity.on('online', (jid) => {

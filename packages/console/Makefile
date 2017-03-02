@@ -5,6 +5,7 @@ make:
 	cp -r node_modules/clipboard public/vendor/
 	cp -r node_modules/jquery public/vendor/
 	cp -r node_modules/tether public/vendor/
+	cp -r node_modules/notie public/vendor/
 	../../node_modules/.bin/browserify public/script.js > public/bundle.js
 
 clean:
