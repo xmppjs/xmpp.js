@@ -3,9 +3,9 @@
   "repository": "github:node-xmpp/node-xmpp",
   "homepage": "http://github.com/node-xmpp/node-xmpp",
   "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "ISC",
   "dependencies": {
-    "@xmpp/connection": "^0.0.5"
+    "@xmpp/connection": "^0.0.6"
   }
 }
