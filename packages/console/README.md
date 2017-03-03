@@ -1,8 +1,6 @@
 # console
 
-XMPP console, CLI or web.
-
-Supports client and component connections.
+XMPP console, terminal and web interfaces.
 
 ![](screenshot.png)
 
@@ -16,7 +14,7 @@ npm install -g @xmpp/console
 
 ```
 Usage
-  $ xmpp-console endpoint
+  $ xmpp-console [endpoint]
 
 Options
   --port, -p 8080 port for the web interface
@@ -25,6 +23,7 @@ Options
   --type, -t client (default) or component
 
 Examples
+  $ xmpp-console
   $ xmpp-console localhost --no-open --port 8000 --web (auto resolve)
   $ xmpp-console xmpp://localhost[:5222] (classic XMPP)
   $ xmpp-console xmpps://localhost[:5223] (direct TLS)
@@ -32,3 +31,23 @@ Examples
   $ xmpp-console wss://localhost:52801/xmpp-websocket (Secure WebSocket)
   $ xmpp-console component.localhost[:5347] --type component (component)
 ```
+
+## Interfaces
+
+### Terminal
+
+The terminal interface supports component and client connection (TCP and WebSocket).
+
+### Web
+
+The Web interface only supports client WebSocket connection at the moment.
+
+It is possible to use it locally see [Usage](#Usage) or deploy it with
+
+```
+$ git clone https://github.com/node-xmpp/node-xmpp
+$ cd node-xmpp
+$ npm install
+```
+
+and use your HTTP server to serve `node-xmpp/packages/console/public/`.

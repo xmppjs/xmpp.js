@@ -72,7 +72,7 @@ entity.on('online', (jid) => {
 })
 
 // "start" opens the socket and the XML stream
-entity.start('component.localhost:5347')
+entity.start('xmpp://component.localhost:5347')
   // resolves once online
   .then((jid) => {
     console.log('started', jid.toString())

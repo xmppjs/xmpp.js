@@ -71,16 +71,25 @@ module.exports = function (flags, endpoint) {
   rl.prompt(true)
 
   rl.on('line', (line) => {
+    if (prevent) return
     // clear stdin - any better idea? please contribute
     readline.moveCursor(process.stdout, 0, -1)
     readline.clearLine(process.stdout, 0)
 
-    if (!prevent) {
-      line = line.trim()
-      if (line) xconsole.send(line)
-      else rl.prompt()
-    }
+    line = line.trim()
+    if (line) xconsole.send(line)
+    else rl.prompt()
   })
 
-  entity.start(endpoint)
+  if (endpoint) {
+    entity.connect(endpoint)
+  } else {
+    xconsole.ask({
+      text: 'Enter endpoint',
+      value: 'ws://localhost:5280/xmpp-websocket',
+      type: 'url'
+    }).then((endpoint) => {
+      return entity.connect(endpoint)
+    })
+  }
 }

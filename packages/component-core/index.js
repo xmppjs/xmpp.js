@@ -15,36 +15,36 @@ const NS = 'jabber:component:accept'
 class Component extends Connection {
   connect (uri) {
     const {hostname, port} = url.parse(uri)
-    return super.connect({port: port || 5347, host: hostname})
+    const p = super.connect({port: port || 5347, host: hostname})
+    this.connectOptions = uri
+    return p
   }
 
   header (domain, lang) {
     return tagString`
       <?xml version='1.0'?>
-      <stream:stream to='${domain}' xml:lang='${lang}' xmlns='${this.NS}' xmlns:stream='${super.NS}'>
+      <stream:stream to='${domain}' ${lang ? `xml:lang='${lang}'` : ''} xmlns='${this.NS}' xmlns:stream='${super.NS}'>
     `
   }
 
-  waitHeader (domain, lang) {
-    return new Promise((resolve, reject) => {
-      this.parser.once('start', (el) => {
-        const {name, attrs} = el
-        if (
-          name === 'stream:stream' &&
-          attrs.xmlns === this.NS &&
-          attrs['xmlns:stream'] === super.NS &&
-          attrs.from === domain &&
-          attrs.id
-        ) {
-          resolve(el)
-          this.emit('authenticate', (secret) => {
-            return this.authenticate(attrs.id, secret)
-          })
-        } else {
-          reject()
-        }
+  open (...args) {
+    return super.open(...args).then((el) => {
+      this.emit('authenticate', (secret) => {
+        return this.authenticate(el.attrs.id, secret)
       })
     })
+  }
+
+  // https://tools.ietf.org/html/rfc7395#section-3.4
+  responseHeader (el, domain) {
+    const {name, attrs} = el
+    return (
+      name === 'stream:stream' &&
+      attrs.xmlns === this.NS &&
+      attrs['xmlns:stream'] === super.NS &&
+      attrs.from === domain &&
+      attrs.id
+    )
   }
 
   // FIXME move to module?

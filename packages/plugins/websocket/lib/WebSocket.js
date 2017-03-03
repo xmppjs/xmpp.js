@@ -14,28 +14,20 @@ const NS_FRAMING = 'urn:ietf:params:xml:ns:xmpp-framing'
 
 class WebSocket extends Connection {
   // https://tools.ietf.org/html/rfc7395#section-3.4
-  waitHeader (domain, lang) {
-    return new Promise((resolve, reject) => {
-      this.parser.once('start', (el) => {
-        const {name, attrs} = el
-        if (
-          name === 'open' &&
-          attrs.version === '1.0' &&
-          attrs.xmlns === NS_FRAMING &&
-          attrs.from === domain &&
-          attrs.id
-        ) {
-          resolve(el)
-        } else {
-          reject()
-        }
-      })
-    })
+  responseHeader (el, domain) {
+    const {name, attrs} = el
+    return (
+      name === 'open' &&
+      attrs.version === '1.0' &&
+      attrs.xmlns === NS_FRAMING &&
+      attrs.from === domain &&
+      attrs.id
+    )
   }
 
   // https://tools.ietf.org/html/rfc7395#section-3.4
   header (domain, lang) {
-    return xml`<open xml:lang='${lang}' version='1.0' xmlns='${NS_FRAMING}' to='${domain}'/>`
+    return xml`<open ${lang ? `xml:lang='${lang}'` : ''} version='1.0' xmlns='${NS_FRAMING}' to='${domain}'/>`
   }
 
   // https://tools.ietf.org/html/rfc7395#section-3.6

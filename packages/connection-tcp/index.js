@@ -12,34 +12,24 @@ const NS_STREAM = 'http://etherx.jabber.org/streams'
 */
 
 class TCP extends Connection {
-  // FIXME is lang useful?
   // https://xmpp.org/rfcs/rfc6120.html#streams-open
-  waitHeader (domain, lang) {
-    return new Promise((resolve, reject) => {
-      this.parser.once('start', (el) => {
-        const {name, attrs} = el
-
-        if (
-          name === 'stream:stream' &&
-          attrs.xmlns === this.NS &&
-          attrs['xmlns:stream'] === NS_STREAM &&
-          attrs.from === domain &&
-          attrs.version === '1.0' &&
-          attrs.id
-        ) {
-          resolve(el)
-        } else {
-          reject()
-        }
-      })
-    })
+  responseHeader (el, domain) {
+    const {name, attrs} = el
+    return (
+      name === 'stream:stream' &&
+      attrs.xmlns === this.NS &&
+      attrs['xmlns:stream'] === NS_STREAM &&
+      attrs.from === domain &&
+      attrs.version === '1.0' &&
+      attrs.id
+    )
   }
 
   // https://xmpp.org/rfcs/rfc6120.html#streams-open
   header (domain, lang) {
     return tagString`
       <?xml version='1.0'?>
-      <stream:stream to='${domain}' version='1.0' xml:lang='${lang}' xmlns='${this.NS}' xmlns:stream='${NS_STREAM}'>
+      <stream:stream to='${domain}' version='1.0' ${lang ? `xml:lang='${lang}'` : ''} xmlns='${this.NS}' xmlns:stream='${NS_STREAM}'>
     `
   }
 
