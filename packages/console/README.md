@@ -24,12 +24,11 @@ Options
 
 Examples
   $ xmpp-console
-  $ xmpp-console localhost --no-open --port 8000 --web (auto resolve)
   $ xmpp-console xmpp://localhost[:5222] (classic XMPP)
   $ xmpp-console xmpps://localhost[:5223] (direct TLS)
   $ xmpp-console ws://localhost:5280/xmpp-websocket (WebSocket)
   $ xmpp-console wss://localhost:52801/xmpp-websocket (Secure WebSocket)
-  $ xmpp-console component.localhost[:5347] --type component (component)
+  $ xmpp-console xmpp://component.localhost[:5347] --type component (component)
 ```
 
 ## Interfaces
