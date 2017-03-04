@@ -25,7 +25,7 @@ function resolveTxt (domain, {owner = '_xmppconnect'}) {
             attribute,
             value,
             method: attribute.split('-').pop(),
-            url: value
+            uri: value
           }
         }).sort(compareAltConnections))
       }
