@@ -36,8 +36,5 @@
   },
   "bin": {
     "xmpp-console": "./app.js"
-  },
-  "scripts": {
-    "prepublish": "make"
   }
 }
