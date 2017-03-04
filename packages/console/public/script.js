@@ -82,7 +82,7 @@ xconsole.choose = function (options) {
   })
 }
 
-function gotParams (params) {
+function connect (params) {
   if (params.endpoint) {
     return entity.connect(params.endpoint)
   } else {
@@ -99,9 +99,9 @@ function gotParams (params) {
 fetch('/params').then((res) => {
   return res.json()
 }).then((params) => {
-  return gotParams(params)
+  return connect(params)
 }, () => {
-  return gotParams({})
+  return connect({})
 })
 
 document.getElementById('input').addEventListener('submit', function (e) {

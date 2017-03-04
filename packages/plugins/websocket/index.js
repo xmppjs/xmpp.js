@@ -1,8 +1,10 @@
-const WebSocket = require('./lib/WebSocket')
+'use strict'
+
+const Client = require('@xmpp/client-websocket/lib/Client')
 
 module.exports.name = 'websocket'
 module.exports.plugin = function plugin (entity) {
-  entity.transports.push(WebSocket)
+  entity.transports.push(Client)
   return {
     entity
   }

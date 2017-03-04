@@ -11,17 +11,16 @@
     "plugins"
   ],
   "dependencies": {
+    "@xmpp/client-tls": "^0.0.0",
+    "@xmpp/client-tcp": "^0.0.0",
+    "@xmpp/client-websocket": "^0.0.0",
     "@xmpp/connection": "^0.0.6",
-    "@xmpp/connection-tcp": "^0.0.6",
     "@xmpp/jid": "^0.0.2",
+    "@xmpp/resolve": "^0.0.2",
     "@xmpp/time": "^0.0.1",
     "@xmpp/xml": "^0.1.3",
     "saslmechanisms": "^0.1.1",
     "sasl-scram-sha-1": "^1.2.0",
-    "sasl-plain": "^0.1.0",
-    "ws": "^1.1.0"
-  },
-  "browser": {
-    "ws": false
+    "sasl-plain": "^0.1.0"
   }
 }

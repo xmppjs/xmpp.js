@@ -55,7 +55,11 @@ class Console extends EventEmitter {
     })
 
     entity.on('error', (err) => {
-      this.error(err)
+      this.error(err.message)
+    })
+
+    entity.on('close', () => {
+      this.info('closed')
     })
 
     entity.on('authenticate', auth => {
@@ -196,7 +200,7 @@ class Console extends EventEmitter {
   }
 
   error (...args) {
-    this.log('❌ error\n', ...args)
+    this.log('❌ error', ...args)
   }
 }
 
