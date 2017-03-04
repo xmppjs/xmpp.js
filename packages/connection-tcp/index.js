@@ -2,7 +2,7 @@
 
 const Socket = require('net').Socket
 const Connection = require('@xmpp/connection')
-const {tagString, escapeXML} = require('@xmpp/xml')
+const {escapeXML} = require('@xmpp/xml')
 
 const NS_STREAM = 'http://etherx.jabber.org/streams'
 

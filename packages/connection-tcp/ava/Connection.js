@@ -3,7 +3,6 @@
 const test = require('ava')
 const _Connection = require('../../../packages/connection')
 const Connection = require('..')
-const xml = require('@xmpp/xml')
 const net = require('net')
 
 const NS_STREAM = 'http://etherx.jabber.org/streams'
