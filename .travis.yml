@@ -43,7 +43,7 @@ script:
   - sudo prosodyctl register node-xmpp localhost foobar
   - yarn run integration
   - sudo prosodyctl restart
-  - yarm run ava:integration
+  - yarn run ava:integration
   - sudo prosodyctl restart
   - yarn run bundle
   - yarn run test:browser
