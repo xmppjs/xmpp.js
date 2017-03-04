@@ -12,7 +12,7 @@ function error (name, message) {
 }
 
 class XMPPError extends Error {
-  constructor(condition, text, element) {
+  constructor (condition, text, element) {
     super()
     this.condition = condition
     this.text = text
@@ -49,11 +49,6 @@ class Connection extends EventEmitter {
     this.openOptions = null
     this.connectOptions = null
     this.socketListeners = Object.create(null)
-  }
-
-  stop () {
-    return this.end()
-      .then(() => this.close())
   }
 
   _attachSocket (socket) {
@@ -179,14 +174,14 @@ class Connection extends EventEmitter {
    * closes the socket
    */
   end () {
-     return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
        // TODO timeout
-       const handler = () => {
-         this.socket.end()
-         this.once('close', resolve)
-       }
-       this.parser.once('end', handler)
-     })
+      const handler = () => {
+        this.socket.end()
+        this.once('close', resolve)
+      }
+      this.parser.once('end', handler)
+    })
   }
 
   /**

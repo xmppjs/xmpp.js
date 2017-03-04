@@ -11,6 +11,7 @@ node_js:
   - '7'
 
 cache:
+  yarn: true
   directories:
   - node_modules/
   - packages/*/node_modules
@@ -34,17 +35,17 @@ before_install:
   - sudo cp test/resources/localhost.key /var/lib/prosody/
 
 script:
-  - npm run test
+  - make
 
   - nohup python2 -m SimpleHTTPServer &
 
   - sudo prosodyctl start
   - sudo prosodyctl register node-xmpp localhost foobar
-  - npm run integration
+  - yarn run integration
   - sudo prosodyctl restart
-  - npm run ava:integration
+  - yarn run ava:integration
   - sudo prosodyctl restart
-  - npm run bundle
-  - npm run test:browser
+  - yarn run bundle
+  - yarn run test:browser
 
 # after_script: npm run coveralls
