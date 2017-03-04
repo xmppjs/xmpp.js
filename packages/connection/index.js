@@ -11,6 +11,20 @@ function error (name, message) {
   return e
 }
 
+class XMPPError extends Error {
+  constructor(condition, text, element) {
+    super()
+    this.condition = condition
+    this.text = text
+    this.message = condition + (text ? ` - ${text}` : '')
+    this.element = element
+  }
+}
+XMPPError.prototype.name = 'XMPPError'
+
+class StreamError extends XMPPError {}
+StreamError.prototype.name = 'StreamError'
+
 // we ignore url module from the browser bundle to reduce its size
 function getHostname (uri) {
   if (url.parse) {
@@ -26,7 +40,6 @@ function getHostname (uri) {
 class Connection extends EventEmitter {
   constructor (options) {
     super()
-    this.online = false
     this._domain = null
     this.lang = null
     this.jid = null
@@ -36,18 +49,6 @@ class Connection extends EventEmitter {
     this.openOptions = null
     this.connectOptions = null
     this.socketListeners = Object.create(null)
-
-    if (this.Parser) {
-      this._attachParser(new this.Parser())
-    } else if (this.parser) {
-      this._attachParser(this.parser)
-    }
-
-    if (this.Socket) {
-      this._attachSocket(new this.Socket())
-    } else if (this.socket) {
-      this._attachsocket(this.socket)
-    }
   }
 
   stop () {
@@ -65,11 +66,9 @@ class Connection extends EventEmitter {
     }
     listeners.close = () => {
       this._domain = ''
-      this.online = false
       this.emit('close')
     }
     listeners.connect = () => {
-      this.online = true
       this.emit('connect')
     }
     listeners.error = (error) => {
@@ -98,9 +97,12 @@ class Connection extends EventEmitter {
       this.emit('element', element)
       this.emit(this.isStanza(element) ? 'stanza' : 'nonza', element)
       if (element.name === 'stream:error') {
-        const condition = element.children[0].name
-        const text = element.getChildText('text', 'urn:ietf:params:xml:ns:xmpp-streams')
-        this.emit('error', error(condition, text || ''))
+        this.stop()
+        this.emit('error', new StreamError(
+          element.children[0].name,
+          element.getChildText('text', 'urn:ietf:params:xml:ns:xmpp-streams') || '',
+          element
+        ))
       }
     }
     parser.on('element', elementListener)
@@ -148,16 +150,43 @@ class Connection extends EventEmitter {
   }
 
   /**
+   * closes the stream then closes the socket
+   */
+  stop () {
+    return new Promise((resolve, reject) => {
+      this.close().catch(reject) // FIXME wait footer
+      this.end().then(resolve, reject)
+    })
+  }
+
+  /**
    * opens the socket
    */
   connect (options) {
     this.connectOptions = options
     return new Promise((resolve, reject) => {
+      this._attachParser(new this.Parser())
+      this._attachSocket(new this.Socket())
+
       this.socket.connect(options, (err) => {
         if (err) reject(err)
         else resolve()
       })
     })
+  }
+
+  /**
+   * closes the socket
+   */
+  end () {
+     return new Promise((resolve, reject) => {
+       // TODO timeout
+       const handler = () => {
+         this.socket.end()
+         this.once('close', resolve)
+       }
+       this.parser.once('end', handler)
+     })
   }
 
   /**
@@ -173,12 +202,19 @@ class Connection extends EventEmitter {
           resolve(el)
           this.emit('open', el)
         } else {
-          reject()
+          reject(new Error('invalid response header received from server'))
         }
       })
       const {domain, lang} = options
       this.write(this.header(domain, lang))
     })
+  }
+
+  /**
+   * closes the stream
+   */
+  close () {
+    return this.promiseWrite(this.footer())
   }
 
   /**
@@ -262,7 +298,7 @@ class Connection extends EventEmitter {
     const {name} = element
     const NS = element.findNS()
     return (
-      this.online &&
+      // this.online && FIXME
       (NS ? NS === this.NS : true) &&
       (name === 'iq' || name === 'message' || name === 'presence')
     )
@@ -270,21 +306,6 @@ class Connection extends EventEmitter {
 
   isNonza (element) {
     return !this.isStanza(element)
-  }
-
-  end () {
-    return this.promiseWrite(this.footer())
-  }
-
-  close () {
-    return new Promise((resolve, reject) => {
-      // TODO timeout
-      const handler = () => {
-        this.socket.close()
-        this.once('close', resolve)
-      }
-      this.parser.once('end', handler)
-    })
   }
 
   plugin (plugin) {
@@ -296,7 +317,7 @@ class Connection extends EventEmitter {
   }
 
   // override
-  waitHeader () {}
+  responseHeader () {}
   header () {}
   footer () {}
   match () {}
@@ -309,3 +330,5 @@ Connection.prototype.Parser = StreamParser
 
 module.exports = Connection
 module.exports.getHostname = getHostname
+module.exports.XMPPError = XMPPError
+module.exports.StreamError = StreamError

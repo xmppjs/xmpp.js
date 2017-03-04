@@ -1,19 +1,19 @@
+'use strict'
+
 const Connection = require('@xmpp/connection')
 
 class Client extends Connection {
   constructor (options) {
     super(options)
     this.transports = []
-    this.uri = ''
   }
 
   send (element, ...args) {
     if (
-      (this.socket.NS && this.socket.NS !== 'jabber:client') &&
       !element.attrs.xmlns &&
       (element.is('iq') || element.is('message') || element.is('presence'))
     ) {
-      element.attrs.xmlns = 'jabber:client'
+      element.attrs.xmlns = 'jabber:client' // FIXME no need for TCP/TLS transports
     }
     return super.send(element, ...args)
   }
@@ -25,46 +25,24 @@ class Client extends Connection {
       return params = Transport.match(uri) // eslint-disable-line no-return-assign
     })
 
-    // FIXME callback?
-    if (!Transport) throw new Error('No transport found')
+    if (!Transport) throw new Error('No compatible connection method found.')
 
-    const sock = this.socket = new Transport()
+    this.Transport = Transport
+    this.Socket = Transport.prototype.Socket
 
-    ;[
-      'error', 'close', 'connect', 'open',
-      'feature', 'element', 'stanza', 'send',
-      'nonza', 'fragment', 'online',
-      'authenticated', 'authenticate'
-    ].forEach(e => {
-      sock.on(e, (...args) => this.emit(e, ...args))
-    })
-
-    return sock.connect(params)
+    return super.connect(params)
   }
 
-  write (...args) {
-    return this.socket.write(...args)
+  header (...args) {
+    return this.Transport.prototype.header(...args)
   }
 
-  open (options) {
-    this.openOptions = options
-    return this.socket.open(options)
+  footer (...args) {
+    return this.Transport.prototype.footer(...args)
   }
 
-  restart (...args) {
-    return this.socket.restart(...args)
-  }
-
-  close (...args) {
-    return this.socket.close(...args)
-  }
-
-  end (...args) {
-    return this.socket.end(...args)
-  }
-
-  stop (...args) {
-    return this.socket.stop(...args)
+  responseHeader (...args) {
+    return this.Transport.prototype.footer(...args)
   }
 }
 

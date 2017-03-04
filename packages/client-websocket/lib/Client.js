@@ -12,7 +12,7 @@ const NS_FRAMING = 'urn:ietf:params:xml:ns:xmpp-framing'
  * XMPP over WebSocket https://tools.ietf.org/html/rfc7395
 */
 
-class WebSocket extends Connection {
+class Client extends Connection {
   // https://tools.ietf.org/html/rfc7395#section-3.4
   responseHeader (el, domain) {
     const {name, attrs} = el
@@ -32,7 +32,7 @@ class WebSocket extends Connection {
 
   // https://tools.ietf.org/html/rfc7395#section-3.6
   footer () {
-    return xml`<close xmlns=${NS_FRAMING}/>`
+    return xml`<close xmlns="${NS_FRAMING}"/>`
   }
 
   static match (uri) {
@@ -40,8 +40,7 @@ class WebSocket extends Connection {
   }
 }
 
-WebSocket.prototype.Socket = Socket
-WebSocket.prototype.NS = 'NS_FRAMING'
+Client.prototype.Socket = Socket
+Client.prototype.NS = 'jabber:client'
 
-module.exports = WebSocket
-module.exports.NS_FRAMING = NS_FRAMING
+module.exports = Client

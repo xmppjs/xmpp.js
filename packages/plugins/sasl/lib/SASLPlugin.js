@@ -4,8 +4,12 @@ const SASLFactory = require('saslmechanisms')
 const {encode, decode} = require('./b64')
 const xml = require('@xmpp/xml')
 const Plugin = require('../../lib/Plugin')
+const {XMPPError} = require('@xmpp/connection')
 
 const NS = 'urn:ietf:params:xml:ns:xmpp-sasl'
+
+class SASLError extends XMPPError {}
+SASLError.prototype.name = 'SASLError'
 
 function getMechanismNames (features) {
   return features.getChild('mechanisms', NS).children.map(el => el.text())
@@ -89,7 +93,10 @@ class SASLPlugin extends Plugin {
         }
 
         if (element.name === 'failure') {
-          reject()
+          reject(new SASLError(
+            element.children[0].name,
+            element.getChild('text')
+          ))
         } else if (element.name === 'success') {
           resolve()
         }

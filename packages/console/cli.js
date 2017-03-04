@@ -39,7 +39,7 @@ module.exports = function (flags, endpoint) {
     this.log(chalk.yellow.bold('⚠'), ...args)
   }
   xconsole.error = function (...args) {
-    this.log(chalk.red.bold('❌') + ' error\n', ...args)
+    this.log(chalk.red.bold('❌') + ' error', ...args)
   }
   xconsole.input = function (el) {
     this.log(chalk.green.bold('⮈ IN\n') + (typeof el === 'string' ? el : this.beautify(el)))
@@ -79,6 +79,14 @@ module.exports = function (flags, endpoint) {
     line = line.trim()
     if (line) xconsole.send(line)
     else rl.prompt()
+  })
+
+  rl.on('close', () => {
+    process.exit()
+  })
+
+  entity.on('close', () => {
+    process.exit()
   })
 
   if (endpoint) {
