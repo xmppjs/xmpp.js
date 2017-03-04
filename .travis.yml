@@ -35,8 +35,7 @@ before_install:
   - sudo cp test/resources/localhost.key /var/lib/prosody/
 
 script:
-  - yarn run bootstrap
-  - yarn run test
+  - make
 
   - nohup python2 -m SimpleHTTPServer &
 
