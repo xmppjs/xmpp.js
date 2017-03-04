@@ -1,10 +1,10 @@
 'use strict'
 
-const Client = require('@xmpp/client-tcp/lib/Client')
+const ConnectionTCP = require('./lib/Connection')
 
 module.exports.name = 'tcp'
 module.exports.plugin = function plugin (entity) {
-  entity.transports.push(Client)
+  entity.transports.push(ConnectionTCP)
   return {
     entity
   }

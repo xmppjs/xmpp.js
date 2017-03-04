@@ -39,14 +39,14 @@ The terminal interface supports component and client connection (TCP and WebSock
 
 ### Web
 
-The Web interface only supports client WebSocket connection at the moment.
+The Web interface only supports WebSocket client connection at the moment.
 
-It is possible to use it locally see [Usage](#usage) or deploy it with
+It is possible to use it locally with `xmpp-console --web` (see [Usage](#usage)) or deploy it with
 
 ```
 $ git clone https://github.com/node-xmpp/node-xmpp
 $ cd node-xmpp
-$ npm install
+$ make
 $ cd packages/console
 $ make
 ```

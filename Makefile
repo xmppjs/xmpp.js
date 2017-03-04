@@ -10,7 +10,7 @@ setup:
 test:
 	ava
 	standard
-	make start
+	make restart
 	ava -v test/
 
 clean:

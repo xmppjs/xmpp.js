@@ -37,23 +37,19 @@ test('Socket', t => {
 })
 
 test('NS', t => {
-  t.is(Connection.NS, NS_STREAM)
+  t.is(Connection.prototype.NS, NS_STREAM)
 })
 
 test('header()', t => {
   const conn = new Connection()
   conn.NS = 'foobar'
   t.is(
-    conn.header('foo', 'bar'),
-    `<?xml version='1.0'?><stream:stream to='foo' version='1.0' xml:lang='bar' xmlns='foobar' xmlns:stream='${NS_STREAM}' >`
-  )
-  t.is(
-    conn.header('foo'),
-    `<?xml version='1.0'?><stream:stream to='foo' version='1.0' xmlns='foobar' xmlns:stream='${NS_STREAM}' >`
+    conn.header(conn.headerElement()),
+    `<?xml version='1.0'?><stream:stream version="1.0" xmlns="foobar" xmlns:stream="${NS_STREAM}">`
   )
 })
 
 test('footer()', t => {
   const conn = new Connection()
-  t.is(conn.footer(), '<stream:stream/>')
+  t.is(conn.footer(), '</stream:stream>')
 })

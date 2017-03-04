@@ -65,14 +65,14 @@ entity.on('online', (jid) => {
   console.log('4. online', jid.toString())
 
   entity.send(xml`
-    <iq to='localhost' id='ping' type='get'>
+    <iq id='ping' type='get'>
       <ping xmlns='urn:xmpp:ping'/>
     </iq>
   `)
 })
 
 // "start" opens the socket and the XML stream
-entity.start('xmpp://component.localhost:5347')
+entity.start('xmpp://node-xmpp.localhost:5347')
   // resolves once online
   .then((jid) => {
     console.log('started', jid.toString())
@@ -84,7 +84,7 @@ entity.start('xmpp://component.localhost:5347')
 
 // emitted when authentication is required
 entity.on('authenticate', authenticate => {
-  authenticate('mysecretcomponentpassword')
+  authenticate('foobar')
     .then(() => {
       console.log('authenticated')
     })

@@ -15,6 +15,7 @@
     "require": "babel-register",
     "babel": "inherit",
     "files": [
+      "packages/*/test.js",
       "packages/*/ava/*.js",
       "packages/*/ava/unit/**/*.js"
     ]

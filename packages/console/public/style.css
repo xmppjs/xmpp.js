@@ -42,6 +42,17 @@ a.token.email-link {
 
 .log-entry pre {
   background-color: inherit;
+  overflow: visible;
+}
+
+.log-entry pre.code-toolbar > .toolbar {
+  top: -32px;
+  left: 70px;
+  opacity: 1;
+}
+
+.log-entry pre.code-toolbar > .toolbar > .toolbar-item {
+  cursor: pointer;
 }
 
 .CodeMirror {

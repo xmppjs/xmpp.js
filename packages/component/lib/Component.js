@@ -1,3 +1,5 @@
+'use strict'
+
 const ComponentCore = require('@xmpp/component-core')
 const reconnect = require('@xmpp/plugins/reconnect')
 
