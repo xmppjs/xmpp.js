@@ -42,9 +42,9 @@ resolve('node-xmpp.org', options).then(console.log).catch(console.error)
   { address: '93.113.206.189', family: 4 },
   { address: '2a03:75c0:39:3458::1', family: 6 },
   { attribute: '_xmpp-client-websocket',
-    value: 'wss://node-xmpp.org:443/websocket' },
+    uri: 'wss://node-xmpp.org:443/websocket' },
   { attribute: '_xmpp-client-xbosh',
-    value: 'https://node-xmpp.org:443/bosh' } ]
+    uri: 'https://node-xmpp.org:443/bosh' } ]
 ```
 
 ## References

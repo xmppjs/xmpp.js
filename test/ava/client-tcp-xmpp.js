@@ -21,7 +21,7 @@ test.cb('client-tcp xmpp://', t => {
     t.true(el instanceof xml.Element)
   })
 
-  entity.connect({hostname: 'localhost', port: 5222}).then(() => {
+  entity.connect('xmpp://localhost').then(() => {
     t.pass()
     return entity.open({domain: 'localhost'}).then((el) => {
       t.true(el instanceof xml.Element)

@@ -3,8 +3,9 @@
 const resolve = require('@xmpp/resolve')
 const url = require('url')
 const Connection = require('@xmpp/connection')
+const EventEmitter = require('events')
 
-class ResolveTransport extends Connection {
+class Socket extends EventEmitter {
   _next (uris) {
     const uri = uris.shift()
 
@@ -38,11 +39,22 @@ class ResolveTransport extends Connection {
   }
 
   connect (domain) {
+    const match = ResolveTransport.match(domain)
+    if (!match) throw new Error(`Invalid domain "${domain}"`)
+
     return resolve.http.resolve(domain).then((records) => {
+      console.log(records)
+      // return
       // records[0].uri = 'ws://foobar'
       const uris = records.map((record) => record.uri)
       this._next(uris)
     })
+  }
+}
+
+class ResolveTransport extends Connection {
+  connect (domain) {
+
   }
 
   header(...args) {
@@ -67,5 +79,8 @@ class ResolveTransport extends Connection {
     }
   }
 }
+
+ResolveTransport.prototype.Socket = Socket
+ResolveTransport.prototype.NS = 'jabber:client'
 
 module.exports = ResolveTransport

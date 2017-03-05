@@ -5,6 +5,12 @@ const tls = require('tls')
 const Connection = require('@xmpp/connection-tcp')
 
 class TLS extends Connection {
+  connect(uri) {
+    const match = TLS.match(uri)
+    if (!match) throw new Error(`Invalid URI "${uri}"`)
+    return super.connect(match)
+  }
+
   static match (uri) {
     try {
       const {protocol, hostname, port, slashes} = url.parse(uri)
