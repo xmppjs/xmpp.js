@@ -31,6 +31,10 @@ function Component (opts) {
   conn.xmlns['stream'] = this.NS_STREAM
   conn.streamTo = this.connection.jid.domain
 
+  if (this.connection.jid.resource) {
+    conn.streamTo += '/' + this.connection.jid.resource
+  }
+
   conn.listen({
     socket: SRV.connect({
       services: [],
