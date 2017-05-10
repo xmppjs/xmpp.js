@@ -156,7 +156,7 @@ DomainContext.prototype.establishS2SStream = function (destDomain) {
         outStream.send(new Element('auth', {
           xmlns: NS_XMPP_SASL,
           mechanism: 'EXTERNAL'
-        }).t(new Buffer(self.domain).toString('base64')))
+        }).t(Buffer.from(self.domain).toString('base64')))
         var onStanza
         onStanza = function (stanza) {
           if (stanza.is('success', NS_XMPP_SASL)) {
@@ -342,11 +342,11 @@ DomainContext.prototype.verifyDialback = function (domain, id, key, cb) {
         self.verifyDialback(domain, id, key, cb)
       })
       outStream.on('close', function () {
-        cb(false)
+        cb(false) // eslint-disable-line
       })
     }
   } else {
-    cb(false)
+    cb(false) // eslint-disable-line
   }
 }
 

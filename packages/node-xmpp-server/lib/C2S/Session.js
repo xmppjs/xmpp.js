@@ -98,7 +98,7 @@ Session.prototype.startStream = function () {
 }
 
 Session.prototype.decode64 = function (encoded) {
-  return (new Buffer(encoded, 'base64')).toString('utf8')
+  return Buffer.from(encoded, 'base64').toString('utf8')
 }
 
 Session.prototype.sendFeatures = function () {
@@ -300,13 +300,7 @@ Session.prototype.onBind = function (stanza) {
         .c('jid').t(self.jid.toString()))
   }
 
-  var listenerCount = 0
-  if (typeof EventEmitter.listenerCount !== 'undefined') {
-    listenerCount = EventEmitter.listenerCount(self, 'bind')
-  } else {
-    listenerCount = this.listeners('bind').length
-  }
-  if (listenerCount > 0) {
+  if (self.listenerCount('bind') > 0) {
     self.emit('bind', resource, function (error, resource) {
       if (error) {
         var element = new Element('iq', {

@@ -10,6 +10,7 @@ describe('BOSH Browser tests', function () {
   var password = 'password'
   var client = null
   var resource = 'test'
+  var should = window.should
 
   it('Can register an account', function (done) {
     client = new Client({
@@ -89,7 +90,7 @@ describe('BOSH Browser tests', function () {
       bareJid.should.equal(jid)
       bareJid = data.jid.local + '@' + data.jid.domain
       bareJid.should.equal(jid)
-      data.jid.resource.should.exist
+      should.exist(data.jid.resource)
       client.end()
       done()
     })
@@ -208,7 +209,7 @@ describe('BOSH Browser tests', function () {
       preferred: 'PLAIN'
     })
     client.on('error', function (error) {
-      error.message.should.exist
+      should.exist(error.message)
       client.end()
       done()
     })

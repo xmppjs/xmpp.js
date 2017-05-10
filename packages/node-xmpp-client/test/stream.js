@@ -5,7 +5,7 @@
 var Client = require('../index')
 var net = require('net')
 var ltx = Client.ltx
-require('should')
+var should = require('should')
 
 describe('Authentication', function () {
   var C2S_PORT = 5225
@@ -40,7 +40,7 @@ describe('Authentication', function () {
     onSocket = function (socket) {
       socket.once('data', function (d) {
         var element = ltx.parse(d.toString('utf8') + '</stream:stream>')
-        element.is('stream').should.be.true
+        element.is('stream').should.be.true()
         element.attrs.to.should.equal(options.host)
         element.attrs.xmlns.should.equal('jabber:client')
         element.attrs['xmlns:stream']
@@ -54,6 +54,6 @@ describe('Authentication', function () {
       })
     }
     var client = new Client(options)
-    client.should.exist
+    should.exist(client)
   })
 })

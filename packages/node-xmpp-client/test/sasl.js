@@ -56,7 +56,7 @@ function startServer (mechanism, done) {
 
   // Allows the developer to register the jid against anything they want
   c2s.on('register', function (opts, cb) {
-    cb(true)
+    cb(true) // eslint-disable-line
   })
 
   // On Connect event. When a client connects.

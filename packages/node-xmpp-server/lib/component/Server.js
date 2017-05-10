@@ -14,7 +14,7 @@ var COMPONENT_PORT = 5347
  *   options.autostart : if we start listening at given port
  */
 function ComponentServer (options) {
-  var server = this.server = (options && options.server || net.createServer())
+  var server = this.server = ((options && options.server) || net.createServer())
   server.on('connection', this.acceptConnection.bind(this))
   server.on('close', this.emit.bind(this, 'close'))
   server.on('error', this.emit.bind(this, 'error'))

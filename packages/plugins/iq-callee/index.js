@@ -48,7 +48,7 @@ function plugin (entity) {
     })
 
     if (!matched) {
-      iq.attrs.type === 'error'
+      iq.attrs.type = 'error'
       iq.cnode(stanza.children[0].clone())
       iq.c('error', {type: 'cancel'})
           .c('service-unavailable', NS_STANZA)

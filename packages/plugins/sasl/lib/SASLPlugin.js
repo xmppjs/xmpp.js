@@ -63,7 +63,7 @@ class SASLPlugin extends Plugin {
 
   authenticate (mechname, credentials, features) {
     const mech = this.findMechanism(mechname)
-    if (!mech) return Promise.reject('no compatible mechanism')
+    if (!mech) return Promise.reject(new Error('no compatible mechanism'))
 
     const {domain} = this.entity.options
     const creds = {}

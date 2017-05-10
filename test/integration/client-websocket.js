@@ -5,7 +5,7 @@
 var Client = require('../../packages/node-xmpp-client')
 var Stanza = Client.Stanza
 
-require('should')
+var should = require('should')
 
 describe('client WebSocket', function () {
   var jid = Math.random().toString(36).substring(7) + '@localhost'
@@ -86,7 +86,7 @@ describe('client WebSocket', function () {
       bareJid.should.equal(jid)
       bareJid = data.jid.local + '@' + data.jid.domain
       bareJid.should.equal(jid)
-      data.jid.resource.should.exist
+      should.exist(data.jid.resource)
       done()
     })
   })
@@ -209,7 +209,7 @@ describe('client WebSocket', function () {
       }
     })
     client.on('error', function (error) {
-      error.message.indexOf('404') > -1
+      should.ok(error.message.indexOf('404') > -1)
       client = null
       done()
     })

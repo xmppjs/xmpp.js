@@ -152,7 +152,7 @@ DigestMD5.prototype.serverChallenge = function () {
   dict.qop = 'auth'
   this.charset = dict.charset = 'utf-8'
   dict.algorithm = 'md5-sess'
-  return new Buffer(encodeDict(dict)).toString('base64')
+  return Buffer.from(encodeDict(dict)).toString('base64')
 }
 
 // Used on the server to check for auth!
@@ -185,7 +185,7 @@ DigestMD5.prototype.manageAuth = function (stanza, server) {
     server.send(challenge)
   } else if (stanza.is('response', NS_XMPP_SASL) && stanza.getText() !== '') {
     // response from client with challenge
-    var responseValid = this.checkResponse(new Buffer(stanza.getText(), 'base64'))
+    var responseValid = this.checkResponse(Buffer.from(stanza.getText(), 'base64'))
     var self = this
     if (responseValid) {
       var user = {
@@ -193,11 +193,11 @@ DigestMD5.prototype.manageAuth = function (stanza, server) {
       }
       this.authenticate(user, function (err, user) {
         // send final challenge and wait for response from user
-        if (self.response === self.responseValue(new Buffer(stanza.getText(), 'base64'), user.password)) {
+        if (self.response === self.responseValue(Buffer.from(stanza.getText(), 'base64'), user.password)) {
           var challenge = new Element('challenge', {
             xmlns: NS_XMPP_SASL
           })
-            .t(new Buffer('rspauth=ea40f60335c427b5527b84dbabcdfffd').toString('base64'))
+            .t(Buffer.from('rspauth=ea40f60335c427b5527b84dbabcdfffd').toString('base64'))
           server.send(challenge)
           delete user.password
           self.user = user

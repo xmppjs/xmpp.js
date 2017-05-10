@@ -33,7 +33,7 @@ test('new Connection()', t => {
 
 test('Socket', t => {
   const conn = new Connection()
-  conn.Socket = net.Socket
+  t.is(conn.Socket, net.Socket)
 })
 
 test('NS', t => {

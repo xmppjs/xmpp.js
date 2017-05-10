@@ -36,7 +36,7 @@ Mechanism.prototype = {
   manageAuth: function (stanza) {
     var self = this
 
-    var auth = new Buffer(stanza.getText(), 'base64').toString('utf8')
+    var auth = Buffer.from(stanza.getText(), 'base64').toString('utf8')
     this.authenticate(this.extractSasl(auth), function (err, user) {
       if (!err && user) {
         self.success(user)

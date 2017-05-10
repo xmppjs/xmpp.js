@@ -8,7 +8,7 @@ var net = require('net')
 var crypto = require('crypto')
 var assert = require('assert')
 
-require('should')
+var should = require('should')
 
 describe('connection', function () {
   var COMPONENT_PORT = 5348
@@ -44,7 +44,7 @@ describe('connection', function () {
     onSocket = function (socket) {
       socket.once('data', function (d) {
         var element = parse(d.toString('utf8') + '</stream:stream>')
-        element.is('stream').should.be.true
+        element.is('stream').should.be.true()
         element.attrs.to.should.equal(options.jid)
         element.attrs.xmlns.should.equal(component.NS_COMPONENT)
         element.attrs['xmlns:stream']
@@ -57,7 +57,7 @@ describe('connection', function () {
       })
     }
     var component = new Component(options)
-    component.should.exist
+    should.exist(component)
   })
 
   it('Sends handshake', function (done) {
@@ -65,7 +65,7 @@ describe('connection', function () {
       socket.once('data', function () {
         socket.once('data', function (d) {
           var handshake = parse(d.toString('utf8'))
-          handshake.is('handshake').should.be.true
+          handshake.is('handshake').should.be.true()
           var shasum = crypto.createHash('sha1')
           shasum.update(555 + options.password)
           var expected = shasum.digest('hex').toLowerCase()
@@ -80,7 +80,7 @@ describe('connection', function () {
       })
     }
     var component = new Component(options)
-    component.should.exist
+    should.exist(component)
   })
 
   it("Reports 'connected' once connected", function (done) {
@@ -97,7 +97,7 @@ describe('connection', function () {
       })
     }
     var component = new Component(options)
-    component.should.exist
+    should.exist(component)
     component.on('online', function () {
       done()
     })
@@ -130,10 +130,10 @@ describe('connection', function () {
       })
     }
     var component = new Component(options)
-    component.should.exist
+    should.exist(component)
     component.on('disconnect', function (error) {
-      error.stanza.is('error').should.be.true
-      error.stanza.getChild('not-authorized').should.exist
+      error.stanza.is('error').should.be.true()
+      should.exist(error.stanza.getChild('not-authorized'))
       error.stanza.getChildText('text', streamError).should.equal(errorMessage)
       error.message.should.equal(errorMessage)
       done()

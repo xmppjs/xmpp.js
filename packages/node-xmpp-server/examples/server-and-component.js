@@ -17,7 +17,7 @@ var startServer = function (done) {
       if (jid.toString() === 'component.example.com') {
         return cb(null, 'ThePassword')
       }
-      return cb('Unauthorized')
+      return cb('Unauthorized') // eslint-disable-line
     })
     component.on('online', function () {
       console.log('ONLINE')
