@@ -8,7 +8,7 @@
     "browserify": "^14.1.0",
     "coveralls": "^2.11.16",
     "istanbul": "^0.4.5",
-    "lerna": "2.0.0-rc.4",
+    "lerna": "^2.0.0-rc.4",
     "mocha": "^3.2.0",
     "mocha-phantomjs-core": "^2.1.1",
     "pem": "^1.9.4",
