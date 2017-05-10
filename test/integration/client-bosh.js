@@ -4,8 +4,7 @@
 
 var Client = require('../../packages/node-xmpp-client')
 var Element = Client.Element
-
-require('should')
+var should = require('should')
 
 describe('client BOSH', function () {
   var jid = Math.random().toString(36).substring(7) + '@localhost'

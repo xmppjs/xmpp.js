@@ -10,6 +10,7 @@ describe('BOSH Browser tests', function () {
   var password = 'password'
   var client = null
   var resource = 'test'
+  var should = window.should
 
   it('Can register an account', function (done) {
     client = new Client({

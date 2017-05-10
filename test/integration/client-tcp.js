@@ -4,8 +4,7 @@
 
 var Client = require('../../packages/node-xmpp-client')
 var Stanza = Client.Stanza
-
-require('should')
+var should = require('should')
 
 describe('client TCP', function () {
   var jid = Math.random().toString(36).substring(7) + '@localhost'
