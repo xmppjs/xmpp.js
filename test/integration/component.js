@@ -65,7 +65,7 @@ describe('Component', function () {
   it('Can connect and send a message', function (done) {
     client.on('stanza', function (stanza) {
       if (stanza.is('message') === false) return
-      stanza.is('message').should.be.true
+      stanza.is('message').should.be.true()
       stanza.attrs.from.should.equal('component.localhost')
       stanza.attrs.to.should.equal(user + '@localhost')
       stanza.attrs.type.should.equal('chat')
@@ -84,7 +84,7 @@ describe('Component', function () {
   it('Can receive a message', function (done) {
     component.on('stanza', function (stanza) {
       if (!stanza.is('message')) return
-      stanza.is('message').should.be.true
+      stanza.is('message').should.be.true()
       stanza.attrs.to.should.equal('component.localhost')
       stanza.attrs.from.should.startWith(user + '@localhost')
       stanza.attrs.type.should.equal('chat')

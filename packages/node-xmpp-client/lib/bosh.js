@@ -142,7 +142,7 @@ BOSHConnection.prototype.mayRequest = function () {
 
 BOSHConnection.prototype.end = function (stanzas) {
   stanzas = stanzas || []
-  if (typeof stanzas !== Array) stanzas = [stanzas]
+  if (!Array.isArray(stanzas)) stanzas = [stanzas]
 
   stanzas = this.queue.concat(stanzas)
   this.shutdown = true

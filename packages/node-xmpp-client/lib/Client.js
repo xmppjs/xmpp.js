@@ -33,29 +33,25 @@ var IQID_SESSION = 'sess'
 var IQID_BIND = 'bind'
 
 var decode64, encode64, Buffer
-if (typeof btoa === 'undefined') {
-  var btoa = null
-  var atob = null
-}
 
-if (typeof btoa === 'function') {
+if (typeof window !== 'undefined' && typeof window.atob === 'function') {
   decode64 = function (encoded) {
-    return atob(encoded)
+    return window.atob(encoded)
   }
 } else {
   Buffer = require('buffer').Buffer
   decode64 = function (encoded) {
-    return (new Buffer(encoded, 'base64')).toString('utf8')
+    return Buffer.from(encoded, 'base64').toString('utf8')
   }
 }
-if (typeof atob === 'function') {
+if (typeof window !== 'undefined' && typeof window.btoa === 'function') {
   encode64 = function (decoded) {
-    return btoa(decoded)
+    return window.btoa(decoded)
   }
 } else {
   Buffer = require('buffer').Buffer
   encode64 = function (decoded) {
-    return (new Buffer(decoded, 'utf8')).toString('base64')
+    return Buffer.from(decoded, 'utf8').toString('base64')
   }
 }
 

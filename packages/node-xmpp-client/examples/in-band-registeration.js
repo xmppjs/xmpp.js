@@ -24,7 +24,6 @@ client.on('online', function (data) {
 client.on('stanza', function (stanza) {
   if (stanza.attrs.type === 'error') {
     console.log('[error] ' + stanza)
-    return
   }
   /*
   For ejabberd users:

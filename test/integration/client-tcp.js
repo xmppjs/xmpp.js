@@ -79,7 +79,7 @@ describe('client TCP', function () {
       bareJid.should.equal(jid)
       bareJid = data.jid.local + '@' + data.jid.domain
       bareJid.should.equal(jid)
-      data.jid.resource.should.exist
+      data.jid.resource.should.exist()
       done()
     })
   })

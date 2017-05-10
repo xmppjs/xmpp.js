@@ -47,5 +47,3 @@ script:
   - sudo prosodyctl restart
   - yarn run bundle
   - yarn run test:browser
-
-# after_script: npm run coveralls

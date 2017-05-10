@@ -26,7 +26,7 @@ function startServer (action) {
     })
     stream.on('register', function (data, cb) {
       if (action === 'fail') {
-        cb({
+        cb({ // eslint-disable-line
           code: 503,
           type: 'cancel',
           condition: 'service-unavailable',

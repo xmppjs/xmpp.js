@@ -24,7 +24,7 @@ var TCP_PORT = 5222
  *   options.tls.certPath : path to certificate
  */
 function TCPServer (options) {
-  var server = this.server = serverStop(options && options.server || net.createServer())
+  var server = this.server = serverStop((options && options.server) || net.createServer())
   server.on('connection', this.acceptConnection.bind(this))
   server.on('close', this.emit.bind(this, 'close'))
   server.on('error', this.emit.bind(this, 'error'))

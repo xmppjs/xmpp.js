@@ -1,21 +1,21 @@
 {
   "private": true,
   "devDependencies": {
-    "ava": "^0.18.2",
+    "ava": "^0.19.1",
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.22.0",
     "babel-register": "^6.23.0",
     "browserify": "^14.1.0",
     "coveralls": "^2.11.16",
     "istanbul": "^0.4.5",
-    "lerna": "2.0.0-beta.38",
+    "lerna": "2.0.0-rc.4",
     "mocha": "^3.2.0",
     "mocha-phantomjs-core": "^2.1.1",
     "pem": "^1.9.4",
     "phantomjs-prebuilt": "^2.1.14",
     "should": "^11.2.0",
-    "sinon": "^1.17.7",
-    "standard": "^8.6.0"
+    "sinon": "^2.2.0",
+    "standard": "^10.0.2"
   },
   "scripts": {
     "ava": "ava",
@@ -39,6 +39,8 @@
     ]
   },
   "standard": {
-    "ignore": ["packages/console/public/vendor/"]
+    "ignore": [
+      "packages/console/public/vendor/"
+    ]
   }
 }

@@ -26,7 +26,7 @@ function startServer (action) {
     })
     stream.on('bind', function (resource, cb) {
       if (action === 'fail') {
-        cb({
+        cb({ // eslint-disable-line
           type: 'cancel',
           condition: 'not-allowed',
           text: 'Test error'

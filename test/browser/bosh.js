@@ -89,7 +89,7 @@ describe('BOSH Browser tests', function () {
       bareJid.should.equal(jid)
       bareJid = data.jid.local + '@' + data.jid.domain
       bareJid.should.equal(jid)
-      data.jid.resource.should.exist
+      data.jid.resource.should.exist()
       client.end()
       done()
     })
@@ -208,7 +208,7 @@ describe('BOSH Browser tests', function () {
       preferred: 'PLAIN'
     })
     client.on('error', function (error) {
-      error.message.should.exist
+      error.message.should.exist()
       client.end()
       done()
     })

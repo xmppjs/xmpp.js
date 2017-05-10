@@ -18,7 +18,7 @@ var startServer = function (done) {
     // Allows the developer to register the jid against anything they want
     client.on('register', function (opts, cb) {
       console.log('REGISTER')
-      cb(true)
+      cb(true) // eslint-disable-line
     })
 
     // Allows the developer to authenticate users against anything they want.
@@ -29,7 +29,7 @@ var startServer = function (done) {
         cb(null, opts)
       } else {
         console.log('server:', opts.username, 'AUTH FAIL')
-        cb(false)
+        cb(false) // eslint-disable-line
       }
     })
 

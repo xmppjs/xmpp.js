@@ -28,7 +28,7 @@ c2s.on('connect', function (client) {
   // Allows the developer to register the jid against anything they want
   client.on('register', function (opts, cb) {
     console.log('REGISTER')
-    cb(true)
+    cb(true) // eslint-disable-line
   })
 
   // Allows the developer to authenticate users against anything they want.
