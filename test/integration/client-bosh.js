@@ -86,7 +86,7 @@ describe('client BOSH', function () {
       bareJid.should.equal(jid)
       bareJid = data.jid.local + '@' + data.jid.domain
       bareJid.should.equal(jid)
-      data.jid.resource.should.exist()
+      should.exist(data.jid.resource)
       done()
     })
   })
@@ -251,9 +251,9 @@ describe('client BOSH', function () {
           url: 'http://localhost:5280/http-bind',
           prebind: function (error, data) {
             if (error) return done(error)
-            data.rid.should.exist()
+            should.exist(data.rid)
             data.rid.length.should.be.above(5)
-            data.sid.should.exist()
+            should.exist(data.sid)
             data.sid.length.should.be.above(5)
             done()
           }
