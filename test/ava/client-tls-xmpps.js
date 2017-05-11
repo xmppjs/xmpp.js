@@ -21,7 +21,7 @@ test.cb('client-tls xmpps://', t => {
     t.true(el instanceof xml.Element)
   })
 
-  entity.connect({hostname: 'localhost', port: 5223}).then(() => {
+  entity.connect('xmpps://localhost').then(() => {
     t.pass()
     return entity.open({domain: 'localhost'}).then((el) => {
       t.true(el instanceof xml.Element)
