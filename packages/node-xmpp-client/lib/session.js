@@ -203,6 +203,12 @@ Session.prototype.end = function () {
   }
 }
 
+Session.prototype.destroy = function () {
+  if (this.connection && this.connection.destroy) {
+    this.connection.destroy()
+  }
+}
+
 Session.prototype.onStanza = function () {}
 
 module.exports = Session
