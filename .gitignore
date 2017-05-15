@@ -1,7 +1,9 @@
 node_modules/
-coverage/
 **/dist/*
 packages/*/yarn.lock
+server/localhost/
+server/prosody.err
+server/prosody.log
 
 !.gitkeep
 !.editorconfig

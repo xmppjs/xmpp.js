@@ -9,12 +9,16 @@ modules_enabled = {
   "posix";
   "bosh";
   "websocket";
+  "http_files";
 };
 
 daemonize = true;
-pidfile = "/var/run/prosody/prosody.pid";
+pidfile = "prosody.pid";
 
 allow_registration = true;
+
+allow_unencrypted_plain_auth = true;
+c2s_require_encryption = false
 
 consider_websocket_secure = true;
 consider_bosh_secure = true;
@@ -26,14 +30,22 @@ authentication = "internal_plain"
 legacy_ssl_ports = { 5223 };
 
 log = {
-  debug = "/var/log/prosody/prosody.log";
-  error = "/var/log/prosody/prosody.err";
+  debug = "prosody.log";
+  error = "prosody.err";
 }
 
 ssl = {
-  certificate = "/var/lib/prosody/localhost.crt";
-  key = "/var/lib/prosody/localhost.key";
+  certificate = "localhost.crt";
+  key = "localhost.key";
 }
+
+data_path = "."
+
+http_dir_listing = true; -- doesn't seem to work, getting a 403 Forbidden
+http_files_dir = "..";
+http_paths = {
+      files = "/";
+  }
 
 VirtualHost "localhost"
 Component "component.localhost"

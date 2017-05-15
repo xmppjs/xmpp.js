@@ -5,7 +5,7 @@
 var Component = require('../../packages/node-xmpp-component')
 var Stanza = require('../../packages/node-xmpp-core').Stanza
 var Client = require('../../packages/node-xmpp-client')
-var helper = require('../helper')
+var server = require('../../server')
 
 require('should')
 
@@ -114,9 +114,7 @@ describe('Component', function () {
   })
 
   it('Sends error when server stops', function (done) {
-    after(function (done) {
-      helper.startServer(done)
-    })
+    after(() => server.start())
 
     client.end()
     component.on('error', function (err) { // eslint-disable-line
@@ -126,6 +124,6 @@ describe('Component', function () {
       done()
     })
 
-    helper.stopServer()
+    server.stop()
   })
 })

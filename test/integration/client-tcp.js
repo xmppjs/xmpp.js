@@ -43,7 +43,7 @@ describe('client TCP', function () {
     client.on('online', function () {
       done('Should not have connected')
     })
-    client.on('error', function (error) {
+    client.once('error', function (error) {
       error.should.equal(
         'XMPP authentication failure'
       )
@@ -93,7 +93,7 @@ describe('client TCP', function () {
     client.on('online', function () {
       done('Should not have connected')
     })
-    client.on('error', function (error) {
+    client.once('error', function (error) {
       error.message.should.equal(
         'Registration error'
       )
