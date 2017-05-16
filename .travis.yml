@@ -28,22 +28,12 @@ addons:
   hosts:
     - component.localhost
 
-before_install:
+before_script:
   - sudo service prosody stop
-  - sudo cp test/resources/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
-  - sudo cp test/resources/localhost.crt /var/lib/prosody/
-  - sudo cp test/resources/localhost.key /var/lib/prosody/
 
 script:
   - make
+  - make test
 
-  - nohup python2 -m SimpleHTTPServer &
-
-  - sudo prosodyctl start
-  - sudo prosodyctl register node-xmpp localhost foobar
-  - yarn run integration
-  - sudo prosodyctl restart
-  - yarn run ava:integration
-  - sudo prosodyctl restart
-  - yarn run bundle
-  - yarn run test:browser
+after_failure:
+  - cat server/prosody.err

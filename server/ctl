@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+
+'use strict'
+
+const server = require('.')
+
+const method = process.argv[2]
+let p
+
+switch (method) {
+  case 'start':
+    p = server.start().then((pid) => {
+      console.log(pid)
+    })
+    break
+  case 'stop':
+    p = server.stop()
+    break
+  case 'restart':
+    p = server.restart().then((pid) => {
+      console.log(pid)
+    })
+    break
+  case 'status':
+    p = server.getPid().then((pid) => {
+      if (pid) console.log(`started (${pid})`)
+      else console.log('stopped')
+    })
+    break
+  default:
+    p = Promise.reject(new Error('Valid commands are start/stop/restart/status.'))
+}
+
+p.catch((err) => {
+  console.error(err)
+})

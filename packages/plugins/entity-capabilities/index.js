@@ -1,9 +1,7 @@
 'use strict'
 
 const crypto = require('crypto')
-
 const JID = require('@xmpp/jid')
-
 const discoInfo = require('../disco-info')
 
 const NS_CAPS = 'http://jabber.org/protocol/caps'
@@ -69,7 +67,7 @@ function hash (query) {
 
   return crypto
     .createHash('sha1')
-    .update(s)
+    .update(s, 'utf8')
     .digest('base64')
 }
 
