@@ -1,24 +1,19 @@
 PATH := node_modules/.bin:$(PATH)
 
-.PHONY: test
+.PHONY: setup test clean bundle start stop restart
 
 setup:
 	yarn
 	lerna bootstrap
+	make bundle
 
 test:
-	make stop
-	mocha --recursive packages/*/test/ -t 5000
 	ava
 	standard
 	make start
-	mocha --recursive test/integration -t 5000
-	ava -v test/ava/**/*.js
-	make bundle
-	phantomjs ./node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js http://localhost:5280/test/browser/ spec '{"ignoreResourceErrors": true}'
+	ava -v test/
 
 clean:
-	make stop
 	rm -f prosody/prosody.err
 	rm -f prosody/prosody.log
 	lerna clean --yes

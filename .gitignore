@@ -4,6 +4,7 @@ packages/*/yarn.lock
 server/localhost/
 server/prosody.err
 server/prosody.log
+server/prosody.pid
 
 !.gitkeep
 !.editorconfig

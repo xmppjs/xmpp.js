@@ -9,7 +9,7 @@ const execFile = pify(require('child_process').execFile, {multiArgs: true})
 
 const DATA_PATH = path.join(__dirname)
 const PID_PATH = path.join(DATA_PATH, 'prosody.pid')
-const DELAY = 1000
+const DELAY = 2000
 
 function kill (pid) {
   return new Promise((resolve) => {
