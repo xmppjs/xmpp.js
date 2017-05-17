@@ -66,11 +66,11 @@ entity.on('online', (jid) => {
 })
 
 // "start" opens the socket and the XML stream
+entity.start('localhost') // auto
 // entity.start('xmpp://localhost:5222') // TCP
-entity.start('xmpps://localhost:5223') // TLS
+// entity.start('xmpps://localhost:5223') // TLS
 // entity.start('ws://localhost:5280/xmpp-websocket') - Websocket
 // entity.start('wss://localhost:5281/xmpp-websocket') - Secure WebSocket
-// entity.start('ws://localhost:5280/xmpp-websocket')
   // resolves once online
   .then((jid) => {
     console.log('started', jid.toString())

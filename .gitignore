@@ -1,6 +1,5 @@
 node_modules/
 **/dist/*
-packages/*/yarn.lock
 server/localhost/
 server/prosody.err
 server/prosody.log

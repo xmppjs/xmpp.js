@@ -12,12 +12,11 @@ class Socket extends EventEmitter {
     const removeListener = (sock.removeEventListener || sock.removeListener).bind(sock)
 
     const openHandler = () => {
-      if (fn) fn()
       this.emit('connect')
+      if (fn) fn()
     }
     const messageHandler = ({data}) => this.emit('data', data)
     const errorHandler = (err) => {
-      if (fn) fn(err)
       this.emit('error', err)
     }
     const closeHandler = () => {

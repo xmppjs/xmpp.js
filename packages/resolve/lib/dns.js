@@ -7,8 +7,25 @@ function lookup (domain, options = {}) {
   options.all = true
   return new Promise((resolve, reject) => {
     dns.lookup(domain, options, (err, addresses) => {
-      if (err) reject(err)
-      else resolve(addresses)
+      if (err) return reject(err)
+
+      const result = []
+      addresses.forEach(({family, address}) => {
+        const uri = `://${family === 4 ? address : '[' + address + ']'}:`
+        result.push(
+          {
+            family,
+            address,
+            uri: 'xmpps' + uri + '5223'
+          },
+          {
+            family,
+            address,
+            uri: 'xmpp' + uri + '5222'
+          }
+        )
+      })
+      resolve(result)
     })
   })
 }
@@ -35,10 +52,14 @@ function resolveTxt (domain, {owner = '_xmppconnect'}) {
 
 function resolveSrv (domain, {service, protocol}) {
   return new Promise((resolve, reject) => {
-    dns.resolveSrv(`_${service}._${protocol}.${domain}`, (err, addresses) => {
+    dns.resolveSrv(`_${service}._${protocol}.${domain}`, (err, records) => {
       if (err && err.code === 'ENOTFOUND') resolve([])
       else if (err) reject(err)
-      else resolve(addresses.map(address => Object.assign(address, {service, protocol})))
+      else {
+        resolve(records.map((record) => {
+          return Object.assign(record, {service, protocol})
+        }))
+      }
     })
   })
 }
@@ -60,7 +81,11 @@ function lookupSrvs (srvs, options) {
   return Promise.all(srvs.map((srv) => {
     return lookup(srv.name, options).then((srvAddresses) => {
       srvAddresses.forEach((address) => {
-        addresses.push(Object.assign({}, address, srv))
+        const {port, service} = srv
+        const addr = address.address
+        addresses.push(Object.assign({}, address, srv, {
+          uri: `${service.split('-')[0]}://${address.family === 6 ? '[' + addr + ']' : addr}:${port}`
+        }))
       })
     })
   })).then(() => addresses)
