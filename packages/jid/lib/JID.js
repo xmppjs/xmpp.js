@@ -85,16 +85,6 @@ JID.prototype.setLocal = function (local, escape) {
   return this
 }
 
-JID.prototype.setUser = function () {
-  console.log('JID.setUser: Use JID.setLocal instead')
-  this.setLocal.apply(this, arguments)
-}
-
-JID.prototype.getUser = function () {
-  console.log('JID.getUser: Use JID.getLocal instead')
-  return this.getLocal.apply(this, arguments)
-}
-
 JID.prototype.getLocal = function (unescape) {
   unescape = unescape || false
   var local = null
@@ -147,8 +137,8 @@ Object.defineProperty(JID.prototype, 'resource', {
   set: JID.prototype.setResource
 })
 
-JID.prototype.detectEscape = escaping.detectEscape // DEPRECATED
-JID.prototype.escapeLocal = escaping.escape // DEPRECATED
-JID.prototype.unescapeLocal = escaping.unescape // DEPRECATED
+JID.prototype.detectEscape = escaping.detectEscape // FIXME move to index
+JID.prototype.escapeLocal = escaping.escape // FIXME move to index
+JID.prototype.unescapeLocal = escaping.unescape // FIXME move to index
 
 module.exports = JID

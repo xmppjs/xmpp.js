@@ -2,7 +2,6 @@
 
 const Socket = require('net').Socket
 const Connection = require('@xmpp/connection')
-const {escapeXML} = require('@xmpp/xml')
 
 const NS_STREAM = 'http://etherx.jabber.org/streams'
 
@@ -11,51 +10,33 @@ const NS_STREAM = 'http://etherx.jabber.org/streams'
 */
 
 class TCP extends Connection {
-  // https://xmpp.org/rfcs/rfc6120.html#streams-open
-  responseHeader (el, domain) {
-    const {name, attrs} = el
-    return (
-      name === 'stream:stream' &&
-      attrs.xmlns === this.NS &&
-      attrs['xmlns:stream'] === NS_STREAM &&
-      attrs.from === domain &&
-      attrs.version === '1.0' &&
-      attrs.id
-    )
+  socketParameters (uri) {
+    const params = super.socketParameters(uri)
+    return (params.protocol === 'xmpp:')
+      ? params
+      : undefined
   }
 
   // https://xmpp.org/rfcs/rfc6120.html#streams-open
-  header (domain, lang) {
-    const attrs = {
-      to: domain,
-      version: '1.0',
-      'xml:lang': lang,
-      xmlns: this.NS,
-      'xmlns:stream': NS_STREAM
-    }
-    let header = `<?xml version='1.0'?><stream:stream `
-    for (let attr in attrs) {
-      if (attrs[attr]) header += `${attr}='${escapeXML(attrs[attr])}' `
-    }
-    header += '>'
-    return header
+  headerElement () {
+    const el = super.headerElement()
+    el.name = 'stream:stream'
+    el.attrs['xmlns:stream'] = NS_STREAM
+    return el
   }
 
-  // // https://xmpp.org/rfcs/rfc6120.html#streams-close
-  // waitFooter (fn) {
-  //   this.parser.once('endElement', (name) => {
-  //     if (name !== 'stream:stream') return // FIXME error
-  //     fn()
-  //   })
-  // }
+  // https://xmpp.org/rfcs/rfc6120.html#streams-open
+  header (el) {
+    const frag = el.toString()
+    return `<?xml version='1.0'?>` + frag.substr(0, frag.length - 2) + '>'
+  }
 
   // https://xmpp.org/rfcs/rfc6120.html#streams-close
   footer () {
-    return '<stream:stream/>'
+    return '</stream:stream>'
   }
 }
 
-TCP.NS = NS_STREAM
 TCP.prototype.NS = NS_STREAM
 TCP.prototype.Socket = Socket
 

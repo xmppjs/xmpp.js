@@ -1,32 +1,41 @@
 'use strict'
 
 const Connection = require('@xmpp/connection-tcp')
-const url = require('url')
 const crypto = require('crypto')
-const {tagString, tag} = require('@xmpp/xml')
+const xml = require('@xmpp/xml')
 
 /*
  * References
  * https://xmpp.org/extensions/xep-0114.html
  */
 
+function getServerDomain (domain) {
+  return domain.substr(domain.indexOf('.') + 1)
+}
+
 const NS = 'jabber:component:accept'
 
 class Component extends Connection {
-  connect (uri) {
-    const {hostname, port} = url.parse(uri)
-    const p = super.connect({port: port || 5347, host: hostname})
-    this.connectOptions = uri
-    return p
+  socketParameters (uri) {
+    const params = super.socketParameters(uri)
+    params.port = params.port || 5347
+    return params
   }
 
-  header (domain, lang) {
-    return tagString`
-      <?xml version='1.0'?>
-      <stream:stream to='${domain}' ${lang ? `xml:lang='${lang}'` : ''} xmlns='${this.NS}' xmlns:stream='${super.NS}'>
-    `
+  // https://xmpp.org/extensions/xep-0114.html#example-4
+  send (el) {
+    if (this.jid && !el.attrs.from) {
+      el.attrs.from = this.jid.toString()
+    }
+
+    if (this.jid && !el.attrs.to) {
+      el.attrs.to = getServerDomain(this.jid.toString())
+    }
+
+    return super.send(el)
   }
 
+  // https://xmpp.org/extensions/xep-0114.html#example-3
   open (...args) {
     return super.open(...args).then((el) => {
       this.emit('authenticate', (secret) => {
@@ -35,29 +44,17 @@ class Component extends Connection {
     })
   }
 
-  // https://tools.ietf.org/html/rfc7395#section-3.4
-  responseHeader (el, domain) {
-    const {name, attrs} = el
-    return (
-      name === 'stream:stream' &&
-      attrs.xmlns === this.NS &&
-      attrs['xmlns:stream'] === super.NS &&
-      attrs.from === domain &&
-      attrs.id
-    )
-  }
-
-  // FIXME move to module?
+  // https://xmpp.org/extensions/xep-0114.html#example-3
   authenticate (id, password) {
     const hash = crypto.createHash('sha1')
     hash.update(id + password, 'binary')
-    return this.sendReceive(tag`<handshake>${hash.digest('hex')}</handshake>`).then((el) => {
+    return this.sendReceive(xml`<handshake>${hash.digest('hex')}</handshake>`).then((el) => {
       if (el.name !== 'handshake') {
         throw new Error('unexpected stanza')
       }
       this._authenticated()
       this._jid(this._domain)
-      this._online() // FIXME should be emitted after promise resolve
+      this._online()
     })
   }
 }

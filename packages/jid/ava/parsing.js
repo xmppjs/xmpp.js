@@ -6,7 +6,6 @@ const JID = require('..').JID
 test('should parse a "domain" JID', t => {
   const j = new JID('d')
   t.is(j.getLocal(), null)
-  t.is(j.getUser(), null) // DEPRECATED
   t.is(j.getDomain(), 'd')
   t.is(j.getResource(), null)
 })
@@ -14,7 +13,6 @@ test('should parse a "domain" JID', t => {
 test('should parse a "user@domain" JID', t => {
   const j = new JID('u@d')
   t.is(j.getLocal(), 'u')
-  t.is(j.getUser(), 'u') // DEPRECATED
   t.is(j.getDomain(), 'd')
   t.is(j.getResource(), null)
 })
@@ -22,7 +20,6 @@ test('should parse a "user@domain" JID', t => {
 test('should parse a "domain/resource" JID', t => {
   const j = new JID('d/r')
   t.is(j.getLocal(), null)
-  t.is(j.getUser(), null) // DEPRECATED
   t.is(j.getDomain(), 'd')
   t.is(j.getResource(), 'r')
 })
@@ -30,7 +27,6 @@ test('should parse a "domain/resource" JID', t => {
 test('should parse a "user@domain/resource" JID', t => {
   const j = new JID('u@d/r')
   t.is(j.getLocal(), 'u')
-  t.is(j.getUser(), 'u') // DEPRECATED
   t.is(j.getDomain(), 'd')
   t.is(j.getResource(), 'r')
 })
@@ -38,7 +34,6 @@ test('should parse a "user@domain/resource" JID', t => {
 test('should parse a "user@domain/resource@thing" JID', t => {
   const j = new JID('u@d/r@foo')
   t.is(j.getLocal(), 'u')
-  t.is(j.getUser(), 'u') // DEPRECATED
   t.is(j.getDomain(), 'd')
   t.is(j.getResource(), 'r@foo')
 })
@@ -46,7 +41,6 @@ test('should parse a "user@domain/resource@thing" JID', t => {
 test('should parse a "user@domain/resource/thing" JID', t => {
   const j = new JID('u@d/r/foo')
   t.is(j.getLocal(), 'u')
-  t.is(j.getUser(), 'u') // DEPRECATED
   t.is(j.getDomain(), 'd')
   t.is(j.getResource(), 'r/foo')
 })
@@ -59,7 +53,6 @@ test('should parse an internationalized domain name as unicode', t => {
 test('should parse an empty domain JID (#109)', t => {
   const j = new JID('u@d', '')
   t.is(j.getLocal(), 'u')
-  t.is(j.getUser(), 'u') // DEPRECATED
   t.is(j.getDomain(), 'd')
   t.is(j.getResource(), null)
 })
@@ -67,7 +60,6 @@ test('should parse an empty domain JID (#109)', t => {
 test('should allow access to jid parts using keys', t => {
   const j = new JID('u@d/r', '')
   t.is(j.local, 'u')
-  t.is(j.user, 'u') // DEPRECATED
   t.is(j.domain, 'd')
   t.is(j.resource, 'r')
 })

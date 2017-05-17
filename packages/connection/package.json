@@ -12,9 +12,7 @@
   ],
   "dependencies": {
     "@xmpp/jid": "^0.0.2",
-    "@xmpp/streamparser": "^0.0.6"
-  },
-  "devDependencies": {
+    "@xmpp/streamparser": "^0.0.6",
     "@xmpp/xml": "^0.1.3"
   },
   "browser": {

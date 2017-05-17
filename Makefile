@@ -10,13 +10,14 @@ setup:
 test:
 	ava
 	standard
-	make start
+	make restart
 	ava -v test/
 
 clean:
 	rm -f prosody/prosody.err
 	rm -f prosody/prosody.log
 	lerna clean --yes
+	rm -rf node_modules/
 
 bundle:
 	lerna run bundle

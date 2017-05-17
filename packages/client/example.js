@@ -4,7 +4,7 @@
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-const {Client, xml} = require('..') // require('@xmpp/client')
+const {Client, xml} = require('./index') // require('@xmpp/client')
 const entity = new Client()
 
 // emitted for any error
@@ -14,14 +14,6 @@ entity.on('error', (err) => {
 
 entity.on('close', () => {
   console.log('closed')
-})
-
-entity.on('reconnecting', () => {
-  console.log('reconnecting')
-})
-
-entity.on('reconnected', () => {
-  console.log('reconnected')
 })
 
 
@@ -74,7 +66,11 @@ entity.on('online', (jid) => {
 })
 
 // "start" opens the socket and the XML stream
-entity.start('xmpp://localhost:5222')
+// entity.start('xmpp://localhost:5222') // TCP
+entity.start('xmpps://localhost:5223') // TLS
+// entity.start('ws://localhost:5280/xmpp-websocket') - Websocket
+// entity.start('wss://localhost:5281/xmpp-websocket') - Secure WebSocket
+// entity.start('ws://localhost:5280/xmpp-websocket')
   // resolves once online
   .then((jid) => {
     console.log('started', jid.toString())

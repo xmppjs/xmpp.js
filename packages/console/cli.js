@@ -42,10 +42,10 @@ module.exports = function (flags, endpoint) {
     this.log(chalk.red.bold('❌') + ' error', ...args)
   }
   xconsole.input = function (el) {
-    this.log(chalk.green.bold('⮈ IN\n') + (typeof el === 'string' ? el : this.beautify(el)))
+    this.log(chalk.green.bold('⮈ IN\n') + this.beautify(el))
   }
   xconsole.output = function (el) {
-    this.log(chalk.magenta.bold('⮊ OUT\n') + (typeof el === 'string' ? el : this.beautify(el)))
+    this.log(chalk.magenta.bold('⮊ OUT\n') + this.beautify(el))
   }
   xconsole.choose = function (options) {
     return new Promise((resolve) => {

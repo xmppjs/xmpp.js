@@ -4,6 +4,7 @@ const EventEmitter = require('events')
 const StreamParser = require('@xmpp/streamparser')
 const JID = require('@xmpp/jid')
 const url = require('url')
+const xml = require('@xmpp/xml')
 
 function error (name, message) {
   const e = new Error(message)
@@ -162,8 +163,7 @@ class Connection extends EventEmitter {
     return new Promise((resolve, reject) => {
       this._attachParser(new this.Parser())
       this._attachSocket(new this.Socket())
-
-      this.socket.connect(options, (err) => {
+      this.socket.connect(this.socketParameters(options), (err) => {
         if (err) reject(err)
         else resolve()
       })
@@ -190,18 +190,30 @@ class Connection extends EventEmitter {
   open (options) {
     this.openOptions = options
     return new Promise((resolve, reject) => {
-      this.parser.once('start', el => {
-        if (this.responseHeader(el, domain)) {
-          this._domain = domain
-          this.lang = el.attrs['xml:lang']
-          resolve(el)
-          this.emit('open', el)
-        } else {
-          reject(new Error('invalid response header received from server'))
-        }
-      })
       const {domain, lang} = options
-      this.write(this.header(domain, lang))
+
+      const headerElement = this.headerElement()
+      headerElement.attrs.to = domain
+      headerElement.attrs['xml:lang'] = lang
+
+      this.write(this.header(headerElement))
+
+      this.parser.once('start', el => {
+        // FIXME what about version and xmlns:stream ?
+        if (
+          el.name !== headerElement.name ||
+          el.attrs.xmlns !== headerElement.attrs.xmlns ||
+          el.attrs.from !== headerElement.attrs.to ||
+          !el.attrs.id
+        ) {
+          return this.once('error', reject)
+        }
+
+        this._domain = domain
+        this.lang = el.attrs['xml:lang']
+        resolve(el)
+        this.emit('open', el)
+      })
     })
   }
 
@@ -209,7 +221,7 @@ class Connection extends EventEmitter {
    * closes the stream
    */
   close () {
-    return this.promiseWrite(this.footer())
+    return this.promiseWrite(this.footer(this.footerElement()))
   }
 
   /**
@@ -312,10 +324,25 @@ class Connection extends EventEmitter {
   }
 
   // override
-  responseHeader () {}
-  header () {}
-  footer () {}
-  match () {}
+  header (el) {
+    return el.toString()
+  }
+  headerElement () {
+    return new xml.Element('', {
+      version: '1.0',
+      xmlns: this.NS
+    })
+  }
+  footer (el) {
+    return el.toString()
+  }
+  footerElement () {}
+  socketParameters (uri) {
+    const parsed = url.parse(uri)
+    parsed.port = +parsed.port
+    parsed.host = parsed.hostname
+    return parsed
+  }
 }
 
 // overrirde
