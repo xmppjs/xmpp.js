@@ -85,9 +85,7 @@ class SASLPlugin extends Plugin {
           mech.challenge(decode(element.text()))
           const resp = mech.response(creds)
           this.entity.send(xml`
-            <response xmlns='${NS}' mechanism='${mech.name}'>
-              ${typeof resp === 'string' ? encode(resp) : ''}
-            </response>
+            <response xmlns='${NS}' mechanism='${mech.name}'>${typeof resp === 'string' ? encode(resp) : ''}</response>
           `)
           return
         }
@@ -107,9 +105,7 @@ class SASLPlugin extends Plugin {
 
       if (mech.clientFirst) {
         this.entity.send(xml`
-          <auth xmlns='${NS}' mechanism='${mech.name}'>
-            ${encode(mech.response(creds))}
-          </auth>
+          <auth xmlns='${NS}' mechanism='${mech.name}'>${encode(mech.response(creds))}</auth>
         `)
       }
     })
