@@ -22,7 +22,8 @@
   },
   "standard": {
     "ignore": [
-      "packages/console/public/vendor/"
+      "packages/console/public/vendor/",
+      "server/modules/"
     ]
   }
 }
