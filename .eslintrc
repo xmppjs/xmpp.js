@@ -1,0 +1,17 @@
+extends:
+  - eslint:recommended
+  - standard
+
+parserOptions:
+  sourceType: script
+
+rules:
+  strict:
+    - error
+    - global
+  comma-dangle:
+    - error
+    - always-multiline
+  # ES2015 http://eslint.org/docs/rules/#ecmascript-6
+  no-var: error
+  prefer-const: error

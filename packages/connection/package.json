@@ -11,6 +11,7 @@
     "connection"
   ],
   "dependencies": {
+    "@xmpp/events": "^0.0.0",
     "@xmpp/jid": "^0.0.2",
     "@xmpp/streamparser": "^0.0.6",
     "@xmpp/xml": "^0.1.3"

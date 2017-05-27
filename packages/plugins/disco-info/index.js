@@ -49,7 +49,7 @@ function plugin (entity) {
     },
     getIdentities (identities) {
       return identities
-    }
+    },
   }
 }
 
@@ -58,5 +58,5 @@ module.exports = {
   match,
   name: 'disco-info',
   plugin,
-  build
+  build,
 }

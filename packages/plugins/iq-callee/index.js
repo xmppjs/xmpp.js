@@ -1,74 +1,66 @@
 'use strict'
 
+const {plugin, xml} = require('@xmpp/plugin')
 const stanzaRouter = require('../stanza-router')
-const xml = require('@xmpp/xml')
 
 const NS_STANZA = 'urn:ietf:params:xml:ns:xmpp-stanzas'
 
-function matchIq (stanza) {
-  return (
-    stanza.is('iq') &&
-    stanza.attrs.id &&
-    (
-      stanza.attrs.type === 'get' ||
-      stanza.attrs.type === 'set')
-  )
-}
+module.exports = plugin('iq-callee', {
+  NS_STANZA,
+  match (stanza) {
+    return (
+      stanza.is('iq') &&
+      (
+        stanza.attrs.type === 'get' ||
+        stanza.attrs.type === 'set'
+      )
+    )
+  },
+  add (name, NS, handle) {
+    this.calls.set(`${name}:${NS}`, handle)
+  },
+  remove (name, NS) {
+    this.calls.delete(`${name}:${NS}`)
+  },
+  start () {
+    this.calls = new Map()
+    this.handler = (stanza) => {
+      const iq = xml`<iq to='${stanza.attrs.from}' from='${stanza.attrs.to}' id='${stanza.attrs.id}'/>`
 
-function plugin (entity) {
-  const calls = new Map()
+      const child = stanza.children[0]
+      const handler = this.calls.get(`${child.name}:${child.getNS()}`)
 
-  const router = entity.plugin(stanzaRouter)
-  router.add(matchIq, (stanza) => {
-    let matched
-    const iq = xml`<iq to='${stanza.attrs.from}' from='${stanza.attrs.to}' id='${stanza.attrs.id}'/>`
-
-    calls.forEach((handler, match) => {
-      const matching = match(stanza)
-      if (!matching) return
-      matched = true
-
-      function callback (err, res) {
-        if (err) {
-          iq.attrs.type = 'error'
-          if (xml.isElement(err)) {
-            iq.cnode(err)
-          }
-          // else // FIXME
-        } else {
+      if (!handler) {
+        iq.attrs.type = 'error'
+        iq.cnode(child.clone())
+        iq.c('error', {type: 'cancel'})
+            .c('service-unavailable', NS_STANZA)
+      } else {
+        Promise.resolve(handler(stanza))
+        .then((res) => {
           iq.attrs.type = 'result'
           if (xml.isElement(res)) {
             iq.cnode(res)
           }
-        }
+        })
+        .catch((err) => {
+          iq.attrs.type = 'error'
+          if (xml.isElement(err)) {
+            iq.cnode(err)
+          } else {
+            iq.c('error', {type: 'cancel'})
+                .c('internal-server-error', NS_STANZA)
+          }
+        })
       }
 
-      const handled = handler(matching, callback)
-      if (xml.isElement(handled)) callback(null, handled)
-    })
-
-    if (!matched) {
-      iq.attrs.type = 'error'
-      iq.cnode(stanza.children[0].clone())
-      iq.c('error', {type: 'cancel'})
-          .c('service-unavailable', NS_STANZA)
+      this.entity.send(iq)
     }
-
-    entity.send(iq)
-  })
-
-  return {
-    entity,
-    calls,
-    add (match, handle) {
-      calls.set(match, handle)
-    }
-  }
-}
-
-module.exports = {
-  NS_STANZA,
-  matchIq,
-  name: 'iq-callee',
-  plugin
-}
+    this.plugins['stanza-router'].add(this.match, this.handler)
+  },
+  stop () {
+    delete this.calls
+    this.plugins['stanza-router'].remove(this.match)
+    delete this.handler
+  },
+}, [stanzaRouter])

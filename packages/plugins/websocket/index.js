@@ -6,6 +6,6 @@ module.exports.name = 'websocket'
 module.exports.plugin = function plugin (entity) {
   entity.transports.push(ConnectionWebSocket)
   return {
-    entity
+    entity,
   }
 }

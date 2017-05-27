@@ -10,14 +10,14 @@ function resolve (domain) {
     .filter(link => [
       'urn:xmpp:alt-connections:websocket',
       'urn:xmpp:alt-connections:httppoll',
-      'urn:xmpp:alt-connections:xbosh'
+      'urn:xmpp:alt-connections:xbosh',
     ].indexOf(link.attrs.rel) > -1
     )
     .map(({attrs}) => ({
       rel: attrs.rel,
       href: attrs.href,
       method: attrs.rel.split(':').pop(),
-      uri: attrs.href
+      uri: attrs.href,
     })).sort(compareAltConnections)
   })
   .catch(() => {

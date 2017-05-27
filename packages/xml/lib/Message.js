@@ -1,7 +1,7 @@
 'use strict'
 
-var Stanza = require('./Stanza')
-var inherits = require('inherits')
+const Stanza = require('./Stanza')
+const inherits = require('inherits')
 
 function Message (attrs) {
   Stanza.call(this, 'message', attrs)

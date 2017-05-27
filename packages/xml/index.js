@@ -1,7 +1,7 @@
 'use strict'
 
-var ltx = require('ltx')
-var tag = require('./lib/tag')
+const ltx = require('ltx')
+const tag = require('./lib/tag')
 
 exports = module.exports = function xml () {
   return tag.apply(null, arguments)

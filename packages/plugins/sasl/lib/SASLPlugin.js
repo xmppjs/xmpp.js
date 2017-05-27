@@ -3,7 +3,6 @@
 const SASLFactory = require('saslmechanisms')
 const {encode, decode} = require('./b64')
 const xml = require('@xmpp/xml')
-const Plugin = require('../../lib/Plugin')
 const {XMPPError} = require('@xmpp/connection')
 
 const NS = 'urn:ietf:params:xml:ns:xmpp-sasl'
@@ -15,9 +14,9 @@ function getMechanismNames (features) {
   return features.getChild('mechanisms', NS).children.map(el => el.text())
 }
 
-class SASLPlugin extends Plugin {
-  constructor (...args) {
-    super(...args)
+class SASLPlugin {
+  constructor (entity) {
+    this.entity = entity
     this.SASL = new SASLFactory()
   }
 
@@ -74,7 +73,7 @@ class SASLPlugin extends Plugin {
       host: domain,
       realm: domain,
       serviceType: 'xmpp',
-      serviceName: domain
+      serviceName: domain,
     }, credentials)
 
     return new Promise((resolve, reject) => {
@@ -85,7 +84,9 @@ class SASLPlugin extends Plugin {
           mech.challenge(decode(element.text()))
           const resp = mech.response(creds)
           this.entity.send(xml`
-            <response xmlns='${NS}' mechanism='${mech.name}'>${typeof resp === 'string' ? encode(resp) : ''}</response>
+            <response xmlns='${NS}' mechanism='${mech.name}'>
+              ${typeof resp === 'string' ? encode(resp) : ''}
+            </response>
           `)
           return
         }
@@ -105,7 +106,9 @@ class SASLPlugin extends Plugin {
 
       if (mech.clientFirst) {
         this.entity.send(xml`
-          <auth xmlns='${NS}' mechanism='${mech.name}'>${encode(mech.response(creds))}</auth>
+          <auth xmlns='${NS}' mechanism='${mech.name}'>
+            ${encode(mech.response(creds))}
+          </auth>
         `)
       }
     })

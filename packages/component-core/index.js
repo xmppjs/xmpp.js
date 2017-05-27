@@ -53,7 +53,7 @@ class Component extends Connection {
         throw new Error('unexpected stanza')
       }
       this._authenticated()
-      this._jid(this._domain)
+      this._jid(this.domain)
       this._online()
     })
   }

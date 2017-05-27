@@ -1,3 +1,5 @@
+'use strict'
+
 const test = require('ava')
 const caps = require('../entity-capabilities')
 const xml = require('@xmpp/xml')

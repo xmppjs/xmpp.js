@@ -36,7 +36,7 @@ function plugin (entity) {
     },
     del (key) {
       delete vars[key]
-    }
+    },
   }
 }
 
@@ -44,5 +44,5 @@ module.exports = {
   NS_VERSION,
   match,
   name: 'version-handle',
-  plugin
+  plugin,
 }

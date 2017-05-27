@@ -1,16 +1,10 @@
 'use strict'
 
-const EventEmitter = require('events')
+const EventEmitter = require('@xmpp/events')
 const StreamParser = require('@xmpp/streamparser')
 const JID = require('@xmpp/jid')
 const url = require('url')
 const xml = require('@xmpp/xml')
-
-function error (name, message) {
-  const e = new Error(message)
-  e.name = name
-  return e
-}
 
 class XMPPError extends Error {
   constructor (condition, text, element) {
@@ -41,7 +35,7 @@ function getHostname (uri) {
 class Connection extends EventEmitter {
   constructor (options) {
     super()
-    this._domain = null
+    this.domain = null
     this.lang = null
     this.jid = null
     this.timeout = 2000
@@ -57,11 +51,11 @@ class Connection extends EventEmitter {
     const listeners = this.socketListeners
     listeners.data = (data) => {
       data = data.toString('utf8')
-      this.emit('fragment', data)
+      this.emit('input', data)
       this.parser.write(data)
     }
     listeners.close = () => {
-      this._domain = ''
+      this.domain = ''
       this.emit('close')
     }
     listeners.connect = () => {
@@ -190,6 +184,7 @@ class Connection extends EventEmitter {
    */
   open (options) {
     this.openOptions = options
+    if (typeof options === 'string') options = {domain: options}
     return new Promise((resolve, reject) => {
       const {domain, lang} = options
 
@@ -210,7 +205,7 @@ class Connection extends EventEmitter {
           return this.once('error', reject)
         }
 
-        this._domain = domain
+        this.domain = domain
         this.lang = el.attrs['xml:lang']
         resolve(el)
         this.emit('open', el)
@@ -232,36 +227,6 @@ class Connection extends EventEmitter {
     return this.open(this.openOptions)
   }
 
-  _promise (event, timeout) {
-    return new Promise((resolve, reject) => {
-      let timer
-      const cleanup = () => {
-        this.removeListener(event, onEvent)
-        this.removeListener('error', onError)
-        clearTimeout(timer)
-      }
-      if (typeof timeout === 'number') {
-        timer = setTimeout(() => {
-          reject(error(
-            'TimeoutError',
-            `"${event}" event didn't fire within ${timeout}ms`
-          ))
-          cleanup()
-        }, timeout)
-      }
-      const onError = (reason) => {
-        reject(reason)
-        cleanup()
-      }
-      const onEvent = (value) => {
-        resolve(value)
-        cleanup()
-      }
-      this.once('error', onError)
-      this.once(event, onEvent)
-    })
-  }
-
   send (element) {
     const root = element.root()
     return this.promiseWrite(root).then(() => {
@@ -272,7 +237,7 @@ class Connection extends EventEmitter {
   sendReceive (element, timeout = this.timeout) {
     return new Promise((resolve, reject) => {
       this.send(element).catch(reject)
-      this._promise('element', timeout).then(resolve, reject)
+      this.promise('element', timeout).then(resolve, reject)
     })
   }
 
@@ -290,7 +255,7 @@ class Connection extends EventEmitter {
     data = data.toString('utf8').trim()
     this.socket.write(data, (err) => {
       if (err) return fn(err)
-      this.emit('fragment', undefined, data)
+      this.emit('output', data)
       fn()
     })
   }
@@ -298,7 +263,7 @@ class Connection extends EventEmitter {
   writeReceive (data, timeout = this.timeout) {
     return new Promise((resolve, reject) => {
       this.promiseWrite(data).catch(reject)
-      this._promise('element', timeout).then(resolve, reject)
+      this.promise('element', timeout).then(resolve, reject)
     })
   }
 
@@ -319,8 +284,11 @@ class Connection extends EventEmitter {
   plugin (plugin) {
     if (!this.plugins[plugin.name]) {
       this.plugins[plugin.name] = plugin.plugin(this)
+      const p = this.plugins[plugin.name]
+      if (p && p.start) p.start()
+      else if (p && p.register) p.register()
     }
-    if (this.plugins[plugin.name].register) this.plugins[plugin.name].register()
+
     return this.plugins[plugin.name]
   }
 
@@ -331,7 +299,7 @@ class Connection extends EventEmitter {
   headerElement () {
     return new xml.Element('', {
       version: '1.0',
-      xmlns: this.NS
+      xmlns: this.NS,
     })
   }
   footer (el) {

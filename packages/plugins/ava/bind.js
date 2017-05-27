@@ -1,3 +1,5 @@
+'use strict'
+
 const test = require('ava')
 const {match, stanza, plugin} = require('../bind')
 const xml = require('@xmpp/xml')

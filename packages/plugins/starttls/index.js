@@ -48,12 +48,12 @@ module.exports.plugin = function plugin (entity) {
     restart: true,
     run: (entity) => {
       return starttls(entity)
-    }
+    },
   }
 
   const streamFeatures = entity.plugin(streamfeatures)
   streamFeatures.add(streamFeature)
   return {
-    entity
+    entity,
   }
 }

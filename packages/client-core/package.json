@@ -6,6 +6,8 @@
   "version": "0.0.2",
   "license": "ISC",
   "dependencies": {
-    "@xmpp/connection": "^0.0.6"
+    "@xmpp/connection": "^0.0.6",
+    "@xmpp/jid": "^0.0.2",
+    "@xmpp/xml": "^0.1.3"
   }
 }

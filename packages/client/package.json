@@ -11,9 +11,7 @@
   },
   "dependencies": {
     "@xmpp/client-core": "^0.0.2",
-    "@xmpp/jid": "^0.0.2",
-    "@xmpp/plugins": "^0.0.3",
-    "@xmpp/xml": "^0.1.3"
+    "@xmpp/plugins": "^0.0.3"
   },
   "browser": {
     "@xmpp/plugins/tcp": false,

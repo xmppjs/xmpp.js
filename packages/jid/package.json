@@ -9,9 +9,5 @@
   "keywords": [
     "XMPP",
     "JID"
-  ],
-  "scripts": {
-    "prepublish": "npm run bundle",
-    "bundle": "../../node_modules/.bin/browserify index.js -s JID -o bundle.js"
-  }
+  ]
 }

@@ -12,21 +12,21 @@ function plugin (entity) {
 
   return {
     entity,
-    get (to, ...args) {
-      return this.query(to, ...args).then((res) => {
+    get (...args) {
+      return this.query(...args).then((res) => {
         const vars = {}
         fields.forEach(field => { vars[field] = res.getChildText(field) || '' })
         return vars
       })
     },
-    query (to, ...args) {
-      return caller.get(to, xml`<time xmlns='${NS_TIME}'/>`, ...args)
-    }
+    query (...args) {
+      return caller.get(xml`<time xmlns='${NS_TIME}'/>`, ...args)
+    },
   }
 }
 
 module.exports = {
   name: 'time-query',
   NS_TIME,
-  plugin
+  plugin,
 }

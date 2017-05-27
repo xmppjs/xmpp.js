@@ -2,6 +2,12 @@
 # yarn lockfile v1
 
 
+"@xmpp/client-core@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@xmpp/client-core/-/client-core-0.0.2.tgz#c90f945bf39dabf10775c2e85b8d83433d4bb1fe"
+  dependencies:
+    "@xmpp/connection" "^0.0.6"
+
 "@xmpp/connection-tcp@^0.0.6":
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/@xmpp/connection-tcp/-/connection-tcp-0.0.6.tgz#505bc36467e0348c7d0bf598610711bf2b455020"

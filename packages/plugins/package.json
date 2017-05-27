@@ -14,6 +14,7 @@
     "@xmpp/connection": "^0.0.6",
     "@xmpp/connection-tcp": "^0.0.6",
     "@xmpp/jid": "^0.0.2",
+    "@xmpp/plugin": "^0.0.0",
     "@xmpp/resolve": "^0.0.2",
     "@xmpp/time": "^0.0.1",
     "@xmpp/xml": "^0.1.3",

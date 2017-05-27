@@ -8,7 +8,7 @@ const meow = require('meow')
 
 const cli = meow(`
     Usage
-      $ xmpp-console endpoint
+      $ xmpp-console [endpoint]
 
     Options
       --port, -p 8080 port for the web interface
@@ -17,6 +17,7 @@ const cli = meow(`
       --type, -t client (default) or component
 
     Examples
+      $ xmpp-console localhost (auto)
       $ xmpp-console xmpp://localhost[:5222] (classic XMPP)
       $ xmpp-console xmpps://localhost[:5223] (direct TLS)
       $ xmpp-console ws://localhost:5280/xmpp-websocket (WebSocket)
@@ -26,8 +27,8 @@ const cli = meow(`
   alias: {
     p: 'port',
     w: 'web',
-    t: 'type'
-  }
+    t: 'type',
+  },
 })
 
 const [endpoint] = cli.input

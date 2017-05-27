@@ -6,7 +6,7 @@ const http = require('./lib/http')
 module.exports = function resolve (...args) {
   return Promise.all([
     dns.resolve ? dns.resolve(...args) : Promise.resolve([]),
-    http.resolve(...args)
+    http.resolve(...args),
   ]).then(([records, endpoints]) => records.concat(endpoints))
 }
 

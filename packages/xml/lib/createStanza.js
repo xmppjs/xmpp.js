@@ -1,7 +1,7 @@
 'use strict'
 
-var Stanza = require('./Stanza')
-var Element = require('ltx').Element
+const Stanza = require('./Stanza')
+const Element = require('ltx').Element
 
 /**
  * JSX compatible API, use this function as pragma
@@ -13,7 +13,7 @@ var Element = require('ltx').Element
  * @return {Element}      Stanza or Element
  */
 module.exports = function createStanza (name, attrs /*, child1, child2, ... */) {
-  var el
+  let el
 
   switch (name) {
     case 'presence':
@@ -25,7 +25,7 @@ module.exports = function createStanza (name, attrs /*, child1, child2, ... */) 
       el = new Element(name, attrs)
   }
 
-  var children = Array.prototype.slice.call(arguments, 2)
+  const children = Array.prototype.slice.call(arguments, 2)
 
   children.forEach(function (child) {
     el.cnode(child)

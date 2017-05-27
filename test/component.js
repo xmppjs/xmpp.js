@@ -30,7 +30,7 @@ test.cb('component', t => {
     t.is(jid.toString(), 'node-xmpp.localhost')
   })
 
-  entity.start('xmpp://node-xmpp.localhost:5347')
+  entity.start({uri: 'xmpp://localhost:5347', domain: 'node-xmpp.localhost'})
     .then((jid) => {
       t.true(jid instanceof xmpp.jid.JID)
       t.is(jid.toString(), 'node-xmpp.localhost')

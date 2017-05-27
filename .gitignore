@@ -11,7 +11,6 @@ server/prosody.pid
 !.travis.yml
 
 bundle.js
-browserify.js
 npm-debug.log
 lerna-debug.log
 yarn-error.log

@@ -1,11 +1,11 @@
 'use strict'
 
-var inherits = require('inherits')
-var EventEmitter = require('events').EventEmitter
-var LtxParser = require('ltx/lib/parsers/ltx')
-var xml = require('@xmpp/xml')
-var Stanza = xml.Stanza
-var Element = xml.Element
+const inherits = require('inherits')
+const EventEmitter = require('events').EventEmitter
+const LtxParser = require('ltx/lib/parsers/ltx')
+const xml = require('@xmpp/xml')
+const Stanza = xml.Stanza
+const Element = xml.Element
 
 /**
  * Recognizes <stream:stream> and collects stanzas used for ordinary
@@ -16,10 +16,10 @@ var Element = xml.Element
  */
 function StreamParser (options) {
   EventEmitter.call(this)
-  var self = this
+  const self = this
 
-  var ElementInterface = (options && options.Element) || Element
-  var ParserInterface = (options && options.Parser) || LtxParser
+  const ElementInterface = (options && options.Element) || Element
+  const ParserInterface = (options && options.Parser) || LtxParser
   this.maxStanzaSize = options && options.maxStanzaSize
   this.parser = new ParserInterface()
 
@@ -38,7 +38,7 @@ function StreamParser (options) {
     if (!self.element && (name === 'stream:stream')) {
       self.emit('streamStart', attrs)
     } else {
-      var child
+      let child
       if (!self.element) {
         /* A new stanza */
         child = new Stanza(name, attrs)
@@ -102,12 +102,12 @@ inherits(StreamParser, EventEmitter)
  */
 StreamParser.prototype.checkXMLHeader = function (data) {
   // check for xml tag
-  var index = data.indexOf('<?xml')
+  const index = data.indexOf('<?xml')
 
   if (index !== -1) {
-    var end = data.indexOf('?>')
+    const end = data.indexOf('?>')
     if (index >= 0 && end >= 0 && index < end + 2) {
-      var search = data.substring(index, end + 2)
+      const search = data.substring(index, end + 2)
       data = data.replace(search, '')
     }
   }
@@ -145,7 +145,7 @@ StreamParser.prototype.end = function (data) {
 }
 
 StreamParser.prototype.error = function (condition, message) {
-  var e = new Error(message)
+  const e = new Error(message)
   e.condition = condition
   this.emit('error', e)
 }

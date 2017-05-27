@@ -1,0 +1,18 @@
+{
+  "name": "@xmpp/plugin",
+  "description": "XMPP plugin for JavaScript",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "https://github.com/node-xmpp/node-xmpp/tree/master/packages/plugin",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "version": "0.0.0",
+  "license": "ISC",
+  "keywords": [
+    "XMPP",
+    "plugin"
+  ],
+  "dependencies": {
+    "@xmpp/events": "^0.0.0",
+    "@xmpp/jid": "^0.0.2",
+    "@xmpp/xml": "^0.1.3"
+  }
+}

@@ -1,10 +1,8 @@
 'use strict'
 
-const Plugin = require('../../lib/Plugin')
-
-class StreamFeaturesPlugin extends Plugin {
-  constructor (...args) {
-    super(...args)
+class StreamFeaturesPlugin {
+  constructor (entity) {
+    this.entity = entity
     this.features = []
     this.negotiated = []
     this.enable() // FIXME
@@ -31,7 +29,7 @@ class StreamFeaturesPlugin extends Plugin {
                 this.onStreamFeatures(features, el)
               }
             }).catch(err => entity.emit('error', err))
-          }
+          },
         }
       })
 

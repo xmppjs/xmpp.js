@@ -1,19 +1,13 @@
 'use strict'
 
-const _handle = require('./handle')
-const _query = require('./query')
+const plugin = require('@xmpp/plugin')
 
-module.exports = {
-  name: 'ping',
-  plugin (entity) {
-    const handle = entity.plugin(_handle)
-    const query = entity.plugin(_query)
-    return {
-      entity,
-      handle,
-      query
-    }
+const callee = require('./callee')
+const caller = require('./caller')
+
+module.exports = plugin('ping', {
+  NS_PING: 'urn:xmpp:ping',
+  ping (...args) {
+    return this.plugins['ping-caller'].ping(...args)
   },
-  handle: _handle,
-  query: _query
-}
+}, [callee, caller])

@@ -11,9 +11,9 @@ test('parse', t => {
     query: {
       type: 'message',
       params: {
-        subject: 'Hello World'
-      }
-    }
+        subject: 'Hello World',
+      },
+    },
   })
 
   t.deepEqual(new JID('foobar'), new JID('foobar'))
@@ -24,32 +24,32 @@ test('parse', t => {
       type: 'message',
       params: {
         subject: 'Hello World',
-        body: 'foobar'
-      }
-    }
+        body: 'foobar',
+      },
+    },
   })
 
   t.deepEqual(parse('xmpp:support@example.com/truc'), {
-    path: new JID('support@example.com/truc')
+    path: new JID('support@example.com/truc'),
   })
 
   t.deepEqual(parse('xmpp:support@example.com/'), {
-    path: new JID('support@example.com/')
+    path: new JID('support@example.com/'),
   })
 
   t.deepEqual(parse('xmpp:support@example.com/?foo'), {
     path: new JID('support@example.com/'),
     query: {
       type: 'foo',
-      params: {}
-    }
+      params: {},
+    },
   })
 
   t.deepEqual(parse('xmpp:support@example.com?foo'), {
     path: new JID('support@example.com'),
     query: {
       type: 'foo',
-      params: {}
-    }
+      params: {},
+    },
   })
 })

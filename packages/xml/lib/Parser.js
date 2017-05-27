@@ -1,8 +1,8 @@
 'use strict'
 
-var inherits = require('inherits')
-var createStanza = require('./createStanza')
-var LtxParser = require('ltx').Parser
+const inherits = require('inherits')
+const createStanza = require('./createStanza')
+const LtxParser = require('ltx').Parser
 
 function Parser (options) {
   LtxParser.call(this, options)

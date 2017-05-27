@@ -22,7 +22,7 @@ function match (features) {
 }
 
 function bind (caller, entity, resource) {
-  return caller.set(null, makeBindElement(resource)).then(result => {
+  return caller.set(makeBindElement(resource)).then(result => {
     entity._jid(result.getChild('jid').text())
   })
 }
@@ -30,10 +30,9 @@ function bind (caller, entity, resource) {
 module.exports.name = 'bind'
 module.exports.plugin = function plugin (entity) {
   const caller = entity.plugin(iqCaller)
-
   const p = {
     entity,
-    getResource () {}
+    getResource () {},
   }
 
   const streamFeature = {
@@ -44,7 +43,7 @@ module.exports.plugin = function plugin (entity) {
       return Promise.resolve((p.getResource())).then((resource) => {
         return bind(caller, entity, resource)
       })
-    }
+    },
   }
 
   const streamFeatures = entity.plugin(streamfeatures)

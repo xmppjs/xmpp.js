@@ -7,7 +7,8 @@
       "example.js",
       "ava/",
       "test/",
-      "test.js"
+      "test.js",
+      ".eslintrc"
     ]
   },
   "packages": [

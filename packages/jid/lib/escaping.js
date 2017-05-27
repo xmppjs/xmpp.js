@@ -4,7 +4,7 @@ module.exports.detect = function (local) {
   if (!local) return false
 
   // remove all escaped sequences
-  var tmp = local
+  const tmp = local
     .replace(/\\20/g, '')
     .replace(/\\22/g, '')
     .replace(/\\26/g, '')
@@ -17,7 +17,7 @@ module.exports.detect = function (local) {
     .replace(/\\5c/g, '')
 
   // detect if we have unescaped sequences
-  var search = tmp.search(/\\| |"|&|'|\/|:|<|>|@/g)
+  const search = tmp.search(/\\| |"|&|'|\/|:|<|>|@/g)
   if (search === -1) {
     return false
   } else {

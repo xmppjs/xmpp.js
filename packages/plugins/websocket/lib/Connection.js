@@ -16,7 +16,7 @@ class ConnectionWebSocket extends Connection {
   // https://tools.ietf.org/html/rfc7395#section-3.6
   footer () {
     return xml.Element('close', {
-      xmlns: NS_FRAMING
+      xmlns: NS_FRAMING,
     })
   }
 

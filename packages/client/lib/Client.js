@@ -1,6 +1,6 @@
 'use strict'
 
-const ClientCore = require('@xmpp/client-core')
+const ClientCore = require('@xmpp/client-core').Client
 const plugins = require('./plugins')
 
 class Client extends ClientCore {

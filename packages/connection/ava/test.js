@@ -1,11 +1,13 @@
+'use strict'
+
 const test = require('ava')
 const Connection = require('..')
-const EventEmitter = require('events')
+const EventEmitter = require('@xmpp/events')
 const xml = require('@xmpp/xml')
 
 test('new Connection()', t => {
   const conn = new Connection()
-  t.is(conn._domain, null)
+  t.is(conn.domain, null)
   t.is(conn.lang, null)
   t.is(conn.jid, null)
   t.is(conn.timeout, 2000)

@@ -15,7 +15,7 @@ function kill (pid) {
   return new Promise((resolve) => {
     try {
       process.kill(pid, 'SIGTERM')
-    } catch (e) {}
+    } catch (e) {} // eslint-disable-line no-empty
     resolve(pid)
   })
 }
@@ -41,8 +41,8 @@ function _start () {
   return execFile('prosody', {
     cwd: DATA_PATH,
     env: {
-      'PROSODY_CONFIG': 'prosody.cfg.lua'
-    }
+      'PROSODY_CONFIG': 'prosody.cfg.lua',
+    },
   })
   .then(delay)
   .then(() => {

@@ -9,7 +9,7 @@ Prism.plugins.toolbar.registerButton('edit', {
   text: 'edit',
   onClick: env => {
     editor.setValue(env.code)
-  }
+  },
 })
 // http://prismjs.com/plugins/toolbar/
 Prism.plugins.toolbar.registerButton('select', {
@@ -27,7 +27,7 @@ Prism.plugins.toolbar.registerButton('select', {
       selection.removeAllRanges()
       selection.addRange(range)
     }
-  }
+  },
 })
 
 const entity = client()
@@ -75,7 +75,7 @@ xconsole.choose = function (options) {
         text: choice,
         handler () {
           resolve(choice)
-        }
+        },
       }
     })
     notie.select(options)
@@ -89,7 +89,7 @@ function connect (params) {
     return xconsole.ask({
       text: 'Enter endpoint',
       value: 'ws://localhost:5280/xmpp-websocket',
-      type: 'url'
+      type: 'url',
     }).then((endpoint) => {
       return entity.connect(endpoint)
     })
