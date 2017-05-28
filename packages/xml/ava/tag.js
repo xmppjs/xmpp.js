@@ -9,9 +9,11 @@ test('exported correctly', t => {
   t.is(xml.tag, tag)
 })
 
-test('parses the stanza and return a Stanza object', t => {
-  const stanza = tag`<message/>`
-  t.true(stanza instanceof Stanza)
+test('return a Stanza object if message/iq/presence, an element otherwise', t => {
+  t.true(tag`<message/>` instanceof Stanza)
+
+  t.true(tag`<foo/>` instanceof xml.Element)
+  t.false(tag`<foo/>` instanceof Stanza)
 })
 
 test('strips whitespaces', t => {
