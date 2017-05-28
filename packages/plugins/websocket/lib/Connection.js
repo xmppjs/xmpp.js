@@ -15,7 +15,7 @@ const NS_FRAMING = 'urn:ietf:params:xml:ns:xmpp-framing'
 class ConnectionWebSocket extends Connection {
   // https://tools.ietf.org/html/rfc7395#section-3.6
   footer () {
-    return xml.Element('close', {
+    return new xml.Element('close', {
       xmlns: NS_FRAMING,
     })
   }
