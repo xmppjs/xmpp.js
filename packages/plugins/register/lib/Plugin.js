@@ -1,13 +1,12 @@
 'use strict'
 
 const xml = require('@xmpp/xml')
-const Plugin = require('../../lib/Plugin')
 
 const NS = 'jabber:iq:register'
 
-class RegisterPlugin extends Plugin {
+class RegisterPlugin {
   constructor (entity, caller) {
-    super(entity)
+    this.entity = entity
     this.caller = caller
   }
 

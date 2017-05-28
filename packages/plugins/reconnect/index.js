@@ -40,6 +40,6 @@ module.exports.plugin = function plugin (entity) {
     },
     getDelay () {
       return delay
-    }
+    },
   }
 }

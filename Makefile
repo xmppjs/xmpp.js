@@ -9,15 +9,18 @@ setup:
 
 test:
 	ava
-	standard
+	eslint .
 	make restart
 	ava -v test/
 
 clean:
+	make stop
 	rm -f prosody/prosody.err
 	rm -f prosody/prosody.log
 	lerna clean --yes
 	rm -rf node_modules/
+	rm packages/*/dist/*.js
+	rm lerna-debug.log
 
 bundle:
 	lerna run bundle

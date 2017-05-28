@@ -1,6 +1,6 @@
 'use strict'
 
-var escaping = require('./escaping')
+const escaping = require('./escaping')
 
 /**
  * JID implements
@@ -28,13 +28,13 @@ function JID (a, b, c) {
 }
 
 JID.prototype.parseJID = function (s) {
-  var resourceStart = s.indexOf('/')
+  const resourceStart = s.indexOf('/')
   if (resourceStart !== -1) {
     this.setResource(s.substr(resourceStart + 1))
     s = s.substr(0, resourceStart)
   }
 
-  var atStart = s.indexOf('@')
+  const atStart = s.indexOf('@')
   if (atStart !== -1) {
     this.setLocal(s.substr(0, atStart))
     s = s.substr(atStart + 1)
@@ -44,7 +44,7 @@ JID.prototype.parseJID = function (s) {
 }
 
 JID.prototype.toString = function (unescape) {
-  var s = this._domain
+  let s = this._domain
   if (this._local) s = this.getLocal(unescape) + '@' + s
   if (this._resource) s = s + '/' + this._resource
   return s
@@ -87,7 +87,7 @@ JID.prototype.setLocal = function (local, escape) {
 
 JID.prototype.getLocal = function (unescape) {
   unescape = unescape || false
-  var local = null
+  let local = null
 
   if (unescape) {
     local = escaping.unescape(this._local)
@@ -100,7 +100,7 @@ JID.prototype.getLocal = function (unescape) {
 
 Object.defineProperty(JID.prototype, 'local', {
   get: JID.prototype.getLocal,
-  set: JID.prototype.setLocal
+  set: JID.prototype.setLocal,
 })
 
 /**
@@ -117,7 +117,7 @@ JID.prototype.getDomain = function () {
 
 Object.defineProperty(JID.prototype, 'domain', {
   get: JID.prototype.getDomain,
-  set: JID.prototype.setDomain
+  set: JID.prototype.setDomain,
 })
 
 /**
@@ -134,7 +134,7 @@ JID.prototype.getResource = function () {
 
 Object.defineProperty(JID.prototype, 'resource', {
   get: JID.prototype.getResource,
-  set: JID.prototype.setResource
+  set: JID.prototype.setResource,
 })
 
 JID.prototype.detectEscape = escaping.detectEscape // FIXME move to index

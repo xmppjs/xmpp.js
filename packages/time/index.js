@@ -34,5 +34,5 @@ module.exports = {
   date,
   time,
   datetime,
-  offset
+  offset,
 }

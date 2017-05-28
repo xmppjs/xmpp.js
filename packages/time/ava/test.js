@@ -1,3 +1,5 @@
+'use strict'
+
 const test = require('ava')
 const time = require('..')
 
@@ -27,7 +29,7 @@ test('offset', t => {
     return {
       getTimezoneOffset () {
         return value
-      }
+      },
     }
   }
   t.is(time.offset(fake(120)), '-02:00')

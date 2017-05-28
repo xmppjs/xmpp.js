@@ -8,7 +8,7 @@
   'ping',
   'stanza-router',
   'version',
-  'time'
+  'time',
 ].map(plugin => require(`./${plugin}`)).forEach((plugin) => {
   module.exports[plugin.name] = plugin
 })

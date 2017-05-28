@@ -1,6 +1,6 @@
 'use strict'
 
-var JID = require('./lib/JID')
+const JID = require('./lib/JID')
 
 module.exports = function createJID (a, b, c) {
   return new JID(a, b, c)

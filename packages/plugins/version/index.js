@@ -11,9 +11,9 @@ module.exports = {
     return {
       entity,
       handle,
-      query
+      query,
     }
   },
   handle: _handle,
-  query: _query
+  query: _query,
 }

@@ -30,7 +30,7 @@ function parse (str) {
   if (query) {
     uri.query = {
       type: type.substr(1),
-      params: params
+      params: params,
     }
   }
   return uri

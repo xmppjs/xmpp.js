@@ -16,12 +16,12 @@ function getURIs (domain) {
   return resolve(domain, {srv: [
     {
       service: 'xmpps-client',
-      protocol: 'tcp'
+      protocol: 'tcp',
     },
     {
       service: 'xmpp-client',
-      protocol: 'tcp'
-    }
+      protocol: 'tcp',
+    },
   ]})
   .then(records => {
     return records.map(record => record.uri).filter(record => record)
@@ -68,6 +68,6 @@ module.exports.plugin = function plugin (entity) {
   }
 
   return {
-    entity
+    entity,
   }
 }

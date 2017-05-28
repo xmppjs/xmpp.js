@@ -34,7 +34,7 @@ function mapIdentites ({attrs}) {
     category: attrs.category,
     type: attrs.type,
     name: attrs.name || '',
-    lang: attrs['xml:lang'] || ''
+    lang: attrs['xml:lang'] || '',
   }
 }
 
@@ -97,7 +97,7 @@ function plugin (entity) {
       xmlns: NS_CAPS,
       hash: 'sha-1',
       node,
-      ver: hash(query)
+      ver: hash(query),
     })
   })
 
@@ -108,7 +108,7 @@ function plugin (entity) {
     },
     setNode (s) {
       node = s
-    }
+    },
   }
 }
 
@@ -116,5 +116,5 @@ module.exports = {
   name: 'entity-capabilities',
   sortIdentities,
   hash,
-  plugin
+  plugin,
 }

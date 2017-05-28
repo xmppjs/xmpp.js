@@ -1,7 +1,7 @@
 'use strict'
 
-var inherits = require('inherits')
-var Element = require('ltx').Element
+const inherits = require('inherits')
+const Element = require('ltx').Element
 
 function Stanza (name, attrs) {
   Element.call(this, name, attrs)
@@ -20,7 +20,7 @@ Object.defineProperty(Stanza.prototype, 'from', {
   },
   set: function (from) {
     this.attrs.from = from
-  }
+  },
 })
 
 Object.defineProperty(Stanza.prototype, 'to', {
@@ -29,7 +29,7 @@ Object.defineProperty(Stanza.prototype, 'to', {
   },
   set: function (to) {
     this.attrs.to = to
-  }
+  },
 })
 
 Object.defineProperty(Stanza.prototype, 'id', {
@@ -38,7 +38,7 @@ Object.defineProperty(Stanza.prototype, 'id', {
   },
   set: function (id) {
     this.attrs.id = id
-  }
+  },
 })
 
 Object.defineProperty(Stanza.prototype, 'type', {
@@ -47,7 +47,7 @@ Object.defineProperty(Stanza.prototype, 'type', {
   },
   set: function (type) {
     this.attrs.type = type
-  }
+  },
 })
 
 module.exports = Stanza

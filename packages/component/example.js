@@ -1,9 +1,11 @@
-/* eslint-disable */
-
 'use strict'
 
-const {xml, Component} = require('.') // require('@xmpp/component')
-const entity = new Component()
+/* eslint-disable no-console */
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
+const {xml, component} = require('.') // require('@xmpp/component')
+const entity = component()
 
 // emitted for any error
 entity.on('error', (err) => {
@@ -22,7 +24,6 @@ entity.on('reconnected', () => {
   console.log('reconnected')
 })
 
-
 // emitted for incoming stanza _only_ (iq/presence/message) qualified with the right namespace
 // entity.on('stanza', (stanza) => {
 //   console.log('stanza', stanza.toString())
@@ -33,11 +34,11 @@ entity.on('reconnected', () => {
 //   console.log('nonza', nonza.toString())
 // })
 
-// emitted for any in our out XML fragment
 // useful for logging raw XML traffic
-entity.on('fragment', (input, output) => {
-  console.log(output ? '=>' : '<=', (output || input).trim())
-})
+// emitted for every fragment out
+entity.on('input', (data) => console.log('⮈ IN ', data))
+// emitted for every fragment in
+entity.on('output', (data) => console.log('⮊ OUT', data))
 
 // emitted for any in our out XML root element
 // useful for logging
@@ -72,7 +73,7 @@ entity.on('online', (jid) => {
 })
 
 // "start" opens the socket and the XML stream
-entity.start('xmpp://node-xmpp.localhost:5347')
+entity.start({uri: 'xmpp://localhost:5347', domain: 'node-xmpp.localhost'})
   // resolves once online
   .then((jid) => {
     console.log('started', jid.toString())

@@ -24,13 +24,13 @@ module.exports.plugin = function plugin (entity) {
     // priority: 2000,
     match,
     run: (entity) => {
-      return caller.set(entity._domain, xml`<session xmlns='${NS}'/>`)
-    }
+      return caller.set(entity.domain, xml`<session xmlns='${NS}'/>`)
+    },
   }
 
   const streamFeatures = entity.plugin(streamfeatures)
   streamFeatures.add(streamFeature)
   return {
-    entity
+    entity,
   }
 }

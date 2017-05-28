@@ -16,7 +16,7 @@ const streamFeature = {
   restart: true,
   run: (entity, features) => {
     return entity.plugins.sasl.gotFeatures(features)
-  }
+  },
 }
 
 module.exports.name = 'sasl'

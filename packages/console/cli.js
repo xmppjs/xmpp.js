@@ -13,7 +13,7 @@ module.exports = function (flags, endpoint) {
   const options = {
     input: process.stdin,
     output: process.stdout,
-    prompt: chalk.magenta.bold('✏ ')
+    prompt: chalk.magenta.bold('✏ '),
   }
   if (parseInt(process.env.NODE_NO_READLINE)) {
     options.terminal = false
@@ -95,7 +95,7 @@ module.exports = function (flags, endpoint) {
     xconsole.ask({
       text: 'Enter endpoint',
       value: 'ws://localhost:5280/xmpp-websocket',
-      type: 'url'
+      type: 'url',
     }).then((endpoint) => {
       return entity.connect(endpoint)
     })

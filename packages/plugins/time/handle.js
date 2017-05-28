@@ -26,7 +26,7 @@ function plugin (entity) {
   })
 
   return {
-    entity
+    entity,
   }
 }
 
@@ -34,5 +34,5 @@ module.exports = {
   NS_TIME,
   match,
   name: 'time-handle',
-  plugin
+  plugin,
 }

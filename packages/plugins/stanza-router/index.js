@@ -1,26 +1,26 @@
 'use strict'
 
-function plugin (entity) {
-  const routes = new Map()
-  return {
-    entity,
-    routes,
-    register () {
-      this.entity.on('element', this.handler)
-    },
-    unregister () {
-      this.entity.removeListener('element', this.handler)
-    },
-    add (match, handle) {
-      routes.set(match, handle)
-    },
-    handler (stanza) {
-      routes.forEach((handle, match) => {
-        if (match(stanza)) handle(stanza, entity)
+const plugin = require('@xmpp/plugin')
+
+module.exports = plugin('stanza-router', {
+  start () {
+    this.routes = new Map()
+    this.handler = (element) => {
+      this.routes.forEach((handle, match) => {
+        if (match(element)) handle(element, this.entity)
       })
     }
-  }
-}
-
-module.exports.name = 'stanza-router'
-module.exports.plugin = plugin
+    this.entity.on('element', this.handler)
+  },
+  stop () {
+    delete this.routes
+    this.entity.off('element', this.handler)
+    delete this.handler
+  },
+  add (match, handle) {
+    this.routes.set(match, handle)
+  },
+  remove (match, handle) {
+    this.routes.delete(match)
+  },
+})

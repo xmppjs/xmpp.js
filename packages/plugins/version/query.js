@@ -21,12 +21,12 @@ function plugin (entity) {
     },
     query (to, ...args) {
       return caller.get(to, xml`<query xmlns='${NS_VERSION}'/>`, ...args)
-    }
+    },
   }
 }
 
 module.exports = {
   name: 'version-query',
   NS_VERSION,
-  plugin
+  plugin,
 }

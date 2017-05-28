@@ -4,23 +4,13 @@ const Promise = require('bluebird')
 const EventEmitter = require('events')
 const xml = require('@xmpp/xml')
 
-function trim (el) {
-  el.children.forEach((child, idx) => {
-    if (typeof child === 'string') el.children[idx] = child.trim()
-    else trim(child)
-  })
-  return el
-}
-
 class Console extends EventEmitter {
   constructor (entity) {
     super()
     this.entity = entity
 
-    entity.on('fragment', (input, output) => {
-      if (input) this.input(input)
-      if (output) this.output(output)
-    })
+    entity.on('input', data => this.input(data))
+    entity.on('output', data => this.output(data))
 
     entity.on('connect', () => {
       this.info('connected')
@@ -57,7 +47,7 @@ class Console extends EventEmitter {
         const options = {
           text: 'Choose stream feature',
           cancelText: 'Done',
-          choices: features.map(({name}) => name)
+          choices: features.map(({name}) => name),
         }
         this.choose(options).then((feature) => {
           return features.find((f) => f.name === feature).run()
@@ -70,18 +60,18 @@ class Console extends EventEmitter {
       entity.plugins['sasl'].getCredentials = () => {
         return this.askMultiple([
           {
-            text: 'enter username'
+            text: 'enter username',
           },
           {
             text: 'Enter password',
-            type: 'password'
-          }
+            type: 'password',
+          },
         ])
       }
       entity.plugins['sasl'].getMechanism = (mechs) => {
         return this.choose({
           text: 'Choose SASL mechanism',
-          choices: mechs
+          choices: mechs,
         })
       }
     }
@@ -90,12 +80,12 @@ class Console extends EventEmitter {
     if (register) {
       register.onFields = (fields, register) => {
         return this.ask({
-          text: 'Choose username'
+          text: 'Choose username',
         })
         .then((username) => {
           return this.ask({
             text: 'Choose password',
-            type: 'password'
+            type: 'password',
           }).then(password => register(username, password))
         })
       }
@@ -105,7 +95,8 @@ class Console extends EventEmitter {
     if (bind) {
       bind.getResource = () => {
         return this.ask({
-          text: 'Enter resource or leave empty'
+          text: 'Enter resource or leave empty',
+          value: 'console',
         })
       }
     }
@@ -113,7 +104,7 @@ class Console extends EventEmitter {
     // component
     entity.on('authenticate', (auth) => {
       this.ask({
-        text: 'Enter password'
+        text: 'Enter password',
       }).then(auth).catch((err) => {
         this.error('authentication', err.message)
       })
@@ -122,7 +113,7 @@ class Console extends EventEmitter {
     entity.on('connect', () => {
       this.ask({
         text: 'Enter domain',
-        value: 'localhost'
+        value: 'localhost',
       }).then((domain) => {
         entity.open({domain}).catch((err) => {
           this.error('open - ', err.message)
@@ -150,7 +141,7 @@ class Console extends EventEmitter {
     } else {
       el = frag
     }
-    return xml.stringify(trim(el), '  ').trim()
+    return xml.stringify(el, '  ')
   }
 
   askMultiple (options) {

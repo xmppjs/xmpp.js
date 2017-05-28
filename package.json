@@ -2,14 +2,21 @@
   "private": true,
   "devDependencies": {
     "ava": "^0.19.1",
+    "babel-cli": "^6.24.1",
     "babel-preset-es2015": "^6.22.0",
     "babel-register": "^6.23.0",
+    "babili": "^0.1.2",
     "browserify": "^14.1.0",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
     "lerna": "^2.0.0-rc.4",
     "pem": "^1.9.4",
     "pify": "^2.3.0",
-    "sinon": "^2.2.0",
-    "standard": "^10.0.2"
+    "sinon": "^2.2.0"
   },
   "ava": {
     "require": "babel-register",
@@ -17,13 +24,8 @@
     "files": [
       "packages/*/test.js",
       "packages/*/ava/*.js",
-      "packages/*/ava/unit/**/*.js"
-    ]
-  },
-  "standard": {
-    "ignore": [
-      "packages/console/public/vendor/",
-      "server/modules/"
+      "packages/*/ava/unit/**/*.js",
+      "packages/plugins/*/test.js"
     ]
   }
 }

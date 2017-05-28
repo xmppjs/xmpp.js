@@ -16,12 +16,12 @@ function lookup (domain, options = {}) {
           {
             family,
             address,
-            uri: 'xmpps' + uri + '5223'
+            uri: 'xmpps' + uri + '5223',
           },
           {
             family,
             address,
-            uri: 'xmpp' + uri + '5222'
+            uri: 'xmpp' + uri + '5222',
           }
         )
       })
@@ -42,7 +42,7 @@ function resolveTxt (domain, {owner = '_xmppconnect'}) {
             attribute,
             value,
             method: attribute.split('-').pop(),
-            uri: value
+            uri: value,
           }
         }).sort(compareAltConnections))
       }
@@ -84,7 +84,7 @@ function lookupSrvs (srvs, options) {
         const {port, service} = srv
         const addr = address.address
         addresses.push(Object.assign({}, address, srv, {
-          uri: `${service.split('-')[0]}://${address.family === 6 ? '[' + addr + ']' : addr}:${port}`
+          uri: `${service.split('-')[0]}://${address.family === 6 ? '[' + addr + ']' : addr}:${port}`,
         }))
       })
     })
@@ -96,44 +96,44 @@ function resolve (domain, options = {}) {
     options.srv = [
       {
         service: 'xmpps-client',
-        protocol: 'tcp'
+        protocol: 'tcp',
       },
       {
         service: 'xmpp-client',
-        protocol: 'tcp'
+        protocol: 'tcp',
       },
       {
         service: 'xmpps-server',
-        protocol: 'tcp'
+        protocol: 'tcp',
       },
       {
         service: 'xmpp-server',
-        protocol: 'tcp'
+        protocol: 'tcp',
       },
       {
         service: 'stun',
-        protocol: 'tcp'
+        protocol: 'tcp',
       },
       {
         service: 'stun',
-        protocol: 'udp'
+        protocol: 'udp',
       },
       {
         service: 'stuns ',
-        protcol: 'tcp'
+        protcol: 'tcp',
       },
       {
         service: 'turn',
-        protocol: 'tcp'
+        protocol: 'tcp',
       },
       {
         service: 'turn',
-        protocol: 'udp'
+        protocol: 'udp',
       },
       {
         service: 'turns',
-        protcol: 'tcp'
-      }
+        protcol: 'tcp',
+      },
     ]
   }
   const family = {options}

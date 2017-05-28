@@ -20,7 +20,7 @@ const streamFeature = {
   match,
   run: (entity, features) => {
     return entity.plugins.register.gotFeatures(features)
-  }
+  },
 }
 
 module.exports.name = 'register'

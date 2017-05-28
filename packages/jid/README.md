@@ -20,19 +20,18 @@ npm install @xmpp/jid
 ## Usage
 
 ```javascript
-var JID = require('@xmpp/jid')
+var jid = require('@xmpp/jid')
 
 /*
- * All return an instance of JID.JID, the new operator is optional.
+ * All return an instance of jid.JID
  */
-var addr = new JID('alice@wonderland.net/rabbithole')          // OK
-var addr = JID`${'alice'}@${'wonderland.net'}/${'rabbithole'}` // OK, es6 tagged template string
-var addr = new JID('alice', 'wonderland.net', 'rabbithole')    // BEST; see section on escaping below
+var addr = jid('alice@wonderland.net/rabbithole')          // OK
+var addr = jid('alice', 'wonderland.net', 'rabbithole')    // BEST; see section on escaping below
 
-addr instanceof JID.JID // true
+addr instanceof jid.JID // true
 
 // domain JIDs are created passing the domain as the first argument
-var addr = JID('wonderland.net')
+var addr = jid('wonderland.net')
 
 /*
  * local
@@ -66,9 +65,9 @@ addr.bare()     // returns a JID without resource
 
 addr.equals(some_jid) // returns true if the two JIDs are equal, false otherwise
 // same as
-JID.equal(addr, some_jid)
+jid.equal(addr, some_jid)
 
-JID.is(addr) // returns true if the passed argument is an instance of JID.JID, false otherwise
+jid.is(addr) // returns true if the passed argument is an instance of jid.JID, false otherwise
 ```
 
 ## Escaping
@@ -77,14 +76,14 @@ The [XEP-0106](http://xmpp.org/extensions/xep-0106.html) defines a method to esc
 
 ```javascript
 // GOOD
-new JID(local, domain, resource)
+jid(local, domain, resource)
 ```
 
 over
 
 ```javascript
 // BAD
-new JID(local@domain/resource)
+jid(local@domain/resource)
 ```
 
 for user input.

@@ -1,11 +1,11 @@
-/* eslint-disable */
-
 'use strict'
+
+/* eslint-disable no-console */
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-const {Client, xml} = require('./index') // require('@xmpp/client')
-const entity = new Client()
+const {client, xml} = require('./index') // require('@xmpp/client')
+const entity = client()
 
 // emitted for any error
 entity.on('error', (err) => {
@@ -15,7 +15,6 @@ entity.on('error', (err) => {
 entity.on('close', () => {
   console.log('closed')
 })
-
 
 // emitted for incoming stanza _only_ (iq/presence/message) qualified with the right namespace
 // entity.on('stanza', (stanza) => {
@@ -27,11 +26,11 @@ entity.on('close', () => {
 //   console.log('nonza', nonza.toString())
 // })
 
-// emitted for any in our out XML fragment
 // useful for logging raw XML traffic
-entity.on('fragment', (input, output) => {
-  console.log(output ? '=>' : '<=', (output || input).trim())
-})
+// emitted for every fragment out
+entity.on('input', (data) => console.log('⮈ IN ', data))
+// emitted for every fragment in
+entity.on('output', (data) => console.log('⮊ OUT', data))
 
 // emitted for any in our out XML root element
 // useful for logging

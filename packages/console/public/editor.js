@@ -41,23 +41,23 @@ const tags = {
     to: null,
     from: null,
     type: null,
-    xmlns: null
+    xmlns: null,
   },
   iq: {
     attrs: {
-      type: ['get', 'set', 'result', 'error']
-    }
+      type: ['get', 'set', 'result', 'error'],
+    },
   },
   presence: {
     attrs: {
-      type: ['subscribe', 'unsubscribe', 'probe', 'error', 'subscribed', 'unsubscribed', 'available', 'unavailable']
-    }
+      type: ['subscribe', 'unsubscribe', 'probe', 'error', 'subscribed', 'unsubscribed', 'available', 'unavailable'],
+    },
   },
   message: {
     attrs: {
-      type: ['chat', 'normal']
-    }
-  }
+      type: ['chat', 'normal'],
+    },
+  },
 }
 
 const editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
@@ -72,10 +72,10 @@ const editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
     "'/'": completeIfAfterLt,
     "' '": completeIfInTag,
     "'='": completeIfInTag,
-    'Ctrl-Space': 'autocomplete'
+    'Ctrl-Space': 'autocomplete',
   },
   hintOptions: {schemaInfo: tags},
-  theme: 'solarized light'
+  theme: 'solarized light',
 })
 
 module.exports = editor
