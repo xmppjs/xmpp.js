@@ -4,21 +4,21 @@ const LtxParser = require('ltx/lib/parsers/ltx')
 const createStanza = require('./createStanza')
 const escape = require('ltx').escapeXML
 
-function tag (literals, ...substitutions) {
+function tag(literals, ...substitutions) {
   const parser = new LtxParser()
 
   let el
   let tree
   let i
-  parser.on('startElement', function (name, attrs) {
+  parser.on('startElement', (name, attrs) => {
     const child = createStanza(name, attrs)
-    if (!el) {
-      el = child
-    } else {
+    if (el) {
       el = el.cnode(child)
+    } else {
+      el = child
     }
   })
-  parser.on('endElement', function (name) {
+  parser.on('endElement', name => {
     if (name === el.name) {
       if (el.parent) {
         el = el.parent
@@ -29,13 +29,17 @@ function tag (literals, ...substitutions) {
     }
   })
   parser.on('text', str => {
-    if (!el) return
+    if (!el) {
+      return
+    }
 
     if (substitutions[i - 1] === str) {
       el.t(str)
     } else {
       str = str.trim()
-      if (str) el.t(str)
+      if (str) {
+        el.t(str)
+      }
     }
   })
 

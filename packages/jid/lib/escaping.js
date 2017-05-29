@@ -1,9 +1,11 @@
 'use strict'
 
 module.exports.detect = function (local) {
-  if (!local) return false
+  if (!local) {
+    return false
+  }
 
-  // remove all escaped sequences
+  // Remove all escaped sequences
   const tmp = local
     .replace(/\\20/g, '')
     .replace(/\\22/g, '')
@@ -16,13 +18,12 @@ module.exports.detect = function (local) {
     .replace(/\\40/g, '')
     .replace(/\\5c/g, '')
 
-  // detect if we have unescaped sequences
+  // Detect if we have unescaped sequences
   const search = tmp.search(/\\| |"|&|'|\/|:|<|>|@/g)
   if (search === -1) {
     return false
-  } else {
-    return true
   }
+  return true
 }
 
 /**
@@ -33,7 +34,9 @@ module.exports.detect = function (local) {
  * @return An escaped local part
  */
 module.exports.escape = function (local) {
-  if (local === null) return null
+  if (local === null) {
+    return null
+  }
 
   return local
     .replace(/^\s+|\s+$/g, '')
@@ -58,7 +61,9 @@ module.exports.escape = function (local) {
  * @return unescaped local part
  */
 module.exports.unescape = function (local) {
-  if (local === null) return null
+  if (local === null) {
+    return null
+  }
 
   return local
     .replace(/\\20/g, ' ')

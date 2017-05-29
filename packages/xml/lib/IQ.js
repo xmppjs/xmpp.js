@@ -3,7 +3,7 @@
 const Stanza = require('./Stanza')
 const inherits = require('inherits')
 
-function IQ (attrs) {
+function IQ(attrs) {
   Stanza.call(this, 'iq', attrs)
 }
 

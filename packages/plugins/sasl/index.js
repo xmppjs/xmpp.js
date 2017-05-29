@@ -10,22 +10,22 @@ const SASLFactory = require('saslmechanisms')
 const NS = 'urn:ietf:params:xml:ns:xmpp-sasl'
 
 class SASLError extends XMPPError {
-  constructor (...args) {
+  constructor(...args) {
     super(...args)
     this.name = 'SASLError'
   }
 }
 
-function match (features) {
+function match(features) {
   return features.getChild('mechanisms', NS)
 }
 
-function getMechanismNames (features) {
+function getMechanismNames(features) {
   return features.getChild('mechanisms', NS).children.map(el => el.text())
 }
 
 module.exports = plugin('sasl', {
-  start () {
+  start() {
     this.SASL = new SASLFactory()
     this.streamFeature = {
       name: 'sasl',
@@ -39,60 +39,62 @@ module.exports = plugin('sasl', {
     this.plugins['stream-features'].add(this.streamFeature)
   },
 
-  stop () {
+  stop() {
     delete this.SASL
     this.plugins['stream-features'].remove(this.streamFeature)
     delete this.streamFeature
     delete this.mech
   },
 
-  use (...args) {
+  use(...args) {
     this.SASL.use(...args)
   },
 
-  gotFeatures (features) {
+  gotFeatures(features) {
     const offered = getMechanismNames(features)
     const usable = this.getUsableMechanisms(offered)
     const available = this.getAvailableMechanisms()
 
-    return Promise.resolve(this.getMechanism(offered, usable, available, features)).then((mech) => {
+    return Promise.resolve(this.getMechanism(offered, usable, available, features)).then(mech => {
       this.mech = mech
       return Promise.resolve(this.handleMechanism(mech, features))
     })
   },
 
-  handleMechanism (mech, features) {
+  handleMechanism(mech, features) {
     return Promise.resolve(this.getCrendentials(mech, features)).then((username, password) => {
       return this.authenticate(mech, {username, password}, features)
     })
   },
 
-  getAvailableMechanisms () {
+  getAvailableMechanisms() {
     return this.SASL._mechs.map(({name}) => name)
   },
 
-  getUsableMechanisms (mechs) {
+  getUsableMechanisms(mechs) {
     const supported = this.getAvailableMechanisms()
-    return mechs.filter((mech) => {
+    return mechs.filter(mech => {
       return supported.indexOf(mech) > -1
     })
   },
 
-  getCredentials (mech, features) {
+  getCredentials(mech, features) { // eslint-disable-line no-unused-vars
     return []
   },
 
-  getMechanism (usable) {
+  getMechanism(usable) {
     return usable[0] // FIXME prefer SHA-1, ... maybe order usable, available, ... by preferred?
   },
 
-  findMechanism (name) {
+  findMechanism(name) {
     return this.SASL.create([name])
   },
 
-  authenticate (mechname, credentials, features) {
+  authenticate(mechname, credentials) {
     const mech = this.findMechanism(mechname)
-    if (!mech) return Promise.reject(new Error('no compatible mechanism'))
+    if (!mech) {
+      return Promise.reject(new Error('no compatible mechanism'))
+    }
 
     const {domain} = this.entity.options
     const creds = Object.assign({
@@ -106,8 +108,10 @@ module.exports = plugin('sasl', {
     }, credentials)
 
     return new Promise((resolve, reject) => {
-      const handler = (element) => {
-        if (element.attrs.xmlns !== NS) return
+      const handler = element => {
+        if (element.attrs.xmlns !== NS) {
+          return
+        }
 
         if (element.name === 'challenge') {
           mech.challenge(decode(element.text()))

@@ -1,11 +1,9 @@
 'use strict'
 
 const inherits = require('inherits')
-const EventEmitter = require('events').EventEmitter
+const EventEmitter = require('events')
 const LtxParser = require('ltx/lib/parsers/ltx')
-const xml = require('@xmpp/xml')
-const Stanza = xml.Stanza
-const Element = xml.Element
+const {Stanza, Element} = require('@xmpp/xml')
 
 /**
  * Recognizes <stream:stream> and collects stanzas used for ordinary
@@ -14,7 +12,7 @@ const Element = xml.Element
  * API: write(data) & end(data)
  * Events: streamStart, stanza, end, error
  */
-function StreamParser (options) {
+function StreamParser(options) {
   EventEmitter.call(this)
   const self = this
 
@@ -28,7 +26,7 @@ function StreamParser (options) {
   /* Will be reset upon first stanza, but enforce maxStanzaSize until it is parsed */
   this.bytesParsedOnStanzaBegin = 0
 
-  this.parser.on('startElement', function (name, attrs) {
+  this.parser.on('startElement', (name, attrs) => {
     if (!self.element) {
       self.emit('startElement', name, attrs)
       self.emit('start', new Element(name, attrs))
@@ -39,7 +37,7 @@ function StreamParser (options) {
       self.emit('streamStart', attrs)
     } else {
       let child
-      if (!self.element) {
+      if (!self.element) { // eslint-disable-line no-negated-condition
         /* A new stanza */
         child = new Stanza(name, attrs)
         self.element = child
@@ -53,7 +51,7 @@ function StreamParser (options) {
     }
   })
 
-  this.parser.on('endElement', function (name) {
+  this.parser.on('endElement', name => {
     if (!self.element) {
       self.emit('endElement', name)
     }
@@ -64,11 +62,11 @@ function StreamParser (options) {
       if (self.element.parent) {
         self.element = self.element.parent
       } else {
-        /* element complete */
+        /* Element complete */
         self.emit('element', self.element)
         self.emit('stanza', self.element) // FIXME deprecate
         delete self.element
-        /* maxStanzaSize doesn't apply until next startElement */
+        /* MaxStanzaSize doesn't apply until next startElement */
         delete self.bytesParsedOnStanzaBegin
       }
     } else {
@@ -76,11 +74,13 @@ function StreamParser (options) {
     }
   })
 
-  this.parser.on('text', function (str) {
-    if (self.element) self.element.t(str)
+  this.parser.on('text', str => {
+    if (self.element) {
+      self.element.t(str)
+    }
   })
 
-  this.parser.on('entityDecl', function () {
+  this.parser.on('entityDecl', () => {
     /* Entity declarations are forbidden in XMPP. We must abort to
      * avoid a billion laughs.
      */
@@ -94,14 +94,14 @@ function StreamParser (options) {
 inherits(StreamParser, EventEmitter)
 
 /*
- * hack for most usecases, do we have a better idea?
+ * Hack for most usecases, do we have a better idea?
  *   catch the following:
  *   <?xml version="1.0"?>
  *   <?xml version="1.0" encoding="UTF-8"?>
  *   <?xml version="1.0" encoding="UTF-16" standalone="yes"?>
  */
 StreamParser.prototype.checkXMLHeader = function (data) {
-  // check for xml tag
+  // Check for xml tag
   const index = data.indexOf('<?xml')
 
   if (index !== -1) {
@@ -116,7 +116,7 @@ StreamParser.prototype.checkXMLHeader = function (data) {
 }
 
 StreamParser.prototype.write = function (data) {
-  // if (/^<stream:stream [^>]+\/>$/.test(data)) {
+  // If (/^<stream:stream [^>]+\/>$/.test(data)) {
   //   data = data.replace(/\/>$/, ">")
   // }
   if (this.parser) {

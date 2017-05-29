@@ -5,7 +5,7 @@ const client = require('../client-core')
 module.exports = function (p) {
   const entity = client()
   entity.socket = {
-    write (data, cb) {
+    write(data, cb) {
       cb()
     },
   }
@@ -14,7 +14,7 @@ module.exports = function (p) {
   return {
     entity,
     plugin,
-    test (element) {
+    test(element) {
       const p = entity.promise('send')
       entity.emit('element', element)
       return p

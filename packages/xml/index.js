@@ -3,9 +3,11 @@
 const ltx = require('ltx')
 const tag = require('./lib/tag')
 
-exports = module.exports = function xml () {
-  return tag.apply(null, arguments)
+function xml(...args) {
+  return tag(...args)
 }
+
+exports = module.exports = xml
 
 Object.assign(exports, ltx)
 

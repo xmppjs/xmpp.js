@@ -10,18 +10,22 @@
 const plugin = require('@xmpp/plugin')
 
 module.exports = plugin('stream-features', {
-  start () {
+  start() {
     this.features = []
     this.negotiated = []
 
     const {entity} = this
-    this.handler = (el) => {
-      if (el.name !== 'stream:features') return
+    this.handler = el => {
+      if (el.name !== 'stream:features') {
+        return
+      }
 
       const streamFeatures = this.selectFeatures(el)
-      if (streamFeatures.length === 0) return
+      if (streamFeatures.length === 0) {
+        return
+      }
 
-      const features = streamFeatures.map((feature) => {
+      const features = streamFeatures.map(feature => {
         return {
           name: feature.name,
           run: (...args) => {
@@ -45,14 +49,14 @@ module.exports = plugin('stream-features', {
     entity.on('nonza', this.handler)
   },
 
-  stop () {
+  stop() {
     delete this.features
     delete this.negotiated
     this.entity.off('nonza', this.handler)
     delete this.handler
   },
 
-  selectFeatures (el) {
+  selectFeatures(el) {
     return this.features
       .filter(f => f.match(el, this.entity) && this.negotiated.indexOf(f) === -1 && typeof f.priority === 'number')
       .sort((a, b) => {
@@ -60,12 +64,12 @@ module.exports = plugin('stream-features', {
       })
   },
 
-  onStreamFeatures (features) {
+  onStreamFeatures(features) {
     const feature = features.shift()
     feature.run()
   },
 
-  add ({name, priority, run, match, restart}) {
+  add({name, priority, run, match, restart}) {
     this.features.push({name, priority, run, match, restart})
   },
 })

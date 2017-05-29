@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const JID = require('..').JID
+const JID = require('../lib/JID')
 
 test('should serialize a "domain" JID', t => {
   const j = new JID(null, 'd')

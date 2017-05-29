@@ -3,17 +3,17 @@
 const EventEmitter = require('@xmpp/events')
 
 class Plugin extends EventEmitter {
-  attach (entity) {
+  attach(entity) {
     this.entity = entity
   }
 
-  detach (entity) {
+  detach() {
     delete this.entity
   }
 
-  // override
-  start () {}
-  stop () {}
+  // Override
+  start() {}
+  stop() {}
 }
 
 module.exports = Plugin

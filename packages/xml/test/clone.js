@@ -4,8 +4,8 @@ const test = require('ava')
 const {Stanza, Element} = require('..')
 
 const originalStanza = new Stanza('iq')
-  .c('foo', { xmlns: 'bar' }).up()
-  .c('bar', { xmlns: 'foo' }).root()
+  .c('foo', {xmlns: 'bar'}).up()
+  .c('bar', {xmlns: 'foo'}).root()
 
 test('clones the stanza', t => {
   const cloned = originalStanza.clone()
@@ -23,7 +23,7 @@ test('uses the correct constructor for children', t => {
   t.true(cloned.children[0] instanceof Element)
 })
 
-test("doesn't modify clone if original is modified", t => {
+test('doesn\'t modify clone if original is modified', t => {
   const cloned = originalStanza.clone()
   originalStanza.attr('foo', 'bar')
   t.is(cloned.attr('foo'), undefined)

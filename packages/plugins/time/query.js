@@ -7,19 +7,21 @@ const NS_TIME = 'urn:xmpp:time'
 
 const fields = ['tzo', 'utc']
 
-function plugin (entity) {
+function plugin(entity) {
   const caller = entity.plugin(iqCaller)
 
   return {
     entity,
-    get (...args) {
-      return this.query(...args).then((res) => {
+    get(...args) {
+      return this.query(...args).then(res => {
         const vars = {}
-        fields.forEach(field => { vars[field] = res.getChildText(field) || '' })
+        fields.forEach(field => {
+          vars[field] = res.getChildText(field) || ''
+        })
         return vars
       })
     },
-    query (...args) {
+    query(...args) {
       return caller.get(xml`<time xmlns='${NS_TIME}'/>`, ...args)
     },
   }

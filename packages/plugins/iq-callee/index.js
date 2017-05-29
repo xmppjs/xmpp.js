@@ -7,7 +7,7 @@ const NS_STANZA = 'urn:ietf:params:xml:ns:xmpp-stanzas'
 
 module.exports = plugin('iq-callee', {
   NS_STANZA,
-  match (stanza) {
+  match(stanza) {
     return (
       stanza.is('iq') &&
       (
@@ -16,34 +16,29 @@ module.exports = plugin('iq-callee', {
       )
     )
   },
-  add (name, NS, handle) {
+  add(name, NS, handle) {
     this.calls.set(`${name}:${NS}`, handle)
   },
-  remove (name, NS) {
+  remove(name, NS) {
     this.calls.delete(`${name}:${NS}`)
   },
-  start () {
+  start() {
     this.calls = new Map()
-    this.handler = (stanza) => {
+    this.handler = stanza => {
       const iq = xml`<iq to='${stanza.attrs.from}' from='${stanza.attrs.to}' id='${stanza.attrs.id}'/>`
 
-      const child = stanza.children[0]
+      const [child] = stanza.children
       const handler = this.calls.get(`${child.name}:${child.getNS()}`)
 
-      if (!handler) {
-        iq.attrs.type = 'error'
-        iq.cnode(child.clone())
-        iq.c('error', {type: 'cancel'})
-            .c('service-unavailable', NS_STANZA)
-      } else {
+      if (handler) {
         Promise.resolve(handler(stanza))
-        .then((res) => {
+        .then(res => {
           iq.attrs.type = 'result'
           if (xml.isElement(res)) {
             iq.cnode(res)
           }
         })
-        .catch((err) => {
+        .catch(err => {
           iq.attrs.type = 'error'
           if (xml.isElement(err)) {
             iq.cnode(err)
@@ -52,13 +47,18 @@ module.exports = plugin('iq-callee', {
                 .c('internal-server-error', NS_STANZA)
           }
         })
+      } else {
+        iq.attrs.type = 'error'
+        iq.cnode(child.clone())
+        iq.c('error', {type: 'cancel'})
+            .c('service-unavailable', NS_STANZA)
       }
 
       this.entity.send(iq)
     }
     this.plugins['stanza-router'].add(this.match, this.handler)
   },
-  stop () {
+  stop() {
     delete this.calls
     this.plugins['stanza-router'].remove(this.match)
     delete this.handler

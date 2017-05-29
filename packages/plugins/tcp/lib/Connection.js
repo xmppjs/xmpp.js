@@ -3,7 +3,7 @@
 const ConnectionTCP = require('@xmpp/connection-tcp')
 
 class Connection extends ConnectionTCP {
-  socketParameters (uri) {
+  socketParameters(uri) {
     const params = super.socketParameters(uri)
     params.port = params.port || 5222
     return params

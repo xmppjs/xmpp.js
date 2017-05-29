@@ -20,7 +20,7 @@ test('returns a Stanza if name is iq', t => {
 
 test('sets attributes and children for stanza', t => {
   const c = new Element('foo')
-  const e = createStanza('message', {'foo': 'bar'}, 'foo', c)
+  const e = createStanza('message', {foo: 'bar'}, 'foo', c)
   t.true(e instanceof Stanza)
   t.true(e.is('message'))
   t.is(e.attrs.foo, 'bar')
@@ -38,7 +38,7 @@ test('returns an Element if name is not message presence or iq', t => {
 
 test('sets attributes and children for element', t => {
   const c = new Stanza('message')
-  const e = createStanza('foo', {'foo': 'bar'}, 'foo', c)
+  const e = createStanza('foo', {foo: 'bar'}, 'foo', c)
   t.true(e instanceof Element)
   t.true(e.is('foo'))
   t.is(e.attrs.foo, 'bar')

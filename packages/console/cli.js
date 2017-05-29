@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-'use strict'
+'use strict' // eslint-disable-line node/shebang
 
 const readline = require('readline')
 const chalk = require('chalk')
@@ -15,7 +15,7 @@ module.exports = function (flags, endpoint) {
     output: process.stdout,
     prompt: chalk.magenta.bold('✏ '),
   }
-  if (parseInt(process.env.NODE_NO_READLINE)) {
+  if (Number(process.env.NODE_NO_READLINE)) {
     options.terminal = false
   }
   const rl = readline.createInterface(options)
@@ -48,20 +48,20 @@ module.exports = function (flags, endpoint) {
     this.log(chalk.magenta.bold('⮊ OUT\n') + this.beautify(el))
   }
   xconsole.choose = function (options) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.log(chalk.yellow.bold('?'), options.text, ':', options.choices.join(', '))
       prevent = true
-      rl.on('line', (line) => {
+      rl.on('line', line => {
         prevent = false
         resolve(line)
       })
     })
   }
   xconsole.ask = function (options) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.log(chalk.yellow.bold('?'), options.text)
       prevent = true
-      rl.on('line', (line) => {
+      rl.on('line', line => {
         prevent = false
         resolve(line)
       })
@@ -70,23 +70,28 @@ module.exports = function (flags, endpoint) {
 
   rl.prompt(true)
 
-  rl.on('line', (line) => {
-    if (prevent) return
-    // clear stdin - any better idea? please contribute
+  rl.on('line', line => {
+    if (prevent) {
+      return
+    }
+    // Clear stdin - any better idea? please contribute
     readline.moveCursor(process.stdout, 0, -1)
     readline.clearLine(process.stdout, 0)
 
     line = line.trim()
-    if (line) xconsole.send(line)
-    else rl.prompt()
+    if (line) {
+      xconsole.send(line)
+    } else {
+      rl.prompt()
+    }
   })
 
   rl.on('close', () => {
-    process.exit()
+    process.exit() // eslint-disable-line no-process-exit
   })
 
   entity.on('close', () => {
-    process.exit()
+    process.exit() // eslint-disable-line no-process-exit
   })
 
   if (endpoint) {
@@ -96,7 +101,7 @@ module.exports = function (flags, endpoint) {
       text: 'Enter endpoint',
       value: 'ws://localhost:5280/xmpp-websocket',
       type: 'url',
-    }).then((endpoint) => {
+    }).then(endpoint => {
       return entity.connect(endpoint)
     })
   }

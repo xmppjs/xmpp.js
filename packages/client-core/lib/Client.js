@@ -3,12 +3,12 @@
 const Connection = require('@xmpp/connection')
 
 class Client extends Connection {
-  constructor (options) {
+  constructor(options) {
     super(options)
     this.transports = []
   }
 
-  send (element, ...args) {
+  send(element, ...args) {
     if (
       !element.attrs.xmlns &&
       (element.is('iq') || element.is('message') || element.is('presence'))
@@ -18,7 +18,7 @@ class Client extends Connection {
     return super.send(element, ...args)
   }
 
-  connect (uri) {
+  connect(uri) {
     const Transport = this.transports.find(Transport => {
       try {
         return Transport.prototype.socketParameters(uri) !== undefined
@@ -27,7 +27,9 @@ class Client extends Connection {
       }
     })
 
-    if (!Transport) throw new Error('No compatible connection method found.')
+    if (!Transport) {
+      throw new Error('No compatible connection method found.')
+    }
 
     this.Transport = Transport
     this.Socket = Transport.prototype.Socket
@@ -35,23 +37,23 @@ class Client extends Connection {
     return super.connect(uri)
   }
 
-  socketParameters (...args) {
+  socketParameters(...args) {
     return this.Transport.prototype.socketParameters(...args)
   }
 
-  header (...args) {
+  header(...args) {
     return this.Transport.prototype.header(...args)
   }
 
-  headerElement (...args) {
+  headerElement(...args) {
     return this.Transport.prototype.headerElement(...args)
   }
 
-  footer (...args) {
+  footer(...args) {
     return this.Transport.prototype.footer(...args)
   }
 
-  footerElement (...args) {
+  footerElement(...args) {
     return this.Transport.prototype.footerElement(...args)
   }
 }

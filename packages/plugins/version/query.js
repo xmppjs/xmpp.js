@@ -7,19 +7,21 @@ const NS_VERSION = 'jabber:iq:version'
 
 const fields = ['os', 'version', 'name']
 
-function plugin (entity) {
+function plugin(entity) {
   const caller = entity.plugin(iqCaller)
 
   return {
     entity,
-    get (to, ...args) {
-      return this.query(to, ...args).then((res) => {
+    get(to, ...args) {
+      return this.query(to, ...args).then(res => {
         const vars = {}
-        fields.forEach(field => { vars[field] = res.getChildText(field) || '' })
+        fields.forEach(field => {
+          vars[field] = res.getChildText(field) || ''
+        })
         return vars
       })
     },
-    query (to, ...args) {
+    query(to, ...args) {
       return caller.get(to, xml`<query xmlns='${NS_VERSION}'/>`, ...args)
     },
   }

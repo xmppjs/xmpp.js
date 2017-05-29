@@ -1,7 +1,7 @@
 'use strict'
 
 class TimeoutError extends Error {
-  constructor (message) {
+  constructor(message) {
     super(message)
     this.name = 'TimeoutError'
   }
@@ -9,20 +9,24 @@ class TimeoutError extends Error {
 TimeoutError.prototype.name = 'TimeoutError'
 
 class EventEmitter {
-  constructor () {
+  constructor() {
     this._listeners = new Map()
   }
-  on (...args) {
+  on(...args) {
     this.addListener(...args)
   }
-  off (...args) {
+  off(...args) {
     this.removeListener(...args)
   }
-  addListener (event, listener) {
-    this._listeners.has(event) || this._listeners.set(event, new Set())
-    this._listeners.get(event).add(listener)
+  addListener(event, listener) {
+    let listeners = this._listeners.get(event)
+    if (!listeners) {
+      listeners = new Set()
+      this._listeners.set(event, listeners)
+    }
+    listeners.add(listener)
   }
-  removeListener (event, listener) {
+  removeListener(event, listener) {
     const listeners = this._listeners.get(event)
     if (listeners) {
       listeners.delete(listener)
@@ -31,14 +35,14 @@ class EventEmitter {
       }
     }
   }
-  once (event, listener) {
+  once(event, listener) {
     const expire = (...args) => {
       listener(...args)
       this.removeListener(event, expire)
     }
     this.addListener(event, expire)
   }
-  promise (event, timeout) {
+  promise(event, timeout) {
     return new Promise((resolve, reject) => {
       let timer
       const cleanup = () => {
@@ -52,11 +56,11 @@ class EventEmitter {
           cleanup()
         }, timeout)
       }
-      const onError = (reason) => {
+      function onError(reason) {
         reject(reason)
         cleanup()
       }
-      const onEvent = (value) => {
+      function onEvent(value) {
         resolve(value)
         cleanup()
       }
@@ -64,17 +68,17 @@ class EventEmitter {
       this.once(event, onEvent)
     })
   }
-  emit (event, arg) {
+  emit(event, arg) {
     const listeners = this._listeners.get(event)
     if (listeners) {
-      listeners.forEach((listener) => {
+      listeners.forEach(listener => {
         listener(arg)
       })
     } else if (event === 'error') {
       throw arg instanceof Error ? arg : new Error(arg)
     }
   }
-  listenerCount (event) {
+  listenerCount(event) {
     const listeners = this.listeners.get(event)
     return listeners ? listeners.size : 0
   }

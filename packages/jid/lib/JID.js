@@ -10,7 +10,7 @@ const escaping = require('./escaping')
  * @see http://tools.ietf.org/html/rfc6122#section-2
  * @see http://xmpp.org/extensions/xep-0106.html
  */
-function JID (a, b, c) {
+function JID(a, b, c) {
   this._local = null
   this.user = null // DEPRECATED
   this._domain = null
@@ -45,25 +45,28 @@ JID.prototype.parseJID = function (s) {
 
 JID.prototype.toString = function (unescape) {
   let s = this._domain
-  if (this._local) s = this.getLocal(unescape) + '@' + s
-  if (this._resource) s = s + '/' + this._resource
+  if (this._local) {
+    s = this.getLocal(unescape) + '@' + s
+  }
+  if (this._resource) {
+    s = s + '/' + this._resource
+  }
   return s
 }
 
 /**
  * Convenience method to distinguish users
- **/
+ * */
 JID.prototype.bare = function () {
   if (this._resource) {
     return new JID(this._local, this._domain, null)
-  } else {
-    return this
   }
+  return this
 }
 
 /**
  * Comparison function
- **/
+ * */
 JID.prototype.equals = function (other) {
   return (this._local === other._local) &&
     (this._domain === other._domain) &&
@@ -72,7 +75,7 @@ JID.prototype.equals = function (other) {
 
 /**
  * http://xmpp.org/rfcs/rfc6122.html#addressing-localpart
- **/
+ * */
 JID.prototype.setLocal = function (local, escape) {
   escape = escape || escaping.detect(local)
 

@@ -6,18 +6,18 @@ const xml = require('@xmpp/xml')
 
 const NS_VERSION = 'jabber:iq:version'
 
-function match (stanza) {
+function match(stanza) {
   return stanza.getChild('query', NS_VERSION)
 }
 
-function plugin (entity) {
+function plugin(entity) {
   const vars = Object.create(null)
 
   const disco = entity.plugin(discoInfo)
   disco.addFeature(NS_VERSION)
 
   const callee = entity.plugin(iqCallee)
-  callee.add(match, (match, cb) => {
+  callee.add(match, () => {
     const query = xml`<query xmlns='${NS_VERSION}'/>`
     Object.getOwnPropertyNames(vars).forEach(k => {
       query.c(k).t(vars[k])
@@ -28,13 +28,13 @@ function plugin (entity) {
   return {
     entity,
     vars,
-    set (key, value) {
+    set(key, value) {
       vars[key] = value
     },
-    get (key) {
+    get(key) {
       return vars[key]
     },
-    del (key) {
+    del(key) {
       delete vars[key]
     },
   }

@@ -1,25 +1,27 @@
 'use strict'
 
-const JID = require('@xmpp/jid').JID
-const IRI = require('iri').IRI
+const jid = require('@xmpp/jid')
+const {IRI} = require('iri')
 const querystring = require('querystring')
 
-function findQueryType (params) {
+function findQueryType(params) {
   return Object.getOwnPropertyNames(params).find(k => {
     return k[0] === '?' && params[k] === ''
   })
 }
 
-function parse (str) {
+function parse(str) {
   const iri = new IRI(str)
 
   const uri = {}
 
   const path = iri.path()
-  uri.path = new JID(path.startsWith('/') ? path.substr(1) : path)
+  uri.path = jid(path.startsWith('/') ? path.substr(1) : path)
 
   const authority = iri.authority()
-  if (authority) uri.authority = new JID(authority)
+  if (authority) {
+    uri.authority = jid(authority)
+  }
 
   const query = iri.query()
   const params = querystring.parse(query, ';')
@@ -30,7 +32,7 @@ function parse (str) {
   if (query) {
     uri.query = {
       type: type.substr(1),
-      params: params,
+      params,
     }
   }
   return uri

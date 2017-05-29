@@ -1,13 +1,13 @@
 'use strict'
 
 const test = require('ava')
-const parse = require('..').parse
-const JID = require('@xmpp/jid').JID
+const {parse} = require('..')
+const jid = require('@xmpp/jid')
 
 test('parse', t => {
   t.deepEqual(parse('xmpp://guest@example.com/support@example.com/truc?message;subject=Hello%20World'), {
-    authority: new JID('guest@example.com'),
-    path: new JID('support@example.com/truc'),
+    authority: jid('guest@example.com'),
+    path: jid('support@example.com/truc'),
     query: {
       type: 'message',
       params: {
@@ -16,10 +16,10 @@ test('parse', t => {
     },
   })
 
-  t.deepEqual(new JID('foobar'), new JID('foobar'))
+  t.deepEqual(jid('foobar'), jid('foobar'))
 
   t.deepEqual(parse('xmpp:support@example.com/truc?message;subject=Hello%20World;body=foobar'), {
-    path: new JID('support@example.com/truc'),
+    path: jid('support@example.com/truc'),
     query: {
       type: 'message',
       params: {
@@ -30,15 +30,15 @@ test('parse', t => {
   })
 
   t.deepEqual(parse('xmpp:support@example.com/truc'), {
-    path: new JID('support@example.com/truc'),
+    path: jid('support@example.com/truc'),
   })
 
   t.deepEqual(parse('xmpp:support@example.com/'), {
-    path: new JID('support@example.com/'),
+    path: jid('support@example.com/'),
   })
 
   t.deepEqual(parse('xmpp:support@example.com/?foo'), {
-    path: new JID('support@example.com/'),
+    path: jid('support@example.com/'),
     query: {
       type: 'foo',
       params: {},
@@ -46,7 +46,7 @@ test('parse', t => {
   })
 
   t.deepEqual(parse('xmpp:support@example.com?foo'), {
-    path: new JID('support@example.com'),
+    path: jid('support@example.com'),
     query: {
       type: 'foo',
       params: {},

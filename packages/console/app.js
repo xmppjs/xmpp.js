@@ -34,10 +34,11 @@ const cli = meow(`
 const [endpoint] = cli.input
 
 const int = cli.flags.web ? './web' : './cli'
-if (!cli.flags.type) cli.flags.type = 'client'
+if (!cli.flags.type) {
+  cli.flags.type = 'client'
+}
 require(int)(cli.flags, endpoint)
 
-process.on('unhandledRejection', (reason) => {
-  console.error(reason)
-  process.exit(1)
+process.on('unhandledRejection', reason => {
+  throw reason
 })

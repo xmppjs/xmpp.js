@@ -13,7 +13,7 @@ test('new Connection()', t => {
   t.is(conn.NS, NS_STREAM)
 })
 
-// test('waitHeader', t => {
+// Test('waitHeader', t => {
 //   const conn = new Connection()
 //   conn.NS = 'foo:bar'
 //

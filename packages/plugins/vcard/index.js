@@ -3,25 +3,26 @@
 const xml = require('@xmpp/xml')
 const iqCaller = require('../iq-caller')
 
-const NS_VCARD = 'vcard-temp'
+const NS = 'vcard-temp'
 
-const parsevCard = (el) => {
+const parse = el => {
   const dict = {}
-  el.children.forEach((c) => {
+  el.children.forEach(c => {
     if (c.children && typeof c.children[0] === 'string') {
       dict[c.name] = c.text()
     } else {
-      dict[c.name] = parsevCard(c)
+      dict[c.name] = parse(c)
     }
   })
   return dict
 }
 
-const buildvCard = (dict, parent) => {
-  const builder = parent || xml`<vCard xmlns="${NS_VCARD}" version="2.0"/>`
-  for (const [key, val] of Object.entries(dict)) {
+const build = (dict, parent) => {
+  const builder = parent || xml`<vCard xmlns='${NS}' version='2.0'/>`
+  for (const key of Object.keys(dict)) {
+    const val = dict[key]
     if (typeof val === 'object') {
-      builder.cnode(buildvCard(val, xml`<${key}/>`)).up()
+      builder.cnode(build(val, xml`<${key}/>`)).up()
     } else if (val) {
       builder.c(key).t(val)
     } else {
@@ -31,25 +32,24 @@ const buildvCard = (dict, parent) => {
   return builder
 }
 
-function plugin (entity) {
+function plugin(entity) {
   const caller = entity.plugin(iqCaller)
 
   return {
     entity,
-    get (...args) {
-      return caller.get(xml`<vCard xmlns='${NS_VCARD}'/>`, ...args)
-      .then(res => parsevCard(res))
+    get(...args) {
+      return caller.get(xml`<vCard xmlns='${NS}'/>`, ...args).then(parse)
     },
-    set (vcard) {
-      return caller.set(buildvCard(vcard))
+    set(vcard) {
+      return caller.set(build(vcard))
     },
   }
 }
 
 module.exports = {
   name: 'vcard',
-  NS_VCARD,
-  buildvCard,
-  parsevCard,
+  NS,
+  build,
+  parse,
   plugin,
 }
