@@ -9,8 +9,12 @@ const SASLFactory = require('saslmechanisms')
 
 const NS = 'urn:ietf:params:xml:ns:xmpp-sasl'
 
-class SASLError extends XMPPError {}
-SASLError.prototype.name = 'SASLError'
+class SASLError extends XMPPError {
+  constructor (...args) {
+    super(...args)
+    this.name = 'SASLError'
+  }
+}
 
 function match (features) {
   return features.getChild('mechanisms', NS)

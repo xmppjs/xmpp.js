@@ -59,6 +59,7 @@ class Connection extends EventEmitter {
     }
     listeners.close = () => {
       this.domain = ''
+      this.jid = null
       this.emit('close')
     }
     listeners.connect = () => {
