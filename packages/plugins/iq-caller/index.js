@@ -39,12 +39,12 @@ module.exports = plugin('iq-caller', {
   get (el, ...args) {
     const iq = xml`<iq type='get'/>`
     iq.cnode(el)
-    return this.request(iq)
+    return this.request(iq, ...args)
   },
   set (el, ...args) {
     const iq = xml`<iq type='set'/>`
     iq.cnode(el)
-    return this.request(iq)
+    return this.request(iq, ...args)
   },
   request (stanza, to) {
     return new Promise((resolve, reject) => {
