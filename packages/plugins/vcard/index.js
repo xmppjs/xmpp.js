@@ -36,11 +36,9 @@ function plugin (entity) {
 
   return {
     entity,
-    get (jid) {
-      return caller.get(jid, xml`<vCard xmlns='${NS_VCARD}'/>`)
-      .then((res) => {
-        return Promise.resolve(parsevCard(res))
-      })
+    get (...args) {
+      return caller.get(xml`<vCard xmlns='${NS_VCARD}'/>`, ...args)
+      .then(res => parsevCard(res))
     },
     set (vcard) {
       return caller.set(null, buildvCard(vcard))
