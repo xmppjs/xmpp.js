@@ -14,11 +14,12 @@ test('name', t => {
 })
 
 test.cb('get', t => {
-  t.plan(7)
+  t.plan(8)
 
   t.context.entity.promise('send').then((stanza) => {
     t.is(stanza.name, 'iq')
     t.is(stanza.attrs.type, 'get')
+    t.is(stanza.attrs.to, 'foo@bar')
     t.is(typeof stanza.attrs.id, 'string')
     t.is(stanza.children[0].toString(), '<vCard xmlns="vcard-temp"/>')
 
@@ -35,10 +36,30 @@ test.cb('get', t => {
     `)
   })
 
-  t.context.plugin.get().then((vcard) => {
+  t.context.plugin.get('foo@bar').then((vcard) => {
     t.is(vcard.FN, 'Foo Bar')
     t.is(vcard.N.FAMILY, 'Bar')
     t.is(vcard.N.GIVEN, 'Foo')
+    t.end()
+  })
+})
+
+test.cb('set', t => {
+  t.plan(4)
+
+  t.context.entity.promise('send').then((stanza) => {
+    t.is(stanza.name, 'iq')
+    t.is(stanza.attrs.type, 'set')
+    t.is(typeof stanza.attrs.id, 'string')
+    t.is(stanza.children[0].toString(), '<vCard xmlns="vcard-temp" version="2.0"><FN>Foo Bar</FN><N><FAMILY>Bar</FAMILY><GIVEN>Foo</GIVEN></N></vCard>')
+
+    t.context.entity.emit('element', xml`
+      <iq type='result' id='${stanza.attrs.id}'>
+      </iq>
+    `)
+  })
+
+  t.context.plugin.set({FN: 'Foo Bar', N: {FAMILY: 'Bar', GIVEN: 'Foo'}}).then((vcard) => {
     t.end()
   })
 })
