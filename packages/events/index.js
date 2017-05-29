@@ -1,6 +1,11 @@
 'use strict'
 
-class TimeoutError extends Error {}
+class TimeoutError extends Error {
+  constructor (message) {
+    super(message)
+    this.name = 'TimeoutError'
+  }
+}
 TimeoutError.prototype.name = 'TimeoutError'
 
 class EventEmitter {

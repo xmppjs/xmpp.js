@@ -35,7 +35,7 @@ test('calls JID with passed arguments', t => {
 })
 
 test('works as expected with new operator', t => {
-  const addr = new index('foo', 'bar', 'baz') // eslint-disable-line
+  const addr = new index('foo', 'bar', 'baz')  // eslint-disable-line new-cap
   t.true(addr instanceof JID)
   t.is(addr.toString(), 'foo@bar/baz')
 })

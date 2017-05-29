@@ -7,8 +7,12 @@ const {XMPPError} = require('@xmpp/connection')
 
 const NS = 'urn:ietf:params:xml:ns:xmpp-sasl'
 
-class SASLError extends XMPPError {}
-SASLError.prototype.name = 'SASLError'
+class SASLError extends XMPPError {
+  constructor (...args) {
+    super(...args)
+    this.name = 'SASLError'
+  }
+}
 
 function getMechanismNames (features) {
   return features.getChild('mechanisms', NS).children.map(el => el.text())

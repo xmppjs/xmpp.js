@@ -13,6 +13,7 @@
     "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
+    "eslint-plugin-unicorn": "^2.1.1",
     "lerna": "^2.0.0-rc.4",
     "pem": "^1.9.4",
     "pify": "^2.3.0",

@@ -1,6 +1,10 @@
+plugins:
+  - unicorn
+
 extends:
   - eslint:recommended
   - standard
+  - plugin:unicorn/recommended
 
 parserOptions:
   sourceType: script
@@ -15,3 +19,5 @@ rules:
   # ES2015 http://eslint.org/docs/rules/#ecmascript-6
   no-var: error
   prefer-const: error
+  # unicorn https://github.com/sindresorhus/eslint-plugin-unicorn
+  unicorn/filename-case: 0

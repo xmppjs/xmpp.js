@@ -15,7 +15,7 @@ function kill (pid) {
   return new Promise((resolve) => {
     try {
       process.kill(pid, 'SIGTERM')
-    } catch (e) {} // eslint-disable-line no-empty
+    } catch (err) {} // eslint-disable-line no-empty
     resolve(pid)
   })
 }

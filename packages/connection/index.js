@@ -8,17 +8,20 @@ const xml = require('@xmpp/xml')
 
 class XMPPError extends Error {
   constructor (condition, text, element) {
-    super()
+    super(condition + (text ? ` - ${text}` : ''))
+    this.name = 'XMPPError'
     this.condition = condition
     this.text = text
-    this.message = condition + (text ? ` - ${text}` : '')
     this.element = element
   }
 }
-XMPPError.prototype.name = 'XMPPError'
 
-class StreamError extends XMPPError {}
-StreamError.prototype.name = 'StreamError'
+class StreamError extends XMPPError {
+  constructor (...args) {
+    super(...args)
+    this.name = 'StreamError'
+  }
+}
 
 // we ignore url module from the browser bundle to reduce its size
 function getHostname (uri) {
