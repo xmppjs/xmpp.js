@@ -7,7 +7,7 @@ const caller = require('./caller')
 
 module.exports = plugin('ping', {
   NS_PING: 'urn:xmpp:ping',
-  ping (...args) {
+  ping(...args) {
     return this.plugins['ping-caller'].ping(...args)
   },
 }, [callee, caller])

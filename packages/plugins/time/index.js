@@ -5,7 +5,7 @@ const _query = require('./query')
 
 module.exports = {
   name: 'time',
-  plugin (entity) {
+  plugin(entity) {
     const handle = entity.plugin(_handle)
     const query = entity.plugin(_query)
     return {

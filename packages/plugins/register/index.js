@@ -11,7 +11,7 @@ const RegisterPlugin = require('./lib/Plugin')
 
 const NS_STREAM_FEATURE = 'http://jabber.org/features/iq-register'
 
-function match (features) {
+function match(features) {
   return features.getChild('register', NS_STREAM_FEATURE)
 }
 
@@ -24,7 +24,7 @@ const streamFeature = {
 }
 
 module.exports.name = 'register'
-module.exports.plugin = function plugin (entity) {
+module.exports.plugin = function plugin(entity) {
   const streamFeatures = entity.plugin(streamfeatures)
   streamFeatures.add(streamFeature)
 

@@ -1,17 +1,17 @@
 'use strict'
 
 module.exports.name = 'reconnect'
-module.exports.plugin = function plugin (entity) {
+module.exports.plugin = function plugin(entity) {
   let delay = 1000
 
-  function reconnect () {
+  function reconnect() {
     entity.emit('reconnecting')
     entity.connect(entity.connectOptions).then(() => {
       return entity.open(entity.openOptions)
     }).then(() => {
       entity.emit('reconnected')
     })
-      .catch((err) => {
+      .catch(err => {
         entity.emit('error', err)
         setTimeout(() => {
           reconnect()
@@ -19,7 +19,7 @@ module.exports.plugin = function plugin (entity) {
       })
   }
 
-  function online () {
+  function online() {
     entity.on('close', () => {
       setTimeout(() => {
         reconnect()
@@ -35,10 +35,10 @@ module.exports.plugin = function plugin (entity) {
 
   return {
     entity,
-    setDelay (d) {
+    setDelay(d) {
       delay = d
     },
-    getDelay () {
+    getDelay() {
       return delay
     },
   }

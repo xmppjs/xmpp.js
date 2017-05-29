@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const spy = require('sinon').spy
+const {spy} = require('sinon')
 const index = require('../index')
 const JID = require('../lib/JID')
 

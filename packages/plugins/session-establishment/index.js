@@ -11,19 +11,19 @@ const iqCaller = require('../iq-caller')
 
 const NS = 'urn:ietf:params:xml:ns:xmpp-session'
 
-function match (features) {
+function match(features) {
   return features.getChild('session', NS)
 }
 
 module.exports.name = 'session-establishment'
-module.exports.plugin = function plugin (entity) {
+module.exports.plugin = function plugin(entity) {
   const caller = entity.plugin(iqCaller)
 
   const streamFeature = {
     name: 'session-establishment',
-    // priority: 2000,
+    // Priority: 2000,
     match,
-    run: (entity) => {
+    run: entity => {
       return caller.set(entity.domain, xml`<session xmlns='${NS}'/>`)
     },
   }

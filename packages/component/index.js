@@ -4,7 +4,7 @@ const Component = require('./lib/Component')
 const xml = require('@xmpp/xml')
 const jid = require('@xmpp/jid')
 
-function component (...args) {
+function component(...args) {
   return new Component(...args)
 }
 

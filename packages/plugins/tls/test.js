@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const ConnectionTLS = require('../tls/lib/Connection')
+const ConnectionTLS = require('./lib/Connection')
 
 test('socketParameters()', t => {
   let params

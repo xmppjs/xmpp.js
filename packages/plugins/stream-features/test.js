@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const streamfeatures = require('../stream-features')
+const streamfeatures = require('.')
 const xml = require('@xmpp/xml')
 
 test.skip('selectFeature', t => {

@@ -11,36 +11,38 @@ const iqCaller = require('../iq-caller')
 
 const NS = 'urn:ietf:params:xml:ns:xmpp-bind'
 
-function makeBindElement (resource) {
+function makeBindElement(resource) {
   const stanza = xml`<bind xmlns='${NS}'/>`
-  if (resource) stanza.cnode(xml`<resource>${resource}</resource>`)
+  if (resource) {
+    stanza.cnode(xml`<resource>${resource}</resource>`)
+  }
   return stanza
 }
 
-function match (features) {
+function match(features) {
   return features.getChild('bind', NS)
 }
 
-function bind (caller, entity, resource) {
+function bind(caller, entity, resource) {
   return caller.set(makeBindElement(resource)).then(result => {
     entity._jid(result.getChild('jid').text())
   })
 }
 
 module.exports.name = 'bind'
-module.exports.plugin = function plugin (entity) {
+module.exports.plugin = function plugin(entity) {
   const caller = entity.plugin(iqCaller)
   const p = {
     entity,
-    getResource () {},
+    getResource() {},
   }
 
   const streamFeature = {
     name: 'bind',
     priority: 2500,
     match,
-    run: (entity) => {
-      return Promise.resolve((p.getResource())).then((resource) => {
+    run: entity => {
+      return Promise.resolve((p.getResource())).then(resource => {
         return bind(caller, entity, resource)
       })
     },

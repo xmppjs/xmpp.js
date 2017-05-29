@@ -25,9 +25,9 @@ test('datetime', t => {
 })
 
 test('offset', t => {
-  function fake (value) {
+  function fake(value) {
     return {
-      getTimezoneOffset () {
+      getTimezoneOffset() {
         return value
       },
     }

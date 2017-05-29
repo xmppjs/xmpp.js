@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const JID = require('..').JID
+const JID = require('../lib/JID')
 
 test('escape `space cadet@example.com`', t => {
   const esc = new JID('space cadet', 'example.com')

@@ -9,7 +9,7 @@ test('exports ltx', t => {
 })
 
 test('exports ltx properties', t => {
-  Object.keys(ltx).forEach((key) => {
+  Object.keys(ltx).forEach(key => {
     t.true(key in xml)
   })
 })

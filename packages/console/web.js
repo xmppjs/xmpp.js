@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-'use strict'
+'use strict' // eslint-disable-line node/shebang
 
 const express = require('express')
 const opn = require('opn')
@@ -13,20 +13,21 @@ module.exports = function (flags, endpoint) {
 
   app.use(express.static(path.join(__dirname, 'public')))
   app.get('/params', (req, res, next) => {
-    res.json({endpoint})
+    res.json({endpoint}, next)
   })
   app.use((req, res, next) => {
     if (req.method === 'GET' && req.accepts('html')) {
       return res.sendFile('index.html', {root: 'public'}, next)
-    } else {
-      return next()
     }
+    return next()
   })
 
   app.listen(port, () => {
     const url = `http://localhost:${port}`
 
-    if (!('open' in flags)) opn(url)
+    if (!('open' in flags)) {
+      opn(url)
+    }
     process.stdout.write(url)
   })
 }

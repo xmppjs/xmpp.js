@@ -2,12 +2,12 @@
 
 const EventEmitter = require('@xmpp/events')
 const StreamParser = require('@xmpp/streamparser')
-const JID = require('@xmpp/jid')
+const jid = require('@xmpp/jid')
 const url = require('url')
 const xml = require('@xmpp/xml')
 
 class XMPPError extends Error {
-  constructor (condition, text, element) {
+  constructor(condition, text, element) {
     super(condition + (text ? ` - ${text}` : ''))
     this.name = 'XMPPError'
     this.condition = condition
@@ -17,26 +17,25 @@ class XMPPError extends Error {
 }
 
 class StreamError extends XMPPError {
-  constructor (...args) {
+  constructor(...args) {
     super(...args)
     this.name = 'StreamError'
   }
 }
 
-// we ignore url module from the browser bundle to reduce its size
-function getHostname (uri) {
+// We ignore url module from the browser bundle to reduce its size
+function getHostname(uri) {
   if (url.parse) {
     const parsed = url.parse(uri)
     return parsed.hostname || parsed.pathname
-  } else {
-    const el = document.createElement('a')
-    el.href = uri
-    return el.hostname
   }
+  const el = document.createElement('a') // eslint-disable-line no-undef
+  el.href = uri
+  return el.hostname
 }
 
 class Connection extends EventEmitter {
-  constructor (options) {
+  constructor(options) {
     super()
     this.domain = null
     this.lang = null
@@ -49,10 +48,10 @@ class Connection extends EventEmitter {
     this.socketListeners = Object.create(null)
   }
 
-  _attachSocket (socket) {
+  _attachSocket(socket) {
     const sock = this.socket = socket
     const listeners = this.socketListeners
-    listeners.data = (data) => {
+    listeners.data = data => {
       data = data.toString('utf8')
       this.emit('input', data)
       this.parser.write(data)
@@ -65,7 +64,7 @@ class Connection extends EventEmitter {
     listeners.connect = () => {
       this.emit('connect')
     }
-    listeners.error = (error) => {
+    listeners.error = error => {
       this.emit('error', error)
     }
     sock.on('data', listeners.data)
@@ -74,20 +73,20 @@ class Connection extends EventEmitter {
     sock.on('connect', listeners.connect)
   }
 
-  _detachSocket (socket) {
+  _detachSocket() {
     const listeners = this.socketListeners
     Object.getOwnPropertyNames(listeners).forEach(k => {
       this.socket.removeListener(k, listeners[k])
     })
   }
 
-  _attachParser (parser) {
-    const errorListener = (error) => {
+  _attachParser(parser) {
+    const errorListener = error => {
       this.emit('error', error)
     }
 
     this.parser = parser
-    const elementListener = (element) => {
+    const elementListener = element => {
       if (element.name === 'stream:error') {
         this.stop()
         this.emit('error', new StreamError(
@@ -103,27 +102,27 @@ class Connection extends EventEmitter {
     parser.on('error', errorListener)
   }
 
-  _jid (jid) {
-    this.jid = JID(jid)
+  _jid(addr) {
+    this.jid = jid(addr)
     return this.jid
   }
 
-  _online () {
+  _online() {
     this.emit('online', this.jid)
   }
 
-  _authenticated () {
+  _authenticated() {
     this.emit('authenticated')
   }
 
-  id () {
+  id() {
     return Math.random().toString().split('0.')[1]
   }
 
   /**
-   * opens the socket then opens the stream
+   * Opens the socket then opens the stream
    */
-  start (options) {
+  start(options) {
     return new Promise((resolve, reject) => {
       if (typeof options === 'string') {
         options = {uri: options}
@@ -142,9 +141,9 @@ class Connection extends EventEmitter {
   }
 
   /**
-   * closes the stream then closes the socket
+   * Closes the stream then closes the socket
    */
-  stop () {
+  stop() {
     return new Promise((resolve, reject) => {
       this.close().catch(reject) // FIXME wait footer
       this.end().then(resolve, reject)
@@ -152,9 +151,9 @@ class Connection extends EventEmitter {
   }
 
   /**
-   * opens the socket
+   * Opens the socket
    */
-  connect (options) {
+  connect(options) {
     this.connectOptions = options
     return new Promise((resolve, reject) => {
       this._attachParser(new this.Parser())
@@ -168,10 +167,10 @@ class Connection extends EventEmitter {
   }
 
   /**
-   * closes the socket
+   * Closes the socket
    */
-  end () {
-    return new Promise((resolve, reject) => {
+  end() {
+    return new Promise(resolve => {
        // TODO timeout
       const handler = () => {
         this.socket.end()
@@ -182,11 +181,13 @@ class Connection extends EventEmitter {
   }
 
   /**
-   * opens the stream
+   * Opens the stream
    */
-  open (options) {
+  open(options) {
     this.openOptions = options
-    if (typeof options === 'string') options = {domain: options}
+    if (typeof options === 'string') {
+      options = {domain: options}
+    }
     return new Promise((resolve, reject) => {
       const {domain, lang} = options
 
@@ -216,107 +217,113 @@ class Connection extends EventEmitter {
   }
 
   /**
-   * closes the stream
+   * Closes the stream
    */
-  close () {
+  close() {
     return this.promiseWrite(this.footer(this.footerElement()))
   }
 
   /**
-   * restarts the stream
+   * Restarts the stream
    */
-  restart () {
+  restart() {
     return this.open(this.openOptions)
   }
 
-  send (element) {
+  send(element) {
     const root = element.root()
     return this.promiseWrite(root).then(() => {
       this.emit('send', root)
     })
   }
 
-  sendReceive (element, timeout = this.timeout) {
+  sendReceive(element, timeout = this.timeout) {
     return new Promise((resolve, reject) => {
       this.send(element).catch(reject)
       this.promise('element', timeout).then(resolve, reject)
     })
   }
 
-  promiseWrite (data) {
+  promiseWrite(data) {
     return new Promise((resolve, reject) => {
-      this.write(data, (err) => {
-        if (err) return reject(err)
-        else resolve()
+      this.write(data, err => {
+        if (err) {
+          return reject(err)
+        }
+        resolve()
       })
     })
   }
 
-  write (data, fn) {
-    fn = fn || function () {}
-    data = data.toString('utf8').trim()
-    this.socket.write(data, (err) => {
-      if (err) return fn(err)
+  write(data, fn = () => {}) {
+    data = data.toString('utf8')
+    this.socket.write(data, err => {
+      if (err) {
+        return fn(err)
+      }
       this.emit('output', data)
       fn()
     })
   }
 
-  writeReceive (data, timeout = this.timeout) {
+  writeReceive(data, timeout = this.timeout) {
     return new Promise((resolve, reject) => {
       this.promiseWrite(data).catch(reject)
       this.promise('element', timeout).then(resolve, reject)
     })
   }
 
-  isStanza (element) {
+  isStanza(element) {
     const {name} = element
     const NS = element.findNS()
     return (
-      // this.online && FIXME
+      // This.online && FIXME
       (NS ? NS === this.NS : true) &&
       (name === 'iq' || name === 'message' || name === 'presence')
     )
   }
 
-  isNonza (element) {
+  isNonza(element) {
     return !this.isStanza(element)
   }
 
-  plugin (plugin) {
+  plugin(plugin) {
     if (!this.plugins[plugin.name]) {
       this.plugins[plugin.name] = plugin.plugin(this)
       const p = this.plugins[plugin.name]
-      if (p && p.start) p.start()
-      else if (p && p.register) p.register()
+      if (p && p.start) {
+        p.start()
+      } else if (p && p.register) {
+        p.register()
+      }
     }
 
     return this.plugins[plugin.name]
   }
 
-  // override
-  header (el) {
+  // Override
+  header(el) {
     return el.toString()
   }
-  headerElement () {
+  headerElement() {
     return new xml.Element('', {
       version: '1.0',
       xmlns: this.NS,
     })
   }
-  footer (el) {
+  footer(el) {
     return el.toString()
   }
-  footerElement () {}
-  socketParameters (uri) {
+  footerElement() {}
+  socketParameters(uri) {
     const parsed = url.parse(uri)
-    parsed.port = +parsed.port
+    parsed.port = Number(parsed.port)
     parsed.host = parsed.hostname
     return parsed
   }
 }
 
-// overrirde
+// Overrirde
 Connection.prototype.NS = ''
 Connection.prototype.Socket = null
 Connection.prototype.Parser = StreamParser

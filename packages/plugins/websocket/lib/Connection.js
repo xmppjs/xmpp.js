@@ -14,21 +14,21 @@ const NS_FRAMING = 'urn:ietf:params:xml:ns:xmpp-framing'
 
 class ConnectionWebSocket extends Connection {
   // https://tools.ietf.org/html/rfc7395#section-3.6
-  footer () {
+  footer() {
     return new xml.Element('close', {
       xmlns: NS_FRAMING,
     })
   }
 
   // https://tools.ietf.org/html/rfc7395#section-3.4
-  headerElement () {
+  headerElement() {
     const el = super.headerElement()
     el.name = 'open'
     el.attrs.xmlns = NS_FRAMING
     return el
   }
 
-  socketParameters (uri) {
+  socketParameters(uri) {
     return uri.match(/^wss?:\/\//) ? uri : undefined
   }
 }

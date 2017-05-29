@@ -16,7 +16,7 @@ test('name', t => {
 test.cb('get', t => {
   t.plan(8)
 
-  t.context.entity.promise('send').then((stanza) => {
+  t.context.entity.promise('send').then(stanza => {
     t.is(stanza.name, 'iq')
     t.is(stanza.attrs.type, 'get')
     t.is(stanza.attrs.to, 'foo@bar')
@@ -36,7 +36,7 @@ test.cb('get', t => {
     `)
   })
 
-  t.context.plugin.get('foo@bar').then((vcard) => {
+  t.context.plugin.get('foo@bar').then(vcard => {
     t.is(vcard.FN, 'Foo Bar')
     t.is(vcard.N.FAMILY, 'Bar')
     t.is(vcard.N.GIVEN, 'Foo')
@@ -47,7 +47,7 @@ test.cb('get', t => {
 test.cb('set', t => {
   t.plan(4)
 
-  t.context.entity.promise('send').then((stanza) => {
+  t.context.entity.promise('send').then(stanza => {
     t.is(stanza.name, 'iq')
     t.is(stanza.attrs.type, 'set')
     t.is(typeof stanza.attrs.id, 'string')
@@ -59,7 +59,7 @@ test.cb('set', t => {
     `)
   })
 
-  t.context.plugin.set({FN: 'Foo Bar', N: {FAMILY: 'Bar', GIVEN: 'Foo'}}).then((vcard) => {
+  t.context.plugin.set({FN: 'Foo Bar', N: {FAMILY: 'Bar', GIVEN: 'Foo'}}).then(() => {
     t.end()
   })
 })

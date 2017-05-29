@@ -2,13 +2,16 @@
 
 const JID = require('./lib/JID')
 
-module.exports = function createJID (a, b, c) {
+function jid(a, b, c) {
   return new JID(a, b, c)
 }
-module.exports.JID = JID
-module.exports.equal = function (a, b) {
+
+exports = module.exports = jid.bind()
+exports.jid = jid
+exports.JID = JID
+exports.equal = function (a, b) {
   return a.equals(b)
 }
-module.exports.is = function (a) {
+exports.is = function (a) {
   return a instanceof JID
 }

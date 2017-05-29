@@ -1,5 +1,5 @@
 {
-  "private": true,
+	"private": true,
   "devDependencies": {
     "ava": "^0.19.1",
     "babel-cli": "^6.24.1",
@@ -8,8 +8,7 @@
     "babili": "^0.1.2",
     "browserify": "^14.1.0",
     "eslint": "^3.19.0",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-import": "^2.3.0",
+    "eslint-config-xo": "^0.18.2",
     "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
@@ -23,10 +22,8 @@
     "require": "babel-register",
     "babel": "inherit",
     "files": [
-      "packages/*/test.js",
-      "packages/*/ava/*.js",
-      "packages/*/ava/unit/**/*.js",
-      "packages/plugins/*/test.js"
+      "packages/**/test.js",
+      "packages/**/test/*.js"
     ]
   }
 }

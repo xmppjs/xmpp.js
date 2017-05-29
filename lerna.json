@@ -5,10 +5,10 @@
     "ignore": [
       "examples/",
       "example.js",
-      "ava/",
       "test/",
       "test.js",
-      ".eslintrc"
+      ".eslintrc",
+      ".eslintignore"
     ]
   },
   "packages": [

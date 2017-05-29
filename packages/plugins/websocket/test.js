@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const ConnectionWebSocket = require('../websocket/lib/Connection')
+const ConnectionWebSocket = require('./lib/Connection')
 
 test('socketParameters()', t => {
   let params

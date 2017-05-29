@@ -3,11 +3,13 @@
 const dns = require('dns')
 const compareAltConnections = require('./alt-connections').compare
 
-function lookup (domain, options = {}) {
+function lookup(domain, options = {}) {
   options.all = true
   return new Promise((resolve, reject) => {
     dns.lookup(domain, options, (err, addresses) => {
-      if (err) return reject(err)
+      if (err) {
+        return reject(err)
+      }
 
       const result = []
       addresses.forEach(({family, address}) => {
@@ -30,13 +32,15 @@ function lookup (domain, options = {}) {
   })
 }
 
-function resolveTxt (domain, {owner = '_xmppconnect'}) {
+function resolveTxt(domain, {owner = '_xmppconnect'}) {
   return new Promise((resolve, reject) => {
     dns.resolveTxt(`${owner}.${domain}`, (err, records) => {
-      if (err && err.code === 'ENOTFOUND') resolve([])
-      else if (err) reject(err)
-      else {
-        resolve(records.map((record) => {
+      if (err && err.code === 'ENOTFOUND') {
+        resolve([])
+      } else if (err) {
+        reject(err)
+      } else {
+        resolve(records.map(record => {
           const [attribute, value] = record[0].split('=')
           return {
             attribute,
@@ -50,13 +54,15 @@ function resolveTxt (domain, {owner = '_xmppconnect'}) {
   })
 }
 
-function resolveSrv (domain, {service, protocol}) {
+function resolveSrv(domain, {service, protocol}) {
   return new Promise((resolve, reject) => {
     dns.resolveSrv(`_${service}._${protocol}.${domain}`, (err, records) => {
-      if (err && err.code === 'ENOTFOUND') resolve([])
-      else if (err) reject(err)
-      else {
-        resolve(records.map((record) => {
+      if (err && err.code === 'ENOTFOUND') {
+        resolve([])
+      } else if (err) {
+        reject(err)
+      } else {
+        resolve(records.map(record => {
           return Object.assign(record, {service, protocol})
         }))
       }
@@ -64,23 +70,27 @@ function resolveSrv (domain, {service, protocol}) {
   })
 }
 
-function sortSrv (records) {
+function sortSrv(records) {
   return records.sort((a, b) => {
     const priority = a.priority - b.priority
-    if (priority !== 0) return priority
+    if (priority !== 0) {
+      return priority
+    }
 
     const weight = b.weight - a.weight
-    if (weight !== 0) return weight
+    if (weight !== 0) {
+      return weight
+    }
 
     return 0
   })
 }
 
-function lookupSrvs (srvs, options) {
+function lookupSrvs(srvs, options) {
   const addresses = []
-  return Promise.all(srvs.map((srv) => {
-    return lookup(srv.name, options).then((srvAddresses) => {
-      srvAddresses.forEach((address) => {
+  return Promise.all(srvs.map(srv => {
+    return lookup(srv.name, options).then(srvAddresses => {
+      srvAddresses.forEach(address => {
         const {port, service} = srv
         const addr = address.address
         addresses.push(Object.assign({}, address, srv, {
@@ -91,7 +101,7 @@ function lookupSrvs (srvs, options) {
   })).then(() => addresses)
 }
 
-function resolve (domain, options = {}) {
+function resolve(domain, options = {}) {
   if (!options.srv) {
     options.srv = [
       {
@@ -137,15 +147,15 @@ function resolve (domain, options = {}) {
     ]
   }
   const family = {options}
-  return lookup(domain, options).then((addresses) => {
-    return Promise.all(options.srv.map((srv) => {
-      return resolveSrv(domain, Object.assign({}, srv, {family})).then((records) => {
+  return lookup(domain, options).then(addresses => {
+    return Promise.all(options.srv.map(srv => {
+      return resolveSrv(domain, Object.assign({}, srv, {family})).then(records => {
         return lookupSrvs(records, options)
       })
     }))
     .then(srvs => sortSrv([].concat(...srvs)).concat(addresses))
-    .then((records) => {
-      return resolveTxt(domain, options).then((txtRecords) => {
+    .then(records => {
+      return resolveTxt(domain, options).then(txtRecords => {
         return records.concat(txtRecords)
       })
     })

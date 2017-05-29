@@ -5,7 +5,7 @@ const EventEmitter = require('events')
 const xml = require('@xmpp/xml')
 
 class Console extends EventEmitter {
-  constructor (entity) {
+  constructor(entity) {
     super()
     this.entity = entity
 
@@ -24,12 +24,12 @@ class Console extends EventEmitter {
       this.info('authenticated')
     })
 
-    entity.on('online', (jid) => {
+    entity.on('online', jid => {
       this.jid = jid
       this.info(`online ${jid.toString()}`)
     })
 
-    entity.on('error', (err) => {
+    entity.on('error', err => {
       this.error(err.message)
     })
 
@@ -37,27 +37,27 @@ class Console extends EventEmitter {
       this.info('closed')
     })
 
-    entity.on('authenticate', auth => {
+    entity.on('authenticate', () => {
       this.info('authenticating')
     })
 
     const streamFeatures = entity.plugins['stream-features']
     if (streamFeatures) {
-      streamFeatures.onStreamFeatures = (features, el) => {
+      streamFeatures.onStreamFeatures = features => {
         const options = {
           text: 'Choose stream feature',
           cancelText: 'Done',
           choices: features.map(({name}) => name),
         }
-        this.choose(options).then((feature) => {
-          return features.find((f) => f.name === feature).run()
+        this.choose(options).then(feature => {
+          return features.find(f => f.name === feature).run()
         })
       }
     }
 
-    const sasl = entity.plugins.sasl
+    const {sasl, register, bind} = entity.plugins
     if (sasl) {
-      entity.plugins['sasl'].getCredentials = () => {
+      sasl.getCredentials = () => {
         return this.askMultiple([
           {
             text: 'enter username',
@@ -68,21 +68,19 @@ class Console extends EventEmitter {
           },
         ])
       }
-      entity.plugins['sasl'].getMechanism = (mechs) => {
+      sasl.getMechanism = mechs => {
         return this.choose({
           text: 'Choose SASL mechanism',
           choices: mechs,
         })
       }
     }
-
-    const register = entity.plugins.register
     if (register) {
       register.onFields = (fields, register) => {
         return this.ask({
           text: 'Choose username',
         })
-        .then((username) => {
+        .then(username => {
           return this.ask({
             text: 'Choose password',
             type: 'password',
@@ -90,8 +88,6 @@ class Console extends EventEmitter {
         })
       }
     }
-
-    const bind = entity.plugins.bind
     if (bind) {
       bind.getResource = () => {
         return this.ask({
@@ -101,11 +97,11 @@ class Console extends EventEmitter {
       }
     }
 
-    // component
-    entity.on('authenticate', (auth) => {
+    // Component
+    entity.on('authenticate', auth => {
       this.ask({
         text: 'Enter password',
-      }).then(auth).catch((err) => {
+      }).then(auth).catch(err => {
         this.error('authentication', err.message)
       })
     })
@@ -114,23 +110,23 @@ class Console extends EventEmitter {
       this.ask({
         text: 'Enter domain',
         value: 'localhost',
-      }).then((domain) => {
-        entity.open({domain}).catch((err) => {
+      }).then(domain => {
+        entity.open({domain}).catch(err => {
           this.error('open - ', err.message)
         })
       })
     })
   }
 
-  input (el) {
+  input(el) {
     this.log('⮈ IN', this.beautify(el))
   }
 
-  output (el) {
+  output(el) {
     this.log('⮊ OUT', this.beautify(el))
   }
 
-  beautify (frag) {
+  beautify(frag) {
     let el
     if (typeof frag === 'string') {
       try {
@@ -144,11 +140,11 @@ class Console extends EventEmitter {
     return xml.stringify(el, '  ')
   }
 
-  askMultiple (options) {
+  askMultiple(options) {
     return Promise.mapSeries(options, o => this.ask(o))
   }
 
-  parse (str) {
+  parse(str) {
     try {
       return xml.parse(str)
     } catch (err) {
@@ -156,7 +152,7 @@ class Console extends EventEmitter {
     }
   }
 
-  send (data) {
+  send(data) {
     let el
     try {
       el = xml.parse(data)
@@ -170,22 +166,22 @@ class Console extends EventEmitter {
     })
   }
 
-  resetInput () {
+  resetInput() {
   }
 
-  log (...args) {
+  log(...args) {
     console.log(...args)
   }
 
-  info (...args) {
+  info(...args) {
     this.log('🛈 ', ...args)
   }
 
-  warning (...args) {
+  warning(...args) {
     this.log('⚠ ', ...args)
   }
 
-  error (...args) {
+  error(...args) {
     this.log('❌ error', ...args)
   }
 }

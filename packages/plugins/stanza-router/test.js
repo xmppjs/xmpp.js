@@ -13,10 +13,10 @@ test.cb('add', t => {
   const entity = client()
   const router = entity.plugin(plugin)
 
-  router.add((element) => element.is('presence'), () => {
+  router.add(element => element.is('presence'), () => {
     t.fail()
   })
-  router.add((element) => element.is('iq'), () => {
+  router.add(element => element.is('iq'), () => {
     t.end()
   })
   entity.emit('element', xml`<iq/>`)
@@ -27,7 +27,7 @@ test.cb('remove', t => {
   const entity = client()
   const router = entity.plugin(plugin)
 
-  const match = (element) => element.is('iq')
+  const match = element => element.is('iq')
 
   router.add(match, () => {
     t.pass()

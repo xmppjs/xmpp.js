@@ -16,11 +16,11 @@ Prism.plugins.toolbar.registerButton('select', {
   text: 'select',
   onClick: env => {
     // http://stackoverflow.com/a/11128179/2757940
-    if (document.body.createTextRange) { // ms
+    if (document.body.createTextRange) { // Ms
       const range = document.body.createTextRange()
       range.moveToElementText(env.element)
       range.select()
-    } else if (window.getSelection) { // moz, opera, webkit
+    } else if (window.getSelection) { // Moz, opera, webkit
       const selection = window.getSelection()
       const range = document.createRange()
       range.selectNodeContents(env.element)
@@ -70,10 +70,10 @@ xconsole.ask = function (options) {
 xconsole.choose = function (options) {
   return new Promise((resolve, reject) => {
     options.cancelCallback = reject
-    options.choices = options.choices.map((choice) => {
+    options.choices = options.choices.map(choice => {
       return {
         text: choice,
-        handler () {
+        handler() {
           resolve(choice)
         },
       }
@@ -82,35 +82,36 @@ xconsole.choose = function (options) {
   })
 }
 
-function connect (params) {
+function connect(params) {
   if (params.endpoint) {
     return entity.connect(params.endpoint)
-  } else {
-    return xconsole.ask({
-      text: 'Enter endpoint',
-      value: 'ws://localhost:5280/xmpp-websocket',
-      type: 'url',
-    }).then((endpoint) => {
-      return entity.connect(endpoint)
-    })
   }
+  return xconsole.ask({
+    text: 'Enter endpoint',
+    value: 'ws://localhost:5280/xmpp-websocket',
+    type: 'url',
+  }).then(endpoint => {
+    return entity.connect(endpoint)
+  })
 }
 
-fetch('/params').then((res) => {
+fetch('/params').then(res => {
   return res.json()
-}).then((params) => {
+}).then(params => {
   return connect(params)
 }, () => {
   return connect({})
 })
 
-document.getElementById('input').addEventListener('submit', function (e) {
+document.getElementById('input').addEventListener('submit', e => {
   e.preventDefault()
   xconsole.send(editor.getValue())
 })
 
-window.addEventListener('keydown', function (e) {
-  if (e.defaultPrevented) return
+window.addEventListener('keydown', e => {
+  if (e.defaultPrevented) {
+    return
+  }
   if (e.key === 'Enter' && e.ctrlKey) {
     e.preventDefault()
     xconsole.send(editor.getValue())

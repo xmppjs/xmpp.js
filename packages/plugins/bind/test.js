@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const {match, stanza, plugin} = require('../bind')
+const {match, stanza, plugin} = require('.')
 const xml = require('@xmpp/xml')
 
 test.skip('plugin', t => {

@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const Connection = require('../tcp/lib/Connection')
+const Connection = require('./lib/Connection')
 
 test('socketParameters()', t => {
   let params

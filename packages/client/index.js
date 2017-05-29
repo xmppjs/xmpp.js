@@ -3,7 +3,7 @@
 const Client = require('./lib/Client')
 const {xml, jid} = require('@xmpp/client-core')
 
-function client (...args) {
+function client(...args) {
   return new Client(...args)
 }
 

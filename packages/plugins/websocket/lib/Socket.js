@@ -5,7 +5,7 @@ const WebSocket = global.WebSocket || WS
 const EventEmitter = require('events')
 
 class Socket extends EventEmitter {
-  connect (url, fn) {
+  connect(url, fn) {
     const sock = this.socket = new WebSocket(url, ['xmpp'])
 
     const addListener = (sock.addEventListener || sock.on).bind(sock)
@@ -13,10 +13,12 @@ class Socket extends EventEmitter {
 
     const openHandler = () => {
       this.emit('connect')
-      if (fn) fn()
+      if (fn) {
+        fn()
+      }
     }
     const messageHandler = ({data}) => this.emit('data', data)
-    const errorHandler = (err) => {
+    const errorHandler = err => {
       this.emit('error', err)
     }
     const closeHandler = () => {
@@ -33,11 +35,11 @@ class Socket extends EventEmitter {
     addListener('close', closeHandler)
   }
 
-  end () {
+  end() {
     this.socket.close()
   }
 
-  write (data, fn) {
+  write(data, fn) {
     if (WebSocket === WS) {
       this.socket.send(data, fn)
     } else {

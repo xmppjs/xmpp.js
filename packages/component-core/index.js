@@ -9,21 +9,21 @@ const xml = require('@xmpp/xml')
  * https://xmpp.org/extensions/xep-0114.html
  */
 
-function getServerDomain (domain) {
+function getServerDomain(domain) {
   return domain.substr(domain.indexOf('.') + 1)
 }
 
 const NS = 'jabber:component:accept'
 
 class Component extends Connection {
-  socketParameters (uri) {
+  socketParameters(uri) {
     const params = super.socketParameters(uri)
     params.port = params.port || 5347
     return params
   }
 
   // https://xmpp.org/extensions/xep-0114.html#example-4
-  send (el) {
+  send(el) {
     if (this.jid && !el.attrs.from) {
       el.attrs.from = this.jid.toString()
     }
@@ -36,19 +36,19 @@ class Component extends Connection {
   }
 
   // https://xmpp.org/extensions/xep-0114.html#example-3
-  open (...args) {
-    return super.open(...args).then((el) => {
-      this.emit('authenticate', (secret) => {
+  open(...args) {
+    return super.open(...args).then(el => {
+      this.emit('authenticate', secret => {
         return this.authenticate(el.attrs.id, secret)
       })
     })
   }
 
   // https://xmpp.org/extensions/xep-0114.html#example-3
-  authenticate (id, password) {
+  authenticate(id, password) {
     const hash = crypto.createHash('sha1')
     hash.update(id + password, 'binary')
-    return this.sendReceive(xml`<handshake>${hash.digest('hex')}</handshake>`).then((el) => {
+    return this.sendReceive(xml`<handshake>${hash.digest('hex')}</handshake>`).then(el => {
       if (el.name !== 'handshake') {
         throw new Error('unexpected stanza')
       }

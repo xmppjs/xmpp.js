@@ -3,7 +3,7 @@
 const Stanza = require('./Stanza')
 const inherits = require('inherits')
 
-function Presence (attrs) {
+function Presence(attrs) {
   Stanza.call(this, 'presence', attrs)
 }
 

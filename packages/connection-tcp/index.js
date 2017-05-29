@@ -1,6 +1,6 @@
 'use strict'
 
-const Socket = require('net').Socket
+const {Socket} = require('net')
 const Connection = require('@xmpp/connection')
 
 const NS_STREAM = 'http://etherx.jabber.org/streams'
@@ -10,15 +10,15 @@ const NS_STREAM = 'http://etherx.jabber.org/streams'
 */
 
 class TCP extends Connection {
-  socketParameters (uri) {
+  socketParameters(uri) {
     const {port, host, protocol} = super.socketParameters(uri)
-    return (protocol === 'xmpp:')
-      ? {port, host}
-      : undefined
+    return (protocol === 'xmpp:') ?
+      {port, host} :
+      undefined
   }
 
   // https://xmpp.org/rfcs/rfc6120.html#streams-open
-  headerElement () {
+  headerElement() {
     const el = super.headerElement()
     el.name = 'stream:stream'
     el.attrs['xmlns:stream'] = NS_STREAM
@@ -26,13 +26,13 @@ class TCP extends Connection {
   }
 
   // https://xmpp.org/rfcs/rfc6120.html#streams-open
-  header (el) {
+  header(el) {
     const frag = el.toString()
     return `<?xml version='1.0'?>` + frag.substr(0, frag.length - 2) + '>'
   }
 
   // https://xmpp.org/rfcs/rfc6120.html#streams-close
-  footer () {
+  footer() {
     return '</stream:stream>'
   }
 }

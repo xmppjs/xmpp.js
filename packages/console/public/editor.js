@@ -1,12 +1,11 @@
 'use strict'
 
-const CodeMirror = global.CodeMirror
-const jQuery = global.jQuery
+const {CodeMirror, jQuery} = global
 
 // https://codemirror.net/demo/xmlcomplete.html
-function completeAfter (cm, pred) {
+function completeAfter(cm, pred) {
   if (!pred || pred()) {
-    setTimeout(function () {
+    setTimeout(() => {
       if (!cm.state.completionActive) {
         cm.showHint({completeSingle: false})
       }
@@ -15,17 +14,19 @@ function completeAfter (cm, pred) {
   return CodeMirror.Pass
 }
 
-function completeIfAfterLt (cm) {
-  return completeAfter(cm, function () {
+function completeIfAfterLt(cm) {
+  return completeAfter(cm, () => {
     const cur = cm.getCursor()
-    return cm.getRange(CodeMirror.Pos(cur.line, cur.ch - 1), cur) === '<'
+    return cm.getRange(CodeMirror.Pos(cur.line, cur.ch - 1), cur) === '<' // eslint-disable-line new-cap
   })
 }
 
-function completeIfInTag (cm) {
-  return completeAfter(cm, function () {
+function completeIfInTag(cm) {
+  return completeAfter(cm, () => {
     const tok = cm.getTokenAt(cm.getCursor())
-    if (tok.type === 'string' && (!/['"]/.test(tok.string.charAt(tok.string.length - 1)) || tok.string.length === 1)) return false
+    if (tok.type === 'string' && (!/['"]/.test(tok.string.charAt(tok.string.length - 1)) || tok.string.length === 1)) {
+      return false
+    }
     const inner = CodeMirror.innerMode(cm.getMode(), tok.state).state
     return inner.tagName
   })
@@ -68,10 +69,10 @@ const editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
   autoCloseTags: true,
   matchTags: {bothTags: true},
   extraKeys: {
-    "'<'": completeAfter,
-    "'/'": completeIfAfterLt,
-    "' '": completeIfInTag,
-    "'='": completeIfInTag,
+    '\'<\'': completeAfter,
+    '\'/\'': completeIfAfterLt,
+    '\' \'': completeIfInTag,
+    '\'=\'': completeIfInTag,
     'Ctrl-Space': 'autocomplete',
   },
   hintOptions: {schemaInfo: tags},

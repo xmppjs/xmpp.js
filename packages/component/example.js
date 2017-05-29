@@ -4,11 +4,11 @@
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-const {xml, component} = require('.') // require('@xmpp/component')
+const {xml, component} = require('.') // For you require('@xmpp/component')
 const entity = component()
 
-// emitted for any error
-entity.on('error', (err) => {
+// Emitted for any error
+entity.on('error', err => {
   console.error('error', err)
 })
 
@@ -24,45 +24,45 @@ entity.on('reconnected', () => {
   console.log('reconnected')
 })
 
-// emitted for incoming stanza _only_ (iq/presence/message) qualified with the right namespace
+// Emitted for incoming stanza _only_ (iq/presence/message) qualified with the right namespace
 // entity.on('stanza', (stanza) => {
 //   console.log('stanza', stanza.toString())
 // })
 
-// emitted for incoming nonza _only_
+// Emitted for incoming nonza _only_
 // entity.on('nonza', (nonza) => {
 //   console.log('nonza', nonza.toString())
 // })
 
-// useful for logging raw XML traffic
-// emitted for every fragment out
-entity.on('input', (data) => console.log('⮈ IN ', data))
-// emitted for every fragment in
-entity.on('output', (data) => console.log('⮊ OUT', data))
+// useful for logging raw traffic
+// Emitted for every incoming fragment
+entity.on('input', data => console.log('⮈ IN ', data))
+// Emitted for every outgoing fragment
+entity.on('output', data => console.log('⮊ OUT', data))
 
-// emitted for any in our out XML root element
+// Emitted for any in our out XML root element
 // useful for logging
 // entity.on('element', (input, output) => {
 //   console.log(output ? 'element =>' : 'element <=', (output || input).toString())
 // })
 
-// emitted when the socket is open
+// Emitted when the connection is established
 entity.on('connect', () => {
   console.log('1. connected')
 })
 
-// emitted when the XMPP stream has open and we received the server stream
-entity.on('open', (el) => {
+// Emitted when the XMPP stream has open and we received the server stream
+entity.on('open', () => {
   console.log('2. open')
 })
 
-// emitted when the XMPP entity is authenticated
+// Emitted when the XMPP entity is authenticated
 entity.on('authenticated', () => {
   console.log('3. authenticated')
 })
 
-// emitted when authenticated and bound
-entity.on('online', (jid) => {
+// Emitted when authenticated and bound
+entity.on('online', jid => {
   console.log('4. online', jid.toString())
 
   entity.send(xml`
@@ -74,26 +74,26 @@ entity.on('online', (jid) => {
 
 // "start" opens the socket and the XML stream
 entity.start({uri: 'xmpp://localhost:5347', domain: 'node-xmpp.localhost'})
-  // resolves once online
-  .then((jid) => {
+  // Resolves once online
+  .then(jid => {
     console.log('started', jid.toString())
   })
-  // rejects for any error before online
+  // Rejects for any error before online
   .catch(err => {
     console.error('start failed', err)
   })
 
-// emitted when authentication is required
+// Emitted when authentication is required
 entity.on('authenticate', authenticate => {
   authenticate('foobar')
     .then(() => {
       console.log('authenticated')
     })
-    .catch((err) => {
+    .catch(err => {
       console.error('authentication failed', err)
     })
 })
 
-process.on('unhandledRejection', function (reason, p) {
+process.on('unhandledRejection', (reason, p) => {
   console.log('Possibly Unhandled Rejection at: Promise ', p, ' reason: ', reason)
 })

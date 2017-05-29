@@ -4,7 +4,7 @@ const inherits = require('inherits')
 const createStanza = require('./createStanza')
 const LtxParser = require('ltx').Parser
 
-function Parser (options) {
+function Parser(options) {
   LtxParser.call(this, options)
 }
 inherits(Parser, LtxParser)
