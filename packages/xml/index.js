@@ -1,25 +1,28 @@
 'use strict'
 
-const ltx = require('ltx')
 const tag = require('./lib/tag')
+
+const Element = require('./lib/Element')
+const createElement = require('./lib/createElement')
+const Parser = require('./lib/Parser')
+const parse = require('./lib/parse')
+const {escapeXML, unescapeXML, escapeXMLText, unescapeXMLText} = require('ltx/lib/escape')
 
 function xml(...args) {
   return tag(...args)
 }
 
 exports = module.exports = xml
+exports.Element = Element
 
-Object.assign(exports, ltx)
-
-exports.IQ = require('./lib/IQ')
-exports.Message = require('./lib/Message')
-exports.Presence = require('./lib/Presence')
-
-exports.Stanza = require('./lib/Stanza')
-exports.createStanza = require('./lib/createStanza')
-
-exports.parse = require('./lib/parse')
-exports.Parser = require('./lib/Parser')
-exports.tag = require('./lib/tag')
-
-exports.ltx = ltx
+Object.assign(exports, {
+  tag,
+  Element,
+  createElement,
+  Parser,
+  parse,
+  escapeXML,
+  unescapeXML,
+  escapeXMLText,
+  unescapeXMLText,
+})

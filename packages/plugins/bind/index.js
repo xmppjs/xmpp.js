@@ -25,7 +25,7 @@ function match(features) {
 
 function bind(caller, entity, resource) {
   return caller.set(makeBindElement(resource)).then(result => {
-    entity._jid(result.getChild('jid').text())
+    entity._jid(result.getChildText('jid'))
   })
 }
 

@@ -1,8 +1,7 @@
 'use strict'
 
-const Parser = require('./Parser')
-const ltxParse = require('ltx').parse
+const tag = require('./tag')
 
-module.exports = function parse(data) {
-  return ltxParse(data, Parser)
+module.exports = function parse(str) {
+  return tag([str], [])
 }

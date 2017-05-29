@@ -14,7 +14,6 @@
     "presence"
   ],
   "dependencies": {
-    "inherits": "^2.0.3",
     "ltx": "^2.6.2"
   }
 }

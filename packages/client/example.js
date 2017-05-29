@@ -68,8 +68,8 @@ entity.on('online', jid => {
 entity.start('localhost') // Auto
 // entity.start('xmpp://localhost:5222') // TCP
 // entity.start('xmpps://localhost:5223') // TLS
-// entity.start('ws://localhost:5280/xmpp-websocket') - Websocket
-// entity.start('wss://localhost:5281/xmpp-websocket') - Secure WebSocket
+// entity.start('ws://localhost:5280/xmpp-websocket') // Websocket
+// entity.start('wss://localhost:5281/xmpp-websocket') // Secure WebSocket
   // resolves once online
   .then(jid => {
     console.log('started', jid.toString())

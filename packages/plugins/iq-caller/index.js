@@ -33,8 +33,7 @@ module.exports = plugin('iq-caller', {
   },
   match(stanza) {
     return (
-      stanza.is('iq') &&
-      stanza.attrs.id &&
+      stanza.name === 'iq' &&
       (stanza.attrs.type === 'error' || stanza.attrs.type === 'result')
     )
   },
@@ -50,7 +49,6 @@ module.exports = plugin('iq-caller', {
   },
   request(stanza, to) {
     return new Promise((resolve, reject) => {
-      stanza = stanza.root()
       if (to && typeof to === 'string' && !stanza.attrs.to) {
         stanza.attrs.to = to
       }
