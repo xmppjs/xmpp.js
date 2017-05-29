@@ -1,0 +1,16 @@
+{
+  "name": "@xmpp/dns",
+  "description": "XMPP domain name resolution for JavaScript",
+  "repository": "github:node-xmpp/node-xmpp",
+  "homepage": "https://github.com/node-xmpp/node-xmpp/tree/master/packages/dns",
+  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "version": "0.0.1",
+  "license": "ISC",
+  "keywords": [
+    "XMPP",
+    "dns",
+    "srv",
+    "lookup",
+    "resolve"
+  ]
+}
