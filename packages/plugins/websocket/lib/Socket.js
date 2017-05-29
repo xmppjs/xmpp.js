@@ -33,8 +33,7 @@ class Socket extends EventEmitter {
     addListener('close', closeHandler)
   }
 
-  close (fn) {
-    this.once('close', fn)
+  end () {
     this.socket.close()
   }
 

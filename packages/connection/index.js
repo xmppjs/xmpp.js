@@ -59,6 +59,7 @@ class Connection extends EventEmitter {
     }
     listeners.close = () => {
       this.domain = ''
+      this.jid = null
       this.emit('close')
     }
     listeners.connect = () => {
@@ -87,8 +88,6 @@ class Connection extends EventEmitter {
 
     this.parser = parser
     const elementListener = (element) => {
-      this.emit('element', element)
-      this.emit(this.isStanza(element) ? 'stanza' : 'nonza', element)
       if (element.name === 'stream:error') {
         this.stop()
         this.emit('error', new StreamError(
@@ -97,6 +96,8 @@ class Connection extends EventEmitter {
           element
         ))
       }
+      this.emit('element', element)
+      this.emit(this.isStanza(element) ? 'stanza' : 'nonza', element)
     }
     parser.on('element', elementListener)
     parser.on('error', errorListener)
@@ -132,9 +133,7 @@ class Connection extends EventEmitter {
         options.domain = getHostname(options.uri)
       }
 
-      this.once('online', (jid) => {
-        resolve(jid)
-      })
+      this.promise('online').then(resolve, reject)
       this.connect(options.uri).then(() => {
         const {domain, lang} = options
         return this.open({domain, lang})

@@ -6,6 +6,10 @@ const debug = require('../packages/debug')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
+test.afterEach((t) => {
+  if (t.jid) return t.context.entity.stop()
+})
+
 test.cb('component', t => {
   t.plan(8)
 
