@@ -52,7 +52,7 @@ function fallbackConnect (entity, uris) {
       entity.Transport = Transport
     })
     .catch(() => {
-      if (!uris.length) return new Error('Couldn\'t connect')
+      if (uris.length === 0) return new Error('Couldn\'t connect')
       else return fallbackConnect(entity, uris)
     })
 }
@@ -61,7 +61,7 @@ module.exports.name = 'resolve'
 module.exports.plugin = function plugin (entity) {
   const _connect = entity.connect
   entity.connect = function connect (domain) {
-    if (!domain.length || domain.match(/:\/\//)) return _connect.call(this, domain)
+    if (domain.length === 0 || domain.match(/:\/\//)) return _connect.call(this, domain)
     return getURIs(domain).then((uris) => {
       return fallbackConnect(entity, uris)
     })
