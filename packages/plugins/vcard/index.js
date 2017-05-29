@@ -41,7 +41,7 @@ function plugin (entity) {
       .then(res => parsevCard(res))
     },
     set (vcard) {
-      return caller.set(null, buildvCard(vcard))
+      return caller.set(buildvCard(vcard))
     },
   }
 }
