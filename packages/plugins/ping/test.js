@@ -30,8 +30,12 @@ test.cb('caller', t => {
 
 test('callee', t => {
   return t.context
-  .test(xml`<iq id='test' from='foo' to='bar' type='set'><ping xmlns='urn:xmpp:ping'/></iq>`)
-  .then(stanza => {
-    t.is(stanza.toString(), `<iq to="foo" from="bar" id="test" xmlns="jabber:client" type="result"/>`)
-  })
+  .fake`
+    <iq id='test' from='foo' to='bar' type='set'>
+      <ping xmlns='urn:xmpp:ping'/>
+    </iq>
+  `
+  .then(stanza => t.deepEqual(stanza, xml`
+    <iq to="foo" from="bar" id="test" type="result"/>
+  `))
 })

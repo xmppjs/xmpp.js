@@ -54,11 +54,15 @@ function hash(query) {
     s += `${category}/${type}/${lang}/${name}<`
   })
 
-  query.getChildren('feature').map(f => f.attrs.var).sort().forEach(feature => {
+  query.getChildren('feature')
+  .map(f => f.attrs.var)
+  .sort()
+  .forEach(feature => {
     s += `${feature}<`
   })
 
-  query.getChildren('x', 'jabber:x:data').forEach(x => {
+  query.getChildren('x', 'jabber:x:data')
+  .forEach(x => {
     const fields = x.getChildren('field')
     const formType = fields.find(field => field.attrs.var === 'FORM_TYPE')
     s += `${formType.getChildText('value')}<`

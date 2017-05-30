@@ -14,17 +14,17 @@ test('name', t => {
 })
 
 test.cb('get', t => {
-  t.plan(8)
+  t.plan(5)
+
+  let id
 
   t.context.entity.promise('send').then(stanza => {
-    t.is(stanza.name, 'iq')
-    t.is(stanza.attrs.type, 'get')
-    t.is(stanza.attrs.to, 'foo@bar')
-    t.is(typeof stanza.attrs.id, 'string')
-    t.is(stanza.children[0].toString(), '<vCard xmlns="vcard-temp"/>')
+    id = stanza.attrs.id // eslint-disable-line prefer-destructuring
+    delete stanza.attrs.id
+    t.is(typeof id, 'string')
 
     t.context.entity.emit('element', xml`
-      <iq type='result' id='${stanza.attrs.id}'>
+      <iq type='result' id='${id}'>
         <vCard xmlns="vcard-temp">
           <FN>Foo Bar</FN>
           <N>
@@ -32,6 +32,13 @@ test.cb('get', t => {
             <GIVEN>Foo</GIVEN>
           </N>
         </vCard>
+      </iq>
+    `)
+
+    delete stanza.attrs.xmlns
+    t.deepEqual(stanza, xml`
+      <iq type='get' to='foo@bar'>
+        <vCard xmlns='vcard-temp'/>
       </iq>
     `)
   })
@@ -45,21 +52,33 @@ test.cb('get', t => {
 })
 
 test.cb('set', t => {
-  t.plan(4)
+  t.plan(2)
+
+  let id
 
   t.context.entity.promise('send').then(stanza => {
-    t.is(stanza.name, 'iq')
-    t.is(stanza.attrs.type, 'set')
-    t.is(typeof stanza.attrs.id, 'string')
-    t.is(stanza.children[0].toString(), '<vCard xmlns="vcard-temp" version="2.0"><FN>Foo Bar</FN><N><FAMILY>Bar</FAMILY><GIVEN>Foo</GIVEN></N></vCard>')
+    id = stanza.attrs.id // eslint-disable-line prefer-destructuring
+    delete stanza.attrs.id
+    t.is(typeof id, 'string')
 
     t.context.entity.emit('element', xml`
-      <iq type='result' id='${stanza.attrs.id}'>
+      <iq type='result' id='${id}'/>
+    `)
+
+    delete stanza.attrs.xmlns
+    t.deepEqual(stanza, xml`
+      <iq type='set'>
+        <vCard xmlns='vcard-temp' version='2.0'>
+          <FN>Foo Bar</FN>
+          <N>
+            <FAMILY>Bar</FAMILY>
+            <GIVEN>Foo</GIVEN>
+          </N>
+        </vCard>
       </iq>
     `)
-  })
-
-  t.context.plugin.set({FN: 'Foo Bar', N: {FAMILY: 'Bar', GIVEN: 'Foo'}}).then(() => {
     t.end()
   })
+
+  t.context.plugin.set({FN: 'Foo Bar', N: {FAMILY: 'Bar', GIVEN: 'Foo'}})
 })

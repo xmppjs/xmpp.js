@@ -1,23 +1,15 @@
 'use strict'
 
 const test = require('ava')
-const xml = require('..')
 const tag = require('../lib/tag')
-const Stanza = require('../lib/Stanza')
+const Element = require('../lib/Element')
 
-test('exported correctly', t => {
-  t.is(xml.tag, tag)
-})
-
-test('return a Stanza object if message/iq/presence, an element otherwise', t => {
-  t.true(tag`<message/>` instanceof Stanza)
-
-  t.true(tag`<foo/>` instanceof xml.Element)
-  t.false(tag`<foo/>` instanceof Stanza)
+test('return an instance of Element', t => {
+  t.true(tag`<message/>` instanceof Element)
 })
 
 test('strips whitespaces', t => {
-  t.is(xml`
+  t.is(tag`
     <foo>
         hello
       <bar/>
@@ -26,21 +18,21 @@ test('strips whitespaces', t => {
 })
 
 test('does not strips whitespaces for substitutions', t => {
-  t.is(xml`
+  t.is(tag`
     <foo>${'  yo  '}</foo>
   `.toString(), '<foo>  yo  </foo>')
 
-  t.is(xml`
+  t.is(tag`
     <foo>${' foo '}<bar>${' bar '}</bar></foo>
   `.toString(), '<foo> foo <bar> bar </bar></foo>')
 
-  t.skip.is(xml`
+  t.skip.is(tag`
     <foo>${' foo '}${' bar '}</foo>
   `.toString(), '<foo> foo  bar </foo>')
 })
 
 test('escapes substitutions', t => {
-  t.is(xml`
+  t.is(tag`
     <foo>${'<'}</foo>
   `.toString(), '<foo>&lt;</foo>')
 })

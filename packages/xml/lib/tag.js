@@ -1,51 +1,48 @@
 'use strict'
 
-const LtxParser = require('ltx/lib/parsers/ltx')
-const createStanza = require('./createStanza')
-const escape = require('ltx').escapeXML
+const Parser = require('./Parser')
+const {escapeXML} = require('ltx/lib/escape')
+
+function error(literals, substitutions) {
+  let s = ''
+  for (let i = 0; i < substitutions.length; i++) {
+    s += literals[i]
+    s += escapeXML(substitutions[i])
+  }
+  s += literals[literals.length - 1]
+  return new Parser.XMLError(s)
+}
 
 function tag(literals, ...substitutions) {
-  const parser = new LtxParser()
+  const parser = new Parser(literals, ...substitutions)
 
-  let el
-  let tree
   let i
-  parser.on('startElement', (name, attrs) => {
-    const child = createStanza(name, attrs)
-    if (el) {
-      el = el.cnode(child)
-    } else {
-      el = child
-    }
-  })
-  parser.on('endElement', name => {
-    if (name === el.name) {
-      if (el.parent) {
-        el = el.parent
-      } else if (!tree) {
-        tree = el
-        el = undefined
-      }
-    }
-  })
-  parser.on('text', str => {
-    if (!el) {
-      return
-    }
+  let tree
 
+  parser.on('error', () => {
+    error(literals, substitutions)
+  })
+
+  parser.onText = (str, element) => {
     if (substitutions[i - 1] === str) {
-      el.t(str)
+      element.t(str)
     } else {
       str = str.trim()
       if (str) {
-        el.t(str)
+        element.t(str)
       }
+    }
+  }
+
+  parser.on('endElement', (el, root) => {
+    if (root) {
+      tree = el
     }
   })
 
   for (i = 0; i < substitutions.length; i++) {
     parser.write(literals[i])
-    parser.write(escape(substitutions[i]))
+    parser.write(escapeXML(substitutions[i]))
   }
   parser.end(literals[literals.length - 1])
 

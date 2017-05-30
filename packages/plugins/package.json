@@ -24,6 +24,7 @@
     "ws": "^3.0.0"
   },
   "browser": {
-    "ws": false
+    "ws": false,
+    "buffer": false
   }
 }

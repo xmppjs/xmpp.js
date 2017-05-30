@@ -22,39 +22,48 @@ module.exports = plugin('iq-callee', {
   remove(name, NS) {
     this.calls.delete(`${name}:${NS}`)
   },
+  response({attrs}) {
+    return xml`<iq to='${attrs.from}' from='${attrs.to}' id='${attrs.id}'/>`
+  },
+  result(iq, reply) {
+    const stanza = this.response(iq)
+    stanza.attrs.type = 'result'
+    if (reply) {
+      stanza.cnode(reply)
+    }
+    return stanza
+  },
+  error(iq, reply) {
+    const stanza = this.response(iq)
+    stanza.attrs.type = 'error'
+    if (reply instanceof xml.Element) {
+      stanza.cnode(reply)
+    } else if (reply instanceof Error) {
+      stanza.cnode(xml`
+        <error type='cancel'>
+          <internal-server-error xmlns='${NS_STANZA}'/>
+        </error>
+      `)
+    }
+    return stanza
+  },
   start() {
     this.calls = new Map()
     this.handler = stanza => {
-      const iq = xml`<iq to='${stanza.attrs.from}' from='${stanza.attrs.to}' id='${stanza.attrs.id}'/>`
-
       const [child] = stanza.children
-      const handler = this.calls.get(`${child.name}:${child.getNS()}`)
+      const handler = this.calls.get(`${child.name}:${child.attrs.xmlns || ''}`)
 
       if (handler) {
         Promise.resolve(handler(stanza))
-        .then(res => {
-          iq.attrs.type = 'result'
-          if (xml.isElement(res)) {
-            iq.cnode(res)
-          }
-        })
-        .catch(err => {
-          iq.attrs.type = 'error'
-          if (xml.isElement(err)) {
-            iq.cnode(err)
-          } else {
-            iq.c('error', {type: 'cancel'})
-                .c('internal-server-error', NS_STANZA)
-          }
-        })
+        .then(res => this.result(stanza, res))
+        .catch(err => this.error(stanza, err)).then(iq => this.entity.send(iq))
       } else {
-        iq.attrs.type = 'error'
-        iq.cnode(child.clone())
-        iq.c('error', {type: 'cancel'})
-            .c('service-unavailable', NS_STANZA)
+        this.entity.send(this.error(stanza, xml`
+          <error type='cancel'>
+            <service-unavailable xmlns='${NS_STANZA}'/>
+          </error>
+        `))
       }
-
-      this.entity.send(iq)
     }
     this.plugins['stanza-router'].add(this.match, this.handler)
   },

@@ -1,7 +1,6 @@
 'use strict'
 
 const EventEmitter = require('@xmpp/events')
-const StreamParser = require('@xmpp/streamparser')
 const jid = require('@xmpp/jid')
 const url = require('url')
 const xml = require('@xmpp/xml')
@@ -98,8 +97,8 @@ class Connection extends EventEmitter {
       this.emit('element', element)
       this.emit(this.isStanza(element) ? 'stanza' : 'nonza', element)
     }
-    parser.on('element', elementListener)
-    parser.on('error', errorListener)
+    parser.on('endElement', elementListener)
+    parser.once('error', errorListener)
   }
 
   _jid(addr) {
@@ -197,7 +196,7 @@ class Connection extends EventEmitter {
 
       this.write(this.header(headerElement))
 
-      this.parser.once('start', el => {
+      this.parser.once('startElement', el => {
         // FIXME what about version and xmlns:stream ?
         if (
           el.name !== headerElement.name ||
@@ -231,9 +230,8 @@ class Connection extends EventEmitter {
   }
 
   send(element) {
-    const root = element.root()
-    return this.promiseWrite(root).then(() => {
-      this.emit('send', root)
+    return this.promiseWrite(element).then(() => {
+      this.emit('send', element)
     })
   }
 
@@ -275,7 +273,7 @@ class Connection extends EventEmitter {
 
   isStanza(element) {
     const {name} = element
-    const NS = element.findNS()
+    const NS = element.attrs.xmlns
     return (
       // This.online && FIXME
       (NS ? NS === this.NS : true) &&
@@ -326,7 +324,7 @@ class Connection extends EventEmitter {
 // Overrirde
 Connection.prototype.NS = ''
 Connection.prototype.Socket = null
-Connection.prototype.Parser = StreamParser
+Connection.prototype.Parser = xml.Parser
 
 module.exports = Connection
 module.exports.getHostname = getHostname

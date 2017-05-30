@@ -18,18 +18,18 @@ const parse = el => {
 }
 
 const build = (dict, parent) => {
-  const builder = parent || xml`<vCard xmlns='${NS}' version='2.0'/>`
+  const el = parent || xml`<vCard xmlns='${NS}' version='2.0'/>`
   for (const key of Object.keys(dict)) {
     const val = dict[key]
     if (typeof val === 'object') {
-      builder.cnode(build(val, xml`<${key}/>`)).up()
+      el.cnode(build(val, xml`<${key}/>`))
     } else if (val) {
-      builder.c(key).t(val)
+      el.cnode(xml`<${key}>${val}</${key}>`)
     } else {
-      builder.c(key).up()
+      el.cnode(xml`<${key}/>`)
     }
   }
-  return builder
+  return el
 }
 
 module.exports = plugin('vcard', {
