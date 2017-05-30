@@ -12,16 +12,13 @@ entity.on('error', err => {
   console.error('error', err)
 })
 
-entity.on('close', () => {
-  console.log('closed')
-})
-
-entity.on('reconnecting', () => {
-  console.log('reconnecting')
-})
-
-entity.on('reconnected', () => {
-  console.log('reconnected')
+// Let's log status changes
+function logStatus(status, ...args) {
+  console.log(status, ...args)
+}
+logStatus(entity.status)
+entity.on('status', (status, ...args) => {
+  logStatus(status, ...args)
 })
 
 // Emitted for incoming stanza _only_ (iq/presence/message) qualified with the right namespace
@@ -46,37 +43,17 @@ entity.on('output', data => console.log('⮊ OUT', data))
 //   console.log(output ? 'element =>' : 'element <=', (output || input).toString())
 // })
 
-// Emitted when the connection is established
-entity.on('connect', () => {
-  console.log('1. connected')
-})
-
-// Emitted when the XMPP stream has open and we received the server stream
-entity.on('open', () => {
-  console.log('2. open')
-})
-
-// Emitted when the XMPP entity is authenticated
-entity.on('authenticated', () => {
-  console.log('3. authenticated')
-})
-
-// Emitted when authenticated and bound
-entity.on('online', jid => {
-  console.log('4. online', jid.toString())
-
-  entity.send(xml`
-    <iq id='ping' type='get'>
-      <ping xmlns='urn:xmpp:ping'/>
-    </iq>
-  `)
+// Resolves if or when online
+entity.ready().then(jid => {
+  console.log('jid', jid.toString())
+  entity.send(xml`<presence/>`)
 })
 
 // "start" opens the socket and the XML stream
 entity.start({uri: 'xmpp://localhost:5347', domain: 'node-xmpp.localhost'})
   // Resolves once online
   .then(jid => {
-    console.log('started', jid.toString())
+    console.log('jid', jid.toString())
   })
   // Rejects for any error before online
   .catch(err => {
@@ -85,13 +62,7 @@ entity.start({uri: 'xmpp://localhost:5347', domain: 'node-xmpp.localhost'})
 
 // Emitted when authentication is required
 entity.on('authenticate', authenticate => {
-  authenticate('foobar')
-    .then(() => {
-      console.log('authenticated')
-    })
-    .catch(err => {
-      console.error('authentication failed', err)
-    })
+  authenticate('foobar').catch(err => console.error('authentication failed', err))
 })
 
 process.on('unhandledRejection', (reason, p) => {

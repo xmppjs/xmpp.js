@@ -17,7 +17,7 @@ class Client extends ClientCore {
     // So that we have a common inteface with component
     const {sasl} = this.plugins
     sasl.handleMechanism = (mech, features) => new Promise((resolve, reject) => {
-      this.emit('authenticate', (username, password) => {
+      this._status('authenticate', (username, password) => {
         return sasl.authenticate(mech, {username, password}, features)
         .then(resolve)
         .catch(err => {

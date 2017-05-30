@@ -45,6 +45,7 @@ class Connection extends EventEmitter {
     this.openOptions = null
     this.connectOptions = null
     this.socketListeners = Object.create(null)
+    this.status = 'offline'
   }
 
   _attachSocket(socket) {
@@ -106,12 +107,17 @@ class Connection extends EventEmitter {
     return this.jid
   }
 
-  _online() {
-    this.emit('online', this.jid)
+  _status(status, ...args) {
+    this.status = status
+    this.emit('status', status, ...args)
+    this.emit(status, ...args)
   }
 
-  _authenticated() {
-    this.emit('authenticated')
+  ready() {
+    if (this.status === 'online') {
+      return Promise.resolve()
+    }
+    return this.promise('online')
   }
 
   id() {
@@ -122,6 +128,7 @@ class Connection extends EventEmitter {
    * Opens the socket then opens the stream
    */
   start(options) {
+    this._status('starting')
     return new Promise((resolve, reject) => {
       if (typeof options === 'string') {
         options = {uri: options}
@@ -143,6 +150,7 @@ class Connection extends EventEmitter {
    * Closes the stream then closes the socket
    */
   stop() {
+    this._status('stopping')
     return new Promise((resolve, reject) => {
       this.close().catch(reject) // FIXME wait footer
       this.end().then(resolve, reject)
@@ -153,6 +161,7 @@ class Connection extends EventEmitter {
    * Opens the socket
    */
   connect(options) {
+    this._status('connecting')
     this.connectOptions = options
     return new Promise((resolve, reject) => {
       this._attachParser(new this.Parser())
@@ -161,6 +170,7 @@ class Connection extends EventEmitter {
       this.socket.connect(this.socketParameters(options), () => {
         this.socket.removeListener('error', reject)
         resolve()
+        this._status('connect')
       })
     })
   }
@@ -169,11 +179,15 @@ class Connection extends EventEmitter {
    * Closes the socket
    */
   end() {
+    this.emit('ending')
     return new Promise(resolve => {
        // TODO timeout
       const handler = () => {
         this.socket.end()
-        this.once('close', resolve)
+        this.once('close', () => {
+          resolve()
+          this.emit('end')
+        })
       }
       this.parser.once('end', handler)
     })
@@ -183,6 +197,7 @@ class Connection extends EventEmitter {
    * Opens the stream
    */
   open(options) {
+    this._status('opening')
     this.openOptions = options
     if (typeof options === 'string') {
       options = {domain: options}
@@ -210,7 +225,7 @@ class Connection extends EventEmitter {
         this.domain = domain
         this.lang = el.attrs['xml:lang']
         resolve(el)
-        this.emit('open', el)
+        this._status('open', el)
       })
     })
   }
@@ -219,14 +234,21 @@ class Connection extends EventEmitter {
    * Closes the stream
    */
   close() {
-    return this.promiseWrite(this.footer(this.footerElement()))
+    this._status('closing')
+    return this.promiseWrite(this.footer(this.footerElement())).then(() => {
+      this._status('closed')
+    })
   }
 
   /**
-   * Restarts the stream
+   * Restart the stream
+   * https://xmpp.org/rfcs/rfc6120.html#streams-negotiation-restart
    */
   restart() {
-    return this.open(this.openOptions)
+    this._status('restarting')
+    return this.open(this.openOptions).then(() => {
+      this._status('restart')
+    })
   }
 
   send(element) {
