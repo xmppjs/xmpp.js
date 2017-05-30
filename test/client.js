@@ -15,10 +15,6 @@ test.beforeEach(t => {
   const entity = client()
   debug(entity)
   t.context.entity = entity
-
-  entity.on('authenticate', auth => {
-    auth(USERNAME, PASSWORD)
-  })
 })
 
 test.afterEach(t => {
@@ -41,8 +37,9 @@ test.cb('client', t => {
     t.true(el instanceof xml.Element)
   })
 
-  entity.on('authenticate', auth => {
+  entity.handle('authenticate', auth => {
     t.is(typeof auth, 'function')
+    return auth(USERNAME, PASSWORD)
   })
 
   entity.on('online', id => {
@@ -73,13 +70,14 @@ test.cb('bad credentials', t => {
   entity.on('authenticated', () => t.fail())
   entity.on('online', () => t.fail())
 
-  entity.on('authenticate', auth => {
-    auth('foo', 'bar')
+  entity.handle('authenticate', auth => {
+    return auth('foo', 'bar')
     .then(() => t.fail())
     .catch(err => {
       t.true(err instanceof Error)
       t.is(err.condition, 'not-authorized')
       error = err
+      throw err
     })
   })
 
@@ -95,46 +93,70 @@ test.cb('bad credentials', t => {
     })
 })
 
-// Prosody 404
+// Prosody 404 https://prosody.im/issues/issue/932
 test.skip('ws IPv4', t => {
+  t.context.entity.handle('authenticate', auth => {
+    return auth(USERNAME, PASSWORD)
+  })
   return t.context.entity.start({uri: 'ws://127.0.0.1:5280/xmpp-websocket', domain})
     .then(id => t.is(id.bare().toString(), JID))
 })
 
-// Prosody 404
+// Prosody 404 https://prosody.im/issues/issue/932
 test.skip('ws IPv6', t => {
+  t.context.entity.handle('authenticate', auth => {
+    return auth(USERNAME, PASSWORD)
+  })
   return t.context.entity.start({uri: 'ws://[::1]:5280/xmpp-websocket', domain})
     .then(id => t.is(id.bare().toString(), JID))
 })
 
 test('ws domain', t => {
+  t.context.entity.handle('authenticate', auth => {
+    return auth(USERNAME, PASSWORD)
+  })
   return t.context.entity.start('ws://localhost:5280/xmpp-websocket')
     .then(id => t.is(id.bare().toString(), JID))
 })
 
-// Prosody 404
+// Prosody 404 https://prosody.im/issues/issue/932
 test.skip('wss IPv4', t => {
+  t.context.entity.handle('authenticate', auth => {
+    return auth(USERNAME, PASSWORD)
+  })
   return t.context.entity.start({uri: 'wss://127.0.0.1:5281/xmpp-websocket', domain})
     .then(id => t.is(id.bare().toString(), JID))
 })
 
-// Prosody 404
+// Prosody 404 https://prosody.im/issues/issue/932
 test.skip('wss IPv6', t => {
+  t.context.entity.handle('authenticate', auth => {
+    return auth(USERNAME, PASSWORD)
+  })
   return t.context.entity.start({uri: 'wss://[::1]:5281/xmpp-websocket', domain})
     .then(id => t.is(id.bare().toString(), JID))
 })
 
 test('wss domain', t => {
+  t.context.entity.handle('authenticate', auth => {
+    return auth(USERNAME, PASSWORD)
+  })
   return t.context.entity.start('wss://localhost:5281/xmpp-websocket')
     .then(id => t.is(id.bare().toString(), JID))
 })
 
 test('xmpp IPv4', t => {
+  t.context.entity.handle('authenticate', auth => {
+    return auth(USERNAME, PASSWORD)
+  })
   return t.context.entity.start({uri: 'xmpp://127.0.0.1:5222', domain})
     .then(id => t.is(id.bare().toString(), JID))
 })
 
 test.skip('xmpp IPv6', t => {
+  t.context.entity.handle('authenticate', auth => {
+    return auth(USERNAME, PASSWORD)
+  })
   // No local IPv6 on travis https://github.com/travis-ci/travis-ci/issues/4964
   if (process.env.TRAVIS) {
     return t.pass()
@@ -144,16 +166,25 @@ test.skip('xmpp IPv6', t => {
 })
 
 test('xmpp domain', t => {
+  t.context.entity.handle('authenticate', auth => {
+    return auth(USERNAME, PASSWORD)
+  })
   return t.context.entity.start('xmpp://localhost:5222')
     .then(id => t.is(id.bare().toString(), JID))
 })
 
 test('xmpps IPv4', t => {
+  t.context.entity.handle('authenticate', auth => {
+    return auth(USERNAME, PASSWORD)
+  })
   return t.context.entity.start({uri: 'xmpps://127.0.0.1:5223', domain})
     .then(id => t.is(id.bare().toString(), JID))
 })
 
 test('xmpps IPv6', t => {
+  t.context.entity.handle('authenticate', auth => {
+    return auth(USERNAME, PASSWORD)
+  })
   // No local IPv6 on travis https://github.com/travis-ci/travis-ci/issues/4964
   if (process.env.TRAVIS) {
     return t.pass()
@@ -163,6 +194,9 @@ test('xmpps IPv6', t => {
 })
 
 test('xmpps domain', t => {
+  t.context.entity.handle('authenticate', auth => {
+    return auth(USERNAME, PASSWORD)
+  })
   return t.context.entity.start('xmpps://localhost:5223')
     .then(id => t.is(id.bare().toString(), JID))
 })

@@ -1,6 +1,6 @@
 PATH := node_modules/.bin:$(PATH)
 
-.PHONY: setup test clean bundle start stop restart
+.PHONY: setup test clean bundle start stop restart size
 
 setup:
 	yarn
@@ -19,8 +19,8 @@ clean:
 	rm -f prosody/prosody.log
 	lerna clean --yes
 	rm -rf node_modules/
-	rm packages/*/dist/*.js
-	rm lerna-debug.log
+	rm -f packages/*/dist/*.js
+	rm -f lerna-debug.log
 
 bundle:
 	lerna run bundle
@@ -33,3 +33,6 @@ stop:
 
 restart:
 	./server/ctl restart
+
+size:
+	browserify packages/client-core/index.js | babili | gzip > /tmp/bundle.js.gz ; stat -c%s /tmp/bundle.js.gz
