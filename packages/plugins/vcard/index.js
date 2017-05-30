@@ -1,6 +1,6 @@
 'use strict'
 
-const xml = require('@xmpp/xml')
+const {xml, plugin} = require('@xmpp/plugin')
 const iqCaller = require('../iq-caller')
 
 const NS = 'vcard-temp'
@@ -32,24 +32,14 @@ const build = (dict, parent) => {
   return builder
 }
 
-function plugin(entity) {
-  const caller = entity.plugin(iqCaller)
-
-  return {
-    entity,
-    get(...args) {
-      return caller.get(xml`<vCard xmlns='${NS}'/>`, ...args).then(parse)
-    },
-    set(vcard) {
-      return caller.set(build(vcard))
-    },
-  }
-}
-
-module.exports = {
-  name: 'vcard',
+module.exports = plugin('vcard', {
   NS,
+  get(...args) {
+    return this.plugins['iq-caller'].get(xml`<vCard xmlns='${NS}'/>`, ...args).then(parse)
+  },
+  set(vcard) {
+    return this.plugins['iq-caller'].set(build(vcard))
+  },
   build,
   parse,
-  plugin,
-}
+}, [iqCaller])
