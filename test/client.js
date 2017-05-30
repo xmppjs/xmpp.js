@@ -18,7 +18,7 @@ test.beforeEach(t => {
 })
 
 test.afterEach(t => {
-  if (t.jid) {
+  if (t.context.entity.jid) {
     return t.context.entity.stop()
   }
 })
@@ -51,8 +51,6 @@ test.cb('client', t => {
     .then(id => {
       t.true(id instanceof jid.JID)
       t.is(id.bare().toString(), JID)
-    })
-    .then(() => {
       t.end()
     })
 })
@@ -91,6 +89,14 @@ test.cb('bad credentials', t => {
       t.is(err, error)
       t.end()
     })
+})
+
+test('auto', t => {
+  t.context.entity.handle('authenticate', auth => {
+    return auth(USERNAME, PASSWORD)
+  })
+  return t.context.entity.start(domain)
+    .then(id => t.is(id.bare().toString(), JID))
 })
 
 // Prosody 404 https://prosody.im/issues/issue/932

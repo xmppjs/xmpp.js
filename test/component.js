@@ -6,12 +6,6 @@ const debug = require('../packages/debug')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-test.afterEach(t => {
-  if (t.jid) {
-    return t.context.entity.stop()
-  }
-})
-
 test.cb('component', t => {
   t.plan(8)
 
@@ -40,8 +34,6 @@ test.cb('component', t => {
     .then(jid => {
       t.true(jid instanceof xmpp.jid.JID)
       t.is(jid.toString(), 'node-xmpp.localhost')
-    })
-    .then(() => {
-      t.end()
+      entity.stop().then(() => t.end())
     })
 })

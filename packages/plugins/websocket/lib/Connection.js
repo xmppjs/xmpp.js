@@ -3,6 +3,7 @@
 const Socket = require('./Socket')
 const Connection = require('@xmpp/connection')
 const xml = require('@xmpp/xml')
+const FramedParser = require('./FramedParser')
 
 const NS_FRAMING = 'urn:ietf:params:xml:ns:xmpp-framing'
 
@@ -14,7 +15,7 @@ const NS_FRAMING = 'urn:ietf:params:xml:ns:xmpp-framing'
 
 class ConnectionWebSocket extends Connection {
   // https://tools.ietf.org/html/rfc7395#section-3.6
-  footer() {
+  footerElement() {
     return new xml.Element('close', {
       xmlns: NS_FRAMING,
     })
@@ -35,5 +36,6 @@ class ConnectionWebSocket extends Connection {
 
 ConnectionWebSocket.prototype.Socket = Socket
 ConnectionWebSocket.prototype.NS = 'jabber:client'
+ConnectionWebSocket.prototype.Parser = FramedParser
 
 module.exports = ConnectionWebSocket
