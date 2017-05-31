@@ -36,6 +36,9 @@ class EventEmitter {
     }
   }
   once(event, listener) {
+    if (!listener) {
+      return this.promise(event)
+    }
     const expire = (...args) => {
       listener(...args)
       this.removeListener(event, expire)

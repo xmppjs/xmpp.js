@@ -113,11 +113,19 @@ class Connection extends EventEmitter {
     this.emit(status, ...args)
   }
 
-  ready() {
+  ready(fn) {
+    if (fn) {
+      if (this.status === 'online') {
+        return Promise.resolve().then(fn)
+      }
+      this.on('online', fn)
+      return
+    }
+
     if (this.status === 'online') {
       return Promise.resolve()
     }
-    return this.promise('online')
+    return this.once('online')
   }
 
   id() {
@@ -129,21 +137,21 @@ class Connection extends EventEmitter {
    */
   start(options) {
     this._status('starting')
-    return new Promise((resolve, reject) => {
-      if (typeof options === 'string') {
-        options = {uri: options}
-      }
+    if (typeof options === 'string') {
+      options = {uri: options}
+    }
 
-      if (!options.domain) {
-        options.domain = getHostname(options.uri)
-      }
+    if (!options.domain) {
+      options.domain = getHostname(options.uri)
+    }
 
-      this.promise('online').then(resolve, reject)
+    return Promise.all([
+      this.promise('online'),
       this.connect(options.uri).then(() => {
         const {domain, lang} = options
         return this.open({domain, lang})
-      }, reject)
-    })
+      }),
+    ])
   }
 
   /**
@@ -258,10 +266,10 @@ class Connection extends EventEmitter {
   }
 
   sendReceive(element, timeout = this.timeout) {
-    return new Promise((resolve, reject) => {
-      this.send(element).catch(reject)
-      this.promise('element', timeout).then(resolve, reject)
-    })
+    return Promise.all([
+      this.send(element),
+      this.promise('element', timeout),
+    ])
   }
 
   promiseWrite(data) {
@@ -287,10 +295,10 @@ class Connection extends EventEmitter {
   }
 
   writeReceive(data, timeout = this.timeout) {
-    return new Promise((resolve, reject) => {
-      this.promiseWrite(data).catch(reject)
-      this.promise('element', timeout).then(resolve, reject)
-    })
+    return Promise.all([
+      this.promiseWrite(data),
+      this.promise('element', timeout),
+    ])
   }
 
   isStanza(element) {
