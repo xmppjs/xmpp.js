@@ -1,14 +1,10 @@
 'use strict'
 
 const TimeoutError = require('./TimeoutError')
-
-function to(ms) {
-  return new Promise((resolve, reject) => setTimeout(() => reject(new TimeoutError()), ms))
-}
+const delay = require('./delay')
 
 module.exports = function timeout(promise, ms) {
-  return Promise.race([
-    to(ms),
-    promise,
-  ])
+  return Promise.race([promise, delay(ms).then(() => {
+    throw new TimeoutError()
+  })])
 }
