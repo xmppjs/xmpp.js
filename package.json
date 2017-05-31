@@ -25,6 +25,5 @@
       "packages/**/test.js",
       "packages/**/test/*.js"
     ]
-  },
-  "dependencies": {}
+  }
 }

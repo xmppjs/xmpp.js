@@ -13,12 +13,8 @@ entity.on('error', err => {
 })
 
 // Let's log status changes
-function logStatus(status) {
+entity.listen('status', status => {
   console.log('🛈', status)
-}
-logStatus(entity.status)
-entity.on('status', (status, ...args) => {
-  logStatus(status, ...args)
 })
 
 // Emitted for incoming stanza _only_ (iq/presence/message) qualified with the right namespace
@@ -33,9 +29,9 @@ entity.on('status', (status, ...args) => {
 
 // useful for logging raw traffic
 // Emitted for every incoming fragment
-entity.on('input', data => console.log('⮈', data))
+entity.listen('input', data => console.log('⮈', data))
 // Emitted for every outgoing fragment
-entity.on('output', data => console.log('⮊', data))
+entity.listen('output', data => console.log('⮊', data))
 
 // Emitted for any in our out XML root element
 // useful for logging
@@ -43,8 +39,11 @@ entity.on('output', data => console.log('⮊', data))
 //   console.log(output ? 'element =>' : 'element <=', (output || input).toString())
 // })
 
-// Runs if online and when online
-entity.ready(jid => {
+// entity.on('online', jid => {
+//   console.log('jid', jid.toString())
+//   entity.send(xml`<presence/>`)
+// })
+entity.listen('online', jid => {
   console.log('jid', jid.toString())
   entity.send(xml`<presence/>`)
 })
@@ -60,7 +59,7 @@ entity.start('localhost') // Auto
   })
 
 // Emitted when authentication is required
-entity.on('authenticate', authenticate => {
+entity.listen('authenticate', authenticate => {
   authenticate('node-xmpp', 'foobar').catch(err => console.error('authentication failed', err))
 })
 

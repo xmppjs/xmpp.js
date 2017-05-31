@@ -1,10 +1,10 @@
 'use strict'
 
-module.exports = function promise(EE, event) {
+module.exports = function promise(EE, event, rejectEvent) {
   return new Promise((resolve, reject) => {
     const cleanup = () => {
       EE.removeListener(event, onEvent)
-      EE.removeListener('error', onError)
+      EE.removeListener(rejectEvent, onError)
     }
     function onError(reason) {
       reject(reason)
@@ -14,7 +14,9 @@ module.exports = function promise(EE, event) {
       resolve(value)
       cleanup()
     }
-    EE.once('error', onError)
     EE.once(event, onEvent)
+    if (rejectEvent) {
+      EE.once(rejectEvent, onError)
+    }
   })
 }

@@ -52,9 +52,9 @@ class Connection extends EventEmitter {
     const sock = this.socket = socket
     const listeners = this.socketListeners
     listeners.data = data => {
-      data = data.toString('utf8')
-      this.emit('input', data)
-      this.parser.write(data)
+      const str = data.toString('utf8')
+      this.emit('input', str)
+      this.parser.write(str)
     }
     listeners.close = () => {
       this.domain = ''
@@ -113,21 +113,6 @@ class Connection extends EventEmitter {
     this.emit(status, ...args)
   }
 
-  ready(fn) {
-    if (fn) {
-      if (this.status === 'online') {
-        return Promise.resolve().then(fn)
-      }
-      this.on('online', fn)
-      return
-    }
-
-    if (this.status === 'online') {
-      return Promise.resolve()
-    }
-    return this.once('online')
-  }
-
   id() {
     return Math.random().toString().split('0.')[1]
   }
@@ -161,12 +146,12 @@ class Connection extends EventEmitter {
     this._status('stopping')
     return new Promise((resolve, reject) => {
       this.close().catch(reject) // FIXME wait footer
-      this.end().then(resolve, reject)
+      this.disconnect().then(resolve, reject)
     })
   }
 
   /**
-   * Opens the socket
+   * Connects the socket
    */
   connect(options) {
     this._status('connecting')
@@ -184,17 +169,17 @@ class Connection extends EventEmitter {
   }
 
   /**
-   * Closes the socket
+   * Disconnects the socket
    */
-  end() {
-    this.emit('ending')
+  disconnect() {
+    this._status('disconnecting')
     return new Promise(resolve => {
        // TODO timeout
       const handler = () => {
         this.socket.end()
         this.once('close', () => {
           resolve()
-          this.emit('end')
+          this._statis('disconnected')
         })
       }
       this.parser.once('end', handler)
@@ -244,8 +229,16 @@ class Connection extends EventEmitter {
   close() {
     this._status('closing')
     return this.write(this.footer(this.footerElement())).then(() => {
-      this._status('closed')
+      this._status('close')
     })
+  }
+
+  ready(fn) {
+    if (this.status === 'online') {
+      fn(this.jid)
+    } else {
+      this.on('online', fn)
+    }
   }
 
   /**
@@ -266,10 +259,9 @@ class Connection extends EventEmitter {
   }
 
   sendReceive(element, ms = this.timeout) {
-    console.log(ms)
     return Promise.all([
       this.send(element),
-      timeout(this.once('element'), ms),
+      timeout(this.promise('element'), ms),
     ]).then(([, el]) => el)
   }
 
@@ -278,13 +270,6 @@ class Connection extends EventEmitter {
     return promify(this.socket, 'write', str).then(() => {
       this.emit('output', str)
     })
-  }
-
-  writeReceive(data, ms = this.timeout) {
-    return Promise.all([
-      this.write(data),
-      timeout(this.once('element'), ms),
-    ]).then(([el]) => el)
   }
 
   isStanza(element) {

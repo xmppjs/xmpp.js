@@ -43,8 +43,7 @@ entity.on('output', data => console.log('⮊ OUT', data))
 //   console.log(output ? 'element =>' : 'element <=', (output || input).toString())
 // })
 
-// Runs if online and when online
-entity.ready(jid => {
+entity.on('online', jid => {
   console.log('jid', jid.toString())
   entity.send(xml`<presence/>`)
 })
