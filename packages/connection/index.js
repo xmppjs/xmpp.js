@@ -1,6 +1,6 @@
 'use strict'
 
-const EventEmitter = require('@xmpp/events')
+const {timeout, EventEmitter, promify} = require('@xmpp/events')
 const jid = require('@xmpp/jid')
 const url = require('url')
 const xml = require('@xmpp/xml')
@@ -45,15 +45,16 @@ class Connection extends EventEmitter {
     this.openOptions = null
     this.connectOptions = null
     this.socketListeners = Object.create(null)
+    this.status = 'offline'
   }
 
   _attachSocket(socket) {
     const sock = this.socket = socket
     const listeners = this.socketListeners
     listeners.data = data => {
-      data = data.toString('utf8')
-      this.emit('input', data)
-      this.parser.write(data)
+      const str = data.toString('utf8')
+      this.emit('input', str)
+      this.parser.write(str)
     }
     listeners.close = () => {
       this.domain = ''
@@ -106,12 +107,10 @@ class Connection extends EventEmitter {
     return this.jid
   }
 
-  _online() {
-    this.emit('online', this.jid)
-  }
-
-  _authenticated() {
-    this.emit('authenticated')
+  _status(status, ...args) {
+    this.status = status
+    this.emit('status', status, ...args)
+    this.emit(status, ...args)
   }
 
   id() {
@@ -122,37 +121,40 @@ class Connection extends EventEmitter {
    * Opens the socket then opens the stream
    */
   start(options) {
-    return new Promise((resolve, reject) => {
-      if (typeof options === 'string') {
-        options = {uri: options}
-      }
+    this._status('starting')
+    if (typeof options === 'string') {
+      options = {uri: options}
+    }
 
-      if (!options.domain) {
-        options.domain = getHostname(options.uri)
-      }
+    if (!options.domain) {
+      options.domain = getHostname(options.uri)
+    }
 
-      this.promise('online').then(resolve, reject)
+    return Promise.all([
+      this.once('online'),
       this.connect(options.uri).then(() => {
         const {domain, lang} = options
         return this.open({domain, lang})
-      }, reject)
-    })
+      }),
+    ]).then(([, res]) => res)
   }
 
   /**
    * Closes the stream then closes the socket
    */
   stop() {
+    this._status('stopping')
     return new Promise((resolve, reject) => {
       this.close().catch(reject) // FIXME wait footer
-      this.end().then(resolve, reject)
+      this.disconnect().then(resolve, reject)
     })
   }
 
   /**
-   * Opens the socket
+   * Connects the socket
    */
   connect(options) {
+    this._status('connecting')
     this.connectOptions = options
     return new Promise((resolve, reject) => {
       this._attachParser(new this.Parser())
@@ -161,19 +163,24 @@ class Connection extends EventEmitter {
       this.socket.connect(this.socketParameters(options), () => {
         this.socket.removeListener('error', reject)
         resolve()
+        this._status('connect')
       })
     })
   }
 
   /**
-   * Closes the socket
+   * Disconnects the socket
    */
-  end() {
+  disconnect() {
+    this._status('disconnecting')
     return new Promise(resolve => {
        // TODO timeout
       const handler = () => {
         this.socket.end()
-        this.once('close', resolve)
+        this.once('close', () => {
+          resolve()
+          this._statis('disconnected')
+        })
       }
       this.parser.once('end', handler)
     })
@@ -183,6 +190,7 @@ class Connection extends EventEmitter {
    * Opens the stream
    */
   open(options) {
+    this._status('opening')
     this.openOptions = options
     if (typeof options === 'string') {
       options = {domain: options}
@@ -210,7 +218,7 @@ class Connection extends EventEmitter {
         this.domain = domain
         this.lang = el.attrs['xml:lang']
         resolve(el)
-        this.emit('open', el)
+        this._status('open', el)
       })
     })
   }
@@ -219,55 +227,48 @@ class Connection extends EventEmitter {
    * Closes the stream
    */
   close() {
-    return this.promiseWrite(this.footer(this.footerElement()))
+    this._status('closing')
+    return this.write(this.footer(this.footerElement())).then(() => {
+      this._status('close')
+    })
+  }
+
+  ready(fn) {
+    if (this.status === 'online') {
+      fn(this.jid)
+    } else {
+      this.on('online', fn)
+    }
   }
 
   /**
-   * Restarts the stream
+   * Restart the stream
+   * https://xmpp.org/rfcs/rfc6120.html#streams-negotiation-restart
    */
   restart() {
-    return this.open(this.openOptions)
+    this._status('restarting')
+    return this.open(this.openOptions).then(() => {
+      this._status('restart')
+    })
   }
 
   send(element) {
-    return this.promiseWrite(element).then(() => {
+    return this.write(element).then(() => {
       this.emit('send', element)
     })
   }
 
-  sendReceive(element, timeout = this.timeout) {
-    return new Promise((resolve, reject) => {
-      this.send(element).catch(reject)
-      this.promise('element', timeout).then(resolve, reject)
-    })
+  sendReceive(element, ms = this.timeout) {
+    return Promise.all([
+      this.send(element),
+      timeout(this.promise('element'), ms),
+    ]).then(([, el]) => el)
   }
 
-  promiseWrite(data) {
-    return new Promise((resolve, reject) => {
-      this.write(data, err => {
-        if (err) {
-          return reject(err)
-        }
-        resolve()
-      })
-    })
-  }
-
-  write(data, fn = () => {}) {
-    data = data.toString('utf8')
-    this.socket.write(data, err => {
-      if (err) {
-        return fn(err)
-      }
-      this.emit('output', data)
-      fn()
-    })
-  }
-
-  writeReceive(data, timeout = this.timeout) {
-    return new Promise((resolve, reject) => {
-      this.promiseWrite(data).catch(reject)
-      this.promise('element', timeout).then(resolve, reject)
+  write(data) {
+    const str = data.toString('utf8')
+    return promify(this.socket, 'write', str).then(() => {
+      this.emit('output', str)
     })
   }
 

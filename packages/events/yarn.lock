@@ -2,3 +2,6 @@
 # yarn lockfile v1
 
 
+zen-observable@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/zen-observable/-/zen-observable-0.5.1.tgz#a2a57908a276b569504f42fdf2fa2f643bc02d72"

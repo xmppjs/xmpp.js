@@ -11,5 +11,8 @@
     "events",
     "promise",
     "EventEmitter"
-  ]
+  ],
+  "devDependencies": {
+    "zen-observable": "^0.5.1"
+  }
 }
