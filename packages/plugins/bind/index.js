@@ -1,6 +1,6 @@
 'use strict'
 
-const xml = require('@xmpp/xml')
+const {plugin, xml} = require('@xmpp/plugin')
 const streamfeatures = require('../stream-features')
 const iqCaller = require('../iq-caller')
 
@@ -23,32 +23,36 @@ function match(features) {
   return features.getChild('bind', NS)
 }
 
-function bind(caller, entity, resource) {
-  return caller.set(makeBindElement(resource)).then(result => {
-    entity._jid(result.getChildText('jid'))
-  })
-}
-
-module.exports.name = 'bind'
-module.exports.plugin = function plugin(entity) {
-  const caller = entity.plugin(iqCaller)
-  const p = {
-    entity,
-    getResource() {},
-  }
-
-  const streamFeature = {
-    name: 'bind',
-    priority: 2500,
-    match,
-    run: entity => {
-      return Promise.resolve((p.getResource())).then(resource => {
-        return bind(caller, entity, resource)
+module.exports = plugin('bind', {
+  start() {
+    const streamFeature = {
+      name: 'bind',
+      priority: 2500,
+      match,
+      run: () => this.handleFeature(),
+    }
+    this.plugins['stream-features'].add(streamFeature)
+  },
+  bind(resource) {
+    this.entity._status('binding')
+    return this.plugins['iq-caller'].set(makeBindElement(resource)).then(result => {
+      this.entity._jid(result.getChildText('jid'))
+      this.entity._status('bound')
+    })
+  },
+  handleFeature() {
+    if (this.entity.listenerCount('bind') === 0) {
+      return this.bind()
+    }
+    return new Promise((resolve, reject) => {
+      this.entity._status('bind', resource => {
+        return this.bind(resource)
+        .then(resolve)
+        .catch(err => {
+          reject(err)
+          throw err
+        })
       })
-    },
-  }
-
-  const streamFeatures = entity.plugin(streamfeatures)
-  streamFeatures.add(streamFeature)
-  return p
-}
+    })
+  },
+}, [streamfeatures, iqCaller])

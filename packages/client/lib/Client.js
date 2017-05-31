@@ -13,19 +13,6 @@ class Client extends ClientCore {
       } // Browserify stub
       this.plugin(plugin)
     })
-
-    // So that we have a common inteface with component
-    const {sasl} = this.plugins
-    sasl.handleMechanism = (mech, features) => new Promise((resolve, reject) => {
-      this._status('authenticate', (username, password) => {
-        return sasl.authenticate(mech, {username, password}, features)
-        .then(resolve)
-        .catch(err => {
-          reject(err)
-          throw err
-        })
-      })
-    })
   }
 }
 

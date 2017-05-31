@@ -1,6 +1,6 @@
 'use strict'
 
-const EventEmitter = require('@xmpp/events')
+const {timeout, EventEmitter, promify} = require('@xmpp/events')
 const jid = require('@xmpp/jid')
 const url = require('url')
 const xml = require('@xmpp/xml')
@@ -146,12 +146,12 @@ class Connection extends EventEmitter {
     }
 
     return Promise.all([
-      this.promise('online'),
+      this.once('online'),
       this.connect(options.uri).then(() => {
         const {domain, lang} = options
         return this.open({domain, lang})
       }),
-    ])
+    ]).then(([, res]) => res)
   }
 
   /**
@@ -243,7 +243,7 @@ class Connection extends EventEmitter {
    */
   close() {
     this._status('closing')
-    return this.promiseWrite(this.footer(this.footerElement())).then(() => {
+    return this.write(this.footer(this.footerElement())).then(() => {
       this._status('closed')
     })
   }
@@ -260,45 +260,31 @@ class Connection extends EventEmitter {
   }
 
   send(element) {
-    return this.promiseWrite(element).then(() => {
+    return this.write(element).then(() => {
       this.emit('send', element)
     })
   }
 
-  sendReceive(element, timeout = this.timeout) {
+  sendReceive(element, ms = this.timeout) {
+    console.log(ms)
     return Promise.all([
       this.send(element),
-      this.promise('element', timeout),
-    ])
+      timeout(this.once('element'), ms),
+    ]).then(([, el]) => el)
   }
 
-  promiseWrite(data) {
-    return new Promise((resolve, reject) => {
-      this.write(data, err => {
-        if (err) {
-          return reject(err)
-        }
-        resolve()
-      })
+  write(data) {
+    const str = data.toString('utf8')
+    return promify(this.socket, 'write', str).then(() => {
+      this.emit('output', str)
     })
   }
 
-  write(data, fn = () => {}) {
-    data = data.toString('utf8')
-    this.socket.write(data, err => {
-      if (err) {
-        return fn(err)
-      }
-      this.emit('output', data)
-      fn()
-    })
-  }
-
-  writeReceive(data, timeout = this.timeout) {
+  writeReceive(data, ms = this.timeout) {
     return Promise.all([
-      this.promiseWrite(data),
-      this.promise('element', timeout),
-    ])
+      this.write(data),
+      timeout(this.once('element'), ms),
+    ]).then(([el]) => el)
   }
 
   isStanza(element) {

@@ -33,3 +33,6 @@ stop:
 
 restart:
 	./server/ctl restart
+
+size:
+	browserify packages/client-core/index.js | babili | gzip > /tmp/bundle.js.gz ; stat -c%s /tmp/bundle.js.gz

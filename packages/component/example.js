@@ -13,8 +13,8 @@ entity.on('error', err => {
 })
 
 // Let's log status changes
-function logStatus(status, ...args) {
-  console.log(status, ...args)
+function logStatus(status) {
+  console.log('🛈', status)
 }
 logStatus(entity.status)
 entity.on('status', (status, ...args) => {

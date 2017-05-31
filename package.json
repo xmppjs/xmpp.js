@@ -1,5 +1,5 @@
 {
-	"private": true,
+  "private": true,
   "devDependencies": {
     "ava": "^0.19.1",
     "babel-cli": "^6.24.1",
@@ -25,5 +25,6 @@
       "packages/**/test.js",
       "packages/**/test/*.js"
     ]
-  }
+  },
+  "dependencies": {}
 }

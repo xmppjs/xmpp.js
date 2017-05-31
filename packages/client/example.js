@@ -13,8 +13,8 @@ entity.on('error', err => {
 })
 
 // Let's log status changes
-function logStatus(status, ...args) {
-  console.log(status, ...args)
+function logStatus(status) {
+  console.log('🛈', status)
 }
 logStatus(entity.status)
 entity.on('status', (status, ...args) => {
@@ -33,9 +33,9 @@ entity.on('status', (status, ...args) => {
 
 // useful for logging raw traffic
 // Emitted for every incoming fragment
-entity.on('input', data => console.log('⮈ IN ', data))
+entity.on('input', data => console.log('⮈', data))
 // Emitted for every outgoing fragment
-entity.on('output', data => console.log('⮊ OUT', data))
+entity.on('output', data => console.log('⮊', data))
 
 // Emitted for any in our out XML root element
 // useful for logging

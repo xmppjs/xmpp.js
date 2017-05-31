@@ -62,8 +62,15 @@ module.exports = plugin('sasl', {
   },
 
   handleMechanism(mech, features) {
-    return Promise.resolve(this.getCrendentials(mech, features)).then((username, password) => {
-      return this.authenticate(mech, {username, password}, features)
+    return new Promise((resolve, reject) => {
+      this.entity._status('authenticate', (username, password) => {
+        return this.authenticate(mech, {username, password}, features)
+        .then(resolve)
+        .catch(err => {
+          reject(err)
+          throw err
+        })
+      })
     })
   },
 
