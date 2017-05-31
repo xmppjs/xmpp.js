@@ -43,19 +43,14 @@ entity.on('output', data => console.log('⮊ OUT', data))
 //   console.log(output ? 'element =>' : 'element <=', (output || input).toString())
 // })
 
-// Resolves if or when online
-entity.ready().then(jid => {
+// Runs if online and when online
+entity.ready(jid => {
   console.log('jid', jid.toString())
   entity.send(xml`<presence/>`)
 })
 
 // "start" opens the socket and the XML stream
 entity.start({uri: 'xmpp://localhost:5347', domain: 'node-xmpp.localhost'})
-  // Resolves once online
-  .then(jid => {
-    console.log('jid', jid.toString())
-  })
-  // Rejects for any error before online
   .catch(err => {
     console.error('start failed', err)
   })

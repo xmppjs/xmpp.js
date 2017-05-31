@@ -55,11 +55,6 @@ entity.start('localhost') // Auto
 // entity.start('xmpps://localhost:5223') // TLS
 // entity.start('ws://localhost:5280/xmpp-websocket') // Websocket
 // entity.start('wss://localhost:5281/xmpp-websocket') // Secure WebSocket
-  // Resolves once online
-  .then(jid => {
-    console.log('jid', jid.toString())
-  })
-  // Rejects for any error before online
   .catch(err => {
     console.error('start failed', err)
   })
