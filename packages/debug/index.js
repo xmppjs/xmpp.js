@@ -5,11 +5,12 @@ module.exports = function debug(entity) {
     entity.on('input', data => console.log('⮈ IN ', data))
     entity.on('output', data => console.log('⮊ OUT', data))
     ;['connect', 'open', 'authenticated', 'online', 'error', 'authenticate'].forEach(event => {
+      const prefix = (event === 'error' ? '❌   ' : '🛈   ')
       entity.on(event, arg => {
         if (arg === undefined || arg === null || typeof arg === 'function') {
-          console.log('🛈    ', event)
+          console.log(prefix, event)
         } else {
-          console.log('🛈    ', event, arg.toString())
+          console.log(prefix, event, arg.toString())
         }
       })
     })
