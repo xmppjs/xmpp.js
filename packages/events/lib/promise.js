@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = function promise(EE, event, rejectEvent) {
+module.exports = function promise(EE, event, rejectEvent = 'error') {
   return new Promise((resolve, reject) => {
     const cleanup = () => {
       EE.removeListener(event, onEvent)

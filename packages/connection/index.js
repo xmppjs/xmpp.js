@@ -131,7 +131,7 @@ class Connection extends EventEmitter {
     }
 
     return Promise.all([
-      this.once('online'),
+      this.promise('online'),
       this.connect(options.uri).then(() => {
         const {domain, lang} = options
         return this.open({domain, lang})
@@ -236,9 +236,8 @@ class Connection extends EventEmitter {
   ready(fn) {
     if (this.status === 'online') {
       fn(this.jid)
-    } else {
-      this.on('online', fn)
     }
+    return this.listen('online', fn)
   }
 
   /**
