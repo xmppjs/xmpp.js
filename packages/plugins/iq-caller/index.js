@@ -29,7 +29,11 @@ module.exports = plugin('iq-caller', {
     delete this.handler
   },
   id() {
-    return Math.random().toString().substr(2)
+    let id
+    while (!id) {
+      id = Math.random().toString(36).substr(2, 12)
+    }
+    return id
   },
   match(stanza) {
     return (

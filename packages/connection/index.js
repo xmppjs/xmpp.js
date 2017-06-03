@@ -114,10 +114,6 @@ class Connection extends EventEmitter {
     this.emit('authenticated')
   }
 
-  id() {
-    return Math.random().toString().split('0.')[1]
-  }
-
   /**
    * Opens the socket then opens the stream
    */
