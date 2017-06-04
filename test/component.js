@@ -26,9 +26,9 @@ test.cb('component', t => {
     t.true(el instanceof xmpp.xml.Element)
   })
 
-  entity.on('authenticate', auth => {
+  entity.handle('authenticate', auth => {
     t.is(typeof auth, 'function')
-    auth('foobar').then(() => t.pass())
+    return auth('foobar').then(() => t.pass())
   })
 
   entity.on('online', jid => {

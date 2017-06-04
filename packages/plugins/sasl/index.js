@@ -57,12 +57,13 @@ module.exports = plugin('sasl', {
 
     return Promise.resolve(this.getMechanism(offered, usable, available, features)).then(mech => {
       this.mech = mech
-      return Promise.resolve(this.handleMechanism(mech, features))
+      return this.handleMechanism(mech, features)
     })
   },
 
   handleMechanism(mech, features) {
-    return Promise.resolve(this.getCrendentials(mech, features)).then((username, password) => {
+    this.entity._status('authenticate')
+    return this.entity.delegate('authenticate', (username, password) => {
       return this.authenticate(mech, {username, password}, features)
     })
   },
@@ -107,6 +108,8 @@ module.exports = plugin('sasl', {
       serviceName: domain,
     }, credentials)
 
+    this.entity._status('authenticating')
+
     return new Promise((resolve, reject) => {
       const handler = element => {
         if (element.attrs.xmlns !== NS) {
@@ -132,7 +135,7 @@ module.exports = plugin('sasl', {
           ))
         } else if (element.name === 'success') {
           resolve()
-          this.entity._authenticated()
+          this.entity._status('authenticated')
         }
 
         this.entity.removeListener('nonza', handler)

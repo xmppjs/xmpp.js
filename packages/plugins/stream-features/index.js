@@ -33,7 +33,7 @@ module.exports = plugin('stream-features', {
               if (feature.restart) {
                 return entity.restart()
               } else if (entity.jid) {
-                entity._online(entity.jid)
+                entity._status('online', entity.jid)
               } else {
                 this.onStreamFeatures(features, el)
               }

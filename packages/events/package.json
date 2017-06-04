@@ -11,5 +11,9 @@
     "events",
     "promise",
     "EventEmitter"
-  ]
+  ],
+  "devDependencies": {},
+  "dependencies": {
+    "util.promisify": "^1.0.0"
+  }
 }

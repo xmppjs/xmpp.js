@@ -24,6 +24,7 @@ rules:
   indent: [error, 2]
   no-multi-assign: 0
   func-names: 0
+  operator-linebreak: [error, after, {overrides: {"?": before, ":": "before" } }]
   # ES2015 http://eslint.org/docs/rules/#ecmascript-6
   prefer-rest-params: [error]
   prefer-spread: [error]

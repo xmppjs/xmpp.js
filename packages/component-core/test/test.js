@@ -6,7 +6,7 @@ const Component = require('..')
 
 test('calling send sanitize the from attribute', t => {
   const entity = new Component()
-  entity.write = () => {}
+  entity.write = () => Promise.resolve()
   let el
 
   el = xml`<el/>`
@@ -26,7 +26,7 @@ test('calling send sanitize the from attribute', t => {
 
 test('calling send sanitize the to attribute', t => {
   const entity = new Component()
-  entity.write = () => {}
+  entity.write = () => Promise.resolve()
   let el
 
   el = xml`<el/>`
