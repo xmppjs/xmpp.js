@@ -2,40 +2,36 @@
 
 const test = require('ava')
 const {spy} = require('sinon')
-const index = require('../index')
+const jid = require('..')
 const JID = require('../lib/JID')
 
-test('is returns true if the passed argument is an instance of JID', t => {
-  const addr = new JID('foo')
-  t.is(index.is(addr), true)
-})
-
-test('is returns false if the passed argument is not an instance of JID', t => {
-  const addr = function () {}
-  t.is(index.is(addr), false)
-})
-
 test('equal calls equals on the first argument with the second argument', t => {
-  const A = new JID('foo')
-  const B = new JID('bar')
+  const A = jid('foo')
+  const B = jid('bar')
   spy(A, 'equals')
-  index.equal(A, B)
+  jid.equal(A, B)
   t.true(A.equals.calledWith(B))
   A.equals.restore()
 })
 
 test('JID exports lib/JID', t => {
-  t.is(index.JID, JID)
+  t.is(jid.JID, JID)
+})
+
+test('calls parse if only first argument provided', t => {
+  const addr = jid('foo@bar')
+  t.true(addr instanceof JID)
+  t.is(addr.toString(), 'foo@bar')
 })
 
 test('calls JID with passed arguments', t => {
-  const addr = index('foo', 'bar', 'baz')
+  const addr = jid('foo', 'bar', 'baz')
   t.true(addr instanceof JID)
   t.is(addr.toString(), 'foo@bar/baz')
 })
 
 test('works as expected with new operator', t => {
-  const addr = new index('foo', 'bar', 'baz')  // eslint-disable-line new-cap
+  const addr = new jid('foo', 'bar', 'baz')  // eslint-disable-line new-cap
   t.true(addr instanceof JID)
   t.is(addr.toString(), 'foo@bar/baz')
 })
