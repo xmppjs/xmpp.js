@@ -19,14 +19,14 @@ npm install @xmpp/jid
 
 ## Usage
 
-```javascript
+```js
 var jid = require('@xmpp/jid')
 
 /*
  * All return an instance of jid.JID
  */
-var addr = jid('alice@wonderland.net/rabbithole')          // OK
-var addr = jid('alice', 'wonderland.net', 'rabbithole')    // BEST; see section on escaping below
+var addr = jid('alice@wonderland.net/rabbithole')
+var addr = jid('alice', 'wonderland.net', 'rabbithole')
 
 addr instanceof jid.JID // true
 
@@ -66,27 +66,26 @@ addr.bare()     // returns a JID without resource
 addr.equals(some_jid) // returns true if the two JIDs are equal, false otherwise
 // same as
 jid.equal(addr, some_jid)
-
-jid.is(addr) // returns true if the passed argument is an instance of jid.JID, false otherwise
 ```
 
 ## Escaping
 
-The [XEP-0106](http://xmpp.org/extensions/xep-0106.html) defines a method to escape and unescape characters that aren't allowed in the local part of the JID. This library fully implement it but because `@` and `/` are ones of them and used as JID separators, you should always prefer the following syntax
+The [XEP-0106](http://xmpp.org/extensions/xep-0106.html) defines a method to escape and unescape characters that aren't allowed in the local part of the JID. This library fully implement it.
 
-```javascript
-// GOOD
-jid(local, domain, resource)
+```js
+const addr = jid('contact@example.net', 'xmpp.net')
+addr.toString()     // contact\40example.net@xmpp.net
+// for display purpose only
+addr.toString(true) // contact@example.net@xmpp.net
 ```
 
-over
+For user input, use
 
-```javascript
-// BAD
-jid(local@domain/resource)
+```js
+jid('contact@example.net', 'xmpp.net')
+// over
+jid('contact@example.net@xmpp.net')
 ```
-
-for user input.
 
 ## References
 

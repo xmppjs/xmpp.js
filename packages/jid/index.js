@@ -1,9 +1,14 @@
 'use strict'
 
 const JID = require('./lib/JID')
+const escaping = require('./lib/escaping')
+const parse = require('./lib/parse')
 
-function jid(a, b, c) {
-  return new JID(a, b, c)
+function jid(...args) {
+  if (!args[1] && !args[2]) {
+    return parse(...args)
+  }
+  return new JID(...args)
 }
 
 exports = module.exports = jid.bind()
@@ -12,6 +17,7 @@ exports.JID = JID
 exports.equal = function (a, b) {
   return a.equals(b)
 }
-exports.is = function (a) {
-  return a instanceof JID
-}
+exports.detectEscape = escaping.detectEscape
+exports.escapeLocal = escaping.escape
+exports.unescapeLocal = escaping.unescape
+exports.parse = parse
