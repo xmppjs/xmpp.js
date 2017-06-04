@@ -46,12 +46,15 @@ function fallbackConnect(entity, uris) {
   }
 
   const socket = new Transport.prototype.Socket()
+  const parser = new Transport.prototype.Parser()
   return sc(socket, params)
     .then(() => {
-      entity._attachParser(new entity.Parser())
+      entity._attachParser(parser)
       entity._attachSocket(socket)
       entity.emit('connect')
       entity.Transport = Transport
+      entity.Socket = Transport.prototype.Socket
+      entity.Parser = Transport.prototype.Parser
     })
     .catch(() => {
       if (uris.length === 0) {

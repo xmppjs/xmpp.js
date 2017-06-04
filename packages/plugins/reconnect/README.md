@@ -2,7 +2,10 @@
 
 XMPP reconnect for JavaScript
 
-Included in `@xmpp/component`.
+Included and enabled in `@xmpp/component` and `@xmpp/client`.
+
+`reconnect` will only be enabled if the entity is already online or after it goes online for the first time. Each reconnect will re-use the options provided to the entity `start` method.
+
 
 ## Install
 
@@ -17,16 +20,45 @@ const reconnect = require('@xmpp/plugins/reconnect')
 const entity = ...
 
 const plugin = entity.plugin(reconnect)
+```
 
-plugin.getDelay() // default is 1000ms
-plugin.setDelay(2000)
+### delay property
 
-entity.on('reconnecting', () => {
+Property to set/get the delay in milliseconds between connection closed and reconnecting.
+
+Default is `1000`.
+
+```js
+plugin.delay // 1000
+plugin.delay = 2000
+```
+
+### reconnecting event
+
+Emitted each time a re-connection is attempted.
+
+```js
+plugin.on('reconnecting', () => {
   console.log('reconnecting')
 })
+```
 
-entity.on('reconnected', () => {
+### reconnected event
+
+Emitted each time a re-connection succeed.
+
+```js
+plugin.on('reconnected', () => {
   console.log('reconnected')
 })
+```
 
+### error event
+
+Emitted each time a re-connection fails.
+
+```js
+plugin.on('error', err => {
+  console.error('reconnection error', err)
+})
 ```

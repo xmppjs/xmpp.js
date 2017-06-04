@@ -2,6 +2,7 @@
 
 const {Socket} = require('net')
 const Connection = require('@xmpp/connection')
+const {Parser} = require('@xmpp/xml')
 
 const NS_STREAM = 'http://etherx.jabber.org/streams'
 
@@ -39,5 +40,6 @@ class TCP extends Connection {
 
 TCP.prototype.NS = NS_STREAM
 TCP.prototype.Socket = Socket
+TCP.prototype.Parser = Parser
 
 module.exports = TCP

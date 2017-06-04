@@ -33,6 +33,7 @@ class Client extends Connection {
 
     this.Transport = Transport
     this.Socket = Transport.prototype.Socket
+    this.Parser = Transport.prototype.Parser
 
     return super.connect(uri)
   }

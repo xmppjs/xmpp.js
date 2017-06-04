@@ -42,9 +42,11 @@ class Connection extends EventEmitter {
     this.timeout = 2000
     this.options = typeof options === 'object' ? options : {}
     this.plugins = Object.create(null)
+    this.startOptions = null
     this.openOptions = null
     this.connectOptions = null
     this.socketListeners = Object.create(null)
+    this.parserListeners = Object.create(null)
     this.status = 'offline'
   }
 
@@ -80,13 +82,10 @@ class Connection extends EventEmitter {
     })
   }
 
-  _attachParser(parser) {
-    const errorListener = error => {
-      this.emit('error', error)
-    }
-
-    this.parser = parser
-    const elementListener = element => {
+  _attachParser(p) {
+    const parser = this.parser = p
+    const listeners = this.parserListeners
+    listeners.element = element => {
       if (element.name === 'stream:error') {
         this.stop()
         this.emit('error', new StreamError(
@@ -98,8 +97,18 @@ class Connection extends EventEmitter {
       this.emit('element', element)
       this.emit(this.isStanza(element) ? 'stanza' : 'nonza', element)
     }
-    parser.on('endElement', elementListener)
-    parser.once('error', errorListener)
+    listeners.error = error => {
+      this.emit('error', error)
+    }
+    parser.once('error', listeners.error)
+    parser.on('element', listeners.element)
+  }
+
+  _detachParser() {
+    const listeners = this.parserListeners
+    Object.getOwnPropertyNames(listeners).forEach(k => {
+      this.parser.removeListener(k, listeners[k])
+    })
   }
 
   _jid(addr) {
@@ -118,6 +127,7 @@ class Connection extends EventEmitter {
    */
   start(options) {
     this._status('starting')
+
     if (typeof options === 'string') {
       options = {uri: options}
     }
@@ -133,17 +143,6 @@ class Connection extends EventEmitter {
         return this.open({domain, lang})
       }),
     ]).then(([addr]) => addr)
-  }
-
-  /**
-   * Closes the stream then closes the socket
-   */
-  stop() {
-    this._status('stopping')
-    return new Promise((resolve, reject) => {
-      this.close().catch(reject) // FIXME wait footer
-      this.disconnect().then(resolve, reject)
-    })
   }
 
   /**
@@ -166,19 +165,14 @@ class Connection extends EventEmitter {
 
   /**
    * Disconnects the socket
+   * https://xmpp.org/rfcs/rfc6120.html#streams-close
+   * https://tools.ietf.org/html/rfc7395#section-3.6
    */
-  disconnect() {
+  disconnect(ms = this.timeout) {
     this._status('disconnecting')
-    return new Promise(resolve => {
-       // TODO timeout
-      const handler = () => {
-        this.socket.end()
-        this.once('close', () => {
-          resolve()
-          this._status('disconnected')
-        })
-      }
-      this.parser.once('end', handler)
+    this.socket.end()
+    return timeout(promise(this.socket, 'close'), ms).then(() => {
+      this._status('disconnected')
     })
   }
 
@@ -187,6 +181,7 @@ class Connection extends EventEmitter {
    */
   open(options) {
     this._status('opening')
+    // Useful for stream-features restart
     this.openOptions = options
     if (typeof options === 'string') {
       options = {domain: options}
@@ -200,7 +195,7 @@ class Connection extends EventEmitter {
 
     return Promise.all([
       this.write(this.header(headerElement)),
-      promise(this.parser, 'startElement').then(el => {
+      promise(this.parser, 'start').then(el => {
         // FIXME what about version and xmlns:stream ?
         if (
           el.name !== headerElement.name ||
@@ -220,11 +215,29 @@ class Connection extends EventEmitter {
   }
 
   /**
-   * Closes the stream
+   * Closes the stream then closes the socket
+   * https://xmpp.org/rfcs/rfc6120.html#streams-close
+   * https://tools.ietf.org/html/rfc7395#section-3.6
    */
-  close() {
+  stop() {
+    this._status('stopping')
+    return this.close().then(el => this.disconnect().then(() => {
+      this._status('stopped')
+      return el
+    }))
+  }
+
+  /**
+   * Closes the stream and wait for the server to close it
+   * https://xmpp.org/rfcs/rfc6120.html#streams-close
+   * https://tools.ietf.org/html/rfc7395#section-3.6
+   */
+  close(ms = this.timeout) {
     this._status('closing')
-    return this.write(this.footer(this.footerElement()))
+    return Promise.all([
+      timeout(promise(this.parser, 'end'), ms),
+      this.write(this.footer(this.footerElement())),
+    ]).then(([el]) => el)
     // The 'close' status is emitted by the socket 'close' listener
   }
 
@@ -233,6 +246,8 @@ class Connection extends EventEmitter {
    * https://xmpp.org/rfcs/rfc6120.html#streams-negotiation-restart
    */
   restart() {
+    this._detachParser()
+    this._attachParser(new this.Parser())
     this._status('restarting')
     return this.open(this.openOptions).then(() => {
       this._status('restart')
@@ -318,7 +333,7 @@ class Connection extends EventEmitter {
 // Overrirde
 Connection.prototype.NS = ''
 Connection.prototype.Socket = null
-Connection.prototype.Parser = xml.Parser
+Connection.prototype.Parser = null
 
 module.exports = Connection
 module.exports.getHostname = getHostname

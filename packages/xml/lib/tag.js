@@ -34,11 +34,11 @@ function tag(literals, ...substitutions) {
     }
   }
 
-  parser.on('endElement', (el, root) => {
-    if (root) {
+  parser.onEndElement = (el, length) => {
+    if (length === 1) {
       tree = el
     }
-  })
+  }
 
   for (i = 0; i < substitutions.length; i++) {
     parser.write(literals[i])

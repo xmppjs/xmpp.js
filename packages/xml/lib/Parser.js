@@ -23,20 +23,16 @@ class Parser extends EventEmitter {
       const child = new Element(name, attrs)
       if (cursor) {
         cursor.cnode(child)
-        this.emit('startElement', child, false)
-      } else {
-        this.emit('startElement', child, true)
       }
+      this.onStartElement(child, cursor)
+      this.emit('startElement', child)
       stack.push(cursor)
       cursor = child
     })
     parser.on('endElement', name => {
       if (name === cursor.name) {
-        if (stack.length === 1) {
-          this.emit('endElement', cursor, true)
-        } else {
-          this.emit('endElement', cursor, false)
-        }
+        this.onEndElement(cursor, stack.length)
+        this.emit('endElement', cursor)
         cursor = stack.pop()
       } else {
         // <foo></bar>
@@ -48,6 +44,18 @@ class Parser extends EventEmitter {
       this.onText(str, cursor)
     })
     this.parser = parser
+  }
+  onStartElement(element, cursor) {
+    if (!cursor) {
+      this.emit('start', element)
+    }
+  }
+  onEndElement(element, length) {
+    if (length === 2) {
+      this.emit('element', element)
+    } else if (length === 1) {
+      this.emit('end', element)
+    }
   }
   onText(str, element) {
     if (!element) {
