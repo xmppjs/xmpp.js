@@ -1,7 +1,6 @@
 'use strict'
 
 const JID = require('../lib/JID')
-const escaping = require('../lib/escaping')
 
 module.exports = function parse(s) {
   let local
