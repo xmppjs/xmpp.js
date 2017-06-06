@@ -59,4 +59,16 @@ module.exports = plugin('pubsub', {
     return this.plugins['iq-caller'].set(stanza, ...args)
   },
 
+  publish(node, item, ...args) {
+    const stanza = xml`
+      <pubsub xmlns='${NS_PUBSUB}'>
+        <publish node='${node}'></publish>
+      </pubsub>`
+    if (item) {
+      stanza.getChild('publish').cnode(item)
+    }
+    return this.plugins['iq-caller'].set(stanza, ...args)
+    .then(result => result.getChild('publish').getChild('item').attrs.id)
+  },
+
 }, [iqCaller])

@@ -110,3 +110,38 @@ test.cb('deleteNode', t => {
   t.context.plugin.deleteNode('foo')
   .then(t.end)
 })
+
+test.cb('publish', t => {
+  t.plan(9)
+
+  t.context.entity.promise('send').then(stanza => {
+    t.is(stanza.name, 'iq')
+    t.is(stanza.attrs.type, 'set')
+    const [pubsub] = stanza.children
+    t.is(pubsub.name, 'pubsub')
+    t.is(pubsub.attrs.xmlns, 'http://jabber.org/protocol/pubsub')
+    const [publish] = pubsub.children
+    t.is(publish.name, 'publish')
+    t.is(publish.attrs.node, 'foo')
+    const [item] = publish.children
+    t.is(item.name, 'item')
+    const [entry] = item.children
+    t.is(entry.name, 'entry')
+
+    t.context.entity.emit('element', xml`
+      <iq type='result' id='${stanza.attrs.id}'>
+        <pubsub xmlns='http://jabber.org/protocol/pubsub'>
+          <publish node='foo'>
+            <item id='foobar'/>
+          </publish>
+        </pubsub>
+      </iq>
+    `)
+  })
+
+  t.context.plugin.publish('foo', xml`<item><entry><title>FooBar</title></entry></item>`)
+  .then(itemId => {
+    t.is(itemId, 'foobar')
+    t.end()
+  })
+})
