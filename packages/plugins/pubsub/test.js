@@ -87,3 +87,26 @@ test.cb('createNode with config options', t => {
     t.end()
   })
 })
+
+test.cb('deleteNode', t => {
+  t.plan(6)
+
+  t.context.entity.promise('send').then(stanza => {
+    t.is(stanza.name, 'iq')
+    t.is(stanza.attrs.type, 'set')
+    const [pubsub] = stanza.children
+    t.is(pubsub.name, 'pubsub')
+    t.is(pubsub.attrs.xmlns, 'http://jabber.org/protocol/pubsub')
+    const [del] = pubsub.children
+    t.is(del.name, 'delete')
+    t.is(del.attrs.node, 'foo')
+
+    t.context.entity.emit('element', xml`
+      <iq type='result' id='${stanza.attrs.id}'>
+      </iq>
+    `)
+  })
+
+  t.context.plugin.deleteNode('foo')
+  .then(t.end)
+})

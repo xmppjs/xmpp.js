@@ -24,8 +24,8 @@ module.exports = plugin('pubsub', {
 
   createNode(node, options, ...args) {
     const stanza = xml`
-      <pubsub xmlns="${NS_PUBSUB}">
-        <create node="${node}"/>
+      <pubsub xmlns='${NS_PUBSUB}'>
+        <create node='${node}'/>
       </pubsub>`
 
     if (options) {
@@ -49,6 +49,14 @@ module.exports = plugin('pubsub', {
 
     return this.plugins['iq-caller'].set(stanza, ...args)
     .then(result => result.getChild('create').attrs.node)
+  },
+
+  deleteNode(node, ...args) {
+    const stanza = xml`
+      <pubsub xmlns='${NS_PUBSUB}'>
+        <delete node='${node}'/>
+      </pubsub>`
+    return this.plugins['iq-caller'].set(stanza, ...args)
   },
 
 }, [iqCaller])
