@@ -3,9 +3,17 @@
 const test = require('ava')
 const Connection = require('..')
 
+test('resolves if socket property is undefined', t => {
+  const conn = new Connection()
+  return conn.stop().then(() => {
+    t.pass()
+  })
+})
+
 test.cb('close rejects', t => {
   t.plan(0)
   const conn = new Connection()
+  conn.socket = {}
   conn.close = () => {
     return Promise.reject()
   }
@@ -21,6 +29,7 @@ test.cb('close rejects', t => {
 test.cb('close resolves', t => {
   t.plan(2)
   const conn = new Connection()
+  conn.socket = {}
   const el = {}
   conn.close = () => {
     return Promise.resolve(el)

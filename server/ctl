@@ -1,36 +1,35 @@
 #!/usr/bin/env node
 
-'use strict'
+ /* eslint-disable no-console */
+
+'use strict' // eslint-disable-line node/shebang
 
 const server = require('.')
 
-const method = process.argv[2]
+const [, , method] = process.argv
 let p
 
 switch (method) {
-  case 'start':
-    p = server.start().then((pid) => {
-      console.log(pid)
-    })
-    break
-  case 'stop':
-    p = server.stop()
-    break
-  case 'restart':
-    p = server.restart().then((pid) => {
-      console.log(pid)
-    })
-    break
-  case 'status':
-    p = server.getPid().then((pid) => {
-      if (pid) console.log(`started (${pid})`)
-      else console.log('stopped')
-    })
-    break
-  default:
-    p = Promise.reject(new Error('Valid commands are start/stop/restart/status.'))
+case 'start':
+  p = server.start()
+  break
+case 'stop':
+  p = server.stop()
+  break
+case 'restart':
+  p = server.restart()
+  break
+case 'status':
+  p = server.isPortOpen().then(open => {
+    if (open) {
+      console.log('started')
+    } else {
+      console.log('stopped')
+    }
+  })
+  break
+default:
+  p = Promise.reject(new Error('Valid commands are start/stop/restart/status.'))
 }
 
-p.catch((err) => {
-  console.error(err)
-})
+p.catch(err => console.error(err))
