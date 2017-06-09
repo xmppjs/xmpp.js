@@ -14,16 +14,14 @@ test('name', t => {
 })
 
 test.cb('createNode', t => {
-  t.plan(7)
+  t.plan(5)
 
   t.context.entity.promise('send').then(stanza => {
     t.is(stanza.name, 'iq')
     t.is(stanza.attrs.type, 'set')
-    const [pubsub] = stanza.children
-    t.is(pubsub.name, 'pubsub')
+    const pubsub = stanza.getChild('pubsub')
     t.is(pubsub.attrs.xmlns, 'http://jabber.org/protocol/pubsub')
-    const [create] = pubsub.children
-    t.is(create.name, 'create')
+    const create = pubsub.getChild('create')
     t.is(create.attrs.node, 'foo')
 
     t.context.entity.emit('element', xml`
@@ -43,20 +41,18 @@ test.cb('createNode', t => {
 })
 
 test.cb('createNode with config options', t => {
-  t.plan(20)
+  t.plan(17)
 
   t.context.entity.promise('send').then(stanza => {
     t.is(stanza.name, 'iq')
     t.is(stanza.attrs.type, 'set')
-    const [pubsub] = stanza.children
-    t.is(pubsub.name, 'pubsub')
+    const pubsub = stanza.getChild('pubsub')
     t.is(pubsub.attrs.xmlns, 'http://jabber.org/protocol/pubsub')
-    const [create, configure] = pubsub.children
-    t.is(create.name, 'create')
+    const create = pubsub.getChild('create')
     t.is(create.attrs.node, 'foo')
+    const configure = pubsub.getChild('configure')
     t.is(configure.name, 'configure')
-    const [x] = configure.children
-    t.is(x.name, 'x')
+    const x = configure.getChild('x')
     t.is(x.attrs.xmlns, 'jabber:x:data')
     t.is(x.attrs.type, 'submit')
     const [formType, accessModel, maxItems] = x.children
@@ -89,16 +85,14 @@ test.cb('createNode with config options', t => {
 })
 
 test.cb('deleteNode', t => {
-  t.plan(6)
+  t.plan(4)
 
   t.context.entity.promise('send').then(stanza => {
     t.is(stanza.name, 'iq')
     t.is(stanza.attrs.type, 'set')
-    const [pubsub] = stanza.children
-    t.is(pubsub.name, 'pubsub')
+    const pubsub = stanza.getChild('pubsub')
     t.is(pubsub.attrs.xmlns, 'http://jabber.org/protocol/pubsub')
-    const [del] = pubsub.children
-    t.is(del.name, 'delete')
+    const del = pubsub.getChild('delete')
     t.is(del.attrs.node, 'foo')
 
     t.context.entity.emit('element', xml`
@@ -112,20 +106,17 @@ test.cb('deleteNode', t => {
 })
 
 test.cb('publish', t => {
-  t.plan(9)
+  t.plan(6)
 
   t.context.entity.promise('send').then(stanza => {
     t.is(stanza.name, 'iq')
     t.is(stanza.attrs.type, 'set')
-    const [pubsub] = stanza.children
-    t.is(pubsub.name, 'pubsub')
+    const pubsub = stanza.getChild('pubsub')
     t.is(pubsub.attrs.xmlns, 'http://jabber.org/protocol/pubsub')
-    const [publish] = pubsub.children
-    t.is(publish.name, 'publish')
+    const publish = pubsub.getChild('publish')
     t.is(publish.attrs.node, 'foo')
-    const [item] = publish.children
-    t.is(item.name, 'item')
-    const [entry] = item.children
+    const item = publish.getChild('item')
+    const entry = item.getChild('entry')
     t.is(entry.name, 'entry')
 
     t.context.entity.emit('element', xml`
@@ -147,16 +138,14 @@ test.cb('publish', t => {
 })
 
 test.cb('items', t => {
-  t.plan(13)
+  t.plan(11)
 
   t.context.entity.promise('send').then(stanza => {
     t.is(stanza.name, 'iq')
     t.is(stanza.attrs.type, 'get')
-    const [pubsub] = stanza.children
-    t.is(pubsub.name, 'pubsub')
+    const pubsub = stanza.getChild('pubsub')
     t.is(pubsub.attrs.xmlns, 'http://jabber.org/protocol/pubsub')
-    const [items] = pubsub.children
-    t.is(items.name, 'items')
+    const items = pubsub.getChild('items')
     t.is(items.attrs.node, 'foo')
 
     t.context.entity.emit('element', xml`
@@ -176,14 +165,66 @@ test.cb('items', t => {
   })
 
   t.context.plugin.items('foo')
-  .then(items => {
-    t.is(items.length, 2)
-    t.is(items[0].name, 'item')
-    t.is(items[0].attrs.id, 'fooitem')
-    t.is(items[0].getChildText('entry'), 'Foo')
-    t.is(items[1].name, 'item')
-    t.is(items[1].attrs.id, 'baritem')
-    t.is(items[1].getChildText('entry'), 'Bar')
+  .then(res => {
+    t.is(res.items.length, 2)
+    t.is(res.items[0].name, 'item')
+    t.is(res.items[0].attrs.id, 'fooitem')
+    t.is(res.items[0].getChildText('entry'), 'Foo')
+    t.is(res.items[1].name, 'item')
+    t.is(res.items[1].attrs.id, 'baritem')
+    t.is(res.items[1].getChildText('entry'), 'Bar')
+    t.end()
+  })
+})
+
+test.cb('items with RSM', t => {
+  t.plan(17)
+
+  t.context.entity.promise('send').then(stanza => {
+    t.is(stanza.name, 'iq')
+    t.is(stanza.attrs.type, 'get')
+    const pubsub = stanza.getChild('pubsub')
+    t.is(pubsub.attrs.xmlns, 'http://jabber.org/protocol/pubsub')
+    const items = pubsub.getChild('items')
+    t.is(items.attrs.node, 'foo')
+    const rsm = pubsub.getChild('set')
+    t.is(rsm.attrs.xmlns, 'http://jabber.org/protocol/rsm')
+    t.is(rsm.getChildText('first'), 'first@time')
+    t.is(rsm.getChildText('max'), '2')
+
+    t.context.entity.emit('element', xml`
+      <iq type='result' id='${stanza.attrs.id}'>
+        <pubsub xmlns='http://jabber.org/protocol/pubsub'>
+          <items node='foo'>
+            <item id='fooitem'>
+              <entry>Foo</entry>
+            </item>
+            <item id='baritem'>
+              <entry>Bar</entry>
+            </item>
+          </items>
+          <set xmlns='http://jabber.org/protocol/rsm'>
+            <first>first@time</first>
+            <last>last@time</last>
+            <count>2</count>
+          </set>
+        </pubsub>
+      </iq>
+    `)
+  })
+
+  t.context.plugin.items('foo', {first: 'first@time', max: 2})
+  .then(res => {
+    t.is(res.items.length, 2)
+    t.is(res.items[0].name, 'item')
+    t.is(res.items[0].attrs.id, 'fooitem')
+    t.is(res.items[0].getChildText('entry'), 'Foo')
+    t.is(res.items[1].name, 'item')
+    t.is(res.items[1].attrs.id, 'baritem')
+    t.is(res.items[1].getChildText('entry'), 'Bar')
+    t.is(res.rsm.first, 'first@time')
+    t.is(res.rsm.last, 'last@time')
+    t.is(res.rsm.count, '2')
     t.end()
   })
 })

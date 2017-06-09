@@ -76,11 +76,31 @@ module.exports = plugin('pubsub', {
       <pubsub xmlns='${NS_PUBSUB}'>
         <items node='${node}'/>
       </pubsub>`
+
     if (rsm) {
-      // Fill me.
+      const rsmEl = xml`<set xmlns='${NS_RSM}'/>`
+      for (const key of Object.keys(rsm)) {
+        rsmEl.c(key).t(rsm[key])
+      }
+      stanza.up().cnode(rsmEl)
     }
+
     return this.plugins['iq-caller'].get(stanza, ...args)
-    .then(result => result.getChild('items').children)
+    .then(result => {
+      const rsmEl = result.getChild('set')
+      const items = result.getChild('items').children
+
+      if (rsmEl) {
+        return {
+          items,
+          rsm: rsmEl.children.reduce((obj, el) => {
+            obj[el.name] = el.text()
+            return obj
+          }, {}),
+        }
+      }
+      return {items}
+    })
   },
 
 }, [iqCaller])
