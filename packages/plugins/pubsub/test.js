@@ -145,3 +145,45 @@ test.cb('publish', t => {
     t.end()
   })
 })
+
+test.cb('items', t => {
+  t.plan(13)
+
+  t.context.entity.promise('send').then(stanza => {
+    t.is(stanza.name, 'iq')
+    t.is(stanza.attrs.type, 'get')
+    const [pubsub] = stanza.children
+    t.is(pubsub.name, 'pubsub')
+    t.is(pubsub.attrs.xmlns, 'http://jabber.org/protocol/pubsub')
+    const [items] = pubsub.children
+    t.is(items.name, 'items')
+    t.is(items.attrs.node, 'foo')
+
+    t.context.entity.emit('element', xml`
+      <iq type='result' id='${stanza.attrs.id}'>
+        <pubsub xmlns='http://jabber.org/protocol/pubsub'>
+          <items node='foo'>
+            <item id='fooitem'>
+              <entry>Foo</entry>
+            </item>
+            <item id='baritem'>
+              <entry>Bar</entry>
+            </item>
+          </items>
+        </pubsub>
+      </iq>
+    `)
+  })
+
+  t.context.plugin.items('foo')
+  .then(items => {
+    t.is(items.length, 2)
+    t.is(items[0].name, 'item')
+    t.is(items[0].attrs.id, 'fooitem')
+    t.is(items[0].getChildText('entry'), 'Foo')
+    t.is(items[1].name, 'item')
+    t.is(items[1].attrs.id, 'baritem')
+    t.is(items[1].getChildText('entry'), 'Bar')
+    t.end()
+  })
+})
