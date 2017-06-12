@@ -2,6 +2,7 @@
 
 const {xml, plugin} = require('@xmpp/plugin')
 const iqCaller = require('../iq-caller')
+const stanzaRouter = require('../stanza-router')
 
 const NS_PUBSUB = 'http://jabber.org/protocol/pubsub'
 const NS_PUBSUB_EVENT = `${NS_PUBSUB}#event`
@@ -24,6 +25,37 @@ module.exports = service =>
     NS_X_DATA,
 
     service,
+
+    matchPEP(stanza) {
+      const ev = stanza.getChild('event')
+      return (
+        ev &&
+        ev.attrs.xmlns === NS_PUBSUB_EVENT &&
+        stanza.is('message') &&
+        stanza.attrs.from === service
+      )
+    },
+
+    start() {
+      if (service) {
+        this.plugins['stanza-router'].add(this.matchPEP, this.onPEPEvent)
+      }
+    },
+
+    stop() {
+      if (service) {
+        this.plugins['stanza-router'].remove(this.matchPEP)
+      }
+    },
+
+    onPEPEvent(message, client) {
+      const items = message.getChild('event').getChild('items')
+      const {node} = items.attrs
+      const item = items.getChild('item')
+      const {id} = item.attrs
+      const entry = item.getChild('entry')
+      client.emit('item-published', {node, id, entry})
+    },
 
     createNode(node, options, ...args) {
       const stanza = xml`
@@ -106,4 +138,4 @@ module.exports = service =>
       })
     },
 
-  }, [iqCaller])
+  }, [iqCaller, stanzaRouter])

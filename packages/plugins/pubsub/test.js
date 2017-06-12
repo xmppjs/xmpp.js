@@ -228,3 +228,25 @@ test.cb('items with RSM', t => {
     t.end()
   })
 })
+
+test.cb('PEP events', t => {
+  t.plan(4)
+  t.context.entity.on('item-published', ev => {
+    t.is(ev.node, 'foo')
+    t.is(ev.id, 'fooitem')
+    t.is(ev.entry.name, 'entry')
+    t.is(ev.entry.text(), 'Foo Bar')
+    t.end()
+  })
+  t.context.fake`
+    <message from='pubsub.foo'>
+      <event xmlns='http://jabber.org/protocol/pubsub#event'>
+        <items node='foo'>
+          <item id='fooitem'>
+            <entry>Foo Bar</entry>
+          </item>
+        </items>
+      </event>
+    </message>
+  `.then()
+})
