@@ -229,8 +229,9 @@ test.cb('items with RSM', t => {
   })
 })
 
-test.cb('PEP events', t => {
+test.cb('item-published event', t => {
   t.plan(7)
+
   const p1 = new Promise(resolve => {
     t.context.entity.on('item-published', ev => {
       t.is(ev.node, 'foo')
@@ -260,6 +261,45 @@ test.cb('PEP events', t => {
           </item>
         </items>
       </event>
+    </message>
+  `.then()
+})
+
+test.cb('last-item-published event', t => {
+  t.plan(9)
+
+  const p1 = new Promise(resolve => {
+    t.context.entity.on('last-item-published', ev => {
+      t.is(ev.node, 'foo')
+      t.is(ev.id, 'fooitem')
+      t.is(ev.entry.name, 'entry')
+      t.is(ev.entry.text(), 'Foo Bar')
+      t.is(ev.stamp, '2003-12-13T23:58:37Z')
+      resolve()
+    })
+  })
+  const p2 = new Promise(resolve => {
+    t.context.entity.on('last-item-published:foo', ev => {
+      t.is(ev.id, 'fooitem')
+      t.is(ev.entry.name, 'entry')
+      t.is(ev.entry.text(), 'Foo Bar')
+      t.is(ev.stamp, '2003-12-13T23:58:37Z')
+      resolve()
+    })
+  })
+
+  Promise.all([p1, p2]).then(t.end())
+
+  t.context.fake`
+    <message from='pubsub.foo'>
+      <event xmlns='http://jabber.org/protocol/pubsub#event'>
+        <items node='foo'>
+          <item id='fooitem'>
+            <entry>Foo Bar</entry>
+          </item>
+        </items>
+      </event>
+      <delay xmlns='urn:xmpp:delay' stamp='2003-12-13T23:58:37Z'/>
     </message>
   `.then()
 })

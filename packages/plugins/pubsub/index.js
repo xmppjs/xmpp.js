@@ -54,8 +54,16 @@ module.exports = service =>
       const item = items.getChild('item')
       const {id} = item.attrs
       const entry = item.getChild('entry')
-      client.emit('item-published', {node, id, entry})
-      client.emit(`item-published:${node}`, {id, entry})
+      const delay = message.getChild('delay')
+
+      if (delay) {
+        const {stamp} = delay.attrs
+        client.emit('last-item-published', {node, id, entry, stamp})
+        client.emit(`last-item-published:${node}`, {id, entry, stamp})
+      } else {
+        client.emit('item-published', {node, id, entry})
+        client.emit(`item-published:${node}`, {id, entry})
+      }
     },
 
     createNode(node, options, ...args) {
