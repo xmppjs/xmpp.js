@@ -6,11 +6,11 @@ const xml = require('@xmpp/xml')
 const testPlugin = require('../testPlugin')
 
 test.beforeEach(t => {
-  t.context = testPlugin(plugin)
+  t.context = testPlugin(plugin('pubsub.foo'))
 })
 
 test('name', t => {
-  t.is(plugin.name, 'pubsub')
+  t.is(plugin().name, 'pubsub')
 })
 
 test.cb('createNode', t => {
