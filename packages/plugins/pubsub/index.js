@@ -55,6 +55,7 @@ module.exports = service =>
       const {id} = item.attrs
       const entry = item.getChild('entry')
       client.emit('item-published', {node, id, entry})
+      client.emit(`item-published:${node}`, {id, entry})
     },
 
     createNode(node, options, ...args) {
