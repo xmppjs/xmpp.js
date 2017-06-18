@@ -130,7 +130,7 @@ module.exports = plugin('sasl', {
         if (element.name === 'failure') {
           reject(new SASLError(
             element.children[0].name,
-            element.getChild('text').text(),
+            element.getChildText('text') || '',
             element
           ))
         } else if (element.name === 'success') {

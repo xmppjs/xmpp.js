@@ -36,8 +36,8 @@ function getHostname(uri) {
 class Connection extends EventEmitter {
   constructor(options) {
     super()
-    this.domain = null
-    this.lang = null
+    this.domain = ''
+    this.lang = ''
     this.jid = null
     this.timeout = 2000
     this.options = typeof options === 'object' ? options : {}
@@ -60,6 +60,7 @@ class Connection extends EventEmitter {
     }
     listeners.close = () => {
       this.domain = ''
+      this.lang = ''
       this.jid = null
       this._status('close')
     }
