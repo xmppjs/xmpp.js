@@ -2,27 +2,59 @@
 
 'use strict' // eslint-disable-line node/shebang
 
-const pify = require('pify')
+const promisify = require('util.promisify')
 const path = require('path')
-const readFile = pify(require('fs').readFile)
-const execFile = pify(require('child_process').execFile, {multiArgs: true})
+const readFile = promisify(require('fs').readFile)
+const execFile = promisify(require('child_process').execFile)
+const removeFile = promisify(require('fs').unlink)
+const net = require('net')
+const {promise, delay} = require('../packages/events')
 
 const DATA_PATH = path.join(__dirname)
 const PID_PATH = path.join(DATA_PATH, 'prosody.pid')
-const DELAY = 2000
 
-function kill(pid) {
-  return new Promise(resolve => {
-    try {
-      process.kill(pid, 'SIGTERM')
-    } catch (err) {} // eslint-disable-line no-empty
-    resolve(pid)
+function clean() {
+  return Promise.all([
+    'prosody.err',
+    'prosody.log',
+    'prosody.pid',
+  ].map(file => removeFile(path.join(__dirname, file)))).catch(() => {})
+}
+
+function isPortOpen() {
+  const sock = new net.Socket()
+  sock.connect({port: 5347})
+  return promise(sock, 'connect')
+    .then(() => {
+      sock.end()
+      sock.destroy()
+      return true
+    })
+  .catch(() => false)
+}
+
+function waitPortOpen() {
+  return isPortOpen().then(open => {
+    if (open) {
+      return Promise.resolve()
+    }
+    return delay(1000).then(() => waitPortOpen())
   })
 }
 
-function delay(value) {
+function waitPortClose() {
+  return isPortOpen().then(open => {
+    if (open) {
+      return delay(1000).then(() => waitPortClose())
+    }
+    return Promise.resolve()
+  })
+}
+
+function kill(pid) {
   return new Promise(resolve => {
-    setTimeout(() => resolve(value), DELAY)
+    process.kill(pid, 'SIGKILL')
+    resolve()
   })
 }
 
@@ -41,45 +73,35 @@ function getPid() {
 }
 
 function _start() {
-  return execFile('prosody', {
-    cwd: DATA_PATH,
-    env: {
-      PROSODY_CONFIG: 'prosody.cfg.lua',
-    },
-  })
-  .then(delay)
-  .then(() => {
-    return getPid().then(pid => {
-      if (!pid) {
-        return new Error(`Couldn't read prosody.pid.`)
-      }
-      return pid
-    })
-  })
+  return Promise.all([
+    execFile('prosody', {
+      cwd: DATA_PATH,
+      env: {
+        PROSODY_CONFIG: 'prosody.cfg.lua',
+      },
+    }),
+    waitPortOpen(),
+  ])
 }
 
 function start() {
-  return getPid().then(pid => {
-    if (pid) {
-      return pid
+  return isPortOpen().then(open => {
+    if (open) {
+      return Promise.resolve()
     }
-    return _start()
+    return clean().then(() => _start())
   })
 }
 
 function stop() {
-  return getPid().then(pid => {
-    if (!pid) {
-      return pid
+  return isPortOpen().then(open => {
+    if (!open) {
+      return clean()
     }
-    return kill(pid).then(delay).then(() => {
-      return getPid().then(npid => {
-        if (npid) {
-          return new Error(`Couldn't stop prosody`)
-        }
-        return pid
-      })
-    })
+    return Promise.all([
+      getPid().then(pid => pid ? kill(pid) : undefined),
+      waitPortClose(),
+    ]).then(() => clean())
   })
 }
 
@@ -89,7 +111,10 @@ function restart() {
   })
 }
 
-module.exports.getPid = getPid
-module.exports.start = start
-module.exports.stop = stop
-module.exports.restart = restart
+exports.isPortOpen = isPortOpen
+exports.waitPortClose = waitPortClose
+exports.waitPortOpen = waitPortOpen
+exports.getPid = getPid
+exports.start = start
+exports.stop = stop
+exports.restart = restart

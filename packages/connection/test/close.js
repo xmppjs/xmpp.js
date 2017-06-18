@@ -12,11 +12,12 @@ test('resets properties on socket close event', t => {
   conn.jid = {}
   conn.domain = 'example.com'
   conn.status = 'online'
+  conn.socket.emit('connect')
   conn.socket.emit('close')
   t.is(conn.lang, '')
   t.is(conn.jid, null)
   t.is(conn.domain, '')
-  t.is(conn.status, 'close')
+  t.is(conn.status, 'disconnect')
 })
 
 test.cb('timeout', t => {

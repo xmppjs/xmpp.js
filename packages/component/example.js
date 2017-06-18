@@ -50,7 +50,7 @@ entity.start({uri: 'xmpp://localhost:5347', domain: 'node-xmpp.localhost'})
     console.error('start failed', err)
   })
 
-// Emitted when authentication is required
+// Handle authentication to provide credentials
 entity.handle('authenticate', authenticate => {
   return authenticate('foobar')
 })

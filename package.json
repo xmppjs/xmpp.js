@@ -15,8 +15,8 @@
     "eslint-plugin-unicorn": "^2.1.1",
     "lerna": "^2.0.0-rc.4",
     "pem": "^1.9.4",
-    "pify": "^2.3.0",
-    "sinon": "^2.2.0"
+    "sinon": "^2.2.0",
+    "util.promisify": "^1.0.0"
   },
   "ava": {
     "require": "babel-register",

@@ -62,17 +62,20 @@ class Connection extends EventEmitter {
       this.domain = ''
       this.lang = ''
       this.jid = null
-      this._status('close')
+      this._detachSocket()
+      this._detachParser()
+      this.socket = null
+      this._status('disconnect')
     }
     listeners.connect = () => {
       this._status('connect')
+      sock.once('close', listeners.close)
     }
     listeners.error = error => {
       this.emit('error', error)
     }
     sock.on('data', listeners.data)
     sock.on('error', listeners.error)
-    sock.on('close', listeners.close)
     sock.on('connect', listeners.connect)
   }
 
@@ -80,7 +83,9 @@ class Connection extends EventEmitter {
     const listeners = this.socketListeners
     Object.getOwnPropertyNames(listeners).forEach(k => {
       this.socket.removeListener(k, listeners[k])
+      delete listeners[k]
     })
+    delete this.socket
   }
 
   _attachParser(p) {
@@ -88,7 +93,7 @@ class Connection extends EventEmitter {
     const listeners = this.parserListeners
     listeners.element = element => {
       if (element.name === 'stream:error') {
-        this.stop()
+        this.close().then(() => this.disconnect())
         this.emit('error', new StreamError(
           element.children[0].name,
           element.getChildText('text', 'urn:ietf:params:xml:ns:xmpp-streams') || '',
@@ -101,15 +106,21 @@ class Connection extends EventEmitter {
     listeners.error = error => {
       this.emit('error', error)
     }
+    listeners.end = element => {
+      this._status('close', element)
+    }
     parser.once('error', listeners.error)
     parser.on('element', listeners.element)
+    parser.on('end', listeners.end)
   }
 
   _detachParser() {
     const listeners = this.parserListeners
     Object.getOwnPropertyNames(listeners).forEach(k => {
       this.parser.removeListener(k, listeners[k])
+      delete listeners[k]
     })
+    delete this.parser
   }
 
   _jid(addr) {
@@ -127,7 +138,13 @@ class Connection extends EventEmitter {
    * Opens the socket then opens the stream
    */
   start(options) {
+    if (this.status !== 'offline') {
+      return Promise.reject(new Error('Connection is not offline'))
+    }
+
     this._status('starting')
+
+    this.startOptions = options
 
     if (typeof options === 'string') {
       options = {uri: options}
@@ -172,9 +189,8 @@ class Connection extends EventEmitter {
   disconnect(ms = this.timeout) {
     this._status('disconnecting')
     this.socket.end()
-    return timeout(promise(this.socket, 'close'), ms).then(() => {
-      this._status('disconnected')
-    })
+    return timeout(promise(this.socket, 'close'), ms)
+    // The 'disconnect' status is emitted by the socket 'close' listener
   }
 
   /**
@@ -221,9 +237,12 @@ class Connection extends EventEmitter {
    * https://tools.ietf.org/html/rfc7395#section-3.6
    */
   stop() {
+    if (!this.socket) {
+      return Promise.resolve()
+    }
     this._status('stopping')
     return this.close().then(el => this.disconnect().then(() => {
-      this._status('stopped')
+      this._status('offline')
       return el
     }))
   }
@@ -235,11 +254,12 @@ class Connection extends EventEmitter {
    */
   close(ms = this.timeout) {
     this._status('closing')
+
     return Promise.all([
       timeout(promise(this.parser, 'end'), ms),
       this.write(this.footer(this.footerElement())),
     ]).then(([el]) => el)
-    // The 'close' status is emitted by the socket 'close' listener
+    // The 'close' status is emitted by the parser 'end' listener
   }
 
   /**

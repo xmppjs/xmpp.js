@@ -2,41 +2,53 @@
 
 const plugin = require('@xmpp/plugin')
 
-function delay(timeout) {
-  return new Promise(resolve => setTimeout(resolve, timeout))
-}
-
 module.exports = plugin('reconnect', {
   delay: 1000,
+
   reconnect() {
     const {entity} = this
     this.emit('reconnecting')
-    return delay(this.delay).then(() => {
+    this._timeout = setTimeout(() => {
+      if (entity.status === 'offline') {
+        return
+      }
+      // Allow calling start() even though status is not offline
+      // reset status property right after
+      const {status} = entity
+      entity.status = 'offline'
+
       entity.start(entity.startOptions)
       .then(() => {
         this.emit('reconnected')
       })
+      .catch(() => this.reconnect())
       .catch(err => {
         this.emit('error', err)
-        this.reconnect()
       })
-    })
+      entity.status = status
+    }, this.delay)
   },
-  enable() {
-    this.entity.on('close', () => this.reconnect())
-  },
-  start() {
-    const {entity} = this
 
-    if (entity.jid) {
-      this.enable()
-    } else {
-      entity.once('online', () => this.enable())
-    }
+  stopped() {
+    const {entity, listeners, _timeout} = this
+    entity.removeListener('disconnect', listeners.disconnect)
+    clearTimeout(_timeout)
   },
+
+  start() {
+    const listeners = {}
+    listeners.disconnect = () => {
+      this.reconnect()
+    }
+    listeners.starting = () => {
+      this.entity.on('disconnect', listeners.disconnect)
+    }
+    this.listeners = listeners
+    this.entity.once('starting', listeners.starting)
+  },
+
   stop() {
-    this.entity.removeListener('online', this.enable)
-    this.entity.removeListener('close', this.onClose)
-    clearTimeout(this._timeout)
+    this.stopped()
+    this.entity.removeListener('connect', this.listeners.connect)
   },
 })
