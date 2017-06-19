@@ -246,12 +246,16 @@ Session.prototype.onRegistration = function (stanza) {
     proceed()
   } else if (stanza.attrs.type === 'set') {
     var jid = new JID(register.getChildText('username'), this.server.options.domain)
-    this.emit('register', {
+    var opts = {
       jid: jid,
       username: register.getChildText('username'),
       password: register.getChildText('password'),
       client: self
-    }, function (error) {
+    }
+    for (var child in register.children) {
+      opts[register.children[child].name] = register.children[child].getText()
+    }
+    this.emit('register', opts, function (error) {
       if (!error) {
         self.emit('registration-success', self.jid)
       } else {

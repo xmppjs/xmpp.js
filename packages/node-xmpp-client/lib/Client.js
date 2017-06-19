@@ -370,7 +370,10 @@ Client.prototype.doRegister = function () {
     to: this.jid.domain
   }).c('query', {xmlns: NS_REGISTER})
     .c('username').t(this.jid.local).up()
-    .c('password').t(this.password)
+    .c('password').t(this.password).up()
+  for (var key in this.options.registrationOptions) {
+    iq.c(key).t(this.options.registrationOptions[key]).up()
+  }
   this.send(iq)
 
   var self = this
