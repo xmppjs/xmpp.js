@@ -142,8 +142,6 @@ class Connection extends EventEmitter {
       return Promise.reject(new Error('Connection is not offline'))
     }
 
-    this._status('starting')
-
     this.startOptions = options
 
     if (typeof options === 'string') {
@@ -240,7 +238,6 @@ class Connection extends EventEmitter {
     if (!this.socket) {
       return Promise.resolve()
     }
-    this._status('stopping')
     return this.close().then(el => this.disconnect().then(() => {
       this._status('offline')
       return el

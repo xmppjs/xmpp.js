@@ -51,7 +51,7 @@ function fallbackConnect(entity, uris) {
     .then(() => {
       entity._attachParser(parser)
       entity._attachSocket(socket)
-      entity.emit('connect')
+      socket.emit('connect')
       entity.Transport = Transport
       entity.Socket = Transport.prototype.Socket
       entity.Parser = Transport.prototype.Parser

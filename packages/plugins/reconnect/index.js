@@ -40,15 +40,15 @@ module.exports = plugin('reconnect', {
     listeners.disconnect = () => {
       this.reconnect()
     }
-    listeners.starting = () => {
+    listeners.online = () => {
       this.entity.on('disconnect', listeners.disconnect)
     }
     this.listeners = listeners
-    this.entity.once('starting', listeners.starting)
+    this.entity.once('online', listeners.online)
   },
 
   stop() {
     this.stopped()
-    this.entity.removeListener('connect', this.listeners.connect)
+    this.entity.removeListener('online', this.listeners.online)
   },
 })

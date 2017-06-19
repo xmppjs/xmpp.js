@@ -31,7 +31,7 @@ entity.on('output', data => console.log('⮊', data))
 
 entity.on('stanza', el => {
   if (el.is('presence') && el.attrs.from === entity.jid.toString()) {
-    console.log('🗸', 'available, ready to receive <message/>')
+    console.log('🗸', 'available, ready to receive <message/>s')
   }
 })
 

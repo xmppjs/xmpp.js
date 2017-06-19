@@ -3,6 +3,7 @@
 const test = require('ava')
 const {client, xml, jid} = require('../packages/client')
 const debug = require('../packages/debug')
+const server = require('../server')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
@@ -15,6 +16,7 @@ test.beforeEach(t => {
   const entity = client()
   debug(entity)
   t.context.entity = entity
+  return server.restart()
 })
 
 test.afterEach(t => {
@@ -89,6 +91,60 @@ test.cb('bad credentials', t => {
       t.is(err, error)
       t.end()
     })
+})
+
+test.cb('reconnects when server restarts', t => {
+  t.plan(2)
+  let c = 0
+
+  const entity = client()
+  debug(entity)
+
+  entity.handle('authenticate', auth => {
+    return auth(USERNAME, PASSWORD)
+  })
+
+  entity.on('online', () => {
+    c++
+    t.pass()
+    if (c === 2) {
+      entity.stop().then(() => {
+        t.end()
+      })
+    } else {
+      server.restart()
+    }
+  })
+
+  entity.start(domain)
+})
+
+test.cb('does not reconnect when stop is called', t => {
+  t.plan(5)
+
+  const entity = client()
+  debug(entity)
+
+  entity.handle('authenticate', auth => {
+    return auth(USERNAME, PASSWORD)
+  })
+
+  entity.on('online', () => {
+    t.pass()
+    entity.stop().then(() => {
+      t.pass()
+      server.stop().then(() => {
+        t.pass()
+        t.end()
+      })
+    })
+  })
+
+  entity.on('close', () => t.pass())
+
+  entity.on('offline', () => t.pass())
+
+  entity.start(domain)
 })
 
 test('auto', t => {
