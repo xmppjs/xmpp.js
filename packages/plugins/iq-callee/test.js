@@ -15,12 +15,12 @@ test('name', t => {
 
 test('service-unavailable', t => {
   return t.context
-  .fake`
+    .fake`
     <iq id='test' from='foo' to='bar' type='set'>
       <test/>
     </iq>
   `
-  .then(stanza => t.deepEqual(stanza, xml`
+    .then(stanza => t.deepEqual(stanza, xml`
     <iq id='test' from='bar' to='foo' type='error'>
       <error type='cancel'>
         <service-unavailable xmlns='urn:ietf:params:xml:ns:xmpp-stanzas'/>
@@ -35,12 +35,12 @@ test('add - sync', t => {
   })
 
   return t.context
-  .fake`
+    .fake`
     <iq id='test' from='foo' to='bar' type='set'>
       <test xmlns='test'/>
     </iq>
   `
-  .then(stanza => t.deepEqual(stanza, xml`
+    .then(stanza => t.deepEqual(stanza, xml`
     <iq to="foo" from="bar" id="test" type="result">
       <foo/>
     </iq>
@@ -53,12 +53,12 @@ test('add - promise resolves', t => {
   })
 
   return t.context
-  .fake`
+    .fake`
     <iq id='test' from='foo' to='bar' type='set'>
       <test xmlns='test'/>
     </iq>
   `
-  .then(stanza => t.deepEqual(stanza, xml`
+    .then(stanza => t.deepEqual(stanza, xml`
     <iq to="foo" from="bar" id="test" type="result">
       <foo/>
     </iq>
@@ -71,12 +71,12 @@ test('add - promise rejects with element', t => {
   })
 
   return t.context
-  .fake`
+    .fake`
     <iq id='test' from='foo' to='bar' type='set'>
       <test xmlns='test'/>
     </iq>
   `
-  .then(stanza => t.deepEqual(stanza, xml`
+    .then(stanza => t.deepEqual(stanza, xml`
     <iq to="foo" from="bar" id="test" type="error">
       <foo/>
     </iq>
@@ -89,12 +89,12 @@ test('add - promise rejects with Error', t => {
   })
 
   return t.context
-  .fake`
+    .fake`
     <iq id='test' from='foo' to='bar' type='set'>
       <test xmlns='test'/>
     </iq>
   `
-  .then(stanza => t.deepEqual(stanza, xml`
+    .then(stanza => t.deepEqual(stanza, xml`
     <iq to="foo" from="bar" id="test" type="error">
       <error type="cancel">
         <internal-server-error xmlns="urn:ietf:params:xml:ns:xmpp-stanzas"/>

@@ -38,7 +38,7 @@ module.exports = plugin('stream-features', {
                 this.onStreamFeatures(features, el)
               }
             })
-            .catch(err => entity.emit('error', err))
+              .catch(err => entity.emit('error', err))
           },
         }
       })

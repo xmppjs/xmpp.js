@@ -80,12 +80,12 @@ class Console extends EventEmitter {
         return this.ask({
           text: 'Choose username',
         })
-        .then(username => {
-          return this.ask({
-            text: 'Choose password',
-            type: 'password',
-          }).then(password => register(username, password))
-        })
+          .then(username => {
+            return this.ask({
+              text: 'Choose password',
+              type: 'password',
+            }).then(password => register(username, password))
+          })
       }
     }
     if (bind) {

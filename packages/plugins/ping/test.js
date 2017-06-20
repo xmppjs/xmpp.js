@@ -30,12 +30,12 @@ test.cb('caller', t => {
 
 test('callee', t => {
   return t.context
-  .fake`
+    .fake`
     <iq id='test' from='foo' to='bar' type='set'>
       <ping xmlns='urn:xmpp:ping'/>
     </iq>
   `
-  .then(stanza => t.deepEqual(stanza, xml`
+    .then(stanza => t.deepEqual(stanza, xml`
     <iq to="foo" from="bar" id="test" type="result"/>
   `))
 })

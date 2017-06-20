@@ -48,34 +48,34 @@ function hash(query) {
   let s = ''
 
   query.getChildren('identity')
-  .map(mapIdentites)
-  .sort(sortIdentities)
-  .forEach(({category, type, name, lang}) => {
-    s += `${category}/${type}/${lang}/${name}<`
-  })
+    .map(mapIdentites)
+    .sort(sortIdentities)
+    .forEach(({category, type, name, lang}) => {
+      s += `${category}/${type}/${lang}/${name}<`
+    })
 
   query.getChildren('feature')
-  .map(f => f.attrs.var)
-  .sort()
-  .forEach(feature => {
-    s += `${feature}<`
-  })
+    .map(f => f.attrs.var)
+    .sort()
+    .forEach(feature => {
+      s += `${feature}<`
+    })
 
   query.getChildren('x', 'jabber:x:data')
-  .forEach(x => {
-    const fields = x.getChildren('field')
-    const formType = fields.find(field => field.attrs.var === 'FORM_TYPE')
-    s += `${formType.getChildText('value')}<`
-    fields.forEach(field => {
-      if (field === formType) {
-        return
-      }
-      s += `${field.attrs.var}<`
-      field.getChildren('value').map(v => v.text()).sort().forEach(value => {
-        s += `${value}<`
+    .forEach(x => {
+      const fields = x.getChildren('field')
+      const formType = fields.find(field => field.attrs.var === 'FORM_TYPE')
+      s += `${formType.getChildText('value')}<`
+      fields.forEach(field => {
+        if (field === formType) {
+          return
+        }
+        s += `${field.attrs.var}<`
+        field.getChildren('value').map(v => v.text()).sort().forEach(value => {
+          s += `${value}<`
+        })
       })
     })
-  })
 
   return crypto
     .createHash('sha1')

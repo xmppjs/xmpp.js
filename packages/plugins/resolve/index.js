@@ -23,10 +23,10 @@ function getURIs(domain) {
       protocol: 'tcp',
     },
   ]})
-  .then(records => {
-    return records.map(record => record.uri).filter(record => record)
-  })
-  .then(uris => [...new Set(uris)])
+    .then(records => {
+      return records.map(record => record.uri).filter(record => record)
+    })
+    .then(uris => [...new Set(uris)])
 }
 
 function fallbackConnect(entity, uris) {
