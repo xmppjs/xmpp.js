@@ -153,12 +153,12 @@ function resolve(domain, options = {}) {
         return lookupSrvs(records, options)
       })
     }))
-    .then(srvs => sortSrv([].concat(...srvs)).concat(addresses))
-    .then(records => {
-      return resolveTxt(domain, options).then(txtRecords => {
-        return records.concat(txtRecords)
+      .then(srvs => sortSrv([].concat(...srvs)).concat(addresses))
+      .then(records => {
+        return resolveTxt(domain, options).then(txtRecords => {
+          return records.concat(txtRecords)
+        })
       })
-    })
   })
 }
 

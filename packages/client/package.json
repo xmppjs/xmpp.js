@@ -5,10 +5,6 @@
   "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
   "version": "0.0.2",
   "license": "ISC",
-  "scripts": {
-    "prepublish": "npm run bundle",
-    "bundle": "../../node_modules/.bin/browserify -s xmpp index.js -o dist/xmpp.js"
-  },
   "dependencies": {
     "@xmpp/client-core": "^0.0.2",
     "@xmpp/plugins": "^0.0.3"

@@ -24,12 +24,12 @@ const cli = meow(`
       $ xmpp-console wss://localhost:52801/xmpp-websocket (Secure WebSocket)
       $ xmpp-console xmpp://component.localhost[:5347] --type component (component)
 `, {
-  alias: {
-    p: 'port',
-    w: 'web',
-    t: 'type',
-  },
-})
+    alias: {
+      p: 'port',
+      w: 'web',
+      t: 'type',
+    },
+  })
 
 const [endpoint] = cli.input
 

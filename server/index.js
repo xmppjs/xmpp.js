@@ -30,7 +30,7 @@ function isPortOpen() {
       sock.destroy()
       return true
     })
-  .catch(() => false)
+    .catch(() => false)
 }
 
 function waitPortOpen() {
@@ -61,14 +61,14 @@ function kill(pid) {
 function getPid() {
   return new Promise((resolve, reject) => {
     readFile(PID_PATH, 'utf8')
-    .then(resolve)
-    .catch(err => {
-      if (err.code === 'ENOENT') {
-        resolve('')
-      } else {
-        reject(err)
-      }
-    })
+      .then(resolve)
+      .catch(err => {
+        if (err.code === 'ENOENT') {
+          resolve('')
+        } else {
+          reject(err)
+        }
+      })
   })
 }
 

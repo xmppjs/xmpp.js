@@ -72,13 +72,13 @@ test.cb('bad credentials', t => {
 
   entity.handle('authenticate', auth => {
     return auth('foo', 'bar')
-    .then(() => t.fail())
-    .catch(err => {
-      t.true(err instanceof Error)
-      t.is(err.condition, 'not-authorized')
-      error = err
-      throw err
-    })
+      .then(() => t.fail())
+      .catch(err => {
+        t.true(err instanceof Error)
+        t.is(err.condition, 'not-authorized')
+        error = err
+        throw err
+      })
   })
 
   entity.on('error', err => {

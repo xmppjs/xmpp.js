@@ -48,7 +48,7 @@ class JID {
     return this
   }
 
-    /**
+  /**
      * Comparison function
      * */
   equals(other) {

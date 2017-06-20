@@ -55,8 +55,8 @@ module.exports = plugin('iq-callee', {
 
       if (handler) {
         Promise.resolve(handler(stanza))
-        .then(res => this.result(stanza, res))
-        .catch(err => this.error(stanza, err)).then(iq => this.entity.send(iq))
+          .then(res => this.result(stanza, res))
+          .catch(err => this.error(stanza, err)).then(iq => this.entity.send(iq))
       } else {
         this.entity.send(this.error(stanza, xml`
           <error type='cancel'>

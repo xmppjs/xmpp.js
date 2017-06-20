@@ -9,10 +9,10 @@ test('by priority', t => {
       {priority: 2, weight: 0},
       {priority: 1, weight: 0},
     ]),
-    [
-      {priority: 1, weight: 0},
-      {priority: 2, weight: 0},
-    ]
+  [
+    {priority: 1, weight: 0},
+    {priority: 2, weight: 0},
+  ]
   )
 
   t.deepEqual(sort(
@@ -20,10 +20,10 @@ test('by priority', t => {
       {priority: 2, weight: 1},
       {priority: 1, weight: 0},
     ]),
-    [
-      {priority: 1, weight: 0},
-      {priority: 2, weight: 1},
-    ]
+  [
+    {priority: 1, weight: 0},
+    {priority: 2, weight: 1},
+  ]
   )
 })
 
@@ -33,10 +33,10 @@ test('by weight', t => {
       {weight: 1, priority: 0},
       {weight: 2, priority: 0},
     ]),
-    [
-      {weight: 2, priority: 0},
-      {weight: 1, priority: 0},
-    ]
+  [
+    {weight: 2, priority: 0},
+    {weight: 1, priority: 0},
+  ]
   )
 
   t.deepEqual(sort(
@@ -44,9 +44,9 @@ test('by weight', t => {
       {weight: 2, priority: 0},
       {weight: 1, priority: 0},
     ]),
-    [
-      {weight: 2, priority: 0},
-      {weight: 1, priority: 0},
-    ]
+  [
+    {weight: 2, priority: 0},
+    {weight: 1, priority: 0},
+  ]
   )
 })

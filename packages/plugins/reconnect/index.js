@@ -18,13 +18,13 @@ module.exports = plugin('reconnect', {
       entity.status = 'offline'
 
       entity.start(entity.startOptions)
-      .then(() => {
-        this.emit('reconnected')
-      })
-      .catch(() => this.reconnect())
-      .catch(err => {
-        this.emit('error', err)
-      })
+        .then(() => {
+          this.emit('reconnected')
+        })
+        .catch(() => this.reconnect())
+        .catch(err => {
+          this.emit('error', err)
+        })
       entity.status = status
     }, this.delay)
   },
