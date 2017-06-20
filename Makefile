@@ -5,7 +5,6 @@ PATH := node_modules/.bin:$(PATH)
 setup:
 	yarn
 	lerna bootstrap
-	make bundle
 
 test:
 	ava
@@ -23,9 +22,6 @@ clean:
 	rm -f packages/*/dist/*.js
 	rm -f lerna-debug.log
 
-bundle:
-	lerna run bundle
-
 start:
 	./server/ctl start
 
@@ -36,4 +32,6 @@ restart:
 	./server/ctl restart
 
 size:
-	browserify packages/client-core/index.js | babili | gzip > /tmp/bundle.js.gz ; stat -c%s /tmp/bundle.js.gz
+	cd packages/xmpp.js && yarn run prepublish
+	gzip -c packages/xmpp.js/dist/xmpp.min.js > /tmp/xmpp.min.js.gz
+	stat -c%s /tmp/xmpp.min.js.gz

@@ -7,9 +7,22 @@
   "version": "0.0.0",
   "license": "ISC",
   "keywords": [
-    "XMPP"
+    "XMPP",
+    "jabber",
+    "client"
   ],
   "dependencies": {
-    "@xmpp/client": "^0.0.2"
+    "@xmpp/client-core": "^0.0.2",
+    "@xmpp/plugins": "^0.0.3"
+  },
+  "browser": {
+    "@xmpp/plugins/tcp": false,
+    "@xmpp/plugins/tls": false,
+    "@xmpp/plugins/starttls": false
+  },
+  "scripts": {
+    "prepublish": "npm run bundle && npm run minify",
+    "bundle": "../../node_modules/.bin/browserify -d -s xmpp index.js -t [ babelify --global true --presets [es2015] ] | ../../node_modules/.bin/exorcist dist/xmpp.js.map > dist/xmpp.js",
+    "minify": "../../node_modules/.bin/uglifyjs dist/xmpp.js -c -m --source-map url=xmpp.min.js.map,content=dist/xmpp.js.map -o dist/xmpp.min.js"
   }
 }
