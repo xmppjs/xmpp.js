@@ -15,7 +15,7 @@ test.skip('match()', t => {
   t.is(match(features), undefined)
 
   const bind = xml('bind', {xmlns: 'urn:ietf:params:xml:ns:xmpp-bind'})
-  features.cnode(bind)
+  features.append(bind)
   t.is(match(features), bind)
 })
 

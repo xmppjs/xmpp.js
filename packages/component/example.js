@@ -4,40 +4,40 @@
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-const {xml, component} = require('.') // For you require('@xmpp/component')
-const entity = component()
+const {xml, Component} = require('.') // For you require('@xmpp/component')
+const component = new Component()
 
 // Log errors
-entity.on('error', err => {
+component.on('error', err => {
   console.error('❌', err.toString())
 })
 
 // Log status changes
-entity.on('status', (status, value) => {
+component.on('status', (status, value) => {
   console.log('🛈', status, value ? value.toString() : '')
 })
 
 // Useful for logging raw traffic
 // Emitted for every incoming fragment
-entity.on('input', data => console.log('⮈', data))
+component.on('input', data => console.log('⮈', data))
 // Emitted for every outgoing fragment
-entity.on('output', data => console.log('⮊', data))
+component.on('output', data => console.log('⮊', data))
 
 // Useful for logging XML traffic
 // Emitted for every incoming XML element
-// entity.on('element', data => console.log('⮈', data))
+// component.on('element', data => console.log('⮈', data))
 // Emitted for every outgoing XML element
-// entity.on('send', data => console.log('⮊', data))
+// component.on('send', data => console.log('⮊', data))
 
-entity.on('stanza', el => {
-  if (el.is('message') && el.attrs.from === entity.jid.toString()) {
+component.on('stanza', el => {
+  if (el.is('message') && el.attrs.from === component.jid.toString()) {
     console.log('🗸', 'It\'s alive!')
   }
 })
 
-entity.on('online', jid => {
+component.on('online', jid => {
   console.log('jid', jid.toString())
-  entity.send(
+  component.send(
     xml('message', {to: jid.toString()},
       xml('body', {}, 'hello')
     )
@@ -45,13 +45,13 @@ entity.on('online', jid => {
 })
 
 // "start" opens the socket and the XML stream
-entity.start({uri: 'xmpp://localhost:5347', domain: 'node-xmpp.localhost'})
+component.start({uri: 'xmpp://localhost:5347', domain: 'node-xmpp.localhost'})
   .catch(err => {
     console.error('start failed', err)
   })
 
 // Handle authentication to provide credentials
-entity.handle('authenticate', authenticate => {
+component.handle('authenticate', authenticate => {
   return authenticate('foobar')
 })
 

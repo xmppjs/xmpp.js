@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "@xmpp/connection-tcp": "^0.0.6",
+    "@xmpp/jid": "^0.0.2",
     "@xmpp/xml": "^0.1.3"
   }
 }

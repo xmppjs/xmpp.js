@@ -1,8 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const xml = require('@xmpp/xml')
-const Component = require('..')
+const {Component, xml} = require('..')
 
 test('calling send sanitize the from attribute', t => {
   const entity = new Component()

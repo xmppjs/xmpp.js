@@ -5,8 +5,8 @@
 const readline = require('readline')
 const chalk = require('chalk')
 
-const component = require('@xmpp/component')
-const client = require('@xmpp/client')
+const {Component} = require('@xmpp/component')
+const {Client} = require('@xmpp/client')
 const Console = require('./lib/Console')
 
 module.exports = function (flags, endpoint) {
@@ -22,7 +22,7 @@ module.exports = function (flags, endpoint) {
 
   let prevent = false
 
-  const entity = flags.type === 'component' ? component() : client()
+  const entity = flags.type === 'component' ? new Component() : new Client()
   const xconsole = new Console(entity)
   xconsole.resetInput = function () {
     rl.prompt()

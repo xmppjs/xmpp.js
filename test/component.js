@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const xmpp = require('../packages/component')
+const {Component, xml, jid} = require('../packages/component')
 const debug = require('../packages/debug')
 const server = require('../server')
 
@@ -14,7 +14,7 @@ test.beforeEach(() => {
 test.cb('component', t => {
   t.plan(8)
 
-  const entity = new xmpp.Component()
+  const entity = new Component()
   debug(entity)
 
   entity.on('connect', () => {
@@ -22,7 +22,7 @@ test.cb('component', t => {
   })
 
   entity.on('open', el => {
-    t.true(el instanceof xmpp.xml.Element)
+    t.true(el instanceof xml.Element)
   })
 
   entity.handle('authenticate', auth => {
@@ -30,15 +30,15 @@ test.cb('component', t => {
     return auth('foobar').then(() => t.pass())
   })
 
-  entity.on('online', jid => {
-    t.true(jid instanceof xmpp.jid.JID)
-    t.is(jid.toString(), 'node-xmpp.localhost')
+  entity.on('online', id => {
+    t.true(id instanceof jid.JID)
+    t.is(id.toString(), 'node-xmpp.localhost')
   })
 
   entity.start({uri: 'xmpp://localhost:5347', domain: 'node-xmpp.localhost'})
-    .then(jid => {
-      t.true(jid instanceof xmpp.jid.JID)
-      t.is(jid.toString(), 'node-xmpp.localhost')
+    .then(id => {
+      t.true(id instanceof jid.JID)
+      t.is(id.toString(), 'node-xmpp.localhost')
       entity.stop().then(() => t.end())
     })
 })
@@ -47,7 +47,7 @@ test.cb('reconnects when server restarts', t => {
   t.plan(2)
   let c = 0
 
-  const entity = new xmpp.Component()
+  const entity = new Component()
   debug(entity)
 
   entity.handle('authenticate', auth => {
@@ -72,7 +72,7 @@ test.cb('reconnects when server restarts', t => {
 test.cb('does not reconnect when stop is called', t => {
   t.plan(5)
 
-  const entity = new xmpp.Component()
+  const entity = new Component()
   debug(entity)
 
   entity.handle('authenticate', auth => {

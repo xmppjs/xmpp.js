@@ -2,20 +2,20 @@
 
 const Element = require('./Element')
 
-function cnode(el, child) {
+function append(el, child) {
   if (child instanceof Element) {
-    el.cnode(child)
+    el.append(child)
   } else if (Array.isArray(child)) {
-    child.forEach(c => cnode(el, c))
+    child.forEach(c => append(el, c))
   } else if (child !== null && child !== undefined) {
-    el.cnode(String(child))
+    el.append(String(child))
   }
 }
 
 function x(name, attrs, ...children) {
   const el = new Element(name, attrs)
   for (let i = 0; i < children.length; i++) {
-    cnode(el, children[i])
+    append(el, children[i])
   }
   return el
 }

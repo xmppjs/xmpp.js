@@ -1,7 +1,7 @@
 'use strict'
 
 const Console = require('../lib/Console')
-const client = require('@xmpp/client')
+const {Client} = require('@xmpp/client')
 const editor = require('./editor')
 const {Prism, fetch, notie} = global
 
@@ -30,9 +30,9 @@ Prism.plugins.toolbar.registerButton('select', {
   },
 })
 
-const entity = client()
+const client = new Client()
 
-const xconsole = new Console(entity)
+const xconsole = new Console(client)
 xconsole.resetInput = function () {
   editor.setValue('')
 }
@@ -84,14 +84,14 @@ xconsole.choose = function (options) {
 
 function connect(params) {
   if (params.endpoint) {
-    return entity.connect(params.endpoint)
+    return client.connect(params.endpoint)
   }
   return xconsole.ask({
     text: 'Enter endpoint',
     value: 'ws://localhost:5280/xmpp-websocket',
     type: 'url',
   }).then(endpoint => {
-    return entity.connect(endpoint)
+    return client.connect(endpoint)
   })
 }
 
