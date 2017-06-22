@@ -32,7 +32,7 @@ function proceed(entity, options) {
 }
 
 function starttls(entity) {
-  return entity.socket.sendReceive(xml`<starttls xmlns='${NS}'/>`).then(element => {
+  return entity.socket.sendReceive(xml('starttls', {xmlns: NS})).then(element => {
     if (element.is('failure', NS)) {
       throw new Error('STARTTLS_FAILURE')
     } else if (element.is('proceed', NS)) {

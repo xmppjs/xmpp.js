@@ -19,7 +19,7 @@ test.cb('add', t => {
   router.add(element => element.is('iq'), () => {
     t.end()
   })
-  entity.emit('element', xml`<iq/>`)
+  entity.emit('element', xml('iq'))
 })
 
 test.cb('remove', t => {
@@ -32,9 +32,9 @@ test.cb('remove', t => {
   router.add(match, () => {
     t.pass()
     router.remove(match)
-    entity.emit('element', xml`<iq/>`)
+    entity.emit('element', xml('iq'))
     t.end()
   })
 
-  entity.emit('element', xml`<iq/>`)
+  entity.emit('element', xml('iq'))
 })

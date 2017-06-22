@@ -9,17 +9,17 @@ test('calling send sanitize the from attribute', t => {
   entity.write = () => Promise.resolve()
   let el
 
-  el = xml`<el/>`
+  el = xml('el')
   entity.send(el)
   t.is(el.attrs.from, undefined)
 
   entity.jid = 'test.foobar'
 
-  el = xml`<el/>`
+  el = xml('el')
   entity.send(el)
   t.is(el.attrs.from, 'test.foobar')
 
-  el = xml`<el from="bar"/>`
+  el = xml('el', {from: 'bar'})
   entity.send(el)
   t.is(el.attrs.from, 'bar')
 })
@@ -29,17 +29,17 @@ test('calling send sanitize the to attribute', t => {
   entity.write = () => Promise.resolve()
   let el
 
-  el = xml`<el/>`
+  el = xml('el')
   entity.send(el)
   t.is(el.attrs.to, undefined)
 
   entity.jid = 'test.foobar'
 
-  el = xml`<el/>`
+  el = xml('el')
   entity.send(el)
   t.is(el.attrs.to, 'foobar')
 
-  el = xml`<el to="bar"/>`
+  el = xml('el', {to: 'bar'})
   entity.send(el)
   t.is(el.attrs.to, 'bar')
 })

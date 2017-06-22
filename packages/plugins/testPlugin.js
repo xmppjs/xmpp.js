@@ -1,7 +1,6 @@
 'use strict'
 
 const client = require('../client-core')
-const xml = require('@xmpp/xml')
 
 module.exports = function (p) {
   const entity = client()
@@ -15,8 +14,7 @@ module.exports = function (p) {
   return {
     entity,
     plugin,
-    fake(...args) {
-      const el = xml(...args)
+    fake(el) {
       const p = entity.promise('send')
       entity.emit('element', el)
       return p.then(el => {

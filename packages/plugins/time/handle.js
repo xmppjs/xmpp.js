@@ -16,14 +16,12 @@ function plugin(entity) {
   disco.addFeature(NS_TIME)
 
   const callee = entity.plugin(iqCallee)
-  callee.add(match, () => {
-    return xml`
-      <time xmlns='${NS_TIME}'>
-        <tzo>${time.offset()}</tzo>
-        <utc>${time.datetime()}</utc>
-      </time>
-    `
-  })
+  callee.add(match, () => (
+    xml('time', {xmlns: NS_TIME},
+      xml('tzo', {}, time.offset()),
+      xml('utc', {}, time.datetime())
+    )
+  ))
 
   return {
     entity,

@@ -37,11 +37,11 @@ entity.on('stanza', el => {
 
 entity.on('online', jid => {
   console.log('jid', jid.toString())
-  entity.send(xml`
-    <message to='${jid.toString()}'>
-      <body>hello</body>
-    </message>
-  `)
+  entity.send(
+    xml('message', {to: jid.toString()},
+      xml('body', {}, 'hello')
+    )
+  )
 })
 
 // "start" opens the socket and the XML stream

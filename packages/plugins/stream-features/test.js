@@ -17,6 +17,10 @@ test.skip('selectFeature', t => {
     match: el => el.getChild('bind'),
   })
 
-  const feature = streamfeatures.selectFeature(features, xml`<foo><bind/></foo>`)
+  const feature = streamfeatures.selectFeature(features,
+    xml('foo', {},
+      xml('bind')
+    )
+  )
   t.is(feature.priority, 2000)
 })

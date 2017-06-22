@@ -48,7 +48,7 @@ class Component extends Connection {
     this._status('authenticating')
     const hash = crypto.createHash('sha1')
     hash.update(id + password, 'binary')
-    return this.sendReceive(xml`<handshake>${hash.digest('hex')}</handshake>`).then(el => {
+    return this.sendReceive(xml('handshake', {}, hash.digest('hex'))).then(el => {
       if (el.name !== 'handshake') {
         throw new Error('unexpected stanza')
       }

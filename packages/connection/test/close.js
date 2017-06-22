@@ -25,7 +25,7 @@ test.cb('timeout', t => {
   const conn = new Connection()
   conn.parser = new EventEmitter()
   conn.footerElement = () => {
-    return xml`<hello/>`
+    return xml('hello')
   }
   conn.socket = new EventEmitter()
   conn.socket.write = (data, cb) => {
@@ -45,7 +45,7 @@ test.cb('resolves', t => {
   const conn = new Connection()
   conn.parser = new EventEmitter()
   conn.footerElement = () => {
-    return xml`<hello/>`
+    return xml('hello')
   }
   conn.socket = new EventEmitter()
   conn.socket.write = (data, cb) => {
@@ -58,5 +58,5 @@ test.cb('resolves', t => {
     t.is(el.toString(), `<goodbye/>`)
     t.end()
   })
-  conn.parser.emit('end', xml`<goodbye/>`)
+  conn.parser.emit('end', xml('goodbye'))
 })

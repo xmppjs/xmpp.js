@@ -13,24 +13,6 @@ test('new Connection()', t => {
   t.is(conn.NS, NS_STREAM)
 })
 
-// Test('waitHeader', t => {
-//   const conn = new Connection()
-//   conn.NS = 'foo:bar'
-//
-//   const el = xml`
-//     <stream:stream xmlns="${conn.NS}" version="1.0" xmlns:stream="${NS_STREAM}" from="domain" id="some-id"/>
-//   `
-//
-//   const p = conn.waitHeader('domain', 'lang')
-//     .then((arg) => {
-//       t.is(arg, el)
-//     })
-//
-//   conn.parser.emit('start', el)
-//
-//   return p
-// })
-
 test('Socket', t => {
   const conn = new Connection()
   t.is(conn.Socket, net.Socket)

@@ -19,7 +19,7 @@ class RegisterPlugin {
   }
 
   getFields() {
-    return this.caller.get(null, xml`<query xmlns='${NS}'/>`).then(res => {
+    return this.caller.get(null, xml('query', {xmlns: NS})).then(res => {
       const fields = {}
       ;['instructions', 'username', 'password', 'email', 'registered'].forEach(field => {
         const t = res.getChildText(field)
@@ -32,15 +32,13 @@ class RegisterPlugin {
   }
 
   setFields(username, password, email) {
-    const el = xml`
-      <query xmlns='${NS}'>
-        <username>${username}</username>
-        <password>${password}</password>
-      </query>
-    `
-    if (email) {
-      el.getChild('query').c('email', {}, email)
-    }
+    const el = (
+      xml('query', {xmlns: NS},
+        xml('username', {}, username),
+        xml('password', {}, password),
+        email && xml('email', {}, email)
+      )
+    )
 
     return this.caller.set(null, el).then(res => {
       return res

@@ -10,14 +10,12 @@ function match(stanza) {
 }
 
 function build(features = [], identities = []) {
-  const query = xml`<query xmlns='${NS_DISCO_INFO}'/>`
-  features.forEach(feature => {
-    query.c('feature', {var: feature})
-  })
-  identities.forEach(identity => {
-    query.c('identitiy', identity)
-  })
-  return query
+  return (
+    xml('query', {xmlns: NS_DISCO_INFO},
+      features.map(f => xml('feature', {var: f})),
+      identities.map(i => xml('identity', {}, i))
+    )
+  )
 }
 
 function plugin(entity) {
