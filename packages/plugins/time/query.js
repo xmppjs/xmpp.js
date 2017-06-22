@@ -22,7 +22,7 @@ function plugin(entity) {
       })
     },
     query(...args) {
-      return caller.get(xml`<time xmlns='${NS_TIME}'/>`, ...args)
+      return caller.get(xml('time', {xmlns: NS_TIME}), ...args)
     },
   }
 }

@@ -1,26 +1,20 @@
 'use strict'
 
-const tag = require('./lib/tag')
-
+const x = require('./lib/x')
 const Element = require('./lib/Element')
-const createElement = require('./lib/createElement')
 const Parser = require('./lib/Parser')
-const parse = require('./lib/parse')
 const {escapeXML, unescapeXML, escapeXMLText, unescapeXMLText} = require('ltx/lib/escape')
 
 function xml(...args) {
-  return tag(...args)
+  return x(...args)
 }
 
 exports = module.exports = xml
-exports.Element = Element
 
 Object.assign(exports, {
-  tag,
+  x,
   Element,
-  createElement,
   Parser,
-  parse,
   escapeXML,
   unescapeXML,
   escapeXMLText,

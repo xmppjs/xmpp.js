@@ -18,7 +18,7 @@ function plugin(entity) {
 
   const callee = entity.plugin(iqCallee)
   callee.add(match, () => {
-    const query = xml`<query xmlns='${NS_VERSION}'/>`
+    const query = xml('query', {xmlns: NS_VERSION})
     Object.getOwnPropertyNames(vars).forEach(k => {
       query.c(k).t(vars[k])
     })

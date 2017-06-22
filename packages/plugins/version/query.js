@@ -22,7 +22,7 @@ function plugin(entity) {
       })
     },
     query(to, ...args) {
-      return caller.get(to, xml`<query xmlns='${NS_VERSION}'/>`, ...args)
+      return caller.get(to, xml('query', {xmlns: NS_VERSION}), ...args)
     },
   }
 }

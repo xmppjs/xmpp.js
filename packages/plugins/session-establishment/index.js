@@ -24,7 +24,7 @@ module.exports.plugin = function plugin(entity) {
     // Priority: 2000,
     match,
     run: entity => {
-      return caller.set(entity.domain, xml`<session xmlns='${NS}'/>`)
+      return caller.set(entity.domain, xml('session', {xmlns: NS}))
     },
   }
 

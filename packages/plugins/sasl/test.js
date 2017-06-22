@@ -18,11 +18,11 @@ test('SASL failure', t => {
     t.is(err.message, 'not-authorized')
   })
 
-  entity.emit('nonza', xml`
-    <failure xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>
-      <not-authorized/>
-    </failure>
-  `)
+  entity.emit('nonza',
+    xml('failure', {xmlns: 'urn:ietf:params:xml:ns:xmpp-sasl'},
+      xml('not-authorized')
+    )
+  )
 
   return p
 })
@@ -40,12 +40,12 @@ test('SASL failure with text element', t => {
     t.is(err.text, 'bar')
   })
 
-  entity.emit('nonza', xml`
-    <failure xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>
-      <foo/>
-      <text>bar</text>
-    </failure>
-  `)
+  entity.emit('nonza',
+    xml('failure', {xmlns: 'urn:ietf:params:xml:ns:xmpp-sasl'},
+      xml('foo'),
+      xml('text', {}, 'bar')
+    )
+  )
 
   return p
 })

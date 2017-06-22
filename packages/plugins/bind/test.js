@@ -11,10 +11,10 @@ test.skip('plugin', t => {
 })
 
 test.skip('match()', t => {
-  const features = xml`<features/>`
+  const features = xml('features')
   t.is(match(features), undefined)
 
-  const bind = xml`<bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'/>`
+  const bind = xml('bind', {xmlns: 'urn:ietf:params:xml:ns:xmpp-bind'})
   features.cnode(bind)
   t.is(match(features), bind)
 })

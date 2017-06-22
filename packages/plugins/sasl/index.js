@@ -119,11 +119,11 @@ module.exports = plugin('sasl', {
         if (element.name === 'challenge') {
           mech.challenge(decode(element.text()))
           const resp = mech.response(creds)
-          this.entity.send(xml`
-            <response xmlns='${NS}' mechanism='${mech.name}'>
-              ${typeof resp === 'string' ? encode(resp) : ''}
-            </response>
-          `)
+          this.entity.send(
+            xml('response', {xmlns: NS, mechanism: mech.name},
+              typeof resp === 'string' ? encode(resp) : ''
+            )
+          )
           return
         }
 
@@ -143,11 +143,11 @@ module.exports = plugin('sasl', {
       this.entity.on('nonza', handler)
 
       if (mech.clientFirst) {
-        this.entity.send(xml`
-          <auth xmlns='${NS}' mechanism='${mech.name}'>
-            ${encode(mech.response(creds))}
-          </auth>
-        `)
+        this.entity.send(
+          xml('auth', {xmlns: NS, mechanism: mech.name},
+            encode(mech.response(creds))
+          )
+        )
       }
     })
   },

@@ -12,11 +12,11 @@ const iqCaller = require('../iq-caller')
 const NS = 'urn:ietf:params:xml:ns:xmpp-bind'
 
 function makeBindElement(resource) {
-  const stanza = xml`<bind xmlns='${NS}'/>`
-  if (resource) {
-    stanza.cnode(xml`<resource>${resource}</resource>`)
-  }
-  return stanza
+  return (
+    xml('bind', {xmlns: NS},
+      resource && xml('resource', {}, resource)
+    )
+  )
 }
 
 function match(features) {

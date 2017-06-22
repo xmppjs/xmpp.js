@@ -14,73 +14,65 @@ test('name', t => {
 })
 
 test('service-unavailable', t => {
-  return t.context
-    .fake`
-    <iq id='test' from='foo' to='bar' type='set'>
-      <test/>
-    </iq>
-  `
-    .then(stanza => t.deepEqual(stanza, xml`
-    <iq id='test' from='bar' to='foo' type='error'>
-      <error type='cancel'>
-        <service-unavailable xmlns='urn:ietf:params:xml:ns:xmpp-stanzas'/>
-      </error>
-    </iq>
-  `))
+  return t.context.fake(
+    xml('iq', {id: 'test', from: 'foo', to: 'bar', type: 'set'},
+      xml('test')
+    )
+  ).then(stanza => t.deepEqual(stanza,
+    xml('iq', {id: 'test', from: 'bar', to: 'foo', type: 'error'},
+      xml('error', {type: 'cancel'},
+        xml('service-unavailable', {xmlns: 'urn:ietf:params:xml:ns:xmpp-stanzas'})
+      )
+    )
+  ))
 })
 
 test('add - sync', t => {
   t.context.plugin.add('test', 'test', () => {
-    return xml`<foo/>`
+    return xml('foo')
   })
 
-  return t.context
-    .fake`
-    <iq id='test' from='foo' to='bar' type='set'>
-      <test xmlns='test'/>
-    </iq>
-  `
-    .then(stanza => t.deepEqual(stanza, xml`
-    <iq to="foo" from="bar" id="test" type="result">
-      <foo/>
-    </iq>
-  `))
+  return t.context.fake(
+    xml('iq', {id: 'test', from: 'foo', to: 'bar', type: 'set'},
+      xml('test', {xmlns: 'test'})
+    )
+  ).then(stanza => t.deepEqual(stanza,
+    xml('iq', {to: 'foo', from: 'bar', id: 'test', type: 'result'},
+      xml('foo')
+    )
+  ))
 })
 
 test('add - promise resolves', t => {
   t.context.plugin.add('test', 'test', () => {
-    return Promise.resolve(xml`<foo/>`)
+    return Promise.resolve(xml('foo'))
   })
 
-  return t.context
-    .fake`
-    <iq id='test' from='foo' to='bar' type='set'>
-      <test xmlns='test'/>
-    </iq>
-  `
-    .then(stanza => t.deepEqual(stanza, xml`
-    <iq to="foo" from="bar" id="test" type="result">
-      <foo/>
-    </iq>
-  `))
+  return t.context.fake(
+    xml('iq', {id: 'test', from: 'foo', to: 'bar', type: 'set'},
+      xml('test', {xmlns: 'test'})
+    )
+  ).then(stanza => t.deepEqual(stanza,
+    xml('iq', {to: 'foo', from: 'bar', id: 'test', type: 'result'},
+      xml('foo')
+    )
+  ))
 })
 
 test('add - promise rejects with element', t => {
   t.context.plugin.add('test', 'test', () => {
-    return Promise.reject(xml`<foo/>`)
+    return Promise.reject(xml('foo'))
   })
 
-  return t.context
-    .fake`
-    <iq id='test' from='foo' to='bar' type='set'>
-      <test xmlns='test'/>
-    </iq>
-  `
-    .then(stanza => t.deepEqual(stanza, xml`
-    <iq to="foo" from="bar" id="test" type="error">
-      <foo/>
-    </iq>
-  `))
+  return t.context.fake(
+    xml('iq', {id: 'test', from: 'foo', to: 'bar', type: 'set'},
+      xml('test', {xmlns: 'test'})
+    )
+  ).then(stanza => t.deepEqual(stanza,
+    xml('iq', {id: 'test', from: 'bar', to: 'foo', type: 'error'},
+      xml('foo')
+    )
+  ))
 })
 
 test('add - promise rejects with Error', t => {
@@ -88,17 +80,15 @@ test('add - promise rejects with Error', t => {
     return Promise.reject(new Error())
   })
 
-  return t.context
-    .fake`
-    <iq id='test' from='foo' to='bar' type='set'>
-      <test xmlns='test'/>
-    </iq>
-  `
-    .then(stanza => t.deepEqual(stanza, xml`
-    <iq to="foo" from="bar" id="test" type="error">
-      <error type="cancel">
-        <internal-server-error xmlns="urn:ietf:params:xml:ns:xmpp-stanzas"/>
-      </error>
-    </iq>
-  `))
+  return t.context.fake(
+    xml('iq', {id: 'test', from: 'foo', to: 'bar', type: 'set'},
+      xml('test', {xmlns: 'test'})
+    )
+  ).then(stanza => t.deepEqual(stanza,
+    xml('iq', {id: 'test', from: 'bar', to: 'foo', type: 'error'},
+      xml('error', {type: 'cancel'},
+        xml('internal-server-error', {xmlns: 'urn:ietf:params:xml:ns:xmpp-stanzas'})
+      )
+    )
+  ))
 })

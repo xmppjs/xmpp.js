@@ -21,7 +21,7 @@ test.cb('caller', t => {
     t.is(stanza.attrs.type, 'get')
     t.is(typeof stanza.attrs.id, 'string')
     t.is(stanza.children[0].toString(), '<ping xmlns="urn:xmpp:ping"/>')
-    t.context.entity.emit('element', xml`<iq type='result' id='${stanza.attrs.id}'/>`)
+    t.context.entity.emit('element', xml('iq', {type: 'result', id: stanza.attrs.id}))
   })
   t.context.plugin.ping().then(() => {
     t.end()
@@ -29,13 +29,9 @@ test.cb('caller', t => {
 })
 
 test('callee', t => {
-  return t.context
-    .fake`
-    <iq id='test' from='foo' to='bar' type='set'>
-      <ping xmlns='urn:xmpp:ping'/>
-    </iq>
-  `
-    .then(stanza => t.deepEqual(stanza, xml`
-    <iq to="foo" from="bar" id="test" type="result"/>
-  `))
+  return t.context.fake(
+    xml('iq', {id: 'test', from: 'foo', to: 'bar', type: 'set'},
+      xml('ping', {xmlns: 'urn:xmpp:ping'})
+    )
+  ).then(stanza => t.deepEqual(stanza, xml('iq', {to: 'foo', from: 'bar', id: 'test', type: 'result'})))
 })

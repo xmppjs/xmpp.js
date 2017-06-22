@@ -42,12 +42,12 @@ module.exports = plugin('iq-caller', {
     )
   },
   get(el, ...args) {
-    const iq = xml`<iq type='get'/>`
+    const iq = xml('iq', {type: 'get'})
     iq.cnode(el)
     return this.request(iq, ...args)
   },
   set(el, ...args) {
-    const iq = xml`<iq type='set'/>`
+    const iq = xml('iq', {type: 'set'})
     iq.cnode(el)
     return this.request(iq, ...args)
   },
