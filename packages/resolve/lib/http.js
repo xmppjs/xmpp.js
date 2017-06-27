@@ -1,7 +1,7 @@
 'use strict'
 
 const fetch = global.fetch || require('node-fetch')
-const {parse} = require('@xmpp/xml')
+const {parse} = require('ltx')
 const compareAltConnections = require('./alt-connections').compare
 
 function resolve(domain) {
