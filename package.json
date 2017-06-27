@@ -29,5 +29,10 @@
       "packages/**/test.js",
       "packages/**/test/*.js"
     ]
+  },
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "test": "ava",
+    "lint": "eslint ."
   }
 }
