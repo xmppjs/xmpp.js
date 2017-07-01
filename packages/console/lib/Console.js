@@ -98,8 +98,8 @@ class Console extends EventEmitter {
     }
 
     // Component
-    entity.on('authenticate', auth => {
-      this.ask({
+    entity.handle('authenticate', auth => {
+      return this.ask({
         text: 'Enter password',
       }).then(auth).catch(err => {
         this.error('authentication', err.message)
