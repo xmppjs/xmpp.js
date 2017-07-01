@@ -1,9 +1,9 @@
 'use strict'
 
-const client = require('../client-core')
+const {Client} = require('../client-core')
 
 module.exports = function (p) {
-  const entity = client()
+  const entity = new Client()
   entity.socket = {
     write(data, cb) {
       cb()

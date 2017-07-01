@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const {client, xml, jid} = require('../packages/client')
+const {Client, xml, jid} = require('../packages/client')
 const debug = require('../packages/debug')
 const server = require('../server')
 
@@ -13,7 +13,7 @@ const domain = 'localhost'
 const JID = jid(USERNAME, domain).toString()
 
 test.beforeEach(t => {
-  const entity = client()
+  const entity = new Client()
   debug(entity)
   t.context.entity = entity
   return server.restart()
@@ -60,7 +60,7 @@ test.cb('client', t => {
 test.cb('bad credentials', t => {
   t.plan(6)
 
-  const entity = client()
+  const entity = new Client()
   debug(entity)
   let error
 
@@ -97,7 +97,7 @@ test.cb('reconnects when server restarts', t => {
   t.plan(2)
   let c = 0
 
-  const entity = client()
+  const entity = new Client()
   debug(entity)
 
   entity.handle('authenticate', auth => {
@@ -122,7 +122,7 @@ test.cb('reconnects when server restarts', t => {
 test.cb('does not reconnect when stop is called', t => {
   t.plan(5)
 
-  const entity = client()
+  const entity = new Client()
   debug(entity)
 
   entity.handle('authenticate', auth => {

@@ -14,7 +14,6 @@ class XMLError extends Error {
 class Parser extends EventEmitter {
   constructor() {
     super()
-
     const parser = new LtxParser()
     const stack = []
     let cursor
@@ -22,7 +21,7 @@ class Parser extends EventEmitter {
     parser.on('startElement', (name, attrs) => {
       const child = new Element(name, attrs)
       if (cursor) {
-        cursor.cnode(child)
+        cursor.append(child)
       }
       this.onStartElement(child, cursor)
       this.emit('startElement', child)

@@ -1,12 +1,15 @@
 'use strict'
 
 const {plugin, xml} = require('@xmpp/plugin')
-const stanzaRouter = require('../stanza-router')
 
 module.exports = plugin('iq-caller', {
   start() {
     this.handlers = new Map()
     this.handler = stanza => {
+      if (!this.match(stanza)) {
+        return
+      }
+
       const {id} = stanza.attrs
 
       const handler = this.handlers.get(id)
@@ -21,12 +24,10 @@ module.exports = plugin('iq-caller', {
       }
       this.handlers.delete(id)
     }
-    this.plugins['stanza-router'].add(this.match, this.handler)
+    this.entity.on('element', this.handler)
   },
   stop() {
-    delete this.handlers
-    this.entity.plugins['stanza-router'].remove(this.match, this.handler)
-    delete this.handler
+    this.entity.removeListener('element', this.handler)
   },
   id() {
     let id
@@ -43,12 +44,12 @@ module.exports = plugin('iq-caller', {
   },
   get(el, ...args) {
     const iq = xml('iq', {type: 'get'})
-    iq.cnode(el)
+    iq.append(el)
     return this.request(iq, ...args)
   },
   set(el, ...args) {
     const iq = xml('iq', {type: 'set'})
-    iq.cnode(el)
+    iq.append(el)
     return this.request(iq, ...args)
   },
   request(stanza, to) {
@@ -65,4 +66,4 @@ module.exports = plugin('iq-caller', {
       this.entity.send(stanza)
     })
   },
-}, [stanzaRouter])
+})

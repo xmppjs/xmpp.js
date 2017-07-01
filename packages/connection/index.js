@@ -123,8 +123,8 @@ class Connection extends EventEmitter {
     delete this.parser
   }
 
-  _jid(addr) {
-    this.jid = jid(addr)
+  _jid(id) {
+    this.jid = jid(id)
     return this.jid
   }
 

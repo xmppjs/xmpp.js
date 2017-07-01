@@ -17,7 +17,7 @@ exports.JID = JID
 exports.equal = function (a, b) {
   return a.equals(b)
 }
-exports.detectEscape = escaping.detectEscape
+exports.detectEscape = escaping.detect
 exports.escapeLocal = escaping.escape
 exports.unescapeLocal = escaping.unescape
 exports.parse = parse
