@@ -4,16 +4,16 @@
   "repository": "github:node-xmpp/node-xmpp",
   "homepage": "https://github.com/node-xmpp/node-xmpp/tree/master/packages/component",
   "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
-  "version": "0.0.6",
+  "version": "0.2.0",
   "license": "ISC",
   "keywords": [
     "XMPP",
     "component"
   ],
   "dependencies": {
-    "@xmpp/component-core": "^0.0.6",
-    "@xmpp/jid": "^0.0.2",
-    "@xmpp/plugins": "^0.0.3",
-    "@xmpp/xml": "^0.1.3"
+    "@xmpp/component-core": "^0.2.0",
+    "@xmpp/jid": "^0.2.0",
+    "@xmpp/plugins": "^0.2.0",
+    "@xmpp/xml": "^0.2.0"
   }
 }

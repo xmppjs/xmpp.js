@@ -4,7 +4,7 @@
   "repository": "github:node-xmpp/node-xmpp",
   "homepage": "https://github.com/node-xmpp/node-xmpp/tree/master/packages/connection-tcp",
   "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
-  "version": "0.0.6",
+  "version": "0.2.0",
   "license": "ISC",
   "keywords": [
     "XMPP",
@@ -12,8 +12,8 @@
     "TCP"
   ],
   "dependencies": {
-    "@xmpp/connection": "^0.0.6",
+    "@xmpp/connection": "^0.2.0",
     "@xmpp/streamparser": "^0.0.6",
-    "@xmpp/xml": "^0.1.3"
+    "@xmpp/xml": "^0.2.0"
   }
 }
