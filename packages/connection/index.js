@@ -73,6 +73,10 @@ class Connection extends EventEmitter {
     }
     listeners.error = error => {
       this.emit('error', error)
+      if (this.status === 'connecting') {
+        listeners.close()
+        this._status('offline')
+      }
     }
     sock.on('data', listeners.data)
     sock.on('error', listeners.error)
