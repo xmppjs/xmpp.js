@@ -170,7 +170,10 @@ class Connection extends EventEmitter {
     return new Promise((resolve, reject) => {
       this._attachParser(new this.Parser())
       this._attachSocket(new this.Socket())
-      this.socket.once('error', reject)
+      this.socket.once('error', err => {
+        this.emit('close', err)
+        reject(err)
+      })
       this.socket.connect(this.socketParameters(options), () => {
         this.socket.removeListener('error', reject)
         resolve()
