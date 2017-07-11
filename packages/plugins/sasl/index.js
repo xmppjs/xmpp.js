@@ -83,7 +83,7 @@ module.exports = plugin('sasl', {
     return []
   },
 
-  getMechanism(usable) {
+  getMechanism(offered, usable) {
     return usable[0] // FIXME prefer SHA-1, ... maybe order usable, available, ... by preferred?
   },
 
