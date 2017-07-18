@@ -14,25 +14,25 @@ const NS = 'urn:ietf:params:xml:ns:xmpp-tls'
 
 function match(features, entity) {
   return features.getChild('starttls', NS) &&
-    entity.socket.Socket === net.Socket // https://prosody.im/issues/issue/837
+    entity.socket.constructor === net.Socket // https://prosody.im/issues/issue/837
 }
 
 function proceed(entity, options) {
   return new Promise((resolve, reject) => {
-    options.socket = entity.socket.socket
-    entity.socket._detachSocket()
+    options.socket = entity.socket
+    entity._detachSocket()
     const tlsSocket = tls.connect(options, err => {
       if (err) {
         return reject(err)
       }
-      entity.socket._attachSocket(tlsSocket)
+      entity._attachSocket(tlsSocket)
       resolve()
     })
   })
 }
 
 function starttls(entity) {
-  return entity.socket.sendReceive(xml('starttls', {xmlns: NS})).then(element => {
+  return entity.sendReceive(xml('starttls', {xmlns: NS})).then(element => {
     if (element.is('failure', NS)) {
       throw new Error('STARTTLS_FAILURE')
     } else if (element.is('proceed', NS)) {
