@@ -32,13 +32,13 @@ test.cb('component', t => {
 
   entity.on('online', id => {
     t.true(id instanceof jid.JID)
-    t.is(id.toString(), 'node-xmpp.localhost')
+    t.is(id.toString(), 'component.localhost')
   })
 
-  entity.start({uri: 'xmpp://localhost:5347', domain: 'node-xmpp.localhost'})
+  entity.start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
     .then(id => {
       t.true(id instanceof jid.JID)
-      t.is(id.toString(), 'node-xmpp.localhost')
+      t.is(id.toString(), 'component.localhost')
       entity.stop().then(() => t.end())
     })
 })
@@ -66,7 +66,7 @@ test.cb('reconnects when server restarts', t => {
     }
   })
 
-  entity.start({uri: 'xmpp://localhost:5347', domain: 'node-xmpp.localhost'})
+  entity.start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
 })
 
 test.cb('does not reconnect when stop is called', t => {
@@ -94,5 +94,5 @@ test.cb('does not reconnect when stop is called', t => {
 
   entity.on('offline', () => t.pass())
 
-  entity.start({uri: 'xmpp://localhost:5347', domain: 'node-xmpp.localhost'})
+  entity.start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
 })

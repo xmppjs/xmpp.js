@@ -23,28 +23,28 @@ const options = {
   owner: '_xmppconnect', // TXT owner
 }
 
-resolve('node-xmpp.org', options).then(console.log).catch(console.error)
+resolve('xmpp.js.org', options).then(console.log).catch(console.error)
 ```
 
 ```javascript
 [ { address: '93.113.206.189',
     family: 4,
-    name: 'node-xmpp.org',
+    name: 'xmpp.js.org',
     port: 5222,
     priority: 5,
     weight: 0 },
   { address: '2a03:75c0:39:3458::1',
     family: 6,
-    name: 'node-xmpp.org',
+    name: 'xmpp.js.org',
     port: 5222,
     priority: 5,
     weight: 0 },
   { address: '93.113.206.189', family: 4 },
   { address: '2a03:75c0:39:3458::1', family: 6 },
   { attribute: '_xmpp-client-websocket',
-    uri: 'wss://node-xmpp.org:443/websocket' },
+    uri: 'wss://xmpp.js.org:443/websocket' },
   { attribute: '_xmpp-client-xbosh',
-    uri: 'https://node-xmpp.org:443/bosh' } ]
+    uri: 'https://xmpp.js.org:443/bosh' } ]
 ```
 
 ## References

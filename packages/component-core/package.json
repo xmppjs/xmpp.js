@@ -1,9 +1,9 @@
 {
   "name": "@xmpp/component-core",
   "description": "XMPP component core for JavaScript",
-  "repository": "github:node-xmpp/node-xmpp",
-  "homepage": "https://github.com/node-xmpp/node-xmpp/tree/master/packages/component-core",
-  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
+  "repository": "github:xmpp.js/xmpp.js",
+  "homepage": "https://github.com/xmpp.js/xmpp.js/tree/master/packages/component-core",
+  "bugs": "http://github.com/xmpp.js/xmpp.js/issues",
   "version": "0.2.0",
   "license": "ISC",
   "keywords": [

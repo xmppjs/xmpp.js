@@ -7,7 +7,7 @@ const server = require('../server')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-const USERNAME = 'node-xmpp'
+const USERNAME = 'client'
 const PASSWORD = 'foobar'
 const domain = 'localhost'
 const JID = jid(USERNAME, domain).toString()
