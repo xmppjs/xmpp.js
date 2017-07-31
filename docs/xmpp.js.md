@@ -34,4 +34,4 @@ Written in ES2015, it provides a modern promise based API and will keep up with 
 
 xmpp.js is a rename and rewrite of the node-xmpp project and learned a lot from it.
 
-Thanks to all xmpp.js and node-xmpp [contributors](https://github.com/xmpp.js/xmpp.js/graphs/contributors).
+Thanks to all xmpp.js and node-xmpp [contributors](https://github.com/xmppjs/xmpp.js/graphs/contributors).

@@ -7,4 +7,4 @@ XMPP for JavaScript.
 
 See [xmppjs.org](http://xmppjs.org) for documentation.
 
-xmpp.js is a rewrite of xmpp.js, if you're interested in any of the xmpp.js package, checkout the xmpp.js branch.
+xmpp.js is a rewrite of node-xmpp, if you're interested in any of the node-xmpp package, checkout the node-xmpp branch.

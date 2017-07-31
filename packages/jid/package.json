@@ -1,9 +1,9 @@
 {
   "name": "@xmpp/jid",
   "description": "XMPP identifiers (JID) for JavaScript",
-  "repository": "github:xmpp.js/xmpp.js",
-  "homepage": "https://github.com/xmpp.js/xmpp.js/tree/master/packages/jid",
-  "bugs": "http://github.com/xmpp.js/xmpp.js/issues",
+  "repository": "github:xmppjs/xmpp.js",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/jid",
+  "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.2.0",
   "license": "ISC",
   "keywords": [

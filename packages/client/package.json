@@ -1,8 +1,8 @@
 {
   "name": "@xmpp/client",
-  "repository": "github:xmpp.js/xmpp.js",
-  "homepage": "http://github.com/xmpp.js/xmpp.js",
-  "bugs": "http://github.com/xmpp.js/xmpp.js/issues",
+  "repository": "github:xmppjs/xmpp.js",
+  "homepage": "http://github.com/xmppjs/xmpp.js",
+  "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.2.0",
   "license": "ISC",
   "dependencies": {
