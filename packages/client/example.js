@@ -52,7 +52,7 @@ client.start('localhost') // Auto
 
 // Handle authentication to provide credentials
 client.handle('authenticate', authenticate => {
-  return authenticate('node-xmpp', 'foobar')
+  return authenticate('client', 'foobar')
 })
 
 // Handle binding to choose resource - optional

@@ -12,4 +12,4 @@ npm install @xmpp/component
 
 ## Usage
 
-See [example.js](https://github.com/node-xmpp/node-xmpp/tree/master/packages/component/example.js)
+See [example.js](https://github.com/xmppjs/xmpp.js/tree/master/packages/component/example.js)

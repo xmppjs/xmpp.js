@@ -19,8 +19,8 @@ const URI = require('@xmpp/uri')
 URI.parse('xmpp://guest@example.com/support@example.com/truc?message;subject=Hello%20World')
 
 {
-  authority: jid('guest@example.com'), // see https://github.com/node-xmpp/node-xmpp/tree/master/packages/jid
-  path: jid('support@example.com/truc'), // see https://github.com/node-xmpp/node-xmpp/tree/master/packages/jid
+  authority: jid('guest@example.com'), // see https://github.com/xmppjs/xmpp.js/tree/master/packages/jid
+  path: jid('support@example.com/truc'), // see https://github.com/xmppjs/xmpp.js/tree/master/packages/jid
   query: {
     type: 'message',
     params: {

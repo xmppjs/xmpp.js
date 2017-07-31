@@ -2,8 +2,8 @@
 
 XMPP for JavaScript.
 
-[![build status](https://img.shields.io/travis/node-xmpp/node-xmpp/master.svg?maxAge=2592000&style=flat-square)](https://travis-ci.org/node-xmpp/node-xmpp/branches)
-[![license](https://img.shields.io/github/license/node-xmpp/node-xmpp.svg?maxAge=2592000&style=flat-square)](https://raw.githubusercontent.com/node-xmpp/node-xmpp/master/LICENSE)
+[![build status](https://img.shields.io/travis/xmppjs/xmpp.js/master.svg?maxAge=2592000&style=flat-square)](https://travis-ci.org/xmppjs/xmpp.js/branches)
+[![license](https://img.shields.io/github/license/xmppjs/xmpp.js.svg?maxAge=2592000&style=flat-square)](https://raw.githubusercontent.com/xmppjs/xmpp.js/master/LICENSE)
 
 See [xmppjs.org](http://xmppjs.org) for documentation.
 

@@ -44,7 +44,7 @@ const message = (
 
 Used in xmpp.js tests.
 
-Requires a [preprocessor](https://www.npmjs.com/package/babel-plugin-transform-react-jsx) but if you're already using [Babel](http://babeljs.io/) and/or need to write big chunks of XML it's a good choice. See our [.babelrc](https://github.com/node-xmpp/node-xmpp/blob/master/.babelrc) for a setup example.
+Requires a [preprocessor](https://www.npmjs.com/package/babel-plugin-transform-react-jsx) but if you're already using [Babel](http://babeljs.io/) and/or need to write big chunks of XML it's a good choice. See our [.babelrc](https://github.com/xmppjs/xmpp.js/blob/master/.babelrc) for a configuration example.
 
 ## Reading
 
