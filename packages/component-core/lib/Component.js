@@ -16,8 +16,8 @@ function getServerDomain(domain) {
 const NS = 'jabber:component:accept'
 
 class Component extends Connection {
-  socketParameters(uri) {
-    const params = super.socketParameters(uri)
+  connectParameters(uri) {
+    const params = super.connectParameters(uri)
     params.port = params.port || 5347
     return params
   }

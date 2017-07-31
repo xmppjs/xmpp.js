@@ -29,7 +29,7 @@ class ConnectionWebSocket extends Connection {
     return el
   }
 
-  socketParameters(uri) {
+  connectParameters({uri}) {
     return uri.match(/^wss?:\/\//) ? uri : undefined
   }
 }

@@ -154,7 +154,7 @@ class Connection extends EventEmitter {
 
     return Promise.all([
       this.promise('online'),
-      this.connect(options.uri).then(() => {
+      this.connect(options).then(() => {
         const {domain, lang} = options
         return this.open({domain, lang})
       }),
@@ -169,9 +169,9 @@ class Connection extends EventEmitter {
     this.connectOptions = options
     return new Promise((resolve, reject) => {
       this._attachParser(new this.Parser())
-      this._attachSocket(new this.Socket())
+      this._attachSocket(options.transport || new this.Socket(options.transportParameters))
       this.socket.once('error', reject)
-      this.socket.connect(this.socketParameters(options), () => {
+      this.socket.connect(this.connectParameters(options), () => {
         this.socket.removeListener('error', reject)
         resolve()
         // The 'connect' status is emitted by the socket 'connect' listener
@@ -340,8 +340,8 @@ class Connection extends EventEmitter {
     return el.toString()
   }
   footerElement() {}
-  socketParameters(uri) {
-    const parsed = url.parse(uri)
+  connectParameters(options) {
+    const parsed = url.parse(options.uri)
     parsed.port = Number(parsed.port)
     parsed.host = parsed.hostname
     return parsed

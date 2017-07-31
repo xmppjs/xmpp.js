@@ -3,15 +3,15 @@
 const test = require('ava')
 const ConnectionWebSocket = require('./lib/Connection')
 
-test('socketParameters()', t => {
+test('connectParameters()', t => {
   let params
 
-  params = ConnectionWebSocket.prototype.socketParameters('ws://foo')
-  t.is(params, 'ws://foo')
+  params = ConnectionWebSocket.prototype.connectParameters({uri: 'ws://foo'})
+  t.deepEqual(params, 'ws://foo')
 
-  params = ConnectionWebSocket.prototype.socketParameters('wss://foo')
-  t.is(params, 'wss://foo')
+  params = ConnectionWebSocket.prototype.connectParameters({uri: 'wss://foo'})
+  t.deepEqual(params, 'wss://foo')
 
-  params = ConnectionWebSocket.prototype.socketParameters('http://foo')
+  params = ConnectionWebSocket.prototype.connectParameters({uri: 'http://foo'})
   t.is(params, undefined)
 })
