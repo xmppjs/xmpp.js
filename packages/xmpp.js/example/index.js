@@ -53,7 +53,7 @@ client.start('ws://localhost:5280/xmpp-websocket') // Websocket
 
 // Handle authentication to provide credentials
 client.handle('authenticate', authenticate => {
-  return authenticate('xmpp.js', 'foobar')
+  return authenticate('client', 'foobar')
 })
 
 // Handle binding to choose resource - optional

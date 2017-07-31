@@ -45,7 +45,7 @@ component.on('online', jid => {
 })
 
 // "start" opens the socket and the XML stream
-component.start({uri: 'xmpp://localhost:5347', domain: 'xmpp.js.localhost'})
+component.start({uri: 'xmpp://localhost:5347', domain: 'xmppjs.localhost'})
   .catch(err => {
     console.error('start failed', err)
   })
