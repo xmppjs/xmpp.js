@@ -48,7 +48,7 @@ http_paths = {
   }
 
 VirtualHost "localhost"
-Component "node-xmpp.localhost"
+Component "component.localhost"
   component_secret = "foobar"
 
 VirtualHost "anon.localhost"
