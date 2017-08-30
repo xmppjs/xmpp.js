@@ -32,7 +32,7 @@ component.on('online', jid => {
   console.log('🗸', 'online as', jid.toString())
 })
 
-client.on('stanza', stanza => {
+component.on('stanza', stanza => {
   console.log('⮈', stanza.toString())
 })
 
