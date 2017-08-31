@@ -5,8 +5,13 @@ const WebSocket = global.WebSocket || WS
 const EventEmitter = require('events')
 
 class Socket extends EventEmitter {
-  connect(url, fn) {
-    const sock = this.socket = new WebSocket(url, ['xmpp'])
+  constructor(parameters = {}) {
+    super()
+    this.parameters = parameters
+  }
+
+  connect(uri, fn) {
+    const sock = this.socket = this.parameters.socket || new WebSocket(uri, ['xmpp'], this.parameters)
 
     const addListener = (sock.addEventListener || sock.on).bind(sock)
     const removeListener = (sock.removeEventListener || sock.removeListener).bind(sock)

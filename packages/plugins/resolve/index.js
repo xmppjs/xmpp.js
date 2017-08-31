@@ -34,7 +34,7 @@ function fallbackConnect(entity, uris) {
   let params
   const Transport = entity.transports.find(Transport => {
     try {
-      params = Transport.prototype.socketParameters(uri)
+      params = Transport.prototype.connectParameters({uri})
       return params !== undefined
     } catch (err) {
       return false
@@ -67,11 +67,12 @@ function fallbackConnect(entity, uris) {
 module.exports.name = 'resolve'
 module.exports.plugin = function plugin(entity) {
   const _connect = entity.connect
-  entity.connect = function connect(domain) {
-    if (domain.length === 0 || domain.match(/:\/\//)) {
-      return _connect.call(this, domain)
+  entity.connect = function connect(options) {
+    const {uri} = options
+    if (uri.length === 0 || uri.match(/:\/\//)) {
+      return _connect.call(this, options)
     }
-    return getURIs(domain).then(uris => {
+    return getURIs(uri).then(uris => {
       return fallbackConnect(entity, uris)
     })
   }

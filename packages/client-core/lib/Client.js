@@ -18,10 +18,10 @@ class Client extends Connection {
     return super.send(element, ...args)
   }
 
-  connect(uri) {
+  connect(options) {
     const Transport = this.transports.find(Transport => {
       try {
-        return Transport.prototype.socketParameters(uri) !== undefined
+        return Transport.prototype.connectParameters(options) !== undefined
       } catch (err) {
         return false
       }
@@ -35,11 +35,11 @@ class Client extends Connection {
     this.Socket = Transport.prototype.Socket
     this.Parser = Transport.prototype.Parser
 
-    return super.connect(uri)
+    return super.connect(options)
   }
 
-  socketParameters(...args) {
-    return this.Transport.prototype.socketParameters(...args)
+  connectParameters(...args) {
+    return this.Transport.prototype.connectParameters(...args)
   }
 
   header(...args) {

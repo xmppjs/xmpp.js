@@ -3,12 +3,12 @@
 const test = require('ava')
 const Connection = require('./lib/Connection')
 
-test('socketParameters()', t => {
+test('connectParameters()', t => {
   let params
 
-  params = Connection.prototype.socketParameters('xmpp://foo')
+  params = Connection.prototype.connectParameters({uri: 'xmpp://foo'})
   t.is(params.port, 5222)
 
-  params = Connection.prototype.socketParameters('xmpp://foo:1234')
+  params = Connection.prototype.connectParameters({uri: 'xmpp://foo:1234'})
   t.is(params.port, 1234)
 })
