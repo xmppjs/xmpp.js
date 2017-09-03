@@ -13,5 +13,9 @@
   "dependencies": {
     "@xmpp/jid": "^0.2.0",
     "iri": "^1.1.1"
+  },
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
   }
 }

@@ -9,5 +9,9 @@
   "keywords": [
     "XMPP",
     "debug"
-  ]
+  ],
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
+  }
 }

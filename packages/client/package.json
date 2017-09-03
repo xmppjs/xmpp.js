@@ -13,5 +13,9 @@
     "@xmpp/plugins/tcp": false,
     "@xmpp/plugins/tls": false,
     "@xmpp/plugins/starttls": false
+  },
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
   }
 }

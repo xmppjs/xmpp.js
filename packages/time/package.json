@@ -10,5 +10,9 @@
     "XMPP",
     "time",
     "date"
-  ]
+  ],
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
+  }
 }

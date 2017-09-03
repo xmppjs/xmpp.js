@@ -2,17 +2,6 @@
 # yarn lockfile v1
 
 
-"@xmpp/connection@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@xmpp/connection/-/connection-0.0.6.tgz#eaa599c488f4b7e4cfdc6bbb55df9058df52f63a"
-  dependencies:
-    "@xmpp/jid" "^0.0.2"
-    "@xmpp/streamparser" "^0.0.6"
-
-"@xmpp/jid@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@xmpp/jid/-/jid-0.0.2.tgz#0d528ca9d58dafc833665564ffe62f332a3167f2"
-
 "@xmpp/streamparser@^0.0.6":
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/@xmpp/streamparser/-/streamparser-0.0.6.tgz#118033ea9db7c86a1cb46103f269ebff79f6f1ea"

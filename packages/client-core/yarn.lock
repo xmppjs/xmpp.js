@@ -2,16 +2,22 @@
 # yarn lockfile v1
 
 
-"@xmpp/connection@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@xmpp/connection/-/connection-0.0.6.tgz#eaa599c488f4b7e4cfdc6bbb55df9058df52f63a"
+"@xmpp/connection@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/connection/-/connection-0.2.0.tgz#7daf0d3596543256f54d233201c62d955d297866"
   dependencies:
-    "@xmpp/jid" "^0.0.2"
+    "@xmpp/events" "^0.2.0"
+    "@xmpp/jid" "^0.2.0"
     "@xmpp/streamparser" "^0.0.6"
+    "@xmpp/xml" "^0.2.0"
 
-"@xmpp/jid@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@xmpp/jid/-/jid-0.0.2.tgz#0d528ca9d58dafc833665564ffe62f332a3167f2"
+"@xmpp/events@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/events/-/events-0.2.0.tgz#531ad642230e722bd20820d2d8844d9ecd36d4c8"
+
+"@xmpp/jid@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/jid/-/jid-0.2.0.tgz#2802be870a3b00ee6694b29680c94b5d5abb3cb4"
 
 "@xmpp/streamparser@^0.0.6":
   version "0.0.6"
@@ -26,6 +32,12 @@
   resolved "https://registry.yarnpkg.com/@xmpp/xml/-/xml-0.1.3.tgz#1f14399e53e419688558698f6c62e71e39a86a6e"
   dependencies:
     inherits "^2.0.3"
+    ltx "^2.6.2"
+
+"@xmpp/xml@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/xml/-/xml-0.2.0.tgz#cc06443ac36f1b12f9081f036e338ba11bee4e2e"
+  dependencies:
     ltx "^2.6.2"
 
 inherits@^2.0.1, inherits@^2.0.3:

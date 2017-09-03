@@ -2,3 +2,26 @@
 # yarn lockfile v1
 
 
+"@xmpp/events@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/events/-/events-0.2.0.tgz#531ad642230e722bd20820d2d8844d9ecd36d4c8"
+
+"@xmpp/jid@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/jid/-/jid-0.2.0.tgz#2802be870a3b00ee6694b29680c94b5d5abb3cb4"
+
+"@xmpp/xml@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/xml/-/xml-0.2.0.tgz#cc06443ac36f1b12f9081f036e338ba11bee4e2e"
+  dependencies:
+    ltx "^2.6.2"
+
+inherits@^2.0.1:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
+
+ltx@^2.6.2:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/ltx/-/ltx-2.7.1.tgz#0e5cbdcb5bf178cfa7831ea41dc323d97422315a"
+  dependencies:
+    inherits "^2.0.1"

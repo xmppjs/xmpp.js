@@ -15,5 +15,9 @@
     "@xmpp/connection-tcp": "^0.2.0",
     "@xmpp/jid": "^0.2.0",
     "@xmpp/xml": "^0.2.0"
+  },
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
   }
 }

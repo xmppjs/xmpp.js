@@ -2,45 +2,69 @@
 # yarn lockfile v1
 
 
-"@xmpp/component-core@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@xmpp/component-core/-/component-core-0.0.6.tgz#576f8fd5ae388573ce183351934948ebae3bb801"
+"@xmpp/component-core@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/component-core/-/component-core-0.2.0.tgz#6a50280fdad44582df8b5e4ab6c95d395f267488"
   dependencies:
-    "@xmpp/connection-tcp" "^0.0.6"
-    "@xmpp/xml" "^0.1.3"
+    "@xmpp/connection-tcp" "^0.2.0"
+    "@xmpp/jid" "^0.2.0"
+    "@xmpp/xml" "^0.2.0"
 
-"@xmpp/connection-tcp@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@xmpp/connection-tcp/-/connection-tcp-0.0.6.tgz#505bc36467e0348c7d0bf598610711bf2b455020"
+"@xmpp/connection-tcp@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/connection-tcp/-/connection-tcp-0.2.0.tgz#81ba20aff4424efd90f0d786b050a5fbf0569269"
   dependencies:
-    "@xmpp/connection" "^0.0.6"
+    "@xmpp/connection" "^0.2.0"
     "@xmpp/streamparser" "^0.0.6"
-    "@xmpp/xml" "^0.1.3"
+    "@xmpp/xml" "^0.2.0"
 
-"@xmpp/connection@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@xmpp/connection/-/connection-0.0.6.tgz#eaa599c488f4b7e4cfdc6bbb55df9058df52f63a"
+"@xmpp/connection@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/connection/-/connection-0.2.0.tgz#7daf0d3596543256f54d233201c62d955d297866"
   dependencies:
-    "@xmpp/jid" "^0.0.2"
+    "@xmpp/events" "^0.2.0"
+    "@xmpp/jid" "^0.2.0"
     "@xmpp/streamparser" "^0.0.6"
+    "@xmpp/xml" "^0.2.0"
 
-"@xmpp/jid@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@xmpp/jid/-/jid-0.0.2.tgz#0d528ca9d58dafc833665564ffe62f332a3167f2"
+"@xmpp/events@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/events/-/events-0.2.0.tgz#531ad642230e722bd20820d2d8844d9ecd36d4c8"
 
-"@xmpp/plugins@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@xmpp/plugins/-/plugins-0.0.3.tgz#65b6a59b6b72c0f1d1fa5af2481b36217e021ad4"
+"@xmpp/jid@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/jid/-/jid-0.2.0.tgz#2802be870a3b00ee6694b29680c94b5d5abb3cb4"
+
+"@xmpp/plugin@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/plugin/-/plugin-0.2.0.tgz#1782a14d6b1688ea294ab6263d890273a62e6c1a"
   dependencies:
-    "@xmpp/connection" "^0.0.6"
-    "@xmpp/connection-tcp" "^0.0.6"
-    "@xmpp/jid" "^0.0.2"
-    "@xmpp/time" "^0.0.1"
-    "@xmpp/xml" "^0.1.3"
+    "@xmpp/events" "^0.2.0"
+    "@xmpp/jid" "^0.2.0"
+    "@xmpp/xml" "^0.2.0"
+
+"@xmpp/plugins@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/plugins/-/plugins-0.2.0.tgz#9da368b9359aeb511cfdfaca2040fef2b8294dcb"
+  dependencies:
+    "@xmpp/connection" "^0.2.0"
+    "@xmpp/connection-tcp" "^0.2.0"
+    "@xmpp/jid" "^0.2.0"
+    "@xmpp/plugin" "^0.2.0"
+    "@xmpp/resolve" "^0.2.0"
+    "@xmpp/time" "^0.2.0"
+    "@xmpp/xml" "^0.2.0"
     sasl-plain "^0.1.0"
     sasl-scram-sha-1 "^1.2.0"
     saslmechanisms "^0.1.1"
-    ws "^1.1.0"
+    ws "^3.0.0"
+
+"@xmpp/resolve@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/resolve/-/resolve-0.2.0.tgz#0dc1e90f54b8000a6a33f9258120c1a961ad896f"
+  dependencies:
+    "@xmpp/xml" "^0.2.0"
+    node-fetch "^1.6.3"
 
 "@xmpp/streamparser@^0.0.6":
   version "0.0.6"
@@ -50,15 +74,21 @@
     inherits "^2.0.3"
     ltx "^2.5.0"
 
-"@xmpp/time@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@xmpp/time/-/time-0.0.1.tgz#70819bc862d3623e18b87ea3dfeabd9744f99fef"
+"@xmpp/time@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/time/-/time-0.2.0.tgz#970b25c820ef0f8815a1b716b6fcdb9d2977ee27"
 
 "@xmpp/xml@^0.1.3":
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/@xmpp/xml/-/xml-0.1.3.tgz#1f14399e53e419688558698f6c62e71e39a86a6e"
   dependencies:
     inherits "^2.0.3"
+    ltx "^2.6.2"
+
+"@xmpp/xml@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@xmpp/xml/-/xml-0.2.0.tgz#cc06443ac36f1b12f9081f036e338ba11bee4e2e"
+  dependencies:
     ltx "^2.6.2"
 
 bitwise-xor@0.0.0:
@@ -87,9 +117,23 @@ create-hmac@^1.1.3:
     create-hash "^1.1.0"
     inherits "^2.0.1"
 
+encoding@^0.1.11:
+  version "0.1.12"
+  resolved "https://registry.yarnpkg.com/encoding/-/encoding-0.1.12.tgz#538b66f3ee62cd1ab51ec323829d1f9480c74beb"
+  dependencies:
+    iconv-lite "~0.4.13"
+
+iconv-lite@~0.4.13:
+  version "0.4.18"
+  resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.18.tgz#23d8656b16aae6742ac29732ea8f0336a4789cf2"
+
 inherits@^2.0.1, inherits@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
+
+is-stream@^1.0.1:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/is-stream/-/is-stream-1.1.0.tgz#12d4a3dd4e68e0b79ceb8dbc84173ae80d91ca44"
 
 ltx@^2.5.0, ltx@^2.6.2:
   version "2.6.2"
@@ -97,9 +141,12 @@ ltx@^2.5.0, ltx@^2.6.2:
   dependencies:
     inherits "^2.0.1"
 
-options@>=0.0.5:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/options/-/options-0.0.6.tgz#ec22d312806bb53e731773e7cdaefcf1c643128f"
+node-fetch@^1.6.3:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-1.7.2.tgz#c54e9aac57e432875233525f3c891c4159ffefd7"
+  dependencies:
+    encoding "^0.1.11"
+    is-stream "^1.0.1"
 
 randombytes@^2.0.1:
   version "2.0.3"
@@ -108,6 +155,10 @@ randombytes@^2.0.1:
 ripemd160@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/ripemd160/-/ripemd160-1.0.1.tgz#93a4bbd4942bc574b69a8fa57c71de10ecca7d6e"
+
+safe-buffer@~5.1.0:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
 
 sasl-plain@^0.1.0:
   version "0.1.0"
@@ -132,13 +183,13 @@ sha.js@^2.3.6:
   dependencies:
     inherits "^2.0.1"
 
-ultron@1.0.x:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.0.2.tgz#ace116ab557cd197386a4e88f4685378c8b2e4fa"
+ultron@~1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.1.0.tgz#b07a2e6a541a815fc6a34ccd4533baec307ca864"
 
-ws@^1.1.0:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-1.1.2.tgz#8a244fa052401e08c9886cf44a85189e1fd4067f"
+ws@^3.0.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-3.1.0.tgz#8afafecdeab46d572e5397ee880739367aa2f41c"
   dependencies:
-    options ">=0.0.5"
-    ultron "1.0.x"
+    safe-buffer "~5.1.0"
+    ultron "~1.1.0"
