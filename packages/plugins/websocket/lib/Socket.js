@@ -7,6 +7,7 @@ const EventEmitter = require('events')
 class Socket extends EventEmitter {
   connect(url, fn) {
     const sock = this.socket = new WebSocket(url, ['xmpp'])
+    this.error = false
 
     const addListener = (sock.addEventListener || sock.on).bind(sock)
     const removeListener = (sock.removeEventListener || sock.removeListener).bind(sock)
@@ -18,14 +19,17 @@ class Socket extends EventEmitter {
       }
     }
     const messageHandler = ({data}) => this.emit('data', data)
-    const errorHandler = err => {
-      this.emit('error', err)
+    const errorHandler = () => {
+      this.error = true
     }
-    const closeHandler = () => {
+    const closeHandler = evt => {
       removeListener('open', openHandler)
       removeListener('message', messageHandler)
       removeListener('error', errorHandler)
       removeListener('close', closeHandler)
+      if (this.error) {
+        this.emit('error', new Error(evt.reason || 'connection was closed abnormally'))
+      }
       this.emit('close')
     }
 
