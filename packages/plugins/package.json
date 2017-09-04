@@ -21,10 +21,14 @@
     "sasl-plain": "^0.1.0",
     "sasl-scram-sha-1": "^1.2.0",
     "saslmechanisms": "^0.1.1",
-    "ws": "^3.0.0"
+    "ws": "^3.1.0"
   },
   "browser": {
     "ws": false,
     "buffer": false
+  },
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
   }
 }

@@ -18,5 +18,9 @@
   },
   "browser": {
     "url": false
+  },
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
   }
 }

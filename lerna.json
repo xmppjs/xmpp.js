@@ -1,19 +1,19 @@
 {
-  "lerna": "2.0.0-rc.5",
+  "lerna": "2.1.2",
   "version": "0.2.0",
-  "publishConfig": {
-    "ignore": [
-      "examples/",
-      "example.js",
-      "test/",
-      "test.js",
-      ".eslintrc",
-      ".eslintignore",
-      "**/*.map"
-    ]
+  "commands": {
+    "publish": {
+      "ignore": [
+        "examples/",
+        "example.js",
+        "test/",
+        "test.js",
+        ".eslintrc",
+        ".eslintignore",
+        "**/*.map"
+      ]
+    }
   },
-  "packages": [
-    "packages/*"
-  ],
-  "npmClient": "yarn"
+  "npmClient": "yarn",
+  "useWorkspaces": true
 }

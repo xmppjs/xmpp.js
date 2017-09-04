@@ -9,5 +9,9 @@
   "keywords": [
     "XMPP",
     "JID"
-  ]
+  ],
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
+  }
 }
