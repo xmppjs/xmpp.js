@@ -14,7 +14,7 @@ function jid(...args) {
 exports = module.exports = jid.bind()
 exports.jid = jid
 exports.JID = JID
-exports.equal = function (a, b) {
+exports.equal = function(a, b) {
   return a.equals(b)
 }
 exports.detectEscape = escaping.detect

@@ -29,15 +29,17 @@ module.exports = plugin('stream-features', {
         return {
           name: feature.name,
           run: (...args) => {
-            return feature.run(entity, el, ...args).then(() => {
-              if (feature.restart) {
-                return entity.restart()
-              } else if (entity.jid) {
-                entity._status('online', entity.jid)
-              } else {
-                this.onStreamFeatures(features, el)
-              }
-            })
+            return feature
+              .run(entity, el, ...args)
+              .then(() => {
+                if (feature.restart) {
+                  return entity.restart()
+                } else if (entity.jid) {
+                  entity._status('online', entity.jid)
+                } else {
+                  this.onStreamFeatures(features, el)
+                }
+              })
               .catch(err => entity.emit('error', err))
           },
         }
@@ -58,7 +60,12 @@ module.exports = plugin('stream-features', {
 
   selectFeatures(el) {
     return this.features
-      .filter(f => f.match(el, this.entity) && this.negotiated.indexOf(f) === -1 && typeof f.priority === 'number')
+      .filter(
+        f =>
+          f.match(el, this.entity) &&
+          this.negotiated.indexOf(f) === -1 &&
+          typeof f.priority === 'number'
+      )
       .sort((a, b) => {
         return a.priority < b.priority
       })

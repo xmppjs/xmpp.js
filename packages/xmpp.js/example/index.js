@@ -3,9 +3,10 @@
 /* global window */
 /* eslint-disable no-console */
 
-const {xml, Client} = typeof window === 'undefined'
-  ? require('..') // For you; require('xmpp.js')
-  : window.xmpp
+const {xml, Client} =
+  typeof window === 'undefined'
+    ? require('..') // For you; require('xmpp.js')
+    : window.xmpp
 
 const client = new Client()
 
@@ -45,8 +46,9 @@ client.on('online', jid => {
 // "start" opens the socket and the XML stream
 // client.start('xmpp://localhost:5222') // TCP
 // client.start('xmpps://localhost:5223') // TLS
-client.start('ws://localhost:5280/xmpp-websocket') // Websocket
-// client.start('wss://localhost:5281/xmpp-websocket') // Secure WebSocket
+client
+  .start('ws://localhost:5280/xmpp-websocket') // Websocket
+  // start('wss://localhost:5281/xmpp-websocket') // Secure WebSocket
   .catch(err => {
     console.error('start failed', err)
   })

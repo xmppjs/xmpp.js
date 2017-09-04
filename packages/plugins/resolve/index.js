@@ -13,16 +13,18 @@ function sc(socket, params) {
 }
 
 function getURIs(domain) {
-  return resolve(domain, {srv: [
-    {
-      service: 'xmpps-client',
-      protocol: 'tcp',
-    },
-    {
-      service: 'xmpp-client',
-      protocol: 'tcp',
-    },
-  ]})
+  return resolve(domain, {
+    srv: [
+      {
+        service: 'xmpps-client',
+        protocol: 'tcp',
+      },
+      {
+        service: 'xmpp-client',
+        protocol: 'tcp',
+      },
+    ],
+  })
     .then(records => {
       return records.map(record => record.uri).filter(record => record)
     })
@@ -58,7 +60,7 @@ function fallbackConnect(entity, uris) {
     })
     .catch(() => {
       if (uris.length === 0) {
-        return new Error('Couldn\'t connect')
+        return new Error("Couldn't connect")
       }
       return fallbackConnect(entity, uris)
     })

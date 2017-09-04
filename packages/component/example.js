@@ -31,21 +31,18 @@ component.on('output', data => console.log('⮊', data))
 
 component.on('stanza', el => {
   if (el.is('message') && el.attrs.from === component.jid.toString()) {
-    console.log('🗸', 'It\'s alive!')
+    console.log('🗸', "It's alive!")
   }
 })
 
 component.on('online', jid => {
   console.log('jid', jid.toString())
-  component.send(
-    xml('message', {to: jid.toString()},
-      xml('body', {}, 'hello')
-    )
-  )
+  component.send(xml('message', {to: jid.toString()}, xml('body', {}, 'hello')))
 })
 
 // "start" opens the socket and the XML stream
-component.start({uri: 'xmpp://localhost:5347', domain: 'xmppjs.localhost'})
+component
+  .start({uri: 'xmpp://localhost:5347', domain: 'xmppjs.localhost'})
   .catch(err => {
     console.error('start failed', err)
   })
@@ -56,5 +53,10 @@ component.handle('authenticate', authenticate => {
 })
 
 process.on('unhandledRejection', (reason, p) => {
-  console.log('Possibly Unhandled Rejection at: Promise ', p, ' reason: ', reason)
+  console.log(
+    'Possibly Unhandled Rejection at: Promise ',
+    p,
+    ' reason: ',
+    reason
+  )
 })

@@ -64,7 +64,7 @@ test('should allow access to jid parts using keys', t => {
   t.is(j.resource, 'r')
 })
 
-test('shouldn\'t get U_STRINGPREP_PROHIBITED_ERROR (#93)', t => {
+test("shouldn't get U_STRINGPREP_PROHIBITED_ERROR (#93)", t => {
   t.notThrows(() => {
     const j = parse('f u@d')
     j.toString()

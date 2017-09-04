@@ -13,9 +13,7 @@ const NS_STREAM = 'http://etherx.jabber.org/streams'
 class TCP extends Connection {
   socketParameters(uri) {
     const {port, host, protocol} = super.socketParameters(uri)
-    return (protocol === 'xmpp:')
-      ? {port, host}
-      : undefined
+    return protocol === 'xmpp:' ? {port, host} : undefined
   }
 
   // https://xmpp.org/rfcs/rfc6120.html#streams-open

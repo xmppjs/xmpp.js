@@ -21,10 +21,10 @@ test('escape `at&t guy@example.com`', t => {
   t.is(esc.toString(true), 'at&t guy@example.com')
 })
 
-test('escape `d\'artagnan@example.com`', t => {
-  const esc = new JID('d\'artagnan', 'example.com')
+test("escape `d'artagnan@example.com`", t => {
+  const esc = new JID("d'artagnan", 'example.com')
   t.is(esc.toString(), 'd\\27artagnan@example.com')
-  t.is(esc.toString(true), 'd\'artagnan@example.com')
+  t.is(esc.toString(true), "d'artagnan@example.com")
 })
 
 test('escape `/.fanboy@example.com`', t => {
@@ -96,7 +96,7 @@ test('escape `at\\26t\\20guy@example.com`', t => {
 test('escape `d\\27artagnan@example.com`', t => {
   const esc = new JID('d\\27artagnan', 'example.com')
   t.is(esc.toString(), 'd\\27artagnan@example.com')
-  t.is(esc.toString(true), 'd\'artagnan@example.com')
+  t.is(esc.toString(true), "d'artagnan@example.com")
 })
 
 test('escape `\\2f.fanboy@example.com`', t => {

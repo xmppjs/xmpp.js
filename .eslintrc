@@ -3,12 +3,14 @@ plugins:
   - promise
   - standard
   - unicorn
+  - prettier
 
 extends:
   - eslint:recommended
   - plugin:unicorn/recommended
   - plugin:node/recommended
   - xo/esnext
+  - prettier
 
 env:
   es6: true

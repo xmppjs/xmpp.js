@@ -6,7 +6,8 @@ process.title = '@xmpp/console'
 
 const meow = require('meow')
 
-const cli = meow(`
+const cli = meow(
+  `
     Usage
       $ xmpp-console [endpoint]
 
@@ -23,13 +24,15 @@ const cli = meow(`
       $ xmpp-console ws://localhost:5280/xmpp-websocket (WebSocket)
       $ xmpp-console wss://localhost:52801/xmpp-websocket (Secure WebSocket)
       $ xmpp-console xmpp://component.localhost[:5347] --type component (component)
-`, {
+`,
+  {
     alias: {
       p: 'port',
       w: 'web',
       t: 'type',
     },
-  })
+  }
+)
 
 const [endpoint] = cli.input
 

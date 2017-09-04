@@ -14,11 +14,11 @@ const DATA_PATH = path.join(__dirname)
 const PID_PATH = path.join(DATA_PATH, 'prosody.pid')
 
 function clean() {
-  return Promise.all([
-    'prosody.err',
-    'prosody.log',
-    'prosody.pid',
-  ].map(file => removeFile(path.join(__dirname, file)))).catch(() => {})
+  return Promise.all(
+    ['prosody.err', 'prosody.log', 'prosody.pid'].map(file =>
+      removeFile(path.join(__dirname, file))
+    )
+  ).catch(() => {})
 }
 
 function isPortOpen() {
@@ -99,7 +99,7 @@ function stop() {
       return clean()
     }
     return Promise.all([
-      getPid().then(pid => pid ? kill(pid) : undefined),
+      getPid().then(pid => (pid ? kill(pid) : undefined)),
       waitPortClose(),
     ]).then(() => clean())
   })

@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "xmpp.js",  
+  "name": "xmpp.js",
   "devDependencies": {
     "ava": "^0.22.0",
     "babel-cli": "^6.26.0",
@@ -11,13 +11,16 @@
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
     "eslint": "^4.6.0",
+    "eslint-config-prettier": "^2.4.0",
     "eslint-config-xo": "^0.18.2",
     "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-prettier": "^2.2.0",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "eslint-plugin-unicorn": "^2.1.2",
     "exorcist": "^0.4.0",
     "lerna": "^2.1.2",
+    "prettier": "^1.6.1",
     "sinon": "^3.2.1",
     "uglify-js": "^3.0.28",
     "util.promisify": "^1.0.0"

@@ -6,10 +6,11 @@ const EventEmitter = require('events')
 
 class Socket extends EventEmitter {
   connect(url, fn) {
-    const sock = this.socket = new WebSocket(url, ['xmpp'])
+    const sock = (this.socket = new WebSocket(url, ['xmpp']))
 
     const addListener = (sock.addEventListener || sock.on).bind(sock)
-    const removeListener = (sock.removeEventListener || sock.removeListener).bind(sock)
+    const removeListener = (sock.removeEventListener || sock.removeListener)
+      .bind(sock)
 
     const openHandler = () => {
       this.emit('connect')

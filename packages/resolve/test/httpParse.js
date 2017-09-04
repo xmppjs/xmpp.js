@@ -22,10 +22,9 @@ global.fetch = url => {
 const {resolve} = require('../lib/http')
 
 test.cb('parse', t => {
-  resolve(domain).then(result => {
-    t.deepEqual(
-      result,
-      [
+  resolve(domain)
+    .then(result => {
+      t.deepEqual(result, [
         {
           rel: 'urn:xmpp:alt-connections:websocket',
           href: 'wss://example.com/ws',
@@ -44,8 +43,8 @@ test.cb('parse', t => {
           method: 'httppoll',
           uri: 'http://example.com/http-poll',
         },
-      ]
-    )
-    t.end()
-  }).catch(t.end)
+      ])
+      t.end()
+    })
+    .catch(t.end)
 })

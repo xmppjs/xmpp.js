@@ -52,9 +52,11 @@ class JID {
      * Comparison function
      * */
   equals(other) {
-    return (this._local === other._local) &&
-      (this._domain === other._domain) &&
-      (this._resource === other._resource)
+    return (
+      this._local === other._local &&
+      this._domain === other._domain &&
+      this._resource === other._resource
+    )
   }
 
   /**

@@ -6,7 +6,7 @@ const express = require('express')
 const opn = require('opn')
 const path = require('path')
 
-module.exports = function (flags, endpoint) {
+module.exports = function(flags, endpoint) {
   const port = flags.port || 8080
 
   const app = express()

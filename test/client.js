@@ -49,12 +49,11 @@ test.cb('client', t => {
     t.is(id.bare().toString(), JID)
   })
 
-  entity.start(domain)
-    .then(id => {
-      t.true(id instanceof jid.JID)
-      t.is(id.bare().toString(), JID)
-      t.end()
-    })
+  entity.start(domain).then(id => {
+    t.true(id instanceof jid.JID)
+    t.is(id.bare().toString(), JID)
+    t.end()
+  })
 })
 
 test.cb('bad credentials', t => {
@@ -85,7 +84,8 @@ test.cb('bad credentials', t => {
     t.is(err, error)
   })
 
-  entity.start(domain)
+  entity
+    .start(domain)
     .then(() => t.fail())
     .catch(err => {
       t.is(err, error)
@@ -151,7 +151,8 @@ test('auto', t => {
   t.context.entity.handle('authenticate', auth => {
     return auth(USERNAME, PASSWORD)
   })
-  return t.context.entity.start(domain)
+  return t.context.entity
+    .start(domain)
     .then(id => t.is(id.bare().toString(), JID))
 })
 
@@ -160,7 +161,8 @@ test.skip('ws IPv4', t => {
   t.context.entity.handle('authenticate', auth => {
     return auth(USERNAME, PASSWORD)
   })
-  return t.context.entity.start({uri: 'ws://127.0.0.1:5280/xmpp-websocket', domain})
+  return t.context.entity
+    .start({uri: 'ws://127.0.0.1:5280/xmpp-websocket', domain})
     .then(id => t.is(id.bare().toString(), JID))
 })
 
@@ -169,7 +171,8 @@ test.skip('ws IPv6', t => {
   t.context.entity.handle('authenticate', auth => {
     return auth(USERNAME, PASSWORD)
   })
-  return t.context.entity.start({uri: 'ws://[::1]:5280/xmpp-websocket', domain})
+  return t.context.entity
+    .start({uri: 'ws://[::1]:5280/xmpp-websocket', domain})
     .then(id => t.is(id.bare().toString(), JID))
 })
 
@@ -177,7 +180,8 @@ test('ws domain', t => {
   t.context.entity.handle('authenticate', auth => {
     return auth(USERNAME, PASSWORD)
   })
-  return t.context.entity.start('ws://localhost:5280/xmpp-websocket')
+  return t.context.entity
+    .start('ws://localhost:5280/xmpp-websocket')
     .then(id => t.is(id.bare().toString(), JID))
 })
 
@@ -186,7 +190,8 @@ test.skip('wss IPv4', t => {
   t.context.entity.handle('authenticate', auth => {
     return auth(USERNAME, PASSWORD)
   })
-  return t.context.entity.start({uri: 'wss://127.0.0.1:5281/xmpp-websocket', domain})
+  return t.context.entity
+    .start({uri: 'wss://127.0.0.1:5281/xmpp-websocket', domain})
     .then(id => t.is(id.bare().toString(), JID))
 })
 
@@ -195,7 +200,8 @@ test.skip('wss IPv6', t => {
   t.context.entity.handle('authenticate', auth => {
     return auth(USERNAME, PASSWORD)
   })
-  return t.context.entity.start({uri: 'wss://[::1]:5281/xmpp-websocket', domain})
+  return t.context.entity
+    .start({uri: 'wss://[::1]:5281/xmpp-websocket', domain})
     .then(id => t.is(id.bare().toString(), JID))
 })
 
@@ -203,7 +209,8 @@ test('wss domain', t => {
   t.context.entity.handle('authenticate', auth => {
     return auth(USERNAME, PASSWORD)
   })
-  return t.context.entity.start('wss://localhost:5281/xmpp-websocket')
+  return t.context.entity
+    .start('wss://localhost:5281/xmpp-websocket')
     .then(id => t.is(id.bare().toString(), JID))
 })
 
@@ -211,7 +218,8 @@ test('xmpp IPv4', t => {
   t.context.entity.handle('authenticate', auth => {
     return auth(USERNAME, PASSWORD)
   })
-  return t.context.entity.start({uri: 'xmpp://127.0.0.1:5222', domain})
+  return t.context.entity
+    .start({uri: 'xmpp://127.0.0.1:5222', domain})
     .then(id => t.is(id.bare().toString(), JID))
 })
 
@@ -223,7 +231,8 @@ test.skip('xmpp IPv6', t => {
   if (process.env.TRAVIS) {
     return t.pass()
   }
-  return t.context.entity.start({uri: 'xmpp://[::1]:5222', domain})
+  return t.context.entity
+    .start({uri: 'xmpp://[::1]:5222', domain})
     .then(id => t.is(id.bare().toString(), JID))
 })
 
@@ -231,7 +240,8 @@ test('xmpp domain', t => {
   t.context.entity.handle('authenticate', auth => {
     return auth(USERNAME, PASSWORD)
   })
-  return t.context.entity.start('xmpp://localhost:5222')
+  return t.context.entity
+    .start('xmpp://localhost:5222')
     .then(id => t.is(id.bare().toString(), JID))
 })
 
@@ -239,7 +249,8 @@ test('xmpps IPv4', t => {
   t.context.entity.handle('authenticate', auth => {
     return auth(USERNAME, PASSWORD)
   })
-  return t.context.entity.start({uri: 'xmpps://127.0.0.1:5223', domain})
+  return t.context.entity
+    .start({uri: 'xmpps://127.0.0.1:5223', domain})
     .then(id => t.is(id.bare().toString(), JID))
 })
 
@@ -251,7 +262,8 @@ test('xmpps IPv6', t => {
   if (process.env.TRAVIS) {
     return t.pass()
   }
-  return t.context.entity.start({uri: 'xmpps://[::1]:5223', domain})
+  return t.context.entity
+    .start({uri: 'xmpps://[::1]:5223', domain})
     .then(id => t.is(id.bare().toString(), JID))
 })
 
@@ -259,6 +271,7 @@ test('xmpps domain', t => {
   t.context.entity.handle('authenticate', auth => {
     return auth(USERNAME, PASSWORD)
   })
-  return t.context.entity.start('xmpps://localhost:5223')
+  return t.context.entity
+    .start('xmpps://localhost:5223')
     .then(id => t.is(id.bare().toString(), JID))
 })

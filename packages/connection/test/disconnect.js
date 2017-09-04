@@ -7,7 +7,7 @@ const {EventEmitter} = require('@xmpp/events')
 test.cb('timeout', t => {
   t.plan(1)
   const conn = new Connection()
-  const sock = conn.socket = new EventEmitter()
+  const sock = (conn.socket = new EventEmitter())
   sock.end = () => {}
   conn.disconnect().catch(err => {
     t.is(err.name, 'TimeoutError')
@@ -17,7 +17,7 @@ test.cb('timeout', t => {
 
 test.cb('resolves', t => {
   const conn = new Connection()
-  const sock = conn.socket = new EventEmitter()
+  const sock = (conn.socket = new EventEmitter())
   sock.end = () => {}
   conn.disconnect().then(() => {
     t.end()

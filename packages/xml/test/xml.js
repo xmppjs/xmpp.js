@@ -5,7 +5,12 @@ const xml = require('..')
 const x = require('../lib/x')
 const Element = require('../lib/Element')
 const Parser = require('../lib/Parser')
-const {escapeXML, unescapeXML, escapeXMLText, unescapeXMLText} = require('ltx/lib/escape')
+const {
+  escapeXML,
+  unescapeXML,
+  escapeXMLText,
+  unescapeXMLText,
+} = require('ltx/lib/escape')
 
 test('exports x', t => {
   t.is(xml.x, x)
