@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "xmpp.js",  
   "devDependencies": {
     "ava": "^0.22.0",
     "babel-cli": "^6.26.0",
@@ -36,6 +37,9 @@
   },
   "engines": {
     "node": ">= 6",
-    "npm": ">= 2"
-  }
+    "yarn": ">= 0.28"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
