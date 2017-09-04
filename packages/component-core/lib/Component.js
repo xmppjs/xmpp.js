@@ -39,7 +39,9 @@ class Component extends Connection {
   open(...args) {
     return super.open(...args).then(el => {
       this._status('authenticate')
-      return this.delegate('authenticate', secret => this.authenticate(el.attrs.id, secret))
+      return this.delegate('authenticate', secret =>
+        this.authenticate(el.attrs.id, secret)
+      )
     })
   }
 
@@ -48,7 +50,9 @@ class Component extends Connection {
     this._status('authenticating')
     const hash = crypto.createHash('sha1')
     hash.update(id + password, 'binary')
-    return this.sendReceive(xml('handshake', {}, hash.digest('hex'))).then(el => {
+    return this.sendReceive(
+      xml('handshake', {}, hash.digest('hex'))
+    ).then(el => {
       if (el.name !== 'handshake') {
         throw new Error('Unexpected server response')
       }

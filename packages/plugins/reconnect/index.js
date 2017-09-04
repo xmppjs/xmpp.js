@@ -17,7 +17,8 @@ module.exports = plugin('reconnect', {
       const {status} = entity
       entity.status = 'offline'
 
-      entity.start(entity.startOptions)
+      entity
+        .start(entity.startOptions)
         .then(() => {
           this.emit('reconnected')
         })

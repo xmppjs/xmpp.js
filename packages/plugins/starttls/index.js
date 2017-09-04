@@ -13,8 +13,10 @@ const net = require('net')
 const NS = 'urn:ietf:params:xml:ns:xmpp-tls'
 
 function match(features, entity) {
-  return features.getChild('starttls', NS) &&
-    entity.socket.constructor === net.Socket // https://prosody.im/issues/issue/837
+  return (
+    features.getChild('starttls', NS) &&
+    entity.socket.constructor === net.Socket
+  ) // https://prosody.im/issues/issue/837
 }
 
 function proceed(entity, options) {

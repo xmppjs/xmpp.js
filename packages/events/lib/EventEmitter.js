@@ -34,8 +34,15 @@ class EventEmitter {
   }
 }
 
-['on', 'addListener', 'removeListener', 'once', 'emit', 'listenerCount'].forEach(name => {
-  EventEmitter.prototype[name] = function (...args) {
+;[
+  'on',
+  'addListener',
+  'removeListener',
+  'once',
+  'emit',
+  'listenerCount',
+].forEach(name => {
+  EventEmitter.prototype[name] = function(...args) {
     this._emitter[name](...args)
   }
 })

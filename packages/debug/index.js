@@ -5,6 +5,8 @@ module.exports = function debug(entity, force) {
     entity.on('input', data => console.log('⮈', data))
     entity.on('output', data => console.log('⮊', data))
     entity.on('error', err => console.error('❌', err))
-    entity.on('status', (status, value) => console.log('🛈', status, value ? value.toString() : ''))
+    entity.on('status', (status, value) =>
+      console.log('🛈', status, value ? value.toString() : '')
+    )
   }
 }

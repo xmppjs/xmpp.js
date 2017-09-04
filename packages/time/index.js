@@ -26,7 +26,7 @@ function pad(value) {
 }
 
 function formatOffset(n) {
-  const sign = (n > 0) ? '-' : '+'
+  const sign = n > 0 ? '-' : '+'
   const offset = Math.abs(n)
   return sign + pad(Math.floor(offset / 60)) + ':' + pad(offset % 60)
 }

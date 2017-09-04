@@ -6,6 +6,9 @@ setup:
 	yarn
 	lerna bootstrap
 
+lint:
+	eslint .
+
 test:
 	ava
 	eslint .

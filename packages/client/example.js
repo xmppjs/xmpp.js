@@ -41,11 +41,12 @@ client.on('online', jid => {
 })
 
 // "start" opens the socket and the XML stream
-client.start('localhost') // Auto
-// client.start('xmpp://localhost:5222') // TCP
-// client.start('xmpps://localhost:5223') // TLS
-// client.start('ws://localhost:5280/xmpp-websocket') // Websocket
-// client.start('wss://localhost:5281/xmpp-websocket') // Secure WebSocket
+client
+  .start('localhost') // Auto
+  // .start('xmpp://localhost:5222') // TCP
+  // .start('xmpps://localhost:5223') // TLS
+  // .start('ws://localhost:5280/xmpp-websocket') // Websocket
+  // .start('wss://localhost:5281/xmpp-websocket') // Secure WebSocket
   .catch(err => {
     console.error('start failed', err)
   })
@@ -61,5 +62,10 @@ client.handle('bind', bind => {
 })
 
 process.on('unhandledRejection', (reason, p) => {
-  console.log('Possibly Unhandled Rejection at: Promise ', p, ' reason: ', reason)
+  console.log(
+    'Possibly Unhandled Rejection at: Promise ',
+    p,
+    ' reason: ',
+    reason
+  )
 })

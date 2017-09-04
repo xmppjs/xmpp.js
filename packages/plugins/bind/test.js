@@ -20,17 +20,23 @@ test.skip('match()', t => {
 })
 
 test.skip('stanza()', t => {
-  t.deepEqual(stanza(), (xml`
+  t.deepEqual(
+    stanza(),
+    xml`
     <iq type='set'>
       <bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'/>
     </iq>
-  `))
+  `
+  )
 
-  t.deepEqual(stanza('foobar'), (`
+  t.deepEqual(
+    stanza('foobar'),
+    `
     <iq type='set'>
       <bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'>
         <resource>foobar</resource>
       </bind>
     </iq>
-  `))
+  `
+  )
 })

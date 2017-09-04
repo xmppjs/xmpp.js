@@ -2,7 +2,7 @@
 
 const {Client} = require('../client-core')
 
-module.exports = function (p) {
+module.exports = function(p) {
   const entity = new Client()
   entity.socket = {
     write(data, cb) {

@@ -35,7 +35,8 @@ test.cb('component', t => {
     t.is(id.toString(), 'component.localhost')
   })
 
-  entity.start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
+  entity
+    .start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
     .then(id => {
       t.true(id instanceof jid.JID)
       t.is(id.toString(), 'component.localhost')

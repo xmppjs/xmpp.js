@@ -32,7 +32,9 @@ module.exports = plugin('iq-caller', {
   id() {
     let id
     while (!id) {
-      id = Math.random().toString(36).substr(2, 12)
+      id = Math.random()
+        .toString(36)
+        .substr(2, 12)
     }
     return id
   },

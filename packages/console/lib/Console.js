@@ -79,13 +79,12 @@ class Console extends EventEmitter {
       register.onFields = (fields, register) => {
         return this.ask({
           text: 'Choose username',
+        }).then(username => {
+          return this.ask({
+            text: 'Choose password',
+            type: 'password',
+          }).then(password => register(username, password))
         })
-          .then(username => {
-            return this.ask({
-              text: 'Choose password',
-              type: 'password',
-            }).then(password => register(username, password))
-          })
       }
     }
     if (bind) {
@@ -101,9 +100,11 @@ class Console extends EventEmitter {
     entity.handle('authenticate', auth => {
       return this.ask({
         text: 'Enter password',
-      }).then(auth).catch(err => {
-        this.error('authentication', err.message)
       })
+        .then(auth)
+        .catch(err => {
+          this.error('authentication', err.message)
+        })
     })
 
     entity.on('connect', () => {
@@ -166,8 +167,7 @@ class Console extends EventEmitter {
     })
   }
 
-  resetInput() {
-  }
+  resetInput() {}
 
   log(...args) {
     console.log(...args)

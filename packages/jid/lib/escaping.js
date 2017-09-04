@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports.detect = function (local) {
+module.exports.detect = function(local) {
   if (!local) {
     return false
   }
@@ -33,7 +33,7 @@ module.exports.detect = function (local) {
  * @param String local local part of a jid
  * @return An escaped local part
  */
-module.exports.escape = function (local) {
+module.exports.escape = function(local) {
   if (local === null) {
     return null
   }
@@ -60,7 +60,7 @@ module.exports.escape = function (local) {
  * @param String local local part of a jid
  * @return unescaped local part
  */
-module.exports.unescape = function (local) {
+module.exports.unescape = function(local) {
   if (local === null) {
     return null
   }
@@ -69,7 +69,7 @@ module.exports.unescape = function (local) {
     .replace(/\\20/g, ' ')
     .replace(/\\22/g, '"')
     .replace(/\\26/g, '&')
-    .replace(/\\27/g, '\'')
+    .replace(/\\27/g, "'")
     .replace(/\\2f/g, '/')
     .replace(/\\3a/g, ':')
     .replace(/\\3c/g, '<')

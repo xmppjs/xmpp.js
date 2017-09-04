@@ -51,7 +51,7 @@ class Connection extends EventEmitter {
   }
 
   _attachSocket(socket) {
-    const sock = this.socket = socket
+    const sock = (this.socket = socket)
     const listeners = this.socketListeners
     listeners.data = data => {
       const str = data.toString('utf8')
@@ -89,16 +89,22 @@ class Connection extends EventEmitter {
   }
 
   _attachParser(p) {
-    const parser = this.parser = p
+    const parser = (this.parser = p)
     const listeners = this.parserListeners
     listeners.element = element => {
       if (element.name === 'stream:error') {
         this.close().then(() => this.disconnect())
-        this.emit('error', new StreamError(
-          element.children[0].name,
-          element.getChildText('text', 'urn:ietf:params:xml:ns:xmpp-streams') || '',
-          element
-        ))
+        this.emit(
+          'error',
+          new StreamError(
+            element.children[0].name,
+            element.getChildText(
+              'text',
+              'urn:ietf:params:xml:ns:xmpp-streams'
+            ) || '',
+            element
+          )
+        )
       }
       this.emit('element', element)
       this.emit(this.isStanza(element) ? 'stanza' : 'nonza', element)
@@ -238,10 +244,12 @@ class Connection extends EventEmitter {
     if (!this.socket) {
       return Promise.resolve()
     }
-    return this.close().then(el => this.disconnect().then(() => {
-      this._status('offline')
-      return el
-    }))
+    return this.close().then(el =>
+      this.disconnect().then(() => {
+        this._status('offline')
+        return el
+      })
+    )
   }
 
   /**

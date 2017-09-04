@@ -40,15 +40,19 @@ function resolveTxt(domain, {owner = '_xmppconnect'}) {
       } else if (err) {
         reject(err)
       } else {
-        resolve(records.map(record => {
-          const [attribute, value] = record[0].split('=')
-          return {
-            attribute,
-            value,
-            method: attribute.split('-').pop(),
-            uri: value,
-          }
-        }).sort(compareAltConnections))
+        resolve(
+          records
+            .map(record => {
+              const [attribute, value] = record[0].split('=')
+              return {
+                attribute,
+                value,
+                method: attribute.split('-').pop(),
+                uri: value,
+              }
+            })
+            .sort(compareAltConnections)
+        )
       }
     })
   })
@@ -62,9 +66,11 @@ function resolveSrv(domain, {service, protocol}) {
       } else if (err) {
         reject(err)
       } else {
-        resolve(records.map(record => {
-          return Object.assign(record, {service, protocol})
-        }))
+        resolve(
+          records.map(record => {
+            return Object.assign(record, {service, protocol})
+          })
+        )
       }
     })
   })
@@ -88,17 +94,23 @@ function sortSrv(records) {
 
 function lookupSrvs(srvs, options) {
   const addresses = []
-  return Promise.all(srvs.map(srv => {
-    return lookup(srv.name, options).then(srvAddresses => {
-      srvAddresses.forEach(address => {
-        const {port, service} = srv
-        const addr = address.address
-        addresses.push(Object.assign({}, address, srv, {
-          uri: `${service.split('-')[0]}://${address.family === 6 ? '[' + addr + ']' : addr}:${port}`,
-        }))
+  return Promise.all(
+    srvs.map(srv => {
+      return lookup(srv.name, options).then(srvAddresses => {
+        srvAddresses.forEach(address => {
+          const {port, service} = srv
+          const addr = address.address
+          addresses.push(
+            Object.assign({}, address, srv, {
+              uri: `${service.split('-')[0]}://${address.family === 6
+                ? '[' + addr + ']'
+                : addr}:${port}`,
+            })
+          )
+        })
       })
     })
-  })).then(() => addresses)
+  ).then(() => addresses)
 }
 
 function resolve(domain, options = {}) {
@@ -148,11 +160,16 @@ function resolve(domain, options = {}) {
   }
   const family = {options}
   return lookup(domain, options).then(addresses => {
-    return Promise.all(options.srv.map(srv => {
-      return resolveSrv(domain, Object.assign({}, srv, {family})).then(records => {
-        return lookupSrvs(records, options)
+    return Promise.all(
+      options.srv.map(srv => {
+        return resolveSrv(
+          domain,
+          Object.assign({}, srv, {family})
+        ).then(records => {
+          return lookupSrvs(records, options)
+        })
       })
-    }))
+    )
       .then(srvs => sortSrv([].concat(...srvs)).concat(addresses))
       .then(records => {
         return resolveTxt(domain, options).then(txtRecords => {

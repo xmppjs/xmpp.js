@@ -24,7 +24,11 @@ function completeIfAfterLt(cm) {
 function completeIfInTag(cm) {
   return completeAfter(cm, () => {
     const tok = cm.getTokenAt(cm.getCursor())
-    if (tok.type === 'string' && (!/['"]/.test(tok.string.charAt(tok.string.length - 1)) || tok.string.length === 1)) {
+    if (
+      tok.type === 'string' &&
+      (!/['"]/.test(tok.string.charAt(tok.string.length - 1)) ||
+        tok.string.length === 1)
+    ) {
       return false
     }
     const inner = CodeMirror.innerMode(cm.getMode(), tok.state).state
@@ -51,7 +55,16 @@ const tags = {
   },
   presence: {
     attrs: {
-      type: ['subscribe', 'unsubscribe', 'probe', 'error', 'subscribed', 'unsubscribed', 'available', 'unavailable'],
+      type: [
+        'subscribe',
+        'unsubscribe',
+        'probe',
+        'error',
+        'subscribed',
+        'unsubscribed',
+        'available',
+        'unavailable',
+      ],
     },
   },
   message: {
@@ -69,10 +82,10 @@ const editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
   autoCloseTags: true,
   matchTags: {bothTags: true},
   extraKeys: {
-    '\'<\'': completeAfter,
-    '\'/\'': completeIfAfterLt,
-    '\' \'': completeIfInTag,
-    '\'=\'': completeIfInTag,
+    "'<'": completeAfter,
+    "'/'": completeIfAfterLt,
+    "' '": completeIfInTag,
+    "'='": completeIfInTag,
     'Ctrl-Space': 'autocomplete',
   },
   hintOptions: {schemaInfo: tags},
