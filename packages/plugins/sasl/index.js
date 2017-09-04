@@ -55,7 +55,7 @@ module.exports = plugin('sasl', {
     const usable = this.getUsableMechanisms(offered)
     const available = this.getAvailableMechanisms()
 
-    return Promise.resolve(this.getMechanism(offered, usable, available, features)).then(mech => {
+    return Promise.resolve(this.getMechanism(usable)).then(mech => {
       this.mech = mech
       return this.handleMechanism(mech, features)
     })
