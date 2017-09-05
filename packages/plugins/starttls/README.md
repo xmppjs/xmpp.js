@@ -1,6 +1,6 @@
 # STARTTLS
 
-STARTTLS negotiation for `@xmpp/client`.
+STARTTLS negotiation for `@xmpp/client-core`.
 
 Included and enabled in `@xmpp/client`.
 

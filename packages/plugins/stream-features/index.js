@@ -12,7 +12,6 @@ const plugin = require('@xmpp/plugin')
 module.exports = plugin('stream-features', {
   start() {
     this.features = []
-    this.negotiated = []
 
     const {entity} = this
     this.handler = el => {
@@ -25,27 +24,23 @@ module.exports = plugin('stream-features', {
         return
       }
 
-      const features = streamFeatures.map(feature => {
-        return {
-          name: feature.name,
-          run: (...args) => {
-            return feature
-              .run(entity, el, ...args)
-              .then(() => {
-                if (feature.restart) {
-                  return entity.restart()
-                } else if (entity.jid) {
-                  entity._status('online', entity.jid)
-                } else {
-                  this.onStreamFeatures(features, el)
-                }
-              })
-              .catch(err => entity.emit('error', err))
-          },
-        }
-      })
+      function iterate(c) {
+        const feature = streamFeatures[c]
+        return feature
+          .run(entity, el)
+          .then(() => {
+            if (feature.restart) {
+              return entity.restart()
+            } else if (c === streamFeatures.length - 1) {
+              if (entity.jid) entity._status('online', entity.jid)
+            } else {
+              iterate(c + 1)
+            }
+          })
+          .catch(err => entity.emit('error', err))
+      }
 
-      this.onStreamFeatures(features, el)
+      return iterate(0)
     }
 
     entity.on('nonza', this.handler)
@@ -53,27 +48,16 @@ module.exports = plugin('stream-features', {
 
   stop() {
     delete this.features
-    delete this.negotiated
     this.entity.off('nonza', this.handler)
     delete this.handler
   },
 
   selectFeatures(el) {
     return this.features
-      .filter(
-        f =>
-          f.match(el, this.entity) &&
-          this.negotiated.indexOf(f) === -1 &&
-          typeof f.priority === 'number'
-      )
+      .filter(f => f.match(el, this.entity) && typeof f.priority === 'number')
       .sort((a, b) => {
         return a.priority < b.priority
       })
-  },
-
-  onStreamFeatures(features) {
-    const feature = features.shift()
-    feature.run()
   },
 
   add({name, priority, run, match, restart}) {

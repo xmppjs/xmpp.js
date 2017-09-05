@@ -1,6 +1,6 @@
 # sasl-plain
 
-plain SASL mechanism for `@xmpp/client`.
+plain SASL mechanism for `@xmpp/client-core`.
 
 Included and enabled in `@xmpp/client`.
 

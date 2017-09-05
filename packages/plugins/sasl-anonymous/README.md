@@ -1,6 +1,6 @@
 # sasl-anonymous
 
-anonymous SASL mechanism for `@xmpp/client`.
+anonymous SASL mechanism for `@xmpp/client-core`.
 
 Included and enabled in `@xmpp/client`.
 
