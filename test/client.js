@@ -147,6 +147,30 @@ test.cb('does not reconnect when stop is called', t => {
   entity.start(domain)
 })
 
+test.cb('anonymous authentication', t => {
+  t.plan(5)
+
+  const entity = new Client()
+  debug(entity)
+
+  entity.on('online', () => {
+    t.pass()
+    entity.stop().then(() => {
+      t.pass()
+      server.stop().then(() => {
+        t.pass()
+        t.end()
+      })
+    })
+  })
+
+  entity.on('close', () => t.pass())
+
+  entity.on('offline', () => t.pass())
+
+  entity.start({uri: domain, domain: 'anon.' + domain})
+})
+
 test('auto', t => {
   t.context.entity.handle('authenticate', auth => {
     return auth(USERNAME, PASSWORD)
