@@ -65,6 +65,11 @@ module.exports = plugin(
 
     handleMechanism(mech, features) {
       this.entity._status('authenticate')
+
+      if (mech === 'ANONYMOUS') {
+        return this.authenticate(mech, {}, features)
+      }
+
       return this.entity.delegate('authenticate', (username, password) => {
         return this.authenticate(mech, {username, password}, features)
       })
