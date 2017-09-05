@@ -1,6 +1,6 @@
 # sasl-scram-sha-1
 
-scram-sha-1 SASL mechanism for `@xmpp/client`.
+scram-sha-1 SASL mechanism for `@xmpp/client-core`.
 
 Supports Node.js and browsers.
 

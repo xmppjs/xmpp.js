@@ -1,6 +1,6 @@
 # resolve
 
-Auto resolve domain endpoints for `@xmpp/client`
+Auto resolve domain endpoints for `@xmpp/client-core`
 
 Supports Node.js and browsers.
 

@@ -12,3 +12,6 @@ exports.tls = require('@xmpp/plugins/tls')
 exports.reconnect = require('@xmpp/plugins/reconnect')
 exports.starttls = require('@xmpp/plugins/starttls')
 exports.resolve = require('@xmpp/plugins/resolve')
+exports[
+  'session-establishment'
+] = require('@xmpp/plugins/session-establishment')
