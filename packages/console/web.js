@@ -13,7 +13,7 @@ module.exports = function(flags, endpoint) {
 
   app.use(express.static(path.join(__dirname, 'public')))
   app.get('/params', (req, res, next) => {
-    res.json({endpoint}, next)
+    res.status(200).json({endpoint}, next)
   })
   app.use((req, res, next) => {
     if (req.method === 'GET' && req.accepts('html')) {
