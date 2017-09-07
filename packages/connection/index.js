@@ -50,6 +50,15 @@ class Connection extends EventEmitter {
     this.status = 'offline'
   }
 
+  _reset() {
+    this.domain = ''
+    this.lang = ''
+    this.jid = null
+    this._detachSocket()
+    this._detachParser()
+    this.socket = null
+  }
+
   _attachSocket(socket) {
     const sock = (this.socket = socket)
     const listeners = this.socketListeners
@@ -58,20 +67,19 @@ class Connection extends EventEmitter {
       this.emit('input', str)
       this.parser.write(str)
     }
-    listeners.close = () => {
-      this.domain = ''
-      this.lang = ''
-      this.jid = null
-      this._detachSocket()
-      this._detachParser()
-      this.socket = null
-      this._status('disconnect')
+    listeners.close = (...args) => {
+      this._reset()
+      this._status('disconnect', ...args)
     }
     listeners.connect = () => {
       this._status('connect')
       sock.once('close', listeners.close)
     }
     listeners.error = error => {
+      this._reset()
+      if (this.status === 'connecting') {
+        this._status('offline')
+      }
       this.emit('error', error)
     }
     sock.on('data', listeners.data)
