@@ -70,9 +70,13 @@ module.exports = plugin(
         return this.authenticate(mech, {}, features)
       }
 
-      return this.entity.delegate('authenticate', (username, password) => {
-        return this.authenticate(mech, {username, password}, features)
-      })
+      return this.entity.delegate(
+        'authenticate',
+        (username, password) => {
+          return this.authenticate(mech, {username, password}, features)
+        },
+        mech
+      )
     },
 
     getAvailableMechanisms() {

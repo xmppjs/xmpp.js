@@ -1,6 +1,6 @@
 'use strict'
 
-const {CodeMirror, jQuery} = global
+const {CodeMirror} = global
 
 // https://codemirror.net/demo/xmlcomplete.html
 function completeAfter(cm, pred) {
@@ -35,8 +35,6 @@ function completeIfInTag(cm) {
     return inner.tagName
   })
 }
-
-jQuery('[data-toggle="tooltip"]').tooltip()
 
 const tags = {
   '!top': ['iq', 'presence', 'message'],

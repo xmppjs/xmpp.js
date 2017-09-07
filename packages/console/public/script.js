@@ -112,9 +112,16 @@ fetch('/params')
     }
   )
 
+function send() {
+  const xml = editor.getValue().trim()
+  if (xml) {
+    xconsole.send(xml)
+  }
+}
+
 document.getElementById('input').addEventListener('submit', e => {
   e.preventDefault()
-  xconsole.send(editor.getValue())
+  send()
 })
 
 window.addEventListener('keydown', e => {
@@ -123,6 +130,6 @@ window.addEventListener('keydown', e => {
   }
   if (e.key === 'Enter' && e.ctrlKey) {
     e.preventDefault()
-    xconsole.send(editor.getValue())
+    send()
   }
 })

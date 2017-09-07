@@ -1,8 +1,8 @@
 'use strict'
 
-const Promise = require('bluebird')
+const mapSeries = require('p-map-series')
 const EventEmitter = require('events')
-const xml = require('@xmpp/xml')
+const {parse, stringify} = require('ltx')
 
 class Console extends EventEmitter {
   constructor(entity) {
@@ -41,7 +41,7 @@ class Console extends EventEmitter {
       this.info('authenticating')
     })
 
-    const streamFeatures = entity.plugins['stream-features']
+    const {sasl, register, bind, streamFeatures} = entity.plugins
     if (streamFeatures) {
       streamFeatures.onStreamFeatures = features => {
         const options = {
@@ -54,20 +54,7 @@ class Console extends EventEmitter {
         })
       }
     }
-
-    const {sasl, register, bind} = entity.plugins
     if (sasl) {
-      sasl.getCredentials = () => {
-        return this.askMultiple([
-          {
-            text: 'enter username',
-          },
-          {
-            text: 'Enter password',
-            type: 'password',
-          },
-        ])
-      }
       sasl.getMechanism = mechs => {
         return this.choose({
           text: 'Choose SASL mechanism',
@@ -96,12 +83,23 @@ class Console extends EventEmitter {
       }
     }
 
-    // Component
-    entity.handle('authenticate', auth => {
-      return this.ask({
-        text: 'Enter password',
-      })
-        .then(auth)
+    entity.handle('authenticate', (auth, mechanism) => {
+      const options = [
+        {
+          text: 'Enter password',
+          type: 'password',
+        },
+      ]
+
+      // Client
+      if (mechanism) {
+        options.unshift({
+          text: 'enter username',
+        })
+      }
+
+      return this.askMultiple(options)
+        .then(data => auth(...data))
         .catch(err => {
           this.error('authentication', err.message)
         })
@@ -131,23 +129,23 @@ class Console extends EventEmitter {
     let el
     if (typeof frag === 'string') {
       try {
-        el = xml.parse(frag)
+        el = parse(frag)
       } catch (err) {
         return frag
       }
     } else {
       el = frag
     }
-    return xml.stringify(el, '  ')
+    return stringify(el, '  ')
   }
 
   askMultiple(options) {
-    return Promise.mapSeries(options, o => this.ask(o))
+    return mapSeries(options, o => this.ask(o))
   }
 
   parse(str) {
     try {
-      return xml.parse(str)
+      return parse(str)
     } catch (err) {
       return str
     }
@@ -156,7 +154,7 @@ class Console extends EventEmitter {
   send(data) {
     let el
     try {
-      el = xml.parse(data)
+      el = parse(data)
     } catch (err) {
       this.error(`invalid XML "${data}"`)
       return
@@ -182,7 +180,7 @@ class Console extends EventEmitter {
   }
 
   error(...args) {
-    this.log('❌ error', ...args)
+    this.log('❌ error ', ...args)
   }
 }
 

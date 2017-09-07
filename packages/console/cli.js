@@ -66,9 +66,9 @@ module.exports = function(flags, endpoint) {
     return new Promise(resolve => {
       this.log(chalk.yellow.bold('?'), options.text)
       prevent = true
-      rl.on('line', line => {
+      rl.once('line', line => {
         prevent = false
-        resolve(line)
+        resolve(line.trim())
       })
     })
   }
