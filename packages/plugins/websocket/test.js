@@ -2,6 +2,8 @@
 
 const test = require('ava')
 const ConnectionWebSocket = require('./lib/Connection')
+const Socket = require('./lib/Socket')
+const EventEmitter = require('events')
 
 test('socketParameters()', t => {
   let params
@@ -14,4 +16,17 @@ test('socketParameters()', t => {
 
   params = ConnectionWebSocket.prototype.socketParameters('http://foo')
   t.is(params, undefined)
+})
+
+test.cb('browser websocket error', t => {
+  const socket = new Socket()
+  const sock = new EventEmitter()
+  sock.addEventListener = sock.addListener
+  socket._attachSocket(sock)
+  socket.url = 'ws://foobar'
+  socket.on('error', err => {
+    t.is(err.message, 'connection error ws://foobar')
+    t.end()
+  })
+  socket.socket.emit('error', {})
 })

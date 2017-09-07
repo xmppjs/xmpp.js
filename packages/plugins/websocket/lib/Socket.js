@@ -5,35 +5,51 @@ const WebSocket = global.WebSocket || WS
 const EventEmitter = require('events')
 
 class Socket extends EventEmitter {
+  constructor() {
+    super()
+    this.listeners = Object.create(null)
+  }
+
   connect(url, fn) {
-    const sock = (this.socket = new WebSocket(url, ['xmpp']))
+    this.url = url
+    this._attachSocket(new WebSocket(url, ['xmpp']), fn)
+  }
 
-    const addListener = (sock.addEventListener || sock.on).bind(sock)
-    const removeListener = (sock.removeEventListener || sock.removeListener)
-      .bind(sock)
-
-    const openHandler = () => {
+  _attachSocket(socket, fn) {
+    const sock = (this.socket = socket)
+    const {listeners} = this
+    listeners.open = () => {
       this.emit('connect')
       if (fn) {
         fn()
       }
     }
-    const messageHandler = ({data}) => this.emit('data', data)
-    const errorHandler = err => {
-      this.emit('error', err)
+    listeners.message = ({data}) => this.emit('data', data)
+    listeners.error = err => {
+      this.emit(
+        'error',
+        err instanceof Error ? err : new Error(`connection error ${this.url}`)
+      )
     }
-    const closeHandler = () => {
-      removeListener('open', openHandler)
-      removeListener('message', messageHandler)
-      removeListener('error', errorHandler)
-      removeListener('close', closeHandler)
-      this.emit('close')
+    listeners.close = ({code, reason}) => {
+      this._detachSocket()
+      this.emit('close', {code, reason})
     }
 
-    addListener('open', openHandler)
-    addListener('message', messageHandler)
-    addListener('error', errorHandler)
-    addListener('close', closeHandler)
+    sock.addEventListener('open', listeners.open)
+    sock.addEventListener('message', listeners.message)
+    sock.addEventListener('error', listeners.error)
+    sock.addEventListener('close', listeners.close)
+  }
+
+  _detachSocket() {
+    delete this.url
+    const {socket, listeners} = this
+    Object.getOwnPropertyNames(listeners).forEach(k => {
+      socket.removeEventListener(k, listeners[k])
+      delete listeners[k]
+    })
+    delete this.socket
   }
 
   end() {
