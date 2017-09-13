@@ -4,7 +4,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/xml",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "ISC",
   "keywords": [
     "XMPP",

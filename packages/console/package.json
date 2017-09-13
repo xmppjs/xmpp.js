@@ -4,7 +4,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/console",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "ISC",
   "keywords": [
     "XMPP",
@@ -15,10 +15,10 @@
     "web"
   ],
   "dependencies": {
-    "@xmpp/client": "^0.2.0",
-    "@xmpp/component": "^0.2.0",
-    "@xmpp/jid": "^0.2.0",
-    "@xmpp/xml": "^0.2.0",
+    "@xmpp/client": "^0.3.0",
+    "@xmpp/component": "^0.3.0",
+    "@xmpp/jid": "^0.3.0",
+    "@xmpp/xml": "^0.3.0",
     "chalk": "^2.1.0",
     "express": "^4.15.4",
     "ltx": "^2.7.1",
