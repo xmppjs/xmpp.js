@@ -44,28 +44,34 @@ module.exports = plugin('iq-caller', {
       (stanza.attrs.type === 'error' || stanza.attrs.type === 'result')
     )
   },
-  get(el, ...args) {
-    const iq = xml('iq', {type: 'get'})
-    iq.append(el)
+  get(child, ...args) {
+    const iq = xml('iq', {type: 'get'}, child)
     return this.request(iq, ...args)
   },
-  set(el, ...args) {
-    const iq = xml('iq', {type: 'set'})
-    iq.append(el)
+  set(child, ...args) {
+    const iq = xml('iq', {type: 'set'}, child)
     return this.request(iq, ...args)
   },
-  request(stanza, to) {
-    return new Promise((resolve, reject) => {
-      if (to && typeof to === 'string' && !stanza.attrs.to) {
-        stanza.attrs.to = to
-      }
-      if (!stanza.attrs.id) {
-        stanza.attrs.id = this.id()
-      }
+  request(stanza, params) {
+    if (typeof params === 'string') {
+      params = {to: params}
+    }
 
-      this.handlers.set(stanza.attrs.id, [resolve, reject])
+    const {to, id} = params || {}
+    if (to) {
+      stanza.attrs.to = to
+    }
 
-      this.entity.send(stanza)
+    if (id) {
+      stanza.attrs.id = id
+    } else if (!stanza.attrs.id) {
+      stanza.attrs.id = this.id()
+    }
+
+    return this.entity.send(stanza).then(() => {
+      return new Promise((resolve, reject) =>
+        this.handlers.set(stanza.attrs.id, [resolve, reject])
+      )
     })
   },
 })
