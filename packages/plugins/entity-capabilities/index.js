@@ -1,10 +1,10 @@
 'use strict'
 
-const crypto = require('crypto')
 const JID = require('@xmpp/jid')
 const plugin = require('@xmpp/plugin')
+const sha1 = require('./sha1')
 
-const disco = require('../disco/callee')
+const discoCallee = require('../disco/callee')
 
 const NS_CAPS = 'http://jabber.org/protocol/caps'
 
@@ -76,10 +76,7 @@ function hash(query) {
     })
   })
 
-  return crypto
-    .createHash('sha1')
-    .update(s)
-    .digest('base64')
+  return sha1(s)
 }
 
 module.exports = plugin(
@@ -108,18 +105,23 @@ module.exports = plugin(
         )
           return
 
-        const query = disco.build([...disco.features], [...disco.identities])
+        const query = discoCallee.build(
+          [...disco.features],
+          [...disco.identities]
+        )
 
-        stanza.c('c', {
-          xmlns: NS_CAPS,
-          hash: 'sha-1',
-          node: this.node,
-          ver: hash(query),
+        hash(query).then(ver => {
+          stanza.c('c', {
+            xmlns: NS_CAPS,
+            hash: 'sha-1',
+            node: this.node,
+            ver,
+          })
         })
       })
     },
   },
-  [disco]
+  [discoCallee]
 )
 module.exports.sortIdentities = sortIdentities
 module.exports.hash = hash
