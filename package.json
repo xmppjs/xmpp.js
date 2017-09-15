@@ -10,6 +10,7 @@
     "babel-register": "^6.26.0",
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
+    "bundlesize": "^0.14.4",
     "eslint": "^4.6.0",
     "eslint-config-prettier": "^2.4.0",
     "eslint-config-xo": "^0.18.2",
@@ -44,5 +45,11 @@
   },
   "workspaces": [
     "packages/*"
+  ],
+  "bundlesize": [
+    {
+      "path": "./packages/xmpp.js/dist/xmpp.min.js",
+      "maxSize": "12 kB"
+    }
   ]
 }

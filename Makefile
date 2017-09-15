@@ -14,6 +14,7 @@ test:
 	eslint .
 	make restart
 	ava --serial --fail-fast test/
+	make size
 
 clean:
 	make stop
@@ -36,5 +37,4 @@ restart:
 
 size:
 	cd packages/xmpp.js && yarn run prepublish
-	gzip -c packages/xmpp.js/dist/xmpp.min.js > /tmp/xmpp.min.js.gz
-	stat -c%s /tmp/xmpp.min.js.gz
+	bundlesize
