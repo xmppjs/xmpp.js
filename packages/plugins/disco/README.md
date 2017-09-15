@@ -1,8 +1,6 @@
 # disco
 
-[Service Discovery](https://xmpp.org/extensions/xep-0030.html) for `@xmpp/client-core` and `@xmpp/component-core`.
-
-Included and enabled in `@xmpp/client`.
+[Service Discovery](https://xmpp.org/extensions/xep-0030.html) for `@xmpp/client` and `@xmpp/component`.
 
 Supports Node.js and browsers.
 

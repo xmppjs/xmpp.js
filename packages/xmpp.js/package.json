@@ -9,21 +9,26 @@
   "keywords": [
     "XMPP",
     "jabber",
-    "client"
+    "client",
+    "component"
   ],
   "dependencies": {
+    "@xmpp/client": "^0.3.0",
     "@xmpp/client-core": "^0.3.0",
-    "@xmpp/plugins": "^0.3.0"
-  },
-  "browser": {
-    "@xmpp/plugins/tcp": false,
-    "@xmpp/plugins/tls": false,
-    "@xmpp/plugins/starttls": false
-  },
-  "scripts": {
-    "prepublish": "npm run bundle && npm run minify",
-    "bundle": "../../node_modules/.bin/browserify -d -s xmpp index.js -t [ babelify --global true --presets [es2015] ] | ../../node_modules/.bin/exorcist dist/xmpp.js.map > dist/xmpp.js",
-    "minify": "../../node_modules/.bin/uglifyjs dist/xmpp.js -c -m --source-map url=xmpp.min.js.map,content=dist/xmpp.js.map -o dist/xmpp.min.js"
+    "@xmpp/component": "^0.3.0",
+    "@xmpp/component-core": "^0.3.0",
+    "@xmpp/connection": "^0.3.0",
+    "@xmpp/connection-tcp": "^0.3.0",
+    "@xmpp/console": "^0.3.0",
+    "@xmpp/debug": "^0.3.0",
+    "@xmpp/events": "^0.3.0",
+    "@xmpp/jid": "^0.3.0",
+    "@xmpp/plugin": "^0.3.0",
+    "@xmpp/plugins": "^0.3.0",
+    "@xmpp/resolve": "^0.3.0",
+    "@xmpp/time": "^0.3.0",
+    "@xmpp/uri": "^0.3.0",
+    "@xmpp/xml": "^0.3.0"
   },
   "engines": {
     "node": ">= 6",

@@ -1,8 +1,18 @@
 'use strict'
 
-const Client = require('./lib/Client')
-const {xml, jid} = require('@xmpp/client-core')
-
-module.exports.Client = Client
-module.exports.xml = xml
-module.exports.jid = jid
+module.exports['client'] = require('@xmpp/client')
+module.exports['client-core'] = require('@xmpp/client-core')
+module.exports['component'] = require('@xmpp/component')
+module.exports['component-core'] = require('@xmpp/component-core')
+module.exports['connection'] = require('@xmpp/connection')
+module.exports['connection-tcp'] = require('@xmpp/connection-tcp')
+module.exports['console'] = require('@xmpp/console')
+module.exports['debug'] = require('@xmpp/debug')
+module.exports['events'] = require('@xmpp/events')
+module.exports['jid'] = require('@xmpp/jid')
+module.exports['plugin'] = require('@xmpp/plugin')
+module.exports['plugins'] = require('@xmpp/plugins')
+module.exports['resolve'] = require('@xmpp/resolve')
+module.exports['time'] = require('@xmpp/time')
+module.exports['uri'] = require('@xmpp/uri')
+module.exports['xml'] = require('@xmpp/xml')

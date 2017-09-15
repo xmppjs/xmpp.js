@@ -1,8 +1,6 @@
 # entity-capabilities
 
-[Entity Capabilities](https://xmpp.org/extensions/xep-0115.html) for `@xmpp/client-core`.
-
-Included and enabled in `@xmpp/client`.
+[Entity Capabilities](https://xmpp.org/extensions/xep-0115.html) for `@xmpp/client`.
 
 Supports Node.js and browsers.
 

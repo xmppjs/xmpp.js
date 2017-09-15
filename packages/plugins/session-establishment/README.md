@@ -1,6 +1,6 @@
 # session-establishment
 
-session-establishment for `@xmpp/client-core`.
+session-establishment for `@xmpp/client`.
 
 Included and enabled in `@xmpp/client`.
 

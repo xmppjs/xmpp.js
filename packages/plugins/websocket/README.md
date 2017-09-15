@@ -1,6 +1,6 @@
 # WebSocket
 
-WebSocket transport for XMPP client
+WebSocket transport `@xmpp/client`.
 
 Included and enabled in `@xmpp/client`.
 

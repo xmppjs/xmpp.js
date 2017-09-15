@@ -1,10 +1,10 @@
 # TLS
 
-TLS transport for XMPP client
-
-This establish a direct TLS connection without STARTTLS negotiation.
+TLS transport for `@xmpp/client`.
 
 Included and enabled in `@xmpp/client`.
+
+This establish a direct TLS connection without STARTTLS negotiation.
 
 Supports Node.js.
 
