@@ -13,7 +13,7 @@ const recipient = 'user@example.com'
 const days = ['Monday', 'Tuesday']
 const message = (
   xml('message', {to: recipient},
-    xml('body', 1 + 2),
+    xml('body', {}, 1 + 2),
     xml('days',
       days.map(day => xml('day', {}, day))
     )
@@ -168,8 +168,7 @@ message.append(
 // read
 JSON.parse(message
   .getChild('myevent', 'xmpp:example.org')
-  .getChild('json', 'urn:xmpp:json:0')
-  .text()
+  .getChildText('json', 'urn:xmpp:json:0')
 )
 ```
 
