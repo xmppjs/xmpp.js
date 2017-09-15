@@ -10,6 +10,8 @@ modules_enabled = {
   "bosh";
   "websocket";
   "http_files";
+  "time";
+  "version";
 };
 
 daemonize = true;

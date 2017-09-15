@@ -289,6 +289,7 @@ class Connection extends EventEmitter {
   }
 
   send(element) {
+    this.emit('outgoing', element)
     return this.write(element).then(() => {
       this.emit('send', element)
     })

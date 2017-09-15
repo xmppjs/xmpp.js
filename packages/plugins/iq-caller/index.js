@@ -45,12 +45,10 @@ module.exports = plugin('iq-caller', {
     )
   },
   get(child, ...args) {
-    const iq = xml('iq', {type: 'get'}, child)
-    return this.request(iq, ...args)
+    return this.request(xml('iq', {type: 'get'}, child), ...args)
   },
   set(child, ...args) {
-    const iq = xml('iq', {type: 'set'}, child)
-    return this.request(iq, ...args)
+    return this.request(xml('iq', {type: 'set'}, child), ...args)
   },
   request(stanza, params) {
     if (typeof params === 'string') {
