@@ -18,15 +18,15 @@ const parse = el => {
 }
 
 const build = (dict, parent) => {
-  const el = parent || xml`<vCard xmlns='${NS}' version='2.0'/>`
+  const el = parent || xml('vCard', {xmlns: NS, version: '2.0'})
   for (const key of Object.keys(dict)) {
     const val = dict[key]
     if (typeof val === 'object') {
-      el.cnode(build(val, xml`<${key}/>`))
+      el.cnode(build(val, xml(key)))
     } else if (val) {
-      el.cnode(xml`<${key}>${val}</${key}>`)
+      el.cnode(xml(key, {}, val))
     } else {
-      el.cnode(xml`<${key}/>`)
+      el.cnode(xml(key))
     }
   }
   return el
@@ -35,7 +35,7 @@ const build = (dict, parent) => {
 module.exports = plugin('vcard', {
   NS,
   get(...args) {
-    return this.plugins['iq-caller'].get(xml`<vCard xmlns='${NS}'/>`, ...args).then(parse)
+    return this.plugins['iq-caller'].get(xml('vCard', {xmlns: NS}), ...args).then(parse)
   },
   set(vcard) {
     return this.plugins['iq-caller'].set(build(vcard))

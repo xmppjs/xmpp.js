@@ -23,26 +23,23 @@ test.cb('get', t => {
     delete stanza.attrs.id
     t.is(typeof id, 'string')
 
-    t.context.entity.emit('element', xml`
-      <iq type='result' id='${id}'>
-        <vCard xmlns="vcard-temp">
-          <FN>Foo Bar</FN>
-          <N>
-            <FAMILY>Bar</FAMILY>
-            <GIVEN>Foo</GIVEN>
-          </N>
-        </vCard>
-      </iq>
-    `)
-
     delete stanza.attrs.xmlns
-    t.deepEqual(stanza, xml`
-      <iq type='get' to='foo@bar'>
-        <vCard xmlns='vcard-temp'/>
-      </iq>
-    `)
-  })
+    t.deepEqual(stanza,
+      xml('iq',
+        {type: 'get', to: 'foo@bar'},
+        [xml('vCard', {xmlns: 'vcard-temp'})]
+      )
+    )
 
+    const reply = xml('iq', {type: 'result', id},
+      xml('vcard', {xmlns: 'vcard-temp'},
+        [xml('FN', {}, 'Foo Bar'),
+          xml('N', {}, [xml('FAMILY', {}, 'BAR'), xml('GIVEN', {}, 'Foo')]),
+        ]
+      )
+    )
+    t.context.entity.emit('element', reply)
+  })
   t.context.plugin.get('foo@bar').then(vcard => {
     t.is(vcard.FN, 'Foo Bar')
     t.is(vcard.N.FAMILY, 'Bar')
@@ -61,22 +58,16 @@ test.cb('set', t => {
     delete stanza.attrs.id
     t.is(typeof id, 'string')
 
-    t.context.entity.emit('element', xml`
-      <iq type='result' id='${id}'/>
-    `)
-
+    t.context.entity.emit('element', xml('iq', {type: 'result', id}))
     delete stanza.attrs.xmlns
-    t.deepEqual(stanza, xml`
-      <iq type='set'>
-        <vCard xmlns='vcard-temp' version='2.0'>
-          <FN>Foo Bar</FN>
-          <N>
-            <FAMILY>Bar</FAMILY>
-            <GIVEN>Foo</GIVEN>
-          </N>
-        </vCard>
-      </iq>
-    `)
+    t.deepEqual(stanza,
+      xml('iq', {type: 'set'},
+        xml('vCard', {xmlns: 'vcard-temp', version: '2.0'}, [
+          xml('FN', {}, 'Foo Bar'),
+          xml('N', {}, [xml('FAMILY', {}, 'Bar'), xml('GIVEN', {}, 'Foo')]),
+        ])
+      )
+    )
     t.end()
   })
 
