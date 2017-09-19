@@ -51,8 +51,7 @@ module.exports = plugin('iq-callee', {
         return
       }
 
-      handler(child)
-        .then(res => Promise.resolve(res))
+      Promise.resolve(handler(child))
         .then(el => {
           iq.attrs.type = 'result'
           if (el) {

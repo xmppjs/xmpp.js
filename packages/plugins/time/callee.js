@@ -10,14 +10,21 @@ const NS_TIME = 'urn:xmpp:time'
 module.exports = plugin(
   'time-callee',
   {
+    getTime() {
+      return {
+        tzo: time.offset(),
+        utc: time.datetime(),
+      }
+    },
     start() {
       this.plugins['disco-callee'].features.add(NS_TIME)
       this.plugins['iq-callee'].get(NS_TIME, () => {
+        const {tzo, utc} = this.getTime()
         return xml(
           'time',
           {xmlns: NS_TIME},
-          xml('tzo', time.offset()),
-          xml('utc', time.datetime())
+          xml('tzo', {}, tzo),
+          xml('utc', {}, utc)
         )
       })
     },

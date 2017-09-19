@@ -13,6 +13,7 @@ module.exports = plugin('iq-caller', {
       const {id} = stanza.attrs
 
       const handler = this.handlers.get(id)
+
       if (!handler) {
         return
       }
