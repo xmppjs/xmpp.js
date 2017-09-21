@@ -14,12 +14,65 @@ module.exports = function(p) {
   return {
     entity,
     plugin,
-    fake(el) {
+    plugins: entity.plugins,
+    sanitize(s) {
+      const stanza = s.clone()
+      const {id} = stanza.attrs
+      delete stanza.attrs.id
+      delete stanza.attrs.xmlns
+      return {stanza, id}
+    },
+    catch() {
+      return entity.promise('send').then(s => this.sanitize(s))
+    },
+    catchOutgoingGet() {
+      return entity.promise('send').then(stanza => {
+        const [child] = stanza.children
+        child.parent = null
+        return child
+      })
+    },
+    scheduleIncomingResult(child) {
+      return this.entity.promise('send').then(stanza => {
+        const {id} = stanza.attrs
+        return this.fakeIncomingResult(child, id)
+      })
+    },
+    fakeIncomingGet(child) {
+      return this.fakeIncomingIq(<iq type="get">{child}</iq>).then(stanza => {
+        const [child] = stanza.children
+        child.parent = null
+        return child
+      })
+    },
+    fakeIncomingSet(child) {
+      return this.fakeIncomingIq(<iq type="set">{child}</iq>).then(stanza => {
+        const [child] = stanza.children
+        child.parent = null
+        return child
+      })
+    },
+    fakeIncomingResult(child, id) {
+      return this.fakeIncomingIq(
+        <iq type="result" id={id}>
+          {child}
+        </iq>
+      ).then(stanza => {
+        const [child] = stanza.children
+        child.parent = null
+        return child
+      })
+    },
+    fakeIncomingIq(el) {
       const p = entity.promise('send')
-      entity.emit('element', el)
+      const stanza = el.clone()
+      delete stanza.attrs.xmlns
+      if (stanza.is('iq') && !stanza.attrs.id) {
+        stanza.attrs.id = 'fake'
+      }
+      Promise.resolve().then(() => entity.emit('element', stanza))
       return p.then(el => {
-        delete el.attrs.xmlns
-        return el
+        return this.sanitize(el).stanza
       })
     },
   }
