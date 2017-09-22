@@ -28,7 +28,9 @@ module.exports = function(p) {
     catchOutgoingGet() {
       return entity.promise('send').then(stanza => {
         const [child] = stanza.children
-        child.parent = null
+        if (child) {
+          child.parent = null
+        }
         return child
       })
     },
@@ -41,14 +43,18 @@ module.exports = function(p) {
     fakeIncomingGet(child) {
       return this.fakeIncomingIq(<iq type="get">{child}</iq>).then(stanza => {
         const [child] = stanza.children
-        child.parent = null
+        if (child) {
+          child.parent = null
+        }
         return child
       })
     },
     fakeIncomingSet(child) {
       return this.fakeIncomingIq(<iq type="set">{child}</iq>).then(stanza => {
         const [child] = stanza.children
-        child.parent = null
+        if (child) {
+          child.parent = null
+        }
         return child
       })
     },
@@ -59,7 +65,9 @@ module.exports = function(p) {
         </iq>
       ).then(stanza => {
         const [child] = stanza.children
-        child.parent = null
+        if (child) {
+          child.parent = null
+        }
         return child
       })
     },

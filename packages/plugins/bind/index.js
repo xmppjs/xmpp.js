@@ -36,8 +36,10 @@ module.exports = plugin(
       return this.plugins['iq-caller']
         .set(makeBindElement(resource))
         .then(result => {
-          this.entity._jid(result.getChildText('jid'))
+          const jid = result.getChildText('jid')
+          this.entity._jid(jid)
           this.entity._status('bound')
+          return jid
         })
     },
     handleFeature() {
