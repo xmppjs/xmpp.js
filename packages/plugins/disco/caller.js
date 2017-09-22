@@ -20,10 +20,10 @@ module.exports = plugin(
       return this.entity.plugins['iq-caller']
         .get(xml('query', {xmlns: NS_DISCO_INFO, node}), service)
         .then(res => {
-          return {
-            features: res.getChildren('feature').map(f => f.attrs.var),
-            identities: res.getChildren('identity').map(i => i.attrs),
-          }
+          return [
+            res.getChildren('feature').map(f => f.attrs.var),
+            res.getChildren('identity').map(i => i.attrs),
+          ]
         })
     },
   },

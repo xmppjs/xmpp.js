@@ -36,10 +36,11 @@ const caller = client.plugin(require('@xmpp/plugins/disco/caller'))
 
 
 // info
-caller.info(jid, node).then(({features, identities}) => {
+caller.info(jid, node).then(([features, identities]) => {
 /*
-{
-  features: [
+[
+  // features
+  [
     'jabber:iq:register',
     'urn:xmpp:ping',
     'http://jabber.org/protocol/disco#info',
@@ -47,8 +48,9 @@ caller.info(jid, node).then(({features, identities}) => {
     'msgoffline',
     'jabber:iq:roster'
   ],
-  identities: [ { type: 'im', name: 'Prosody', category: 'server' } ]
-}
+  // identities
+  [ { type: 'im', name: 'Prosody', category: 'server' } ]
+]
 */
 })
 

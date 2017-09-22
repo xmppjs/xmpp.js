@@ -9,8 +9,8 @@ function build(features = [], identities = []) {
   return xml(
     'query',
     {xmlns: NS_DISCO_INFO},
-    ...features.map(f => xml('feature', {var: f})),
-    ...identities.map(i => xml('identity', i))
+    [...features].map(f => xml('feature', {var: f})),
+    [...identities].map(i => xml('identity', i))
   )
 }
 

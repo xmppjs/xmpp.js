@@ -1,42 +1,48 @@
 'use strict'
 
 const test = require('ava')
-const {match, stanza, plugin} = require('.')
-const xml = require('@xmpp/xml')
+const plugin = require('.')
+const testPlugin = require('../testPlugin')
 
-test.skip('plugin', t => {
-  const client = {}
-  plugin(client)
-  t.true(typeof client.bind === 'function')
+test.beforeEach(t => {
+  t.context = testPlugin(plugin)
 })
 
-test.skip('match()', t => {
-  const features = xml('features')
-  t.is(match(features), undefined)
+test('without resource', t => {
+  t.context.scheduleIncomingResult(
+    <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
+      <jid>foo@bar/foobar</jid>
+    </bind>
+  )
 
-  const bind = xml('bind', {xmlns: 'urn:ietf:params:xml:ns:xmpp-bind'})
-  features.append(bind)
-  t.is(match(features), bind)
+  return Promise.all([
+    t.context.catchOutgoingGet().then(child => {
+      t.deepEqual(child, <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind" />)
+    }),
+    t.context.plugin.bind().then(jid => {
+      t.is(jid, 'foo@bar/foobar')
+    }),
+  ])
 })
 
-test.skip('stanza()', t => {
-  t.deepEqual(
-    stanza(),
-    xml`
-    <iq type='set'>
-      <bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'/>
-    </iq>
-  `
+test('with resource', t => {
+  t.context.scheduleIncomingResult(
+    <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
+      <jid>foo@bar/foobar</jid>
+    </bind>
   )
 
-  t.deepEqual(
-    stanza('foobar'),
-    `
-    <iq type='set'>
-      <bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'>
-        <resource>foobar</resource>
-      </bind>
-    </iq>
-  `
-  )
+  return Promise.all([
+    t.context.catchOutgoingGet().then(child => {
+      t.deepEqual(
+        child,
+        <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
+          <resource>resource</resource>
+        </bind>
+      )
+    }),
+    t.context.plugin.bind('resource').then(jid => {
+      t.is(jid, 'foo@bar/foobar')
+    }),
+  ])
 })
