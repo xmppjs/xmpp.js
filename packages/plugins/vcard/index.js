@@ -18,7 +18,7 @@ const parse = el => {
 }
 
 const build = (dict, parent) => {
-  const el = parent || xml('vCard', {xmlns: NS, version: '2.0'})
+  const el = parent || xml('vCard', {xmlns: NS})
   for (const key of Object.keys(dict)) {
     const val = dict[key]
     if (typeof val === 'object') {
@@ -32,14 +32,20 @@ const build = (dict, parent) => {
   return el
 }
 
-module.exports = plugin('vcard', {
-  NS,
-  get(...args) {
-    return this.plugins['iq-caller'].get(xml('vCard', {xmlns: NS}), ...args).then(parse)
+module.exports = plugin(
+  'vcard',
+  {
+    NS,
+    get(...args) {
+      return this.plugins['iq-caller']
+        .get(xml('vCard', {xmlns: NS}), ...args)
+        .then(parse)
+    },
+    set(vcard, ...args) {
+      return this.plugins['iq-caller'].set(build(vcard), ...args)
+    },
+    build,
+    parse,
   },
-  set(vcard) {
-    return this.plugins['iq-caller'].set(build(vcard))
-  },
-  build,
-  parse,
-}, [iqCaller])
+  [iqCaller]
+)
