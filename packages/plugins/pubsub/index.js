@@ -2,7 +2,6 @@
 
 const {xml, plugin} = require('@xmpp/plugin')
 const iqCaller = require('../iq-caller')
-const stanzaRouter = require('../stanza-router')
 
 const NS_PUBSUB = 'http://jabber.org/protocol/pubsub'
 const NS_PUBSUB_EVENT = `${NS_PUBSUB}#event`
@@ -13,8 +12,9 @@ const NS_DELAY = 'urn:xmpp:delay'
 const NS_RSM = 'http://jabber.org/protocol/rsm'
 const NS_X_DATA = 'jabber:x:data'
 
-module.exports = service =>
-  plugin('pubsub', {
+module.exports = plugin(
+  'pubsub',
+  {
     NS_PUBSUB,
     NS_PUBSUB_EVENT,
     NS_PUBSUB_OWNER,
@@ -24,31 +24,28 @@ module.exports = service =>
     NS_RSM,
     NS_X_DATA,
 
-    service,
-
-    matchPEP(stanza) {
-      const ev = stanza.getChild('event')
+    isPubSubEventNotification(stanza) {
+      const child = stanza.getChild('event')
       return (
-        ev &&
-        ev.attrs.xmlns === NS_PUBSUB_EVENT &&
-        stanza.is('message') &&
-        stanza.attrs.from === service
+        stanza.is('message') && child && child.attrs.xmlns === NS_PUBSUB_EVENT
       )
     },
 
     start() {
-      if (service) {
-        this.plugins['stanza-router'].add(this.matchPEP, this.onPEPEvent)
+      this.listener = stanza => {
+        if (this.isPubSubEventNotification(stanza)) {
+          this.onPubSubEventNotification(stanza)
+        }
       }
+      this.entity.on('element', this.listener)
     },
 
     stop() {
-      if (service) {
-        this.plugins['stanza-router'].remove(this.matchPEP)
-      }
+      this.entity.removeListener('element', this.listener)
     },
 
-    onPEPEvent(message, client) {
+    onPubSubEventNotification(message) {
+      const service = message.attrs.from
       const items = message.getChild('event').getChild('items')
       const {node} = items.attrs
       const item = items.getChild('item')
@@ -58,93 +55,95 @@ module.exports = service =>
 
       if (delay) {
         const {stamp} = delay.attrs
-        client.emit('last-item-published', {node, id, entry, stamp})
-        client.emit(`last-item-published:${node}`, {id, entry, stamp})
+        this.emit(`last-item-published:${service}`, {node, id, entry, stamp})
+        this.emit(`last-item-published:${service}:${node}`, {id, entry, stamp})
       } else {
-        client.emit('item-published', {node, id, entry})
-        client.emit(`item-published:${node}`, {id, entry})
+        this.emit(`item-published:${service}`, {node, id, entry})
+        this.emit(`item-published:${service}:${node}`, {id, entry})
       }
     },
 
-    createNode(node, options, ...args) {
-      const stanza = xml`
-        <pubsub xmlns='${NS_PUBSUB}'>
-          <create node='${node}'/>
-        </pubsub>`
+    createNode(params, node, options) {
+      const stanza = xml('pubsub', {xmlns: NS_PUBSUB}, xml('create', {node}))
 
       if (options) {
-        const config = xml`<configure/>`
-        const x = config.cnode(xml`
-          <x xmlns='${NS_X_DATA}' type='submit'>
-            <field var='FORM_TYPE' type='hidden'>
-              <value>${NS_PUBSUB_NODE_CONFIG}</value>
-            </field>
-          </x>`)
+        const config = xml('configure')
+        const x = config.cnode(
+          xml(
+            'x',
+            {xmlns: NS_X_DATA, type: 'submit'},
+            xml(
+              'field',
+              {var: 'FORM_TYPE', type: 'hidden'},
+              xml('value', {}, NS_PUBSUB_NODE_CONFIG)
+            )
+          )
+        )
 
         for (const key of Object.keys(options)) {
-          const option = xml`
-            <field var='${key}'>
-              <value>${options[key].toString()}</value>
-            </field>`
+          const option = xml(
+            'field',
+            {var: key},
+            xml('value', {}, options[key].toString())
+          )
           x.cnode(option)
         }
         stanza.cnode(config)
       }
 
-      return this.plugins['iq-caller'].set(stanza, ...args)
-      .then(result => result.getChild('create').attrs.node)
+      return this.plugins['iq-caller']
+        .set(stanza, params)
+        .then(result => result.getChild('create').attrs.node)
     },
 
-    deleteNode(node, ...args) {
-      const stanza = xml`
-        <pubsub xmlns='${NS_PUBSUB}'>
-          <delete node='${node}'/>
-        </pubsub>`
-      return this.plugins['iq-caller'].set(stanza, ...args)
+    deleteNode(params, node) {
+      return this.plugins['iq-caller'].set(
+        xml('pubsub', {xmlns: NS_PUBSUB}, xml('delete', {node})),
+        params
+      )
     },
 
-    publish(node, item, ...args) {
-      const stanza = xml`
-        <pubsub xmlns='${NS_PUBSUB}'>
-          <publish node='${node}'></publish>
-        </pubsub>`
+    publish(params, node, item) {
+      const stanza = xml('pubsub', {xmlns: NS_PUBSUB}, xml('publish', {node}))
       if (item) {
         stanza.getChild('publish').cnode(item)
       }
-      return this.plugins['iq-caller'].set(stanza, ...args)
-      .then(result => result.getChild('publish').getChild('item').attrs.id)
+      return this.plugins['iq-caller']
+        .set(stanza, params)
+        .then(result => result.getChild('publish').getChild('item').attrs.id)
     },
 
-    items(node, rsm, ...args) {
-      const stanza = xml`
-        <pubsub xmlns='${NS_PUBSUB}'>
-          <items node='${node}'/>
-        </pubsub>`
+    items(params, node, rsm) {
+      const stanza = xml('pubsub', {xmlns: NS_PUBSUB}, xml('items', {node}))
 
       if (rsm) {
-        const rsmEl = xml`<set xmlns='${NS_RSM}'/>`
+        const rsmEl = xml('set', {xmlns: NS_RSM})
         for (const key of Object.keys(rsm)) {
-          rsmEl.c(key).t(rsm[key])
+          rsmEl.c(key).t(rsm[key].toString())
         }
         stanza.up().cnode(rsmEl)
       }
 
-      return this.plugins['iq-caller'].get(stanza, ...args)
-      .then(result => {
+      return this.plugins['iq-caller'].get(stanza, params).then(result => {
         const rsmEl = result.getChild('set')
         const items = result.getChild('items').children
 
         if (rsmEl) {
-          return {
+          return [
             items,
-            rsm: rsmEl.children.reduce((obj, el) => {
-              obj[el.name] = el.text()
+            rsmEl.children.reduce((obj, el) => {
+              if (el.name === 'max' || el.name === 'count') {
+                obj[el.name] = parseInt(el.text(), 10)
+              } else {
+                obj[el.name] = el.text()
+              }
               return obj
             }, {}),
-          }
+          ]
         }
-        return {items}
+        return [items]
       })
     },
-
-  }, [iqCaller, stanzaRouter])
+  },
+  [iqCaller]
+)
