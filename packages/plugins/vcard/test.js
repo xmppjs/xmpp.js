@@ -17,7 +17,7 @@ test('set', t => {
   t.context.scheduleIncomingResult()
 
   return Promise.all([
-    t.context.catchOutgoingGet().then(child => {
+    t.context.catchOutgoingSet().then(child => {
       t.deepEqual(
         child,
         xml('vCard', {xmlns: 'vcard-temp'}, [
