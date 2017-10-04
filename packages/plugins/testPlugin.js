@@ -25,8 +25,37 @@ module.exports = function(p) {
     catch() {
       return entity.promise('send').then(s => this.sanitize(s))
     },
-    catchOutgoingGet() {
-      return entity.promise('send').then(stanza => {
+    catchOutgoing(fn) {
+      return new Promise(resolve => {
+        function onSend(stanza) {
+          if (!fn || fn(stanza)) {
+            entity.removeListener('send', onSend)
+            resolve(stanza)
+          }
+        }
+        entity.on('send', onSend)
+      })
+    },
+    catchOutgoingIq(fn) {
+      return this.catchOutgoing(stanza => {
+        return stanza.is('iq') && fn ? fn(stanza) : true
+      })
+    },
+    catchOutgoingGet(fn) {
+      return this.catchOutgoingIq(
+        stanza => (stanza.attrs.type === 'get' && fn ? fn(stanza) : true)
+      ).then(stanza => {
+        const [child] = stanza.children
+        if (child) {
+          child.parent = null
+        }
+        return child
+      })
+    },
+    catchOutgoingSet(fn) {
+      return this.catchOutgoingIq(
+        stanza => (stanza.attrs.type === 'get' && fn ? fn(stanza) : true)
+      ).then(stanza => {
         const [child] = stanza.children
         if (child) {
           child.parent = null

@@ -16,7 +16,7 @@ test('without resource', t => {
   )
 
   return Promise.all([
-    t.context.catchOutgoingGet().then(child => {
+    t.context.catchOutgoingSet().then(child => {
       t.deepEqual(child, <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind" />)
     }),
     t.context.plugin.bind().then(jid => {
@@ -33,7 +33,7 @@ test('with resource', t => {
   )
 
   return Promise.all([
-    t.context.catchOutgoingGet().then(child => {
+    t.context.catchOutgoingSet().then(child => {
       t.deepEqual(
         child,
         <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
