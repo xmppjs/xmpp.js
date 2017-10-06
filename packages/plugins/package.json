@@ -15,6 +15,7 @@
     "@xmpp/resolve": "^0.3.0",
     "@xmpp/time": "^0.3.0",
     "@xmpp/xml": "^0.3.0",
+    "object.entries": "^1.0.4",
     "sasl-anonymous": "^0.1.0",
     "sasl-plain": "^0.1.0",
     "sasl-scram-sha-1": "^1.2.0",
@@ -24,7 +25,8 @@
   "browser": {
     "ws": false,
     "buffer": false,
-    "crypto": false
+    "crypto": false,
+    "object.entries": false
   },
   "engines": {
     "node": ">= 6",

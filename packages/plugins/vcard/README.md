@@ -13,7 +13,7 @@ npm install @xmpp/plugins
 ## Usage
 
 ```js
-const plugin = client.plugin(require('@xmpp/plugins/vcard'))
+const vcard = client.plugin(require('@xmpp/plugins/vcard'))
 ```
 
 ## set
@@ -21,7 +21,7 @@ const plugin = client.plugin(require('@xmpp/plugins/vcard'))
 get vcard
 
 ```js
-plugin.set({
+vcard.set({
   FN: 'John',
   N: {
     FAMILY: 'Doe',
@@ -42,14 +42,7 @@ plugin.set({
 set vcard
 
 ```js
-plugin.get([service]).then
-  FN: 'John',
-  N: {
-    FAMILY: 'Doe',
-    GIVEN: 'John'
-  }
-})
-.then((vcard) => {
+vcard.get([service]).then((vcard) => {
   console.log(vcard)
   /*
   {

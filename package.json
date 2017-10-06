@@ -1,6 +1,5 @@
 {
   "private": true,
-  "name": "xmpp.js",
   "devDependencies": {
     "ava": "^0.22.0",
     "babel-cli": "^6.26.0",

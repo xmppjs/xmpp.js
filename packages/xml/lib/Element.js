@@ -11,6 +11,7 @@ class Element extends _Element {
         node.parent = this
       }
     })
+    return this
   }
 
   prepend(nodes) {
@@ -21,6 +22,7 @@ class Element extends _Element {
         node.parent = this
       }
     })
+    return this
   }
 }
 
