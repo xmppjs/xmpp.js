@@ -1,8 +1,6 @@
 # ping
 
-[ping](https://xmpp.org/extensions/xep-0199.html) for `@xmpp/client-core` and `@xmpp/component-core`.
-
-Included and enabled in `@xmpp/client`.
+[ping](https://xmpp.org/extensions/xep-0199.html) for `@xmpp/client` and `@xmpp/component`.
 
 Supports Node.js and browsers.
 

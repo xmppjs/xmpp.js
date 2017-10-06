@@ -1,6 +1,6 @@
 # bind
 
-Resource binding for `@xmpp/client-core`.
+Resource binding for `@xmpp/client`.
 
 Included and enabled in `@xmpp/client`.
 

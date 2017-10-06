@@ -15,4 +15,3 @@ exports.resolve = require('@xmpp/plugins/resolve')
 exports[
   'session-establishment'
 ] = require('@xmpp/plugins/session-establishment')
-exports.roster = require('@xmpp/plugins/roster')

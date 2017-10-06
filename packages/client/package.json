@@ -12,7 +12,15 @@
   "browser": {
     "@xmpp/plugins/tcp": false,
     "@xmpp/plugins/tls": false,
-    "@xmpp/plugins/starttls": false
+    "@xmpp/plugins/starttls": false,
+    "@xmpp/plugins/sasl-scram-sha-1": false
+  },
+  "scripts": {
+    "prepublish": "npm run bundle && npm run minify",
+    "bundle":
+      "../../node_modules/.bin/browserify -d -s xmpp index.js -t [ babelify --global true --presets [es2015] ] | ../../node_modules/.bin/exorcist dist/xmpp.js.map > dist/xmpp.js",
+    "minify":
+      "../../node_modules/.bin/uglifyjs dist/xmpp.js -c -m --source-map url=xmpp.min.js.map,content=dist/xmpp.js.map -o dist/xmpp.min.js"
   },
   "engines": {
     "node": ">= 6",

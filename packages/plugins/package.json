@@ -6,10 +6,7 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.3.0",
   "license": "ISC",
-  "keywords": [
-    "XMPP",
-    "plugins"
-  ],
+  "keywords": ["XMPP", "plugins"],
   "dependencies": {
     "@xmpp/connection": "^0.3.0",
     "@xmpp/connection-tcp": "^0.3.0",
@@ -26,7 +23,8 @@
   },
   "browser": {
     "ws": false,
-    "buffer": false
+    "buffer": false,
+    "crypto": false
   },
   "engines": {
     "node": ">= 6",

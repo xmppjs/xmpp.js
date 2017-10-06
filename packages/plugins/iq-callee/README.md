@@ -1,8 +1,6 @@
 # iq-callee
 
-Requests handler for `@xmpp/client-core` and `@xmpp/component-core`.
-
-Included and enabled in `@xmpp/client`.
+Requests handler for `@xmpp/client` and `@xmpp/component`.
 
 Supports Node.js and browsers.
 

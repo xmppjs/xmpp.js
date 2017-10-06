@@ -5,6 +5,7 @@ PATH := node_modules/.bin:$(PATH)
 setup:
 	yarn
 	lerna bootstrap
+	node packages/xmpp.js/gen.js
 
 lint:
 	eslint .
@@ -36,5 +37,5 @@ restart:
 	./server/ctl restart
 
 size:
-	cd packages/xmpp.js && yarn run prepublish
+	cd packages/client && yarn run prepublish
 	bundlesize

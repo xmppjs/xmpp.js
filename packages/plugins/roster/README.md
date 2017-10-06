@@ -1,8 +1,6 @@
 # roster
 
-[roster management](https://xmpp.org/rfcs/rfc6121.html#roster) for `@xmpp/client-core`.
-
-Included and enabled in `@xmpp/client`.
+[roster management](https://xmpp.org/rfcs/rfc6121.html#roster) for `@xmpp/client`.
 
 Supports Node.js and browsers.
 

@@ -1,6 +1,6 @@
 # reconnect
 
-Auto reconnect.
+Auto reconnect for `@xmpp/client` and `@xmpp/component`.
 
 Included and enabled in `@xmpp/component` and `@xmpp/client`.
 
