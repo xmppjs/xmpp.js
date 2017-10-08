@@ -62,7 +62,8 @@ function startClient (cb) {
 }
 
 describe('Stream register', () => {
-  let server, client
+  let server
+  let client
 
   afterEach((done) => {
     client.end()

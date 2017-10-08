@@ -12,7 +12,9 @@ const fs = require('fs')
 const path = require('path')
 
 describe('S2S Router Integration', () => {
-  let exampleRouter, nodeXmppRouter, certs
+  let exampleRouter
+  let nodeXmppRouter
+  let certs
 
   const msgToExampleStr = '<message to="test-user@example.com" from="xiaoxin.lu@nodexmpp.com" type="chat" xml:lang="en"><body>Hi. This is a test message.</body></message>'
   const msgToExampleStanza = parse(msgToExampleStr)

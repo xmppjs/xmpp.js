@@ -60,7 +60,8 @@ function startClient (cb) {
 }
 
 describe('Stream resource bind', () => {
-  let server, client
+  let server
+  let client
 
   afterEach((done) => {
     client.end()
