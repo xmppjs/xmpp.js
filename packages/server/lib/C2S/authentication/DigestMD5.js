@@ -24,7 +24,7 @@ function md5Hex (s) {
 function parseDict (s) {
   const result = {}
   while (s) {
-    var m
+    let m
     if ((m = /^(.+?)=(.*?[^\\]),\s*(.*)/.exec(s))) {
       result[m[1]] = m[2].replace(/"/g, '')
       s = m[3]

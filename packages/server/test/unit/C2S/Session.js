@@ -13,7 +13,7 @@ describe('C2S Session', () => {
     describe('to attribute', () => {
       it('sends a host-unknown error if stream "to" attribute is empty', () => {
         const conn = new Connection()
-        var session = new Session({connection: conn}) // eslint-disable-line
+        const session = new Session({connection: conn}); // eslint-disable-line
         const error = sinon.stub(conn, 'error')
         conn.emit('streamStart', {to: ''})
         assert(error.calledOnce)
@@ -22,7 +22,7 @@ describe('C2S Session', () => {
 
       it('sends a host-unknown error if stream "to" is missing', () => {
         const conn = new Connection()
-        var session = new Session({connection: conn}) // eslint-disable-line
+        const session = new Session({connection: conn}); // eslint-disable-line
         const error = sinon.stub(conn, 'error')
         conn.emit('streamStart', {})
         assert(error.calledOnce)

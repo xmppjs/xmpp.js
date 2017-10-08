@@ -256,7 +256,7 @@ describe('SASL', () => {
        * We cannot use existing client realization
        * because we need to skip challenge response
        */
-      var client = net.connect({port: c2s.options.port}, () => {
+      const client = net.connect({port: c2s.options.port}, () => {
         client.write(handshakeStanza, () => {
           client.write(authStanza, () => {
             client.write(earlyAccessStanza, () => {

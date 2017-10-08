@@ -283,7 +283,8 @@ class BOSHSession extends EventEmitter {
     if (opts) {
       delete this.inQueue[rid]
     } else {
-      for (var i = 0; i < this.outQueue.length; i++) {
+      let i = 0
+      for (; i < this.outQueue.length; i++) {
         if (this.outQueue[i].bodyEl.attrs.rid === rid) break
       }
 

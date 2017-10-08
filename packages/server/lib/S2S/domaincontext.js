@@ -145,40 +145,40 @@ class DomainContext {
     outStream.on('close', closeCb)
     outStream.on('error', closeCb)
 
-    var onAuth = function (method) {
+    const onAuth = function (method) {
       debug('onAuth')
       outStream.isConnected = true
       switch (method) {
-      case 'dialback':
-        self.startDialback(destDomain, outStream)
-        break
+        case 'dialback':
+          self.startDialback(destDomain, outStream)
+          break
 
-      case 'external':
-        outStream.send(new Element('auth', {
-          xmlns: NS_XMPP_SASL,
-          mechanism: 'EXTERNAL',
-        }).t(Buffer.from(self.domain).toString('base64')))
-        var onStanza
-        onStanza = function (stanza) {
-          if (stanza.is('success', NS_XMPP_SASL)) {
-            outStream.startStream()
-            outStream.removeListener('stanza', onStanza)
-            let onStream
-            onStream = function () {
-              outStream.emit('online')
-              outStream.removeListener('streamStart', onStream)
+        case 'external':
+          outStream.send(new Element('auth', {
+            xmlns: NS_XMPP_SASL,
+            mechanism: 'EXTERNAL',
+          }).t(Buffer.from(self.domain).toString('base64')))
+          let onStanza
+          onStanza = function (stanza) {
+            if (stanza.is('success', NS_XMPP_SASL)) {
+              outStream.startStream()
+              outStream.removeListener('stanza', onStanza)
+              let onStream
+              onStream = function () {
+                outStream.emit('online')
+                outStream.removeListener('streamStart', onStream)
+              }
+              outStream.on('streamStart', onStream)
+            } else if (stanza.is('failure', NS_XMPP_SASL)) {
+              outStream.end()
             }
-            outStream.on('streamStart', onStream)
-          } else if (stanza.is('failure', NS_XMPP_SASL)) {
-            outStream.end()
           }
-        }
-        outStream.on('stanza', onStanza)
-        break
+          outStream.on('stanza', onStanza)
+          break
 
-      default:
-        outStream.error('undefined-condition',
-          'Cannot authenticate via ' + method)
+        default:
+          outStream.error('undefined-condition',
+            'Cannot authenticate via ' + method)
       }
       outStream.removeListener('auth', onAuth)
     }
@@ -207,10 +207,10 @@ class DomainContext {
 
     if (!destDomain) {
       throw new Error('Trying to reach empty domain')
-    // There's one already
+      // There's one already
     } else if (this.s2sOut.hasOwnProperty(destDomain)) {
       return this.s2sOut[destDomain]
-    // Establish a new connection
+      // Establish a new connection
     } else {
       return this.establishS2SStream(destDomain)
     }
@@ -299,7 +299,7 @@ class DomainContext {
     outStream.send(dialbackkey.dialbackKey(this.domain, destDomain, outStream.dbKey))
 
     const self = this
-    var onResult = function (from, to, isValid) {
+    const onResult = function (from, to, isValid) {
       if ((from !== destDomain) ||
         (to !== self.domain)) {
         // Not for us
@@ -356,8 +356,9 @@ class DomainContext {
     debug('verify incoming streamid: ' + inStream.streamId)
     const outStream = this.sendRaw(dialbackkey.dialbackVerify(this.domain, fromDomain,
       inStream.streamId, dbKey),
-    fromDomain)
+      fromDomain)
 
+    let rmCbs = null
     // These are needed before for removeListener()
     const onVerified = function (from, to, id, isValid) {
       from = nameprep(from)
@@ -396,7 +397,7 @@ class DomainContext {
 
       rmCbs()
     }
-    var rmCbs = function () {
+    rmCbs = function () {
       outStream.removeListener('dialbackVerified', onVerified)
       outStream.removeListener('close', onClose)
       inStream.removeListener('close', onCloseIn)
