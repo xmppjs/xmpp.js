@@ -7,6 +7,39 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 const {xml, Client} = require('./index') // For you; require('@xmpp/client')
 const client = new Client()
 
+const middleware = require('../middleware')(client)
+const router = require('../router')(middleware)
+
+router.use('message/jabber:client/body', (ctx, next) => {
+  console.log('fofo', ctx.stanza.toString())
+  setTimeout(() => {
+    console.log('\n3\n')
+    ctx.foobar = 'lol'
+    next()
+  }, 1000)
+})
+
+router.use('message/jabber:client/body', (ctx, next) => {
+  console.log('\n4', ctx.foobar, '\n')
+  next()
+})
+
+router.filter('message', (ctx, next) => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      console.log('\n1\n')
+      ctx.foobar = 'lol'
+      resolve()
+    }, 1000)
+  }).then(next)
+})
+
+router.filter('message', (ctx, next) => {
+  if (ctx.name !== 'message') return next()
+  console.log('\n2', ctx.foobar, '\n')
+  next()
+})
+
 // Log errors
 client.on('error', err => {
   console.error('❌', err.toString())
@@ -38,11 +71,19 @@ client.on('stanza', el => {
 client.on('online', jid => {
   console.log('jid', jid.toString())
   client.send(xml('presence'))
+
+  client.send(
+    xml(
+      'message',
+      {to: 'sonny@jabberfr.org', type: 'chat'},
+      xml('body', {}, 'hello')
+    )
+  )
 })
 
 // "start" opens the socket and the XML stream
 client
-  .start('localhost') // Auto
+  .start('jabberfr.org') // Auto
   // .start('xmpp://localhost:5222') // TCP
   // .start('xmpps://localhost:5223') // TLS
   // .start('ws://localhost:5280/xmpp-websocket') // Websocket
@@ -53,7 +94,7 @@ client
 
 // Handle authentication to provide credentials
 client.handle('authenticate', authenticate => {
-  return authenticate('client', 'foobar')
+  return authenticate('sonny', 'foobar')
 })
 
 // Handle binding to choose resource - optional

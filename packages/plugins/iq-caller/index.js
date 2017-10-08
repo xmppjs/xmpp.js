@@ -1,6 +1,7 @@
 'use strict'
 
 const {plugin, xml} = require('@xmpp/plugin')
+const xid = require('@xmpp/id')
 
 module.exports = plugin('iq-caller', {
   start() {
@@ -30,15 +31,6 @@ module.exports = plugin('iq-caller', {
   stop() {
     this.entity.removeListener('element', this.handler)
   },
-  id() {
-    let id
-    while (!id) {
-      id = Math.random()
-        .toString(36)
-        .substr(2, 12)
-    }
-    return id
-  },
   match(stanza) {
     return (
       stanza.name === 'iq' &&
@@ -64,7 +56,7 @@ module.exports = plugin('iq-caller', {
     if (id) {
       stanza.attrs.id = id
     } else if (!stanza.attrs.id) {
-      stanza.attrs.id = this.id()
+      stanza.attrs.id = xid()
     }
 
     return this.entity.send(stanza).then(() => {

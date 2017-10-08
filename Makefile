@@ -3,9 +3,10 @@ PATH := node_modules/.bin:$(PATH)
 .PHONY: setup test clean bundle start stop restart size
 
 setup:
+	node packages/xmpp.js/script.js
 	yarn
 	lerna bootstrap
-	node script.js
+	cd packages/xmpp.js/ && yarn run prepublish
 
 lint:
 	eslint .

@@ -28,10 +28,7 @@
   "ava": {
     "require": "babel-register",
     "babel": "inherit",
-    "files": [
-      "packages/**/test.js",
-      "packages/**/test/*.js"
-    ]
+    "files": ["packages/**/test.js", "packages/**/test/*.js"]
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
@@ -42,9 +39,7 @@
     "node": ">= 6",
     "yarn": ">= 0.28"
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": ["packages/*"],
   "bundlesize": [
     {
       "path": "./packages/client/dist/xmpp.min.js",
