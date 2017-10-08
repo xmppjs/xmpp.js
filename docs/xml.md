@@ -2,7 +2,7 @@
 
 ## Writing
 
-There's 2 methods for writing XML with xmpp.js
+There are 2 methods for writing XML with xmpp.js
 
 ### factory
 
