@@ -1,0 +1,14 @@
+{
+  "name": "@xmpp/ping",
+  "description": "XMPP ping for JavaScript",
+  "repository": "github:xmppjs/xmpp.js",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/ping",
+  "bugs": "http://github.com/xmppjs/xmpp.js/issues",
+  "version": "0.3.0",
+  "license": "ISC",
+  "keywords": ["XMPP", "ping", "pong"],
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
+  }
+}
