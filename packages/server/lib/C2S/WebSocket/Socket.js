@@ -1,9 +1,8 @@
 'use strict'
 
-const EventEmitter = require('events').EventEmitter
-const util = require('util')
+const { EventEmitter } = require('@xmpp/events')
 const debug = require('debug')('xmpp:server:websocket')
-const ltx = require('node-xmpp-core').ltx
+const { parse } = require('ltx')
 
 class Socket extends EventEmitter {
   constructor(socket) {
@@ -32,7 +31,7 @@ class Socket extends EventEmitter {
     })
 
     socket.on('message', (message, flags) => {
-      const connection = self.session.connection
+      const { connection } = self.session
       let body
 
       if (flags && (flags.binary || flags.masked)) {
@@ -43,9 +42,9 @@ class Socket extends EventEmitter {
 
       let stanza
       try {
-        stanza = ltx.parse(body)
-      } catch (e) {
-        console.log(e)
+        stanza = parse(body)
+      } catch (err) {
+        console.error(err)
         connection.error('xml-not-well-formed', 'XML parse error')
         return
       }

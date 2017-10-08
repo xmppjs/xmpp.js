@@ -1,7 +1,6 @@
 'use strict'
 
 const crypto = require('crypto')
-const util = require('util')
 const Mechanism = require('./Mechanism')
 
 class Anonymous extends Mechanism {

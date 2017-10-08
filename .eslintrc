@@ -23,7 +23,7 @@ rules:
   strict: [error, global]
   semi: [error, never]
   comma-dangle: [error, always-multiline]
-  indent: [error, 2]
+  indent: [error, 2, { "SwitchCase": 1 }]
   no-multi-assign: 0
   func-names: 0
   operator-linebreak: [error, after, {overrides: {"?": before, ":": "before" } }]

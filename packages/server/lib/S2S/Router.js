@@ -5,11 +5,10 @@
  */
 const fs = require('fs')
 const net = require('net')
-const util = require('util')
 const tls = require('tls')
-const EventEmitter = require('events').EventEmitter
-const rack = require('hat').rack
-const JID = require('node-xmpp-core').JID
+const { EventEmitter } = require('@xmpp/events')
+const { rack } = require('hat')
+const jid = require('@xmpp/jid')
 const DomainContext = require('./domaincontext')
 const nameprep = require('./util/nameprep')
 const dialbackkey = require('./util/dialbackkey')
@@ -22,15 +21,13 @@ const debug = require('debug')('xmpp:s2s:router')
  * for your own domain.
  */
 class Router extends EventEmitter {
-  constructor(s2sPort, bindAddress, opts) {
+  constructor(s2sPort, bindAddress, opts = {}) {
     super()
     this.ctxs = {}
 
-    opts = opts || {}
-
     this.generateId = rack(opts.idBits, opts.idBitsBase, opts.idBitsExpandBy)
 
-    if (opts.secureDomains && opts.secureDomains.length) {
+    if (opts.secureDomains && opts.secureDomains.length > 0) {
       opts.secureDomains.forEach(this.addSecureDomain, this)
     }
 
@@ -84,11 +81,11 @@ class Router extends EventEmitter {
     })
 
     // Send features supported by this domain
-    inStream.on('streamStart', (attrs) => {
-      inStream.fromDomain = nameprep(attrs.from)
-      inStream.toDomain = nameprep(attrs.to)
+    inStream.on('streamStart', ({ from, to }) => {
+      inStream.fromDomain = nameprep(from)
+      inStream.toDomain = nameprep(to)
       const domainContext = self.getContext(inStream.toDomain)
-      const credentials = domainContext.credentials
+      const { credentials } = domainContext
       if (credentials) {
         inStream.opts.tls = true
         inStream.credentials = credentials
@@ -162,7 +159,7 @@ class Router extends EventEmitter {
     }
 
     const to = stanza.attrs && stanza.attrs.to
-    const toDomain = to && (new JID(to)).getDomain()
+    const toDomain = to && jid(to).getDomain()
     if (toDomain && this.hasContext(toDomain)) {
       debug('inner routing')
       // Inner routing
@@ -170,7 +167,7 @@ class Router extends EventEmitter {
     } else if (stanza.attrs && stanza.attrs.from) {
       debug('s2s routing')
       // Route to domain context for s2s
-      const domain = (new JID(stanza.attrs.from)).getDomain()
+      const domain = jid(stanza.attrs.from).getDomain()
       this.getContext(domain).send(stanza)
     } else {
       throw new Error('Sending stanza from a domain we do not host')
@@ -178,11 +175,11 @@ class Router extends EventEmitter {
   }
 
   hasContext(domain) {
-    return this.ctxs.hasOwnProperty(domain)
+    return Object.prototype.hasOwnProperty.call(this.ctxs, domain)
   }
 
   getContext(domain) {
-    if (this.ctxs.hasOwnProperty(domain)) {
+    if (Object.prototype.hasOwnProperty.call(this.ctxs, domain)) {
       return this.ctxs[domain]
     }
     this.ctxs[domain] = new DomainContext(this, domain)

@@ -6,12 +6,12 @@ const assert = require('assert')
 const TCPServer = require('../../../lib/C2S/TCP/Server')
 const WebSocketServer = require('../../../lib/C2S/WebSocket/Server')
 const BOSHServer = require('../../../lib/C2S/BOSH/Server')
-const Client = require('node-xmpp-client')
+const Client = require('@xmpp/client')
 
 const PORT = 6767
 
-function makeServer (Server) {
-  const server = new Server({port: PORT, autostart: false})
+function makeServer(Server) {
+  const server = new Server({ port: PORT, autostart: false })
   server.on('connection', (connection) => {
     connection.on('authenticate', (creds, cb) => {
       cb(null, creds)

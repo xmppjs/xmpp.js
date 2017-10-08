@@ -1,21 +1,20 @@
 'use strict'
 
-const util = require('util')
 const crypto = require('crypto')
-const EventEmitter = require('events').EventEmitter
-const Connection = require('node-xmpp-core').Connection
-const JID = require('node-xmpp-core').JID
-const Element = require('node-xmpp-core').Element
+const { EventEmitter } = require('@xmpp/events')
+const Connection = require('@xmpp/connection')
+const jid = require('@xmpp/jid')
+const { Element } = require('@xmpp/xml')
 
 class ComponentSession extends EventEmitter {
-  constructor(opts) {
+  constructor({connection, socket}) {
     super()
-    this.connection = opts.connection || new Connection()
+    this.connection = connection || new Connection()
     this._addConnectionListeners()
     this.connection.xmlns[''] = this.NS_COMPONENT
     this.connection.xmlns.stream = this.NS_STREAM
     if (this.connection.connect) {
-      this.connection.connect({socket: opts.socket})
+      this.connection.connect({ socket })
     }
   }
 
@@ -26,7 +25,7 @@ class ComponentSession extends EventEmitter {
     }
 
     const self = this
-    this.jid = new JID(streamAttrs.to)
+    this.jid = jid(streamAttrs.to)
     this.emit('verify-component', this.jid, (err, password) => {
       if (err) {
         self.connection.error('host-unknown', err.message || 'unknown host')

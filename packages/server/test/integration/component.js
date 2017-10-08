@@ -4,8 +4,8 @@
 
 const assert = require('assert')
 const XMPP = require('../..')
-const Server = XMPP.component.Server
-const Component = require('node-xmpp-component')
+const { Server } = XMPP.component
+const Component = require('@xmpp/component')
 
 const server = new Server({
   autostart: false,
@@ -14,10 +14,10 @@ const server = new Server({
 server.on('connection', (connection) => {
   connection.on('verify-component', (jid, cb) => {
     switch (jid.toString()) {
-    case 'foo.localhost':
-      return cb(null, 'password')
-    default:
-      return cb(new Error('unknown host'))
+      case 'foo.localhost':
+        return cb(null, 'password')
+      default:
+        return cb(new Error('unknown host'))
     }
   })
 
@@ -26,7 +26,7 @@ server.on('connection', (connection) => {
     stanza.attrs.to = connection.jid
     connection.send(stanza)
   })
-  connection.on('error', () => {})
+  connection.on('error', () => { })
 })
 
 describe('component server - component', () => {
@@ -84,6 +84,7 @@ describe('component server - component', () => {
   })
 
   describe('component that uses wrong namespace', () => {
+    // eslint-disable-next-line prefer-destructuring
     const NS_COMPONENT = Component.prototype.NS_COMPONENT
 
     before(() => {

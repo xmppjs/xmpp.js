@@ -4,9 +4,9 @@
 
 const XMPP = require('../../..')
 const Server = XMPP.C2S.TCPServer
-const Plain = XMPP.auth.Plain
-const JID = XMPP.JID
-const Client = require('node-xmpp-client')
+const { Plain } = XMPP.auth
+const { JID } = XMPP
+const Client = require('@xmpp/client')
 
 const port = 5223
 const user = {
@@ -14,7 +14,7 @@ const user = {
   password: 'secret',
 }
 
-function startServer (action) {
+function startServer(action) {
   const server = new Server({
     port,
     domain: 'localhost',
@@ -26,7 +26,7 @@ function startServer (action) {
     })
     stream.on('register', (data, cb) => {
       if (action === 'fail') {
-        cb({ // eslint-disable-line
+        cb({ // eslint-disable-line standard/no-callback-literal
           code: 503,
           type: 'cancel',
           condition: 'service-unavailable',
@@ -41,7 +41,7 @@ function startServer (action) {
   return server
 }
 
-function startClient (cb) {
+function startClient(cb) {
   const client = new Client({
     host: 'localhost',
     port,

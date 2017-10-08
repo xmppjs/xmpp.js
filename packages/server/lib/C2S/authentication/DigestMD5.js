@@ -1,27 +1,27 @@
 'use strict'
 
-const util = require('util')
 const crypto = require('crypto')
-const Element = require('node-xmpp-core').Element
+const { Element } = require('@xmpp/xml')
 const Mechanism = require('./Mechanism')
-const JID = require('node-xmpp-core').JID
+const jid = require('@xmpp/jid')
 
 /**
  * Hash a string
  */
-function md5 (s, encoding) {
+function md5(s, encoding) {
   const hash = crypto.createHash('md5')
   hash.update(s, 'binary')
   return hash.digest(encoding || 'binary')
 }
-function md5Hex (s) {
+function md5Hex(s) {
   return md5(s, 'hex')
 }
 
 /**
  * Parse SASL serialization
  */
-function parseDict (s) {
+function parseDict(s) {
+  /* eslint-disable prefer-destructuring */
   const result = {}
   while (s) {
     let m
@@ -42,25 +42,24 @@ function parseDict (s) {
     }
   }
   return result
+  /* eslint-enable prefer-destructuring */
 }
 
 /**
  * SASL serialization
  */
-function encodeDict (dict) {
-  let s = ''
-  for (const k in dict) {
-    const v = dict[k]
-    if (v) s += `,${k}="${v}"`
-  }
-  return s.substr(1) // Without first ','
+function encodeDict(dict) {
+  return Object.keys(dict)
+    .filter(key => dict[key])
+    .map(key => `${key}="${dict[key]}"`)
+    .join(',')
 }
 
 /**
  * Right-justify a string,
  * eg. pad with 0s
  */
-function rjust (s, targetLen, padding) {
+function rjust(s, targetLen, padding) {
   while (s.length < targetLen) {
     s = padding + s
   }
@@ -71,7 +70,7 @@ function rjust (s, targetLen, padding) {
  * Generate a string of 8 digits
  * (number used once)
  */
-function generateNonce () {
+function generateNonce() {
   let result = ''
   for (let i = 0; i < 8; i++) {
     result += String.fromCharCode(48 +
@@ -88,6 +87,7 @@ const NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl'
  */
 class DigestMD5 extends Mechanism {
   constructor(domain) {
+    super()
     this.nonce = generateNonce()
     this.nonceCount = 0
     this.authcid = null
@@ -205,12 +205,12 @@ class DigestMD5 extends Mechanism {
   }
 
   loginFailed(server) {
-    let jid = false
+    let userJid = false
     if (this.username) {
-      jid = new JID(this.username, server.serverdomain ? server.serverdomain.toString() : '')
+      userJid = jid(this.username, server.serverdomain ? server.serverdomain.toString() : '')
     }
 
-    server.emit('auth-failure', jid)
+    server.emit('auth-failure', userJid)
     server.send(new Element('response', {
       xmlns: NS_XMPP_SASL,
     }))

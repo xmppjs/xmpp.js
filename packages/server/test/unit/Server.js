@@ -4,7 +4,7 @@
 
 const assert = require('assert')
 const Server = require('../../lib/Server')
-const EventEmitter = require('events').EventEmitter
+const { EventEmitter } = require('@xmpp/events')
 const sinon = require('sinon')
 
 describe('Server', () => {

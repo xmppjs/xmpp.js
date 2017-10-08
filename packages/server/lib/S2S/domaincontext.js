@@ -1,7 +1,7 @@
 'use strict'
 
-const JID = require('node-xmpp-core').JID
-const Element = require('node-xmpp-core').Element
+const jid = require('@xmpp/jid')
+const { Element } = require('@xmpp/xml')
 const nameprep = require('./util/nameprep')
 const dialbackkey = require('./util/dialbackkey')
 const OutgoingServer = require('./session/outgoing')
@@ -65,7 +65,7 @@ class DomainContext {
     }
 
     // Route stanza
-    const destDomain = new JID(stanza.attrs.to).domain
+    const destDomain = jid(stanza.attrs.to).domain
     // Get stream for suiteable s2s connection
     const outStream = this.getOutStream(destDomain)
 
@@ -145,6 +145,8 @@ class DomainContext {
     outStream.on('close', closeCb)
     outStream.on('error', closeCb)
 
+    let onStanza
+    let onStream
     const onAuth = (method) => {
       debug('onAuth')
       outStream.isConnected = true
@@ -158,12 +160,10 @@ class DomainContext {
             xmlns: NS_XMPP_SASL,
             mechanism: 'EXTERNAL',
           }).t(Buffer.from(self.domain).toString('base64')))
-          let onStanza
           onStanza = (stanza) => {
             if (stanza.is('success', NS_XMPP_SASL)) {
               outStream.startStream()
               outStream.removeListener('stanza', onStanza)
-              let onStream
               onStream = () => {
                 outStream.emit('online')
                 outStream.removeListener('streamStart', onStream)
@@ -208,7 +208,7 @@ class DomainContext {
     if (!destDomain) {
       throw new Error('Trying to reach empty domain')
       // There's one already
-    } else if (this.s2sOut.hasOwnProperty(destDomain)) {
+    } else if (Object.prototype.hasOwnProperty.call(this.s2sOut, destDomain)) {
       return this.s2sOut[destDomain]
       // Establish a new connection
     } else {
@@ -222,7 +222,7 @@ class DomainContext {
   addInStream(srcDomain, stream) {
     const self = this
 
-    if (this.s2sIn.hasOwnProperty(srcDomain)) {
+    if (Object.prototype.hasOwnProperty.call(this.s2sIn, srcDomain)) {
       // Replace old
       const oldStream = this.s2sIn[srcDomain]
       oldStream.error('conflict', 'Connection replaced')
@@ -273,14 +273,14 @@ class DomainContext {
 
       // Only accept 'from' attribute JIDs that have the same domain
       // that we validated the stream for
-      const fromDomain = (new JID(stanza.attrs.from)).domain
+      const fromDomain = jid(stanza.attrs.from).domain
       if (fromDomain !== domain) {
         stream.error('invalid-from')
         return
       }
 
       // Only accept 'to' attribute JIDs to this DomainContext
-      const toDomain = (new JID(stanza.attrs.to)).domain
+      const toDomain = jid(stanza.attrs.to).domain
       if (toDomain !== self.domain) {
         stream.error('improper-addressing')
         return
@@ -325,7 +325,7 @@ class DomainContext {
   verifyDialback(domain, id, key, cb) {
     const self = this
     let outStream
-    if (this.s2sOut.hasOwnProperty(domain) &&
+    if (Object.prototype.hasOwnProperty.call(this.s2sOut, domain) &&
       (outStream = this.s2sOut[domain])) {
       if (outStream.isConnected) {
         debug(`verify key:${outStream.dbKey} ${key}`)
@@ -343,19 +343,19 @@ class DomainContext {
           self.verifyDialback(domain, id, key, cb)
         })
         outStream.on('close', () => {
-          cb(false) // eslint-disable-line
+          cb(false) // eslint-disable-line standard/no-callback-literal
         })
       }
     } else {
-      cb(false) // eslint-disable-line
+      cb(false) // eslint-disable-line standard/no-callback-literal
     }
   }
 
   verifyIncoming(fromDomain, inStream, dbKey) {
     const self = this
     debug(`verify incoming streamid: ${inStream.streamId}`)
-    const outStream = this.sendRaw(dialbackkey.dialbackVerify(this.domain, fromDomain,
-      inStream.streamId, dbKey),
+    const outStream = this.sendRaw(
+      dialbackkey.dialbackVerify(this.domain, fromDomain, inStream.streamId, dbKey),
       fromDomain)
 
     let rmCbs = null
@@ -417,7 +417,7 @@ class DomainContext {
     debug('close connection')
     const shutdown = (conns) => {
       for (const domain in conns) {
-        if (conns.hasOwnProperty(domain)) {
+        if (Object.prototype.hasOwnProperty.call(conns, domain)) {
           conns[domain].end()
         }
       }

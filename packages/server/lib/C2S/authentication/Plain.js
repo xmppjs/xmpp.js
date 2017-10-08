@@ -1,6 +1,5 @@
 'use strict'
 
-const util = require('util')
 const Mechanism = require('./Mechanism')
 
 class Plain extends Mechanism {

@@ -4,7 +4,7 @@
 
 const assert = require('assert')
 const Server = require('../lib/C2S/TCP/Server')
-const Client = require('node-xmpp-client')
+const Client = require('@xmpp/client')
 
 const PORT = 6768
 
@@ -13,7 +13,7 @@ describe('server stop', () => {
   let client
 
   beforeEach((done) => {
-    server = new Server({port: PORT})
+    server = new Server({ port: PORT })
     server.on('connection', (connection) => {
       connection.on('authenticate', (creds, cb) => {
         cb(null, creds)
@@ -54,7 +54,7 @@ describe('server stop', () => {
 
   it('disconnects all clients and shutdown the server', (done) => {
     let count = 0
-    client.on('error', () => {})
+    client.on('error', () => { })
     client.once('offline', () => {
       count++
       if (count === 2) done()

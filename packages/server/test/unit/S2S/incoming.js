@@ -5,7 +5,7 @@
 const IncomingServer = require('../../../lib/S2S/session/incoming')
 const sinon = require('sinon')
 const assert = require('assert')
-const Element = require('node-xmpp-core').ltx.Element
+const { Element } = require('ltx')
 const tls = require('tls')
 
 describe('S2S IncomingServer', () => {
@@ -15,7 +15,7 @@ describe('S2S IncomingServer', () => {
     server = new IncomingServer()
   })
 
-  function assertStanza (spy, expectedStanza) {
+  function assertStanza(spy, expectedStanza) {
     sinon.assert.calledWith(spy, sinon.match((stanza) => {
       return stanza.toString() === expectedStanza
     }))
@@ -25,7 +25,7 @@ describe('S2S IncomingServer', () => {
     const streamFeaturesNoSASL = '<stream:features/>'
     const streamFeaturesSASL = '<stream:features><mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl"><mechanism>EXTERNAL</mechanism></mechanisms></stream:features>'
 
-    function assertFeatures (secureDomain, isSecure, isAuthed, expectedStanza) {
+    function assertFeatures(secureDomain, isSecure, isAuthed, expectedStanza) {
       const sendStub = sinon.stub(server, 'send')
 
       server.secureDomain = secureDomain
@@ -93,7 +93,7 @@ describe('S2S IncomingServer', () => {
       server.socket.servername = 'xmpp.example.com'
 
       sinon.stub(server.socket, 'getPeerCertificate').returns({
-        subject: {CN: 'example.com'},
+        subject: { CN: 'example.com' },
       })
 
       const sendNotAuthorizedStub = sinon.stub(server, 'sendNotAuthorizedAndClose')
@@ -112,7 +112,7 @@ describe('S2S IncomingServer', () => {
       server.socket = new FakeSocket()
       server.socket.servername = 'example.com'
       sinon.stub(server.socket, 'getPeerCertificate').returns({
-        subject: {CN: '*.example.com'},
+        subject: { CN: '*.example.com' },
       })
 
       const sendNotAuthorizedStub = sinon.stub(server, 'sendNotAuthorizedAndClose')
@@ -131,7 +131,7 @@ describe('S2S IncomingServer', () => {
       server.socket.servername = 'example.com'
       sinon.stub(server.socket, 'getPeerCertificate').returns({
         subjectaltname: 'DNS:example.com',
-        subject: {CN: '*.example.com'},
+        subject: { CN: '*.example.com' },
       })
 
       const sendNotAuthorizedStub = sinon.stub(server, 'sendNotAuthorizedAndClose')
@@ -206,7 +206,7 @@ describe('S2S IncomingServer', () => {
 
       assert.equal(server.handleSASLExternal(validAuthElement), true)
 
-      sinon.assert.calledWith(server.socket.renegotiate, {requestCert: true})
+      sinon.assert.calledWith(server.socket.renegotiate, { requestCert: true })
       assert(server.socket.renegotiate.calledBefore(verifyCertificateStub))
       sinon.assert.calledOnce(verifyCertificateStub)
     })
@@ -223,7 +223,7 @@ describe('S2S IncomingServer', () => {
 
       assert.equal(server.handleSASLExternal(validAuthElement), true)
 
-      sinon.assert.calledWith(server.socket.renegotiate, {requestCert: true})
+      sinon.assert.calledWith(server.socket.renegotiate, { requestCert: true })
       assert(server.socket.renegotiate.calledBefore(verifyCertificateStub))
       sinon.assert.calledOnce(verifyCertificateStub)
     })

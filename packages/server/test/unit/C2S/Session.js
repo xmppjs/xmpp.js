@@ -5,7 +5,7 @@
 const Session = require('../../../').C2S._Session
 const assert = require('assert')
 const sinon = require('sinon')
-const Connection = require('node-xmpp-core').Connection
+const Connection = require('@xmpp/connection')
 
 describe('C2S Session', () => {
   describe('stream start', () => {
@@ -13,16 +13,16 @@ describe('C2S Session', () => {
     describe('to attribute', () => {
       it('sends a host-unknown error if stream "to" attribute is empty', () => {
         const conn = new Connection()
-        const session = new Session({connection: conn}); // eslint-disable-line
+        const session = new Session({ connection: conn }) // eslint-disable-line no-unused-vars
         const error = sinon.stub(conn, 'error')
-        conn.emit('streamStart', {to: ''})
+        conn.emit('streamStart', { to: '' })
         assert(error.calledOnce)
         assert(error.calledWith('host-unknown', "empty 'to' attibute"))
       })
 
       it('sends a host-unknown error if stream "to" is missing', () => {
         const conn = new Connection()
-        const session = new Session({connection: conn}); // eslint-disable-line
+        const session = new Session({ connection: conn }) // eslint-disable-line no-unused-vars
         const error = sinon.stub(conn, 'error')
         conn.emit('streamStart', {})
         assert(error.calledOnce)

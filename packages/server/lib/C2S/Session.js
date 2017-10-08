@@ -1,13 +1,10 @@
 'use strict'
 
-const EventEmitter = require('events').EventEmitter
-const util = require('util')
-const core = require('node-xmpp-core')
-const Element = core.Element
-const JID = core.JID
-const IQ = core.IQ
-const Connection = core.Connection
-const rack = require('hat').rack
+const { EventEmitter } = require('@xmpp/events')
+const { Element } = require('@xmpp/xml')
+const jid = require('@xmpp/jid')
+const Connection = require('@xmpp/connection')
+const { rack } = require('hat')
 
 const NS_CLIENT = 'jabber:client'
 const NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl'
@@ -19,6 +16,8 @@ const NS_STREAMS = 'http://etherx.jabber.org/streams'
 
 class Session extends EventEmitter {
   constructor(opts) {
+    super()
+
     this.authenticated = false
     this.server = opts.server
     this.generateId = rack(opts.idBits, opts.idBitsBase, opts.idBitsExpandBy)
@@ -54,14 +53,14 @@ class Session extends EventEmitter {
     con.on('reconnect', this.emit.bind(this, 'reconnect'))
     con.on('disconnect', this.emit.bind(this, 'disconnect'))
     con.on('disconnect', this.emit.bind(this, 'offline'))
-    con.on('streamStart', (attrs) => {
-      if (attrs.to === undefined) {
+    con.on('streamStart', ({ to }) => {
+      if (to === undefined) {
         this.connection.error('host-unknown', "'to' attribute missing")
-      } else if (attrs.to === '') {
+      } else if (to === '') {
         this.connection.error('host-unknown', "empty 'to' attibute")
       } else {
-        this.serverdomain = attrs.to
-        con.streamAttrs.from = attrs.to
+        this.serverdomain = to
+        con.streamAttrs.from = to
         this.startStream()
       }
     })
@@ -102,7 +101,10 @@ class Session extends EventEmitter {
   sendFeatures() {
     // Trilian requires features to be prefixed https://github.com/node-xmpp/node-xmpp-server/pull/125
     const features = new Element('stream:features', { xmlns: NS_STREAMS, 'xmlns:stream': NS_STREAMS })
-    if (!this.authenticated) {
+    if (this.authenticated) {
+      features.c('bind', { xmlns: NS_BIND })
+      features.c('session', { xmlns: NS_SESSION })
+    } else {
       if (this.server && this.server.availableSaslMechanisms) {
         // TLS
         const opts = this.server.options
@@ -118,12 +120,9 @@ class Session extends EventEmitter {
 
       const mechanismsEl = features.c(
         'mechanisms', { xmlns: NS_XMPP_SASL })
-      this.mechanisms.forEach((mech) => {
-        mechanismsEl.c('mechanism').t(mech.prototype.name)
+      this.mechanisms.forEach(({ prototype: { name } }) => {
+        mechanismsEl.c('mechanism').t(name)
       })
-    } else {
-      features.c('bind', { xmlns: NS_BIND })
-      features.c('session', { xmlns: NS_SESSION })
     }
     this.send(features)
   }
@@ -179,11 +178,11 @@ class Session extends EventEmitter {
 
     // If we havn't already decided for one method
     if (!this.mechanism) {
-      const matchingMechs = this.mechanisms.filter((mech) => {
-        return mech.prototype.name === stanza.attrs.mechanism
+      const matchingMechs = this.mechanisms.filter(({ prototype: { name } }) => {
+        return stanza.attrs.mechanism === name
       })
 
-      // TODO handle case where we are not able to match a sasl mechanism
+      // TODO: handle case where we are not able to match a sasl mechanism
       this.mechanism = new matchingMechs[0]()
 
       /**
@@ -197,9 +196,9 @@ class Session extends EventEmitter {
         }
 
         if (user.jid) {
-          user.jid = new JID(user.jid)
+          user.jid = jid(user.jid)
         } else {
-          user.jid = new JID(user.username, self.serverdomain.toString())
+          user.jid = jid(user.username, self.serverdomain.toString())
         }
         user.client = self
 
@@ -243,17 +242,15 @@ class Session extends EventEmitter {
         .c('password')
       proceed()
     } else if (stanza.attrs.type === 'set') {
-      const jid = new JID(register.getChildText('username'), this.server.options.domain)
+      const regJid = jid(register.getChildText('username'), this.server.options.domain)
       this.emit('register', {
-        jid,
+        jid: regJid,
         username: register.getChildText('username'),
         password: register.getChildText('password'),
         client: self,
       }, (error) => {
-        if (!error) {
-          self.emit('registration-success', self.jid)
-        } else {
-          self.emit('registration-failure', jid)
+        if (error) {
+          self.emit('registration-failure', regJid)
           reply.attrs.type = 'error'
           reply
             .c('error', {
@@ -267,6 +264,8 @@ class Session extends EventEmitter {
               xmlns: NS_STANZAS,
             })
             .t(error.message)
+        } else {
+          self.emit('registration-success', self.jid)
         }
         proceed()
       })

@@ -17,14 +17,21 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "debug": "^2.2.0",
+    "@xmpp/connection": "^0.3.0",
+    "@xmpp/events": "^0.3.0",
+    "@xmpp/jid": "^0.3.0",
+    "@xmpp/xml": "^0.3.0",
+    "debug": "^3.1.0",
     "hat": "^0.0.3",
-    "node-xmpp-core": "^5.0.9",
-    "ws": "^1.1.1"
+    "ltx": "^2.7.1",
+    "ws": "^3.1.0"
   },
   "devDependencies": {
-    "async": "^2.0.0-rc.5",
-    "node-xmpp-client": "^3.2.0",
-    "node-xmpp-component": "^2.0.9"
+    "@xmpp/client": "^0.3.0",
+    "@xmpp/component": "^0.3.0"
+  },
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
   }
 }

@@ -1,8 +1,7 @@
 'use strict'
 
-const EventEmitter = require('events').EventEmitter
-const util = require('util')
-const ltx = require('node-xmpp-core').ltx
+const { EventEmitter } = require('@xmpp/events')
+const { parse, Element } = require('ltx')
 const hat = require('hat')
 const debug = require('debug')('xmpp:bosh:session')
 
@@ -31,7 +30,8 @@ const NS_HTTPBIND = 'http://jabber.org/protocol/httpbind'
  * License: MIT
  */
 class BOSHSession extends EventEmitter {
-  constructor(opts) {
+  constructor(opts = {}) {
+    super()
     // Socket properties
     this.writable = true
     this.readable = true
@@ -142,13 +142,13 @@ class BOSHSession extends EventEmitter {
     process.nextTick(this.workInQueue.bind(this))
   }
 
-  streamOpen(opts) {
+  streamOpen({ xmppv, to }) {
     return [
       '<stream:stream',
       'xmlns="jabber:client"',
       'xmlns:stream="http://etherx.jabber.org/streams"',
-      opts.xmppv ? (`xmpp:version="${opts.xmppv}"`) : '',
-      `to="${opts.to}">`,
+      xmppv ? (`xmpp:version="${xmppv}"`) : '',
+      `to="${to}">`,
     ].join(' ')
   }
 
@@ -168,9 +168,9 @@ class BOSHSession extends EventEmitter {
     // Handle message
 
     // extract values
-    const rid = opts.bodyEl.attrs.rid
-    const sid = opts.bodyEl.attrs.sid
-    const to = opts.bodyEl.attrs.to
+    const { rid } = opts.bodyEl.attrs
+    const { sid } = opts.bodyEl.attrs
+    const { to } = opts.bodyEl.attrs
     const restart = opts.bodyEl.attrs['xmpp:restart']
     const xmppv = opts.bodyEl.attrs['xmpp:version']
 
@@ -199,13 +199,7 @@ class BOSHSession extends EventEmitter {
     // Input process, retain response for sending stanzas
     this.outQueue.push(opts)
 
-    if (opts.bodyEl.attrs.type !== 'terminate') {
-      debug('schedule response')
-      process.nextTick(() => {
-        self.workOutQueue()
-        self.workInQueue()
-      })
-    } else {
+    if (opts.bodyEl.attrs.type === 'terminate') {
       debug('terminate connection')
       for (let i = 0; i < this.outQueue.length; i++) {
         opts = this.outQueue[i]
@@ -214,6 +208,12 @@ class BOSHSession extends EventEmitter {
       }
       this.outQueue = []
       this.closeSocket()
+    } else {
+      debug('schedule response')
+      process.nextTick(() => {
+        self.workOutQueue()
+        self.workInQueue()
+      })
     }
   }
 
@@ -300,20 +300,16 @@ class BOSHSession extends EventEmitter {
       200,
       { 'Content-Type': 'text/xml; charset=utf-8' }
     )
-    for (const k in this.xmlnsAttrs) {
-      attrs[k] = this.xmlnsAttrs[k]
-    }
-    if (res.boshAttrs) {
-      for (const i in res.boshAttrs) {
-        attrs[i] = res.boshAttrs[i]
-      }
-    }
-    const bodyEl = new ltx.Element('body', attrs)
+    const bodyEl = new Element('body', {
+      ...attrs,
+      ...this.xmlnsAttrs,
+      ...(res.boshAttrs || {}),
+    })
     if (children) {
-      // TODO, we need to filter the stream element
+      // TODO: we need to filter the stream element
       children.forEach((element) => {
         try {
-          bodyEl.cnode(ltx.parse(element))
+          bodyEl.cnode(parse(element))
         } catch (err) {
           console.error(`could not parse${element}`)
         }

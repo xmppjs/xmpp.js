@@ -1,22 +1,22 @@
 'use strict'
 
-const util = require('util')
-const SRV = require('node-xmpp-core').SRV
-const Connection = require('node-xmpp-core').Connection
+const Connection = require('@xmpp/connection')
 const Server = require('./server')
 const debug = require('debug')('xmpp:s2s:outserver')
 const NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl'
 
 class OutgoingServer extends Server {
   constructor(srcDomain, destDomain, credentials) {
-    debug(util.format('establish an outgoing S2S connection from %s to %s', srcDomain, destDomain))
-
-    this.streamId = null
+    debug(`establish an outgoing S2S connection from ${srcDomain} to ${destDomain}`)
 
     const streamAttrs = {
       version: '1.0',
       from: srcDomain,
     }
+
+    super({ streamAttrs })
+
+    this.streamId = null
 
     this.streamTo = destDomain
 
@@ -30,12 +30,10 @@ class OutgoingServer extends Server {
       this.allowTLS = false
     }
 
-    this.on('streamStart', function (attrs) {
+    this.on('streamStart', function ({ id }) {
       // Extract stream id
-      this.streamId = attrs.id
+      this.streamId = id
     })
-
-    super({ streamAttrs })
 
     // Establish connection
     this.listen({

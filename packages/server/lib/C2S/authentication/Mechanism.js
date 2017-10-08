@@ -9,8 +9,7 @@
  * - authServer: takes a stanza and extracts the information
  */
 
-const util = require('util')
-const EventEmitter = require('events').EventEmitter
+const { EventEmitter } = require('@xmpp/events')
 
 // Mechanisms
 class Mechanism extends EventEmitter {
@@ -19,15 +18,15 @@ class Mechanism extends EventEmitter {
    * Handle failures within the mechanism
    * @param {String} error
    */
-  success() {}
+  success() { }
 
   /**
    * Handle failures within the mechanism
    * @param {String} error
    */
-  failure() {}
+  failure() { }
 
-  authenticate() {}
+  authenticate() { }
 
   manageAuth(stanza) {
     const self = this

@@ -4,7 +4,7 @@
 
 const XMPP = require('../../..')
 const Server = XMPP.C2S.TCPServer
-const Client = require('node-xmpp-client')
+const Client = require('@xmpp/client')
 
 const server = new Server({
   autostart: false,

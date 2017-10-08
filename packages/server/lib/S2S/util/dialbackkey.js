@@ -1,6 +1,6 @@
 'use strict'
 
-const Element = require('node-xmpp-core').Element
+const { Element } = require('@xmpp/xml')
 const crypto = require('crypto')
 const debug = require('debug')('xmpp:s2s:util:dialbackkey')
 

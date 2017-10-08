@@ -4,7 +4,7 @@
 
 const XMPP = require('../../..')
 const Server = XMPP.C2S.BOSHServer
-const Client = require('node-xmpp-client')
+const Client = require('@xmpp/client')
 
 const server = new Server({
   autostart: false,
@@ -45,10 +45,9 @@ describe('C2S BOSH server client', () => {
         done()
       })
     })
-  // FIXME
-  // it('should disconnect when server shuts down', function(done) {
-  //     client.once('offline', done)
-  //     server.shutdown()
-  // })
+    it('should disconnect when server shuts down', (done) => {
+      client.once('offline', done)
+      server.shutdown()
+    })
   })
 })

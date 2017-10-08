@@ -4,8 +4,8 @@
 
 const OutgoingServer = require('../../../lib/S2S/session/outgoing')
 const assert = require('assert')
-const Connection = require('node-xmpp-core').Connection
-const ltx = require('node-xmpp-core').ltx
+const Connection = require('@xmpp/connection')
+const { parse } = require('ltx')
 const sinon = require('sinon')
 
 describe('S2S OutgoingServer', () => {
@@ -27,11 +27,11 @@ describe('S2S OutgoingServer', () => {
   })
 
   it('should only send one stream header after TLS connect', () => {
-    const emptyFn = () => {}
+    const emptyFn = () => { }
     outgoing = new OutgoingServer(FROM_SERVER, TO_SERVER)
     const sendStub = sinon.stub(outgoing, 'send')
 
-    outgoing.emit('connect', {on: emptyFn, setKeepAlive: emptyFn})
+    outgoing.emit('connect', { on: emptyFn, setKeepAlive: emptyFn })
     outgoing.socket.emit('secure')
 
     sinon.assert.calledOnce(sendStub)
@@ -44,7 +44,7 @@ describe('S2S OutgoingServer', () => {
 
       const streamFeaturesResponse = '<stream:features xmlns:db="jabber:server:dialback" xmlns:stream="http://etherx.jabber.org/streams"><dialback xmlns="urn:xmpp:features:dialback"/><mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl"><mechanism>EXTERNAL</mechanism></mechanisms></stream:features>'
 
-      const stanza = ltx.parse(streamFeaturesResponse)
+      const stanza = parse(streamFeaturesResponse)
       outgoing.onStanza(stanza)
       sinon.assert.calledWithExactly(emitStub, 'auth', 'external')
     })
@@ -55,7 +55,7 @@ describe('S2S OutgoingServer', () => {
 
       const streamFeaturesResponse = '<stream:features xmlns:db="jabber:server:dialback" xmlns:stream="http://etherx.jabber.org/streams"><dialback xmlns="urn:xmpp:features:dialback"/></stream:features>'
 
-      const stanza = ltx.parse(streamFeaturesResponse)
+      const stanza = parse(streamFeaturesResponse)
       outgoing.onStanza(stanza)
       sinon.assert.calledWithExactly(emitStub, 'auth', 'dialback')
     })
@@ -65,7 +65,7 @@ describe('S2S OutgoingServer', () => {
       const emitStub = sinon.stub(outgoing, 'emit')
 
       const success = '<success xmlns="urn:ietf:params:xml:ns:xmpp-sasl"/>'
-      const stanza = ltx.parse(success)
+      const stanza = parse(success)
 
       outgoing.onStanza(stanza)
       sinon.assert.calledWithExactly(emitStub, 'stanza', stanza)

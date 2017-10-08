@@ -1,7 +1,6 @@
 'use strict'
 
-const util = require('util')
-const Element = require('node-xmpp-core').Element
+const { Element } = require('@xmpp/xml')
 const hat = require('hat')
 const debug = require('debug')('xmpp:s2s:inserver')
 const Server = require('./server')
@@ -12,23 +11,23 @@ const NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl'
  * Accepts incomming server-to-server connections
  */
 class IncomingServer extends Server {
-  constructor(opts) {
+  constructor(opts = {}) {
     debug('start a new incoming server connection')
 
-    opts = opts || {}
-
-    this.streamId = opts.streamId || hat(opts.sidBits, opts.sidBitsBase)
+    const streamId = opts.streamId || hat(opts.sidBits, opts.sidBitsBase)
 
     const streamAttrs = {}
     streamAttrs.version = '1.0'
-    streamAttrs.id = this.streamId
+    streamAttrs.id = streamId
     opts.streamAttrs = streamAttrs
 
     // TLS is activated in domaincontext.
 
     super(opts)
 
-    this.connect({socket: opts.socket})
+    this.streamId = streamId
+
+    this.connect({ socket: opts.socket })
 
     return this
   }
@@ -63,7 +62,7 @@ class IncomingServer extends Server {
 
   verifyCertificate() {
     // Authorized ?
-    const socket = this.socket
+    const { socket } = this
     if (!socket.authorized) {
       debug(`certificate authorization failed: ${socket.authorizationError}`)
       return this.sendNotAuthorizedAndClose()
@@ -89,7 +88,7 @@ class IncomingServer extends Server {
 
       if (isEmptyCertificate(certificate)) {
         debug('Empty certificate. Renegotiate for certificate.')
-        this.socket.renegotiate({requestCert: true}, (error) => {
+        this.socket.renegotiate({ requestCert: true }, (error) => {
           if (error) {
             return self.error('internal-server-error', error)
           }
@@ -134,11 +133,12 @@ class IncomingServer extends Server {
 
 IncomingServer.NS_XMPP_SASL = NS_XMPP_SASL
 
-function isEmptyCertificate (certificate) {
+function isEmptyCertificate(certificate) {
+  // eslint-disable-next-line no-eq-null, eqeqeq
   return certificate == null || Object.keys(certificate).length === 0
 }
 
-function isSASLExternal (stanza) {
+function isSASLExternal(stanza) {
   return stanza && stanza.is('auth', NS_XMPP_SASL) && stanza.attrs.mechanism && stanza.attrs.mechanism === 'EXTERNAL'
 }
 

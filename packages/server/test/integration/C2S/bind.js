@@ -4,9 +4,9 @@
 
 const XMPP = require('../../..')
 const Server = XMPP.C2S.TCPServer
-const Plain = XMPP.auth.Plain
-const JID = XMPP.JID
-const Client = require('node-xmpp-client')
+const { Plain } = XMPP.auth
+const { JID } = XMPP
+const Client = require('@xmpp/client')
 
 const port = 5225
 const user = {
@@ -14,7 +14,7 @@ const user = {
   password: 'secret',
 }
 
-function startServer (action) {
+function startServer(action) {
   const server = new Server({
     port,
     domain: 'localhost',
@@ -40,7 +40,7 @@ function startServer (action) {
   return server
 }
 
-function startClient (cb) {
+function startClient(cb) {
   const client = new Client({
     host: 'localhost',
     jid: user.jid,
@@ -49,8 +49,8 @@ function startClient (cb) {
     preferred: Plain.id,
   })
 
-  client.on('online', (data) => {
-    cb(null, data.jid.resource)
+  client.on('online', ({ jid }) => {
+    cb(null, jid.resource)
   })
   client.on('error', (error) => {
     cb(error, null)

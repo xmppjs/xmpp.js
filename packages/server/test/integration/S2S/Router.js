@@ -5,7 +5,7 @@
 const Router = require('../../../lib/S2S/Router')
 const assert = require('assert')
 const sinon = require('sinon')
-const parse = require('node-xmpp-core').ltx.parse
+const { parse } = require('ltx')
 const async = require('async')
 const dns = require('dns')
 const fs = require('fs')
@@ -43,7 +43,7 @@ describe('S2S Router Integration', () => {
     }
   })
 
-  function getCreds (domain) {
+  function getCreds(domain) {
     const certRelativeLocation = '../../resources/certs/'
     const key = fs.readFileSync(path.join(__dirname, certRelativeLocation, `${domain}.key`), 'ascii')
     const cert = fs.readFileSync(path.join(__dirname, certRelativeLocation, `${domain}.crt`), 'ascii')
@@ -55,13 +55,13 @@ describe('S2S Router Integration', () => {
     dns.resolveSrv.restore()
   })
 
-  function close (done) {
+  function close(done) {
     async.each([exampleRouter, nodeXmppRouter], (router, callback) => {
       router.close(callback)
     }, done)
   }
 
-  function unregister () {
+  function unregister() {
     exampleRouter.unregister('example.com')
     nodeXmppRouter.unregister('nodexmpp.com')
   }
@@ -76,14 +76,14 @@ describe('S2S Router Integration', () => {
     close(done)
   })
 
-  function registerDomainsAndAssert (done) {
+  function registerDomainsAndAssert(done) {
     async.parallel({
-      example (callback) {
+      example(callback) {
         exampleRouter.register('example.com', (stanza) => {
           callback(null, stanza)
         })
       },
-      nodexmpp (callback) {
+      nodexmpp(callback) {
         nodeXmppRouter.register('nodexmpp.com', (stanza) => {
           callback(null, stanza)
         })

@@ -1,8 +1,7 @@
 'use strict'
 
-const EventEmitter = require('events').EventEmitter
-const util = require('util')
-const ltx = require('node-xmpp-core').ltx
+const { EventEmitter } = require('@xmpp/events')
+const ltx = require('ltx')
 const Socket = require('./Socket')
 const debug = require('debug')('xmpp:bosh:http')
 const http = require('http')
@@ -11,7 +10,7 @@ const serverStop = require('../../serverStop')
 const NS_HTTPBIND = 'http://jabber.org/protocol/httpbind'
 const NEXT_REQUEST_TIMEOUT = 60 * 1000
 
-function parseBody (stream, cb) {
+function parseBody(stream, cb) {
   const parser = new ltx.Parser()
   stream.on('data', (data) => {
     parser.write(data)
@@ -56,11 +55,11 @@ class BOSHServer extends EventEmitter {
   }
 
   setCorsHeader(req, res, options) {
-    let origin = options.origin
+    let { origin } = options
     if (Array.isArray(options.origin)) {
       origin = options.origin.indexOf(req.headers.origin) > -1 ? req.headers.origin : undefined
     } else if (options.origin === '*') {
-      origin = req.headers.origin
+      ({ origin } = req.headers)
     }
 
     if (origin) {
@@ -176,7 +175,7 @@ class BOSHServer extends EventEmitter {
       delete self.sessions[session.sid]
     })
 
-    res.boshAttrs = {'xmpp:restartlogic': true}
+    res.boshAttrs = { 'xmpp:restartlogic': true }
 
     // Emit new connection
     this.emit('connection', session)

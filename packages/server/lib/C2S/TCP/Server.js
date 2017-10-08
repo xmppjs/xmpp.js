@@ -1,6 +1,5 @@
 'use strict'
 
-const util = require('util')
 const tls = require('tls')
 const net = require('net')
 const fs = require('fs')
@@ -25,13 +24,14 @@ const TCP_PORT = 5222
  */
 class TCPServer extends C2SServer {
   constructor(options) {
+    super(options)
+
     const server = this.server = serverStop((options && options.server) || net.createServer())
     server.on('connection', this.acceptConnection.bind(this))
     server.on('close', this.emit.bind(this, 'close'))
     server.on('error', this.emit.bind(this, 'error'))
     server.on('listening', this.emit.bind(this, 'listening'))
 
-    super(options)
     this._setupTls()
   }
 

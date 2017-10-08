@@ -1,7 +1,6 @@
 'use strict'
 
-const EventEmitter = require('events').EventEmitter
-const util = require('util')
+const { EventEmitter } = require('@xmpp/events')
 
 class Server extends EventEmitter {
   constructor(options) {
@@ -34,7 +33,7 @@ class Server extends EventEmitter {
 
   onConnectionClosed(session) {
     this.sessions.delete(session)
-    // FIXME should we remove all listeners?
+    // FIXME: should we remove all listeners?
   }
 
   acceptConnection(socket) {
@@ -77,7 +76,7 @@ class Server extends EventEmitter {
     if (this.server && this.server.stop) this.server.stop()
   }
 
-  // FIXME this should be async, data might not be drained
+  // FIXME: this should be async, data might not be drained
   endSessions() {
     const self = this
     this.sessions.forEach((session) => {

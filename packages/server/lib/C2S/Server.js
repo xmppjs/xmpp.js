@@ -1,7 +1,6 @@
 'use strict'
 
 const Server = require('../Server')
-const util = require('util')
 const Plain = require('./authentication/Plain')
 const Session = require('./Session')
 

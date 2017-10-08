@@ -4,14 +4,11 @@
 
 const XMPP = require('../../..')
 const Server = XMPP.C2S.TCPServer
-const Element = require('node-xmpp-core').Element
+const { Element } = require('@xmpp/xml')
 const net = require('net')
-const rack = require('hat').rack
-const Client = require('node-xmpp-client')
-const Plain = XMPP.auth.Plain
-const XOAuth2 = XMPP.auth.XOAuth2
-const DigestMD5 = XMPP.auth.DigestMD5
-const Anonymous = XMPP.auth.Anonymous
+const { rack } = require('hat')
+const Client = require('@xmpp/client')
+const { Plain, XOAuth2, DigestMD5, Anonymous } = XMPP.auth
 
 require('should')
 
@@ -20,7 +17,7 @@ const user = {
   password: 'secret',
 }
 
-function startServer (mechanism) {
+function startServer(mechanism) {
   // Sets up the server.
   const c2s = new Server({
     port: 5225,
@@ -35,7 +32,7 @@ function startServer (mechanism) {
 
   // Allows the developer to register the jid against anything they want
   c2s.on('register', (opts, cb) => {
-    cb(true) // eslint-disable-line
+    cb(true) // eslint-disable-line standard/no-callback-literal
   })
 
   // On Connect event. When a client connects.
@@ -90,7 +87,7 @@ function startServer (mechanism) {
   return c2s
 }
 
-function createClient (opts) {
+function createClient(opts) {
   opts.port = 5225
   const cl = new Client(opts)
 
@@ -104,7 +101,7 @@ function createClient (opts) {
       // And send back.
       cl.send(stanza)
     } else {
-      console.log('INCLIENT STANZA PRE', stanza.toString())
+      console.warn('INCLIENT STANZA PRE', stanza.toString())
     }
   }
   )
@@ -142,7 +139,7 @@ describe('SASL', () => {
         done()
       })
       cl.on('error', (e) => {
-        console.log(e)
+        console.error(e)
         done(e)
       })
     })
@@ -199,7 +196,7 @@ describe('SASL', () => {
         done()
       })
       cl.on('error', (e) => {
-        console.log(e)
+        console.error(e)
         done(e)
       })
     })
@@ -234,7 +231,7 @@ describe('SASL', () => {
         done()
       })
       cl.on('error', (e) => {
-        console.log(e)
+        console.error(e)
         done(e)
       })
     })
@@ -256,7 +253,7 @@ describe('SASL', () => {
        * We cannot use existing client realization
        * because we need to skip challenge response
        */
-      const client = net.connect({port: c2s.options.port}, () => {
+      const client = net.connect({ port: c2s.options.port }, () => {
         client.write(handshakeStanza, () => {
           client.write(authStanza, () => {
             client.write(earlyAccessStanza, () => {
@@ -310,13 +307,13 @@ describe('SASL', () => {
       })
 
       const defaultHatRackHashLength = rack()().length
-      cl.on('online', (online) => {
-        online.jid.local.length.should.equal(defaultHatRackHashLength)
-        online.jid.resource.length.should.equal(defaultHatRackHashLength)
+      cl.on('online', ({ jid }) => {
+        jid.local.length.should.equal(defaultHatRackHashLength)
+        jid.resource.length.should.equal(defaultHatRackHashLength)
         done()
       })
       cl.on('error', (e) => {
-        console.log(e)
+        console.error(e)
         done(e)
       })
     })

@@ -3,9 +3,8 @@
 /**
  * Implements http://xmpp.org/extensions/xep-0220.html
  */
-const util = require('util')
-const ltx = require('node-xmpp-core').ltx
-const Connection = require('node-xmpp-core').Connection
+const { Element } = require('ltx')
+const Connection = require('@xmpp/connection')
 const StreamShaper = require('../stream/shaper')
 const IdleTimeout = require('../stream/timeout')
 const debug = require('debug')('xmpp:s2s:server')
@@ -21,9 +20,9 @@ const NS_DIALBACK = 'jabber:server:dialback'
  * (4) dialbackResult(from, to, isValid)
  */
 class Server extends Connection {
-  constructor(opts) {
-    this.opts = opts || {}
+  constructor(opts = {}) {
     super(opts)
+    this.opts = opts
 
     this.xmlns[''] = NS_SERVER
     this.xmlns.db = NS_DIALBACK
@@ -68,7 +67,7 @@ class Server extends Connection {
       !this.isSecure &&
       stanza.getChild('starttls', this.NS_XMPP_TLS)) {
       /* Signal willingness to perform TLS handshake */
-      this.send(new ltx.Element('starttls', { xmlns: this.NS_XMPP_TLS }))
+      this.send(new Element('starttls', { xmlns: this.NS_XMPP_TLS }))
       handled = true
     } else if (this.allowTLS &&
       stanza.is('proceed', this.NS_XMPP_TLS)) {
@@ -131,10 +130,9 @@ class Server extends Connection {
 Server.prototype.NS_SERVER = NS_SERVER
 Server.prototype.NS_DIALBACK = NS_DIALBACK
 
-function getAllText (el) {
-  return !el.children ? el : el.children.reduce((text, child) => {
-    return text + getAllText(child)
-  }, '')
+function getAllText(el) {
+  return el.children ? el.children.reduce((text, child) => text + getAllText(child), '')
+    : el
 }
 
 module.exports = Server

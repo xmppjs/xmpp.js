@@ -1,6 +1,5 @@
 'use strict'
 
-const util = require('util')
 const Server = require('./BOSHServer')
 const C2SServer = require('../Server')
 
@@ -17,8 +16,9 @@ const BOSH_PORT = 5280
  * - https://example.com:5281/http-bind
  */
 class BOSHServer extends C2SServer {
-  constructor(opts) {
-    const options = opts || {}
+  constructor(options = {}) {
+    super(options)
+
     const server = this.server = new Server({
       server: options.server,
       cors: options.cors,
@@ -29,7 +29,6 @@ class BOSHServer extends C2SServer {
     server.on('listening', this.emit.bind(this, 'listening'))
     server.on('connection', this.acceptConnection.bind(this))
 
-    super(options)
   }
 }
 
