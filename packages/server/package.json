@@ -1,20 +1,9 @@
 {
-  "name": "node-xmpp-server",
-  "version": "2.2.7",
-  "description": "XMPP server libraries for Node.js",
-  "repository": "github:node-xmpp/node-xmpp",
-  "homepage": "http://github.com/node-xmpp/node-xmpp",
-  "bugs": "http://github.com/node-xmpp/node-xmpp/issues",
-  "keywords": [
-    "XMPP",
-    "server",
-    "C2S",
-    "component",
-    "S2S",
-    "BOSH",
-    "WebSocket",
-    "TCP"
-  ],
+  "name": "@xmpp/server",
+  "repository": "github:xmppjs/xmpp.js",
+  "homepage": "http://github.com/xmppjs/xmpp.js",
+  "bugs": "http://github.com/xmppjs/xmpp.js/issues",
+  "version": "0.1.0",
   "license": "MIT",
   "dependencies": {
     "@xmpp/connection": "^0.3.0",
