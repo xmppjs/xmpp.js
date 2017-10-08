@@ -32,7 +32,7 @@ function startServer (action) {
           text: 'Test error',
         }, null)
       } else {
-        cb(null, action === 'modified' ? resource + '-' + 'mod' : resource)
+        cb(null, action === 'modified' ? `${resource}-mod` : resource)
       }
     })
   })
@@ -73,7 +73,7 @@ describe('Stream resource bind', () => {
       if (error) {
         done(error)
       } else if (resource !== user.jid.resource) {
-        done(new Error('Wrong resource: ' + resource))
+        done(new Error(`Wrong resource: ${resource}`))
       } else {
         done()
       }
@@ -85,8 +85,8 @@ describe('Stream resource bind', () => {
     client = startClient((error, resource) => {
       if (error) {
         done(error)
-      } else if (resource !== user.jid.resource + '-' + 'mod') {
-        done(new Error('Wrong resource: ' + resource))
+      } else if (resource !== `${user.jid.resource}-mod`) {
+        done(new Error(`Wrong resource: ${resource}`))
       } else {
         done()
       }

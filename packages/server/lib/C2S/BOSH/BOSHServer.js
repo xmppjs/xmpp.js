@@ -113,7 +113,7 @@ class BOSHServer extends EventEmitter {
         return self._sendErrorResponse(res, error)
       }
 
-      debug('got: ' + bodyEl.toString())
+      debug(`got: ${bodyEl.toString()}`)
 
       if (bodyEl.attrs.sid) {
         debug('sid found, reuse existing session')

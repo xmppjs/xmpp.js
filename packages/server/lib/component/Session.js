@@ -21,7 +21,7 @@ class ComponentSession extends EventEmitter {
 
   onStreamStart(streamAttrs) {
     if (streamAttrs.xmlns !== this.NS_COMPONENT) {
-      this.connection.error('invalid-namespace', "invalid namespace '" + streamAttrs.xmlns + "'")
+      this.connection.error('invalid-namespace', `invalid namespace '${streamAttrs.xmlns}'`)
       return
     }
 

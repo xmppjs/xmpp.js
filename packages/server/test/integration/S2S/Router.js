@@ -43,8 +43,8 @@ describe('S2S Router Integration', () => {
 
   function getCreds (domain) {
     const certRelativeLocation = '../../resources/certs/'
-    const key = fs.readFileSync(path.join(__dirname, certRelativeLocation, domain + '.key'), 'ascii')
-    const cert = fs.readFileSync(path.join(__dirname, certRelativeLocation, domain + '.crt'), 'ascii')
+    const key = fs.readFileSync(path.join(__dirname, certRelativeLocation, `${domain}.key`), 'ascii')
+    const cert = fs.readFileSync(path.join(__dirname, certRelativeLocation, `${domain}.crt`), 'ascii')
     const ca = fs.readFileSync(path.join(__dirname, certRelativeLocation, 'ca.crt'), 'ascii')
     return [domain, key, cert, ca]
   }

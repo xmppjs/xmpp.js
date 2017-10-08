@@ -41,7 +41,7 @@ class BOSHSession extends EventEmitter {
     if (opts.xmlns) {
       for (const prefix in opts.xmlns) {
         if (prefix) {
-          this.xmlnsAttrs['xmlns:' + prefix] = opts.xmlns[prefix]
+          this.xmlnsAttrs[`xmlns:${prefix}`] = opts.xmlns[prefix]
         } else {
           this.xmlnsAttrs.xmlns = opts.xmlns[prefix]
         }
@@ -85,8 +85,8 @@ class BOSHSession extends EventEmitter {
     fn(stanza.toString()) // No specific serialization
   }
 
-  pause() {}
-  resume() {}
+  pause() { }
+  resume() { }
 
   end() {
     debug('close connection')
@@ -98,7 +98,7 @@ class BOSHSession extends EventEmitter {
    */
   sendData(data) {
     // Emit this data to connection
-    debug('emit data: ' + data.toString())
+    debug(`emit data: ${data.toString()}`)
     this.emit('data', data.toString())
   }
 
@@ -143,16 +143,13 @@ class BOSHSession extends EventEmitter {
   }
 
   streamOpen(opts) {
-    /* eslint-disable indent */
     return [
-      '<stream:stream ',
-      'xmlns="jabber:client" ',
-      'xmlns:stream="http://etherx.jabber.org/streams" ',
-      'to="' + opts.to + '"',
-      opts.xmppv ? (' xmpp:version="' + opts.xmppv + '"') : '',
-      '>',
-    ].join('')
-  /* eslint-enable indent */
+      '<stream:stream',
+      'xmlns="jabber:client"',
+      'xmlns:stream="http://etherx.jabber.org/streams"',
+      opts.xmppv ? (`xmpp:version="${opts.xmppv}"`) : '',
+      `to="${opts.to}">`,
+    ].join(' ')
   }
 
   workInQueue() {
@@ -182,20 +179,19 @@ class BOSHSession extends EventEmitter {
       debug('handle stream start')
       // Emulate stream creation for connection
       this.sendData(
-        '<?xml version="1.0" ?>' +
-        this.streamOpen({to, xmppv})
+        `<?xml version="1.0" ?>${this.streamOpen({ to, xmppv })}`
       )
-    // Handle stream reset
+      // Handle stream reset
     } else if (opts.bodyEl.attrs['xmpp:restart'] === 'true') {
       debug('reset stream')
       // Emulate stream restart for connection
       this.sendData(
-        this.streamOpen({to, xmppv})
+        this.streamOpen({ to, xmppv })
       )
     }
 
     opts.bodyEl.children.forEach((stanza) => {
-      debug('send data: ' + stanza)
+      debug(`send data: ${stanza}`)
       // Extract content
       self.sendData(stanza.toString())
     })
@@ -319,7 +315,7 @@ class BOSHSession extends EventEmitter {
         try {
           bodyEl.cnode(ltx.parse(element))
         } catch (err) {
-          console.error('could not parse' + element)
+          console.error(`could not parse${element}`)
         }
       })
     }

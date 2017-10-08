@@ -21,7 +21,7 @@ class DialbackKey {
     const shasum = crypto.createHash('sha256')
     shasum.update(this.secret)
     const shakey = shasum.digest('hex')
-    const text = recievingsrv + ' ' + originatingsrv + ' ' + streamid
+    const text = `${recievingsrv} ${originatingsrv} ${streamid}`
     const hash = crypto.createHmac('sha256', shakey).update(text).digest('hex')
     debug(hash)
     return hash

@@ -178,7 +178,7 @@ class DomainContext {
 
         default:
           outStream.error('undefined-condition',
-            'Cannot authenticate via ' + method)
+            `Cannot authenticate via ${method}`)
       }
       outStream.removeListener('auth', onAuth)
     }
@@ -328,8 +328,8 @@ class DomainContext {
     if (this.s2sOut.hasOwnProperty(domain) &&
       (outStream = this.s2sOut[domain])) {
       if (outStream.isConnected) {
-        debug('verify key:' + outStream.dbKey + ' ' + key)
-        debug('compare id:' + outStream.streamId + ' ' + id)
+        debug(`verify key:${outStream.dbKey} ${key}`)
+        debug(`compare id:${outStream.streamId} ${id}`)
         const isValid = outStream.streamId === id &&
           outStream.dbKey === key
         cb(isValid)
@@ -353,7 +353,7 @@ class DomainContext {
 
   verifyIncoming(fromDomain, inStream, dbKey) {
     const self = this
-    debug('verify incoming streamid: ' + inStream.streamId)
+    debug(`verify incoming streamid: ${inStream.streamId}`)
     const outStream = this.sendRaw(dialbackkey.dialbackVerify(this.domain, fromDomain,
       inStream.streamId, dbKey),
       fromDomain)

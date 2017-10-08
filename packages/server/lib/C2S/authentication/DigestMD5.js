@@ -51,7 +51,7 @@ function encodeDict (dict) {
   let s = ''
   for (const k in dict) {
     const v = dict[k]
-    if (v) s += ',' + k + '="' + v + '"'
+    if (v) s += `,${k}="${v}"`
   }
   return s.substr(1) // Without first ','
 }
@@ -116,25 +116,16 @@ class DigestMD5 extends Mechanism {
     let value
     if (dict.nonce && dict.qop) {
       this.nonceCount++
-      let a1 = md5(this.authcid + ':' +
-          this.realm + ':' +
-          password) + ':' +
-        dict.nonce + ':' +
-        this.cnonce
+      let a1 = `${md5(`${this.authcid}:${this.realm}:${password}`)}:${dict.nonce}:${this.cnonce}`
 
-      if (this.actAs) a1 += ':' + this.actAs
+      if (this.actAs) a1 += `:${this.actAs}`
 
-      let a2 = 'AUTHENTICATE:' + this.digestUri
+      let a2 = `AUTHENTICATE:${this.digestUri}`
       if ((dict.qop === 'auth-int') || (dict.qop === 'auth-conf')) {
         a2 += ':00000000000000000000000000000000'
       }
 
-      value = md5Hex(md5Hex(a1) + ':' +
-        dict.nonce + ':' +
-        ((this.nc) ? this.nc : this.getNC()) + ':' +
-        this.cnonce + ':' +
-        dict.qop + ':' +
-        md5Hex(a2))
+      value = md5Hex(`${md5Hex(a1)}:${dict.nonce}:${(this.nc) ? this.nc : this.getNC()}:${this.cnonce}:${dict.qop}:${md5Hex(a2)}`)
     }
     return value
   }

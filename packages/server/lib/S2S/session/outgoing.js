@@ -35,7 +35,7 @@ class OutgoingServer extends Server {
       this.streamId = attrs.id
     })
 
-    super({streamAttrs})
+    super({ streamAttrs })
 
     // Establish connection
     this.listen({
@@ -49,7 +49,7 @@ class OutgoingServer extends Server {
 
   // Overwrite onStanza from Server
   onStanza(stanza) {
-    debug('recieved stanza' + stanza.toString())
+    debug(`recieved stanza: ${stanza.toString()}`)
     const handled = Server.prototype.onStanza.call(this, stanza)
 
     if (!handled) {
@@ -69,7 +69,7 @@ class OutgoingServer extends Server {
   }
 }
 
-function hasSASLExternal (stanza) {
+function hasSASLExternal(stanza) {
   const mechanisms = stanza.getChild('mechanisms', NS_XMPP_SASL)
   if (mechanisms) {
     const mechanism = mechanisms.getChild('mechanism')

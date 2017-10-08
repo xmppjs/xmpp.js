@@ -73,7 +73,7 @@ class Router extends EventEmitter {
    * Handles a new socket connection
    */
   acceptConnection(socket) {
-    debug('accept a new connection' + socket)
+    debug(`accept a new connection: ${socket}`)
     const self = this
 
     const inStream = new IncomingServer({
@@ -127,7 +127,7 @@ class Router extends EventEmitter {
         // Trigger verification via outgoing connection
         self.getContext(to).verifyIncoming(from, inStream, key)
       } else {
-        inStream.error('host-unknown', to + ' is not served here')
+        inStream.error('host-unknown', `${to} is not served here`)
       }
     })
     return inStream
@@ -138,7 +138,7 @@ class Router extends EventEmitter {
    */
   register(domain, listener) {
     domain = nameprep(domain)
-    debug('register a new domain: ' + domain)
+    debug(`register a new domain: ${domain}`)
     this.getContext(domain).stanzaListener = listener
   }
 
@@ -146,7 +146,7 @@ class Router extends EventEmitter {
    * Unregister a context and stop its connections
    */
   unregister(domain) {
-    debug('unregister a domain: ' + domain)
+    debug(`unregister a domain: ${domain}`)
     if (this.hasContext(domain)) {
       this.ctxs[domain].end()
 
@@ -155,7 +155,7 @@ class Router extends EventEmitter {
   }
 
   send(stanza) {
-    debug('send: ' + stanza.root().toString())
+    debug(`send: ${stanza.root().toString()}`)
 
     if (stanza.root) {
       stanza = stanza.root()
@@ -184,10 +184,10 @@ class Router extends EventEmitter {
   getContext(domain) {
     if (this.ctxs.hasOwnProperty(domain)) {
       return this.ctxs[domain]
-    } 
+    }
     this.ctxs[domain] = new DomainContext(this, domain)
     return this.ctxs[domain]
-    
+
   }
 }
 

@@ -76,7 +76,7 @@ describe('server end', () => {
           jid: 'WebSocket@localhost',
           password: 'WebSocket',
           websocket: {
-            url: 'ws://localhost:' + PORT,
+            url: `ws://localhost:${PORT}`,
           },
         })
         client.on('online', () => {
@@ -94,7 +94,7 @@ describe('server end', () => {
           jid: 'WebSocket@localhost',
           password: 'WebSocket',
           websocket: {
-            url: 'ws://localhost:' + PORT,
+            url: `ws://localhost:${PORT}`,
           },
         })
         client.on('error', (err) => {
@@ -114,7 +114,7 @@ describe('server end', () => {
           jid: 'BOSH@localhost',
           password: 'BOSH',
           bosh: {
-            url: 'http://localhost:' + PORT + '/http-bind',
+            url: `http://localhost:${PORT}/http-bind`,
           },
         })
         client.on('online', () => {
@@ -133,7 +133,7 @@ describe('server end', () => {
           jid: 'WebSocket@localhost',
           password: 'WebSocket',
           bosh: {
-            url: 'http://localhost:' + PORT,
+            url: `http://localhost:${PORT}`,
           },
         })
         client.on('error', (err) => {

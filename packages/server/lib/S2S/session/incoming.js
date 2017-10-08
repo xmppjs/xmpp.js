@@ -65,11 +65,11 @@ class IncomingServer extends Server {
     // Authorized ?
     const socket = this.socket
     if (!socket.authorized) {
-      debug('certificate authorization failed: ' + socket.authorizationError)
+      debug(`certificate authorization failed: ${socket.authorizationError}`)
       return this.sendNotAuthorizedAndClose()
     }
 
-    debug(this.fromDomain + ' authorized')
+    debug(`${this.fromDomain} authorized`)
     this.emit('auth', 'SASL')
   }
 
