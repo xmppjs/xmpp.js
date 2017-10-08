@@ -23,27 +23,27 @@ const TCP_PORT = 5222
  *   options.tls.keyPath : path to key
  *   options.tls.certPath : path to certificate
  */
-function TCPServer (options) {
-  const server = this.server = serverStop((options && options.server) || net.createServer())
-  server.on('connection', this.acceptConnection.bind(this))
-  server.on('close', this.emit.bind(this, 'close'))
-  server.on('error', this.emit.bind(this, 'error'))
-  server.on('listening', this.emit.bind(this, 'listening'))
+class TCPServer extends C2SServer {
+  constructor(options) {
+    const server = this.server = serverStop((options && options.server) || net.createServer())
+    server.on('connection', this.acceptConnection.bind(this))
+    server.on('close', this.emit.bind(this, 'close'))
+    server.on('error', this.emit.bind(this, 'error'))
+    server.on('listening', this.emit.bind(this, 'listening'))
 
-  C2SServer.call(this, options)
-  this._setupTls()
+    super(options)
+    this._setupTls()
+  }
+
+  _setupTls() {
+    if (!this.options.tls) return
+    const details = this.options.tls
+    details.key = details.key || fs.readFileSync(details.keyPath, 'ascii')
+    details.cert = details.cert || fs.readFileSync(details.certPath, 'ascii')
+    this.credentials = tls.createSecureContext(details)
+  }
 }
-
-util.inherits(TCPServer, C2SServer)
 
 TCPServer.prototype.DEFAULT_PORT = TCP_PORT
-
-TCPServer.prototype._setupTls = function () {
-  if (!this.options.tls) return
-  const details = this.options.tls
-  details.key = details.key || fs.readFileSync(details.keyPath, 'ascii')
-  details.cert = details.cert || fs.readFileSync(details.certPath, 'ascii')
-  this.credentials = tls.createSecureContext(details)
-}
 
 module.exports = TCPServer

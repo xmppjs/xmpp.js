@@ -54,22 +54,22 @@ describe('S2S IncomingServer', () => {
   })
 
   describe('verifyCertificate', () => {
-    function FakeSocket () {}
+    class FakeSocket {
+      // Good aproximation of the server identity check in TLS wrapper
+      checkServerIdentity() {
+        const cert = this.getPeerCertificate()
+        const verifyError = tls.checkServerIdentity(this.servername, cert)
 
-    // Good aproximation of the server identity check in TLS wrapper
-    FakeSocket.prototype.checkServerIdentity = function () {
-      const cert = this.getPeerCertificate()
-      const verifyError = tls.checkServerIdentity(this.servername, cert)
-
-      if (verifyError) {
-        this.authorized = false
-        this.authorizationError = verifyError.code || verifyError.message
-      } else {
-        this.authorized = true
+        if (verifyError) {
+          this.authorized = false
+          this.authorizationError = verifyError.code || verifyError.message
+        } else {
+          this.authorized = true
+        }
       }
-    }
 
-    FakeSocket.prototype.getPeerCertificate = function () { throw new Error('Unimplemented Fake Socket Stub') }
+      getPeerCertificate() { throw new Error('Unimplemented Fake Socket Stub') }
+    }
 
     it('should call unauthorized method if fails TLS authorization', () => {
       server.socket = {

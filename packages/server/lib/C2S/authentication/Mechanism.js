@@ -13,27 +13,23 @@ const util = require('util')
 const EventEmitter = require('events').EventEmitter
 
 // Mechanisms
-function Mechanism () {}
-
-util.inherits(Mechanism, EventEmitter)
-
-// The following functions will be overridden by xmpp server
-Mechanism.prototype = {
+class Mechanism extends EventEmitter {
+  // The following functions will be overridden by xmpp server
   /**
    * Handle failures within the mechanism
    * @param {String} error
    */
-  success () {},
+  success() {}
 
   /**
    * Handle failures within the mechanism
    * @param {String} error
    */
-  failure () {},
+  failure() {}
 
-  authenticate () {},
+  authenticate() {}
 
-  manageAuth (stanza) {
+  manageAuth(stanza) {
     const self = this
 
     const auth = Buffer.from(stanza.getText(), 'base64').toString('utf8')
@@ -44,12 +40,12 @@ Mechanism.prototype = {
         self.failure(err)
       }
     })
-  },
-}
+  }
 
-// This method should be overrriden in custom mechanisms
-Mechanism.prototype.extractSasl = function () {
-  throw new Error('This is an abstract method, you should overrride it')
+  // This method should be overrriden in custom mechanisms
+  extractSasl() {
+    throw new Error('This is an abstract method, you should overrride it')
+  }
 }
 
 module.exports = Mechanism

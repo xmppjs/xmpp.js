@@ -19,55 +19,55 @@ const Session = require('./Session')
  *   options.tls.keyPath : path to key
  *   options.tls.certPath : path to certificate
  */
-function C2SServer (options) {
-  Server.call(this, options)
+class C2SServer extends Server {
+  constructor(options) {
+    super(options)
 
-  this.availableSaslMechanisms = [Plain]
+    this.availableSaslMechanisms = [Plain]
 
-  // Don't allow anybody by default when using client cert auth
-  if ((this.options.requestCert) &&
-    (this.options.rejectUnauthorized !== false)) {
-    this.options.rejectUnauthorized = true
+    // Don't allow anybody by default when using client cert auth
+    if ((this.options.requestCert) &&
+      (this.options.rejectUnauthorized !== false)) {
+      this.options.rejectUnauthorized = true
+    }
+  }
+
+  /**
+   * Returns all registered sasl mechanisms
+   */
+  getSaslMechanisms() {
+    return this.availableSaslMechanisms
+  }
+
+  /**
+   * Removes all registered sasl mechanisms
+   */
+  clearSaslMechanism() {
+    this.availableSaslMechanisms = []
+  }
+
+  /**
+   * Register a new sasl mechanism
+   */
+  registerSaslMechanism(method) {
+    // Check if method is registered
+    if (this.availableSaslMechanisms.indexOf(method) === -1) {
+      this.availableSaslMechanisms.push(method)
+    }
+  }
+
+  /**
+   * Unregister an existing sasl mechanism
+   */
+  unregisterSaslMechanism(method) {
+    // Check if method is registered
+    const index = this.availableSaslMechanisms.indexOf(method)
+    if (index >= 0) {
+      this.availableSaslMechanisms.splice(index, 1)
+    }
   }
 }
-
-util.inherits(C2SServer, Server)
 
 C2SServer.prototype.Session = Session
-
-/**
- * Returns all registered sasl mechanisms
- */
-C2SServer.prototype.getSaslMechanisms = function () {
-  return this.availableSaslMechanisms
-}
-
-/**
- * Removes all registered sasl mechanisms
- */
-C2SServer.prototype.clearSaslMechanism = function () {
-  this.availableSaslMechanisms = []
-}
-
-/**
- * Register a new sasl mechanism
- */
-C2SServer.prototype.registerSaslMechanism = function (method) {
-  // Check if method is registered
-  if (this.availableSaslMechanisms.indexOf(method) === -1) {
-    this.availableSaslMechanisms.push(method)
-  }
-}
-
-/**
- * Unregister an existing sasl mechanism
- */
-C2SServer.prototype.unregisterSaslMechanism = function (method) {
-  // Check if method is registered
-  const index = this.availableSaslMechanisms.indexOf(method)
-  if (index >= 0) {
-    this.availableSaslMechanisms.splice(index, 1)
-  }
-}
 
 module.exports = C2SServer
