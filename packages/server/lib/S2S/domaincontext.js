@@ -91,7 +91,7 @@ class DomainContext {
     }
 
     const outStream = this.getOutStream(destDomain)
-    const send = function () {
+    const send = () => {
       outStream.send(stanza)
     }
 
@@ -116,7 +116,7 @@ class DomainContext {
     this.s2sOut[destDomain] = outStream
     this.setupStream(destDomain, outStream)
 
-    const closeCb = function () {
+    const closeCb = () => {
       // Purge queue
       if (outStream.queue) {
         outStream.queue.forEach((stanza) => {
@@ -145,7 +145,7 @@ class DomainContext {
     outStream.on('close', closeCb)
     outStream.on('error', closeCb)
 
-    const onAuth = function (method) {
+    const onAuth = (method) => {
       debug('onAuth')
       outStream.isConnected = true
       switch (method) {
@@ -159,12 +159,12 @@ class DomainContext {
             mechanism: 'EXTERNAL',
           }).t(Buffer.from(self.domain).toString('base64')))
           let onStanza
-          onStanza = function (stanza) {
+          onStanza = (stanza) => {
             if (stanza.is('success', NS_XMPP_SASL)) {
               outStream.startStream()
               outStream.removeListener('stanza', onStanza)
               let onStream
-              onStream = function () {
+              onStream = () => {
                 outStream.emit('online')
                 outStream.removeListener('streamStart', onStream)
               }
@@ -238,7 +238,7 @@ class DomainContext {
     this.setupStream(srcDomain, stream)
     stream.isConnected = true
     stream.isAuthed = true
-    const closeCb = function () {
+    const closeCb = () => {
       if (self.s2sIn[srcDomain] === stream) {
         delete self.s2sIn[srcDomain]
       }
@@ -299,7 +299,7 @@ class DomainContext {
     outStream.send(dialbackkey.dialbackKey(this.domain, destDomain, outStream.dbKey))
 
     const self = this
-    const onResult = function (from, to, isValid) {
+    const onResult = (from, to, isValid) => {
       if ((from !== destDomain) ||
         (to !== self.domain)) {
         // Not for us
@@ -360,7 +360,7 @@ class DomainContext {
 
     let rmCbs = null
     // These are needed before for removeListener()
-    const onVerified = function (from, to, id, isValid) {
+    const onVerified = (from, to, id, isValid) => {
       from = nameprep(from)
       to = nameprep(to)
       if ((from !== fromDomain) ||
@@ -384,20 +384,20 @@ class DomainContext {
 
       rmCbs()
     }
-    const onClose = function () {
+    const onClose = () => {
       // Outgoing connection didn't work out, tell the incoming
       // connection
       inStream.send(dialbackkey.dialbackResult(self.domain, fromDomain, false))
 
       rmCbs()
     }
-    const onCloseIn = function () {
+    const onCloseIn = () => {
       // T'was the incoming stream that wanted to get
       // verified, nothing to do remains
 
       rmCbs()
     }
-    rmCbs = function () {
+    rmCbs = () => {
       outStream.removeListener('dialbackVerified', onVerified)
       outStream.removeListener('close', onClose)
       inStream.removeListener('close', onCloseIn)
@@ -415,7 +415,7 @@ class DomainContext {
 
   end() {
     debug('close connection')
-    const shutdown = function (conns) {
+    const shutdown = (conns) => {
       for (const domain in conns) {
         if (conns.hasOwnProperty(domain)) {
           conns[domain].end()

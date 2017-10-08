@@ -27,7 +27,7 @@ describe('S2S OutgoingServer', () => {
   })
 
   it('should only send one stream header after TLS connect', () => {
-    const emptyFn = function () {}
+    const emptyFn = () => {}
     outgoing = new OutgoingServer(FROM_SERVER, TO_SERVER)
     const sendStub = sinon.stub(outgoing, 'send')
 

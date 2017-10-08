@@ -190,7 +190,7 @@ class Session extends EventEmitter {
        * Authenticates a user
        * @param  Object authRequest obejct with credentials like {user: 'bob', password: 'secret'}
        */
-      this.mechanism.authenticate = function (user, cb) {
+      this.mechanism.authenticate = (user, cb) => {
         if (!user.saslmech) {
           // Attach sasl mechanism
           user.saslmech = self.mechanism.name
@@ -206,7 +206,7 @@ class Session extends EventEmitter {
         // Emit event
         self.emit('authenticate', user, cb)
       }
-      this.mechanism.success = function (user) {
+      this.mechanism.success = (user) => {
         self.emit('auth-success', user.jid)
         self.jid = user.jid
         self.authenticated = true
@@ -216,7 +216,7 @@ class Session extends EventEmitter {
           self.connection.startParser()
         }
       }
-      this.mechanism.failure = function (error) {
+      this.mechanism.failure = (error) => {
         self.sendAuthError(error)
       }
     }
@@ -283,7 +283,7 @@ class Session extends EventEmitter {
     const resourceNode = bind.getChild('resource', NS_BIND)
     const resource = resourceNode ? resourceNode.getText() : null
 
-    const sendBind = function (resource) {
+    const sendBind = (resource) => {
       if (!resource) {
         resource = self.generateId()
       }

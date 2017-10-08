@@ -8,11 +8,11 @@
  */
 exports.attach = function (stream, timeout) {
   let timer
-  const emitTimeout = function () {
+  const emitTimeout = () => {
     timer = undefined
     stream.emit('timeout')
   }
-  const updateTimer = function () {
+  const updateTimer = () => {
     if (timer) clearTimeout(timer)
     timer = setTimeout(emitTimeout, timeout)
   }
@@ -22,7 +22,7 @@ exports.attach = function (stream, timeout) {
     updateTimer()
     oldWrite.apply(this, arguments)
   }
-  const clear = function () {
+  const clear = () => {
     if (timer) clearTimeout(timer)
     if (stream.write !== oldWrite) stream.write = oldWrite
     delete stream.clearTimer

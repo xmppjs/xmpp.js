@@ -70,7 +70,7 @@ class Server extends EventEmitter {
     this.server.close.apply(this.server, arguments)
   }
 
-  end(fn = function () { }) {
+  end(fn = () => { }) {
     this.once('close', fn)
     this.close()
     this.endSessions()
