@@ -1,7 +1,7 @@
 'use strict'
 
-var util = require('util')
-var Mechanism = require('./Mechanism')
+const util = require('util')
+const Mechanism = require('./Mechanism')
 
 /**
  * @see https://developers.google.com/talk/jep_extensions/oauth
@@ -14,10 +14,10 @@ XOAuth2.prototype.name = 'X-OAUTH2'
 XOAuth2.id = 'X-OAUTH2'
 
 XOAuth2.prototype.extractSasl = function (auth) {
-  var params = auth.split('\x00')
-  var authRequest = {
+  const params = auth.split('\x00')
+  const authRequest = {
     'jid': params[1],
-    'oauth_token': params[2]
+    'oauth_token': params[2],
   }
   return authRequest
 }

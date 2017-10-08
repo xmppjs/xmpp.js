@@ -2,63 +2,63 @@
 
 /* global describe, before, after, it */
 
-var assert = require('assert')
-var XMPP = require('../..')
-var Server = XMPP.component.Server
-var Component = require('node-xmpp-component')
+const assert = require('assert')
+const XMPP = require('../..')
+const Server = XMPP.component.Server
+const Component = require('node-xmpp-component')
 
-var server = new Server({
+const server = new Server({
   autostart: false,
-  port: 5343
+  port: 5343,
 })
-server.on('connection', function (connection) {
-  connection.on('verify-component', function (jid, cb) {
+server.on('connection', (connection) => {
+  connection.on('verify-component', (jid, cb) => {
     switch (jid.toString()) {
-      case 'foo.localhost':
-        return cb(null, 'password')
-      default:
-        return cb(new Error('unknown host'))
+    case 'foo.localhost':
+      return cb(null, 'password')
+    default:
+      return cb(new Error('unknown host'))
     }
   })
 
-  connection.on('stanza', function (stanza) {
+  connection.on('stanza', (stanza) => {
     stanza.attrs.from = server.jid
     stanza.attrs.to = connection.jid
     connection.send(stanza)
   })
-  connection.on('error', function () {})
+  connection.on('error', () => {})
 })
 
-describe('component server - component', function () {
-  describe('server', function () {
-    it('should listen', function (done) {
+describe('component server - component', () => {
+  describe('server', () => {
+    it('should listen', (done) => {
       server.listen(done)
     })
   })
 
-  describe('component', function () {
-    it('should connect', function (done) {
-      var component = new Component({
+  describe('component', () => {
+    it('should connect', (done) => {
+      const component = new Component({
         jid: 'foo.localhost',
         password: 'password',
         host: 'localhost',
-        port: 5343
+        port: 5343,
       })
       component.on('error', done)
       component.on('online', done)
     })
   })
 
-  describe('component not serviced by server', function () {
-    it('should connect', function (done) {
-      var component = new Component({
+  describe('component not serviced by server', () => {
+    it('should connect', (done) => {
+      const component = new Component({
         jid: 'unknown.localhost',
         password: 'password',
         host: 'localhost',
-        port: 5343
+        port: 5343,
       })
       component.on('error', done)
-      component.on('disconnect', function (err) {
+      component.on('disconnect', (err) => {
         assert.equal(err.message, 'unknown host')
         assert.equal(err.stanza.children[0].name, 'host-unknown')
         done()
@@ -66,16 +66,16 @@ describe('component server - component', function () {
     })
   })
 
-  describe('component supplied invalid credentials', function () {
-    it('should connect', function (done) {
-      var component = new Component({
+  describe('component supplied invalid credentials', () => {
+    it('should connect', (done) => {
+      const component = new Component({
         jid: 'foo.localhost',
         password: 'notthepassword',
         host: 'localhost',
-        port: 5343
+        port: 5343,
       })
       component.on('error', done)
-      component.on('disconnect', function (err) {
+      component.on('disconnect', (err) => {
         assert.equal(err.message, 'not authorized')
         assert.equal(err.stanza.children[0].name, 'not-authorized')
         done()
@@ -83,26 +83,26 @@ describe('component server - component', function () {
     })
   })
 
-  describe('component that uses wrong namespace', function () {
-    var NS_COMPONENT = Component.prototype.NS_COMPONENT
+  describe('component that uses wrong namespace', () => {
+    const NS_COMPONENT = Component.prototype.NS_COMPONENT
 
-    before(function () {
+    before(() => {
       Component.prototype.NS_COMPONENT = 'jabber:component:wrong'
     })
 
-    after(function () {
+    after(() => {
       Component.prototype.NS_COMPONENT = NS_COMPONENT
     })
 
-    it('should error if wrong namespace', function (done) {
-      var component = new Component({
+    it('should error if wrong namespace', (done) => {
+      const component = new Component({
         jid: 'foo.localhost',
         password: 'password',
         host: 'localhost',
-        port: 5343
+        port: 5343,
       })
       component.on('error', done)
-      component.on('disconnect', function (err) {
+      component.on('disconnect', (err) => {
         assert.equal(err.message, "invalid namespace 'jabber:component:wrong'")
         assert.equal(err.stanza.children[0].name, 'invalid-namespace')
         done()

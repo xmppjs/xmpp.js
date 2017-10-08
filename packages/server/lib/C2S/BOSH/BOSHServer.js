@@ -1,31 +1,31 @@
 'use strict'
 
-var EventEmitter = require('events').EventEmitter
-var util = require('util')
-var ltx = require('node-xmpp-core').ltx
-var Socket = require('./Socket')
-var debug = require('debug')('xmpp:bosh:http')
-var http = require('http')
-var serverStop = require('../../serverStop')
+const EventEmitter = require('events').EventEmitter
+const util = require('util')
+const ltx = require('node-xmpp-core').ltx
+const Socket = require('./Socket')
+const debug = require('debug')('xmpp:bosh:http')
+const http = require('http')
+const serverStop = require('../../serverStop')
 
-var NS_HTTPBIND = 'http://jabber.org/protocol/httpbind'
-var NEXT_REQUEST_TIMEOUT = 60 * 1000
+const NS_HTTPBIND = 'http://jabber.org/protocol/httpbind'
+const NEXT_REQUEST_TIMEOUT = 60 * 1000
 
 function parseBody (stream, cb) {
-  var parser = new ltx.Parser()
-  stream.on('data', function (data) {
+  const parser = new ltx.Parser()
+  stream.on('data', (data) => {
     parser.write(data)
   })
-  stream.on('end', function () {
+  stream.on('end', () => {
     parser.end()
   })
-  stream.on('error', function (e) {
+  stream.on('error', (e) => {
     cb(e)
   })
-  parser.on('tree', function (bodyEl) {
+  parser.on('tree', (bodyEl) => {
     cb(null, bodyEl)
   })
-  parser.on('error', function (e) {
+  parser.on('error', (e) => {
     cb(e)
   })
 }
@@ -35,11 +35,11 @@ function BOSHServer (options) {
   this.options = options || {}
   this.nextRequestTimeout = this.options.nextRequestTimeout || NEXT_REQUEST_TIMEOUT
 
-  // set default cors properties
+  // Set default cors properties
   if (!this.options.cors) {
     this.options.cors = {}
   }
-  for (var i in this.corsHeaders) {
+  for (const i in this.corsHeaders) {
     if (typeof this.options.cors[i] === 'undefined') {
       this.options.cors[i] = this.corsHeaders[i]
     }
@@ -47,7 +47,7 @@ function BOSHServer (options) {
 
   this.sessions = Object.create(null)
 
-  var server = this.server = serverStop(this.options.server || http.createServer())
+  const server = this.server = serverStop(this.options.server || http.createServer())
   server.on('request', this.onRequest.bind(this))
   server.on('close', this.emit.bind(this, 'close'))
   server.on('error', this.emit.bind(this, 'error'))
@@ -60,18 +60,18 @@ BOSHServer.prototype.corsHeaders = {
   origin: '*',
   methods: [
     'POST',
-    'OPTIONS'
+    'OPTIONS',
   ],
   headers: [
     'X-Requested-With',
     'Content-Type',
-    'Content-Length'
+    'Content-Length',
   ],
-  credentials: false
+  credentials: false,
 }
 
 BOSHServer.prototype.setCorsHeader = function (req, res, options) {
-  var origin = options.origin
+  let origin = options.origin
   if (Array.isArray(options.origin)) {
     origin = options.origin.indexOf(req.headers.origin) > -1 ? req.headers.origin : undefined
   } else if (options.origin === '*') {
@@ -111,7 +111,7 @@ BOSHServer.prototype.onRequest = function (req, res) {
     this._handlePostRequest(req, res)
   } else {
     res.writeHead(405, {
-      'Allow': 'OPTIONS, POST'
+      'Allow': 'OPTIONS, POST',
     })
     res.end()
   }
@@ -119,8 +119,8 @@ BOSHServer.prototype.onRequest = function (req, res) {
 
 BOSHServer.prototype._handlePostRequest = function (req, res) {
   debug('handle POST request')
-  var self = this
-  parseBody(req, function (error, bodyEl) {
+  const self = this
+  parseBody(req, (error, bodyEl) => {
     if (error ||
       !bodyEl || !bodyEl.attrs || !bodyEl.is ||
       !bodyEl.is('body', NS_HTTPBIND)
@@ -143,7 +143,7 @@ BOSHServer.prototype._handlePostRequest = function (req, res) {
 BOSHServer.prototype._sendErrorResponse = function (res, error) {
   res.writeHead(400, { 'Content-Type': 'text/plain' })
 
-  var body
+  let body
   if (error instanceof Error) {
     body = error.message || error.stack
   } else if (typeof error === 'string') {
@@ -156,13 +156,13 @@ BOSHServer.prototype._sendErrorResponse = function (res, error) {
 }
 
 BOSHServer.prototype._useExistingSession = function (req, res, bodyEl) {
-  var session = this.sessions[bodyEl.attrs.sid]
+  const session = this.sessions[bodyEl.attrs.sid]
   if (session) {
     debug('session for sid', bodyEl.attrs.sid, 'found', process.pid)
     session.handleHTTP(
-      { req: req, res: res, bodyEl: bodyEl }
+      { req, res, bodyEl }
     )
-    res.once('close', function () {
+    res.once('close', () => {
       session.closeSocket()
     })
   } else {
@@ -177,23 +177,23 @@ BOSHServer.prototype._useExistingSession = function (req, res, bodyEl) {
 BOSHServer.prototype._createSession = function (req, res, bodyEl) {
   debug('create a new session')
 
-  var self = this
-  var session = new Socket({
-    req: req,
-    res: res,
-    bodyEl: bodyEl,
-    nextRequestTimeout: this.nextRequestTimeout
+  const self = this
+  const session = new Socket({
+    req,
+    res,
+    bodyEl,
+    nextRequestTimeout: this.nextRequestTimeout,
   })
   this.sessions[session.sid] = session
 
   // Hook for destruction
-  session.once('close', function () {
+  session.once('close', () => {
     delete self.sessions[session.sid]
   })
 
   res.boshAttrs = {'xmpp:restartlogic': true}
 
-  // emit new connection
+  // Emit new connection
   this.emit('connection', session)
 }
 

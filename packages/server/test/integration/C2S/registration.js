@@ -2,35 +2,35 @@
 
 /* global describe, it, afterEach */
 
-var XMPP = require('../../..')
-var Server = XMPP.C2S.TCPServer
-var Plain = XMPP.auth.Plain
-var JID = XMPP.JID
-var Client = require('node-xmpp-client')
+const XMPP = require('../../..')
+const Server = XMPP.C2S.TCPServer
+const Plain = XMPP.auth.Plain
+const JID = XMPP.JID
+const Client = require('node-xmpp-client')
 
-var port = 5223
-var user = {
+const port = 5223
+const user = {
   jid: new JID('me@localhost/res'),
-  password: 'secret'
+  password: 'secret',
 }
 
 function startServer (action) {
-  var server = new Server({
-    port: port,
-    domain: 'localhost'
+  const server = new Server({
+    port,
+    domain: 'localhost',
   })
 
-  server.on('connect', function (stream) {
-    stream.on('authenticate', function (opts, cb) {
+  server.on('connect', (stream) => {
+    stream.on('authenticate', (opts, cb) => {
       cb(null, opts)
     })
-    stream.on('register', function (data, cb) {
+    stream.on('register', (data, cb) => {
       if (action === 'fail') {
         cb({ // eslint-disable-line
           code: 503,
           type: 'cancel',
           condition: 'service-unavailable',
-          text: 'Test error'
+          text: 'Test error',
         }, null)
       } else {
         cb(null)
@@ -42,36 +42,36 @@ function startServer (action) {
 }
 
 function startClient (cb) {
-  var client = new Client({
+  const client = new Client({
     host: 'localhost',
-    port: port,
+    port,
     jid: user.jid,
     password: user.password,
     preferred: Plain.id,
-    register: true
+    register: true,
   })
 
-  client.on('online', function () {
+  client.on('online', () => {
     cb(null)
   })
-  client.on('error', function (error) {
+  client.on('error', (error) => {
     cb(error)
   })
 
   return client
 }
 
-describe('Stream register', function () {
-  var server, client
+describe('Stream register', () => {
+  let server, client
 
-  afterEach(function (done) {
+  afterEach((done) => {
     client.end()
     server.end(done)
   })
 
-  it('Should register', function (done) {
+  it('Should register', (done) => {
     server = startServer('unmodified')
-    client = startClient(function (error) {
+    client = startClient((error) => {
       if (error) {
         done(error)
       } else {
@@ -80,9 +80,9 @@ describe('Stream register', function () {
     })
   })
 
-  it('Should not register', function (done) {
+  it('Should not register', (done) => {
     server = startServer('fail')
-    client = startClient(function (error) {
+    client = startClient((error) => {
       if (!error) {
         done(new Error('No error'))
       } else {

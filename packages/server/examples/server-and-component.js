@@ -1,36 +1,36 @@
 'use strict'
 
-var xmpp = require('../index')
-var server = null
-var Component = require('node-xmpp-component')
+const xmpp = require('../index')
+let server = null
+const Component = require('node-xmpp-component')
 
-var startServer = function (done) {
+const startServer = function (done) {
   // Sets up the server.
   server = new xmpp.ComponentServer({
-    port: 5347
+    port: 5347,
   })
-  server.on('connect', function (component) {
+  server.on('connect', (component) => {
     // Component auth is two step:
     // first, verify that the component is allowed to connect at all,
     // then verify the password is correct
-    component.on('verify-component', function (jid, cb) {
+    component.on('verify-component', (jid, cb) => {
       if (jid.toString() === 'component.example.com') {
         return cb(null, 'ThePassword')
       }
       return cb('Unauthorized') // eslint-disable-line
     })
-    component.on('online', function () {
+    component.on('online', () => {
       console.log('ONLINE')
     })
-    component.on('stanza', function (stanza) {
+    component.on('stanza', (stanza) => {
       console.log('STANZA', stanza.root().toString())
       // Here you could, for example, dispatch this to an existing C2S Server
-      var from = stanza.attrs.from
+      const from = stanza.attrs.from
       stanza.attrs.from = stanza.attrs.to
       stanza.attrs.to = from
       component.send(stanza)
     })
-    component.on('disconnect', function () {
+    component.on('disconnect', () => {
       console.log('DISCONNECT')
     })
   })
@@ -38,24 +38,24 @@ var startServer = function (done) {
   server.on('listening', done)
 }
 
-startServer(function () {
-  var component = new Component({
+startServer(() => {
+  const component = new Component({
     jid: 'component.example.com',
     host: 'localhost',
     port: 5347,
-    password: 'ThePassword'
+    password: 'ThePassword',
   })
-  component.on('online', function () {
+  component.on('online', () => {
     console.log('component is online')
 
-    var stanza = new xmpp.Stanza('message', {
+    const stanza = new xmpp.Stanza('message', {
       to: 'testguy@example.com',
-      from: 'fake@example.com'
+      from: 'fake@example.com',
     }).c('body').t('HelloWorld')
 
     component.send(stanza)
   })
-  component.on('stanza', function (stanza) {
+  component.on('stanza', (stanza) => {
     console.log('component', 'received stanza', stanza.root().toString())
   })
 })

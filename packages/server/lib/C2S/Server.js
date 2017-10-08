@@ -1,12 +1,12 @@
 'use strict'
 
-var Server = require('../Server')
-var util = require('util')
-var Plain = require('./authentication/Plain')
-var Session = require('./Session')
+const Server = require('../Server')
+const util = require('util')
+const Plain = require('./authentication/Plain')
+const Session = require('./Session')
 
 /**
- * params:
+ * Params:
  *   options : port on which to listen to C2S connections
  *   options.port : xmpp tcp socket port
  *   options.domain : domain of xmpp server
@@ -24,7 +24,7 @@ function C2SServer (options) {
 
   this.availableSaslMechanisms = [Plain]
 
-  // don't allow anybody by default when using client cert auth
+  // Don't allow anybody by default when using client cert auth
   if ((this.options.requestCert) &&
     (this.options.rejectUnauthorized !== false)) {
     this.options.rejectUnauthorized = true
@@ -36,35 +36,35 @@ util.inherits(C2SServer, Server)
 C2SServer.prototype.Session = Session
 
 /**
- * returns all registered sasl mechanisms
+ * Returns all registered sasl mechanisms
  */
 C2SServer.prototype.getSaslMechanisms = function () {
   return this.availableSaslMechanisms
 }
 
 /**
- * removes all registered sasl mechanisms
+ * Removes all registered sasl mechanisms
  */
 C2SServer.prototype.clearSaslMechanism = function () {
   this.availableSaslMechanisms = []
 }
 
 /**
- * register a new sasl mechanism
+ * Register a new sasl mechanism
  */
 C2SServer.prototype.registerSaslMechanism = function (method) {
-  // check if method is registered
+  // Check if method is registered
   if (this.availableSaslMechanisms.indexOf(method) === -1) {
     this.availableSaslMechanisms.push(method)
   }
 }
 
 /**
- * unregister an existing sasl mechanism
+ * Unregister an existing sasl mechanism
  */
 C2SServer.prototype.unregisterSaslMechanism = function (method) {
-  // check if method is registered
-  var index = this.availableSaslMechanisms.indexOf(method)
+  // Check if method is registered
+  const index = this.availableSaslMechanisms.indexOf(method)
   if (index >= 0) {
     this.availableSaslMechanisms.splice(index, 1)
   }

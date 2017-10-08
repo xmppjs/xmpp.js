@@ -1,10 +1,10 @@
 'use strict'
 
-var util = require('util')
-var Server = require('./BOSHServer')
-var C2SServer = require('../Server')
+const util = require('util')
+const Server = require('./BOSHServer')
+const C2SServer = require('../Server')
 
-var BOSH_PORT = 5280
+const BOSH_PORT = 5280
 
 /**
  * [BOSHServer description]
@@ -17,11 +17,11 @@ var BOSH_PORT = 5280
  * - https://example.com:5281/http-bind
  */
 function BOSHServer (opts) {
-  var options = opts || {}
-  var server = this.server = new Server({
+  const options = opts || {}
+  const server = this.server = new Server({
     server: options.server,
     cors: options.cors,
-    nextRequestTimeout: options.nextRequestTimeout
+    nextRequestTimeout: options.nextRequestTimeout,
   })
   server.on('close', this.emit.bind(this, 'close'))
   server.on('error', this.emit.bind(this, 'error'))

@@ -1,16 +1,16 @@
 'use strict'
 
-var util = require('util')
-var tls = require('tls')
-var net = require('net')
-var fs = require('fs')
-var C2SServer = require('../Server')
-var serverStop = require('../../serverStop')
+const util = require('util')
+const tls = require('tls')
+const net = require('net')
+const fs = require('fs')
+const C2SServer = require('../Server')
+const serverStop = require('../../serverStop')
 
-var TCP_PORT = 5222
+const TCP_PORT = 5222
 
 /**
- * params:
+ * Params:
  *   options : port on which to listen to C2S connections
  *   options.port : xmpp tcp socket port
  *   options.domain : domain of xmpp server
@@ -24,7 +24,7 @@ var TCP_PORT = 5222
  *   options.tls.certPath : path to certificate
  */
 function TCPServer (options) {
-  var server = this.server = serverStop((options && options.server) || net.createServer())
+  const server = this.server = serverStop((options && options.server) || net.createServer())
   server.on('connection', this.acceptConnection.bind(this))
   server.on('close', this.emit.bind(this, 'close'))
   server.on('error', this.emit.bind(this, 'error'))
@@ -40,7 +40,7 @@ TCPServer.prototype.DEFAULT_PORT = TCP_PORT
 
 TCPServer.prototype._setupTls = function () {
   if (!this.options.tls) return
-  var details = this.options.tls
+  const details = this.options.tls
   details.key = details.key || fs.readFileSync(details.keyPath, 'ascii')
   details.cert = details.cert || fs.readFileSync(details.certPath, 'ascii')
   this.credentials = tls.createSecureContext(details)

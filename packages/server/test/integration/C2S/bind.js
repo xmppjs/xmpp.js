@@ -2,34 +2,34 @@
 
 /* global describe, it, afterEach */
 
-var XMPP = require('../../..')
-var Server = XMPP.C2S.TCPServer
-var Plain = XMPP.auth.Plain
-var JID = XMPP.JID
-var Client = require('node-xmpp-client')
+const XMPP = require('../../..')
+const Server = XMPP.C2S.TCPServer
+const Plain = XMPP.auth.Plain
+const JID = XMPP.JID
+const Client = require('node-xmpp-client')
 
-var port = 5225
-var user = {
+const port = 5225
+const user = {
   jid: new JID('me@localhost/res'),
-  password: 'secret'
+  password: 'secret',
 }
 
 function startServer (action) {
-  var server = new Server({
-    port: port,
-    domain: 'localhost'
+  const server = new Server({
+    port,
+    domain: 'localhost',
   })
 
-  server.on('connect', function (stream) {
-    stream.on('authenticate', function (opts, cb) {
+  server.on('connect', (stream) => {
+    stream.on('authenticate', (opts, cb) => {
       cb(null, opts)
     })
-    stream.on('bind', function (resource, cb) {
+    stream.on('bind', (resource, cb) => {
       if (action === 'fail') {
         cb({ // eslint-disable-line
           type: 'cancel',
           condition: 'not-allowed',
-          text: 'Test error'
+          text: 'Test error',
         }, null)
       } else {
         cb(null, action === 'modified' ? resource + '-' + 'mod' : resource)
@@ -41,35 +41,35 @@ function startServer (action) {
 }
 
 function startClient (cb) {
-  var client = new Client({
+  const client = new Client({
     host: 'localhost',
     jid: user.jid,
-    port: port,
+    port,
     password: user.password,
-    preferred: Plain.id
+    preferred: Plain.id,
   })
 
-  client.on('online', function (data) {
+  client.on('online', (data) => {
     cb(null, data.jid.resource)
   })
-  client.on('error', function (error) {
+  client.on('error', (error) => {
     cb(error, null)
   })
 
   return client
 }
 
-describe('Stream resource bind', function () {
-  var server, client
+describe('Stream resource bind', () => {
+  let server, client
 
-  afterEach(function (done) {
+  afterEach((done) => {
     client.end()
     server.end(done)
   })
 
-  it('Should bind unmodified', function (done) {
+  it('Should bind unmodified', (done) => {
     server = startServer('unmodified')
-    client = startClient(function (error, resource) {
+    client = startClient((error, resource) => {
       if (error) {
         done(error)
       } else if (resource !== user.jid.resource) {
@@ -80,9 +80,9 @@ describe('Stream resource bind', function () {
     })
   })
 
-  it('Should bind modified', function (done) {
+  it('Should bind modified', (done) => {
     server = startServer('modified')
-    client = startClient(function (error, resource) {
+    client = startClient((error, resource) => {
       if (error) {
         done(error)
       } else if (resource !== user.jid.resource + '-' + 'mod') {
@@ -93,9 +93,9 @@ describe('Stream resource bind', function () {
     })
   })
 
-  it('Should not bind', function (done) {
+  it('Should not bind', (done) => {
     server = startServer('fail')
-    client = startClient(function (error) {
+    client = startClient((error) => {
       if (!error) {
         done(new Error('No error'))
       } else {

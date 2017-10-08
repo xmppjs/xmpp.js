@@ -2,46 +2,46 @@
 
 /* global describe, it */
 
-var XMPP = require('../../..')
-var Server = XMPP.C2S.BOSHServer
-var Client = require('node-xmpp-client')
+const XMPP = require('../../..')
+const Server = XMPP.C2S.BOSHServer
+const Client = require('node-xmpp-client')
 
-var server = new Server({
+const server = new Server({
   autostart: false,
-  port: 5285
+  port: 5285,
 })
-server.on('connection', function (connection) {
-  connection.on('authenticate', function (opts, cb) {
+server.on('connection', (connection) => {
+  connection.on('authenticate', (opts, cb) => {
     cb(null, opts)
   })
 
-  connection.on('stanza', function (stanza) {
+  connection.on('stanza', (stanza) => {
     stanza.attrs.from = server.jid
     stanza.attrs.to = connection.jid
     connection.send(stanza)
   })
 })
 
-describe('C2S BOSH server client', function () {
-  describe('server', function () {
-    it('should listen', function (done) {
+describe('C2S BOSH server client', () => {
+  describe('server', () => {
+    it('should listen', (done) => {
       server.listen(done)
     })
   })
 
-  describe('client', function () {
-    var client
+  describe('client', () => {
+    let client
 
-    it('should connect', function (done) {
+    it('should connect', (done) => {
       client = new Client({
         jid: 'foo@localhost',
         password: 'password',
         bosh: {
-          url: 'http://localhost:5285/http-bind'
-        }
+          url: 'http://localhost:5285/http-bind',
+        },
       })
       client.once('error', done)
-      client.on('online', function () {
+      client.on('online', () => {
         done()
       })
     })

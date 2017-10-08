@@ -1,24 +1,24 @@
 'use strict'
 
-var util = require('util')
-var Element = require('node-xmpp-core').Element
-var hat = require('hat')
-var debug = require('debug')('xmpp:s2s:inserver')
-var Server = require('./server')
+const util = require('util')
+const Element = require('node-xmpp-core').Element
+const hat = require('hat')
+const debug = require('debug')('xmpp:s2s:inserver')
+const Server = require('./server')
 
-var NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl'
+const NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl'
 
 /**
  * Accepts incomming server-to-server connections
  */
-var IncomingServer = function (opts) {
+const IncomingServer = function (opts) {
   debug('start a new incoming server connection')
 
   opts = opts || {}
 
   this.streamId = opts.streamId || hat(opts.sidBits, opts.sidBitsBase)
 
-  var streamAttrs = {}
+  const streamAttrs = {}
   streamAttrs.version = '1.0'
   streamAttrs.id = this.streamId
   opts.streamAttrs = streamAttrs
@@ -39,7 +39,7 @@ IncomingServer.NS_XMPP_SASL = NS_XMPP_SASL
 IncomingServer.prototype.handleTlsNegotiation = function (stanza) {
   if (stanza.is('starttls', this.NS_XMPP_TLS)) {
     this.send(new Element('proceed', {
-      xmlns: this.NS_XMPP_TLS
+      xmlns: this.NS_XMPP_TLS,
     }))
     this.setSecure(this.credentials, true, this.fromDomain)
     return true
@@ -47,26 +47,26 @@ IncomingServer.prototype.handleTlsNegotiation = function (stanza) {
   return false
 }
 
-// overwrite onStanza from Server
+// Overwrite onStanza from Server
 IncomingServer.prototype.onStanza = function (stanza) {
-  var handled = [
+  const handled = [
     Server.prototype.onStanza,
     this.handleTlsNegotiation,
     this.handleDialback,
-    this.handleSASLExternal
+    this.handleSASLExternal,
   ].some(function (stanzaHandler) {
     return stanzaHandler.call(this, stanza)
   }, this)
 
-  // emit stanza if it is not handled
+  // Emit stanza if it is not handled
   if (!handled) {
     this.emit('stanza', stanza)
   }
 }
 
 IncomingServer.prototype.verifyCertificate = function () {
-  // authorized ?
-  var socket = this.socket
+  // Authorized ?
+  const socket = this.socket
   if (!socket.authorized) {
     debug('certificate authorization failed: ' + socket.authorizationError)
     return this.sendNotAuthorizedAndClose()
@@ -78,7 +78,7 @@ IncomingServer.prototype.verifyCertificate = function () {
 
 IncomingServer.prototype.onSASLAuth = function () {
   this.send(new Element('success', {
-    xmlns: NS_XMPP_SASL
+    xmlns: NS_XMPP_SASL,
   }))
   this.streamStart()
 }
@@ -92,15 +92,15 @@ function isSASLExternal (stanza) {
 }
 
 IncomingServer.prototype.handleSASLExternal = function (stanza) {
-  var self = this
+  const self = this
   if (this.isSecure && isSASLExternal(stanza)) {
     debug('Auth using SASL EXTERNAL')
 
-    var certificate = this.socket.getPeerCertificate()
+    const certificate = this.socket.getPeerCertificate()
 
     if (isEmptyCertificate(certificate)) {
       debug('Empty certificate. Renegotiate for certificate.')
-      this.socket.renegotiate({requestCert: true}, function (error) {
+      this.socket.renegotiate({requestCert: true}, (error) => {
         if (error) {
           return self.error('internal-server-error', error)
         }
@@ -116,7 +116,7 @@ IncomingServer.prototype.handleSASLExternal = function (stanza) {
 
 IncomingServer.prototype.sendNotAuthorizedAndClose = function () {
   this.send(new Element('failure', {
-    xmlns: NS_XMPP_SASL
+    xmlns: NS_XMPP_SASL,
   }).c('not-authorized').up()
   )
   this.closeStream()
@@ -125,17 +125,17 @@ IncomingServer.prototype.sendNotAuthorizedAndClose = function () {
 
 IncomingServer.prototype.sendFeatures = function () {
   debug('send features')
-  var features = new Element('stream:features')
+  const features = new Element('stream:features')
   // TLS
   if (this.opts && this.opts.tls && !this.isSecure) {
     features
       .c('starttls', {
-        xmlns: this.NS_XMPP_TLS
+        xmlns: this.NS_XMPP_TLS,
       })
       .c('required')
   } else if (this.isSecure && this.secureDomain && !this.isAuthed) {
     features.c('mechanisms', {
-      xmlns: NS_XMPP_SASL
+      xmlns: NS_XMPP_SASL,
     })
       .c('mechanism').t('EXTERNAL')
   }

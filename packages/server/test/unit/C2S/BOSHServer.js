@@ -2,28 +2,28 @@
 
 /* global describe, it */
 
-var Server = require('../../../lib/C2S/BOSH/Server')
-var BOSHServer = require('../../../lib/C2S/BOSH/BOSHServer')
-var C2SServer = require('../../../lib/C2S/Server')
-var assert = require('assert')
-var http = require('http')
+const Server = require('../../../lib/C2S/BOSH/Server')
+const BOSHServer = require('../../../lib/C2S/BOSH/BOSHServer')
+const C2SServer = require('../../../lib/C2S/Server')
+const assert = require('assert')
+const http = require('http')
 
-describe('BOSHServer', function () {
-  it('is an instanceof C2SServer', function () {
+describe('BOSHServer', () => {
+  it('is an instanceof C2SServer', () => {
     assert(new Server() instanceof C2SServer)
   })
-  describe('server property', function () {
-    it('is a BOSHServer instance', function () {
-      var server = new Server()
+  describe('server property', () => {
+    it('is a BOSHServer instance', () => {
+      const server = new Server()
       assert(server.server instanceof BOSHServer)
     })
-    it('uses the server provided as an option', function () {
-      var httpServer = http.createServer()
-      var server = new Server({server: httpServer})
+    it('uses the server provided as an option', () => {
+      const httpServer = http.createServer()
+      const server = new Server({server: httpServer})
       assert.equal(server.server.server, httpServer)
     })
-    it('defaults to create its own http server', function () {
-      var server = new Server()
+    it('defaults to create its own http server', () => {
+      const server = new Server()
       assert(server.server.server instanceof http.Server)
     })
   })

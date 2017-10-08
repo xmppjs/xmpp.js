@@ -1,20 +1,20 @@
 'use strict'
 
-var util = require('util')
-var net = require('net')
-var Server = require('../Server')
-var Session = require('./Session')
+const util = require('util')
+const net = require('net')
+const Server = require('../Server')
+const Session = require('./Session')
 
-var COMPONENT_PORT = 5347
+const COMPONENT_PORT = 5347
 
 /**
- * params:
+ * Params:
  *   options : port on which to listen to component connections
  *   options.port : xmpp tcp socket port
  *   options.autostart : if we start listening at given port
  */
 function ComponentServer (options) {
-  var server = this.server = ((options && options.server) || net.createServer())
+  const server = this.server = ((options && options.server) || net.createServer())
   server.on('connection', this.acceptConnection.bind(this))
   server.on('close', this.emit.bind(this, 'close'))
   server.on('error', this.emit.bind(this, 'error'))

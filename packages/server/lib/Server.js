@@ -1,7 +1,7 @@
 'use strict'
 
-var EventEmitter = require('events').EventEmitter
-var util = require('util')
+const EventEmitter = require('events').EventEmitter
+const util = require('util')
 
 function Server (options) {
   EventEmitter.call(this)
@@ -13,7 +13,7 @@ function Server (options) {
 
   this.on('connection', this.onConnection.bind(this))
 
-  // node-xmpp events
+  // Node-xmpp events
   this.on('listening', this.emit.bind(this, 'online'))
   this.on('close', this.emit.bind(this, 'offline'))
   this.on('close', this.emit.bind(this, 'shutdown'))
@@ -31,7 +31,7 @@ util.inherits(Server, EventEmitter)
 Server.prototype.onConnection = function (connection) {
   this.connections.add(connection)
   connection.once('close', this.onConnectionClosed.bind(this, connection))
-  // backward compatibility FIXME remove me
+  // Backward compatibility FIXME remove me
   this.emit('connect', connection)
 }
 
@@ -41,14 +41,14 @@ Server.prototype.onConnectionClosed = function (connection) {
 }
 
 Server.prototype.acceptConnection = function (socket) {
-  var session = new this.Session({
+  const session = new this.Session({
     rejectUnauthorized: this.options.rejectUnauthorized,
     requestCert: this.options.requestCert,
-    socket: socket,
+    socket,
     server: this,
     streamOpen: this.options.streamOpen,
     streamClose: this.options.streamClose,
-    streamAttrs: this.options.streamAttrs
+    streamAttrs: this.options.streamAttrs,
   })
   socket.session = session
   this.emit('connection', session)
@@ -91,8 +91,8 @@ Server.prototype.shutdown = Server.prototype.end
 
 // FIXME this should be async, data might not be drained
 Server.prototype.endSessions = function () {
-  var self = this
-  this.connections.forEach(function (session) {
+  const self = this
+  this.connections.forEach((session) => {
     session.removeListener('close', self.onConnectionClosed)
     session.end()
     self.connections.delete(session)

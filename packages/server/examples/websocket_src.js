@@ -1,30 +1,30 @@
 'use strict'
 
-var xmpp = require('../index')
-var c2s = null
-var debug = require('debug')('server-and-client')
-var Client = require('node-xmpp-client')
-var Stanza = require('node-xmpp-core').Stanza
+const xmpp = require('../index')
+let c2s = null
+const debug = require('debug')('server-and-client')
+const Client = require('node-xmpp-client')
+const Stanza = require('node-xmpp-core').Stanza
 
-var startServer = function (done) {
+const startServer = function (done) {
   // Sets up the server.
   c2s = new xmpp.WebSocketServer({
     port: 5280,
-    domain: 'localhost'
+    domain: 'localhost',
   })
 
   // On Connect event. When a client connects.
-  c2s.on('connect', function (client) {
+  c2s.on('connect', (client) => {
     // That's the way you add mods to a given server.
 
     // Allows the developer to register the jid against anything they want
-    client.on('register', function (opts, cb) {
+    client.on('register', (opts, cb) => {
       debug('REGISTER')
       cb(true) // eslint-disable-line
     })
 
     // Allows the developer to authenticate users against anything they want.
-    client.on('authenticate', function (opts, cb) {
+    client.on('authenticate', (opts, cb) => {
       debug('AUTH ' + opts.jid + ' -> ' + opts.password)
       if (opts.password === 'secret') {
         debug('SUCCESS')
@@ -34,21 +34,21 @@ var startServer = function (done) {
       cb(false) // eslint-disable-line
     })
 
-    client.on('online', function () {
+    client.on('online', () => {
       debug('ONLINE')
     })
 
     // Stanza handling
-    client.on('stanza', function (stanza) {
+    client.on('stanza', (stanza) => {
       debug('STANZA', stanza.root().toString())
-      var from = stanza.attrs.from
+      const from = stanza.attrs.from
       stanza.attrs.from = stanza.attrs.to
       stanza.attrs.to = from
       client.send(stanza)
     })
 
     // On Disconnect event. When a client disconnects
-    client.on('disconnect', function () {
+    client.on('disconnect', () => {
       debug('DISCONNECT')
     })
   })
@@ -56,27 +56,27 @@ var startServer = function (done) {
   if (done) done()
 }
 
-startServer(function () {
-  var client1 = new Client({
+startServer(() => {
+  const client1 = new Client({
     websocket: { url: 'ws://localhost:5280' },
     jid: 'client1@localhost',
-    password: 'secret'
+    password: 'secret',
   })
-  client1.on('online', function (data) {
+  client1.on('online', (data) => {
     debug('client1 is online')
     debug('client1', data)
     client1.send(new Stanza('message', { to: 'localhost' }).c('body').t('HelloWorld'))
   })
-  client1.on('stanza', function (stanza) {
+  client1.on('stanza', (stanza) => {
     debug('client1', 'received stanza', stanza.root().toString())
   })
 
-  var client2 = new Client({
+  const client2 = new Client({
     websocket: { url: 'ws://localhost:5280' },
     jid: 'client2@localhost',
-    password: 'notsecret'
+    password: 'notsecret',
   })
-  client2.on('error', function (error) {
+  client2.on('error', (error) => {
     debug('client2 auth failed')
     debug('client2', error)
   })

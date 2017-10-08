@@ -6,20 +6,20 @@
  * @param {Number} rateLimit B/ms or KB/s
  */
 exports.attach = function (stream, rateLimit) {
-  var timer
-  // makes it readjustable after attachment
+  let timer
+  // Makes it readjustable after attachment
   stream.rateLimit = rateLimit
-  stream.on('data', function (data) {
+  stream.on('data', (data) => {
     if (timer) clearTimeout(timer)
     stream.pause()
-    var sleep = Math.floor(data.length / stream.rateLimit)
-    timer = setTimeout(function () {
+    const sleep = Math.floor(data.length / stream.rateLimit)
+    timer = setTimeout(() => {
       timer = undefined
       stream.resume()
     }, sleep)
   })
-  stream.on('close', function () {
-    // don't let the last timeout inhibit node shutdown
+  stream.on('close', () => {
+    // Don't let the last timeout inhibit node shutdown
     if (timer) clearTimeout(timer)
   })
 }

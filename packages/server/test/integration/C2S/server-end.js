@@ -2,64 +2,64 @@
 
 /* global describe, it, afterEach */
 
-var assert = require('assert')
-var TCPServer = require('../../../lib/C2S/TCP/Server')
-var WebSocketServer = require('../../../lib/C2S/WebSocket/Server')
-var BOSHServer = require('../../../lib/C2S/BOSH/Server')
-var Client = require('node-xmpp-client')
+const assert = require('assert')
+const TCPServer = require('../../../lib/C2S/TCP/Server')
+const WebSocketServer = require('../../../lib/C2S/WebSocket/Server')
+const BOSHServer = require('../../../lib/C2S/BOSH/Server')
+const Client = require('node-xmpp-client')
 
-var PORT = 6767
+const PORT = 6767
 
 function makeServer (Server) {
-  var server = new Server({port: PORT, autostart: false})
-  server.on('connection', function (connection) {
-    connection.on('authenticate', function (creds, cb) {
+  const server = new Server({port: PORT, autostart: false})
+  server.on('connection', (connection) => {
+    connection.on('authenticate', (creds, cb) => {
       cb(null, creds)
     })
   })
   return server
 }
 
-describe('server end', function () {
-  var server
-  var client
+describe('server end', () => {
+  let server
+  let client
 
-  describe('TCP server', function () {
-    afterEach(function () {
+  describe('TCP server', () => {
+    afterEach(() => {
       client.end()
       client = null
     })
 
-    it('disconnects all clients', function (done) {
+    it('disconnects all clients', (done) => {
       server = makeServer(TCPServer)
-      server.listen(function (err) {
+      server.listen((err) => {
         if (err) return done(err)
         client = new Client({
           jid: 'TCP@localhost',
           password: 'TCP',
           port: PORT,
-          host: 'localhost'
+          host: 'localhost',
         })
-        client.on('online', function () {
-          client.on('error', function () { })
+        client.on('online', () => {
+          client.on('error', () => { })
           server.end()
           client.on('close', done)
         })
       })
     })
 
-    it('closes the port', function (done) {
+    it('closes the port', (done) => {
       server = makeServer(TCPServer)
-      server.listen(function (err) {
+      server.listen((err) => {
         if (err) return done(err)
         server.end()
         client = new Client({
           jid: 'TCP@localhost',
           password: 'TCP',
           port: PORT,
-          host: 'localhost'
+          host: 'localhost',
         })
-        client.on('error', function (err) {
+        client.on('error', (err) => {
           assert.equal(err.errno, 'ECONNREFUSED')
           done()
         })
@@ -67,37 +67,37 @@ describe('server end', function () {
     })
   })
 
-  describe('WebSocket server', function () {
-    it('disconnects all clients', function (done) {
+  describe('WebSocket server', () => {
+    it('disconnects all clients', (done) => {
       server = makeServer(WebSocketServer)
-      server.listen(function (err) {
+      server.listen((err) => {
         if (err) return done(err)
         client = new Client({
           jid: 'WebSocket@localhost',
           password: 'WebSocket',
           websocket: {
-            url: 'ws://localhost:' + PORT
-          }
+            url: 'ws://localhost:' + PORT,
+          },
         })
-        client.on('online', function () {
+        client.on('online', () => {
           server.end()
           client.on('close', done)
         })
       })
     })
-    it('closes the port', function (done) {
+    it('closes the port', (done) => {
       server = makeServer(TCPServer)
-      server.listen(function (err) {
+      server.listen((err) => {
         if (err) return done(err)
         server.end()
         client = new Client({
           jid: 'WebSocket@localhost',
           password: 'WebSocket',
           websocket: {
-            url: 'ws://localhost:' + PORT
-          }
+            url: 'ws://localhost:' + PORT,
+          },
         })
-        client.on('error', function (err) {
+        client.on('error', (err) => {
           assert(err.message.indexOf('ECONNREFUSED') !== -1)
           done()
         })
@@ -105,38 +105,38 @@ describe('server end', function () {
     })
   })
 
-  describe('BOSH server', function () {
-    it('disconnects all clients', function (done) {
+  describe('BOSH server', () => {
+    it('disconnects all clients', (done) => {
       server = makeServer(BOSHServer)
-      server.listen(function (err) {
+      server.listen((err) => {
         if (err) return done(err)
         client = new Client({
           jid: 'BOSH@localhost',
           password: 'BOSH',
           bosh: {
-            url: 'http://localhost:' + PORT + '/http-bind'
-          }
+            url: 'http://localhost:' + PORT + '/http-bind',
+          },
         })
-        client.on('online', function () {
+        client.on('online', () => {
           server.end()
           client.on('close', done)
           client.end() // FIXME client tries to reconnect
         })
       })
     })
-    it('closes the port', function (done) {
+    it('closes the port', (done) => {
       server = makeServer(BOSHServer)
-      server.listen(function (err) {
+      server.listen((err) => {
         if (err) return done(err)
         server.end()
         client = new Client({
           jid: 'WebSocket@localhost',
           password: 'WebSocket',
           bosh: {
-            url: 'http://localhost:' + PORT
-          }
+            url: 'http://localhost:' + PORT,
+          },
         })
-        client.on('error', function (err) {
+        client.on('error', (err) => {
           assert(err.message.indexOf('ECONNREFUSED') !== -1)
           done()
         })

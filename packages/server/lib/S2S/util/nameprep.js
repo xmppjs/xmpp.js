@@ -1,10 +1,10 @@
 'use strict'
 
-var nameprep
+let nameprep
 try {
-  var StringPrep = require('node-stringprep').StringPrep
-  var c = function (n) {
-    var p = new StringPrep(n)
+  const StringPrep = require('node-stringprep').StringPrep
+  const c = function (n) {
+    const p = new StringPrep(n)
     return function (s) {
       return p.prepare(s)
     }

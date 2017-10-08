@@ -1,8 +1,8 @@
 'use strict'
 
-var crypto = require('crypto')
-var util = require('util')
-var Mechanism = require('./Mechanism')
+const crypto = require('crypto')
+const util = require('util')
+const Mechanism = require('./Mechanism')
 
 function Anonymous () {}
 
@@ -12,7 +12,7 @@ Anonymous.prototype.name = 'ANONYMOUS'
 Anonymous.id = 'ANONYMOUS'
 
 Anonymous.prototype.extractSasl = function () {
-  var user = crypto.randomBytes(16).toString('hex')
+  const user = crypto.randomBytes(16).toString('hex')
   return { username: user }
 }
 

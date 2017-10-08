@@ -1,21 +1,21 @@
 'use strict'
 
-var EventEmitter = require('events').EventEmitter
-var util = require('util')
-var core = require('node-xmpp-core')
-var Element = core.Element
-var JID = core.JID
-var IQ = core.IQ
-var Connection = core.Connection
-var rack = require('hat').rack
+const EventEmitter = require('events').EventEmitter
+const util = require('util')
+const core = require('node-xmpp-core')
+const Element = core.Element
+const JID = core.JID
+const IQ = core.IQ
+const Connection = core.Connection
+const rack = require('hat').rack
 
-var NS_CLIENT = 'jabber:client'
-var NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl'
-var NS_REGISTER = 'jabber:iq:register'
-var NS_SESSION = 'urn:ietf:params:xml:ns:xmpp-session'
-var NS_BIND = 'urn:ietf:params:xml:ns:xmpp-bind'
-var NS_STANZAS = 'urn:ietf:params:xml:ns:xmpp-stanzas'
-var NS_STREAMS = 'http://etherx.jabber.org/streams'
+const NS_CLIENT = 'jabber:client'
+const NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl'
+const NS_REGISTER = 'jabber:iq:register'
+const NS_SESSION = 'urn:ietf:params:xml:ns:xmpp-session'
+const NS_BIND = 'urn:ietf:params:xml:ns:xmpp-bind'
+const NS_STANZAS = 'urn:ietf:params:xml:ns:xmpp-stanzas'
+const NS_STREAMS = 'http://etherx.jabber.org/streams'
 
 function Session (opts) {
   this.authenticated = false
@@ -28,7 +28,7 @@ function Session (opts) {
     reconnect: false,
     streamOpen: opts.streamOpen,
     streamClose: opts.streamClose,
-    streamAttrs: opts.streamAttrs
+    streamAttrs: opts.streamAttrs,
   })
   this._addConnectionListeners()
   if (this.connection.xmlns) {
@@ -56,7 +56,7 @@ Session.prototype._addConnectionListeners = function (con) {
   con.on('reconnect', this.emit.bind(this, 'reconnect'))
   con.on('disconnect', this.emit.bind(this, 'disconnect'))
   con.on('disconnect', this.emit.bind(this, 'offline'))
-  con.on('streamStart', function (attrs) {
+  con.on('streamStart', (attrs) => {
     if (attrs.to === undefined) {
       this.connection.error('host-unknown', "'to' attribute missing")
     } else if (attrs.to === '') {
@@ -66,7 +66,7 @@ Session.prototype._addConnectionListeners = function (con) {
       con.streamAttrs.from = attrs.to
       this.startStream()
     }
-  }.bind(this))
+  })
 }
 
 Session.prototype.send = function (stanza) {
@@ -102,12 +102,12 @@ Session.prototype.decode64 = function (encoded) {
 }
 
 Session.prototype.sendFeatures = function () {
-  // trilian requires features to be prefixed https://github.com/node-xmpp/node-xmpp-server/pull/125
-  var features = new Element('stream:features', {xmlns: NS_STREAMS, 'xmlns:stream': NS_STREAMS})
+  // Trilian requires features to be prefixed https://github.com/node-xmpp/node-xmpp-server/pull/125
+  const features = new Element('stream:features', {xmlns: NS_STREAMS, 'xmlns:stream': NS_STREAMS})
   if (!this.authenticated) {
     if (this.server && this.server.availableSaslMechanisms) {
       // TLS
-      var opts = this.server.options
+      const opts = this.server.options
       if (opts && opts.tls && !this.connection.isSecure) {
         features
           .c('starttls', { xmlns: this.connection.NS_XMPP_TLS })
@@ -118,9 +118,9 @@ Session.prototype.sendFeatures = function () {
       this.mechanisms = []
     }
 
-    var mechanismsEl = features.c(
+    const mechanismsEl = features.c(
       'mechanisms', { xmlns: NS_XMPP_SASL })
-    this.mechanisms.forEach(function (mech) {
+    this.mechanisms.forEach((mech) => {
       mechanismsEl.c('mechanism').t(mech.prototype.name)
     })
   } else {
@@ -134,7 +134,7 @@ Session.prototype.onStanza = function (stanza) {
   if (this.jid) stanza.attrs.from = this.jid.toString()
 
   if (stanza.is('starttls', this.connection.NS_XMPP_TLS)) {
-    var toSend = new Element(
+    const toSend = new Element(
       'proceed', { xmlns: this.connection.NS_XMPP_TLS }
     )
     this.send(toSend)
@@ -149,7 +149,7 @@ Session.prototype.onStanza = function (stanza) {
 }
 
 Session.prototype.onAuthStanza = function (stanza) {
-  var bind = stanza.getChild('bind', NS_BIND)
+  const bind = stanza.getChild('bind', NS_BIND)
   if (stanza.is('iq') &&
     (stanza.attrs.type === 'set') &&
     (bind)) {
@@ -167,21 +167,21 @@ Session.prototype.sendAuthError = function (error) {
   if (this.jid) {
     this.emit('auth-failure', this.jid)
   }
-  var message = error && error.message ? error.message : 'Authentication failure'
-  var type = error && error.type ? error.type : 'not-authorized'
+  const message = error && error.message ? error.message : 'Authentication failure'
+  const type = error && error.type ? error.type : 'not-authorized'
   this.send(new Element('failure', {
-    xmlns: NS_XMPP_SASL
+    xmlns: NS_XMPP_SASL,
   })
     .c(type).up()
     .c('text').t(message))
 }
 
 Session.prototype.onAuth = function (stanza) {
-  var self = this
+  const self = this
 
-  // if we havn't already decided for one method
+  // If we havn't already decided for one method
   if (!this.mechanism) {
-    var matchingMechs = this.mechanisms.filter(function (mech) {
+    const matchingMechs = this.mechanisms.filter((mech) => {
       return mech.prototype.name === stanza.attrs.mechanism
     })
 
@@ -194,7 +194,7 @@ Session.prototype.onAuth = function (stanza) {
      */
     this.mechanism.authenticate = function (user, cb) {
       if (!user.saslmech) {
-        // attach sasl mechanism
+        // Attach sasl mechanism
         user.saslmech = self.mechanism.name
       }
 
@@ -205,7 +205,7 @@ Session.prototype.onAuth = function (stanza) {
       }
       user.client = self
 
-      // emit event
+      // Emit event
       self.emit('authenticate', user, cb)
     }
     this.mechanism.success = function (user) {
@@ -213,7 +213,7 @@ Session.prototype.onAuth = function (stanza) {
       self.jid = user.jid
       self.authenticated = true
       self.send(new Element('success', { xmlns: NS_XMPP_SASL }))
-      // incoming stream restart
+      // Incoming stream restart
       if (self.connection.startParser) {
         self.connection.startParser()
       }
@@ -229,15 +229,15 @@ Session.prototype.onAuth = function (stanza) {
 }
 
 Session.prototype.onRegistration = function (stanza) {
-  var self = this
-  var register = stanza.getChild('query', NS_REGISTER)
-  var reply = new Element('iq', { type: 'result' })
+  const self = this
+  const register = stanza.getChild('query', NS_REGISTER)
+  const reply = new Element('iq', { type: 'result' })
   if (stanza.attrs.id) {
     reply.attrs.id = stanza.attrs.id
   }
 
   if (stanza.attrs.type === 'get') {
-    var instructions = 'Choose a username and password for use ' +
+    const instructions = 'Choose a username and password for use ' +
       'with this service. '
     reply.c('query', { xmlns: NS_REGISTER })
       .c('instructions').t(instructions).up()
@@ -245,13 +245,13 @@ Session.prototype.onRegistration = function (stanza) {
       .c('password')
     proceed()
   } else if (stanza.attrs.type === 'set') {
-    var jid = new JID(register.getChildText('username'), this.server.options.domain)
+    const jid = new JID(register.getChildText('username'), this.server.options.domain)
     this.emit('register', {
-      jid: jid,
+      jid,
       username: register.getChildText('username'),
       password: register.getChildText('password'),
-      client: self
-    }, function (error) {
+      client: self,
+    }, (error) => {
       if (!error) {
         self.emit('registration-success', self.jid)
       } else {
@@ -259,14 +259,14 @@ Session.prototype.onRegistration = function (stanza) {
         reply.attrs.type = 'error'
         reply
           .c('error', {
-            code: '' + error.code,
-            type: error.type
+            code: String(error.code),
+            type: error.type,
           })
           .c(error.condition, {
-            xmlns: NS_STANZAS
+            xmlns: NS_STANZAS,
           }).up()
           .c('text', {
-            xmlns: NS_STANZAS
+            xmlns: NS_STANZAS,
           })
           .t(error.message)
       }
@@ -280,12 +280,12 @@ Session.prototype.onRegistration = function (stanza) {
 }
 
 Session.prototype.onBind = function (stanza) {
-  var self = this
-  var bind = stanza.getChild('bind', NS_BIND)
-  var resourceNode = bind.getChild('resource', NS_BIND)
-  var resource = resourceNode ? resourceNode.getText() : null
+  const self = this
+  const bind = stanza.getChild('bind', NS_BIND)
+  const resourceNode = bind.getChild('resource', NS_BIND)
+  const resource = resourceNode ? resourceNode.getText() : null
 
-  var sendBind = function (resource) {
+  const sendBind = function (resource) {
     if (!resource) {
       resource = self.generateId()
     }
@@ -294,18 +294,18 @@ Session.prototype.onBind = function (stanza) {
     self.send(
       new Element('iq', {
         type: 'result',
-        id: stanza.attrs.id
+        id: stanza.attrs.id,
       })
         .c('bind', { xmlns: NS_BIND })
         .c('jid').t(self.jid.toString()))
   }
 
   if (self.listenerCount('bind') > 0) {
-    self.emit('bind', resource, function (error, resource) {
+    self.emit('bind', resource, (error, resource) => {
       if (error) {
-        var element = new Element('iq', {
+        const element = new Element('iq', {
           type: 'error',
-          id: stanza.attrs.id
+          id: stanza.attrs.id,
         })
           .c('error', { type: error.type })
           .c(error.condition, { xmlns: NS_STANZAS })
@@ -323,7 +323,7 @@ Session.prototype.onBind = function (stanza) {
 }
 
 Session.prototype.onSession = function (stanza) {
-  var result = new IQ({type: 'result', id: stanza.attrs.id})
+  const result = new IQ({type: 'result', id: stanza.attrs.id})
     .c('session', {xmlns: NS_SESSION})
   this.send(result)
   this.emit('online')

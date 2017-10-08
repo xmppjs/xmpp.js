@@ -1,20 +1,20 @@
 'use strict'
 
-var util = require('util')
-var SRV = require('node-xmpp-core').SRV
-var Connection = require('node-xmpp-core').Connection
-var Server = require('./server')
-var debug = require('debug')('xmpp:s2s:outserver')
-var NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl'
+const util = require('util')
+const SRV = require('node-xmpp-core').SRV
+const Connection = require('node-xmpp-core').Connection
+const Server = require('./server')
+const debug = require('debug')('xmpp:s2s:outserver')
+const NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl'
 
-var OutgoingServer = function (srcDomain, destDomain, credentials) {
+const OutgoingServer = function (srcDomain, destDomain, credentials) {
   debug(util.format('establish an outgoing S2S connection from %s to %s', srcDomain, destDomain))
 
   this.streamId = null
 
-  var streamAttrs = {
+  const streamAttrs = {
     version: '1.0',
-    from: srcDomain
+    from: srcDomain,
   }
 
   this.streamTo = destDomain
@@ -30,37 +30,37 @@ var OutgoingServer = function (srcDomain, destDomain, credentials) {
   }
 
   this.on('streamStart', function (attrs) {
-    // extract stream id
+    // Extract stream id
     this.streamId = attrs.id
   })
 
-  Server.call(this, {streamAttrs: streamAttrs})
+  Server.call(this, {streamAttrs})
 
-  // establish connection
+  // Establish connection
   this.listen({
     socket: SRV.connect({
       services: ['_xmpp-server._tcp', '_jabber._tcp'],
       domain: destDomain,
-      defaultPort: 5269
-    })
+      defaultPort: 5269,
+    }),
   })
 }
 
 util.inherits(OutgoingServer, Server)
 
 function hasSASLExternal (stanza) {
-  var mechanisms = stanza.getChild('mechanisms', NS_XMPP_SASL)
+  const mechanisms = stanza.getChild('mechanisms', NS_XMPP_SASL)
   if (mechanisms) {
-    var mechanism = mechanisms.getChild('mechanism')
+    const mechanism = mechanisms.getChild('mechanism')
     return mechanism && mechanism.text() === 'EXTERNAL'
   }
   return false
 }
 
-// overwrite onStanza from Server
+// Overwrite onStanza from Server
 OutgoingServer.prototype.onStanza = function (stanza) {
   debug('recieved stanza' + stanza.toString())
-  var handled = Server.prototype.onStanza.call(this, stanza)
+  const handled = Server.prototype.onStanza.call(this, stanza)
 
   if (!handled) {
     if (stanza.is('features', Connection.NS_STREAM)) {

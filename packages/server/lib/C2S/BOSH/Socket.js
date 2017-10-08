@@ -1,12 +1,12 @@
 'use strict'
 
-var EventEmitter = require('events').EventEmitter
-var util = require('util')
-var ltx = require('node-xmpp-core').ltx
-var hat = require('hat')
-var debug = require('debug')('xmpp:bosh:session')
+const EventEmitter = require('events').EventEmitter
+const util = require('util')
+const ltx = require('node-xmpp-core').ltx
+const hat = require('hat')
+const debug = require('debug')('xmpp:bosh:session')
 
-var NS_HTTPBIND = 'http://jabber.org/protocol/httpbind'
+const NS_HTTPBIND = 'http://jabber.org/protocol/httpbind'
 
 /**
  * Gets constructed with a first HTTP request (opts.req & opts.res),
@@ -31,14 +31,14 @@ var NS_HTTPBIND = 'http://jabber.org/protocol/httpbind'
  * License: MIT
  */
 function BOSHSession (opts) {
-  // socket properties
+  // Socket properties
   this.writable = true
   this.readable = true
 
   // BOSH settings
   this.nextRequestTimeout = opts.nextRequestTimeout
   if (opts.xmlns) {
-    for (var prefix in opts.xmlns) {
+    for (const prefix in opts.xmlns) {
       if (prefix) {
         this.xmlnsAttrs['xmlns:' + prefix] = opts.xmlns[prefix]
       } else {
@@ -49,9 +49,9 @@ function BOSHSession (opts) {
   this.streamAttrs = opts.streamAttrs || {}
   this.handshakeAttrs = opts.bodyEl.attrs
 
-  // generate sid
+  // Generate sid
   this.sid = opts.sid || hat()
-  // add sid to properties
+  // Add sid to properties
   this.xmlnsAttrs.sid = this.sid
 
   this.nextRid = parseInt(opts.bodyEl.attrs.rid, 10)
@@ -75,18 +75,18 @@ BOSHSession.prototype.name = 'BOSH'
 BOSHSession.prototype.xmlnsAttrs = {
   xmlns: NS_HTTPBIND,
   'xmlns:xmpp': 'urn:xmpp:xbosh',
-  'xmlns:stream': 'http://etherx.jabber.org/streams'
+  'xmlns:stream': 'http://etherx.jabber.org/streams',
 }
 
 /**
- * implementation of socket interface
+ * Implementation of socket interface
  * forwards data from connection to http
  */
 BOSHSession.prototype.write = function (data) {
   this.stanzaQueue.push(data)
 
   process.nextTick(this.workOutQueue.bind(this))
-  // indicates if we flush
+  // Indicates if we flush
   return this.outQueue.length > 0
 }
 
@@ -104,10 +104,10 @@ BOSHSession.prototype.end = function () {
 }
 
 /**
- * internal method to emit data to Connection
+ * Internal method to emit data to Connection
  */
 BOSHSession.prototype.sendData = function (data) {
-  // emit this data to connection
+  // Emit this data to connection
   debug('emit data: ' + data.toString())
   this.emit('data', data.toString())
 }
@@ -120,11 +120,11 @@ BOSHSession.prototype.closeSocket = function () {
 }
 
 /**
- * handle http requests
+ * Handle http requests
  */
 BOSHSession.prototype.handleHTTP = function (opts) {
   debug('handle http')
-  var oldOpts = this.inQueue[opts.bodyEl.attrs.rid]
+  const oldOpts = this.inQueue[opts.bodyEl.attrs.rid]
   if (oldOpts) {
     // Already queued? Replace with this request
     oldOpts.res.writeHead(
@@ -141,8 +141,8 @@ BOSHSession.prototype.handleHTTP = function (opts) {
   this.resetNextRequestTimeout()
 
   // Set up timeout:
-  var self = this
-  opts.timer = setTimeout(function () {
+  const self = this
+  opts.timer = setTimeout(() => {
     delete opts.timer
     self.onReqTimeout(opts.bodyEl.attrs.rid)
   }, this.wait * 1000)
@@ -160,7 +160,7 @@ BOSHSession.prototype.streamOpen = function (opts) {
     'xmlns:stream="http://etherx.jabber.org/streams" ',
     'to="' + opts.to + '"',
     opts.xmppv ? (' xmpp:version="' + opts.xmppv + '"') : '',
-    '>'
+    '>',
   ].join('')
 /* eslint-enable indent */
 }
@@ -168,45 +168,45 @@ BOSHSession.prototype.streamOpen = function (opts) {
 BOSHSession.prototype.workInQueue = function () {
   debug('run workInQueue')
 
-  var opts = this.inQueue[this.nextRid]
+  let opts = this.inQueue[this.nextRid]
   if (!opts) {
     // Still waiting for next rid request
     return
   }
 
-  var self = this
+  const self = this
   delete this.inQueue[this.nextRid]
   this.nextRid++
 
-  // handle message
+  // Handle message
 
   // extract values
-  var rid = opts.bodyEl.attrs.rid
-  var sid = opts.bodyEl.attrs.sid
-  var to = opts.bodyEl.attrs.to
-  var restart = opts.bodyEl.attrs['xmpp:restart']
-  var xmppv = opts.bodyEl.attrs['xmpp:version']
+  const rid = opts.bodyEl.attrs.rid
+  const sid = opts.bodyEl.attrs.sid
+  const to = opts.bodyEl.attrs.to
+  const restart = opts.bodyEl.attrs['xmpp:restart']
+  const xmppv = opts.bodyEl.attrs['xmpp:version']
 
-  // handle stream start
+  // Handle stream start
   if (!restart && rid && !sid) {
     debug('handle stream start')
-    // emulate stream creation for connection
+    // Emulate stream creation for connection
     this.sendData(
       '<?xml version="1.0" ?>' +
-      this.streamOpen({to: to, xmppv: xmppv})
+      this.streamOpen({to, xmppv})
     )
-  // handle stream reset
+  // Handle stream reset
   } else if (opts.bodyEl.attrs['xmpp:restart'] === 'true') {
     debug('reset stream')
-    // emulate stream restart for connection
+    // Emulate stream restart for connection
     this.sendData(
-      this.streamOpen({to: to, xmppv: xmppv})
+      this.streamOpen({to, xmppv})
     )
   }
 
-  opts.bodyEl.children.forEach(function (stanza) {
+  opts.bodyEl.children.forEach((stanza) => {
     debug('send data: ' + stanza)
-    // extract content
+    // Extract content
     self.sendData(stanza.toString())
   })
 
@@ -215,13 +215,13 @@ BOSHSession.prototype.workInQueue = function () {
 
   if (opts.bodyEl.attrs.type !== 'terminate') {
     debug('schedule response')
-    process.nextTick(function () {
+    process.nextTick(() => {
       self.workOutQueue()
       self.workInQueue()
     })
   } else {
     debug('terminate connection')
-    for (var i = 0; i < this.outQueue.length; i++) {
+    for (let i = 0; i < this.outQueue.length; i++) {
       opts = this.outQueue[i]
       if (opts.timer) clearTimeout(opts.timer)
       this.respond(opts.res, { type: 'terminate' }, [])
@@ -241,12 +241,12 @@ BOSHSession.prototype.workOutQueue = function () {
     return
   }
 
-  // queued stanzas
-  var stanzas = this.stanzaQueue
+  // Queued stanzas
+  const stanzas = this.stanzaQueue
   this.stanzaQueue = []
 
-  // available requests
-  var opts = this.outQueue.shift()
+  // Available requests
+  const opts = this.outQueue.shift()
 
   if (opts.timer) {
     clearTimeout(opts.timer)
@@ -258,7 +258,7 @@ BOSHSession.prototype.workOutQueue = function () {
     return
   }
 
-  // answer
+  // Answer
   this.respond(opts.res, {}, stanzas)
 
   this.setNextRequestTimeout()
@@ -271,8 +271,8 @@ BOSHSession.prototype.setNextRequestTimeout = function () {
     return
   }
 
-  var self = this
-  this.NRTimeout = setTimeout(function () {
+  const self = this
+  this.NRTimeout = setTimeout(() => {
     self.emit('error', new Error('Session timeout'))
     self.emit('close')
   }, this.nextRequestTimeout)
@@ -288,7 +288,7 @@ BOSHSession.prototype.resetNextRequestTimeout = function () {
 }
 
 BOSHSession.prototype.onReqTimeout = function (rid) {
-  var opts = this.inQueue[rid]
+  let opts = this.inQueue[rid]
 
   if (opts) {
     delete this.inQueue[rid]
@@ -313,18 +313,18 @@ BOSHSession.prototype.respond = function (res, attrs, children) {
     200,
     { 'Content-Type': 'text/xml; charset=utf-8' }
   )
-  for (var k in this.xmlnsAttrs) {
+  for (const k in this.xmlnsAttrs) {
     attrs[k] = this.xmlnsAttrs[k]
   }
   if (res.boshAttrs) {
-    for (var i in res.boshAttrs) {
+    for (const i in res.boshAttrs) {
       attrs[i] = res.boshAttrs[i]
     }
   }
-  var bodyEl = new ltx.Element('body', attrs)
+  const bodyEl = new ltx.Element('body', attrs)
   if (children) {
     // TODO, we need to filter the stream element
-    children.forEach(function (element) {
+    children.forEach((element) => {
       try {
         bodyEl.cnode(ltx.parse(element))
       } catch (err) {
@@ -332,7 +332,7 @@ BOSHSession.prototype.respond = function (res, attrs, children) {
       }
     })
   }
-  bodyEl.write(function (s) {
+  bodyEl.write((s) => {
     res.write(s)
   })
   res.end()

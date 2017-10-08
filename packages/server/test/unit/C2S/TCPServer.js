@@ -2,23 +2,23 @@
 
 /* global describe, it */
 
-var Server = require('../../../lib/C2S/TCP/Server')
-var C2SServer = require('../../../lib/C2S/Server')
-var assert = require('assert')
-var net = require('net')
+const Server = require('../../../lib/C2S/TCP/Server')
+const C2SServer = require('../../../lib/C2S/Server')
+const assert = require('assert')
+const net = require('net')
 
-describe('BOSHServer', function () {
-  it('is an instanceof C2SServer', function () {
+describe('BOSHServer', () => {
+  it('is an instanceof C2SServer', () => {
     assert(new Server() instanceof C2SServer)
   })
-  describe('server property', function () {
-    it('uses the server provided as an option', function () {
-      var httpServer = net.createServer()
-      var server = new Server({server: httpServer})
+  describe('server property', () => {
+    it('uses the server provided as an option', () => {
+      const httpServer = net.createServer()
+      const server = new Server({server: httpServer})
       assert.equal(server.server, httpServer)
     })
-    it('defaults to create its own net server', function () {
-      var server = new Server()
+    it('defaults to create its own net server', () => {
+      const server = new Server()
       assert(server.server instanceof net.Server)
     })
   })

@@ -2,31 +2,31 @@
 
 'use strict'
 
-var IncomingServer = require('../../../lib/S2S/session/incoming')
-var sinon = require('sinon')
-var assert = require('assert')
-var Element = require('node-xmpp-core').ltx.Element
-var tls = require('tls')
+const IncomingServer = require('../../../lib/S2S/session/incoming')
+const sinon = require('sinon')
+const assert = require('assert')
+const Element = require('node-xmpp-core').ltx.Element
+const tls = require('tls')
 
-describe('S2S IncomingServer', function () {
-  var server = null
+describe('S2S IncomingServer', () => {
+  let server = null
 
-  beforeEach(function () {
+  beforeEach(() => {
     server = new IncomingServer()
   })
 
   function assertStanza (spy, expectedStanza) {
-    sinon.assert.calledWith(spy, sinon.match(function (stanza) {
+    sinon.assert.calledWith(spy, sinon.match((stanza) => {
       return stanza.toString() === expectedStanza
     }))
   }
 
-  describe('sendFeatures', function () {
-    var streamFeaturesNoSASL = '<stream:features/>'
-    var streamFeaturesSASL = '<stream:features><mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl"><mechanism>EXTERNAL</mechanism></mechanisms></stream:features>'
+  describe('sendFeatures', () => {
+    const streamFeaturesNoSASL = '<stream:features/>'
+    const streamFeaturesSASL = '<stream:features><mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl"><mechanism>EXTERNAL</mechanism></mechanisms></stream:features>'
 
     function assertFeatures (secureDomain, isSecure, isAuthed, expectedStanza) {
-      var sendStub = sinon.stub(server, 'send')
+      const sendStub = sinon.stub(server, 'send')
 
       server.secureDomain = secureDomain
       server.isSecure = isSecure
@@ -37,29 +37,29 @@ describe('S2S IncomingServer', function () {
       assertStanza(sendStub, expectedStanza)
     }
 
-    it('should offer SASL EXTERNAL mechanism if connection is secured and secureDomain is true', function () {
+    it('should offer SASL EXTERNAL mechanism if connection is secured and secureDomain is true', () => {
       assertFeatures(true, true, undefined, streamFeaturesSASL)
     })
 
-    it('should not offer SASL EXTERNAL mechanism if connection is not secured and secureDomain is true', function () {
+    it('should not offer SASL EXTERNAL mechanism if connection is not secured and secureDomain is true', () => {
       assertFeatures(true, undefined, undefined, streamFeaturesNoSASL)
     })
 
-    it('should not offer SASL EXTERNAL mechanism if connection is secured and secureDomain is not set', function () {
+    it('should not offer SASL EXTERNAL mechanism if connection is secured and secureDomain is not set', () => {
       assertFeatures(undefined, true, undefined, streamFeaturesNoSASL)
     })
-    it('should not offer SASL EXTERNAL mechanism if connection is secured and secureDomain is set and isAuthed', function () {
+    it('should not offer SASL EXTERNAL mechanism if connection is secured and secureDomain is set and isAuthed', () => {
       assertFeatures(true, true, true, streamFeaturesNoSASL)
     })
   })
 
-  describe('verifyCertificate', function () {
+  describe('verifyCertificate', () => {
     function FakeSocket () {}
 
-    // good aproximation of the server identity check in TLS wrapper
+    // Good aproximation of the server identity check in TLS wrapper
     FakeSocket.prototype.checkServerIdentity = function () {
-      var cert = this.getPeerCertificate()
-      var verifyError = tls.checkServerIdentity(this.servername, cert)
+      const cert = this.getPeerCertificate()
+      const verifyError = tls.checkServerIdentity(this.servername, cert)
 
       if (verifyError) {
         this.authorized = false
@@ -71,15 +71,15 @@ describe('S2S IncomingServer', function () {
 
     FakeSocket.prototype.getPeerCertificate = function () { throw new Error('Unimplemented Fake Socket Stub') }
 
-    it('should call unauthorized method if fails TLS authorization', function () {
+    it('should call unauthorized method if fails TLS authorization', () => {
       server.socket = {
         authorized: false,
         authorizationError: 'failed error',
-        getPeerCertificate: sinon.stub()
+        getPeerCertificate: sinon.stub(),
       }
 
-      var sendNotAuthorizedStub = sinon.stub(server, 'sendNotAuthorizedAndClose')
-      var emitStub = sinon.stub(server, 'emit')
+      const sendNotAuthorizedStub = sinon.stub(server, 'sendNotAuthorizedAndClose')
+      const emitStub = sinon.stub(server, 'emit')
 
       server.verifyCertificate()
 
@@ -88,16 +88,16 @@ describe('S2S IncomingServer', function () {
       sinon.assert.notCalled(server.socket.getPeerCertificate)
     })
 
-    it('should call unauthorized method if fails certificate identity check', function () {
+    it('should call unauthorized method if fails certificate identity check', () => {
       server.socket = new FakeSocket()
       server.socket.servername = 'xmpp.example.com'
 
       sinon.stub(server.socket, 'getPeerCertificate').returns({
-        subject: {CN: 'example.com'}
+        subject: {CN: 'example.com'},
       })
 
-      var sendNotAuthorizedStub = sinon.stub(server, 'sendNotAuthorizedAndClose')
-      var emitStub = sinon.stub(server, 'emit')
+      const sendNotAuthorizedStub = sinon.stub(server, 'sendNotAuthorizedAndClose')
+      const emitStub = sinon.stub(server, 'emit')
 
       server.socket.checkServerIdentity()
 
@@ -108,15 +108,15 @@ describe('S2S IncomingServer', function () {
       sinon.assert.calledOnce(server.socket.getPeerCertificate)
     })
 
-    it('should call unauthorized method if fails certificate identity check 2', function () {
+    it('should call unauthorized method if fails certificate identity check 2', () => {
       server.socket = new FakeSocket()
       server.socket.servername = 'example.com'
       sinon.stub(server.socket, 'getPeerCertificate').returns({
-        subject: {CN: '*.example.com'}
+        subject: {CN: '*.example.com'},
       })
 
-      var sendNotAuthorizedStub = sinon.stub(server, 'sendNotAuthorizedAndClose')
-      var emitStub = sinon.stub(server, 'emit')
+      const sendNotAuthorizedStub = sinon.stub(server, 'sendNotAuthorizedAndClose')
+      const emitStub = sinon.stub(server, 'emit')
 
       server.socket.checkServerIdentity()
       server.verifyCertificate()
@@ -126,16 +126,16 @@ describe('S2S IncomingServer', function () {
       sinon.assert.calledOnce(server.socket.getPeerCertificate)
     })
 
-    it('should emit auth if passes authorization and identity check', function () {
+    it('should emit auth if passes authorization and identity check', () => {
       server.socket = new FakeSocket()
       server.socket.servername = 'example.com'
       sinon.stub(server.socket, 'getPeerCertificate').returns({
         subjectaltname: 'DNS:example.com',
-        subject: {CN: '*.example.com'}
+        subject: {CN: '*.example.com'},
       })
 
-      var sendNotAuthorizedStub = sinon.stub(server, 'sendNotAuthorizedAndClose')
-      var emitStub = sinon.stub(server, 'emit')
+      const sendNotAuthorizedStub = sinon.stub(server, 'sendNotAuthorizedAndClose')
+      const emitStub = sinon.stub(server, 'emit')
 
       server.socket.checkServerIdentity()
       server.verifyCertificate()
@@ -146,23 +146,23 @@ describe('S2S IncomingServer', function () {
     })
   })
 
-  describe('handleSASLExternal', function () {
-    var validAuthElement = new Element('auth', {
+  describe('handleSASLExternal', () => {
+    const validAuthElement = new Element('auth', {
       xmlns: IncomingServer.NS_XMPP_SASL,
-      mechanism: 'EXTERNAL'
+      mechanism: 'EXTERNAL',
     })
 
-    it('should not handle SASL EXTERNAL if not secure connection', function () {
+    it('should not handle SASL EXTERNAL if not secure connection', () => {
       assert.equal(server.handleSASLExternal(validAuthElement), false)
     })
 
-    it('should not handle SASL EXTERNAL if missing mechanism', function () {
+    it('should not handle SASL EXTERNAL if missing mechanism', () => {
       assert.equal(server.handleSASLExternal(new Element('auth', {
-        xmlns: IncomingServer.NS_XMPP_SASL
+        xmlns: IncomingServer.NS_XMPP_SASL,
       })), false)
     })
 
-    it('should not renegotiate for certificate if certificate contains data', function () {
+    it('should not renegotiate for certificate if certificate contains data', () => {
       server.isSecure = true
 
       server.socket = {
@@ -173,20 +173,20 @@ describe('S2S IncomingServer', function () {
               ST: 'NC',
               L: 'Raleigh',
               O: 'Example.com',
-              CN: 'example.com'
+              CN: 'example.com',
             },
             issuer: {
               C: 'US',
               ST: 'NC',
               L: 'Durham',
               O: 'Realtime',
-              CN: '*.nodexmpp.com'
-            }
+              CN: '*.nodexmpp.com',
+            },
           }),
-        renegotiate: sinon.stub().yields(null)
+        renegotiate: sinon.stub().yields(null),
       }
 
-      var verifyCertificateStub = sinon.stub(server, 'verifyCertificate')
+      const verifyCertificateStub = sinon.stub(server, 'verifyCertificate')
 
       assert.equal(server.handleSASLExternal(validAuthElement), true)
 
@@ -194,15 +194,15 @@ describe('S2S IncomingServer', function () {
       sinon.assert.calledOnce(verifyCertificateStub)
     })
 
-    it('should renegotiate for certificate if certificate is empty', function () {
+    it('should renegotiate for certificate if certificate is empty', () => {
       server.isSecure = true
 
       server.socket = {
         getPeerCertificate: sinon.stub().returns({}),
-        renegotiate: sinon.stub().yields(null)
+        renegotiate: sinon.stub().yields(null),
       }
 
-      var verifyCertificateStub = sinon.stub(server, 'verifyCertificate')
+      const verifyCertificateStub = sinon.stub(server, 'verifyCertificate')
 
       assert.equal(server.handleSASLExternal(validAuthElement), true)
 
@@ -211,15 +211,15 @@ describe('S2S IncomingServer', function () {
       sinon.assert.calledOnce(verifyCertificateStub)
     })
 
-    it('should renegotiate for certificate if certificate is null', function () {
+    it('should renegotiate for certificate if certificate is null', () => {
       server.isSecure = true
 
       server.socket = {
         getPeerCertificate: sinon.stub().returns(null),
-        renegotiate: sinon.stub().yields(null)
+        renegotiate: sinon.stub().yields(null),
       }
 
-      var verifyCertificateStub = sinon.stub(server, 'verifyCertificate')
+      const verifyCertificateStub = sinon.stub(server, 'verifyCertificate')
 
       assert.equal(server.handleSASLExternal(validAuthElement), true)
 
@@ -229,9 +229,9 @@ describe('S2S IncomingServer', function () {
     })
   })
 
-  it('should send <success> onSASLAuth call and start new stream', function () {
-    var sendStub = sinon.stub(server, 'send')
-    var streamStartStub = sinon.stub(server, 'streamStart')
+  it('should send <success> onSASLAuth call and start new stream', () => {
+    const sendStub = sinon.stub(server, 'send')
+    const streamStartStub = sinon.stub(server, 'streamStart')
 
     server.onSASLAuth()
 
@@ -240,13 +240,13 @@ describe('S2S IncomingServer', function () {
     assert(sendStub.calledBefore(streamStartStub))
   })
 
-  describe('handleTlsNegotiation', function () {
-    it('should send <proceed> after seeing <starttls>', function () {
-      var credentials = {}
+  describe('handleTlsNegotiation', () => {
+    it('should send <proceed> after seeing <starttls>', () => {
+      const credentials = {}
       server.credentials = credentials
 
-      var setSecureStub = sinon.stub(server, 'setSecure')
-      var sendStub = sinon.stub(server, 'send')
+      const setSecureStub = sinon.stub(server, 'setSecure')
+      const sendStub = sinon.stub(server, 'send')
 
       assert(server.handleTlsNegotiation(new Element('starttls', { xmlns: server.NS_XMPP_TLS })))
 
@@ -255,10 +255,10 @@ describe('S2S IncomingServer', function () {
     })
   })
 
-  it('should send not authorized response and close stream', function () {
-    var sendStub = sinon.stub(server, 'send')
-    var closeStreamStub = sinon.stub(server, 'closeStream')
-    var endStub = sinon.stub(server, 'end')
+  it('should send not authorized response and close stream', () => {
+    const sendStub = sinon.stub(server, 'send')
+    const closeStreamStub = sinon.stub(server, 'closeStream')
+    const endStub = sinon.stub(server, 'end')
 
     server.sendNotAuthorizedAndClose()
 
@@ -269,14 +269,14 @@ describe('S2S IncomingServer', function () {
     assert(closeStreamStub.calledBefore(endStub))
   })
 
-  it('should not sendFeatures immediately after connect', function () {
-    var sendFeaturesSpy = sinon.spy(server, 'sendFeatures')
-    var fakeSocket = {
+  it('should not sendFeatures immediately after connect', () => {
+    const sendFeaturesSpy = sinon.spy(server, 'sendFeatures')
+    const fakeSocket = {
       on: sinon.stub().returnsThis(),
       once: sinon.stub().returnsThis(),
       emit: sinon.stub().returnsThis(),
       end: sinon.stub(),
-      setKeepAlive: sinon.stub()
+      setKeepAlive: sinon.stub(),
     }
     server.emit('connect', fakeSocket)
     sinon.assert.notCalled(sendFeaturesSpy)

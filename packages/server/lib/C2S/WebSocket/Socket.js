@@ -1,9 +1,9 @@
 'use strict'
 
-var EventEmitter = require('events').EventEmitter
-var util = require('util')
-var debug = require('debug')('xmpp:server:websocket')
-var ltx = require('node-xmpp-core').ltx
+const EventEmitter = require('events').EventEmitter
+const util = require('util')
+const debug = require('debug')('xmpp:server:websocket')
+const ltx = require('node-xmpp-core').ltx
 
 function Socket (socket) {
   EventEmitter.call(this)
@@ -22,20 +22,20 @@ Socket.prototype.maxStanzaSize = 65535
 Socket.prototype.setupSocket = function (socket) {
   debug('set socket')
   this.socket = socket
-  var self = this
+  const self = this
 
-  socket.on('open', function () {
+  socket.on('open', () => {
     debug('websocket connected')
   })
 
-  socket.on('close', function () {
+  socket.on('close', () => {
     debug('websocket disconnected')
     self.emit('close')
   })
 
-  socket.on('message', function (message, flags) {
-    var connection = self.session.connection
-    var body
+  socket.on('message', (message, flags) => {
+    const connection = self.session.connection
+    let body
 
     if (flags && (flags.binary || flags.masked)) {
       body = message.toString('utf8')
@@ -43,7 +43,7 @@ Socket.prototype.setupSocket = function (socket) {
       body = message
     }
 
-    var stanza
+    let stanza
     try {
       stanza = ltx.parse(body)
     } catch (e) {
@@ -59,7 +59,7 @@ Socket.prototype.setupSocket = function (socket) {
     }
   })
 
-  socket.on('error', function () {
+  socket.on('error', () => {
     debug('websocket error')
     self.emit('error')
   })
@@ -71,8 +71,8 @@ Socket.prototype.serializeStanza = function (stanza, fn) {
 
 Socket.prototype.write = function (data) {
   debug(data)
-  var self = this
-  this.socket.send(data, function (error) {
+  const self = this
+  this.socket.send(data, (error) => {
     if (error) {
       self.emit('error', error)
     }
@@ -80,12 +80,12 @@ Socket.prototype.write = function (data) {
 }
 
 Socket.prototype.pause = function () {
-  // nothing to do
+  // Nothing to do
   debug('websocket is requested to pause. But we cannot do anything')
 }
 
 Socket.prototype.resume = function () {
-  // nothing to do
+  // Nothing to do
   debug('websocket is requested to resume. But we cannot do anything')
 }
 

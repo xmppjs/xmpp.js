@@ -2,25 +2,25 @@
 
 /* global describe, it */
 
-var assert = require('assert')
-var Server = require('../../../lib/Server')
-var C2SServer = require('../../../lib/C2S/Server')
-var C2SSession = require('../../../lib/C2S/Session')
+const assert = require('assert')
+const Server = require('../../../lib/Server')
+const C2SServer = require('../../../lib/C2S/Server')
+const C2SSession = require('../../../lib/C2S/Session')
 
-describe('C2S Server', function () {
-  it('is an instance of Server', function () {
-    var s = new C2SServer()
+describe('C2S Server', () => {
+  it('is an instance of Server', () => {
+    const s = new C2SServer()
     assert(s instanceof Server)
   })
-  it('has an availableSaslMechanisms array property', function () {
-    var s = new C2SServer()
+  it('has an availableSaslMechanisms array property', () => {
+    const s = new C2SServer()
     assert(Array.isArray(s.availableSaslMechanisms))
   })
-  it('sets rejectUnauthorized to true if requestCert is true', function () {
-    var s = new C2SServer({requestCert: true})
+  it('sets rejectUnauthorized to true if requestCert is true', () => {
+    const s = new C2SServer({requestCert: true})
     assert.equal(s.options.rejectUnauthorized, true)
   })
-  it('has C2S Session as default session', function () {
+  it('has C2S Session as default session', () => {
     assert.equal(C2SServer.prototype.Session, C2SSession)
   })
 })

@@ -2,48 +2,48 @@
 
 /* global describe, it, before, after, afterEach */
 
-var XMPP = require('../../..')
-var Server = XMPP.C2S.TCPServer
-var Element = require('node-xmpp-core').Element
-var net = require('net')
-var rack = require('hat').rack
-var Client = require('node-xmpp-client')
-var Plain = XMPP.auth.Plain
-var XOAuth2 = XMPP.auth.XOAuth2
-var DigestMD5 = XMPP.auth.DigestMD5
-var Anonymous = XMPP.auth.Anonymous
+const XMPP = require('../../..')
+const Server = XMPP.C2S.TCPServer
+const Element = require('node-xmpp-core').Element
+const net = require('net')
+const rack = require('hat').rack
+const Client = require('node-xmpp-client')
+const Plain = XMPP.auth.Plain
+const XOAuth2 = XMPP.auth.XOAuth2
+const DigestMD5 = XMPP.auth.DigestMD5
+const Anonymous = XMPP.auth.Anonymous
 
 require('should')
 
-var user = {
+const user = {
   jid: 'me@localhost',
-  password: 'secret'
+  password: 'secret',
 }
 
 function startServer (mechanism) {
   // Sets up the server.
-  var c2s = new Server({
+  const c2s = new Server({
     port: 5225,
-    domain: 'localhost'
+    domain: 'localhost',
   })
 
   if (mechanism) {
-    // remove plain
+    // Remove plain
     c2s.availableSaslMechanisms = []
     c2s.registerSaslMechanism(mechanism)
   }
 
   // Allows the developer to register the jid against anything they want
-  c2s.on('register', function (opts, cb) {
+  c2s.on('register', (opts, cb) => {
     cb(true) // eslint-disable-line
   })
 
   // On Connect event. When a client connects.
-  c2s.on('connect', function (stream) {
+  c2s.on('connect', (stream) => {
     // That's the way you add mods to a given server.
 
     // Allows the developer to authenticate users against anything they want.
-    stream.on('authenticate', function (opts, cb) {
+    stream.on('authenticate', (opts, cb) => {
       if ((opts.saslmech === Plain.id) &&
         (opts.jid.toString() === user.jid) &&
         (opts.password === user.password)) {
@@ -67,9 +67,9 @@ function startServer (mechanism) {
       }
     })
 
-    stream.on('online', function () {
+    stream.on('online', () => {
       stream.send(new Element('message', {
-        type: 'chat'
+        type: 'chat',
       })
         .c('body')
         .t('Hello there, little client.')
@@ -77,13 +77,13 @@ function startServer (mechanism) {
     })
 
     // Stanza handling
-    stream.on('stanza', function () {
-      // got stanza
+    stream.on('stanza', () => {
+      // Got stanza
     })
 
     // On Disconnect event. When a client disconnects
-    stream.on('disconnect', function () {
-      // client disconnect
+    stream.on('disconnect', () => {
+      // Client disconnect
     })
   })
 
@@ -92,16 +92,16 @@ function startServer (mechanism) {
 
 function createClient (opts) {
   opts.port = 5225
-  var cl = new Client(opts)
+  const cl = new Client(opts)
 
-  cl.on('stanza', function (stanza) {
+  cl.on('stanza', (stanza) => {
     if (stanza.is('message') &&
       // Important: never reply to errors!
       (stanza.attrs.type !== 'error')) {
       // Swap addresses...
       stanza.attrs.to = stanza.attrs.from
       delete stanza.attrs.from
-      // and send back.
+      // And send back.
       cl.send(stanza)
     } else {
       console.log('INCLIENT STANZA PRE', stanza.toString())
@@ -112,168 +112,168 @@ function createClient (opts) {
   return cl
 }
 
-describe('SASL', function () {
-  describe('PLAIN', function () {
-    var c2s = null
-    var cl = null
+describe('SASL', () => {
+  describe('PLAIN', () => {
+    let c2s = null
+    let cl = null
 
-    afterEach(function (done) {
+    afterEach((done) => {
       cl.once('offline', done)
       cl.end()
     })
 
-    before(function (done) {
+    before((done) => {
       c2s = startServer(Plain)
       done()
     })
 
-    after(function (done) {
+    after((done) => {
       c2s.end(done)
     })
 
-    it('should accept plain authentication', function (done) {
+    it('should accept plain authentication', (done) => {
       cl = createClient({
         jid: user.jid,
         password: user.password,
-        preferred: Plain.id
+        preferred: Plain.id,
       })
 
-      cl.on('online', function () {
+      cl.on('online', () => {
         done()
       })
-      cl.on('error', function (e) {
+      cl.on('error', (e) => {
         console.log(e)
         done(e)
       })
     })
 
-    it('should not accept plain authentication', function (done) {
+    it('should not accept plain authentication', (done) => {
       cl = createClient({
         jid: user.jid,
-        password: 'secretsecret'
+        password: 'secretsecret',
       })
 
-      cl.on('online', function () {
+      cl.on('online', () => {
         done('user is not valid')
       })
-      cl.on('error', function () {
-        // this should happen
+      cl.on('error', () => {
+        // This should happen
         done()
       })
     })
   })
 
-  describe('XOAUTH-2', function () {
-    var c2s = null
-    var cl = null
+  describe('XOAUTH-2', () => {
+    let c2s = null
+    let cl = null
 
-    afterEach(function (done) {
+    afterEach((done) => {
       cl.once('offline', done)
       cl.end()
     })
 
-    before(function (done) {
+    before((done) => {
       c2s = startServer(XOAuth2)
       done()
     })
 
-    after(function (done) {
+    after((done) => {
       c2s.end(done)
     })
 
     /*
-     * google talk is replaced by google hangout,
+     * Google talk is replaced by google hangout,
      * but we can support the protocol anyway
      */
-    it('should accept google authentication', function (done) {
+    it('should accept google authentication', (done) => {
       cl = createClient({
         jid: 'me@gmail.com',
         /* eslint-disable camelcase */
-        oauth2_token: 'xxxx.xxxxxxxxxxx', // from OAuth2
+        oauth2_token: 'xxxx.xxxxxxxxxxx', // From OAuth2
         oauth2_auth: 'http://www.google.com/talk/protocol/auth',
         /* eslint-enable camelcase */
-        host: 'localhost'
+        host: 'localhost',
       })
 
-      cl.on('online', function () {
+      cl.on('online', () => {
         done()
       })
-      cl.on('error', function (e) {
+      cl.on('error', (e) => {
         console.log(e)
         done(e)
       })
     })
   })
 
-  describe('DIGEST MD5', function () {
-    var c2s = null
-    var cl = null
+  describe('DIGEST MD5', () => {
+    let c2s = null
+    let cl = null
 
-    afterEach(function (done) {
+    afterEach((done) => {
       cl.once('offline', done)
       cl.end()
     })
 
-    before(function (done) {
+    before((done) => {
       c2s = startServer(DigestMD5)
       done()
     })
 
-    after(function (done) {
+    after((done) => {
       c2s.end(done)
     })
 
-    it('should accept digest md5 authentication', function (done) {
+    it('should accept digest md5 authentication', (done) => {
       cl = createClient({
         jid: user.jid,
         password: user.password,
-        preferred: 'DIGEST-MD5'
+        preferred: 'DIGEST-MD5',
       })
 
-      cl.on('online', function () {
+      cl.on('online', () => {
         done()
       })
-      cl.on('error', function (e) {
+      cl.on('error', (e) => {
         console.log(e)
         done(e)
       })
     })
 
-    it('should not allow to skip digest md5 challenges', function (done) {
-      // preparing a sequence of stanzas to send
-      var handshakeStanza = '<?xml version="1.0" encoding="UTF-8"?>' +
+    it('should not allow to skip digest md5 challenges', (done) => {
+      // Preparing a sequence of stanzas to send
+      const handshakeStanza = '<?xml version="1.0" encoding="UTF-8"?>' +
         '<stream:stream to="localhost" xmlns="jabber:client" ' +
         'xmlns:stream="http://etherx.jabber.org/streams" ' +
         'xml:l="en" version="1.0">'
 
-      var authStanza = '<auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl" ' +
+      const authStanza = '<auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl" ' +
         'mechanism="DIGEST-MD5"/>'
 
-      var earlyAccessStanza = '<response ' +
+      const earlyAccessStanza = '<response ' +
         'xmlns="urn:ietf:params:xml:ns:xmpp-sasl"/>'
 
       /*
-       * we cannot use existing client realization
+       * We cannot use existing client realization
        * because we need to skip challenge response
        */
-      var client = net.connect({port: c2s.options.port}, function () {
-        client.write(handshakeStanza, function () {
-          client.write(authStanza, function () {
-            client.write(earlyAccessStanza, function () {
-              // send earlyAccessStanza to receive 'success'
+      var client = net.connect({port: c2s.options.port}, () => {
+        client.write(handshakeStanza, () => {
+          client.write(authStanza, () => {
+            client.write(earlyAccessStanza, () => {
+              // Send earlyAccessStanza to receive 'success'
               client.write(earlyAccessStanza)
             })
           })
         })
       })
 
-      var receivedData = ''
+      let receivedData = ''
 
-      client.on('data', function (data) {
+      client.on('data', (data) => {
         receivedData += data
       })
 
-      client.setTimeout(500, function () {
+      client.setTimeout(500, () => {
         if (/<\/failure>$/.test(receivedData.toString())) {
           client.end()
           done()
@@ -285,37 +285,37 @@ describe('SASL', function () {
     })
   })
 
-  describe('ANONYMOUS', function () {
-    var c2s = null
-    var cl = null
+  describe('ANONYMOUS', () => {
+    let c2s = null
+    let cl = null
 
-    afterEach(function (done) {
+    afterEach((done) => {
       cl.once('offline', done)
       cl.end()
     })
 
-    before(function (done) {
+    before((done) => {
       c2s = startServer(Anonymous)
       done()
     })
 
-    after(function (done) {
+    after((done) => {
       c2s.end(done)
     })
 
-    it('should accept anonymous authentication', function (done) {
+    it('should accept anonymous authentication', (done) => {
       cl = createClient({
         jid: '@localhost',
-        preferred: Anonymous.id
+        preferred: Anonymous.id,
       })
 
-      var defaultHatRackHashLength = rack()().length
-      cl.on('online', function (online) {
+      const defaultHatRackHashLength = rack()().length
+      cl.on('online', (online) => {
         online.jid.local.length.should.equal(defaultHatRackHashLength)
         online.jid.resource.length.should.equal(defaultHatRackHashLength)
         done()
       })
-      cl.on('error', function (e) {
+      cl.on('error', (e) => {
         console.log(e)
         done(e)
       })

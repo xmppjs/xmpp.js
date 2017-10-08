@@ -1,11 +1,11 @@
 'use strict'
 
-var util = require('util')
-var crypto = require('crypto')
-var EventEmitter = require('events').EventEmitter
-var Connection = require('node-xmpp-core').Connection
-var JID = require('node-xmpp-core').JID
-var Element = require('node-xmpp-core').Element
+const util = require('util')
+const crypto = require('crypto')
+const EventEmitter = require('events').EventEmitter
+const Connection = require('node-xmpp-core').Connection
+const JID = require('node-xmpp-core').JID
+const Element = require('node-xmpp-core').Element
 
 function ComponentSession (opts) {
   EventEmitter.call(this)
@@ -29,9 +29,9 @@ ComponentSession.prototype.onStreamStart = function (streamAttrs) {
     return
   }
 
-  var self = this
+  const self = this
   this.jid = new JID(streamAttrs.to)
-  this.emit('verify-component', this.jid, function (err, password) {
+  this.emit('verify-component', this.jid, (err, password) => {
     if (err) {
       self.connection.error('host-unknown', err.message || 'unknown host')
     } else {
@@ -83,7 +83,7 @@ ComponentSession.prototype._addConnectionListeners = function (con) {
 }
 
 ComponentSession.prototype._sha1Hex = function (s) {
-  var hash = crypto.createHash('sha1')
+  const hash = crypto.createHash('sha1')
   hash.update(s)
   return hash.digest('hex')
 }

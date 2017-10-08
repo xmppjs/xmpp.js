@@ -2,23 +2,23 @@
 
 'use strict'
 
-var Router = require('../../../lib/S2S/Router')
-var assert = require('assert')
-var sinon = require('sinon')
+const Router = require('../../../lib/S2S/Router')
+const assert = require('assert')
+const sinon = require('sinon')
 
-describe('S2S Router', function () {
-  var fakeSocket = {
+describe('S2S Router', () => {
+  const fakeSocket = {
     on: sinon.stub().returnsThis(),
     once: sinon.stub().returnsThis(),
     emit: sinon.stub().returnsThis(),
     end: sinon.stub(),
-    setKeepAlive: sinon.stub()
+    setKeepAlive: sinon.stub(),
   }
 
-  describe('constructor', function () {
-    it('sets up secure domains using passed in as opts.secureDomains', function () {
-      var router = new Router(5269, 'localhost', {
-        secureDomains: ['nodexmpp.com', 'example.com']
+  describe('constructor', () => {
+    it('sets up secure domains using passed in as opts.secureDomains', () => {
+      const router = new Router(5269, 'localhost', {
+        secureDomains: ['nodexmpp.com', 'example.com'],
       })
 
       assert.equal(router.getContext('nodexmpp.com').secureDomain, true)
@@ -27,33 +27,33 @@ describe('S2S Router', function () {
     })
   })
 
-  describe('Incoming Server authed', function () {
-    it('should call onSASLAuth when auth event is received with SASL type', function () {
-      var router = new Router()
-      var stream = router.acceptConnection(fakeSocket)
-      var onAuthStub = sinon.stub(stream, 'onSASLAuth')
+  describe('Incoming Server authed', () => {
+    it('should call onSASLAuth when auth event is received with SASL type', () => {
+      const router = new Router()
+      const stream = router.acceptConnection(fakeSocket)
+      const onAuthStub = sinon.stub(stream, 'onSASLAuth')
       stream.emit('auth', 'SASL')
       sinon.assert.calledOnce(onAuthStub)
     })
 
-    it('should not call onSASLAuth when auth event is received without SASL type', function () {
-      var router = new Router()
-      var stream = router.acceptConnection(fakeSocket)
-      var onAuthStub = sinon.stub(stream, 'onSASLAuth')
+    it('should not call onSASLAuth when auth event is received without SASL type', () => {
+      const router = new Router()
+      const stream = router.acceptConnection(fakeSocket)
+      const onAuthStub = sinon.stub(stream, 'onSASLAuth')
       stream.emit('auth')
       sinon.assert.notCalled(onAuthStub)
     })
 
-    it('should calls domainContext addInStream method for the stream when authenticated', function () {
-      var router = new Router()
-      var stream = router.acceptConnection(fakeSocket)
+    it('should calls domainContext addInStream method for the stream when authenticated', () => {
+      const router = new Router()
+      const stream = router.acceptConnection(fakeSocket)
 
       stream.fromDomain = 'example.com'
       stream.toDomain = 'nodexmpp.com'
 
-      var addInStream = sinon.stub()
-      var getContextStub = sinon.stub(router, 'getContext').returns({
-        addInStream: addInStream
+      const addInStream = sinon.stub()
+      const getContextStub = sinon.stub(router, 'getContext').returns({
+        addInStream,
       })
 
       stream.emit('auth', 'SASL')
@@ -63,8 +63,8 @@ describe('S2S Router', function () {
     })
   })
 
-  describe('Incoming Server sendFeatures', function () {
-    var attrs = {'xmlns:db': 'jabber:server:dialback',
+  describe('Incoming Server sendFeatures', () => {
+    const attrs = {'xmlns:db': 'jabber:server:dialback',
       'xmlns:stream': 'http://etherx.jabber.org/streams',
       'xml:lang': 'en',
       'from': 'example.com',
@@ -72,12 +72,12 @@ describe('S2S Router', function () {
       'version': '1.0',
       'xmlns': 'jabber:server'}
 
-    it('should not offer TLS to incoming connections without credentials', function () {
-      var router = new Router()
-      var stream = router.acceptConnection(fakeSocket)
+    it('should not offer TLS to incoming connections without credentials', () => {
+      const router = new Router()
+      const stream = router.acceptConnection(fakeSocket)
 
-      var sendSpy = sinon.spy(stream, 'send')
-      var sendFeaturesSpy = sinon.spy(stream, 'sendFeatures')
+      const sendSpy = sinon.spy(stream, 'send')
+      const sendFeaturesSpy = sinon.spy(stream, 'sendFeatures')
 
       stream.emit('streamStart', attrs)
 
@@ -85,20 +85,20 @@ describe('S2S Router', function () {
       assert.equal(stream.fromDomain, attrs.from)
       assert.equal(stream.toDomain, attrs.to)
       assert(sendFeaturesSpy.calledOnce)
-      sinon.assert.calledWith(sendSpy, sinon.match(function (features) {
+      sinon.assert.calledWith(sendSpy, sinon.match((features) => {
         return features.getChild('starttls', stream.NS_XMPP_TLS) === undefined
       }))
     })
 
-    it('should offer TLS to incoming connections with credentials', function () {
-      var router = new Router()
-      var credentials = {key: 'key', cert: 'cert'}
+    it('should offer TLS to incoming connections with credentials', () => {
+      const router = new Router()
+      const credentials = {key: 'key', cert: 'cert'}
       router.getContext('nodexmpp.com').credentials = credentials
 
-      var stream = router.acceptConnection(fakeSocket)
+      const stream = router.acceptConnection(fakeSocket)
 
-      var sendSpy = sinon.spy(stream, 'send')
-      var sendFeaturesSpy = sinon.spy(stream, 'sendFeatures')
+      const sendSpy = sinon.spy(stream, 'send')
+      const sendFeaturesSpy = sinon.spy(stream, 'sendFeatures')
 
       stream.emit('streamStart', attrs)
 
@@ -107,8 +107,8 @@ describe('S2S Router', function () {
       assert.equal(stream.fromDomain, attrs.from)
       assert.equal(stream.toDomain, attrs.to)
       assert(sendFeaturesSpy.calledOnce)
-      sinon.assert.calledWith(sendSpy, sinon.match(function (features) {
-        return !!features.getChild('starttls', stream.NS_XMPP_TLS)
+      sinon.assert.calledWith(sendSpy, sinon.match((features) => {
+        return Boolean(features.getChild('starttls', stream.NS_XMPP_TLS))
       }))
     })
   })

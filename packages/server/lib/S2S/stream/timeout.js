@@ -7,22 +7,22 @@
  * @param {Number} timeout Milliseconds
  */
 exports.attach = function (stream, timeout) {
-  var timer
-  var emitTimeout = function () {
+  let timer
+  const emitTimeout = function () {
     timer = undefined
     stream.emit('timeout')
   }
-  var updateTimer = function () {
+  const updateTimer = function () {
     if (timer) clearTimeout(timer)
     timer = setTimeout(emitTimeout, timeout)
   }
 
-  var oldWrite = stream.write
+  const oldWrite = stream.write
   stream.write = function () {
     updateTimer()
     oldWrite.apply(this, arguments)
   }
-  var clear = function () {
+  const clear = function () {
     if (timer) clearTimeout(timer)
     if (stream.write !== oldWrite) stream.write = oldWrite
     delete stream.clearTimer

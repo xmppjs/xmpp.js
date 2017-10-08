@@ -3,15 +3,15 @@
 /**
  * Implements http://xmpp.org/extensions/xep-0220.html
  */
-var util = require('util')
-var ltx = require('node-xmpp-core').ltx
-var Connection = require('node-xmpp-core').Connection
-var StreamShaper = require('../stream/shaper')
-var IdleTimeout = require('../stream/timeout')
-var debug = require('debug')('xmpp:s2s:server')
+const util = require('util')
+const ltx = require('node-xmpp-core').ltx
+const Connection = require('node-xmpp-core').Connection
+const StreamShaper = require('../stream/shaper')
+const IdleTimeout = require('../stream/timeout')
+const debug = require('debug')('xmpp:s2s:server')
 
-var NS_SERVER = 'jabber:server'
-var NS_DIALBACK = 'jabber:server:dialback'
+const NS_SERVER = 'jabber:server'
+const NS_DIALBACK = 'jabber:server:dialback'
 
 /**
  * Dialback-specific events:
@@ -41,7 +41,7 @@ Server.prototype.setupStream = function (opts) {
 
   Connection.prototype.setupStream.call(this, opts)
 
-  this.on('connect', function (socket) {
+  this.on('connect', (socket) => {
     StreamShaper.attach(socket, this.rateLimit)
     socket.setKeepAlive(true, this.keepAlive)
     IdleTimeout.attach(socket, this.streamTimeout)
@@ -50,7 +50,7 @@ Server.prototype.setupStream = function (opts) {
         this.error('connection-timeout')
       }
     })
-  }.bind(this))
+  })
 }
 
 Server.prototype.streamStart = function (opts) {
@@ -58,17 +58,17 @@ Server.prototype.streamStart = function (opts) {
 }
 
 function getAllText (el) {
-  return !el.children ? el : el.children.reduce(function (text, child) {
+  return !el.children ? el : el.children.reduce((text, child) => {
     return text + getAllText(child)
   }, '')
 }
 
-// overwrite onStanza from Connection
+// Overwrite onStanza from Connection
 Server.prototype.onStanza = function (stanza) {
-  var handled = false
+  let handled = false
 
   if (stanza.is('error', this.NS_STREAM)) {
-    var error = new Error('' + getAllText(stanza))
+    const error = new Error(String(getAllText(stanza)))
     error.stanza = stanza
     this.socket.emit('error', error)
     handled = true
@@ -90,8 +90,8 @@ Server.prototype.onStanza = function (stanza) {
 }
 
 Server.prototype.handleDialback = function (stanza) {
-  var handled = false
-  var key = stanza.getText()
+  let handled = false
+  const key = stanza.getText()
 
   if (stanza.is('result', this.NS_DIALBACK)) {
     if (stanza.attrs.from && stanza.attrs.to &&

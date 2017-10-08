@@ -1,23 +1,23 @@
 'use strict'
 
 module.exports = function (server) {
-  var connections = server.__connections = new Set()
-  server.on('connection', function (connection) {
+  const connections = server.__connections = new Set()
+  server.on('connection', (connection) => {
     if (server.__closing === true) {
       connection.destroy()
     }
 
     connections.add(connection)
-    connection.once('close', function () {
+    connection.once('close', () => {
       connections.delete(connection)
     })
   })
   server.stop = function () {
     server.__closing = true
-    server.once('close', function () {
+    server.once('close', () => {
       server.__closing = false
     })
-    connections.forEach(function (connection) {
+    connections.forEach((connection) => {
       connection.destroy()
     })
   }

@@ -9,8 +9,8 @@
  * - authServer: takes a stanza and extracts the information
  */
 
-var util = require('util')
-var EventEmitter = require('events').EventEmitter
+const util = require('util')
+const EventEmitter = require('events').EventEmitter
 
 // Mechanisms
 function Mechanism () {}
@@ -20,31 +20,31 @@ util.inherits(Mechanism, EventEmitter)
 // The following functions will be overridden by xmpp server
 Mechanism.prototype = {
   /**
-   * handle failures within the mechanism
+   * Handle failures within the mechanism
    * @param {String} error
    */
-  success: function () {},
+  success () {},
 
   /**
-   * handle failures within the mechanism
+   * Handle failures within the mechanism
    * @param {String} error
    */
-  failure: function () {},
+  failure () {},
 
-  authenticate: function () {},
+  authenticate () {},
 
-  manageAuth: function (stanza) {
-    var self = this
+  manageAuth (stanza) {
+    const self = this
 
-    var auth = Buffer.from(stanza.getText(), 'base64').toString('utf8')
-    this.authenticate(this.extractSasl(auth), function (err, user) {
+    const auth = Buffer.from(stanza.getText(), 'base64').toString('utf8')
+    this.authenticate(this.extractSasl(auth), (err, user) => {
       if (!err && user) {
         self.success(user)
       } else {
         self.failure(err)
       }
     })
-  }
+  },
 }
 
 // This method should be overrriden in custom mechanisms

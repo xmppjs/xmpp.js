@@ -1,16 +1,16 @@
 'use strict'
 
-var util = require('util')
-var crypto = require('crypto')
-var Element = require('node-xmpp-core').Element
-var Mechanism = require('./Mechanism')
-var JID = require('node-xmpp-core').JID
+const util = require('util')
+const crypto = require('crypto')
+const Element = require('node-xmpp-core').Element
+const Mechanism = require('./Mechanism')
+const JID = require('node-xmpp-core').JID
 
 /**
  * Hash a string
  */
 function md5 (s, encoding) {
-  var hash = crypto.createHash('md5')
+  const hash = crypto.createHash('md5')
   hash.update(s, 'binary')
   return hash.digest(encoding || 'binary')
 }
@@ -22,7 +22,7 @@ function md5Hex (s) {
  * Parse SASL serialization
  */
 function parseDict (s) {
-  var result = {}
+  const result = {}
   while (s) {
     var m
     if ((m = /^(.+?)=(.*?[^\\]),\s*(.*)/.exec(s))) {
@@ -48,12 +48,12 @@ function parseDict (s) {
  * SASL serialization
  */
 function encodeDict (dict) {
-  var s = ''
-  for (var k in dict) {
-    var v = dict[k]
+  let s = ''
+  for (const k in dict) {
+    const v = dict[k]
     if (v) s += ',' + k + '="' + v + '"'
   }
-  return s.substr(1) // without first ','
+  return s.substr(1) // Without first ','
 }
 
 /**
@@ -72,15 +72,15 @@ function rjust (s, targetLen, padding) {
  * (number used once)
  */
 function generateNonce () {
-  var result = ''
-  for (var i = 0; i < 8; i++) {
+  let result = ''
+  for (let i = 0; i < 8; i++) {
     result += String.fromCharCode(48 +
       Math.ceil(Math.random() * 10))
   }
   return result
 }
 
-var NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl'
+const NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl'
 
 /**
  * @see http://tools.ietf.org/html/rfc2831
@@ -114,15 +114,15 @@ DigestMD5.prototype.getNC = function () {
 }
 
 DigestMD5.prototype.responseValue = function (s, password) {
-  var dict = parseDict(s)
+  const dict = parseDict(s)
   if (dict.realm) {
     this.realm = dict.realm
   }
 
-  var value
+  let value
   if (dict.nonce && dict.qop) {
     this.nonceCount++
-    var a1 = md5(this.authcid + ':' +
+    let a1 = md5(this.authcid + ':' +
         this.realm + ':' +
         password) + ':' +
       dict.nonce + ':' +
@@ -130,7 +130,7 @@ DigestMD5.prototype.responseValue = function (s, password) {
 
     if (this.actAs) a1 += ':' + this.actAs
 
-    var a2 = 'AUTHENTICATE:' + this.digestUri
+    let a2 = 'AUTHENTICATE:' + this.digestUri
     if ((dict.qop === 'auth-int') || (dict.qop === 'auth-conf')) {
       a2 += ':00000000000000000000000000000000'
     }
@@ -146,7 +146,7 @@ DigestMD5.prototype.responseValue = function (s, password) {
 }
 
 DigestMD5.prototype.serverChallenge = function () {
-  var dict = {}
+  const dict = {}
   dict.realm = this.domain
   this.nonce = dict.nonce = generateNonce()
   dict.qop = 'auth'
@@ -157,14 +157,14 @@ DigestMD5.prototype.serverChallenge = function () {
 
 // Used on the server to check for auth!
 DigestMD5.prototype.checkResponse = function (s) {
-  var dict = parseDict(s)
+  const dict = parseDict(s)
   this.authcid = this.username = dict.username
 
   this.digestUri = dict['digest-uri']
   if (dict.nonce !== this.nonce) return false
   if (!dict.cnonce) return false
 
-  // dict['serv-type'] should be xmpp
+  // Dict['serv-type'] should be xmpp
 
   if (dict.nc) {
     this.nc = dict.nc
@@ -178,56 +178,56 @@ DigestMD5.prototype.checkResponse = function (s) {
 
 DigestMD5.prototype.manageAuth = function (stanza, server) {
   if (stanza.is('auth', NS_XMPP_SASL)) {
-    // send initial challenge to client
-    var challenge = new Element('challenge', {
-      xmlns: NS_XMPP_SASL
+    // Send initial challenge to client
+    const challenge = new Element('challenge', {
+      xmlns: NS_XMPP_SASL,
     }).t(this.serverChallenge())
     server.send(challenge)
   } else if (stanza.is('response', NS_XMPP_SASL) && stanza.getText() !== '') {
-    // response from client with challenge
-    var responseValid = this.checkResponse(Buffer.from(stanza.getText(), 'base64'))
-    var self = this
+    // Response from client with challenge
+    const responseValid = this.checkResponse(Buffer.from(stanza.getText(), 'base64'))
+    const self = this
     if (responseValid) {
-      var user = {
-        'username': self.authcid
+      const user = {
+        'username': self.authcid,
       }
-      this.authenticate(user, function (err, user) {
-        // send final challenge and wait for response from user
+      this.authenticate(user, (err, user) => {
+        // Send final challenge and wait for response from user
         if (self.response === self.responseValue(Buffer.from(stanza.getText(), 'base64'), user.password)) {
-          var challenge = new Element('challenge', {
-            xmlns: NS_XMPP_SASL
+          const challenge = new Element('challenge', {
+            xmlns: NS_XMPP_SASL,
           })
             .t(Buffer.from('rspauth=ea40f60335c427b5527b84dbabcdfffd').toString('base64'))
           server.send(challenge)
           delete user.password
           self.user = user
         } else {
-          // no authenticated <response xmlns='urn:ietf:params:xml:ns:xmpp-sasl'/>
+          // No authenticated <response xmlns='urn:ietf:params:xml:ns:xmpp-sasl'/>
           self.failure(err)
         }
       })
     } else {
-      // error if we are not able to authenticate the user
+      // Error if we are not able to authenticate the user
       self.failure(new Error('Invalid response'))
     }
   } else if (stanza.is('response', NS_XMPP_SASL) && this.user) {
-    // here we are successfully authenticated and are able to call the callback
+    // Here we are successfully authenticated and are able to call the callback
     this.success(this.user)
   } else if (stanza.is('response', NS_XMPP_SASL)) {
-    // client wants to skip mechanism steps
+    // Client wants to skip mechanism steps
     this.failure(new Error('Invalid response'))
   }
 }
 
 DigestMD5.prototype.loginFailed = function (server) {
-  var jid = false
+  let jid = false
   if (this.username) {
     jid = new JID(this.username, server.serverdomain ? server.serverdomain.toString() : '')
   }
 
   server.emit('auth-failure', jid)
   server.send(new Element('response', {
-    xmlns: NS_XMPP_SASL
+    xmlns: NS_XMPP_SASL,
   }))
 }
 
