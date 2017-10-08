@@ -43,8 +43,7 @@ class Session extends EventEmitter {
     }
   }
 
-  _addConnectionListeners(con) {
-    con = con || this.connection
+  _addConnectionListeners(con = this.connection) {
     con.on('stanza', this.onStanza.bind(this))
     con.on('drain', this.emit.bind(this, 'drain'))
     con.on('data', this.emit.bind(this, 'data'))

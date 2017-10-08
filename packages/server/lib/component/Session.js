@@ -63,8 +63,7 @@ class ComponentSession extends EventEmitter {
     this.connection.end()
   }
 
-  _addConnectionListeners(con) {
-    con = con || this.connection
+  _addConnectionListeners(con = this.connection) {
     con.on('streamStart', this.onStreamStart.bind(this))
     con.on('stanza', this.onStanza.bind(this))
     con.on('drain', this.emit.bind(this, 'drain'))
