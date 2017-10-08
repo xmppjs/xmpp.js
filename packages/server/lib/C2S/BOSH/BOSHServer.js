@@ -72,15 +72,15 @@ class BOSHServer extends EventEmitter {
   }
 
   listen(...args) {
-    this.server.listen.apply(this.server, args)
+    this.server.listen(...args)
   }
 
   close(...args) {
-    this.server.close.apply(this.server, args)
+    this.server.close(...args)
   }
 
   stop(...args) {
-    this.server.stop.apply(this.server, args)
+    this.server.stop(...args)
   }
 
   /**

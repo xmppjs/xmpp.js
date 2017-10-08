@@ -67,7 +67,7 @@ class Server extends EventEmitter {
   }
 
   close(...args) {
-    this.server.close.apply(this.server, args)
+    this.server.close(...args)
   }
 
   end(fn = () => { }) {
