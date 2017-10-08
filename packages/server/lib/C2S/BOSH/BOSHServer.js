@@ -71,16 +71,16 @@ class BOSHServer extends EventEmitter {
     res.setHeader('Access-Control-Allow-Headers', options.headers.join(', '))
   }
 
-  listen() {
-    this.server.listen.apply(this.server, arguments)
+  listen(...args) {
+    this.server.listen.apply(this.server, args)
   }
 
-  close() {
-    this.server.close.apply(this.server, arguments)
+  close(...args) {
+    this.server.close.apply(this.server, args)
   }
 
-  stop() {
-    this.server.stop.apply(this.server, arguments)
+  stop(...args) {
+    this.server.stop.apply(this.server, args)
   }
 
   /**

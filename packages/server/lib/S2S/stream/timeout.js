@@ -18,9 +18,9 @@ exports.attach = function (stream, timeout) {
   }
 
   const oldWrite = stream.write
-  stream.write = function () {
+  stream.write = function(...args) {
     updateTimer()
-    oldWrite.apply(this, arguments)
+    oldWrite.apply(this, args)
   }
   const clear = () => {
     if (timer) clearTimeout(timer)

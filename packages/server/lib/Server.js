@@ -66,8 +66,8 @@ class Server extends EventEmitter {
     this.server.listen(port, host, fn)
   }
 
-  close() {
-    this.server.close.apply(this.server, arguments)
+  close(...args) {
+    this.server.close.apply(this.server, args)
   }
 
   end(fn = () => { }) {
