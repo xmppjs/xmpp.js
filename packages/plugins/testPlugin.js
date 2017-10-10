@@ -69,6 +69,12 @@ module.exports = function(p) {
         return this.fakeIncomingResult(child, id)
       })
     },
+    scheduleIncomingError(child) {
+      return this.entity.promise('send').then(stanza => {
+        const {id} = stanza.attrs
+        return this.fakeIncomingError(child, id)
+      })
+    },
     fakeIncomingGet(child) {
       return this.fakeIncomingIq(<iq type="get">{child}</iq>).then(stanza => {
         const [child] = stanza.children
@@ -90,6 +96,19 @@ module.exports = function(p) {
     fakeIncomingResult(child, id) {
       return this.fakeIncomingIq(
         <iq type="result" id={id}>
+          {child}
+        </iq>
+      ).then(stanza => {
+        const [child] = stanza.children
+        if (child) {
+          child.parent = null
+        }
+        return child
+      })
+    },
+    fakeIncomingError(child, id) {
+      return this.fakeIncomingIq(
+        <iq type="error" id={id}>
           {child}
         </iq>
       ).then(stanza => {
