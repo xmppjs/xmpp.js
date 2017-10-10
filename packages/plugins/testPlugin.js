@@ -120,12 +120,16 @@ module.exports = function(p) {
       })
     },
     fakeIncomingIq(el) {
-      const p = entity.promise('send')
       const stanza = el.clone()
-      delete stanza.attrs.xmlns
       if (stanza.is('iq') && !stanza.attrs.id) {
         stanza.attrs.id = 'fake'
       }
+      return this.fakeIncoming(stanza)
+    },
+    fakeIncoming(el) {
+      const p = entity.promise('send')
+      const stanza = el.clone()
+      delete stanza.attrs.xmlns
       Promise.resolve().then(() => entity.emit('element', stanza))
       return p.then(el => {
         return this.sanitize(el).stanza
