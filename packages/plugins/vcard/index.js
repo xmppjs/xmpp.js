@@ -2,34 +2,24 @@
 
 const {xml, plugin} = require('@xmpp/plugin')
 const iqCaller = require('../iq-caller')
+const entries = require('object.entries')
 
 const NS = 'vcard-temp'
 
-const parse = el => {
-  const dict = {}
-  el.children.forEach(c => {
-    if (c.children && typeof c.children[0] === 'string') {
-      dict[c.name] = c.text()
-    } else {
-      dict[c.name] = parse(c)
-    }
-  })
-  return dict
+function parse({children}) {
+  return children.reduce((dict, c) => {
+    dict[c.name] =
+      c.children && typeof c.children[0] === 'string' ? c.text() : parse(c)
+    return dict
+  }, {})
 }
 
-const build = (dict, parent) => {
-  const el = parent || xml('vCard', {xmlns: NS})
-  for (const key of Object.keys(dict)) {
-    const val = dict[key]
-    if (typeof val === 'object') {
-      el.cnode(build(val, xml(key)))
-    } else if (val) {
-      el.cnode(xml(key, {}, val))
-    } else {
-      el.cnode(xml(key))
-    }
-  }
-  return el
+function build(dict, parent) {
+  return (parent || xml('vCard', {xmlns: NS})).append(
+    entries(dict).map(([key, val]) => {
+      return typeof val === 'object' ? build(val, xml(key)) : xml(key, {}, val)
+    })
+  )
 }
 
 module.exports = plugin(

@@ -5,7 +5,7 @@ PATH := node_modules/.bin:$(PATH)
 setup:
 	yarn
 	lerna bootstrap
-	node packages/xmpp.js/gen.js
+	node script.js
 
 lint:
 	eslint .
