@@ -6,43 +6,39 @@ Supports Node.js and browsers.
 
 ## Install
 
-```js
-npm install @xmpp/plugins
 ```
-
-## Hooks
-
-```js
-`` // match any
-`presence` // match stanza with name of presence
-`message` // match stanza with name of presence
-`iq` // match stanza with name of iq
-`NAME/XMLNS/CHILD` // match stanza with name, child xmlns and child name
-`NAME-TYPE` // match stanza with name and type
-`NAME-TYPE/XMLNS/CHILD` // match stanza with name, type, child xmlns and child name
+npm install @xmpp/middleware
+```
 
 ## Usage
 
 ```js
-const router = client.plugin(require('@xmpp/plugins/router'))
+const {Client} = new require('@xmpp/client')
+const middleware = require('@xmpp/middlware')
+
+const client = new Client()
+const app = middleware(client)
 ```
 
 ### use
 
-`event` argument is optional and defaults to `''`
+The `use` method registers a middleware for incoming stanzas.
 
 ```js
-router.use(event, incoming => {
-  return foobar
+app.use(ctx (ctx, next) => {
+
 })
 ```
 
+
 ### filter
 
-`event` argument is optional and defaults to `''`
+
+The `filter` method registers a middleware for outgoing stanzas.
+
 
 ```js
-router.filter(event, outgoing => {
-  return foobar
+app.use(ctx (ctx, next) => {
+
 })
 ```

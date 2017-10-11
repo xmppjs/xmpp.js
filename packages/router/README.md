@@ -6,8 +6,8 @@ Supports Node.js and browsers.
 
 ## Install
 
-```js
-npm install @xmpp/plugins
+```
+npm install @xmpp/router
 ```
 
 ## Hooks
@@ -20,11 +20,17 @@ npm install @xmpp/plugins
 `NAME/XMLNS/CHILD` // match stanza with name, child xmlns and child name
 `NAME-TYPE` // match stanza with name and type
 `NAME-TYPE/XMLNS/CHILD` // match stanza with name, type, child xmlns and child name
+```
 
 ## Usage
 
 ```js
-const router = client.plugin(require('@xmpp/plugins/router'))
+const {Client} = new require('@xmpp/client')
+const middleware = require('@xmpp/middlware')
+const router = require('@xmpp/router')
+
+const client = new Client()
+const app = router(middleware(client))
 ```
 
 ### use
@@ -32,8 +38,7 @@ const router = client.plugin(require('@xmpp/plugins/router'))
 `event` argument is optional and defaults to `''`
 
 ```js
-router.use(event, incoming => {
-  return foobar
+router.use(event, (ctx, next) => {
 })
 ```
 
@@ -42,7 +47,6 @@ router.use(event, incoming => {
 `event` argument is optional and defaults to `''`
 
 ```js
-router.filter(event, outgoing => {
-  return foobar
+router.filter(event, (ctx, next) => {
 })
 ```

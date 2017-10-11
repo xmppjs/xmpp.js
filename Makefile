@@ -12,11 +12,23 @@ lint:
 	eslint .
 
 test:
+	cd packages/xmpp.js/ && yarn run prepublish
+	yarn
+	lerna bootstrap
+	cd packages/client/ && yarn run prepublish
+	ava
+	eslint .
+	bundlesize
+
+test-ci:
+	yarn
+	lerna bootstrap
 	ava
 	eslint .
 	make restart
 	ava --serial --fail-fast test/
-	make size
+	lerna run prepublish
+	bundlesize
 
 clean:
 	make stop

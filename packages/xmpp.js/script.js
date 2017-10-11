@@ -7,9 +7,8 @@ const path = require('path')
 
 const packages = fs
   .readdirSync(path.join(__dirname, '..'))
-  .filter(
-    p => !['console', 'xmpp.js', 'plugins'].includes(p) && !p.startsWith('.')
-  )
+  // For some reason there's a * file on travis
+  .filter(p => !['console', 'plugins', '*'].includes(p) && !p.includes('.'))
 
 const pkg = require(path.join(__dirname, 'package.json'))
 
@@ -20,7 +19,7 @@ pkg.dependencies = packages.reduce((dict, name) => {
 }, {})
 fs.writeFileSync(
   path.join(__dirname, 'package.json'),
-  JSON.stringify(pkg, null, 2)
+  JSON.stringify(pkg, null, 2) + '\n'
 )
 
 // Write index.js

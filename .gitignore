@@ -12,7 +12,6 @@ server/prosody.pid
 !.gitignore
 !.travis.yml
 
-bundle.js
 npm-debug.log
 lerna-debug.log
 yarn-error.log
