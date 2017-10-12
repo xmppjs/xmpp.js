@@ -3,6 +3,18 @@
 const _Element = require('ltx/lib/Element')
 
 class Element extends _Element {
+  setAttrs(attrs) {
+    if (typeof attrs === 'string') {
+      this.attrs.xmlns = attrs
+    } else if (attrs) {
+      Object.keys(attrs).forEach(function(key) {
+        const val = attrs[key]
+        if (val !== undefined && val !== null)
+          this.attrs[key.toString()] = val.toString()
+      }, this)
+    }
+  }
+
   append(nodes) {
     nodes = Array.isArray(nodes) ? nodes : [nodes]
     nodes.forEach(node => {

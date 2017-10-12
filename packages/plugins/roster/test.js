@@ -3,6 +3,7 @@
 const test = require('ava')
 const plugin = require('.')
 const testPlugin = require('../testPlugin')
+const JID = require('@xmpp/jid')
 
 test.beforeEach(t => {
   t.context = testPlugin(plugin)
@@ -36,7 +37,7 @@ test('get', t => {
       t.deepEqual(val, [
         [
           {
-            jid: 'foo@foobar.com',
+            jid: new JID('foo@foobar.com'),
             name: 'Foo',
             subscription: 'both',
             approved: false,
@@ -44,7 +45,7 @@ test('get', t => {
             groups: ['Friends', 'Buddies'],
           },
           {
-            jid: 'bar@foobar.com',
+            jid: new JID('bar@foobar.com'),
             name: 'Bar',
             subscription: 'from',
             approved: true,
@@ -94,7 +95,7 @@ test('get with ver, new roster', t => {
       t.deepEqual(val, [
         [
           {
-            jid: 'foo@bar',
+            jid: new JID('foo@bar'),
             groups: [],
             ask: false,
             subscription: 'none',
@@ -121,6 +122,24 @@ test('set with string', t => {
       )
     }),
     t.context.plugin.set('foo@bar').then(val => {
+      t.deepEqual(val, undefined)
+    }),
+  ])
+})
+
+test('set with jid', t => {
+  t.context.scheduleIncomingResult()
+
+  return Promise.all([
+    t.context.catchOutgoingSet().then(child => {
+      t.deepEqual(
+        child,
+        <query xmlns="jabber:iq:roster">
+          <item jid="foo@bar" />
+        </query>
+      )
+    }),
+    t.context.plugin.set(new JID('foo@bar')).then(val => {
       t.deepEqual(val, undefined)
     }),
   ])
@@ -170,7 +189,7 @@ test('remove', t => {
 test.serial('push remove', t => {
   return Promise.all([
     t.context.plugin.promise('remove').then(([jid, ver]) => {
-      t.is(jid, 'foo@bar')
+      t.deepEqual(jid, new JID('foo@bar'))
       t.is(ver, 'v1')
     }),
     t.context
@@ -189,7 +208,7 @@ test.serial('push set', t => {
   return Promise.all([
     t.context.plugin.promise('set').then(([item, ver]) => {
       t.deepEqual(item, {
-        jid: 'foo@bar',
+        jid: new JID('foo@bar'),
         name: '',
         ask: false,
         approved: false,

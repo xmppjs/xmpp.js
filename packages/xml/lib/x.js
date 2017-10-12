@@ -2,10 +2,6 @@
 
 const Element = require('./Element')
 
-function removeUndefinedProperties(obj) {
-  Object.keys(obj).forEach(key => obj[key] === undefined && delete obj[key])
-}
-
 function append(el, child) {
   if (child instanceof Element) {
     el.append(child)
@@ -17,9 +13,6 @@ function append(el, child) {
 }
 
 function x(name, attrs, ...children) {
-  if (attrs) {
-    removeUndefinedProperties(attrs)
-  }
   const el = new Element(name, attrs)
   for (let i = 0; i < children.length; i++) {
     append(el, children[i])

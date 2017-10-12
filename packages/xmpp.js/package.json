@@ -25,11 +25,17 @@
     "@xmpp/connection-tcp": "^0.3.0",
     "@xmpp/debug": "^0.3.0",
     "@xmpp/events": "^0.3.0",
+    "@xmpp/id": "^0.3.0",
     "@xmpp/jid": "^0.3.0",
+    "@xmpp/middleware": "^0.3.0",
     "@xmpp/plugin": "^0.3.0",
     "@xmpp/resolve": "^0.3.0",
+    "@xmpp/router": "^0.3.0",
     "@xmpp/time": "^0.3.0",
     "@xmpp/uri": "^0.3.0",
     "@xmpp/xml": "^0.3.0"
+  },
+  "scripts": {
+    "prepublish": "node script.js"
   }
 }
