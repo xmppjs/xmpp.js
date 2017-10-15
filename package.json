@@ -28,7 +28,11 @@
   "ava": {
     "require": "babel-register",
     "babel": "inherit",
-    "files": ["packages/**/test.js", "packages/**/test/*.js"]
+    "files": [
+      "packages/**/test.js",
+      "packages/**/test/*.js",
+      "!packages/test/*.js"
+    ]
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",

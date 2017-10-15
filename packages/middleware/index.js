@@ -7,7 +7,6 @@ const OutgoingContext = require('./lib/OutgoingContext')
 
 function listener(entity, middleware, Context) {
   return function(stanza) {
-    if (!entity.jid) return
     const ctx = new Context(entity, stanza)
     return compose(middleware)(ctx)
   }

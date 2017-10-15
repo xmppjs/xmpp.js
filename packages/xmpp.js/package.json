@@ -31,6 +31,7 @@
     "@xmpp/plugin": "^0.3.0",
     "@xmpp/resolve": "^0.3.0",
     "@xmpp/router": "^0.3.0",
+    "@xmpp/test": "^0.3.0",
     "@xmpp/time": "^0.3.0",
     "@xmpp/uri": "^0.3.0",
     "@xmpp/xml": "^0.3.0"

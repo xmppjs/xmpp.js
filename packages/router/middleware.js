@@ -4,14 +4,18 @@ function matches(event, ctx) {
   const {name, type, stanza} = ctx
   const [child] = stanza.children
 
-  const events = [`${name}`, `${name}-${type}`]
+  const events = [`${name}`]
 
-  if (child) {
+  if (type) {
+    events.push(`${name}-${type}`)
+  }
+
+  if (child && child.findNS) {
     const NS = child.findNS()
-    events.push(
-      `${name}/${NS}/${child.name}`,
-      `${name}-${type}/${NS}/${child.name}`
-    )
+    events.push(`${name}/${NS}/${child.name}`)
+    if (type) {
+      events.push(`${name}-${type}/${NS}/${child.name}`)
+    }
   }
 
   return events.includes(event)
