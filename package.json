@@ -10,12 +10,12 @@
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
     "bundlesize": "^0.15.2",
-    "eslint": "^4.8.0",
+    "eslint": "^4.9.0",
     "eslint-config-prettier": "^2.6.0",
     "eslint-config-xo": "^0.18.2",
     "eslint-plugin-node": "^5.2.0",
     "eslint-plugin-prettier": "^2.2.0",
-    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
     "eslint-plugin-unicorn": "^2.1.2",
     "exorcist": "^1.0.0",
@@ -43,7 +43,9 @@
     "node": ">= 6",
     "yarn": ">= 0.28"
   },
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "bundlesize": [
     {
       "path": "./packages/client/dist/xmpp.min.js",
