@@ -9,7 +9,10 @@ module.exports = class IncomingContext extends Context {
 
     const {to, from} = stanza.attrs
 
-    this.from = new JID(from || entity.jid.domain)
+    this.from = new JID(
+      from || (entity.jid && entity.jid.domain) || entity.openOptions.domain
+    )
+
     this.to = to ? new JID(to) : entity.jid
 
     this.local = this.from.local || ''

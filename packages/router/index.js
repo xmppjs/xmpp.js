@@ -1,14 +1,14 @@
 'use strict'
 
-const route = require('./middleware')
+const route = require('./route')
 
-module.exports = router => {
+module.exports = middleware => {
   return {
     use(...args) {
-      return router.use(route(...args))
+      middleware.use(route(...args))
     },
     filter(...args) {
-      return router.filter(route(...args))
+      middleware.filter(route(...args))
     },
 
     error(...args) {
