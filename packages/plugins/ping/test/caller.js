@@ -20,3 +20,15 @@ test('#ping', t => {
     }),
   ])
 })
+
+test('#ping resolve for feature-not-implemented error', t => {
+  t.context.scheduleIncomingError(
+    <error type='cancel'>
+      <feature-not-implemented xmlns='urn:ietf:params:xml:ns:xmpp-stanzas'/>
+    </error>
+  )
+
+  return t.context.plugin.ping().then(val => {
+    t.deepEqual(val, undefined)
+  })
+})

@@ -12,6 +12,10 @@
     "client",
     "component"
   ],
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
+  },
   "dependencies": {
     "@xmpp/client": "^0.3.0",
     "@xmpp/client-core": "^0.3.0",
@@ -19,19 +23,20 @@
     "@xmpp/component-core": "^0.3.0",
     "@xmpp/connection": "^0.3.0",
     "@xmpp/connection-tcp": "^0.3.0",
-    "@xmpp/console": "^0.3.0",
     "@xmpp/debug": "^0.3.0",
     "@xmpp/events": "^0.3.0",
+    "@xmpp/id": "^0.3.0",
     "@xmpp/jid": "^0.3.0",
+    "@xmpp/middleware": "^0.3.0",
     "@xmpp/plugin": "^0.3.0",
-    "@xmpp/plugins": "^0.3.0",
     "@xmpp/resolve": "^0.3.0",
+    "@xmpp/router": "^0.3.0",
+    "@xmpp/test": "^0.3.0",
     "@xmpp/time": "^0.3.0",
     "@xmpp/uri": "^0.3.0",
     "@xmpp/xml": "^0.3.0"
   },
-  "engines": {
-    "node": ">= 6",
-    "npm": ">= 2"
+  "scripts": {
+    "prepublish": "node script.js"
   }
 }

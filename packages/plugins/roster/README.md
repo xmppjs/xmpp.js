@@ -34,7 +34,7 @@ roster.get(ver).then([roster, newver] => {
   /*
   [
     {
-      jid: 'foo@bar',
+      jid: JID('foo@bar'), // see https://github.com/xmppjs/xmpp.js/tree/master/packages/jid
       name: 'Foo Bar',
       approved: false,
       subscription: 'none',
@@ -88,7 +88,7 @@ Emitted when a roster entry was removed.
 
 ```js
 roster.on('remove', ([jid, ver]) => {
-  console.log(jid, 'removed')
+  console.log(jid.toString(), 'removed')
 
   console.log(ver)
   // new roster versioning string

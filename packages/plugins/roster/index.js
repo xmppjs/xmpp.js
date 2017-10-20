@@ -1,6 +1,7 @@
 'use strict'
 
 const {xml, plugin} = require('@xmpp/plugin')
+const JID = require('@xmpp/jid')
 const iqCaller = require('../iq-caller')
 const iqCallee = require('../iq-callee')
 
@@ -13,6 +14,7 @@ function parseItem(item) {
     ask: item.attrs.ask === 'subscribe',
     name: item.attrs.name || '',
     subscription: item.attrs.subscription || 'none',
+    jid: new JID(item.attrs.jid),
   })
 }
 
@@ -32,9 +34,10 @@ module.exports = plugin(
         })
     },
     set(item, ...args) {
-      if (typeof item === 'string') {
+      if (typeof item === 'string' || item instanceof JID.JID) {
         item = {jid: item}
       }
+
       const groups = item.groups || []
       delete item.groups
       return this.plugins['iq-caller'].set(

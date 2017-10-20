@@ -94,7 +94,6 @@ module.exports = plugin(
       // this.plugins['disco-callee'].features.add('http://jabber.org/protocol/caps#optimize') TODO
 
       // We need a better hook API
-      // something like stanza-router for outgoing stanzas or something new for both
       entity.on('outgoing', stanza => {
         if (!stanza.is('presence')) return
         if (stanza.attrs.from) {

@@ -33,8 +33,7 @@ before_script:
   - sudo service prosody stop
 
 script:
-  - make
-  - make test
+  - make test-ci
 
 after_failure:
   - cat server/prosody.err
