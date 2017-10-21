@@ -2,7 +2,8 @@
 
 const Server = require('../Server')
 const Plain = require('./authentication/Plain')
-const Session = require('./Session')
+const accept = require('../plugins/accept')
+const features = require('../plugins/features')
 
 /**
  * Params:
@@ -67,6 +68,9 @@ class C2SServer extends Server {
   }
 }
 
-C2SServer.prototype.Session = Session
+C2SServer.prototype.plugins = {
+  accept,
+  features,
+}
 
 module.exports = C2SServer

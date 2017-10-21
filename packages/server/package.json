@@ -7,8 +7,12 @@
   "license": "MIT",
   "dependencies": {
     "@xmpp/connection": "^0.3.0",
+    "@xmpp/connection-tcp": "^0.3.0",
     "@xmpp/events": "^0.3.0",
     "@xmpp/jid": "^0.3.0",
+    "@xmpp/middleware": "^0.3.0",
+    "@xmpp/plugin": "^0.3.0",
+    "@xmpp/router": "^0.3.0",
     "@xmpp/xml": "^0.3.0",
     "debug": "^3.1.0",
     "hat": "^0.0.3",

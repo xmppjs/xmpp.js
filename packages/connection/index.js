@@ -1,6 +1,6 @@
 'use strict'
 
-const {timeout, EventEmitter, promise} = require('@xmpp/events')
+const { timeout, EventEmitter, promise } = require('@xmpp/events')
 const jid = require('@xmpp/jid')
 const url = require('url')
 const xml = require('@xmpp/xml')
@@ -159,7 +159,7 @@ class Connection extends EventEmitter {
     this.startOptions = options
 
     if (typeof options === 'string') {
-      options = {uri: options}
+      options = { uri: options }
     }
 
     if (!options.domain) {
@@ -169,8 +169,8 @@ class Connection extends EventEmitter {
     return Promise.all([
       this.promise('online'),
       this.connect(options.uri).then(() => {
-        const {domain, lang} = options
-        return this.open({domain, lang})
+        const { domain, lang } = options
+        return this.open({ domain, lang })
       }),
     ]).then(([addr]) => addr)
   }
@@ -183,13 +183,18 @@ class Connection extends EventEmitter {
     this.connectOptions = options
     return new Promise((resolve, reject) => {
       this._attachParser(new this.Parser())
-      this._attachSocket(new this.Socket())
-      this.socket.once('error', reject)
-      this.socket.connect(this.socketParameters(options), () => {
-        this.socket.removeListener('error', reject)
+      this._attachSocket(options.socket || new this.Socket())
+      if (options.socket) {
+        // Got already connected socket - we're done
         resolve()
-        // The 'connect' status is emitted by the socket 'connect' listener
-      })
+      } else {
+        this.socket.once('error', reject)
+        this.socket.connect(this.socketParameters(options), () => {
+          this.socket.removeListener('error', reject)
+          resolve()
+          // The 'connect' status is emitted by the socket 'connect' listener
+        })
+      }
     })
   }
 
@@ -213,10 +218,10 @@ class Connection extends EventEmitter {
     // Useful for stream-features restart
     this.openOptions = options
     if (typeof options === 'string') {
-      options = {domain: options}
+      options = { domain: options }
     }
 
-    const {domain, lang} = options
+    const { domain, lang } = options
 
     const headerElement = this.headerElement()
     headerElement.attrs.to = domain
@@ -323,7 +328,7 @@ class Connection extends EventEmitter {
   }
 
   isStanza(element) {
-    const {name} = element
+    const { name } = element
     const NS = element.attrs.xmlns
     return (
       // This.online && FIXME
@@ -363,7 +368,7 @@ class Connection extends EventEmitter {
   footer(el) {
     return el.toString()
   }
-  footerElement() {}
+  footerElement() { }
   socketParameters(uri) {
     const parsed = url.parse(uri)
     parsed.port = Number(parsed.port)

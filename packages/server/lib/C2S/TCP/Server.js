@@ -3,6 +3,7 @@
 const tls = require('tls')
 const net = require('net')
 const fs = require('fs')
+const ConnectionTCP = require('@xmpp/connection-tcp')
 const C2SServer = require('../Server')
 const serverStop = require('../../serverStop')
 
@@ -45,5 +46,6 @@ class TCPServer extends C2SServer {
 }
 
 TCPServer.prototype.DEFAULT_PORT = TCP_PORT
+TCPServer.prototype.Connection = ConnectionTCP
 
 module.exports = TCPServer

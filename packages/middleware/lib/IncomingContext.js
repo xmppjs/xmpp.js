@@ -7,16 +7,16 @@ module.exports = class IncomingContext extends Context {
   constructor(entity, stanza) {
     super(entity, stanza)
 
-    const {to, from} = stanza.attrs
+    const { to: stanzaTo, from: stanzaFrom } = stanza.attrs
 
-    this.from = new JID(
-      from || (entity.jid && entity.jid.domain) || entity.openOptions.domain
-    )
+    this.to = stanzaTo ? new JID(stanzaTo) : entity.jid
 
-    this.to = to ? new JID(to) : entity.jid
-
-    this.local = this.from.local || ''
-    this.domain = this.from.domain
-    this.resource = this.from.resource || ''
+    const from = stanzaFrom || (entity.jid && entity.jid.domain) || entity.openOptions.domain
+    if (from) {
+      this.from = new JID(from)
+      this.local = this.from.local || ''
+      this.domain = this.from.domain
+      this.resource = this.from.resource || ''
+    }
   }
 }

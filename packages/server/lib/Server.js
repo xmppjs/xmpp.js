@@ -1,6 +1,9 @@
 'use strict'
 
-const { EventEmitter } = require('@xmpp/events')
+const { EventEmitter, promise } = require('@xmpp/events')
+const middleware = require('@xmpp/middleware')
+const router = require('@xmpp/router')
+const { rack } = require('hat')
 
 class Server extends EventEmitter {
   constructor(options) {
@@ -9,7 +12,7 @@ class Server extends EventEmitter {
     this.options = options || {}
     this.port = this.options.port || this.DEFAULT_PORT
 
-    this.sessions = new Set()
+    this.connections = new Set()
 
     this.on('connection', this.onConnection.bind(this))
 
@@ -26,28 +29,37 @@ class Server extends EventEmitter {
     }
   }
 
-  onConnection(session) {
-    this.sessions.add(session)
-    session.connection.once('close', this.onConnectionClosed.bind(this, session))
+  onConnection(connection) {
+    this.connections.add(connection)
+    connection.once('close', this.onConnectionClosed.bind(this, connection))
   }
 
-  onConnectionClosed(session) {
-    this.sessions.delete(session)
+  onConnectionClosed(connection) {
+    this.connections.delete(connection)
     // FIXME: should we remove all listeners?
   }
 
   acceptConnection(socket) {
-    const session = new this.Session({
-      rejectUnauthorized: this.options.rejectUnauthorized,
-      requestCert: this.options.requestCert,
-      socket,
-      server: this,
-      streamOpen: this.options.streamOpen,
-      streamClose: this.options.streamClose,
-      streamAttrs: this.options.streamAttrs,
+    const connection = new this.Connection({})
+    socket.connection = connection
+    connection.server = this
+    connection.authenticated = false
+    connection.generateId = rack(this.options.idBits, this.options.idBitsBase, this.options.idBitsExpandBy)
+    connection.id = connection.generateId()
+    connection.mw = middleware(connection)
+    connection.router = router(connection.mw)
+    Object.keys(this.plugins).forEach(name => {
+      const plugin = this.plugins[name]
+      // Ignore browserify stubs
+      if (!plugin.plugin) {
+        return
+      }
+      connection.plugin(plugin)
     })
-    socket.session = session
-    this.emit('connection', session)
+    socket.connection = connection
+    connection.server = this
+    this.emit('connection', connection)
+    connection.accept(socket)
   }
 
   listen(port, host, fn) {
@@ -63,6 +75,8 @@ class Server extends EventEmitter {
     host = host || this.options.host || '::'
 
     this.server.listen(port, host, fn)
+
+    return promise(this.server, 'listening')
   }
 
   close(...args) {
@@ -72,17 +86,17 @@ class Server extends EventEmitter {
   end(fn = () => { }) {
     this.once('close', fn)
     this.close()
-    this.endSessions()
+    this.endConnections()
     if (this.server && this.server.stop) this.server.stop()
   }
 
   // FIXME: this should be async, data might not be drained
-  endSessions() {
+  endConnections() {
     const self = this
-    this.sessions.forEach((session) => {
-      session.removeListener('close', self.onConnectionClosed)
-      session.end()
-      self.connections.delete(session)
+    this.connections.forEach((connection) => {
+      connection.removeListener('close', self.onConnectionClosed)
+      connection.end()
+      self.connections.delete(connection)
     })
   }
 }
@@ -91,7 +105,8 @@ class Server extends EventEmitter {
  * Those are meant to be overriden
  */
 Server.prototype.DEFAULT_PORT = null
-Server.prototype.Session = null
+Server.prototype.Connection = null
+Server.prototype.plugins = null
 
 Server.prototype.shutdown = Server.prototype.end
 
