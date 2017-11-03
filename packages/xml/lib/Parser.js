@@ -44,11 +44,13 @@ class Parser extends EventEmitter {
     })
     this.parser = parser
   }
+
   onStartElement(element, cursor) {
     if (!cursor) {
       this.emit('start', element)
     }
   }
+
   onEndElement(element, length) {
     if (length === 2) {
       this.emit('element', element)
@@ -56,6 +58,7 @@ class Parser extends EventEmitter {
       this.emit('end', element)
     }
   }
+
   onText(str, element) {
     if (!element) {
       this.emit('error', new XMLError(`${str} must be a child.`))
@@ -63,9 +66,11 @@ class Parser extends EventEmitter {
     }
     element.t(str)
   }
+
   write(data) {
     this.parser.write(data)
   }
+
   end(data) {
     if (data) {
       this.parser.write(data)

@@ -4,6 +4,7 @@ const {Parser} = require('@xmpp/xml')
 
 module.exports = class FramedParser extends Parser {
   onStartElement() {}
+
   onEndElement(element, length) {
     if (length === 1) {
       if (element.is('open', 'urn:ietf:params:xml:ns:xmpp-framing')) {

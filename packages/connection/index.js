@@ -354,16 +354,20 @@ class Connection extends EventEmitter {
   header(el) {
     return el.toString()
   }
+
   headerElement() {
     return new xml.Element('', {
       version: '1.0',
       xmlns: this.NS,
     })
   }
+
   footer(el) {
     return el.toString()
   }
+
   footerElement() {}
+
   socketParameters(uri) {
     const parsed = url.parse(uri)
     parsed.port = Number(parsed.port)

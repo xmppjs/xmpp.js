@@ -31,7 +31,8 @@ module.exports = plugin('stream-features', {
           .then(() => {
             if (feature.restart) {
               return entity.restart()
-            } else if (c === streamFeatures.length - 1) {
+            }
+            if (c === streamFeatures.length - 1) {
               if (entity.jid) entity._status('online', entity.jid)
             } else {
               iterate(c + 1)
