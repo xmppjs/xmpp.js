@@ -72,6 +72,7 @@ class JID {
     this._local = local && local.toLowerCase()
     return this
   }
+
   getLocal(unescape) {
     unescape = unescape || false
     let local = null
@@ -92,6 +93,7 @@ class JID {
     this._domain = domain.toLowerCase()
     return this
   }
+
   getDomain() {
     return this._domain
   }
@@ -103,6 +105,7 @@ class JID {
     this._resource = resource
     return this
   }
+
   getResource() {
     return this._resource
   }

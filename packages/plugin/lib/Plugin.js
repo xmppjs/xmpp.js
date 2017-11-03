@@ -13,6 +13,7 @@ class Plugin extends EventEmitter {
 
   // Override
   start() {}
+
   stop() {}
 }
 
