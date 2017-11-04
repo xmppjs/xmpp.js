@@ -10,6 +10,7 @@ const packages = fs
   // For some reason there's a * file on travis
   .filter(p => !['*'].includes(p) && !p.includes('.'))
   .map(name => require(path.join(__dirname, '..', name, 'package.json')))
+  .filter(pkg => pkg.private !== true)
 
 const xmppjsPackage = require(path.join(__dirname, 'package.json'))
 
