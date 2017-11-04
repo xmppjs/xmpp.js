@@ -1,9 +1,6 @@
 'use strict'
 
 const Server = require('../Server')
-const Plain = require('./authentication/Plain')
-const accept = require('../plugins/accept')
-const features = require('../plugins/features')
 
 /**
  * Params:
@@ -23,54 +20,28 @@ class C2SServer extends Server {
   constructor(options) {
     super(options)
 
-    this.availableSaslMechanisms = [Plain]
-
     // Don't allow anybody by default when using client cert auth
     if ((this.options.requestCert) &&
       (this.options.rejectUnauthorized !== false)) {
       this.options.rejectUnauthorized = true
     }
   }
-
-  /**
-   * Returns all registered sasl mechanisms
-   */
-  getSaslMechanisms() {
-    return this.availableSaslMechanisms
-  }
-
-  /**
-   * Removes all registered sasl mechanisms
-   */
-  clearSaslMechanism() {
-    this.availableSaslMechanisms = []
-  }
-
-  /**
-   * Register a new sasl mechanism
-   */
-  registerSaslMechanism(method) {
-    // Check if method is registered
-    if (this.availableSaslMechanisms.indexOf(method) === -1) {
-      this.availableSaslMechanisms.push(method)
-    }
-  }
-
-  /**
-   * Unregister an existing sasl mechanism
-   */
-  unregisterSaslMechanism(method) {
-    // Check if method is registered
-    const index = this.availableSaslMechanisms.indexOf(method)
-    if (index >= 0) {
-      this.availableSaslMechanisms.splice(index, 1)
-    }
-  }
 }
 
 C2SServer.prototype.plugins = {
-  accept,
-  features,
+  accept: require('../plugins/accept'),
+  features: require('../plugins/stream-features'),
+  sasl: require('../plugins/sasl'),
+  bind: require('../plugins/bind'),
+  session: require('../plugins/session'),
 }
 
 module.exports = C2SServer
+module.exports.auth = {
+  AbstractMechanism: require('./authentication/Mechanism'),
+  Mechanism: require('./authentication/Mechanism'),
+  Plain: require('./authentication/Plain'),
+  DigestMD5: require('./authentication/DigestMD5'),
+  XOAuth2: require('./authentication/XOAuth2'),
+  Anonymous: require('./authentication/Anonymous'),
+}

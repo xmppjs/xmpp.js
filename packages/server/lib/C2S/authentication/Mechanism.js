@@ -41,9 +41,9 @@ class Mechanism extends EventEmitter {
     })
   }
 
-  // This method should be overrriden in custom mechanisms
+  // This method should be overriden in custom mechanisms
   extractSasl() {
-    throw new Error('This is an abstract method, you should overrride it')
+    throw new Error('This is an abstract method, you should override it')
   }
 }
 

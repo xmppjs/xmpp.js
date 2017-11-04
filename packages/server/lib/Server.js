@@ -56,10 +56,8 @@ class Server extends EventEmitter {
       }
       connection.plugin(plugin)
     })
-    socket.connection = connection
-    connection.server = this
     this.emit('connection', connection)
-    connection.accept(socket)
+    connection.open({ socket })
   }
 
   listen(port, host, fn) {
