@@ -26,8 +26,7 @@
   "browser": {
     "ws": false,
     "buffer": false,
-    "crypto": false,
-    "object.entries": false
+    "crypto": false
   },
   "engines": {
     "node": ">= 6",
