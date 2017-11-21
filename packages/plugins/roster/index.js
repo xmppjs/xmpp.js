@@ -30,7 +30,7 @@ module.exports = plugin(
             return []
           }
 
-          return [res.getChildren('item').map(parseItem), res.attrs.ver]
+          return [res.getChildren('item').map(x => parseItem(x)), res.attrs.ver]
         })
     },
     set(item, ...args) {

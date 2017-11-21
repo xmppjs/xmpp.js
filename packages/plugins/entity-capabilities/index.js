@@ -45,7 +45,7 @@ function hash(query) {
 
   query
     .getChildren('identity')
-    .map(mapIdentites)
+    .map(x => mapIdentites(x))
     .sort(sortIdentities)
     .forEach(({category, type, name, lang}) => {
       s += `${category}/${type}/${lang}/${name}<`

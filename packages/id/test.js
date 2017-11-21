@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const xid = require('./index')
+const xid = require('.')
 
 test('returns a non empty string', t => {
   t.is(typeof xid(), 'string')

@@ -18,12 +18,15 @@
   "scripts": {
     "prepublish": "npm run bundle && npm run minify",
     "bundle":
-      "../../node_modules/.bin/browserify -d -s xmpp index.js -t [ babelify --global true --presets [es2015] ] | ../../node_modules/.bin/exorcist dist/xmpp.js.map > dist/xmpp.js",
+      "../../node_modules/.bin/browserify -p tinyify -d -s xmpp index.js -t [ babelify --global true --presets [es2015] ] | ../../node_modules/.bin/exorcist dist/xmpp.js.map > dist/xmpp.js",
     "minify":
       "../../node_modules/.bin/uglifyjs dist/xmpp.js -c -m --source-map url=xmpp.min.js.map,content=dist/xmpp.js.map -o dist/xmpp.min.js"
   },
   "engines": {
     "node": ">= 6",
     "npm": ">= 2"
+  },
+  "devDependencies": {
+    "tinyify": "^2.3.0"
   }
 }

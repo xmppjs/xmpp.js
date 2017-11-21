@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const {match} = require('./index')
+const {match} = require('.')
 
 test('match', t => {
   t.is(match(<foo />), false)

@@ -2,7 +2,7 @@
 
 const test = require('ava')
 const {client} = require('../test')
-const router = require('./index')
+const router = require('.')
 const middleware = require('../middleware')
 
 test.beforeEach(t => {

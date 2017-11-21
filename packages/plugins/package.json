@@ -6,7 +6,10 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.3.0",
   "license": "ISC",
-  "keywords": ["XMPP", "plugins"],
+  "keywords": [
+    "XMPP",
+    "plugins"
+  ],
   "dependencies": {
     "@xmpp/connection": "^0.3.0",
     "@xmpp/connection-tcp": "^0.3.0",
@@ -21,7 +24,7 @@
     "sasl-plain": "^0.1.0",
     "sasl-scram-sha-1": "^1.2.0",
     "saslmechanisms": "^0.1.1",
-    "ws": "^3.1.0"
+    "ws": "^3.3.2"
   },
   "browser": {
     "ws": false,
