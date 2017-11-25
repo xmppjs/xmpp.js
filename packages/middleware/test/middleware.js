@@ -3,11 +3,11 @@
 const test = require('ava')
 const IncomingContext = require('../lib/IncomingContext')
 const OutgoingContext = require('../lib/OutgoingContext')
-const {client} = require('../../test')
+const {context} = require('@xmpp/test')
 const middleware = require('..')
 
 test.beforeEach(t => {
-  t.context = client()
+  t.context = context()
   t.context.middleware = middleware(t.context.entity)
 })
 

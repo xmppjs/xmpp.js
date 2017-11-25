@@ -1,12 +1,12 @@
 'use strict'
 
 const test = require('ava')
-const {client} = require('../test')
-const router = require('.')
-const middleware = require('../middleware')
+const {context} = require('@xmpp/test')
+const router = require('..')
+const middleware = require('../../middleware')
 
 test.beforeEach(t => {
-  t.context = client()
+  t.context = context()
   t.context.middleware = middleware(t.context.entity)
   t.context.router = router(t.context.middleware)
 })

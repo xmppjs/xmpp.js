@@ -1,0 +1,2 @@
+rules:
+  node/no-extraneous-require: 0

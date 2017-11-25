@@ -2,7 +2,7 @@
 
 const test = require('ava')
 const plugin = require('../caller')
-const testPlugin = require('../../testPlugin')
+const testPlugin = require('@xmpp/test/testPlugin')
 
 test.beforeEach(t => {
   t.context = testPlugin(plugin)
@@ -23,8 +23,8 @@ test('#ping', t => {
 
 test('#ping resolve for feature-not-implemented error', t => {
   t.context.scheduleIncomingError(
-    <error type='cancel'>
-      <feature-not-implemented xmlns='urn:ietf:params:xml:ns:xmpp-stanzas'/>
+    <error type="cancel">
+      <feature-not-implemented xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
     </error>
   )
 
