@@ -8,7 +8,7 @@ module.exports = middleware => {
       middleware.use(route(...args))
     },
     filter(...args) {
-      middleware.filter(route(...args))
+      middleware.filter(x => route(...args)(x))
     },
 
     error(...args) {

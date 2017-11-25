@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const saslPlugin = require('./index')
+const saslPlugin = require('.')
 const testPlugin = require('../testPlugin')
 const xml = require('../../xml')
 

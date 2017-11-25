@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const caps = require('./index')
+const caps = require('.')
 const xml = require('@xmpp/xml')
 
 test('5.2 Simple Generation Example', t => {

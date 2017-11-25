@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const xmpp = require('./index')
+const xmpp = require('.')
 
 const fs = require('fs')
 const path = require('path')

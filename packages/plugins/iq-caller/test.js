@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const iqCallerPlugin = require('./index')
+const iqCallerPlugin = require('.')
 const testPlugin = require('../testPlugin')
 
 test.cb('#get', t => {

@@ -29,11 +29,11 @@
   "devDependencies": {
     "bootstrap": "^4.0.0-alpha.6",
     "clipboard": "^1.7.1",
-    "codemirror": "^5.31.0",
+    "codemirror": "^5.32.0",
     "jquery": "^3.1.1",
     "notie": "^4.1.0",
-    "prismjs": "^1.8.3",
-    "tether": "^1.4.0"
+    "prismjs": "^1.8.4",
+    "tether": "^1.4.2"
   },
   "bin": {
     "xmpp-console": "./app.js"
