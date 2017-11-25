@@ -2,7 +2,7 @@
 
 const test = require('ava')
 const saslPlugin = require('.')
-const testPlugin = require('../testPlugin')
+const testPlugin = require('@xmpp/test/testPlugin')
 const xml = require('../../xml')
 
 test('SASL failure', t => {

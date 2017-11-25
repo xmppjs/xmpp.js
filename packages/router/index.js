@@ -39,7 +39,7 @@ module.exports = middleware => {
     subscribe(...args) {
       this.use('presence-subscribe', ...args)
     },
-    ubsubscribe(...args) {
+    unsubscribe(...args) {
       this.use('presence-unsubscribe', ...args)
     },
     available(...args) {

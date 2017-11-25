@@ -34,7 +34,7 @@ rules:
   # node https://github.com/mysticatea/eslint-plugin-node
   node/no-unsupported-features: [error, {version: 6}]
   node/no-unpublished-require: 0 # doesn't play nice with monorepo
-  node/no-extraneous-require: [error, allowModules: [ava,sinon]]
+  node/no-extraneous-require: [error, allowModules: [ava, sinon, "@xmpp/test"]]
   # standard https://github.com/xjamundx/eslint-plugin-standard
   standard/no-callback-literal: [error, [cb, callback]]
   # unicorn https://github.com/sindresorhus/eslint-plugin-unicorn

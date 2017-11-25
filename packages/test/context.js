@@ -1,20 +1,11 @@
 'use strict'
 
-const {Client} = require('../client-core')
+const client = require('./client')
 
-module.exports = function(p) {
-  const entity = new Client()
-  entity.socket = {
-    write(data, cb) {
-      cb()
-    },
-  }
-  const plugin = entity.plugin(p)
-
+module.exports = function context() {
+  const entity = client()
   return {
     entity,
-    plugin,
-    plugins: entity.plugins,
     sanitize(s) {
       const stanza = s.clone()
       const {id} = stanza.attrs
@@ -134,6 +125,9 @@ module.exports = function(p) {
       return p.then(el => {
         return this.sanitize(el).stanza
       })
+    },
+    fakeOutgoing(el) {
+      entity.hookOutgoing(el)
     },
   }
 }

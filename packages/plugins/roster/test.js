@@ -2,7 +2,7 @@
 
 const test = require('ava')
 const plugin = require('.')
-const testPlugin = require('../testPlugin')
+const testPlugin = require('@xmpp/test/testPlugin')
 const JID = require('@xmpp/jid')
 
 test.beforeEach(t => {

@@ -2,7 +2,7 @@
 
 const test = require('ava')
 const plugin = require('../caller')
-const testPlugin = require('../../testPlugin')
+const testPlugin = require('@xmpp/test/testPlugin')
 
 test.beforeEach(t => {
   t.context = testPlugin(plugin)
