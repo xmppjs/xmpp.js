@@ -1,6 +1,6 @@
 'use strict'
 
-const entries = require('object.entries')
+const entries = Object.entries || require('object.entries') // eslint-disable-line node/no-unsupported-features
 
 const Client = require('./lib/Client')
 const {xml, jid} = require('@xmpp/client-core')
@@ -15,7 +15,10 @@ function xmpp() {
   const client = new Client()
   return Object.assign(
     {client},
-    ...entries(packages).map(([k, v]) => [v(client), k])
+    ...entries(packages)
+      // Ignore browserify stubs
+      .filter(([, v]) => typeof v === 'function')
+      .map(([k, v]) => [v(client), k])
   )
 }
 

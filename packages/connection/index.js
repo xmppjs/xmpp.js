@@ -4,6 +4,7 @@ const {timeout, EventEmitter, promise} = require('@xmpp/events')
 const jid = require('@xmpp/jid')
 const url = require('url')
 const xml = require('@xmpp/xml')
+const URL = global.URL || require('url').URL || require('whatwg-url').URL
 
 class XMPPError extends Error {
   constructor(condition, text, element) {
@@ -24,13 +25,12 @@ class StreamError extends XMPPError {
 
 // We ignore url module from the browser bundle to reduce its size
 function getHostname(uri) {
-  if (url.parse) {
-    const parsed = url.parse(uri)
-    return parsed.hostname || parsed.pathname
+  // WHATWG URL parser requires a protocol
+  if (!uri.includes('://')) {
+    uri = 'http://' + uri
   }
-  const el = document.createElement('a') // eslint-disable-line no-undef
-  el.href = uri
-  return el.hostname
+
+  return new URL(uri).hostname
 }
 
 class Connection extends EventEmitter {

@@ -28,7 +28,7 @@ test-ci:
 	make restart
 	ava --serial --fail-fast test/
 	lerna run prepublish
-	bundlesize
+	make bundlesize
 
 clean:
 	make stop
@@ -49,6 +49,10 @@ stop:
 restart:
 	./server/ctl restart
 
+bundlesize:
+	gzip -kf9 packages/client/dist/xmpp.min.js
+	bundlesize
+
 size:
 	cd packages/client && yarn run prepublish
-	bundlesize
+	make bundlesize

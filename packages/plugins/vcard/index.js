@@ -2,7 +2,7 @@
 
 const {xml, plugin} = require('@xmpp/plugin')
 const iqCaller = require('../iq-caller')
-const entries = require('object.entries')
+const entries = Object.entries || require('object.entries') // eslint-disable-line node/no-unsupported-features
 
 const NS = 'vcard-temp'
 

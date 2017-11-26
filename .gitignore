@@ -6,6 +6,7 @@ server/prosody.err
 server/prosody.log
 server/prosody.pid
 **/vendor/*
+packages/console/public/bundle.js
 
 !.gitkeep
 !.editorconfig
