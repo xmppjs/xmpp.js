@@ -9,7 +9,6 @@ exports['sasl-anonymous'] = require('@xmpp/plugins/sasl-anonymous')
 exports.websocket = require('@xmpp/plugins/websocket')
 exports.tcp = require('@xmpp/plugins/tcp')
 exports.tls = require('@xmpp/plugins/tls')
-exports.reconnect = require('@xmpp/plugins/reconnect')
 exports.starttls = require('@xmpp/plugins/starttls')
 exports.resolve = require('@xmpp/plugins/resolve')
 exports[

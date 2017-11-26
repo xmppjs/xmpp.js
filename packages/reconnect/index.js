@@ -1,12 +1,17 @@
 'use strict'
 
-const plugin = require('@xmpp/plugin')
+const EventEmitter = require('@xmpp/events/lib/EventEmitter')
 
-module.exports = plugin('reconnect', {
-  delay: 1000,
+class Reconnect extends EventEmitter {
+  constructor(entity) {
+    super()
+
+    this.delay = 1000
+    this.entity = entity
+  }
 
   reconnect() {
-    const {entity} = this
+    const {entity, delay} = this
     this.emit('reconnecting')
     this._timeout = setTimeout(() => {
       if (entity.status === 'offline') {
@@ -27,29 +32,33 @@ module.exports = plugin('reconnect', {
           this.emit('error', err)
         })
       entity.status = status
-    }, this.delay)
-  },
-
-  stopped() {
-    const {entity, listeners, _timeout} = this
-    entity.removeListener('disconnect', listeners.disconnect)
-    clearTimeout(_timeout)
-  },
+    }, delay)
+  }
 
   start() {
+    const {entity} = this
     const listeners = {}
     listeners.disconnect = () => {
       this.reconnect()
     }
     listeners.online = () => {
-      this.entity.on('disconnect', listeners.disconnect)
+      entity.on('disconnect', listeners.disconnect)
     }
     this.listeners = listeners
-    this.entity.once('online', listeners.online)
-  },
+    entity.once('online', listeners.online)
+  }
 
   stop() {
-    this.stopped()
-    this.entity.removeListener('online', this.listeners.online)
-  },
-})
+    const {entity} = this
+    const {listeners, _timeout} = this
+    entity.removeListener('disconnect', listeners.disconnect)
+    clearTimeout(_timeout)
+    entity.removeListener('online', this.listeners.online)
+  }
+}
+
+module.exports = function reconnect(entity) {
+  const r = new Reconnect(entity)
+  r.start()
+  return r
+}
