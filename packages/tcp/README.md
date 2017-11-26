@@ -1,6 +1,6 @@
 # TCP
 
-TCP transport for XMPP client
+TCP transport for `@xmpp/client`.
 
 Included and enabled in `@xmpp/client`.
 
@@ -9,13 +9,13 @@ Supports Node.js.
 ## Install
 
 ```js
-npm install @xmpp/plugins
+npm install @xmpp/tcp
 ```
 
 ## Usage
 
 ```js
-client.plugin(require('@xmpp/plugins/tcp'))
+require('@xmpp/tcp')(client)
 client.start('xmpp://example.com:5222')
 ```
 

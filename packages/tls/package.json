@@ -1,0 +1,18 @@
+{
+  "name": "@xmpp/tls",
+  "description": "XMPP TLS for JavaScript",
+  "repository": "github:xmppjs/xmpp.js",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/tls",
+  "bugs": "http://github.com/xmppjs/xmpp.js/issues",
+  "version": "0.3.0",
+  "license": "ISC",
+  "dependencies": {
+    "@xmpp/connection": "^0.3.0",
+    "@xmpp/connection-tcp": "^0.3.0"
+  },
+  "keywords": ["XMPP", "tls"],
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
+  }
+}

@@ -8,11 +8,15 @@
   "dependencies": {
     "@xmpp/client-core": "^0.3.0",
     "@xmpp/plugins": "^0.3.0",
-    "@xmpp/reconnect": "^0.3.0"
+    "@xmpp/reconnect": "^0.3.0",
+    "@xmpp/tcp": "^0.3.0",
+    "@xmpp/tls": "^0.3.0",
+    "@xmpp/websocket": "^0.3.0",
+    "object.entries": "^1.0.4"
   },
   "browser": {
-    "@xmpp/plugins/tcp": false,
-    "@xmpp/plugins/tls": false,
+    "@xmpp/tcp": false,
+    "@xmpp/tls": false,
     "@xmpp/plugins/starttls": false,
     "@xmpp/plugins/sasl-scram-sha-1": false
   },

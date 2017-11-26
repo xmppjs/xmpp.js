@@ -11,12 +11,12 @@ Supports Node.js.
 ## Install
 
 ```js
-npm install @xmpp/plugins
+npm install @xmpp/tls
 ```
 
 ## Usage
 
 ```js
-client.plugin(require('@xmpp/plugins/tls'))
+require('@xmpp/plugins/tls')(client)
 client.start('xmpps://example.com:5223')
 ```
