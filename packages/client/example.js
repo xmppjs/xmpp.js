@@ -4,8 +4,8 @@
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-const {xml, Client} = require('.') // For you; require('@xmpp/client')
-const client = new Client()
+const {xmpp, xml} = require('.') // For you; require('@xmpp/client')
+const {client} = xmpp()
 
 const middleware = require('../middleware')(client)
 const router = require('../router')(middleware)

@@ -7,7 +7,8 @@
   "license": "ISC",
   "dependencies": {
     "@xmpp/client-core": "^0.3.0",
-    "@xmpp/plugins": "^0.3.0"
+    "@xmpp/plugins": "^0.3.0",
+    "@xmpp/reconnect": "^0.3.0"
   },
   "browser": {
     "@xmpp/plugins/tcp": false,

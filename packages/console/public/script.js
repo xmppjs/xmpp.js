@@ -1,7 +1,7 @@
 'use strict'
 
 const Console = require('../lib/Console')
-const {Client} = require('@xmpp/client')
+const {xmpp} = require('@xmpp/client')
 const editor = require('./editor')
 const {Prism, fetch, notie} = global
 
@@ -32,7 +32,7 @@ Prism.plugins.toolbar.registerButton('select', {
   },
 })
 
-const client = new Client()
+const {client} = xmpp()
 
 const xconsole = new Console(client)
 xconsole.resetInput = function() {

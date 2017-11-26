@@ -4,8 +4,8 @@
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-const {xml, Component} = require('.') // For you require('@xmpp/component')
-const component = new Component()
+const {xmpp, xml} = require('.') // For you require('@xmpp/component')
+const {component} = xmpp()
 
 // Log errors
 component.on('error', err => {

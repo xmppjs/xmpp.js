@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const {Component, xml, jid} = require('../packages/component')
+const {xmpp, xml, jid} = require('../packages/component')
 const debug = require('../packages/debug')
 const server = require('../server')
 
@@ -14,33 +14,33 @@ test.beforeEach(() => {
 test.cb('component', t => {
   t.plan(8)
 
-  const entity = new Component()
-  debug(entity)
+  const {component} = xmpp()
+  debug(component)
 
-  entity.on('connect', () => {
+  component.on('connect', () => {
     t.pass()
   })
 
-  entity.on('open', el => {
+  component.on('open', el => {
     t.true(el instanceof xml.Element)
   })
 
-  entity.handle('authenticate', auth => {
+  component.handle('authenticate', auth => {
     t.is(typeof auth, 'function')
     return auth('foobar').then(() => t.pass())
   })
 
-  entity.on('online', id => {
+  component.on('online', id => {
     t.true(id instanceof jid.JID)
     t.is(id.toString(), 'component.localhost')
   })
 
-  entity
+  component
     .start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
     .then(id => {
       t.true(id instanceof jid.JID)
       t.is(id.toString(), 'component.localhost')
-      entity.stop().then(() => t.end())
+      component.stop().then(() => t.end())
     })
 })
 
@@ -48,18 +48,18 @@ test.cb('reconnects when server restarts', t => {
   t.plan(2)
   let c = 0
 
-  const entity = new Component()
-  debug(entity)
+  const {component} = xmpp()
+  debug(component)
 
-  entity.handle('authenticate', auth => {
+  component.handle('authenticate', auth => {
     return auth('foobar')
   })
 
-  entity.on('online', () => {
+  component.on('online', () => {
     c++
     t.pass()
     if (c === 2) {
-      entity.stop().then(() => {
+      component.stop().then(() => {
         t.end()
       })
     } else {
@@ -67,22 +67,22 @@ test.cb('reconnects when server restarts', t => {
     }
   })
 
-  entity.start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
+  component.start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
 })
 
 test.cb('does not reconnect when stop is called', t => {
   t.plan(5)
 
-  const entity = new Component()
-  debug(entity)
+  const {component} = xmpp()
+  debug(component)
 
-  entity.handle('authenticate', auth => {
+  component.handle('authenticate', auth => {
     return auth('foobar')
   })
 
-  entity.on('online', () => {
+  component.on('online', () => {
     t.pass()
-    entity.stop().then(() => {
+    component.stop().then(() => {
       t.pass()
       server.stop().then(() => {
         t.pass()
@@ -91,9 +91,9 @@ test.cb('does not reconnect when stop is called', t => {
     })
   })
 
-  entity.on('close', () => t.pass())
+  component.on('close', () => t.pass())
 
-  entity.on('offline', () => t.pass())
+  component.on('offline', () => t.pass())
 
-  entity.start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
+  component.start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
 })
