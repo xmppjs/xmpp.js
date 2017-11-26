@@ -4,7 +4,9 @@ const entries = Object.entries || require('object.entries') // eslint-disable-li
 const {Component, xml, jid} = require('@xmpp/component-core')
 
 const reconnect = require('@xmpp/reconnect')
-const packages = {reconnect}
+const middleware = require('@xmpp/middleware')
+const router = require('@xmpp/router')
+const packages = {reconnect, middleware, router}
 
 function xmpp() {
   const component = new Component()

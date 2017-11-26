@@ -1,7 +1,7 @@
 'use strict'
 
 const {Client} = require('../client-core')
-const JID = require('../jid')
+const JID = require('@xmpp/jid')
 
 module.exports = function client() {
   const entity = new Client()

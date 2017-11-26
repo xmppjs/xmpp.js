@@ -23,6 +23,7 @@ module.exports = function(entity) {
   entity.hookOutgoing = outgoingListener
 
   return {
+    entity,
     incoming,
     outgoing,
     incomingListener,

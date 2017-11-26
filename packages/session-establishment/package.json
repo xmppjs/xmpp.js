@@ -1,0 +1,18 @@
+{
+  "name": "@xmpp/session-establishment",
+  "description": "XMPP session establishment for JavaScript",
+  "repository": "github:xmppjs/xmpp.js",
+  "homepage":
+    "https://github.com/xmppjs/xmpp.js/tree/master/packages/session-establishment",
+  "bugs": "http://github.com/xmppjs/xmpp.js/issues",
+  "version": "0.3.0",
+  "license": "ISC",
+  "keywords": ["XMPP", "session", "establishment"],
+  "dependencies": {
+    "@xmpp/xml": "^0.3.0"
+  },
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
+  }
+}

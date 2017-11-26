@@ -1,6 +1,7 @@
 'use strict'
 
 const client = require('./client')
+const xml = require('@xmpp/xml')
 
 module.exports = function context() {
   const entity = client()
@@ -67,48 +68,48 @@ module.exports = function context() {
       })
     },
     fakeIncomingGet(child) {
-      return this.fakeIncomingIq(<iq type="get">{child}</iq>).then(stanza => {
-        const [child] = stanza.children
-        if (child) {
-          child.parent = null
+      return this.fakeIncomingIq(xml('iq', {type: 'get'}, child)).then(
+        stanza => {
+          const [child] = stanza.children
+          if (child) {
+            child.parent = null
+          }
+          return child
         }
-        return child
-      })
+      )
     },
     fakeIncomingSet(child) {
-      return this.fakeIncomingIq(<iq type="set">{child}</iq>).then(stanza => {
-        const [child] = stanza.children
-        if (child) {
-          child.parent = null
+      return this.fakeIncomingIq(xml('iq', {type: 'set'}, child)).then(
+        stanza => {
+          const [child] = stanza.children
+          if (child) {
+            child.parent = null
+          }
+          return child
         }
-        return child
-      })
+      )
     },
     fakeIncomingResult(child, id) {
-      return this.fakeIncomingIq(
-        <iq type="result" id={id}>
-          {child}
-        </iq>
-      ).then(stanza => {
-        const [child] = stanza.children
-        if (child) {
-          child.parent = null
+      return this.fakeIncomingIq(xml('iq', {type: 'result', id}, child)).then(
+        stanza => {
+          const [child] = stanza.children
+          if (child) {
+            child.parent = null
+          }
+          return child
         }
-        return child
-      })
+      )
     },
     fakeIncomingError(child, id) {
-      return this.fakeIncomingIq(
-        <iq type="error" id={id}>
-          {child}
-        </iq>
-      ).then(stanza => {
-        const [child] = stanza.children
-        if (child) {
-          child.parent = null
-        }
-        return child
-      })
+      return this.fakeIncomingIq(xml('iq', {type: 'error', id}, child))
+        .then()
+        .then(stanza => {
+          const [child] = stanza.children
+          if (child) {
+            child.parent = null
+          }
+          return child
+        })
     },
     fakeIncomingIq(el) {
       const stanza = el.clone()

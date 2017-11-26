@@ -1,7 +1,6 @@
 'use strict'
 
 const xml = require('@xmpp/xml')
-const streamfeatures = require('../stream-features')
 const tls = require('tls')
 const net = require('net')
 
@@ -33,7 +32,7 @@ function proceed(entity, options) {
   })
 }
 
-function starttls(entity) {
+function _starttls(entity) {
   return entity.sendReceive(xml('starttls', {xmlns: NS})).then(element => {
     if (element.is('failure', NS)) {
       throw new Error('STARTTLS_FAILURE')
@@ -43,21 +42,21 @@ function starttls(entity) {
   })
 }
 
-module.exports.name = 'starttls'
-module.exports.plugin = function plugin(entity) {
-  const streamFeature = {
+module.exports = function starttls(streamFeatures) {
+  const {entity} = streamFeatures
+
+  streamFeatures.use({
     name: 'starttls',
     priority: 5000,
     match,
     restart: true,
-    run: entity => {
-      return starttls(entity)
+    run: () => {
+      return _starttls(entity)
     },
-  }
+  })
 
-  const streamFeatures = entity.plugin(streamfeatures)
-  streamFeatures.add(streamFeature)
   return {
+    streamFeatures,
     entity,
   }
 }
