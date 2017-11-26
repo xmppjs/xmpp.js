@@ -1,6 +1,6 @@
 # WebSocket
 
-WebSocket transport `@xmpp/client`.
+WebSocket transport for `@xmpp/client`.
 
 Included and enabled in `@xmpp/client`.
 
@@ -9,13 +9,13 @@ Supports Node.js and browsers.
 ## Install
 
 ```js
-npm install @xmpp/plugins
+npm install @xmpp/websocket
 ```
 
 ## Usage
 
 ```js
-client.plugin(require('@xmpp/plugins/websocket'))
+require('@xmpp/websocket')(client)
 client.start('ws://localhost:5280/xmpp-websocket')
 ```
 

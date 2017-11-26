@@ -16,7 +16,7 @@ Here is a code example to get started.
 ```js
 const {xmpp} = require('@xmpp/client')
 
-const client = xmpp()
+const {client} = xmpp()
 
 client.start('ws://localhost:5280/xmpp-websocket')
 

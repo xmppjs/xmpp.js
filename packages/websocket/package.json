@@ -1,0 +1,23 @@
+{
+  "name": "@xmpp/websocket",
+  "description": "XMPP websocket for JavaScript",
+  "repository": "github:xmppjs/xmpp.js",
+  "homepage":
+    "https://github.com/xmppjs/xmpp.js/tree/master/packages/websocket",
+  "bugs": "http://github.com/xmppjs/xmpp.js/issues",
+  "version": "0.3.0",
+  "license": "ISC",
+  "dependencies": {
+    "@xmpp/connection": "^0.3.0",
+    "@xmpp/xml": "^0.3.0",
+    "ws": "^3.3.2"
+  },
+  "browser": {
+    "ws": false
+  },
+  "keywords": ["XMPP", "websocket"],
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
+  }
+}

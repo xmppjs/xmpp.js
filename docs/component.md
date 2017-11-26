@@ -16,7 +16,7 @@ Here is a code example to get started.
 ```js
 const {xmpp} = require('@xmpp/component')
 
-const component = xmpp()
+const {component} = xmpp()
 
 component.start({
   uri: 'xmpp://localhost:5347',

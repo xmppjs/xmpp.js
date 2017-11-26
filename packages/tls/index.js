@@ -2,7 +2,6 @@
 
 const ConnectionTLS = require('./lib/Connection')
 
-module.exports.name = 'tls'
-module.exports.plugin = function plugin(entity) {
+module.exports = function tls(entity) {
   entity.transports.push(ConnectionTLS)
 }

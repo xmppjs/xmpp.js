@@ -2,7 +2,6 @@
 
 const ConnectionTCP = require('./lib/Connection')
 
-module.exports.name = 'tcp'
-module.exports.plugin = function plugin(entity) {
+module.exports = function tcp(entity) {
   entity.transports.push(ConnectionTCP)
 }

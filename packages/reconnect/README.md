@@ -6,24 +6,25 @@ Included and enabled in `@xmpp/component` and `@xmpp/client`.
 
 Supports Node.js and browsers.
 
-`reconnect` will only be enabled once the entity goes online for the first time. Each reconnect will re-use the options provided to the entity `start` method.
-
+`reconnect` will only be enabled once the entity goes online for the first time.
+Each reconnect will re-use the options provided to the entity `start` method.
 
 ## Install
 
 ```
-npm install @xmpp/plugins
+npm install @xmpp/reconnect
 ```
 
 ## Usage
 
 ```javascript
-const reconnect = entity.plugin(require('@xmpp/plugins/reconnect'))
+const reconnect = require('@xmpp/reconnect')(entity)
 ```
 
 ### delay property
 
-Property to set/get the delay in milliseconds between connection closed and reconnecting.
+Property to set/get the delay in milliseconds between connection closed and
+reconnecting.
 
 Default is `1000`.
 

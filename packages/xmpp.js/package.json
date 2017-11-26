@@ -32,9 +32,12 @@
     "@xmpp/reconnect": "^0.3.0",
     "@xmpp/resolve": "^0.3.0",
     "@xmpp/router": "^0.3.0",
+    "@xmpp/tcp": "^0.3.0",
     "@xmpp/test": "^0.3.0",
     "@xmpp/time": "^0.3.0",
+    "@xmpp/tls": "^0.3.0",
     "@xmpp/uri": "^0.3.0",
+    "@xmpp/websocket": "^0.3.0",
     "@xmpp/xml": "^0.3.0"
   },
   "scripts": {
