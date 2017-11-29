@@ -18,7 +18,7 @@ function xmpp() {
     ...entries(packages)
       // Ignore browserify stubs
       .filter(([, v]) => typeof v === 'function')
-      .map(([k, v]) => [v(client), k])
+      .map(([k, v]) => ({[k]: v(client)}))
   )
 }
 
