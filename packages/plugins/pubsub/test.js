@@ -233,6 +233,31 @@ test('items with RSM', t => {
   ])
 })
 
+test('delete item', t => {
+  t.context.scheduleIncomingResult(
+  )
+
+  return Promise.all([
+    t.context.catchOutgoingSet().then(child => {
+
+      t.deepEqual(
+        child,
+        <pubsub xmlns="http://jabber.org/protocol/pubsub">
+          <retract node="foo" notify="true">
+            <item id="foobar"/>
+          </retract>
+        </pubsub>
+      )
+    }),
+    t.context.plugin
+      .deleteItem(
+        SERVICE,
+        'foo',
+        'foobar'
+      ),
+  ])
+})
+
 test('item-published event', t => {
   t.context.fakeIncoming(
     <message from={SERVICE}>
@@ -295,6 +320,32 @@ test('last-item-published event', t => {
         id: 'fooitem',
         stamp: '2003-12-13T23:58:37Z',
         entry: <entry>Foo Bar</entry>,
+      })
+    }),
+  ])
+})
+
+test('item-deleted event', t => {
+  t.context.fakeIncoming(
+    <message from={SERVICE}>
+      <event xmlns="http://jabber.org/protocol/pubsub#event">
+        <items node="foo">
+          <retract id="fooitem"/>
+        </items>
+      </event>
+    </message>
+  )
+
+  return Promise.all([
+    t.context.plugin.promise('item-deleted:pubsub.foo').then(ev => {
+      t.deepEqual(ev, {
+        node: 'foo',
+        id: 'fooitem',
+      })
+    }),
+    t.context.plugin.promise('item-deleted:pubsub.foo:foo').then(ev => {
+      t.deepEqual(ev, {
+        id: 'fooitem',
       })
     }),
   ])
