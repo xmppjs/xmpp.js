@@ -10,7 +10,8 @@
   "keywords": ["XMPP", "component"],
   "dependencies": {
     "@xmpp/component-core": "^0.3.0",
-    "@xmpp/reconnect": "^0.3.0"
+    "@xmpp/reconnect": "^0.3.0",
+    "object.entries": "^1.0.4"
   },
   "engines": {
     "node": ">= 6",
