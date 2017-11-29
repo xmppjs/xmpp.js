@@ -1,0 +1,17 @@
+{
+  "name": "@xmpp/disco",
+  "description": "XMPP service discovery for JavaScript",
+  "repository": "github:xmppjs/xmpp.js",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/disco",
+  "bugs": "http://github.com/xmppjs/xmpp.js/issues",
+  "version": "0.3.0",
+  "license": "ISC",
+  "keywords": ["XMPP", "service", "discovery", "disco"],
+  "dependencies": {
+    "@xmpp/xml": "^0.3.0"
+  },
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
+  }
+}
