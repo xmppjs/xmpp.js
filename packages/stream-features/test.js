@@ -2,7 +2,7 @@
 
 const test = require('ava')
 const streamfeatures = require('.')
-const xml = require('@xmpp/xml')
+const {xml} = require('@xmpp/test')
 
 test.skip('selectFeature', t => {
   const features = []

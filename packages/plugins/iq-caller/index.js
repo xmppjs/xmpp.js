@@ -59,10 +59,14 @@ module.exports = plugin('iq-caller', {
       stanza.attrs.id = xid()
     }
 
-    return this.entity.send(stanza).then(() => {
-      return new Promise((resolve, reject) =>
+    return Promise.all([
+      new Promise((resolve, reject) => {
         this.handlers.set(stanza.attrs.id, [resolve, reject])
-      )
-    })
+      }),
+      this.entity.send(stanza).catch(err => {
+        this.handlers.remove(stanza.attrs.id)
+        throw err
+      }),
+    ]).then(([res]) => res)
   },
 })

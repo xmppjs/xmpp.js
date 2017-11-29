@@ -1,0 +1,17 @@
+{
+  "name": "@xmpp/starttls",
+  "description": "XMPP STARTTLS for JavaScript",
+  "repository": "github:xmppjs/xmpp.js",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/starttls",
+  "bugs": "http://github.com/xmppjs/xmpp.js/issues",
+  "version": "0.3.0",
+  "license": "ISC",
+  "keywords": ["XMPP", "STARTTLS"],
+  "dependencies": {
+    "@xmpp/xml": "^0.3.0"
+  },
+  "engines": {
+    "node": ">= 6",
+    "npm": ">= 2"
+  }
+}

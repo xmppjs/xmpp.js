@@ -10,6 +10,7 @@
 
   const {xmpp, xml} =
     typeof require === 'undefined' ? global.xmpp : require('..') // For you; require('@xmpp/client')
+
   const {client} = xmpp()
 
   // Log errors
@@ -55,7 +56,7 @@
 
   // "start" opens the socket and the XML stream
   client
-    .start('jabberfr.org') // Auto
+    .start('xmpp://jabberfr.org:5222') // Auto
     // .start('xmpp://localhost:5222') // TCP
     // .start('xmpps://localhost:5223') // TLS
     // .start('ws://localhost:5280/xmpp-websocket') // Websocket

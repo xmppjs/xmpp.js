@@ -1,9 +1,7 @@
 'use strict'
 
 const {encode, decode} = require('./lib/b64')
-const plugin = require('@xmpp/plugin')
-const xml = require('@xmpp/xml')
-const streamFeatures = require('../stream-features')
+const {xml} = require('@xmpp/test')
 const {XMPPError} = require('@xmpp/connection')
 const SASLFactory = require('saslmechanisms')
 
@@ -24,9 +22,10 @@ function getMechanismNames(features) {
   return features.getChild('mechanisms', NS).children.map(el => el.text())
 }
 
-module.exports = plugin(
-  'sasl',
-  {
+module.exports = function sasl(streamFeatures) {
+  const {entity} = streamFeatures
+  const p = {
+    entity,
     start() {
       this.SASL = new SASLFactory()
       this.streamFeature = {
@@ -38,14 +37,7 @@ module.exports = plugin(
           return this.gotFeatures(features)
         },
       }
-      this.plugins['stream-features'].add(this.streamFeature)
-    },
-
-    stop() {
-      delete this.SASL
-      this.plugins['stream-features'].remove(this.streamFeature)
-      delete this.streamFeature
-      delete this.mech
+      streamFeatures.use(this.streamFeature)
     },
 
     use(...args) {
@@ -167,6 +159,7 @@ module.exports = plugin(
         }
       })
     },
-  },
-  [streamFeatures]
-)
+  }
+  p.start()
+  return p
+}

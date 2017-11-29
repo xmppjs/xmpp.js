@@ -6,9 +6,19 @@
   "version": "0.3.0",
   "license": "ISC",
   "dependencies": {
+    "@xmpp/bind": "^0.3.0",
     "@xmpp/client-core": "^0.3.0",
+    "@xmpp/middleware": "^0.3.0",
     "@xmpp/plugins": "^0.3.0",
     "@xmpp/reconnect": "^0.3.0",
+    "@xmpp/router": "^0.3.0",
+    "@xmpp/sasl": "^0.3.0",
+    "@xmpp/sasl-anonymous": "^0.3.0",
+    "@xmpp/sasl-plain": "^0.3.0",
+    "@xmpp/sasl-scram-sha-1": "^0.3.0",
+    "@xmpp/session-establishment": "^0.3.0",
+    "@xmpp/starttls": "^0.3.0",
+    "@xmpp/stream-features": "^0.3.0",
     "@xmpp/tcp": "^0.3.0",
     "@xmpp/tls": "^0.3.0",
     "@xmpp/websocket": "^0.3.0",
@@ -17,8 +27,8 @@
   "browser": {
     "@xmpp/tcp": false,
     "@xmpp/tls": false,
-    "@xmpp/plugins/starttls": false,
-    "@xmpp/plugins/sasl-scram-sha-1": false,
+    "@xmpp/starttls": false,
+    "@xmpp/sasl-scram-sha-1": false,
     "object.entries": false
   },
   "scripts": {

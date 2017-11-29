@@ -3,7 +3,10 @@
 const route = require('./route')
 
 module.exports = middleware => {
+  const {entity} = middleware
   return {
+    entity,
+    middleware,
     use(...args) {
       middleware.use(route(...args))
     },

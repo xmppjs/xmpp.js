@@ -4,6 +4,7 @@ const test = require('ava')
 const _events = require('../events')
 const IncomingContext = require('@xmpp/middleware/lib/IncomingContext')
 const JID = require('@xmpp/jid')
+const xml = require('@xmpp/xml')
 
 function events(stanza) {
   const entity = {jid: new JID('foo@bar/foobar')}
@@ -50,4 +51,6 @@ test('events', t => {
   )
 
   t.deepEqual(events(<foo />), ['foo'])
+
+  t.deepEqual(events(xml('foo:bar')), ['foo:bar'])
 })
