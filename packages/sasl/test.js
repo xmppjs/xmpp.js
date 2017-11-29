@@ -21,7 +21,7 @@ test.beforeEach(t => {
   t.context.sasl = sasl(streamFeatures)
 })
 
-test('SASL failure', t => {
+test.skip('SASL failure', t => {
   const {sasl, entity} = t.context
   sasl.findMechanism = () => {
     return {}
@@ -46,7 +46,7 @@ test('SASL failure', t => {
   return p
 })
 
-test('SASL failure with text element', t => {
+test.skip('SASL failure with text element', t => {
   const {sasl, entity} = t.context
   sasl.findMechanism = () => {
     return {}

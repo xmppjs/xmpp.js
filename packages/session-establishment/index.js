@@ -9,25 +9,14 @@ function match(features) {
   return Boolean(feature) && !feature.getChild('optional')
 }
 
-module.exports = function sessionEstablishment(streamFeatures) {
-  const {entity} = streamFeatures
-
-  function establishSession() {
-    return entity.plugins['iq-caller'].set(
-      xml('session', 'urn:ietf:params:xml:ns:xmpp-session')
-    )
-  }
-
-  streamFeatures.use({
-    name: 'session-establishment',
-    priority: 2000,
-    match,
-    run: () => establishSession(),
-  })
-
-  return {
-    entity,
-    streamFeatures,
+module.exports = function() {
+  return function({stanza, entity}, next) {
+    if (!match(stanza)) return next()
+    return entity.plugins['iq-caller']
+      .set(xml('session', 'urn:ietf:params:xml:ns:xmpp-session'))
+      .then(() => {
+        return next()
+      })
   }
 }
 
