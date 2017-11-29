@@ -49,17 +49,25 @@ module.exports = plugin(
       const items = message.getChild('event').getChild('items')
       const {node} = items.attrs
       const item = items.getChild('item')
-      const {id} = item.attrs
-      const entry = item.getChild('entry')
-      const delay = message.getChild('delay')
+      const retract = items.getChild('retract')
+      if (item) {
+        const {id} = item.attrs
+        const entry = item.getChild('entry')
+        const delay = message.getChild('delay')
 
-      if (delay) {
-        const {stamp} = delay.attrs
-        this.emit(`last-item-published:${service}`, {node, id, entry, stamp})
-        this.emit(`last-item-published:${service}:${node}`, {id, entry, stamp})
-      } else {
-        this.emit(`item-published:${service}`, {node, id, entry})
-        this.emit(`item-published:${service}:${node}`, {id, entry})
+        if (delay) {
+          const {stamp} = delay.attrs
+          this.emit(`last-item-published:${service}`, {node, id, entry, stamp})
+          this.emit(`last-item-published:${service}:${node}`, {id, entry, stamp})
+        } else {
+          this.emit(`item-published:${service}`, {node, id, entry})
+          this.emit(`item-published:${service}:${node}`, {id, entry})
+        }
+      }
+      if (retract) {
+        const {id} = retract.attrs
+        this.emit(`item-deleted:${service}`, {node, id})
+        this.emit(`item-deleted:${service}:${node}`, {id})
       }
     },
 
@@ -143,6 +151,14 @@ module.exports = plugin(
         }
         return [items]
       })
+    },
+
+    deleteItem(params, node, id, notify=true) {
+      const stanza = xml('pubsub', {xmlns: NS_PUBSUB},
+        xml('retract', {node, notify},
+          xml('item', {id})))
+      return this.plugins['iq-caller']
+        .set(stanza, params)
     },
   },
   [iqCaller]
