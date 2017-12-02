@@ -11,13 +11,6 @@ const net = require('net')
 
 const NS = 'urn:ietf:params:xml:ns:xmpp-tls'
 
-function match(features, entity) {
-  return (
-    features.getChild('starttls', NS) &&
-    entity.socket.constructor === net.Socket
-  ) // https://prosody.im/issues/issue/837
-}
-
 function proceed(entity, options) {
   return new Promise((resolve, reject) => {
     options.socket = entity.socket
@@ -32,7 +25,7 @@ function proceed(entity, options) {
   })
 }
 
-function _starttls(entity) {
+function starttls(entity) {
   return entity.sendReceive(xml('starttls', {xmlns: NS})).then(element => {
     if (element.is('failure', NS)) {
       throw new Error('STARTTLS_FAILURE')
@@ -42,21 +35,19 @@ function _starttls(entity) {
   })
 }
 
-module.exports = function starttls(streamFeatures) {
-  const {entity} = streamFeatures
-
-  streamFeatures.use({
-    name: 'starttls',
-    priority: 5000,
-    match,
-    restart: true,
-    run: () => {
-      return _starttls(entity)
-    },
-  })
-
-  return {
-    streamFeatures,
-    entity,
+function route() {
+  return function({entity}, next) {
+    // https://prosody.im/issues/issue/837
+    if (entity.socket.constructor !== net.Socket) return next()
+    return starttls(entity).then(() => {
+      return entity.restart()
+    })
   }
+}
+
+module.exports.proceed = proceed
+module.exports.starttls = starttls
+module.exports.route = route
+module.exports.streamFeature = function() {
+  return ['starttls', NS, route()]
 }

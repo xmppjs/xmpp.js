@@ -22,144 +22,139 @@ function getMechanismNames(features) {
   return features.getChild('mechanisms', NS).children.map(el => el.text())
 }
 
-module.exports = function sasl(streamFeatures) {
-  const {entity} = streamFeatures
-  const p = {
-    entity,
-    start() {
-      this.SASL = new SASLFactory()
-      this.streamFeature = {
-        name: 'sasl',
-        priority: 1000,
-        match,
-        restart: true,
-        run: (entity, features) => {
-          return this.gotFeatures(features)
-        },
-      }
-      streamFeatures.use(this.streamFeature)
-    },
+module.exports = function sasl() {
+  const SASL = new SASLFactory()
 
-    use(...args) {
-      this.SASL.use(...args)
-    },
+  function getUsableMechanisms(mechs) {
+    const supported = getAvailableMechanisms()
+    return mechs.filter(mech => {
+      return supported.indexOf(mech) > -1
+    })
+  }
 
-    gotFeatures(features) {
-      const offered = getMechanismNames(features)
-      const usable = this.getUsableMechanisms(offered)
-      // FIXME const available = this.getAvailableMechanisms()
+  function getAvailableMechanisms() {
+    return SASL._mechs.map(({name}) => name)
+  }
 
-      return Promise.resolve(this.getMechanism(usable)).then(mech => {
-        this.mech = mech
-        return this.handleMechanism(mech, features)
-      })
-    },
+  function getMechanism(usable) {
+    return usable[0] // FIXME prefer SHA-1, ... maybe order usable, available, ... by preferred?
+  }
 
-    handleMechanism(mech, features) {
-      this.entity._status('authenticate')
+  function gotFeatures(entity, features) {
+    const offered = getMechanismNames(features)
+    const usable = getUsableMechanisms(offered)
+    // FIXME const available = this.getAvailableMechanisms()
 
-      if (mech === 'ANONYMOUS') {
-        return this.authenticate(mech, {}, features)
-      }
+    return Promise.resolve(getMechanism(usable)).then(mech => {
+      return handleMechanism(entity, mech, features)
+    })
+  }
 
-      return this.entity.delegate(
-        'authenticate',
-        (username, password) => {
-          return this.authenticate(mech, {username, password}, features)
-        },
-        mech
-      )
-    },
+  function findMechanism(name) {
+    return SASL.create([name])
+  }
 
-    getAvailableMechanisms() {
-      return this.SASL._mechs.map(({name}) => name)
-    },
+  function handleMechanism(entity, mech, features) {
+    entity._status('authenticate')
 
-    getUsableMechanisms(mechs) {
-      const supported = this.getAvailableMechanisms()
-      return mechs.filter(mech => {
-        return supported.indexOf(mech) > -1
-      })
-    },
+    if (mech === 'ANONYMOUS') {
+      return authenticate(entity, mech, {}, features)
+    }
 
-    getMechanism(usable) {
-      return usable[0] // FIXME prefer SHA-1, ... maybe order usable, available, ... by preferred?
-    },
+    return entity.delegate(
+      'authenticate',
+      (username, password) => {
+        return authenticate(entity, mech, {username, password}, features)
+      },
+      mech
+    )
+  }
 
-    findMechanism(name) {
-      return this.SASL.create([name])
-    },
+  function authenticate(entity, mechname, credentials) {
+    const mech = findMechanism(mechname)
+    if (!mech) {
+      return Promise.reject(new Error('no compatible mechanism'))
+    }
 
-    authenticate(mechname, credentials) {
-      const mech = this.findMechanism(mechname)
-      if (!mech) {
-        return Promise.reject(new Error('no compatible mechanism'))
-      }
+    const {domain} = entity.options
+    const creds = Object.assign(
+      {
+        username: null,
+        password: null,
+        server: domain,
+        host: domain,
+        realm: domain,
+        serviceType: 'xmpp',
+        serviceName: domain,
+      },
+      credentials
+    )
 
-      const {domain} = this.entity.options
-      const creds = Object.assign(
-        {
-          username: null,
-          password: null,
-          server: domain,
-          host: domain,
-          realm: domain,
-          serviceType: 'xmpp',
-          serviceName: domain,
-        },
-        credentials
-      )
+    entity._status('authenticating')
 
-      this.entity._status('authenticating')
-
-      return new Promise((resolve, reject) => {
-        const handler = element => {
-          if (element.attrs.xmlns !== NS) {
-            return
-          }
-
-          if (element.name === 'challenge') {
-            mech.challenge(decode(element.text()))
-            const resp = mech.response(creds)
-            this.entity.send(
-              xml(
-                'response',
-                {xmlns: NS, mechanism: mech.name},
-                typeof resp === 'string' ? encode(resp) : ''
-              )
-            )
-            return
-          }
-
-          if (element.name === 'failure') {
-            reject(
-              new SASLError(
-                element.children[0].name,
-                element.getChildText('text') || '',
-                element
-              )
-            )
-          } else if (element.name === 'success') {
-            resolve()
-            this.entity._status('authenticated')
-          }
-
-          this.entity.removeListener('nonza', handler)
+    return new Promise((resolve, reject) => {
+      const handler = element => {
+        if (element.attrs.xmlns !== NS) {
+          return
         }
-        this.entity.on('nonza', handler)
 
-        if (mech.clientFirst) {
-          this.entity.send(
+        if (element.name === 'challenge') {
+          mech.challenge(decode(element.text()))
+          const resp = mech.response(creds)
+          entity.send(
             xml(
-              'auth',
+              'response',
               {xmlns: NS, mechanism: mech.name},
-              encode(mech.response(creds))
+              typeof resp === 'string' ? encode(resp) : ''
             )
           )
+          return
         }
-      })
+
+        if (element.name === 'failure') {
+          reject(
+            new SASLError(
+              element.children[0].name,
+              element.getChildText('text') || '',
+              element
+            )
+          )
+        } else if (element.name === 'success') {
+          resolve()
+          entity._status('authenticated')
+        }
+
+        entity.removeListener('nonza', handler)
+      }
+      entity.on('nonza', handler)
+
+      if (mech.clientFirst) {
+        entity.send(
+          xml(
+            'auth',
+            {xmlns: NS, mechanism: mech.name},
+            encode(mech.response(creds))
+          )
+        )
+      }
+    })
+  }
+
+  return {
+    use(...args) {
+      return SASL.use(...args)
+    },
+    route() {
+      return function({stanza, entity}, next) {
+        if (!match(stanza)) return next()
+        return gotFeatures(entity, stanza)
+          .then(() => {
+            return entity.restart()
+          })
+          .catch(err => {
+            entity.emit('error', err)
+          })
+      }
     },
   }
-  p.start()
-  return p
 }

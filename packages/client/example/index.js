@@ -20,14 +20,14 @@
 
   // Log status changes
   client.on('status', (status, value) => {
-    console.log('🛈', status, value ? value.toString() : '')
+    console.log('ℹ️', status, value ? value.toString() : '')
   })
 
   // Useful for logging raw traffic
   // Emitted for every incoming fragment
-  client.on('input', data => console.log('⮈', data))
+  client.on('input', data => console.log('👈', data))
   // Emitted for every outgoing fragment
-  client.on('output', data => console.log('⮊', data))
+  client.on('output', data => console.log('👉', data))
 
   // Useful for logging XML traffic
   // Emitted for every incoming XML element
@@ -37,7 +37,7 @@
 
   client.on('stanza', el => {
     if (el.is('presence') && el.attrs.from === client.jid.toString()) {
-      console.log('🗸', 'available, ready to receive <message/>s')
+      console.log('👌', 'available, ready to receive <message/>s')
     }
   })
 
@@ -45,10 +45,9 @@
     console.log('jid', jid.toString())
     client.send(xml('presence'))
 
+    // prettier-ignore
     client.send(
-      xml(
-        'message',
-        {to: 'sonny@jabberfr.org', type: 'chat'},
+      xml('message', {to: 'sonny@xmppjs.org', type: 'chat'},
         xml('body', {}, 'hello')
       )
     )
@@ -56,11 +55,11 @@
 
   // "start" opens the socket and the XML stream
   client
-    .start('xmpp://jabberfr.org:5222') // Auto
-    // .start('xmpp://localhost:5222') // TCP
-    // .start('xmpps://localhost:5223') // TLS
-    // .start('ws://localhost:5280/xmpp-websocket') // Websocket
-    // .start('wss://localhost:5281/xmpp-websocket') // Secure WebSocket
+    .start('xmppjs.org') // Auto
+    // .start('xmpp://xmppjs.org:5222') // TCP
+    // .start('xmpps://xmppjs.org:5223') // TLS
+    // .start('ws://xmppjs.org:5280/xmpp-websocket') // Websocket
+    // .start('wss://xmppjs.org:5281/xmpp-websocket') // Secure WebSocket
     .catch(err => {
       console.error('start failed', err)
     })

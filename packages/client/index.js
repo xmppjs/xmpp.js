@@ -14,47 +14,53 @@ const packages = {reconnect, tcp, websocket, tls}
 const _middleware = require('@xmpp/middleware')
 const _router = require('@xmpp/router')
 const _streamFeatures = require('@xmpp/stream-features')
-const _bind = require('@xmpp/bind')
-const _sasl = require('@xmpp/sasl')
 
-const _saslPlain = require('@xmpp/sasl-plain')
-const _saslScramSha1 = require('@xmpp/sasl-scram-sha-1')
-const _saslAnonymous = require('@xmpp/sasl-anonymous')
+// Stream features - order matters and define priority
+const starttls = require('@xmpp/starttls')
+const sasl = require('@xmpp/sasl')
+const bind = require('@xmpp/bind')
+const sessionEstablishment = require('@xmpp/session-establishment')
 
-const _sessionEstablishment = require('@xmpp/session-establishment')
-const _starttls = require('@xmpp/starttls')
+// SASL mechanisms - order matters and define priority
+const anonymous = require('@xmpp/sasl-anonymous')
+const scramsha1 = require('@xmpp/sasl-scram-sha-1')
+const plain = require('@xmpp/sasl-plain')
+const _mechanisms = {anonymous, scramsha1, plain}
 
 function xmpp() {
   const client = new Client()
   const middleware = _middleware(client)
   const router = _router(middleware)
-  const streamFeatures = _streamFeatures(router)
-  const bind = _bind(streamFeatures)
-  const sasl = _sasl(streamFeatures)
-  const saslPlain = _saslPlain(sasl)
-  const saslScramSha1 = _saslScramSha1(sasl)
-  const saslAnonymous = _saslAnonymous(sasl)
-  const sessionEstablishment = _sessionEstablishment(streamFeatures)
-  const starttls = _starttls(streamFeatures)
-  return Object.assign(
+  const streamFeatures = _streamFeatures(middleware)
+
+  const _sasl = sasl()
+
+  streamFeatures.use(...starttls.streamFeature())
+  router.use('stream:features', _sasl.route())
+  streamFeatures.use(...bind.streamFeature())
+  router.use('stream:features', sessionEstablishment())
+
+  const mechanisms = entries(_mechanisms)
+    // Ignore browserify stubs
+    .filter(([, v]) => typeof v === 'function')
+    .map(([k, v]) => ({[k]: v(_sasl)}))
+
+  const exports = Object.assign(
     {
       client,
       middleware,
       router,
-      streamFeatures,
-      bind,
       sasl,
-      saslPlain,
-      saslScramSha1,
-      saslAnonymous,
-      sessionEstablishment,
-      starttls,
     },
+    // ...features,
+    ...mechanisms,
     ...entries(packages)
       // Ignore browserify stubs
       .filter(([, v]) => typeof v === 'function')
       .map(([k, v]) => ({[k]: v(client)}))
   )
+
+  return exports
 }
 
 module.exports.Client = Client
