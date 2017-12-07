@@ -93,7 +93,7 @@ class Connection extends EventEmitter {
       this.socket.removeListener(k, listeners[k])
       delete listeners[k]
     })
-    delete this.socket
+    this.socket = null
   }
 
   _attachParser(p) {
@@ -184,9 +184,9 @@ class Connection extends EventEmitter {
     return new Promise((resolve, reject) => {
       this._attachParser(new this.Parser())
       this._attachSocket(new this.Socket())
-      this.socket.once('error', reject)
+      this.once('error', reject)
       this.socket.connect(this.socketParameters(options), () => {
-        this.socket.removeListener('error', reject)
+        this.removeListener('error', reject)
         resolve()
         // The 'connect' status is emitted by the socket 'connect' listener
       })
