@@ -5,6 +5,7 @@ var core = require('node-xmpp-core')
 var inherits = core.inherits
 var ltx = core.ltx
 var request = require('request')
+var cookieJar = request.jar()
 var debug = require('debug')('xmpp:client:bosh')
 
 function BOSHConnection (opts) {
@@ -184,7 +185,8 @@ BOSHConnection.prototype.request = function (attrs, children, cb, retry) {
     uri: this.boshURL,
     method: 'POST',
     headers: { 'Content-Type': this.contentType },
-    body: boshEl.toString()
+    body: boshEl.toString(),
+    jar: cookieJar
   },
     function (err, res, body) {
       that.currentRequests--
