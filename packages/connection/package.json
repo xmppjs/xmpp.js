@@ -12,15 +12,13 @@
     "@xmpp/events": "^0.3.0",
     "@xmpp/jid": "^0.3.0",
     "@xmpp/streamparser": "^0.0.6",
-    "@xmpp/xml": "^0.3.0",
-    "whatwg-url": "^6.3.0"
+    "@xmpp/xml": "^0.3.0"
   },
   "browser": {
-    "url": false,
-    "whatwg-url": false
+    "url": false
   },
   "engines": {
-    "node": ">= 6",
+    "node": ">= 7.6.0",
     "npm": ">= 2"
   }
 }

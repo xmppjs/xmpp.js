@@ -10,19 +10,16 @@ class Socket extends EventEmitter {
     this.listeners = Object.create(null)
   }
 
-  connect(url, fn) {
+  connect(url) {
     this.url = url
-    this._attachSocket(new WebSocket(url, ['xmpp']), fn)
+    this._attachSocket(new WebSocket(url, ['xmpp']))
   }
 
-  _attachSocket(socket, fn) {
+  _attachSocket(socket) {
     const sock = (this.socket = socket)
     const {listeners} = this
     listeners.open = () => {
       this.emit('connect')
-      if (fn) {
-        fn()
-      }
     }
     listeners.message = ({data}) => this.emit('data', data)
     listeners.error = err => {

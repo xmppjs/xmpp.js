@@ -21,15 +21,13 @@
     "@xmpp/stream-features": "^0.3.0",
     "@xmpp/tcp": "^0.3.0",
     "@xmpp/tls": "^0.3.0",
-    "@xmpp/websocket": "^0.3.0",
-    "object.entries": "^1.0.4"
+    "@xmpp/websocket": "^0.3.0"
   },
   "browser": {
     "@xmpp/tcp": false,
     "@xmpp/tls": false,
     "@xmpp/starttls": false,
-    "@xmpp/sasl-scram-sha-1": false,
-    "object.entries": false
+    "@xmpp/sasl-scram-sha-1": false
   },
   "scripts": {
     "prepublish": "npm run bundle && npm run minify",
@@ -39,7 +37,7 @@
       "../../node_modules/uglify-es/bin/uglifyjs dist/xmpp.js -c -m --source-map url=xmpp.min.js.map,content=dist/xmpp.js.map -o dist/xmpp.min.js"
   },
   "engines": {
-    "node": ">= 6",
+    "node": ">= 7.6.0",
     "npm": ">= 2"
   }
 }

@@ -55,10 +55,10 @@ reconnect.on('reconnected', () => {
 
 ### error event
 
-Emitted each time a re-connection fails.
+Emitted on entity each time a re-connection fails.
 
 ```js
-reconnect.on('error', err => {
-  console.error('reconnection error', err)
+entity.on('error', err => {
+  console.error(err)
 })
 ```

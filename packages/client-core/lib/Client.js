@@ -18,14 +18,18 @@ class Client extends Connection {
     return super.send(element, ...args)
   }
 
-  connect(uri) {
-    const Transport = this.transports.find(Transport => {
+  _findTransport(uri) {
+    return this.transports.find(Transport => {
       try {
         return Transport.prototype.socketParameters(uri) !== undefined
       } catch (err) {
         return false
       }
     })
+  }
+
+  connect(uri) {
+    const Transport = this._findTransport(uri)
 
     if (!Transport) {
       throw new Error('No compatible connection method found.')

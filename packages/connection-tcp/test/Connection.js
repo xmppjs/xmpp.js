@@ -35,3 +35,20 @@ test('footer()', t => {
   const conn = new Connection()
   t.is(conn.footer(), '</stream:stream>')
 })
+
+test('socketParameters()', t => {
+  t.deepEqual(Connection.prototype.socketParameters('xmpp://foo'), {
+    port: null,
+    host: 'foo',
+  })
+
+  t.deepEqual(Connection.prototype.socketParameters('xmpp://foo:1234'), {
+    port: 1234,
+    host: 'foo',
+  })
+
+  t.deepEqual(
+    Connection.prototype.socketParameters('xmpps://foo:1234'),
+    undefined
+  )
+})

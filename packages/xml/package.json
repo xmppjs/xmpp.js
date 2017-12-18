@@ -6,18 +6,12 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.3.0",
   "license": "ISC",
-  "keywords": [
-    "XMPP",
-    "stanza",
-    "iq",
-    "message",
-    "presence"
-  ],
+  "keywords": ["XMPP", "stanza", "iq", "message", "presence"],
   "dependencies": {
     "ltx": "^2.7.1"
   },
   "engines": {
-    "node": ">= 6",
+    "node": ">= 7.6.0",
     "npm": ">= 2"
   }
 }

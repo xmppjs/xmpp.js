@@ -32,14 +32,14 @@
     "codemirror": "^5.32.0",
     "jquery": "^3.1.1",
     "notie": "^4.1.0",
-    "prismjs": "^1.8.4",
-    "tether": "^1.4.2"
+    "prismjs": "^1.9.0",
+    "tether": "^1.4.3"
   },
   "bin": {
     "xmpp-console": "./app.js"
   },
   "engines": {
-    "node": ">= 6",
+    "node": ">= 7.6.0",
     "npm": ">= 2"
   }
 }

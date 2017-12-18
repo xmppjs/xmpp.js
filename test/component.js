@@ -51,6 +51,8 @@ test.cb('reconnects when server restarts', t => {
   const {component} = xmpp()
   debug(component)
 
+  component.on('error', () => {})
+
   component.handle('authenticate', auth => {
     return auth('foobar')
   })

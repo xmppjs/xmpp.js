@@ -2,22 +2,19 @@
   "name": "@xmpp/connection-tcp",
   "description": "XMPP TCP connection for JavaScript",
   "repository": "github:xmppjs/xmpp.js",
-  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/connection-tcp",
+  "homepage":
+    "https://github.com/xmppjs/xmpp.js/tree/master/packages/connection-tcp",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.3.0",
   "license": "ISC",
-  "keywords": [
-    "XMPP",
-    "connection",
-    "TCP"
-  ],
+  "keywords": ["XMPP", "connection", "TCP"],
   "dependencies": {
     "@xmpp/connection": "^0.3.0",
     "@xmpp/streamparser": "^0.0.6",
     "@xmpp/xml": "^0.3.0"
   },
   "engines": {
-    "node": ">= 6",
+    "node": ">= 7.6.0",
     "npm": ">= 2"
   }
 }

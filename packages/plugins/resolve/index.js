@@ -1,81 +1,81 @@
 'use strict'
 
 const resolve = require('@xmpp/resolve')
+const {socketConnect} = require('@xmpp/connection')
 
-function sc(socket, params) {
-  return new Promise((resolve, reject) => {
-    socket.once('error', reject)
-    socket.connect(params, () => {
-      socket.removeListener('error', reject)
-      resolve()
-    })
-  })
+async function fetchURIs(domain) {
+  return [
+    // Remove duplicates
+    ...new Set(
+      (await resolve(domain, {
+        srv: [
+          {
+            service: 'xmpps-client',
+            protocol: 'tcp',
+          },
+          {
+            service: 'xmpp-client',
+            protocol: 'tcp',
+          },
+        ],
+      })).map(record => record.uri)
+    ),
+  ]
 }
 
-function getURIs(domain) {
-  return resolve(domain, {
-    srv: [
-      {
-        service: 'xmpps-client',
-        protocol: 'tcp',
-      },
-      {
-        service: 'xmpp-client',
-        protocol: 'tcp',
-      },
-    ],
-  })
-    .then(records => {
-      return records.map(record => record.uri).filter(record => record)
-    })
-    .then(uris => [...new Set(uris)])
+function filterSupportedURIs(entity, uris) {
+  return uris.filter(uri => entity._findTransport(uri))
 }
 
-function fallbackConnect(entity, uris) {
-  const uri = uris.shift()
-  let params
-  const Transport = entity.transports.find(Transport => {
-    try {
-      params = Transport.prototype.socketParameters(uri)
-      return params !== undefined
-    } catch (err) {
-      return false
-    }
-  })
-
-  if (!Transport) {
-    throw new Error('No compatible connection method found.')
+async function fallbackConnect(entity, uris) {
+  if (uris.length === 0) {
+    throw new Error("Couldn't connect")
   }
 
+  const uri = uris.shift()
+  const Transport = entity._findTransport(uri)
+
+  if (!Transport) {
+    return fallbackConnect(entity, uris)
+  }
+
+  const params = Transport.prototype.socketParameters(uri)
   const socket = new Transport.prototype.Socket()
-  const parser = new Transport.prototype.Parser()
-  return sc(socket, params)
-    .then(() => {
-      entity._attachParser(parser)
-      entity._attachSocket(socket)
-      socket.emit('connect')
-      entity.Transport = Transport
-      entity.Socket = Transport.prototype.Socket
-      entity.Parser = Transport.prototype.Parser
-    })
-    .catch(() => {
-      if (uris.length === 0) {
-        return new Error("Couldn't connect")
-      }
-      return fallbackConnect(entity, uris)
-    })
+
+  try {
+    await socketConnect(socket, params)
+  } catch (err) {
+    return fallbackConnect(entity, uris)
+  }
+
+  entity._attachSocket(socket)
+  socket.emit('connect')
+  entity.Transport = Transport
+  entity.Socket = Transport.prototype.Socket
+  entity.Parser = Transport.prototype.Parser
 }
 
 module.exports.name = 'resolve'
 module.exports.plugin = function plugin(entity) {
   const _connect = entity.connect
-  entity.connect = function connect(domain) {
+  entity.connect = async function connect(domain) {
     if (domain.length === 0 || domain.match(/:\/\//)) {
       return _connect.call(this, domain)
     }
-    return getURIs(domain).then(uris => {
-      return fallbackConnect(entity, uris)
-    })
+
+    const uris = filterSupportedURIs(entity, await fetchURIs(domain))
+
+    if (uris.length === 0) {
+      throw new Error('No compatible transport found.')
+    }
+
+    try {
+      await fallbackConnect(entity, uris)
+    } catch (err) {
+      entity._reset()
+      entity._status('disconnect')
+      throw err
+    }
   }
 
   return {

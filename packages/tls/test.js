@@ -4,17 +4,20 @@ const test = require('ava')
 const ConnectionTLS = require('./lib/Connection')
 
 test('socketParameters()', t => {
-  let params
+  t.deepEqual(ConnectionTLS.prototype.socketParameters('xmpps://foo'), {
+    port: 5223,
+    host: 'foo',
+  })
 
-  params = ConnectionTLS.prototype.socketParameters('xmpps://foo')
-  t.is(params.port, 5223)
+  t.deepEqual(ConnectionTLS.prototype.socketParameters('xmpps://foo:1234'), {
+    port: 1234,
+    host: 'foo',
+  })
 
-  params = ConnectionTLS.prototype.socketParameters('xmpps://foo:1234')
-  t.is(params.port, 1234)
+  t.deepEqual(ConnectionTLS.prototype.socketParameters('xmpp://foo'), undefined)
 
-  params = ConnectionTLS.prototype.socketParameters('xmpp://foo')
-  t.is(params, undefined)
-
-  params = ConnectionTLS.prototype.socketParameters('xmpp://foo:1234')
-  t.is(params, undefined)
+  t.deepEqual(
+    ConnectionTLS.prototype.socketParameters('xmpp://foo:1234'),
+    undefined
+  )
 })

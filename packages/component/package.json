@@ -12,11 +12,10 @@
     "@xmpp/component-core": "^0.3.0",
     "@xmpp/middleware": "^0.3.0",
     "@xmpp/reconnect": "^0.3.0",
-    "@xmpp/router": "^0.3.0",
-    "object.entries": "^1.0.4"
+    "@xmpp/router": "^0.3.0"
   },
   "engines": {
-    "node": ">= 6",
+    "node": ">= 7.6.0",
     "npm": ">= 2"
   }
 }
