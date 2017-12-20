@@ -1,15 +1,16 @@
 'use strict'
 
-const ConnectionTCP = require('@xmpp/connection-tcp')
+const Connection = require('@xmpp/connection-tcp')
 
-class Connection extends ConnectionTCP {
+class ConnectionTCP extends Connection {
   socketParameters(uri) {
     const params = super.socketParameters(uri)
+    if (!params) return params
     params.port = params.port || 5222
     return params
   }
 }
 
-Connection.prototype.NS = 'jabber:client'
+ConnectionTCP.prototype.NS = 'jabber:client'
 
-module.exports = Connection
+module.exports = ConnectionTCP

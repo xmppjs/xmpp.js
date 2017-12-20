@@ -1,7 +1,5 @@
 'use strict'
 
-const entries = Object.entries || require('object.entries') // eslint-disable-line node/no-unsupported-features
-
 const Client = require('./lib/Client')
 const {xml, jid} = require('@xmpp/client-core')
 
@@ -40,7 +38,7 @@ function xmpp() {
   streamFeatures.use(...bind.streamFeature())
   router.use('stream:features', sessionEstablishment())
 
-  const mechanisms = entries(_mechanisms)
+  const mechanisms = Object.entries(_mechanisms)
     // Ignore browserify stubs
     .filter(([, v]) => typeof v === 'function')
     .map(([k, v]) => ({[k]: v(_sasl)}))
@@ -54,7 +52,7 @@ function xmpp() {
     },
     // ...features,
     ...mechanisms,
-    ...entries(packages)
+    ...Object.entries(packages)
       // Ignore browserify stubs
       .filter(([, v]) => typeof v === 'function')
       .map(([k, v]) => ({[k]: v(client)}))

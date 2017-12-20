@@ -8,7 +8,7 @@
   "license": "ISC",
   "keywords": ["XMPP", "test"],
   "engines": {
-    "node": ">= 6",
+    "node": ">= 7.6.0",
     "npm": ">= 2"
   },
   "dependencies": {

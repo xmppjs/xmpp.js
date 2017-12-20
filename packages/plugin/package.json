@@ -6,17 +6,14 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.3.0",
   "license": "ISC",
-  "keywords": [
-    "XMPP",
-    "plugin"
-  ],
+  "keywords": ["XMPP", "plugin"],
   "dependencies": {
     "@xmpp/events": "^0.3.0",
     "@xmpp/jid": "^0.3.0",
     "@xmpp/xml": "^0.3.0"
   },
   "engines": {
-    "node": ">= 6",
+    "node": ">= 7.6.0",
     "npm": ">= 2"
   }
 }

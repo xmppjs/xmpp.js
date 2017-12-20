@@ -40,6 +40,26 @@ test.cb('timeout', t => {
   })
 })
 
+test.cb('error on status closing', t => {
+  t.plan(2)
+  const conn = new Connection()
+  conn.parser = new EventEmitter()
+  conn.footerElement = () => {
+    return xml('hello')
+  }
+  conn.socket = new EventEmitter()
+  conn.socket.write = (data, cb) => {
+    return cb()
+  }
+  conn.status = 'closing'
+  conn.close().catch(err => {
+    t.is(err.name, 'Error')
+    t.is(err.message, 'Connection is closing')
+    t.end()
+  })
+  conn.parser.emit('end')
+})
+
 test.cb('resolves', t => {
   t.plan(2)
   const conn = new Connection()

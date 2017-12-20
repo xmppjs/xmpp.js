@@ -33,7 +33,7 @@ rules:
   prefer-spread: [error]
   prefer-destructuring: [error]
   # node https://github.com/mysticatea/eslint-plugin-node
-  node/no-unsupported-features: [error, {version: 6}]
+  node/no-unsupported-features: [error, {version: 7.6}]
   node/no-unpublished-require: 0 # doesn't play nice with monorepo
   node/no-extraneous-require: [error, allowModules: [ava, sinon, "@xmpp/test"]]
   # standard https://github.com/xjamundx/eslint-plugin-standard

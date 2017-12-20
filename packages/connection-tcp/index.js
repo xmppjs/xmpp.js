@@ -3,6 +3,7 @@
 const {Socket} = require('net')
 const Connection = require('@xmpp/connection')
 const {Parser} = require('@xmpp/xml')
+const url = require('url')
 
 const NS_STREAM = 'http://etherx.jabber.org/streams'
 
@@ -10,10 +11,12 @@ const NS_STREAM = 'http://etherx.jabber.org/streams'
  * Extensible Messaging and Presence Protocol (XMPP): Core http://xmpp.org/rfcs/rfc6120.html
 */
 
-class TCP extends Connection {
+class ConnectionTCP extends Connection {
   socketParameters(uri) {
-    const {port, host, protocol} = super.socketParameters(uri)
-    return protocol === 'xmpp:' ? {port, host} : undefined
+    const {port, hostname, protocol} = url.parse(uri)
+    return protocol === 'xmpp:'
+      ? {port: port ? Number(port) : null, host: hostname}
+      : undefined
   }
 
   // https://xmpp.org/rfcs/rfc6120.html#streams-open
@@ -36,8 +39,8 @@ class TCP extends Connection {
   }
 }
 
-TCP.prototype.NS = NS_STREAM
-TCP.prototype.Socket = Socket
-TCP.prototype.Parser = Parser
+ConnectionTCP.prototype.NS = NS_STREAM
+ConnectionTCP.prototype.Socket = Socket
+ConnectionTCP.prototype.Parser = Parser
 
-module.exports = TCP
+module.exports = ConnectionTCP

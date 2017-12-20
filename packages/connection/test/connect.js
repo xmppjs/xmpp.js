@@ -2,18 +2,24 @@
 
 const test = require('ava')
 const Connection = require('..')
-const {EventEmitter} = require('@xmpp/events')
+const EventEmitter = require('events')
 
-class Socket extends EventEmitter {
-  connect(param, fn) {
-    process.nextTick(fn)
+function socket(fn) {
+  return class Socket extends EventEmitter {
+    connect() {
+      if (!fn) return
+      Promise.resolve().then(() => {
+        fn.call(this)
+      })
+    }
   }
 }
 
 test('emits "connecting" status', t => {
   const conn = new Connection()
-  conn.Parser = EventEmitter
-  conn.Socket = Socket
+  conn.Socket = socket(function() {
+    this.emit('connect')
+  })
 
   return Promise.all([
     conn.promise('connecting'),
@@ -24,27 +30,24 @@ test('emits "connecting" status', t => {
   ])
 })
 
-test('rejects if an error is emitted before connected', t => {
+test.skip('rejects if an error is emitted before connected', t => {
   const conn = new Connection()
-  conn.Parser = EventEmitter
-  conn.Socket = Socket
-
   const error = new Error('foobar')
 
-  t.is(conn._emitter.listenerCount('error'), 0)
+  conn.Socket = socket(function() {
+    this.emit('error', error)
+  })
   const promise = conn.connect('url')
-  t.is(conn._emitter.listenerCount('error'), 1)
-  conn.emit('error', error)
   return promise.catch(err => {
-    t.is(conn._emitter.listenerCount('error'), 0)
     t.is(err, error)
   })
 })
 
 test('resolves if socket connects', t => {
   const conn = new Connection()
-  conn.Parser = EventEmitter
-  conn.Socket = Socket
+  conn.Socket = socket(function() {
+    this.emit('connect')
+  })
 
   return conn.connect('url').then(() => {
     t.pass()

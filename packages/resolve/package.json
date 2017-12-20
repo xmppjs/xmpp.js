@@ -6,15 +6,7 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.3.0",
   "license": "ISC",
-  "keywords": [
-    "XMPP",
-    "dns",
-    "records",
-    "srv",
-    "txt",
-    "lookup",
-    "resolve"
-  ],
+  "keywords": ["XMPP", "dns", "records", "srv", "txt", "lookup", "resolve"],
   "browser": {
     "dns": false,
     "./lib/dns": false,
@@ -25,7 +17,7 @@
     "node-fetch": "^1.7.2"
   },
   "engines": {
-    "node": ">= 6",
+    "node": ">= 7.6.0",
     "npm": ">= 2"
   }
 }

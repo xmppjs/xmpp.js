@@ -100,6 +100,8 @@ test.cb('reconnects when server restarts', t => {
   const {client} = xmpp()
   debug(client)
 
+  client.on('error', () => {})
+
   client.handle('authenticate', auth => {
     return auth(USERNAME, PASSWORD)
   })

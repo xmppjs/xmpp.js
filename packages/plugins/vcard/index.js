@@ -2,7 +2,6 @@
 
 const {xml, plugin} = require('@xmpp/plugin')
 const iqCaller = require('../iq-caller')
-const entries = Object.entries || require('object.entries') // eslint-disable-line node/no-unsupported-features
 
 const NS = 'vcard-temp'
 
@@ -16,7 +15,7 @@ function parse({children}) {
 
 function build(dict, parent) {
   return (parent || xml('vCard', {xmlns: NS})).append(
-    entries(dict).map(([key, val]) => {
+    Object.entries(dict).map(([key, val]) => {
       return typeof val === 'object' ? build(val, xml(key)) : xml(key, {}, val)
     })
   )

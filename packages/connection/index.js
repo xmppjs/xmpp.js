@@ -2,9 +2,10 @@
 
 const {timeout, EventEmitter, promise} = require('@xmpp/events')
 const jid = require('@xmpp/jid')
-const url = require('url')
 const xml = require('@xmpp/xml')
-const URL = global.URL || require('url').URL || require('whatwg-url').URL
+const URL = global.URL || require('url').URL
+
+const NS_STREAM = 'urn:ietf:params:xml:ns:xmpp-streams'
 
 class XMPPError extends Error {
   constructor(condition, text, element) {
@@ -23,14 +24,34 @@ class StreamError extends XMPPError {
   }
 }
 
-// We ignore url module from the browser bundle to reduce its size
-function getHostname(uri) {
+function socketConnect(socket, ...params) {
+  return new Promise((resolve, reject) => {
+    function onError(err) {
+      socket.removeListener('connect', onConnect)
+      reject(err)
+    }
+
+    function onConnect(value) {
+      socket.removeListener('error', onError)
+      resolve(value)
+    }
+
+    socket.once('error', onError)
+    socket.once('connect', onConnect)
+
+    socket.connect(...params)
+  })
+}
+
+function getDomain(uri) {
   // WHATWG URL parser requires a protocol
   if (!uri.includes('://')) {
     uri = 'http://' + uri
   }
-
-  return new URL(uri).hostname
+  const url = new URL(uri)
+  // WHATWG URL parser doesn't support non Web protocols in browser
+  url.protocol = 'http:'
+  return url.hostname
 }
 
 class Connection extends EventEmitter {
@@ -48,24 +69,53 @@ class Connection extends EventEmitter {
     this.socketListeners = Object.create(null)
     this.parserListeners = Object.create(null)
     this.status = 'offline'
+    this.socket = null
+    this.parser = null
   }
 
   _reset() {
     this.domain = ''
     this.lang = ''
     this.jid = null
+    this.status = 'offline'
     this._detachSocket()
     this._detachParser()
-    this.socket = null
+  }
+
+  async _streamError(condition) {
+    try {
+      await this.send(
+        // prettier-ignore
+        xml('stream:error', {}, [
+          xml(condition, {xmlns: NS_STREAM}),
+        ])
+      )
+    } catch (err) {}
+
+    return this._end()
+  }
+
+  async _onData(data) {
+    const str = data.toString('utf8')
+    this.emit('input', str)
+    try {
+      await this.parser.write(str)
+    } catch (err) {
+      // https://xmpp.org/rfcs/rfc6120.html#streams-error-conditions-bad-format
+      // "This error can be used instead of the more specific XML-related errors,
+      // such as <bad-namespace-prefix/>, <invalid-xml/>, <not-well-formed/>, <restricted-xml/>,
+      // and <unsupported-encoding/>. However, the more specific errors are RECOMMENDED."
+      try {
+        this._streamError('bad-format')
+      } catch (err) {}
+    }
   }
 
   _attachSocket(socket) {
     const sock = (this.socket = socket)
     const listeners = this.socketListeners
     listeners.data = data => {
-      const str = data.toString('utf8')
-      this.emit('input', str)
-      this.parser.write(str)
+      this._onData(data)
     }
     listeners.close = (...args) => {
       this._reset()
@@ -73,15 +123,11 @@ class Connection extends EventEmitter {
     }
     listeners.connect = () => {
       this._status('connect')
-      sock.once('close', listeners.close)
     }
     listeners.error = error => {
-      this._reset()
-      if (this.status === 'connecting') {
-        this._status('offline')
-      }
       this.emit('error', error)
     }
+    sock.on('close', listeners.close)
     sock.on('data', listeners.data)
     sock.on('error', listeners.error)
     sock.on('connect', listeners.connect)
@@ -96,31 +142,48 @@ class Connection extends EventEmitter {
     this.socket = null
   }
 
+  async _end() {
+    let el
+    try {
+      el = await this.close()
+    } catch (err) {}
+    try {
+      await this.disconnect()
+    } catch (err) {}
+    return el
+  }
+
+  async _onElement(element) {
+    this.emit('element', element)
+    this.emit(this.isStanza(element) ? 'stanza' : 'nonza', element)
+    // https://xmpp.org/rfcs/rfc6120.html#streams-error
+    if (element.name !== 'stream:error') return
+    this.emit(
+      'error',
+      new StreamError(
+        element.children[0].name,
+        element.getChildText('text', NS_STREAM) || '',
+        element
+      )
+    )
+    // "Stream Errors Are Unrecoverable"
+    // "The entity that receives the stream error then SHALL close the stream"
+    try {
+      await this._end()
+    } catch (err) {}
+  }
+
   _attachParser(p) {
     const parser = (this.parser = p)
     const listeners = this.parserListeners
     listeners.element = element => {
-      if (element.name === 'stream:error') {
-        this.close().then(() => this.disconnect())
-        this.emit(
-          'error',
-          new StreamError(
-            element.children[0].name,
-            element.getChildText(
-              'text',
-              'urn:ietf:params:xml:ns:xmpp-streams'
-            ) || '',
-            element
-          )
-        )
-      }
-      this.emit('element', element)
-      this.emit(this.isStanza(element) ? 'stanza' : 'nonza', element)
+      this._onElement(element)
     }
     listeners.error = error => {
       this.emit('error', error)
     }
     listeners.end = element => {
+      this._detachParser()
       this._status('close', element)
     }
     parser.once('error', listeners.error)
@@ -134,7 +197,7 @@ class Connection extends EventEmitter {
       this.parser.removeListener(k, listeners[k])
       delete listeners[k]
     })
-    delete this.parser
+    this.parser = null
   }
 
   _jid(id) {
@@ -163,7 +226,7 @@ class Connection extends EventEmitter {
     }
 
     if (!options.domain) {
-      options.domain = getHostname(options.uri)
+      options.domain = getDomain(options.uri)
     }
 
     return Promise.all([
@@ -181,16 +244,9 @@ class Connection extends EventEmitter {
   connect(options) {
     this._status('connecting')
     this.connectOptions = options
-    return new Promise((resolve, reject) => {
-      this._attachParser(new this.Parser())
-      this._attachSocket(new this.Socket())
-      this.once('error', reject)
-      this.socket.connect(this.socketParameters(options), () => {
-        this.removeListener('error', reject)
-        resolve()
-        // The 'connect' status is emitted by the socket 'connect' listener
-      })
-    })
+    this._attachSocket(new this.Socket())
+    // The 'connect' status is set by the socket 'connect' listener
+    return socketConnect(this.socket, this.socketParameters(options))
   }
 
   /**
@@ -198,11 +254,24 @@ class Connection extends EventEmitter {
    * https://xmpp.org/rfcs/rfc6120.html#streams-close
    * https://tools.ietf.org/html/rfc7395#section-3.6
    */
-  disconnect(ms = this.timeout) {
+  async disconnect(ms = this.timeout) {
+    if (this._status === 'offline' || this._status === 'disconnect')
+      return Promise.resolve()
+
     this._status('disconnecting')
-    this.socket.end()
-    return timeout(promise(this.socket, 'close'), ms)
-    // The 'disconnect' status is emitted by the socket 'close' listener
+
+    try {
+      this.socket.end()
+    } catch (err) {
+      throw err
+    }
+
+    // The 'disconnect' status is set by the socket 'close' listener
+    try {
+      await timeout(promise(this.socket, 'close'), ms)
+    } catch (err) {
+      throw err
+    }
   }
 
   /**
@@ -222,24 +291,29 @@ class Connection extends EventEmitter {
     headerElement.attrs.to = domain
     headerElement.attrs['xml:lang'] = lang
 
+    this._attachParser(new this.Parser())
+
     return Promise.all([
       this.write(this.header(headerElement)),
-      promise(this.parser, 'start').then(el => {
-        // FIXME what about version and xmlns:stream ?
-        if (
-          el.name !== headerElement.name ||
-          el.attrs.xmlns !== headerElement.attrs.xmlns ||
-          el.attrs.from !== headerElement.attrs.to ||
-          !el.attrs.id
-        ) {
-          return this.promise('error')
-        }
+      timeout(
+        promise(this.parser, 'start').then(el => {
+          // FIXME what about version and xmlns:stream ?
+          if (
+            el.name !== headerElement.name ||
+            el.attrs.xmlns !== headerElement.attrs.xmlns ||
+            el.attrs.from !== headerElement.attrs.to ||
+            !el.attrs.id
+          ) {
+            return this.promise('error')
+          }
 
-        this.domain = domain
-        this.lang = el.attrs['xml:lang']
-        this._status('open', el)
-        return el
-      }),
+          this.domain = domain
+          this.lang = el.attrs['xml:lang']
+          this._status('open', el)
+          return el
+        }),
+        options.timeout || this.timeout
+      ),
     ]).then(([, el]) => el)
   }
 
@@ -248,16 +322,10 @@ class Connection extends EventEmitter {
    * https://xmpp.org/rfcs/rfc6120.html#streams-close
    * https://tools.ietf.org/html/rfc7395#section-3.6
    */
-  stop() {
-    if (!this.socket) {
-      return Promise.resolve()
-    }
-    return this.close().then(el =>
-      this.disconnect().then(() => {
-        this._status('offline')
-        return el
-      })
-    )
+  async stop() {
+    const el = await this._end()
+    this._status('offline')
+    return el
   }
 
   /**
@@ -266,13 +334,13 @@ class Connection extends EventEmitter {
    * https://tools.ietf.org/html/rfc7395#section-3.6
    */
   close(ms = this.timeout) {
-    this._status('closing')
-
-    return Promise.all([
+    const p = Promise.all([
       timeout(promise(this.parser, 'end'), ms),
       this.write(this.footer(this.footerElement())),
     ]).then(([el]) => el)
-    // The 'close' status is emitted by the parser 'end' listener
+    this._status('closing')
+    return p
+    // The 'close' status is set by the parser 'end' listener
   }
 
   /**
@@ -282,10 +350,7 @@ class Connection extends EventEmitter {
   restart() {
     this._detachParser()
     this._attachParser(new this.Parser())
-    this._status('restarting')
-    return this.open(this.openOptions).then(() => {
-      this._status('restart')
-    })
+    return this.open(this.openOptions)
   }
 
   send(element) {
@@ -311,6 +376,12 @@ class Connection extends EventEmitter {
 
   write(data) {
     return new Promise((resolve, reject) => {
+      // https://xmpp.org/rfcs/rfc6120.html#streams-close
+      // "Refrain from sending any further data over its outbound stream to the other entity"
+      if (this.status === 'closing') {
+        reject(new Error('Connection is closing'))
+        return
+      }
       const str = data.toString('utf8')
       this.socket.write(str, err => {
         if (err) {
@@ -355,6 +426,7 @@ class Connection extends EventEmitter {
     return el.toString()
   }
 
+  // Override
   headerElement() {
     return new xml.Element('', {
       version: '1.0',
@@ -362,18 +434,16 @@ class Connection extends EventEmitter {
     })
   }
 
+  // Override
   footer(el) {
     return el.toString()
   }
 
+  // Override
   footerElement() {}
 
-  socketParameters(uri) {
-    const parsed = url.parse(uri)
-    parsed.port = Number(parsed.port)
-    parsed.host = parsed.hostname
-    return parsed
-  }
+  // Override
+  socketParameters() {}
 }
 
 // Overrirde
@@ -382,6 +452,7 @@ Connection.prototype.Socket = null
 Connection.prototype.Parser = null
 
 module.exports = Connection
-module.exports.getHostname = getHostname
+module.exports.getDomain = getDomain
 module.exports.XMPPError = XMPPError
 module.exports.StreamError = StreamError
+module.exports.socketConnect = socketConnect
