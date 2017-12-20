@@ -1,6 +1,6 @@
 PATH := node_modules/.bin:$(PATH)
 
-.PHONY: setup test clean bundle start stop restart size
+.PHONY: setup test clean bundle start stop restart size bundle
 
 setup:
 	node packages/xmpp.js/script.js
@@ -26,8 +26,8 @@ test-ci:
 	ava
 	eslint .
 	make restart
-	ava --serial --fail-fast test/
 	lerna run prepublish
+	ava --serial --fail-fast test/
 	make bundlesize
 
 clean:
@@ -53,6 +53,9 @@ bundlesize:
 	gzip -kf9 packages/client/dist/xmpp.min.js
 	bundlesize
 
-size:
+bundle:
 	cd packages/client && yarn run prepublish
+
+size:
+	make bundle
 	make bundlesize

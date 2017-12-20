@@ -33,7 +33,9 @@ function xmpp() {
 
   const _sasl = sasl()
 
-  streamFeatures.use(...starttls.streamFeature())
+  if (starttls.streamFeature) {
+    streamFeatures.use(...starttls.streamFeature())
+  }
   router.use('stream:features', _sasl.route())
   streamFeatures.use(...bind.streamFeature())
   router.use('stream:features', sessionEstablishment())
