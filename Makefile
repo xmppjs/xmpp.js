@@ -1,6 +1,6 @@
-PATH := node_modules/.bin:$(PATH)
+PATH := $(PATH):node_modules/.bin
 
-.PHONY: setup test clean bundle start stop restart size bundle
+.PHONY: setup test clean bundle start stop restart size bundlesize
 
 setup:
 	node packages/xmpp.js/script.js
