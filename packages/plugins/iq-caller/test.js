@@ -106,3 +106,26 @@ test.cb('#request with id and to parameters', t => {
     {to: 'service', id: 'foobar'}
   )
 })
+
+test('removes the handler if sending failed', t => {
+  const {plugin, entity} = testPlugin(iqCallerPlugin)
+
+  const error = new Error('foobar')
+
+  entity.send = () => {
+    return Promise.reject(error)
+  }
+
+  const promise = plugin.request(
+    <iq type="get">
+      <foo />
+    </iq>
+  )
+
+  t.is(plugin.handlers.size, 1)
+
+  return promise.catch(err => {
+    t.is(err, error)
+    t.is(plugin.handlers.size, 0)
+  })
+})
