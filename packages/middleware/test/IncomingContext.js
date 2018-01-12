@@ -6,37 +6,37 @@ const {JID} = require('@xmpp/test')
 const _Context = require('../lib/Context')
 
 test('is instance of Context', t => {
-  const entity = {jid: new JID('foo@bar')}
+  const entity = {jid: new JID('foo@bar'), domain: 'bar'}
   const ctx = new Context(entity, {attrs: {}})
   t.true(ctx instanceof _Context)
 })
 
 test('sets the from property', t => {
-  const entity = {jid: new JID('foo@bar')}
+  const entity = {jid: new JID('foo@bar'), domain: 'bar'}
   const ctx = new Context(entity, {attrs: {from: 'foo@bar'}})
   t.deepEqual(ctx.from, new JID('foo@bar'))
 })
 
 test('from property default to entity jid domain', t => {
-  const entity = {jid: new JID('foo@bar')}
+  const entity = {jid: new JID('foo@bar'), domain: 'bar'}
   const ctx = new Context(entity, {attrs: {}})
   t.deepEqual(ctx.from, new JID('bar'))
 })
 
 test('sets the to property', t => {
-  const entity = {jid: new JID('foo@bar')}
+  const entity = {jid: new JID('foo@bar'), domain: 'bar'}
   const ctx = new Context(entity, {attrs: {to: 'foo@bar'}})
   t.deepEqual(ctx.to, new JID('foo@bar'))
 })
 
 test('to property default to entity jid', t => {
-  const entity = {jid: new JID('foo@bar')}
+  const entity = {jid: new JID('foo@bar'), domain: 'bar'}
   const ctx = new Context(entity, {attrs: {}})
   t.deepEqual(ctx.to, new JID('foo@bar'))
 })
 
 test('sets the local property to from.local', t => {
-  const entity = {jid: new JID('foo@bar')}
+  const entity = {jid: new JID('foo@bar'), domain: 'bar'}
   const ctx = new Context(entity, {attrs: {from: 'foo@bar'}})
   t.deepEqual(ctx.local, 'foo')
 })
