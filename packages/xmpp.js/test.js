@@ -9,7 +9,7 @@ const path = require('path')
 test('exports packages', t => {
   const packages = fs
     .readdirSync(path.join(__dirname, '..'))
-    // For some reason there's a * file on travis
+    // For some reason there's a "*"" file on travis
     .filter(p => !['console', 'plugins', '*'].includes(p) && !p.includes('.'))
 
   t.is(Object.keys(xmpp).length, packages.length)

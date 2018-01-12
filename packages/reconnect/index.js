@@ -15,7 +15,7 @@ class Reconnect extends EventEmitter {
     const {entity, delay, _timeout} = this
     clearTimeout(_timeout)
     this._timeout = setTimeout(() => {
-      if (entity.status === 'offline') {
+      if (entity.status !== 'disconnect') {
         return
       }
       this.reconnect()

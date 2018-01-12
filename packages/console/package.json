@@ -29,7 +29,7 @@
   "devDependencies": {
     "bootstrap": "^3.3.7",
     "clipboard": "^1.7.1",
-    "codemirror": "^5.32.0",
+    "codemirror": "^5.33.0",
     "jquery": "^3.1.1",
     "notie": "^4.1.0",
     "prismjs": "^1.9.0",
