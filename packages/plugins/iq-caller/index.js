@@ -64,7 +64,7 @@ module.exports = plugin('iq-caller', {
         this.handlers.set(stanza.attrs.id, [resolve, reject])
       }),
       this.entity.send(stanza).catch(err => {
-        this.handlers.remove(stanza.attrs.id)
+        this.handlers.delete(stanza.attrs.id)
         throw err
       }),
     ]).then(([res]) => res)
