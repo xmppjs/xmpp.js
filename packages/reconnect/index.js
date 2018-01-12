@@ -36,6 +36,7 @@ class Reconnect extends EventEmitter {
       .then(() => {
         this.emit('reconnected')
       })
+      // FIXME this makes the error being emitted twice on Chrome
       .catch(err => {
         entity.emit('error', err)
       })

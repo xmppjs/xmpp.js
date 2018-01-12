@@ -18,15 +18,53 @@ test('socketParameters()', t => {
   t.is(params, undefined)
 })
 
-test.cb('browser websocket error', t => {
+test('DOM WebSocket error', t => {
   const socket = new Socket()
   const sock = new EventEmitter()
   sock.addEventListener = sock.addListener
   socket._attachSocket(sock)
   socket.url = 'ws://foobar'
+  const evt = {}
   socket.on('error', err => {
-    t.is(err.message, 'connection error ws://foobar')
-    t.end()
+    t.is(err.message, 'WebSocket ECONNERROR ws://foobar')
+    t.is(err.errno, 'ECONNERROR')
+    t.is(err.code, 'ECONNERROR')
+    t.is(err.url, 'ws://foobar')
+    t.is(err.event, evt)
   })
-  socket.socket.emit('error', {})
+  socket.socket.emit('error', evt)
+})
+
+test('WS WebSocket error', t => {
+  const socket = new Socket()
+  const sock = new EventEmitter()
+  sock.addEventListener = sock.addListener
+  socket._attachSocket(sock)
+  socket.url = 'ws://foobar'
+  const error = {}
+  const evt = {error}
+  socket.on('error', err => {
+    t.is(err, error)
+    t.is(err.event, evt)
+    t.is(err.url, 'ws://foobar')
+  })
+  socket.socket.emit('error', evt)
+})
+
+test('socket close', t => {
+  t.plan(3)
+  const socket = new Socket()
+  const sock = new EventEmitter()
+  sock.addEventListener = sock.addListener
+  sock.removeEventListener = sock.removeListener
+  socket._attachSocket(sock)
+  const evt = {wasClean: false}
+  socket.on('close', (clean, event) => {
+    t.is(clean, true)
+    t.is(evt, event)
+  })
+  socket._detachSocket = () => {
+    t.pass()
+  }
+  socket.socket.emit('close', evt)
 })

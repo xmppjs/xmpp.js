@@ -15,12 +15,12 @@
 
   // Log errors
   client.on('error', err => {
-    console.error('❌', err.toString())
+    console.error('❌', err.message)
   })
 
   // Log status changes
-  client.on('status', (status, value) => {
-    console.log('ℹ️', status, value ? value.toString() : '')
+  client.on('status', status => {
+    console.log('ℹ️', status)
   })
 
   // Useful for logging raw traffic
@@ -61,7 +61,7 @@
     // .start('ws://xmppjs.org:5280/xmpp-websocket') // Websocket
     // .start('wss://xmppjs.org:5281/xmpp-websocket') // Secure WebSocket
     .catch(err => {
-      console.error('start failed', err)
+      console.error('start failed', err.message)
     })
 
   // Handle authentication to provide credentials

@@ -9,19 +9,19 @@ const {component} = xmpp()
 
 // Log errors
 component.on('error', err => {
-  console.error('❌', err.toString())
+  console.error('❌', err.message)
 })
 
 // Log status changes
-component.on('status', (status, value) => {
-  console.log('🛈', status, value ? value.toString() : '')
+component.on('status', status => {
+  console.log('ℹ️', status)
 })
 
 // Useful for logging raw traffic
 // Emitted for every incoming fragment
-component.on('input', data => console.log('⮈', data))
+component.on('input', data => console.log('👈', data))
 // Emitted for every outgoing fragment
-component.on('output', data => console.log('⮊', data))
+component.on('output', data => console.log('👉', data))
 
 // Useful for logging XML traffic
 // Emitted for every incoming XML element
@@ -31,7 +31,7 @@ component.on('output', data => console.log('⮊', data))
 
 component.on('stanza', el => {
   if (el.is('message') && el.attrs.from === component.jid.toString()) {
-    console.log('🗸', "It's alive!")
+    console.log('👌', "It's alive!")
   }
 })
 
@@ -44,7 +44,7 @@ component.on('online', jid => {
 component
   .start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
   .catch(err => {
-    console.error('start failed', err)
+    console.error('start failed', err.message)
   })
 
 // Handle authentication to provide credentials

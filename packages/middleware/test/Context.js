@@ -52,3 +52,28 @@ test('type property defaults to empty string for nonzas', t => {
   const ctx = new Context({}, stanza)
   t.is(ctx.type, '')
 })
+
+test('to property is null', t => {
+  const ctx = new Context({}, <foobar />)
+  t.is(ctx.to, null)
+})
+
+test('from property is null', t => {
+  const ctx = new Context({}, <foobar />)
+  t.is(ctx.from, null)
+})
+
+test('local property is an empty string', t => {
+  const ctx = new Context({}, <foobar />)
+  t.is(ctx.local, '')
+})
+
+test('domain property is an empty string', t => {
+  const ctx = new Context({}, <foobar />)
+  t.is(ctx.domain, '')
+})
+
+test('resource property is an empty string', t => {
+  const ctx = new Context({}, <foobar />)
+  t.is(ctx.resource, '')
+})
