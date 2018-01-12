@@ -11,5 +11,6 @@ module.exports = function client() {
     },
   }
   entity.jid = new JID('foo@bar/test')
+  entity.domain = 'bar'
   return entity
 }

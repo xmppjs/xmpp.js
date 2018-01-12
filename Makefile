@@ -18,7 +18,7 @@ test:
 	cd packages/client/ && yarn run prepublish
 	ava
 	eslint .
-	bundlesize
+	make bundlesize
 
 test-ci:
 	yarn

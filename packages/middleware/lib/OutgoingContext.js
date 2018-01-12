@@ -7,15 +7,18 @@ module.exports = class OutgoingContext extends Context {
   constructor(entity, stanza) {
     super(entity, stanza)
 
-    const {to, from} = stanza.attrs
+    const {jid, domain} = entity
 
-    this.from = from ? new JID(from) : entity.jid
-    this.to = new JID(
-      to || (entity.jid && entity.jid.domain) || entity.openOptions.domain
-    )
+    const from = stanza.attrs.from || (jid && jid.toString())
+    const to = stanza.attrs.to || domain
 
-    this.local = this.to.local || ''
-    this.domain = this.to.domain
-    this.resource = this.to.resource || ''
+    if (from) this.from = new JID(from)
+
+    if (to) {
+      this.to = new JID(to)
+      this.local = this.to.local
+      this.domain = this.to.domain
+      this.resource = this.to.resource
+    }
   }
 }

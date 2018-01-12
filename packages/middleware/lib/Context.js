@@ -18,5 +18,11 @@ module.exports = class Context {
     } else {
       this.type = type || ''
     }
+
+    this.from = null
+    this.to = null
+    this.local = ''
+    this.domain = ''
+    this.resource = ''
   }
 }
