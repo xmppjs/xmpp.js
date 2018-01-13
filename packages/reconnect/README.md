@@ -6,7 +6,6 @@ Included and enabled in `@xmpp/component` and `@xmpp/client`.
 
 Supports Node.js and browsers.
 
-`reconnect` will only be enabled once the entity goes online for the first time.
 Each reconnect will re-use the options provided to the entity `start` method.
 
 ## Install
