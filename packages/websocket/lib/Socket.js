@@ -4,6 +4,8 @@ const WS = require('ws')
 const WebSocket = global.WebSocket || WS
 const EventEmitter = require('events')
 
+const CODE = 'ECONNERROR'
+
 class Socket extends EventEmitter {
   constructor() {
     super()
@@ -22,15 +24,22 @@ class Socket extends EventEmitter {
       this.emit('connect')
     }
     listeners.message = ({data}) => this.emit('data', data)
-    listeners.error = err => {
-      this.emit(
-        'error',
-        err instanceof Error ? err : new Error(`connection error ${this.url}`)
-      )
+    listeners.error = event => {
+      // WS
+      let {error} = event
+      // DOM
+      if (!error) {
+        error = new Error(`WebSocket ${CODE} ${this.url}`)
+        error.errno = CODE
+        error.code = CODE
+      }
+      error.event = event
+      error.url = this.url
+      this.emit('error', error)
     }
-    listeners.close = ({code, reason}) => {
+    listeners.close = event => {
       this._detachSocket()
-      this.emit('close', {code, reason})
+      this.emit('close', !event.wasClean, event)
     }
 
     sock.addEventListener('open', listeners.open)

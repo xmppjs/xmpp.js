@@ -117,9 +117,9 @@ class Connection extends EventEmitter {
     listeners.data = data => {
       this._onData(data)
     }
-    listeners.close = (...args) => {
+    listeners.close = (dirty, event) => {
       this._reset()
-      this._status('disconnect', ...args)
+      this._status('disconnect', {clean: !dirty, event})
     }
     listeners.connect = () => {
       this._status('connect')
@@ -180,13 +180,14 @@ class Connection extends EventEmitter {
       this._onElement(element)
     }
     listeners.error = error => {
+      this._detachParser()
       this.emit('error', error)
     }
     listeners.end = element => {
       this._detachParser()
       this._status('close', element)
     }
-    parser.once('error', listeners.error)
+    parser.on('error', listeners.error)
     parser.on('element', listeners.element)
     parser.on('end', listeners.end)
   }
