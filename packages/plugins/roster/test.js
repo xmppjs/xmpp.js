@@ -4,6 +4,7 @@ const test = require('ava')
 const plugin = require('.')
 const testPlugin = require('@xmpp/test/testPlugin')
 const JID = require('@xmpp/jid')
+const {promise} = require('@xmpp/events')
 
 test.beforeEach(t => {
   t.context = testPlugin(plugin)
@@ -188,7 +189,7 @@ test('remove', t => {
 
 test.serial('push remove', t => {
   return Promise.all([
-    t.context.plugin.promise('remove').then(([jid, ver]) => {
+    promise(t.context.plugin, 'remove').then(([jid, ver]) => {
       t.deepEqual(jid, new JID('foo@bar'))
       t.is(ver, 'v1')
     }),
@@ -206,7 +207,7 @@ test.serial('push remove', t => {
 
 test.serial('push set', t => {
   return Promise.all([
-    t.context.plugin.promise('set').then(([item, ver]) => {
+    promise(t.context.plugin, 'set').then(([item, ver]) => {
       t.deepEqual(item, {
         jid: new JID('foo@bar'),
         name: '',

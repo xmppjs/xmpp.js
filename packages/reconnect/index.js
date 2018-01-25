@@ -14,11 +14,16 @@ class Reconnect extends EventEmitter {
   scheduleReconnect() {
     const {entity, delay, _timeout} = this
     clearTimeout(_timeout)
-    this._timeout = setTimeout(() => {
+    this._timeout = setTimeout(async () => {
       if (entity.status !== 'disconnect') {
         return
       }
-      this.reconnect()
+
+      try {
+        await this.reconnect()
+      } catch (err) {
+        // Ignoring the rejection is safe because the error is emitted on entity by #start
+      }
     }, delay)
   }
 
@@ -31,16 +36,13 @@ class Reconnect extends EventEmitter {
     const {status} = entity
     entity.status = 'offline'
 
-    entity
-      .start(entity.startOptions)
-      .then(() => {
-        this.emit('reconnected')
-      })
-      // FIXME this makes the error being emitted twice on Chrome
-      .catch(err => {
-        entity.emit('error', err)
-      })
+    const start = entity.start(entity.startOptions)
+
     entity.status = status
+
+    return start.then(() => {
+      this.emit('reconnected')
+    })
   }
 
   start() {

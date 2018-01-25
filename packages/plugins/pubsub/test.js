@@ -3,6 +3,7 @@
 const test = require('ava')
 const plugin = require('.')
 const testPlugin = require('@xmpp/test/testPlugin')
+const {promise} = require('@xmpp/events')
 
 const SERVICE = 'pubsub.foo'
 
@@ -234,27 +235,20 @@ test('items with RSM', t => {
 })
 
 test('delete item', t => {
-  t.context.scheduleIncomingResult(
-  )
+  t.context.scheduleIncomingResult()
 
   return Promise.all([
     t.context.catchOutgoingSet().then(child => {
-
       t.deepEqual(
         child,
         <pubsub xmlns="http://jabber.org/protocol/pubsub">
           <retract node="foo" notify="true">
-            <item id="foobar"/>
+            <item id="foobar" />
           </retract>
         </pubsub>
       )
     }),
-    t.context.plugin
-      .deleteItem(
-        SERVICE,
-        'foo',
-        'foobar'
-      ),
+    t.context.plugin.deleteItem(SERVICE, 'foo', 'foobar'),
   ])
 })
 
@@ -272,7 +266,7 @@ test('item-published event', t => {
   )
 
   return Promise.all([
-    t.context.plugin.promise('item-published:pubsub.foo').then(ev => {
+    promise(t.context.plugin, 'item-published:pubsub.foo').then(ev => {
       ev.entry.parent = null
       t.deepEqual(ev, {
         node: 'foo',
@@ -280,7 +274,7 @@ test('item-published event', t => {
         entry: <entry>Foo Bar</entry>,
       })
     }),
-    t.context.plugin.promise('item-published:pubsub.foo:foo').then(ev => {
+    promise(t.context.plugin, 'item-published:pubsub.foo:foo').then(ev => {
       ev.entry.parent = null
       t.deepEqual(ev, {
         id: 'fooitem',
@@ -305,7 +299,7 @@ test('last-item-published event', t => {
   )
 
   return Promise.all([
-    t.context.plugin.promise('last-item-published:pubsub.foo').then(ev => {
+    promise(t.context.plugin, 'last-item-published:pubsub.foo').then(ev => {
       ev.entry.parent = null
       t.deepEqual(ev, {
         node: 'foo',
@@ -314,7 +308,7 @@ test('last-item-published event', t => {
         entry: <entry>Foo Bar</entry>,
       })
     }),
-    t.context.plugin.promise('last-item-published:pubsub.foo:foo').then(ev => {
+    promise(t.context.plugin, 'last-item-published:pubsub.foo:foo').then(ev => {
       ev.entry.parent = null
       t.deepEqual(ev, {
         id: 'fooitem',
@@ -330,20 +324,20 @@ test('item-deleted event', t => {
     <message from={SERVICE}>
       <event xmlns="http://jabber.org/protocol/pubsub#event">
         <items node="foo">
-          <retract id="fooitem"/>
+          <retract id="fooitem" />
         </items>
       </event>
     </message>
   )
 
   return Promise.all([
-    t.context.plugin.promise('item-deleted:pubsub.foo').then(ev => {
+    promise(t.context.plugin, 'item-deleted:pubsub.foo').then(ev => {
       t.deepEqual(ev, {
         node: 'foo',
         id: 'fooitem',
       })
     }),
-    t.context.plugin.promise('item-deleted:pubsub.foo:foo').then(ev => {
+    promise(t.context.plugin, 'item-deleted:pubsub.foo:foo').then(ev => {
       t.deepEqual(ev, {
         id: 'fooitem',
       })

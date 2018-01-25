@@ -231,7 +231,7 @@ class Connection extends EventEmitter {
     }
 
     return Promise.all([
-      this.promise('online'),
+      promise(this, 'online'),
       this.connect(options.uri).then(() => {
         const {domain, lang} = options
         return this.open({domain, lang})
@@ -305,7 +305,7 @@ class Connection extends EventEmitter {
             el.attrs.from !== headerElement.attrs.to ||
             !el.attrs.id
           ) {
-            return this.promise('error')
+            return promise(this, 'error')
           }
 
           this.domain = domain
@@ -371,7 +371,7 @@ class Connection extends EventEmitter {
   sendReceive(element, ms = this.timeout) {
     return Promise.all([
       this.send(element),
-      timeout(this.promise('element'), ms),
+      timeout(promise(this, 'element'), ms),
     ]).then(([, el]) => el)
   }
 

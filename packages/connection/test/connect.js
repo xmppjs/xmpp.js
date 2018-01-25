@@ -2,7 +2,7 @@
 
 const test = require('ava')
 const Connection = require('..')
-const EventEmitter = require('events')
+const {EventEmitter, promise} = require('@xmpp/events')
 
 function socket(fn) {
   return class Socket extends EventEmitter {
@@ -22,8 +22,8 @@ test('emits "connecting" status', t => {
   })
 
   return Promise.all([
-    conn.promise('connecting'),
-    conn.promise('status').then(status => {
+    promise(conn, 'connecting'),
+    promise(conn, 'status').then(status => {
       t.is(status, 'connecting')
     }),
     conn.connect('url'),
