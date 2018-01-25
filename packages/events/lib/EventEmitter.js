@@ -1,16 +1,11 @@
 'use strict'
 
 const _EventEmitter = require('events')
-const promiseEvent = require('./promise')
 
 class EventEmitter {
   constructor() {
     this._emitter = new _EventEmitter()
     this._handlers = Object.create(null)
-  }
-
-  promise(...args) {
-    return promiseEvent(this, ...args)
   }
 
   handle(event, handler) {

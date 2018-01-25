@@ -9,6 +9,7 @@
   "keywords": ["XMPP", "plugins"],
   "dependencies": {
     "@xmpp/connection": "^0.3.0",
+    "@xmpp/events": "^0.3.0",
     "@xmpp/id": "^0.3.0",
     "@xmpp/jid": "^0.3.0",
     "@xmpp/plugin": "^0.3.0",

@@ -1,6 +1,7 @@
 'use strict'
 
 const client = require('./client')
+const {promise} = require('@xmpp/events')
 const xml = require('@xmpp/xml')
 
 module.exports = function context() {
@@ -15,7 +16,7 @@ module.exports = function context() {
       return {stanza, id}
     },
     catch() {
-      return entity.promise('send').then(s => this.sanitize(s))
+      return promise(entity, 'send').then(s => this.sanitize(s))
     },
     catchOutgoing(fn) {
       return new Promise(resolve => {
@@ -56,13 +57,13 @@ module.exports = function context() {
       })
     },
     scheduleIncomingResult(child) {
-      return this.entity.promise('send').then(stanza => {
+      return promise(entity, 'send').then(stanza => {
         const {id} = stanza.attrs
         return this.fakeIncomingResult(child, id)
       })
     },
     scheduleIncomingError(child) {
-      return this.entity.promise('send').then(stanza => {
+      return promise(entity, 'send').then(stanza => {
         const {id} = stanza.attrs
         return this.fakeIncomingError(child, id)
       })
@@ -119,7 +120,7 @@ module.exports = function context() {
       return this.fakeIncoming(stanza)
     },
     fakeIncoming(el) {
-      const p = entity.promise('send')
+      const p = promise(entity, 'send')
       const stanza = el.clone()
       delete stanza.attrs.xmlns
       Promise.resolve().then(() => entity.emit('element', stanza))

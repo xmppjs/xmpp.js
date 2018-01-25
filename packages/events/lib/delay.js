@@ -1,7 +1,7 @@
 'use strict'
 
-module.exports = function delay(timeout) {
+module.exports = function delay(ms) {
   return new Promise(resolve => {
-    setTimeout(resolve, timeout)
+    setTimeout(resolve, ms)
   })
 }
