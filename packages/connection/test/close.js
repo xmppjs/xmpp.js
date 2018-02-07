@@ -2,7 +2,7 @@
 
 const test = require('ava')
 const Connection = require('..')
-const {EventEmitter} = require('@xmpp/events')
+const {EventEmitter, promise, timeout} = require('@xmpp/events')
 const xml = require('@xmpp/xml')
 
 test('resets properties on socket close event', t => {
@@ -79,4 +79,44 @@ test.cb('resolves', t => {
     t.end()
   })
   conn.parser.emit('end', xml('goodbye'))
+})
+
+test('emits closing status', t => {
+  const conn = new Connection()
+  conn.parser = new EventEmitter()
+  conn.footerElement = () => {
+    return xml('hello')
+  }
+  conn.socket = new EventEmitter()
+  conn.socket.write = (data, cb) => {
+    return cb()
+  }
+
+  const p = Promise.all([
+    promise(conn, 'status').then(status => t.is(status, 'closing')),
+    conn.close(),
+  ])
+
+  conn.parser.emit('end')
+  return p
+})
+
+test('do not emit closing status if parser property is missing', t => {
+  t.plan(2)
+  const conn = new Connection()
+  conn.parser = null
+  conn.footerElement = () => {
+    return xml('hello')
+  }
+  conn.socket = new EventEmitter()
+  conn.socket.write = (data, cb) => {
+    return cb()
+  }
+
+  return Promise.all([
+    timeout(promise(conn, 'status'), 500).catch(err =>
+      t.is(err.name, 'TimeoutError')
+    ),
+    conn.close().catch(err => t.pass(err)),
+  ])
 })
