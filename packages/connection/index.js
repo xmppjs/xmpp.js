@@ -142,18 +142,7 @@ class Connection extends EventEmitter {
     this.socket = null
   }
 
-  async _end() {
-    let el
-    try {
-      el = await this.close()
-    } catch (err) {}
-    try {
-      await this.disconnect()
-    } catch (err) {}
-    return el
-  }
-
-  async _onElement(element) {
+  _onElement(element) {
     this.emit('element', element)
     this.emit(this.isStanza(element) ? 'stanza' : 'nonza', element)
     // https://xmpp.org/rfcs/rfc6120.html#streams-error
@@ -168,9 +157,7 @@ class Connection extends EventEmitter {
     )
     // "Stream Errors Are Unrecoverable"
     // "The entity that receives the stream error then SHALL close the stream"
-    try {
-      await this._end()
-    } catch (err) {}
+    this._end()
   }
 
   _attachParser(p) {
@@ -212,12 +199,23 @@ class Connection extends EventEmitter {
     this.emit(status, ...args)
   }
 
+  async _end() {
+    let el
+    try {
+      el = await this.close()
+    } catch (err) {}
+    try {
+      await this.disconnect()
+    } catch (err) {}
+    return el
+  }
+
   /**
    * Opens the socket then opens the stream
    */
-  start(options) {
+  async start(options) {
     if (this.status !== 'offline') {
-      return Promise.reject(new Error('Connection is not offline'))
+      throw new Error('Connection is not offline')
     }
 
     this.startOptions = options
@@ -230,19 +228,20 @@ class Connection extends EventEmitter {
       options.domain = getDomain(options.uri)
     }
 
-    return Promise.all([
-      promise(this, 'online'),
-      this.connect(options.uri).then(() => {
-        const {domain, lang} = options
-        return this.open({domain, lang})
-      }),
-    ]).then(([addr]) => addr)
+    await this.connect(options.uri)
+
+    const promiseOnline = promise(this, 'online')
+
+    const {domain, lang} = options
+    await this.open({domain, lang})
+
+    return promiseOnline
   }
 
   /**
    * Connects the socket
    */
-  connect(options) {
+  async connect(options) {
     this._status('connecting')
     this.connectOptions = options
     this._attachSocket(new this.Socket())
@@ -256,29 +255,18 @@ class Connection extends EventEmitter {
    * https://tools.ietf.org/html/rfc7395#section-3.6
    */
   async disconnect(ms = this.timeout) {
-    if (this._status === 'offline' || this._status === 'disconnect')
-      return Promise.resolve()
+    if (this.socket) this._status('disconnecting')
 
-    this._status('disconnecting')
-
-    try {
-      this.socket.end()
-    } catch (err) {
-      throw err
-    }
+    this.socket.end()
 
     // The 'disconnect' status is set by the socket 'close' listener
-    try {
-      await timeout(promise(this.socket, 'close'), ms)
-    } catch (err) {
-      throw err
-    }
+    await timeout(promise(this.socket, 'close'), ms)
   }
 
   /**
    * Opens the stream
    */
-  open(options) {
+  async open(options) {
     this._status('opening')
     // Useful for stream-features restart
     this.openOptions = options
@@ -294,28 +282,28 @@ class Connection extends EventEmitter {
 
     this._attachParser(new this.Parser())
 
-    return Promise.all([
-      this.write(this.header(headerElement)),
-      timeout(
-        promise(this.parser, 'start').then(el => {
-          // FIXME what about version and xmlns:stream ?
-          if (
-            el.name !== headerElement.name ||
-            el.attrs.xmlns !== headerElement.attrs.xmlns ||
-            el.attrs.from !== headerElement.attrs.to ||
-            !el.attrs.id
-          ) {
-            return promise(this, 'error')
-          }
+    await this.write(this.header(headerElement))
 
-          this.domain = domain
-          this.lang = el.attrs['xml:lang']
-          this._status('open', el)
-          return el
-        }),
-        options.timeout || this.timeout
-      ),
-    ]).then(([, el]) => el)
+    const promiseStart = async () => {
+      const el = await promise(this.parser, 'start')
+      // FIXME what about version and xmlns:stream ?
+      if (
+        el.name !== headerElement.name ||
+        el.attrs.xmlns !== headerElement.attrs.xmlns ||
+        el.attrs.from !== headerElement.attrs.to ||
+        !el.attrs.id
+      ) {
+        return promise(this, 'error')
+      }
+
+      this.domain = domain
+      this.lang = el.attrs['xml:lang']
+      this._status('open', el)
+
+      return el
+    }
+
+    return timeout(promiseStart(), options.timeout || this.timeout)
   }
 
   /**
@@ -325,7 +313,7 @@ class Connection extends EventEmitter {
    */
   async stop() {
     const el = await this._end()
-    this._status('offline')
+    if (this.status !== 'offline') this._status('offline', el)
     return el
   }
 
@@ -334,13 +322,15 @@ class Connection extends EventEmitter {
    * https://xmpp.org/rfcs/rfc6120.html#streams-close
    * https://tools.ietf.org/html/rfc7395#section-3.6
    */
-  close(ms = this.timeout) {
+  async close(ms = this.timeout) {
     const p = Promise.all([
       timeout(promise(this.parser, 'end'), ms),
       this.write(this.footer(this.footerElement())),
-    ]).then(([el]) => el)
-    this._status('closing')
-    return p
+    ])
+
+    if (this.parser && this.socket) this._status('closing')
+    const [el] = await p
+    return el
     // The 'close' status is set by the parser 'end' listener
   }
 
@@ -348,13 +338,13 @@ class Connection extends EventEmitter {
    * Restart the stream
    * https://xmpp.org/rfcs/rfc6120.html#streams-negotiation-restart
    */
-  restart() {
+  async restart() {
     this._detachParser()
     this._attachParser(new this.Parser())
     return this.open(this.openOptions)
   }
 
-  send(element) {
+  async send(element) {
     this.emit('outgoing', element)
 
     const proceed = () => {
@@ -368,14 +358,14 @@ class Connection extends EventEmitter {
       : proceed()
   }
 
-  sendReceive(element, ms = this.timeout) {
+  async sendReceive(element, ms = this.timeout) {
     return Promise.all([
       this.send(element),
       timeout(promise(this, 'element'), ms),
     ]).then(([, el]) => el)
   }
 
-  write(data) {
+  async write(data) {
     return new Promise((resolve, reject) => {
       // https://xmpp.org/rfcs/rfc6120.html#streams-close
       // "Refrain from sending any further data over its outbound stream to the other entity"

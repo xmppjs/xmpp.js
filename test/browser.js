@@ -2,7 +2,6 @@
 
 const {JSDOM} = require('jsdom')
 const fetch = require('node-fetch')
-const WebSocket = require('ws')
 const {readFileSync} = require('fs')
 
 const test = require('ava')
@@ -23,7 +22,6 @@ const xmppjs = readFileSync('./packages/client/dist/xmpp.js', {
 
 test.beforeEach(t => {
   const {window} = new JSDOM(``, {runScripts: 'dangerously'})
-  window.WebSocket = WebSocket
   window.fetch = fetch
   const {document} = window
   const scriptEl = document.createElement('script')
