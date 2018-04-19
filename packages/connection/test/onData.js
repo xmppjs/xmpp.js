@@ -9,7 +9,7 @@ test.cb('#_onData', t => {
   const conn = new Connection()
   conn.parser = {
     write() {
-      throw new Error()
+      throw new Error('foo')
     },
   }
   conn._streamError = condition => {
