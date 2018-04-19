@@ -1,5 +1,5 @@
 {
-  "lerna": "2.6.0",
+  "lerna": "2.10.2",
   "version": "0.3.0",
   "commands": {
     "publish": {
