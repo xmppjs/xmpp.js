@@ -4,6 +4,8 @@
 
 Supports Node.js and browsers.
 
+If you need extended browser support please checkout [webcrypto-shim](https://github.com/vibornoff/webcrypto-shim#supported-browsers) and [text-encoding](https://github.com/inexorabletash/text-encoding) polyfills.
+
 ## Install
 
 ```js

@@ -15,7 +15,9 @@ test('5.2 Simple Generation Example', t => {
     </query>
   )
 
-  t.is(caps.hash(query), 'QgayPKawpkPSDYmwT/WM94uAlu0=')
+  return caps.hash(query).then(ver => {
+    t.is(ver, 'QgayPKawpkPSDYmwT/WM94uAlu0=')
+  })
 })
 
 test('5.3 Complex Generation Example', t => {
@@ -70,7 +72,9 @@ test('5.3 Complex Generation Example', t => {
     })
   )
 
-  t.is(caps.hash(query), 'q07IKJEyjvHSyhy//CH0CxmKi8w=')
+  return caps.hash(query).then(ver => {
+    t.is(ver, 'q07IKJEyjvHSyhy//CH0CxmKi8w=')
+  })
 })
 
 test.skip('multiple forms', t => {
@@ -90,5 +94,7 @@ test.skip('multiple forms', t => {
     </query>
   )
 
-  t.is(caps.hash(query), 'q07IKJEyjvHSyhy//CH0CxmKi8w=')
+  return caps.hash(query).then(ver => {
+    t.is(ver, 'q07IKJEyjvHSyhy//CH0CxmKi8w=')
+  })
 })
