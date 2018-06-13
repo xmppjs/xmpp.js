@@ -1,4 +1,6 @@
 {
+  "name": "xmpp.js",
+  "version": "0.4.0",
   "private": true,
   "devDependencies": {
     "ava": "^0.25.0",
