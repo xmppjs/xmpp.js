@@ -9,7 +9,7 @@
   "keywords": ["XMPP", "URI"],
   "dependencies": {
     "@xmpp/jid": "^0.3.0",
-    "iri": "^1.1.1"
+    "iri": "^1.3.0"
   },
   "engines": {
     "node": ">= 7.6.0",

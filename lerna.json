@@ -1,9 +1,13 @@
 {
-  "lerna": "2.10.2",
   "version": "0.3.0",
-  "commands": {
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "packages": [
+    "packages/*"
+  ],
+  "command": {
     "publish": {
-      "ignore": [
+      "ignoreChanges": [
         "examples/",
         "example.js",
         "test/",
@@ -13,10 +17,5 @@
         "**/*.map"
       ]
     }
-  },
-  "npmClient": "yarn",
-  "useWorkspaces": true,
-  "packages": [
-    "packages/*"
-  ]
+  }
 }
