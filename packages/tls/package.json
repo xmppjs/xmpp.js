@@ -9,10 +9,7 @@
   "dependencies": {
     "@xmpp/connection-tcp": "^0.3.0"
   },
-  "keywords": [
-    "XMPP",
-    "tls"
-  ],
+  "keywords": ["XMPP", "tls"],
   "engines": {
     "node": ">= 7.6.0",
     "npm": ">= 2"

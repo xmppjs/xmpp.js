@@ -3,7 +3,7 @@
 const {timeout, EventEmitter, promise} = require('@xmpp/events')
 const jid = require('@xmpp/jid')
 const xml = require('@xmpp/xml')
-const URL = global.URL || require('url').URL
+const URL = global.URL || require('url').URL // eslint-disable-line node/no-unsupported-features/node-builtins
 
 const NS_STREAM = 'urn:ietf:params:xml:ns:xmpp-streams'
 
@@ -241,6 +241,7 @@ class Connection extends EventEmitter {
   /**
    * Connects the socket
    */
+  // eslint-disable-next-line require-await
   async connect(options) {
     this._status('connecting')
     this.connectOptions = options
@@ -338,12 +339,14 @@ class Connection extends EventEmitter {
    * Restart the stream
    * https://xmpp.org/rfcs/rfc6120.html#streams-negotiation-restart
    */
+  // eslint-disable-next-line require-await
   async restart() {
     this._detachParser()
     this._attachParser(new this.Parser())
     return this.open(this.openOptions)
   }
 
+  // eslint-disable-next-line require-await
   async send(element) {
     this.emit('outgoing', element)
 
@@ -358,14 +361,14 @@ class Connection extends EventEmitter {
       : proceed()
   }
 
-  async sendReceive(element, ms = this.timeout) {
+  sendReceive(element, ms = this.timeout) {
     return Promise.all([
       this.send(element),
       timeout(promise(this, 'element'), ms),
     ]).then(([, el]) => el)
   }
 
-  async write(data) {
+  write(data) {
     return new Promise((resolve, reject) => {
       // https://xmpp.org/rfcs/rfc6120.html#streams-close
       // "Refrain from sending any further data over its outbound stream to the other entity"
