@@ -1,8 +1,8 @@
 'use strict'
 
 const test = require('ava')
-const ConnectionWebSocket = require('./lib/Connection')
-const Socket = require('./lib/Socket')
+const ConnectionWebSocket = require('../lib/Connection')
+const Socket = require('../lib/Socket')
 const EventEmitter = require('events')
 
 test('socketParameters()', t => {
