@@ -53,7 +53,11 @@ function waitPortClose() {
 
 function kill(pid) {
   return new Promise(resolve => {
-    process.kill(pid, 'SIGKILL')
+    try {
+      process.kill(pid, 'SIGKILL')
+    } catch (err) {
+      if (err.code !== 'ESRCH') throw err
+    }
     resolve()
   })
 }

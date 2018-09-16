@@ -15,56 +15,63 @@ class Parser extends EventEmitter {
   constructor() {
     super()
     const parser = new LtxParser()
-    const stack = []
-    let cursor
+    this.root = null
+    this.cursor = null
 
-    parser.on('startElement', (name, attrs) => {
-      const child = new Element(name, attrs)
-      if (cursor) {
-        cursor.append(child)
-      }
-      this.onStartElement(child, cursor)
-      this.emit('startElement', child)
-      stack.push(cursor)
-      cursor = child
-    })
-    parser.on('endElement', name => {
-      if (name === cursor.name) {
-        this.onEndElement(cursor, stack.length)
-        this.emit('endElement', cursor)
-        cursor = stack.pop()
-      } else {
-        // <foo></bar>
-        this.emit('error', new XMLError(`${cursor.name} must be closed.`))
-      }
-    })
+    parser.on('startElement', this.onStartElement.bind(this))
+    parser.on('endElement', this.onEndElement.bind(this))
+    parser.on('text', this.onText.bind(this))
 
-    parser.on('text', str => {
-      this.onText(str, cursor)
-    })
     this.parser = parser
   }
 
-  onStartElement(element, cursor) {
-    if (!cursor) {
+  onStartElement(name, attrs) {
+    const element = new Element(name, attrs)
+
+    const {root, cursor} = this
+
+    if (!root) {
+      this.root = element
       this.emit('start', element)
+    } else if (cursor !== root) {
+      cursor.append(element)
     }
+
+    this.cursor = element
   }
 
-  onEndElement(element, length) {
-    if (length === 2) {
-      this.emit('element', element)
-    } else if (length === 1) {
-      this.emit('end', element)
+  onEndElement(name) {
+    const {root, cursor} = this
+    if (name !== cursor.name) {
+      // <foo></bar>
+      this.emit('error', new XMLError(`${cursor.name} must be closed.`))
+      return
     }
+
+    if (cursor === root) {
+      this.emit('end', root)
+      return
+    }
+
+    if (!cursor.parent) {
+      if (cursor.name.startsWith('stream:')) {
+        cursor.attrs['xmlns:stream'] = root.attrs['xmlns:stream']
+      }
+      this.emit('element', cursor)
+      this.cursor = root
+      return
+    }
+
+    this.cursor = cursor.parent
   }
 
-  onText(str, element) {
-    if (!element) {
+  onText(str) {
+    const {cursor} = this
+    if (!cursor) {
       this.emit('error', new XMLError(`${str} must be a child.`))
       return
     }
-    element.t(str)
+    cursor.t(str)
   }
 
   write(data) {
