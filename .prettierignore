@@ -1,7 +1,4 @@
-packages/console/public/vendor/
-server/modules/
-**/node_modules/
+node_modules/
 **/dist/*.js
 bundle.js
-.git/
 package.json

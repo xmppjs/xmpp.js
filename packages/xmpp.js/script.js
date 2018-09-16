@@ -8,7 +8,7 @@ const path = require('path')
 const packages = fs
   .readdirSync(path.join(__dirname, '..'))
   // For some reason there's a * file on travis
-  .filter(p => !['console', '*'].includes(p) && !p.includes('.'))
+  .filter(p => !['*'].includes(p) && !p.includes('.'))
 
 const pkg = require(path.join(__dirname, 'package.json'))
 
