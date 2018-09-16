@@ -1,17 +1,22 @@
 'use strict'
 
 const test = require('ava')
-const plugin = require('.')
-const testPlugin = require('@xmpp/test/testPlugin')
-const JID = require('@xmpp/jid')
+const {context} = require('@xmpp/test')
+const _middleware = require('@xmpp/middleware')
+const _iqCaller = require('@xmpp/iq/caller')
+const _iqCallee = require('@xmpp/iq/callee')
+const _rosterCaller = require('./caller')
 const {promise} = require('@xmpp/events')
+const JID = require('@xmpp/jid')
 
 test.beforeEach(t => {
-  t.context = testPlugin(plugin)
-})
-
-test('name', t => {
-  t.is(plugin.name, 'roster')
+  const ctx = context()
+  const {entity} = ctx
+  const middleware = _middleware(entity)
+  const iqCaller = _iqCaller({middleware, entity})
+  const iqCallee = _iqCallee({middleware, entity})
+  ctx.rosterCaller = _rosterCaller({iqCaller, entity, iqCallee})
+  t.context = ctx
 })
 
 test('get', t => {
@@ -34,7 +39,7 @@ test('get', t => {
     t.context.catchOutgoingGet().then(child => {
       t.deepEqual(child, <query xmlns="jabber:iq:roster" />)
     }),
-    t.context.plugin.get().then(val => {
+    t.context.rosterCaller.get().then(val => {
       t.deepEqual(val, [
         [
           {
@@ -63,7 +68,7 @@ test('get', t => {
 test('get empty roster', t => {
   t.context.scheduleIncomingResult(<query xmlns="jabber:iq:roster" />)
 
-  return t.context.plugin.get().then(val => {
+  return t.context.rosterCaller.get().then(val => {
     t.deepEqual(val, [[], undefined])
   })
 })
@@ -75,7 +80,7 @@ test('get with ver, no changes', t => {
     t.context.catchOutgoingGet().then(child => {
       t.deepEqual(child, <query xmlns="jabber:iq:roster" ver="ver6" />)
     }),
-    t.context.plugin.get('ver6').then(val => {
+    t.context.rosterCaller.get('ver6').then(val => {
       t.deepEqual(val, [])
     }),
   ])
@@ -92,7 +97,7 @@ test('get with ver, new roster', t => {
     t.context.catchOutgoingGet().then(child => {
       t.deepEqual(child, <query xmlns="jabber:iq:roster" ver="ver6" />)
     }),
-    t.context.plugin.get('ver6').then(val => {
+    t.context.rosterCaller.get('ver6').then(val => {
       t.deepEqual(val, [
         [
           {
@@ -122,7 +127,7 @@ test('set with string', t => {
         </query>
       )
     }),
-    t.context.plugin.set('foo@bar').then(val => {
+    t.context.rosterCaller.set('foo@bar').then(val => {
       t.deepEqual(val, undefined)
     }),
   ])
@@ -140,7 +145,7 @@ test('set with jid', t => {
         </query>
       )
     }),
-    t.context.plugin.set(new JID('foo@bar')).then(val => {
+    t.context.rosterCaller.set(new JID('foo@bar')).then(val => {
       t.deepEqual(val, undefined)
     }),
   ])
@@ -161,7 +166,7 @@ test('set with object', t => {
         </query>
       )
     }),
-    t.context.plugin
+    t.context.rosterCaller
       .set({jid: 'foo@bar', groups: ['a', 'b'], name: 'foobar'})
       .then(val => {
         t.deepEqual(val, undefined)
@@ -181,7 +186,7 @@ test('remove', t => {
         </query>
       )
     }),
-    t.context.plugin.remove('foo@bar').then(val => {
+    t.context.rosterCaller.remove('foo@bar').then(val => {
       t.deepEqual(val, undefined)
     }),
   ])
@@ -189,7 +194,7 @@ test('remove', t => {
 
 test.serial('push remove', t => {
   return Promise.all([
-    promise(t.context.plugin, 'remove').then(([jid, ver]) => {
+    promise(t.context.rosterCaller, 'remove').then(([jid, ver]) => {
       t.deepEqual(jid, new JID('foo@bar'))
       t.is(ver, 'v1')
     }),
@@ -207,7 +212,7 @@ test.serial('push remove', t => {
 
 test.serial('push set', t => {
   return Promise.all([
-    promise(t.context.plugin, 'set').then(([item, ver]) => {
+    promise(t.context.rosterCaller, 'set').then(([item, ver]) => {
       t.deepEqual(item, {
         jid: new JID('foo@bar'),
         name: '',
