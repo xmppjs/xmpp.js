@@ -1,18 +1,21 @@
 'use strict'
 
 const test = require('ava')
-const plugin = require('.')
-const testPlugin = require('@xmpp/test/testPlugin')
+const {context} = require('@xmpp/test')
+const _pubsubCaller = require('./caller')
+const _middleware = require('@xmpp/middleware')
+const _iqCaller = require('@xmpp/iq-caller')
 const {promise} = require('@xmpp/events')
 
 const SERVICE = 'pubsub.foo'
 
 test.beforeEach(t => {
-  t.context = testPlugin(plugin)
-})
-
-test('name', t => {
-  t.is(plugin.name, 'pubsub')
+  const ctx = context()
+  const {entity} = ctx
+  const middleware = _middleware(entity)
+  const iqCaller = _iqCaller({middleware, entity})
+  ctx.pubsubCaller = _pubsubCaller({iqCaller, middleware})
+  t.context = ctx
 })
 
 test('createNode', t => {
@@ -31,7 +34,7 @@ test('createNode', t => {
         </pubsub>
       )
     }),
-    t.context.plugin.createNode(SERVICE, 'foo').then(val => {
+    t.context.pubsubCaller.createNode(SERVICE, 'foo').then(val => {
       t.is(val, 'foo')
     }),
   ])
@@ -66,7 +69,7 @@ test('createNode with config options', t => {
         </pubsub>
       )
     }),
-    t.context.plugin
+    t.context.pubsubCaller
       .createNode(SERVICE, 'foo', {
         'pubsub#access_model': 'whitelist',
         'pubsub#max_items': 100,
@@ -89,7 +92,7 @@ test('deleteNode', t => {
         </pubsub>
       )
     }),
-    t.context.plugin.deleteNode(SERVICE, 'foo').then(val => {
+    t.context.pubsubCaller.deleteNode(SERVICE, 'foo').then(val => {
       t.is(val, undefined)
     }),
   ])
@@ -119,7 +122,7 @@ test('publish', t => {
         </pubsub>
       )
     }),
-    t.context.plugin
+    t.context.pubsubCaller
       .publish(
         SERVICE,
         'foo',
@@ -158,7 +161,7 @@ test('items', t => {
         </pubsub>
       )
     }),
-    t.context.plugin.items(SERVICE, 'foo').then(([items, rsm]) => {
+    t.context.pubsubCaller.items(SERVICE, 'foo').then(([items, rsm]) => {
       items.forEach(i => {
         i.parent = null
       })
@@ -211,7 +214,7 @@ test('items with RSM', t => {
         </pubsub>
       )
     }),
-    t.context.plugin
+    t.context.pubsubCaller
       .items(SERVICE, 'foo', {first: 'first@time', max: 2})
       .then(([items, rsm]) => {
         items.forEach(i => {
@@ -248,7 +251,7 @@ test('delete item', t => {
         </pubsub>
       )
     }),
-    t.context.plugin.deleteItem(SERVICE, 'foo', 'foobar'),
+    t.context.pubsubCaller.deleteItem(SERVICE, 'foo', 'foobar'),
   ])
 })
 
@@ -266,7 +269,7 @@ test('item-published event', t => {
   )
 
   return Promise.all([
-    promise(t.context.plugin, 'item-published:pubsub.foo').then(ev => {
+    promise(t.context.pubsubCaller, 'item-published:pubsub.foo').then(ev => {
       ev.entry.parent = null
       t.deepEqual(ev, {
         node: 'foo',
@@ -274,13 +277,15 @@ test('item-published event', t => {
         entry: <entry>Foo Bar</entry>,
       })
     }),
-    promise(t.context.plugin, 'item-published:pubsub.foo:foo').then(ev => {
-      ev.entry.parent = null
-      t.deepEqual(ev, {
-        id: 'fooitem',
-        entry: <entry>Foo Bar</entry>,
-      })
-    }),
+    promise(t.context.pubsubCaller, 'item-published:pubsub.foo:foo').then(
+      ev => {
+        ev.entry.parent = null
+        t.deepEqual(ev, {
+          id: 'fooitem',
+          entry: <entry>Foo Bar</entry>,
+        })
+      }
+    ),
   ])
 })
 
@@ -299,23 +304,27 @@ test('last-item-published event', t => {
   )
 
   return Promise.all([
-    promise(t.context.plugin, 'last-item-published:pubsub.foo').then(ev => {
-      ev.entry.parent = null
-      t.deepEqual(ev, {
-        node: 'foo',
-        id: 'fooitem',
-        stamp: '2003-12-13T23:58:37Z',
-        entry: <entry>Foo Bar</entry>,
-      })
-    }),
-    promise(t.context.plugin, 'last-item-published:pubsub.foo:foo').then(ev => {
-      ev.entry.parent = null
-      t.deepEqual(ev, {
-        id: 'fooitem',
-        stamp: '2003-12-13T23:58:37Z',
-        entry: <entry>Foo Bar</entry>,
-      })
-    }),
+    promise(t.context.pubsubCaller, 'last-item-published:pubsub.foo').then(
+      ev => {
+        ev.entry.parent = null
+        t.deepEqual(ev, {
+          node: 'foo',
+          id: 'fooitem',
+          stamp: '2003-12-13T23:58:37Z',
+          entry: <entry>Foo Bar</entry>,
+        })
+      }
+    ),
+    promise(t.context.pubsubCaller, 'last-item-published:pubsub.foo:foo').then(
+      ev => {
+        ev.entry.parent = null
+        t.deepEqual(ev, {
+          id: 'fooitem',
+          stamp: '2003-12-13T23:58:37Z',
+          entry: <entry>Foo Bar</entry>,
+        })
+      }
+    ),
   ])
 })
 
@@ -331,13 +340,13 @@ test('item-deleted event', t => {
   )
 
   return Promise.all([
-    promise(t.context.plugin, 'item-deleted:pubsub.foo').then(ev => {
+    promise(t.context.pubsubCaller, 'item-deleted:pubsub.foo').then(ev => {
       t.deepEqual(ev, {
         node: 'foo',
         id: 'fooitem',
       })
     }),
-    promise(t.context.plugin, 'item-deleted:pubsub.foo:foo').then(ev => {
+    promise(t.context.pubsubCaller, 'item-deleted:pubsub.foo:foo').then(ev => {
       t.deepEqual(ev, {
         id: 'fooitem',
       })

@@ -27,6 +27,7 @@
     "@xmpp/debug": "^0.3.0",
     "@xmpp/disco-callee": "^0.3.0",
     "@xmpp/disco-caller": "^0.3.0",
+    "@xmpp/entity-capabilities": "^0.3.0",
     "@xmpp/events": "^0.3.0",
     "@xmpp/id": "^0.3.0",
     "@xmpp/iq-callee": "^0.3.0",
@@ -34,6 +35,7 @@
     "@xmpp/jid": "^0.3.0",
     "@xmpp/middleware": "^0.3.0",
     "@xmpp/plugin": "^0.3.0",
+    "@xmpp/pubsub": "^0.3.0",
     "@xmpp/reconnect": "^0.3.0",
     "@xmpp/resolve": "^0.3.0",
     "@xmpp/router": "^0.3.0",
@@ -49,6 +51,7 @@
     "@xmpp/time": "^0.3.0",
     "@xmpp/tls": "^0.3.0",
     "@xmpp/uri": "^0.3.0",
+    "@xmpp/vcard-caller": "^0.3.0",
     "@xmpp/websocket": "^0.3.0",
     "@xmpp/xml": "^0.3.0"
   },

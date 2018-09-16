@@ -2,9 +2,7 @@
   "version": "0.3.0",
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/*"],
   "command": {
     "publish": {
       "ignoreChanges": [
@@ -14,7 +12,8 @@
         "test.js",
         ".eslintrc",
         ".eslintignore",
-        "**/*.map"
+        "**/*.map",
+        "*.test.js"
       ]
     }
   }

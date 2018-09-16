@@ -1,7 +1,7 @@
 'use strict'
 
-const {xml, plugin} = require('@xmpp/plugin')
-const iqCaller = require('../iq-caller')
+const xml = require('@xmpp/xml')
+const EventEmitter = require('events')
 
 const NS_PUBSUB = 'http://jabber.org/protocol/pubsub'
 const NS_PUBSUB_EVENT = `${NS_PUBSUB}#event`
@@ -12,9 +12,48 @@ const NS_DELAY = 'urn:xmpp:delay'
 const NS_RSM = 'http://jabber.org/protocol/rsm'
 const NS_X_DATA = 'jabber:x:data'
 
-module.exports = plugin(
-  'pubsub',
-  {
+function isPubSubEventNotification(stanza) {
+  const child = stanza.getChild('event')
+  return stanza.is('message') && child && child.attrs.xmlns === NS_PUBSUB_EVENT
+}
+
+module.exports = function({iqCaller, middleware}) {
+  const ee = new EventEmitter()
+
+  middleware.use(({from, stanza}, next) => {
+    if (!isPubSubEventNotification(stanza)) return next()
+
+    const service = from
+    const items = stanza.getChild('event').getChild('items')
+    const {node} = items.attrs
+    const item = items.getChild('item')
+    const retract = items.getChild('retract')
+    if (item) {
+      const {id} = item.attrs
+      const entry = item.getChild('entry')
+      const delay = stanza.getChild('delay')
+
+      if (delay) {
+        const {stamp} = delay.attrs
+        ee.emit(`last-item-published:${service}`, {node, id, entry, stamp})
+        ee.emit(`last-item-published:${service}:${node}`, {
+          id,
+          entry,
+          stamp,
+        })
+      } else {
+        ee.emit(`item-published:${service}`, {node, id, entry})
+        ee.emit(`item-published:${service}:${node}`, {id, entry})
+      }
+    }
+    if (retract) {
+      const {id} = retract.attrs
+      ee.emit(`item-deleted:${service}`, {node, id})
+      ee.emit(`item-deleted:${service}:${node}`, {id})
+    }
+  })
+
+  return Object.assign(ee, {
     NS_PUBSUB,
     NS_PUBSUB_EVENT,
     NS_PUBSUB_OWNER,
@@ -23,54 +62,6 @@ module.exports = plugin(
     NS_DELAY,
     NS_RSM,
     NS_X_DATA,
-
-    isPubSubEventNotification(stanza) {
-      const child = stanza.getChild('event')
-      return (
-        stanza.is('message') && child && child.attrs.xmlns === NS_PUBSUB_EVENT
-      )
-    },
-
-    start() {
-      this.listener = stanza => {
-        if (this.isPubSubEventNotification(stanza)) {
-          this.onPubSubEventNotification(stanza)
-        }
-      }
-      this.entity.on('element', this.listener)
-    },
-
-    stop() {
-      this.entity.removeListener('element', this.listener)
-    },
-
-    onPubSubEventNotification(message) {
-      const service = message.attrs.from
-      const items = message.getChild('event').getChild('items')
-      const {node} = items.attrs
-      const item = items.getChild('item')
-      const retract = items.getChild('retract')
-      if (item) {
-        const {id} = item.attrs
-        const entry = item.getChild('entry')
-        const delay = message.getChild('delay')
-
-        if (delay) {
-          const {stamp} = delay.attrs
-          this.emit(`last-item-published:${service}`, {node, id, entry, stamp})
-          this.emit(`last-item-published:${service}:${node}`, {id, entry, stamp})
-        } else {
-          this.emit(`item-published:${service}`, {node, id, entry})
-          this.emit(`item-published:${service}:${node}`, {id, entry})
-        }
-      }
-      if (retract) {
-        const {id} = retract.attrs
-        this.emit(`item-deleted:${service}`, {node, id})
-        this.emit(`item-deleted:${service}:${node}`, {id})
-      }
-    },
-
     createNode(params, node, options) {
       const stanza = xml('pubsub', {xmlns: NS_PUBSUB}, xml('create', {node}))
 
@@ -99,13 +90,13 @@ module.exports = plugin(
         stanza.cnode(config)
       }
 
-      return this.plugins['iq-caller']
+      return iqCaller
         .set(stanza, params)
         .then(result => result.getChild('create').attrs.node)
     },
 
     deleteNode(params, node) {
-      return this.plugins['iq-caller'].set(
+      return iqCaller.set(
         xml('pubsub', {xmlns: NS_PUBSUB}, xml('delete', {node})),
         params
       )
@@ -116,7 +107,7 @@ module.exports = plugin(
       if (item) {
         stanza.getChild('publish').cnode(item)
       }
-      return this.plugins['iq-caller']
+      return iqCaller
         .set(stanza, params)
         .then(result => result.getChild('publish').getChild('item').attrs.id)
     },
@@ -132,7 +123,7 @@ module.exports = plugin(
         stanza.up().cnode(rsmEl)
       }
 
-      return this.plugins['iq-caller'].get(stanza, params).then(result => {
+      return iqCaller.get(stanza, params).then(result => {
         const rsmEl = result.getChild('set')
         const items = result.getChild('items').children
 
@@ -153,13 +144,13 @@ module.exports = plugin(
       })
     },
 
-    deleteItem(params, node, id, notify=true) {
-      const stanza = xml('pubsub', {xmlns: NS_PUBSUB},
-        xml('retract', {node, notify},
-          xml('item', {id})))
-      return this.plugins['iq-caller']
-        .set(stanza, params)
+    deleteItem(params, node, id, notify = true) {
+      const stanza = xml(
+        'pubsub',
+        {xmlns: NS_PUBSUB},
+        xml('retract', {node, notify}, xml('item', {id}))
+      )
+      return iqCaller.set(stanza, params)
     },
-  },
-  [iqCaller]
-)
+  })
+}
