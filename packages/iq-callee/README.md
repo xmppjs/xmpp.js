@@ -7,22 +7,25 @@ Supports Node.js and browsers.
 ## Install
 
 ```js
-npm install @xmpp/plugins
+npm install @xmpp/iq-callee
 ```
 
 ## Usage
 
 ```js
-const callee = client.plugin(require('@xmpp/plugins/iq-callee'))
+const _iqCallee = require('@xmpp/iq-callee')
+const callee = _iqCaller({middleware, entity})
+```
 
+```js
 // handle iq get query with that namespace
-callee.get('jabber:iq:version', (query) => {
+callee.get('jabber:iq:version', query => {
   console.log(query)
   return Promise.resolve()
 })
 
 // handle iq set query with that namespace
-callee.set('jabber:iq:version', (query) => {
+callee.set('jabber:iq:version', query => {
   console.log(query)
   return Promise.resolve()
 })
