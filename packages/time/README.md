@@ -24,6 +24,30 @@ time.datetime('05 October 2011 14:48 UTC') // '2011-10-05T14:48:00.000Z'
 time.datetime(new Date('05 October 2011 14:48 UTC')) // '2011-10-05T14:48:00.000Z'
 ```
 
+## Callee
+
+Time callee allows the entity to reply to time queries.
+
+```js
+client.plugin(require('@xmpp/plugins/time/callee'))
+```
+
+The entity will automatically reply to time queries.
+
+## Caller
+
+`jid` parameter is optional
+
+```js
+const time = client.plugin(require('@xmpp/plugins/time/caller'))
+
+time.get(jid).then(({tzo, utc}) => {
+  console.log(tzo) // '+00:00'
+  console.log(utc) // '2017-09-15T13:19:23Z'
+})
+```
+
 ## References
 
-* [XEP-0082: XMPP Date and Time Profiles](https://xmpp.org/extensions/xep-0082.html)
+- [XEP-0082: XMPP Date and Time Profiles](https://xmpp.org/extensions/xep-0082.html)
+- [XEP-0202: Entity Time](https://xmpp.org/extensions/xep-0202.html)

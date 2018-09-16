@@ -1,13 +1,11 @@
 'use strict'
 
-const iq = require('../iq-caller')
-const {xml, plugin} = require('@xmpp/plugin')
+const xml = require('@xmpp/xml')
 
 const NS_TIME = 'urn:xmpp:time'
 
-module.exports = plugin(
-  'time-caller',
-  {
+module.exports = function({iqCaller}) {
+  return {
     get(...args) {
       return this.query(...args).then(res => {
         return {
@@ -17,11 +15,7 @@ module.exports = plugin(
       })
     },
     query(...args) {
-      return this.plugins['iq-caller'].get(
-        xml('time', {xmlns: NS_TIME}),
-        ...args
-      )
+      return iqCaller.get(xml('time', {xmlns: NS_TIME}), ...args)
     },
-  },
-  [iq]
-)
+  }
+}

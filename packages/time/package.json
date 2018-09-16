@@ -10,5 +10,13 @@
   "engines": {
     "node": ">= 8.0.0",
     "npm": ">= 2"
+  },
+  "dependencies": {
+    "@xmpp/xml": "^0.3.0"
+  },
+  "devDependencies": {
+    "@xmpp/iq": "^0.3.0",
+    "@xmpp/middleware": "^0.3.0",
+    "@xmpp/service-discovery": "^0.3.0"
   }
 }

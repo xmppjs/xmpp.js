@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const time = require('..')
+const time = require('./time')
 
 const s = '21 Jully 1969 02:56 UTC'
 const d = new Date(s)
