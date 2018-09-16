@@ -20,11 +20,11 @@ Releases follow the [Semantic Versionning specification](http://semver.org/)
 
 #### modular
 
-Thanks to [lerna](https://lernajs.io/), xmpp.js is highly modular, each feature is implemented as a plugin and can be included or excluded. (even XMPP core features)
+Thanks to [lerna](https://lernajs.io/), xmpp.js is highly modular, each feature is implemented as a package and can be included or excluded. (even XMPP core features)
 
-This allows to hand-pick what you need and reduce browser bundle. Additionally plugins can be dynamically imported on demand.
+This allows to hand-pick what you need and reduce browser bundle. Additionally packages can be dynamically imported on demand.
 
-For now the list of plugins is limited but will be completed over time.
+For now the list of packages is limited but will be completed over time.
 
 #### modern
 

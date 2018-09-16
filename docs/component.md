@@ -5,10 +5,10 @@ However components are granted special permissions. If you'd like to extend an
 XMPP server with additional features a component is a good choice.
 
 `@xmpp/component` package includes component-core and ships with most commonly
-used plugins. This is the recommended package for newcomers.
+used features. This is the recommended package for newcomers.
 
 `@xmpp/component-core` package provides a bare component connection and allows
-to hand-pick plugins. It is recommend to start with the `@xmpp/component`
+to hand-pick additional features. It is recommend to start with the `@xmpp/component`
 package and switch to this once you feel comfortable with `xmpp.js`.
 
 Here is a code example to get started.

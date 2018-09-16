@@ -5,6 +5,7 @@ setup:
 	yarn
 	./node_modules/.bin/lerna bootstrap
 	cd packages/xmpp.js/ && yarn run prepublish
+	cd packages/client/ && yarn run prepublish
 
 lint:
 	./node_modules/.bin/eslint .

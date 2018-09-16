@@ -62,7 +62,6 @@ class Connection extends EventEmitter {
     this.jid = null
     this.timeout = 2000
     this.options = typeof options === 'object' ? options : {}
-    this.plugins = Object.create(null)
     this.startOptions = null
     this.openOptions = null
     this.connectOptions = null
@@ -399,20 +398,6 @@ class Connection extends EventEmitter {
 
   isNonza(element) {
     return !this.isStanza(element)
-  }
-
-  plugin(plugin) {
-    if (!this.plugins[plugin.name]) {
-      this.plugins[plugin.name] = plugin.plugin(this)
-      const p = this.plugins[plugin.name]
-      if (p && p.start) {
-        p.start()
-      } else if (p && p.register) {
-        p.register()
-      }
-    }
-
-    return this.plugins[plugin.name]
   }
 
   // Override

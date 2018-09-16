@@ -13,24 +13,22 @@ function makeBindElement(resource) {
   return xml('bind', {xmlns: NS}, resource && xml('resource', {}, resource))
 }
 
-function bind(entity, resource) {
+function bind(entity, iqCaller, resource) {
   entity._status('binding')
-  return entity.plugins['iq-caller']
-    .set(makeBindElement(resource))
-    .then(result => {
-      const jid = result.getChildText('jid')
-      entity._jid(jid)
-      entity._status('bound')
-      return jid
-    })
+  return iqCaller.set(makeBindElement(resource)).then(result => {
+    const jid = result.getChildText('jid')
+    entity._jid(jid)
+    entity._status('bound')
+    return jid
+  })
 }
 
-function route() {
+function route({iqCaller}) {
   return function({entity}, next) {
     entity._status('bind')
     return (entity.isHandled('bind')
-      ? entity.delegate('bind', resource => bind(entity, resource))
-      : bind(entity)
+      ? entity.delegate('bind', resource => bind(entity, iqCaller, resource))
+      : bind(entity, iqCaller)
     ).then(() => {
       return next()
     })
@@ -40,6 +38,6 @@ function route() {
 module.exports = route
 module.exports.makeBindElement = makeBindElement
 module.exports.bind = bind
-module.exports.streamFeature = function() {
-  return ['bind', NS, route()]
+module.exports.streamFeature = function({iqCaller}) {
+  return ['bind', NS, route({iqCaller})]
 }

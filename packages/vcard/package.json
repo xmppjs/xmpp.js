@@ -1,0 +1,24 @@
+{
+  "name": "@xmpp/vcard",
+  "description": "XMPP vCard for JavaScript",
+  "repository": "github:xmppjs/xmpp.js",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/vcard",
+  "bugs": "http://github.com/xmppjs/xmpp.js/issues",
+  "version": "0.3.0",
+  "license": "ISC",
+  "keywords": [
+    "XMPP",
+    "vcard"
+  ],
+  "engines": {
+    "node": ">= 8.0.0",
+    "npm": ">= 2"
+  },
+  "dependencies": {
+    "@xmpp/xml": "^0.3.0"
+  },
+  "devDependencies": {
+    "@xmpp/iq": "^0.3.0",
+    "@xmpp/middleware": "^0.3.0"
+  }
+}

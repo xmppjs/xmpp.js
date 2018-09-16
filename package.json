@@ -35,6 +35,7 @@
     "files": [
       "packages/**/test.js",
       "packages/**/test/*.js",
+      "packages/**/*.test.js",
       "!packages/test/*.js"
     ]
   },

@@ -1,0 +1,28 @@
+{
+  "name": "@xmpp/roster",
+  "description": "XMPP roster for JavaScript",
+  "repository": "github:xmppjs/xmpp.js",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/roster",
+  "bugs": "http://github.com/xmppjs/xmpp.js/issues",
+  "version": "0.3.0",
+  "license": "ISC",
+  "keywords": [
+    "XMPP",
+    "roster"
+  ],
+  "engines": {
+    "node": ">= 8.0.0",
+    "npm": ">= 2"
+  },
+  "dependencies": {
+    "@xmpp/events": "^0.3.0",
+    "@xmpp/jid": "^0.3.0",
+    "@xmpp/xml": "^0.3.0"
+  },
+  "devDependencies": {
+    "@xmpp/events": "^0.3.0",
+    "@xmpp/iq": "^0.3.0",
+    "@xmpp/jid": "^0.3.0",
+    "@xmpp/middleware": "^0.3.0"
+  }
+}

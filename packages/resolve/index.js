@@ -1,16 +1,79 @@
 'use strict'
 
-const dns = require('./lib/dns')
-const http = require('./lib/http')
+const resolve = require('./resolve')
+const {socketConnect} = require('@xmpp/connection')
 
-module.exports = function resolve(...args) {
-  return Promise.all([
-    dns.resolve ? dns.resolve(...args) : Promise.resolve([]),
-    http.resolve(...args),
-  ]).then(([records, endpoints]) => records.concat(endpoints))
+async function fetchURIs(domain) {
+  return [
+    // Remove duplicates
+    ...new Set(
+      (await resolve(domain, {
+        srv: [
+          {
+            service: 'xmpps-client',
+            protocol: 'tcp',
+          },
+          {
+            service: 'xmpp-client',
+            protocol: 'tcp',
+          },
+        ],
+      })).map(record => record.uri)
+    ),
+  ]
 }
 
-if (dns.resolve) {
-  module.exports.dns = dns
+function filterSupportedURIs(entity, uris) {
+  return uris.filter(uri => entity._findTransport(uri))
 }
-module.exports.http = http
+
+async function fallbackConnect(entity, uris) {
+  if (uris.length === 0) {
+    throw new Error("Couldn't connect")
+  }
+
+  const uri = uris.shift()
+  const Transport = entity._findTransport(uri)
+
+  if (!Transport) {
+    return fallbackConnect(entity, uris)
+  }
+
+  const params = Transport.prototype.socketParameters(uri)
+  const socket = new Transport.prototype.Socket()
+
+  try {
+    await socketConnect(socket, params)
+  } catch (err) {
+    return fallbackConnect(entity, uris)
+  }
+
+  entity._attachSocket(socket)
+  socket.emit('connect')
+  entity.Transport = Transport
+  entity.Socket = Transport.prototype.Socket
+  entity.Parser = Transport.prototype.Parser
+}
+
+module.exports = function({entity}) {
+  const _connect = entity.connect
+  entity.connect = async function connect(domain) {
+    if (domain.length === 0 || domain.match(/:\/\//)) {
+      return _connect.call(this, domain)
+    }
+
+    const uris = filterSupportedURIs(entity, await fetchURIs(domain))
+
+    if (uris.length === 0) {
+      throw new Error('No compatible transport found.')
+    }
+
+    try {
+      await fallbackConnect(entity, uris)
+    } catch (err) {
+      entity._reset()
+      entity._status('disconnect')
+      throw err
+    }
+  }
+}
