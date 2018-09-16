@@ -9,10 +9,10 @@ function match(features) {
   return Boolean(feature) && !feature.getChild('optional')
 }
 
-module.exports = function() {
-  return function({stanza, entity}, next) {
+module.exports = function({iqCaller}) {
+  return function({stanza}, next) {
     if (!match(stanza)) return next()
-    return entity.plugins['iq-caller']
+    return iqCaller
       .set(xml('session', 'urn:ietf:params:xml:ns:xmpp-session'))
       .then(() => {
         return next()

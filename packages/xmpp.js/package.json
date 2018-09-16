@@ -6,7 +6,12 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.3.0",
   "license": "ISC",
-  "keywords": ["XMPP", "jabber", "client", "component"],
+  "keywords": [
+    "XMPP",
+    "jabber",
+    "client",
+    "component"
+  ],
   "engines": {
     "node": ">= 8.0.0",
     "npm": ">= 2"
@@ -22,6 +27,7 @@
     "@xmpp/debug": "^0.3.0",
     "@xmpp/events": "^0.3.0",
     "@xmpp/id": "^0.3.0",
+    "@xmpp/iq-caller": "^0.3.0",
     "@xmpp/jid": "^0.3.0",
     "@xmpp/middleware": "^0.3.0",
     "@xmpp/plugin": "^0.3.0",

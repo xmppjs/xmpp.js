@@ -4,3 +4,4 @@ server/modules/
 **/dist/*.js
 bundle.js
 .git/
+package.json

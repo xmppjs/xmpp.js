@@ -9,11 +9,9 @@ const _streamFeatures = require('@xmpp/stream-features')
 const _middleware = require('@xmpp/middleware')
 const _router = require('@xmpp/router')
 const {context} = require('@xmpp/test')
-const iqCaller = require('@xmpp/plugins/iq-caller')
 
 test.beforeEach(t => {
   const ctx = context()
-  ctx.entity.plugin(iqCaller)
   const middleware = _middleware(ctx.entity)
   const router = _router(middleware)
   const streamFeatures = _streamFeatures(router)

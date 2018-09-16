@@ -13,6 +13,8 @@ const _middleware = require('@xmpp/middleware')
 const _router = require('@xmpp/router')
 const _streamFeatures = require('@xmpp/stream-features')
 
+const _iqCaller = require('@xmpp/iq-caller')
+
 // Stream features - order matters and define priority
 const starttls = require('@xmpp/starttls')
 const sasl = require('@xmpp/sasl')
@@ -31,14 +33,18 @@ function xmpp() {
   const router = _router(middleware)
   const streamFeatures = _streamFeatures(middleware)
 
+  const iqCaller = _iqCaller({middleware, entity: client})
+  //FIXME
+  client.plugins['iq-caller'] = iqCaller
+
   const _sasl = sasl()
 
   if (starttls.streamFeature) {
     streamFeatures.use(...starttls.streamFeature())
   }
   router.use('stream:features', _sasl.route())
-  streamFeatures.use(...bind.streamFeature())
-  router.use('stream:features', sessionEstablishment())
+  streamFeatures.use(...bind.streamFeature({iqCaller}))
+  router.use('stream:features', sessionEstablishment({iqCaller}))
 
   const mechanisms = Object.entries(_mechanisms)
     // Ignore browserify stubs

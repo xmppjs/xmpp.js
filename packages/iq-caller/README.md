@@ -7,20 +7,20 @@ Supports Node.js and browsers.
 ## Install
 
 ```js
-npm install @xmpp/plugins
+npm install @xmpp/iq-caller
 ```
 
 ## Usage
 
 ```js
-client.plugin(require('@xmpp/plugins/iq-caller'))
+const _iqCaller = require('@xmpp/iq-caller')
+const iqCaller = _iqCaller({middleware, entity})
 ```
 
 ### Get
 
 ```js
-const caller = client.plugins['iq-caller']
-caller.get(xml('time', 'urn:xmpp:time')).then((time) => {
+iqCaller.get(xml('time', 'urn:xmpp:time')).then(time => {
   console.log(time.getChildText('tzo'))
   console.log(time.getChildText('utc'))
 })
@@ -29,16 +29,10 @@ caller.get(xml('time', 'urn:xmpp:time')).then((time) => {
 ### Set
 
 ```js
-const caller = client.plugins['iq-caller']
-caller.set(
-  xml('vCard', 'vcard-temp',
-    xml('FN', 'bot')
-  ),
-).then(() => {
+iqCaller.set(xml('vCard', 'vcard-temp', xml('FN', 'bot'))).then(() => {
   console.log('done')
 })
 ```
-
 
 ## References
 
