@@ -1,0 +1,25 @@
+{
+  "name": "@xmpp/disco-callee",
+  "description": "XMPP Service Discovery callee for JavaScript",
+  "repository": "github:xmppjs/xmpp.js",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/disco-callee",
+  "bugs": "http://github.com/xmppjs/xmpp.js/issues",
+  "version": "0.3.0",
+  "license": "ISC",
+  "keywords": [
+    "XMPP",
+    "disco",
+    "callee"
+  ],
+  "engines": {
+    "node": ">= 8.0.0",
+    "npm": ">= 2"
+  },
+  "dependencies": {
+    "@xmpp/xml": "^0.3.0"
+  },
+  "devDependencies": {
+    "@xmpp/iq-callee": "^0.3.0",
+    "@xmpp/middleware": "^0.3.0"
+  }
+}

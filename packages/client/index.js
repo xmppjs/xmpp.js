@@ -34,7 +34,7 @@ function xmpp() {
   const streamFeatures = _streamFeatures(middleware)
 
   const iqCaller = _iqCaller({middleware, entity: client})
-  //FIXME
+  // FIXME
   client.plugins['iq-caller'] = iqCaller
 
   const _sasl = sasl()

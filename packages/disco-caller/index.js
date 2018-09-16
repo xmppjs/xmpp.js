@@ -1,23 +1,21 @@
 'use strict'
 
-const iq = require('../iq-caller')
-const {plugin, xml} = require('@xmpp/plugin')
+const xml = require('@xmpp/xml')
 
 const NS_DISCO_INFO = 'http://jabber.org/protocol/disco#info'
 const NS_DISCO_ITEMS = 'http://jabber.org/protocol/disco#items'
 
-module.exports = plugin(
-  'disco-caller',
-  {
+module.exports = function({iqCaller}) {
+  return {
     items(service, node) {
-      return this.entity.plugins['iq-caller']
+      return iqCaller
         .get(xml('query', {xmlns: NS_DISCO_ITEMS, node}), service)
         .then(res => {
           return res.getChildren('item').map(i => i.attrs)
         })
     },
     info(service, node) {
-      return this.entity.plugins['iq-caller']
+      return iqCaller
         .get(xml('query', {xmlns: NS_DISCO_INFO, node}), service)
         .then(res => {
           return [
@@ -26,6 +24,5 @@ module.exports = plugin(
           ]
         })
     },
-  },
-  [iq]
-)
+  }
+}

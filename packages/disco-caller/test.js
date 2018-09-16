@@ -1,11 +1,18 @@
 'use strict'
 
 const test = require('ava')
-const plugin = require('../caller')
-const testPlugin = require('@xmpp/test/testPlugin')
+const {context} = require('@xmpp/test')
+const _discoCaller = require('.')
+const _middleware = require('@xmpp/middleware')
+const _iqCaller = require('@xmpp/iq-caller')
 
 test.beforeEach(t => {
-  t.context = testPlugin(plugin)
+  const ctx = context()
+  const {entity} = ctx
+  const middleware = _middleware(entity)
+  const iqCaller = _iqCaller({middleware, entity})
+  ctx.discoCaller = _discoCaller({iqCaller})
+  t.context = ctx
 })
 
 test('#items with node', t => {
@@ -23,7 +30,7 @@ test('#items with node', t => {
         <query xmlns="http://jabber.org/protocol/disco#items" node="foo" />
       )
     }),
-    t.context.plugin.items('server', 'foo').then(items => {
+    t.context.discoCaller.items('server', 'foo').then(items => {
       t.deepEqual(items, [
         {
           jid: 'people.shakespeare.lit',
@@ -53,7 +60,7 @@ test('#items without node', t => {
         <query xmlns="http://jabber.org/protocol/disco#items" />
       )
     }),
-    t.context.plugin.items().then(items => {
+    t.context.discoCaller.items().then(items => {
       t.deepEqual(items, [
         {
           jid: 'people.shakespeare.lit',
@@ -87,7 +94,7 @@ test('#info with node', t => {
         <query xmlns="http://jabber.org/protocol/disco#info" node="foo" />
       )
     }),
-    t.context.plugin.info('server', 'foo').then(items => {
+    t.context.discoCaller.info('server', 'foo').then(items => {
       t.deepEqual(items, [
         ['http://jabber.org/protocol/disco#info'],
         [
@@ -121,7 +128,7 @@ test('#info without node', t => {
         <query xmlns="http://jabber.org/protocol/disco#info" />
       )
     }),
-    t.context.plugin.info().then(info => {
+    t.context.discoCaller.info().then(info => {
       t.deepEqual(info, [
         ['http://jabber.org/protocol/disco#info'],
         [
