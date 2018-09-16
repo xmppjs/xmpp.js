@@ -13,6 +13,7 @@
     "node-fetch": false
   },
   "dependencies": {
+    "@xmpp/connection": "^0.3.0",
     "@xmpp/xml": "^0.3.0",
     "node-fetch": "^2.2.0"
   },

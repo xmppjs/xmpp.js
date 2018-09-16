@@ -32,6 +32,7 @@
     "@xmpp/iq-caller": "^0.3.0",
     "@xmpp/jid": "^0.3.0",
     "@xmpp/middleware": "^0.3.0",
+    "@xmpp/ping": "^0.3.0",
     "@xmpp/plugin": "^0.3.0",
     "@xmpp/pubsub": "^0.3.0",
     "@xmpp/reconnect": "^0.3.0",

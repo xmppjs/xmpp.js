@@ -1,6 +1,6 @@
 'use strict'
 
-const resolve = require('.')
+const resolve = require('./resolve')
 // For you
 // const resolve = require('@xmpp/resolve')
 

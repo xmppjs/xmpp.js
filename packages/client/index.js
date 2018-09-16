@@ -1,7 +1,6 @@
 'use strict'
 
-const Client = require('./lib/Client')
-const {xml, jid} = require('@xmpp/client-core')
+const {xml, jid, Client} = require('@xmpp/client-core')
 
 const reconnect = require('@xmpp/reconnect')
 const tcp = require('@xmpp/tcp')
@@ -14,6 +13,7 @@ const _router = require('@xmpp/router')
 const _streamFeatures = require('@xmpp/stream-features')
 
 const _iqCaller = require('@xmpp/iq-caller')
+const resolve = require('@xmpp/resolve')
 
 // Stream features - order matters and define priority
 const starttls = require('@xmpp/starttls')
@@ -29,13 +29,12 @@ const _mechanisms = {anonymous, scramsha1, plain}
 
 function xmpp() {
   const client = new Client()
+  resolve({entity: client})
   const middleware = _middleware(client)
   const router = _router(middleware)
   const streamFeatures = _streamFeatures(middleware)
 
   const iqCaller = _iqCaller({middleware, entity: client})
-  // FIXME
-  client.plugins['iq-caller'] = iqCaller
 
   const _sasl = sasl()
 
