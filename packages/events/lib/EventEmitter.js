@@ -2,9 +2,9 @@
 
 const _EventEmitter = require('events')
 
-class EventEmitter {
-  constructor() {
-    this._emitter = new _EventEmitter()
+class EventEmitter extends _EventEmitter {
+  constructor(...args) {
+    super(...args)
     this._handlers = Object.create(null)
   }
 
@@ -28,18 +28,5 @@ class EventEmitter {
     return Boolean(this._handlers[event])
   }
 }
-
-;[
-  'on',
-  'addListener',
-  'removeListener',
-  'once',
-  'emit',
-  'listenerCount',
-].forEach(name => {
-  EventEmitter.prototype[name] = function(...args) {
-    this._emitter[name](...args)
-  }
-})
 
 module.exports = EventEmitter
