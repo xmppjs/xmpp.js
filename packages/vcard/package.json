@@ -1,15 +1,14 @@
 {
-  "name": "@xmpp/vcard-caller",
-  "description": "XMPP vCard caller for JavaScript",
+  "name": "@xmpp/vcard",
+  "description": "XMPP vCard for JavaScript",
   "repository": "github:xmppjs/xmpp.js",
-  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/vcard-caller",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/vcard",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.3.0",
   "license": "ISC",
   "keywords": [
     "XMPP",
-    "vcard",
-    "caller"
+    "vcard"
   ],
   "engines": {
     "node": ">= 8.0.0",

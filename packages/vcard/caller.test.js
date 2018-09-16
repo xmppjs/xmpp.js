@@ -2,7 +2,7 @@
 
 const test = require('ava')
 const {context, xml} = require('@xmpp/test')
-const _vcardCaller = require('.')
+const _vcardCaller = require('./caller')
 const _middleware = require('@xmpp/middleware')
 const _iqCaller = require('@xmpp/iq-caller')
 
