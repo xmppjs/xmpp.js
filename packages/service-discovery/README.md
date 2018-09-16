@@ -10,6 +10,20 @@ Supports Node.js and browsers.
 npm install @xmpp/plugins
 ```
 
+## Callee
+
+Disco callee allows the entity to reply to service discovery queries.
+
+```js
+const callee = client.plugin(require('@xmpp/plugins/disco/callee'))
+// add a feature
+callee.features.add('jabber:iq:time')
+// add an identity
+callee.identity.add({name: 'xmpp.js', type: 'pc', category: 'client'})
+```
+
+The entity will automatically reply to disco info queries.
+
 ## Caller
 
 Both `jid` and `node` parameters are optionals
