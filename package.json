@@ -44,7 +44,7 @@
     "lint": "eslint ."
   },
   "engines": {
-    "node": ">= 7.6.0",
+    "node": ">= 8.0.0",
     "yarn": ">= 0.28"
   },
   "workspaces": ["packages/*"],
