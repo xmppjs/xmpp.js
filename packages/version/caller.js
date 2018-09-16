@@ -1,13 +1,11 @@
 'use strict'
 
-const iq = require('../iq-caller')
-const {xml, plugin} = require('@xmpp/plugin')
+const xml = require('@xmpp/xml')
 
 const NS_VERSION = 'jabber:iq:version'
 
-module.exports = plugin(
-  'version-caller',
-  {
+module.exports = function({iqCaller}) {
+  return {
     get(...args) {
       return this.query(...args).then(res => {
         return {
@@ -18,11 +16,7 @@ module.exports = plugin(
       })
     },
     query(...args) {
-      return this.plugins['iq-caller'].get(
-        xml('query', {xmlns: NS_VERSION}),
-        ...args
-      )
+      return iqCaller.get(xml('query', {xmlns: NS_VERSION}), ...args)
     },
-  },
-  [iq]
-)
+  }
+}

@@ -21,7 +21,6 @@ versionCallee.version = '0.3.0' // required
 versionCallee.os = 'milky way' // optional
 ```
 
-
 ## Caller
 
 `jid` parameter is optional
