@@ -20,8 +20,7 @@
     "@xmpp/xml": "^0.3.0"
   },
   "devDependencies": {
-    "@xmpp/iq-callee": "^0.3.0",
-    "@xmpp/iq-caller": "^0.3.0",
+    "@xmpp/iq": "^0.3.0",
     "@xmpp/middleware": "^0.3.0"
   }
 }

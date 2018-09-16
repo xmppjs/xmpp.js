@@ -24,6 +24,7 @@ module.exports = function iqCaller({entity, middleware}) {
   })
 
   return {
+    handlers,
     get(child, ...args) {
       return this.request(xml('iq', {type: 'get'}, child), ...args)
     },

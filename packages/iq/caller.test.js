@@ -1,11 +1,20 @@
 'use strict'
 
 const test = require('ava')
-const iqCallerPlugin = require('.')
-const testPlugin = require('@xmpp/test/testPlugin')
+const {context} = require('@xmpp/test')
+const _middleware = require('@xmpp/middleware')
+const _iqCaller = require('./caller')
+
+test.beforeEach(t => {
+  const ctx = context()
+  const {entity} = ctx
+  const middleware = _middleware(entity)
+  ctx.iqCaller = _iqCaller({middleware, entity})
+  t.context = ctx
+})
 
 test.cb('#get', t => {
-  const {plugin, entity} = testPlugin(iqCallerPlugin)
+  const {iqCaller, entity} = t.context
 
   entity.send = el => {
     t.is(typeof el.attrs.id, 'string')
@@ -20,11 +29,11 @@ test.cb('#get', t => {
     return Promise.resolve()
   }
 
-  plugin.get(<foo />)
+  iqCaller.get(<foo />)
 })
 
 test.cb('#set', t => {
-  const {plugin, entity} = testPlugin(iqCallerPlugin)
+  const {iqCaller, entity} = t.context
 
   entity.send = el => {
     t.is(typeof el.attrs.id, 'string')
@@ -39,11 +48,11 @@ test.cb('#set', t => {
     return Promise.resolve()
   }
 
-  plugin.set(<foo />)
+  iqCaller.set(<foo />)
 })
 
 test.cb('#request', t => {
-  const {plugin, entity} = testPlugin(iqCallerPlugin)
+  const {iqCaller, entity} = t.context
 
   entity.send = el => {
     t.deepEqual(
@@ -56,7 +65,7 @@ test.cb('#request', t => {
     return Promise.resolve()
   }
 
-  plugin.request(
+  iqCaller.request(
     <iq type="get" id="foobar">
       <foo />
     </iq>
@@ -64,7 +73,7 @@ test.cb('#request', t => {
 })
 
 test.cb('#request with param as string', t => {
-  const {plugin, entity} = testPlugin(iqCallerPlugin)
+  const {iqCaller, entity} = t.context
 
   entity.send = el => {
     t.deepEqual(
@@ -77,7 +86,7 @@ test.cb('#request with param as string', t => {
     return Promise.resolve()
   }
 
-  plugin.request(
+  iqCaller.request(
     <iq type="get" id="foobar">
       <foo />
     </iq>,
@@ -86,7 +95,7 @@ test.cb('#request with param as string', t => {
 })
 
 test.cb('#request with id and to parameters', t => {
-  const {plugin, entity} = testPlugin(iqCallerPlugin)
+  const {iqCaller, entity} = t.context
 
   entity.send = el => {
     t.deepEqual(
@@ -99,7 +108,7 @@ test.cb('#request with id and to parameters', t => {
     return Promise.resolve()
   }
 
-  plugin.request(
+  iqCaller.request(
     <iq type="get">
       <foo />
     </iq>,
@@ -108,7 +117,7 @@ test.cb('#request with id and to parameters', t => {
 })
 
 test('removes the handler if sending failed', t => {
-  const {plugin, entity} = testPlugin(iqCallerPlugin)
+  const {iqCaller, entity} = t.context
 
   const error = new Error('foobar')
 
@@ -116,16 +125,16 @@ test('removes the handler if sending failed', t => {
     return Promise.reject(error)
   }
 
-  const promise = plugin.request(
+  const promise = iqCaller.request(
     <iq type="get">
       <foo />
     </iq>
   )
 
-  t.is(plugin.handlers.size, 1)
+  t.is(iqCaller.handlers.size, 1)
 
   return promise.catch(err => {
     t.is(err, error)
-    t.is(plugin.handlers.size, 0)
+    t.is(iqCaller.handlers.size, 0)
   })
 })

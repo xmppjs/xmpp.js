@@ -4,7 +4,7 @@ const test = require('ava')
 const {context} = require('@xmpp/test')
 const _pubsubCaller = require('./caller')
 const _middleware = require('@xmpp/middleware')
-const _iqCaller = require('@xmpp/iq-caller')
+const _iqCaller = require('@xmpp/iq/caller')
 const {promise} = require('@xmpp/events')
 
 const SERVICE = 'pubsub.foo'

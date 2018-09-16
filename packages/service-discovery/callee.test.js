@@ -4,7 +4,7 @@ const test = require('ava')
 const {context} = require('@xmpp/test')
 const _discoCallee = require('./callee')
 const _middleware = require('@xmpp/middleware')
-const _iqCallee = require('@xmpp/iq-callee')
+const _iqCallee = require('@xmpp/iq/callee')
 
 test.beforeEach(t => {
   const ctx = context()

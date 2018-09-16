@@ -1,16 +1,40 @@
-# iq-callee
+# iq
 
-Requests handler for `@xmpp/client` and `@xmpp/component`.
+Requests for `@xmpp/client` and `@xmpp/component`.
 
 Supports Node.js and browsers.
 
 ## Install
 
 ```js
-npm install @xmpp/iq-callee
+npm install @xmpp/iq-caller
 ```
 
 ## Usage
+
+```js
+const _iqCaller = require('@xmpp/iq-caller')
+const iqCaller = _iqCaller({middleware, entity})
+```
+
+### Get
+
+```js
+iqCaller.get(xml('time', 'urn:xmpp:time')).then(time => {
+  console.log(time.getChildText('tzo'))
+  console.log(time.getChildText('utc'))
+})
+```
+
+### Set
+
+```js
+iqCaller.set(xml('vCard', 'vcard-temp', xml('FN', 'bot'))).then(() => {
+  console.log('done')
+})
+```
+
+## Callee
 
 ```js
 const _iqCallee = require('@xmpp/iq-callee')

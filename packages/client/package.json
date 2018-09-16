@@ -8,7 +8,7 @@
   "dependencies": {
     "@xmpp/bind": "^0.3.0",
     "@xmpp/client-core": "^0.3.0",
-    "@xmpp/iq-caller": "^0.3.0",
+    "@xmpp/iq": "^0.3.0",
     "@xmpp/middleware": "^0.3.0",
     "@xmpp/resolve": "^0.3.0",
     "@xmpp/reconnect": "^0.3.0",

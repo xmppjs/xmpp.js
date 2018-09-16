@@ -12,7 +12,7 @@ const _middleware = require('@xmpp/middleware')
 const _router = require('@xmpp/router')
 const _streamFeatures = require('@xmpp/stream-features')
 
-const _iqCaller = require('@xmpp/iq-caller')
+const _iqCaller = require('@xmpp/iq/caller')
 const resolve = require('@xmpp/resolve')
 
 // Stream features - order matters and define priority
