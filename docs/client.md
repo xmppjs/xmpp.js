@@ -30,6 +30,9 @@ client.on('status', (status, value) => {
 
 client.on('online', jid => {
   console.log('🗸', 'online as', jid.toString())
+  
+  // want to get disconnected?
+  client.stop();
 })
 
 client.on('stanza', stanza => {
