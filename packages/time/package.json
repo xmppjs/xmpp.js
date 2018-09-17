@@ -8,8 +8,8 @@
   "license": "ISC",
   "keywords": ["XMPP", "time", "date"],
   "engines": {
-    "node": ">= 8.0.0",
-    "npm": ">= 2"
+    "node": ">= 9.6.1",
+    "yarn": ">= 1.0.0"
   },
   "dependencies": {
     "@xmpp/xml": "^0.3.0"

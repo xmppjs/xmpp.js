@@ -38,7 +38,7 @@
       "../../node_modules/uglify-es/bin/uglifyjs dist/xmpp.js -c -m --source-map url=xmpp.min.js.map,content=dist/xmpp.js.map -o dist/xmpp.min.js"
   },
   "engines": {
-    "node": ">= 8.0.0",
-    "npm": ">= 2"
+    "node": ">= 9.6.1",
+    "yarn": ">= 1.0.0"
   }
 }
