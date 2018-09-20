@@ -1,6 +1,5 @@
 'use strict'
 
-module.exports['bind'] = require('@xmpp/bind')
 module.exports['client'] = require('@xmpp/client')
 module.exports['client-core'] = require('@xmpp/client-core')
 module.exports['component'] = require('@xmpp/component')
@@ -18,6 +17,7 @@ module.exports['ping'] = require('@xmpp/ping')
 module.exports['pubsub'] = require('@xmpp/pubsub')
 module.exports['reconnect'] = require('@xmpp/reconnect')
 module.exports['resolve'] = require('@xmpp/resolve')
+module.exports['resource-binding'] = require('@xmpp/resource-binding')
 module.exports['roster'] = require('@xmpp/roster')
 module.exports['router'] = require('@xmpp/router')
 module.exports['sasl'] = require('@xmpp/sasl')

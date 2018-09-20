@@ -10,5 +10,10 @@
   "engines": {
     "node": ">= 9.6.1",
     "yarn": ">= 1.0.0"
+  },
+  "devDependencies": {
+    "@xmpp/jid": "^0.3.0",
+    "@xmpp/middleware": "^0.3.0",
+    "@xmpp/xml": "^0.3.0"
   }
 }

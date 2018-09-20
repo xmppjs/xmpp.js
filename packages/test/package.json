@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@xmpp/client": "^0.3.0",
+    "@xmpp/debug": "^0.3.0",
     "@xmpp/events": "^0.3.0",
     "@xmpp/jid": "^0.3.0",
     "@xmpp/xml": "^0.3.0"

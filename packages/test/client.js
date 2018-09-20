@@ -3,8 +3,7 @@
 const {Client} = require('../client-core')
 const JID = require('@xmpp/jid')
 
-module.exports = function client() {
-  const entity = new Client()
+module.exports = function client(entity = new Client()) {
   entity.socket = {
     write(data, cb) {
       cb()

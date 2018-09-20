@@ -3,10 +3,21 @@
 const client = require('./client')
 const {promise} = require('@xmpp/events')
 const xml = require('@xmpp/xml')
+const debug = require('@xmpp/debug')
+const JID = require('@xmpp/jid')
 
-module.exports = function context() {
-  const entity = client()
-  return {
+module.exports = function context(entity = client()) {
+  debug(entity)
+
+  entity.socket = {
+    write(data, cb) {
+      cb()
+    },
+  }
+  entity.jid = new JID('foo@bar/test')
+  entity.domain = 'bar'
+
+  const ctx = {
     entity,
     sanitize(s) {
       const stanza = s.clone()
@@ -18,10 +29,10 @@ module.exports = function context() {
     catch() {
       return promise(entity, 'send').then(s => this.sanitize(s))
     },
-    catchOutgoing(fn) {
+    catchOutgoing(match = () => true) {
       return new Promise(resolve => {
         function onSend(stanza) {
-          if (!fn || fn(stanza)) {
+          if (match(stanza)) {
             entity.removeListener('send', onSend)
             resolve(stanza)
           }
@@ -29,32 +40,28 @@ module.exports = function context() {
         entity.on('send', onSend)
       })
     },
-    catchOutgoingIq(fn) {
-      return this.catchOutgoing(stanza => {
-        return stanza.is('iq') && fn ? fn(stanza) : true
-      })
+    catchOutgoingIq(match = () => true) {
+      return this.catchOutgoing(stanza => stanza.is('iq') && match(stanza))
     },
-    catchOutgoingGet(fn) {
-      return this.catchOutgoingIq(
-        stanza => (stanza.attrs.type === 'get' && fn ? fn(stanza) : true)
-      ).then(stanza => {
-        const [child] = stanza.children
-        if (child) {
-          child.parent = null
-        }
-        return child
-      })
+    async catchOutgoingGet(match = () => true) {
+      const stanza = await this.catchOutgoingIq(
+        stanza => stanza.attrs.type === 'get' && match(stanza)
+      )
+      const [child] = stanza.children
+      if (child) {
+        child.parent = null
+      }
+      return child
     },
-    catchOutgoingSet(fn) {
-      return this.catchOutgoingIq(
-        stanza => (stanza.attrs.type === 'get' && fn ? fn(stanza) : true)
-      ).then(stanza => {
-        const [child] = stanza.children
-        if (child) {
-          child.parent = null
-        }
-        return child
-      })
+    async catchOutgoingSet(match = () => true) {
+      const stanza = await this.catchOutgoingIq(
+        stanza => stanza.attrs.type === 'set' && match(stanza)
+      )
+      const [child] = stanza.children
+      if (child) {
+        child.parent = null
+      }
+      return child
     },
     scheduleIncomingResult(child) {
       return promise(entity, 'send').then(stanza => {
@@ -123,7 +130,7 @@ module.exports = function context() {
       const p = promise(entity, 'send')
       const stanza = el.clone()
       delete stanza.attrs.xmlns
-      Promise.resolve().then(() => entity.emit('element', stanza))
+      Promise.resolve().then(() => this.mockInput(el))
       return p.then(el => {
         return this.sanitize(el).stanza
       })
@@ -131,5 +138,11 @@ module.exports = function context() {
     fakeOutgoing(el) {
       entity.hookOutgoing(el)
     },
+    mockInput(el) {
+      entity.emit('input', el.toString())
+      entity._onElement(el)
+    },
   }
+
+  return ctx
 }

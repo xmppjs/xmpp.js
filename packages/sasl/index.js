@@ -1,7 +1,7 @@
 'use strict'
 
 const {encode, decode} = require('./lib/b64')
-const {xml} = require('@xmpp/test')
+const xml = require('@xmpp/xml')
 const {XMPPError} = require('@xmpp/connection')
 const SASLFactory = require('saslmechanisms')
 

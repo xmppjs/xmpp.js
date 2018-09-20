@@ -6,7 +6,7 @@
   "version": "0.3.0",
   "license": "ISC",
   "dependencies": {
-    "@xmpp/bind": "^0.3.0",
+    "@xmpp/resource-binding": "^0.3.0",
     "@xmpp/client-core": "^0.3.0",
     "@xmpp/iq": "^0.3.0",
     "@xmpp/middleware": "^0.3.0",
