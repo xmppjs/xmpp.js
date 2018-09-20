@@ -26,7 +26,7 @@ test('createNode', t => {
   )
 
   return Promise.all([
-    t.context.catchOutgoingGet().then(child => {
+    t.context.catchOutgoingSet().then(child => {
       t.deepEqual(
         child,
         <pubsub xmlns="http://jabber.org/protocol/pubsub">
@@ -48,7 +48,7 @@ test('createNode with config options', t => {
   )
 
   return Promise.all([
-    t.context.catchOutgoingGet().then(child => {
+    t.context.catchOutgoingSet().then(child => {
       t.deepEqual(
         child,
         <pubsub xmlns="http://jabber.org/protocol/pubsub">
@@ -153,7 +153,7 @@ test('items', t => {
   )
 
   return Promise.all([
-    t.context.catchOutgoingSet().then(child => {
+    t.context.catchOutgoingGet().then(child => {
       t.deepEqual(
         child,
         <pubsub xmlns="http://jabber.org/protocol/pubsub">
@@ -202,7 +202,7 @@ test('items with RSM', t => {
   )
 
   return Promise.all([
-    t.context.catchOutgoingSet().then(child => {
+    t.context.catchOutgoingGet().then(child => {
       t.deepEqual(
         child,
         <pubsub xmlns="http://jabber.org/protocol/pubsub">

@@ -18,7 +18,7 @@ const resolve = require('@xmpp/resolve')
 // Stream features - order matters and define priority
 const starttls = require('@xmpp/starttls')
 const sasl = require('@xmpp/sasl')
-const bind = require('@xmpp/bind')
+const resourceBinding = require('@xmpp/resource-binding')
 const sessionEstablishment = require('@xmpp/session-establishment')
 
 // SASL mechanisms - order matters and define priority
@@ -27,7 +27,9 @@ const scramsha1 = require('@xmpp/sasl-scram-sha-1')
 const plain = require('@xmpp/sasl-plain')
 const _mechanisms = {anonymous, scramsha1, plain}
 
-function xmpp() {
+function xmpp(options = {}) {
+  const {resource} = options
+
   const client = new Client()
   resolve({entity: client})
   const middleware = _middleware(client)
@@ -42,7 +44,7 @@ function xmpp() {
     streamFeatures.use(...starttls.streamFeature())
   }
   router.use('stream:features', _sasl.route())
-  streamFeatures.use(...bind.streamFeature({iqCaller}))
+  resourceBinding({iqCaller, streamFeatures}, resource)
   router.use('stream:features', sessionEstablishment({iqCaller}))
 
   const mechanisms = Object.entries(_mechanisms)
