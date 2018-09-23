@@ -4,20 +4,10 @@ const xml = require('@xmpp/xml')
 
 const NS = 'urn:ietf:params:xml:ns:xmpp-session'
 
-function match(features) {
-  const feature = features.getChild('session', NS)
-  return Boolean(feature) && !feature.getChild('optional')
+module.exports = function({iqCaller, streamFeatures}) {
+  streamFeatures.use('session', NS, async (context, next, feature) => {
+    if (feature.getChild('optional')) return next()
+    await iqCaller.set(xml('session', NS))
+    return next()
+  })
 }
-
-module.exports = function({iqCaller}) {
-  return function({stanza}, next) {
-    if (!match(stanza)) return next()
-    return iqCaller
-      .set(xml('session', 'urn:ietf:params:xml:ns:xmpp-session'))
-      .then(() => {
-        return next()
-      })
-  }
-}
-
-module.exports.match = match

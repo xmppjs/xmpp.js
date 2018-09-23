@@ -8,7 +8,7 @@ const password = 'bar'
 const credentials = {username, password}
 
 test('no compatibles mechanisms', async t => {
-  const {client} = mockClient({credentials})
+  const {client, entity} = mockClient({credentials})
 
   client.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -18,15 +18,15 @@ test('no compatibles mechanisms', async t => {
     </features>
   )
 
-  const error = await promise(client, 'error')
+  const error = await promise(entity, 'error')
   t.true(error instanceof Error)
   t.is(error.message, 'No compatible mechanism')
 })
 
 test('with object credentials', async t => {
-  const {client} = mockClient({credentials})
-  client.restart = () => {
-    client.emit('open')
+  const {client, entity} = mockClient({credentials})
+  entity.restart = () => {
+    entity.emit('open')
     return Promise.resolve()
   }
 
@@ -39,7 +39,7 @@ test('with object credentials', async t => {
   )
 
   t.deepEqual(
-    await promise(client, 'send'),
+    await promise(entity, 'send'),
     <auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl" mechanism="PLAIN">
       AGZvbwBiYXI=
     </auth>
@@ -47,7 +47,7 @@ test('with object credentials', async t => {
 
   client.mockInput(<success xmlns="urn:ietf:params:xml:ns:xmpp-sasl" />)
 
-  await promise(client, 'online')
+  await promise(entity, 'online')
 })
 
 test('with function credentials', async t => {
@@ -58,9 +58,9 @@ test('with function credentials', async t => {
     return auth(credentials)
   }
 
-  const {client} = mockClient({credentials: authenticate})
-  client.restart = () => {
-    client.emit('open')
+  const {client, entity} = mockClient({credentials: authenticate})
+  entity.restart = () => {
+    entity.emit('open')
     return Promise.resolve()
   }
 
@@ -73,7 +73,7 @@ test('with function credentials', async t => {
   )
 
   t.deepEqual(
-    await promise(client, 'send'),
+    await promise(entity, 'send'),
     <auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl" mechanism={mech}>
       AGZvbwBiYXI=
     </auth>
@@ -81,11 +81,11 @@ test('with function credentials', async t => {
 
   client.mockInput(<success xmlns="urn:ietf:params:xml:ns:xmpp-sasl" />)
 
-  await promise(client, 'online')
+  await promise(entity, 'online')
 })
 
 test('failure', async t => {
-  const {client} = mockClient({credentials})
+  const {client, entity} = mockClient({credentials})
 
   client.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -96,7 +96,7 @@ test('failure', async t => {
   )
 
   t.deepEqual(
-    await promise(client, 'send'),
+    await promise(entity, 'send'),
     <auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl" mechanism="PLAIN">
       AGZvbwBiYXI=
     </auth>
@@ -110,7 +110,7 @@ test('failure', async t => {
 
   client.mockInput(failure)
 
-  const error = await promise(client, 'error')
+  const error = await promise(entity, 'error')
   t.true(error instanceof Error)
   t.is(error.name, 'SASLError')
   t.is(error.condition, 'some-condition')
