@@ -1,7 +1,4 @@
 'use strict'
 
-const caller = require('./caller')
-const callee = require('./callee')
-
-module.exports.caller = caller
-module.exports.callee = callee
+module.exports.NS_DISCO_INFO = 'http://jabber.org/protocol/disco#info'
+module.exports.NS_DISCO_ITEMS = 'http://jabber.org/protocol/disco#items'
