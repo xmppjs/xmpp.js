@@ -2,7 +2,7 @@
 
 const xml = require('@xmpp/xml')
 
-const NS_DISCO_INFO = 'http://jabber.org/protocol/disco#info'
+const {NS_DISCO_INFO} = require('.')
 
 function build(features = [], identities = []) {
   return xml(

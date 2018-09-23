@@ -95,16 +95,16 @@ test('#info with node', t => {
       )
     }),
     t.context.discoCaller.info('server', 'foo').then(items => {
-      t.deepEqual(items, [
-        ['http://jabber.org/protocol/disco#info'],
-        [
+      t.deepEqual(items, {
+        features: ['http://jabber.org/protocol/disco#info'],
+        identities: [
           {
             category: 'directory',
             type: 'chatroom',
             name: 'Play-Specific Chatrooms',
           },
         ],
-      ])
+      })
     }),
   ])
 })
@@ -129,16 +129,16 @@ test('#info without node', t => {
       )
     }),
     t.context.discoCaller.info().then(info => {
-      t.deepEqual(info, [
-        ['http://jabber.org/protocol/disco#info'],
-        [
+      t.deepEqual(info, {
+        features: ['http://jabber.org/protocol/disco#info'],
+        identities: [
           {
             category: 'directory',
             type: 'chatroom',
             name: 'Play-Specific Chatrooms',
           },
         ],
-      ])
+      })
     }),
   ])
 })
