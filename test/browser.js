@@ -11,10 +11,11 @@ const server = require('../server')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-const USERNAME = 'client'
-const PASSWORD = 'foobar'
+const username = 'client'
+const password = 'foobar'
+const credentials = {username, password}
 const domain = 'localhost'
-const JID = jid(USERNAME, domain).toString()
+const JID = jid(username, domain).toString()
 
 const xmppjs = readFileSync('./packages/client/dist/xmpp.js', {
   encoding: 'utf-8',
@@ -33,13 +34,8 @@ test.beforeEach(t => {
 })
 
 test('client ws://', t => {
-  const {client} = t.context()
+  const {client} = t.context({credentials})
   debug(client)
-
-  client.handle('authenticate', auth => {
-    t.is(typeof auth, 'function')
-    return auth(USERNAME, PASSWORD)
-  })
 
   return client.start('ws://localhost:5280/xmpp-websocket').then(id => {
     t.is(id.bare().toString(), JID)

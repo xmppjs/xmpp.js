@@ -50,6 +50,7 @@ http_paths = {
   }
 
 VirtualHost "localhost"
+
 Component "component.localhost"
   component_secret = "foobar"
 
