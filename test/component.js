@@ -11,6 +11,12 @@ test.beforeEach(() => {
   return server.restart()
 })
 
+test.afterEach(t => {
+  if (t.context.component) {
+    return t.context.component.stop()
+  }
+})
+
 test.cb('component', t => {
   t.plan(8)
 
@@ -42,6 +48,8 @@ test.cb('component', t => {
       t.is(id.toString(), 'component.localhost')
       component.stop().then(() => t.end())
     })
+
+  t.context.component = component
 })
 
 test.cb('reconnects when server restarts', t => {
@@ -70,6 +78,8 @@ test.cb('reconnects when server restarts', t => {
   })
 
   component.start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
+
+  t.context.component = component
 })
 
 test.cb('does not reconnect when stop is called', t => {
@@ -98,4 +108,6 @@ test.cb('does not reconnect when stop is called', t => {
   component.on('offline', () => t.pass())
 
   component.start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
+
+  t.context.component = component
 })

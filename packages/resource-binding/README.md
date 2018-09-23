@@ -1,4 +1,4 @@
-# bind
+# resource-binding
 
 Resource binding for `@xmpp/client`.
 
@@ -17,20 +17,29 @@ const client = xmpp({resource: 'laptop'})
 
 ### function
 
-You can provide a function that returns a promise so that every time the entity (re) connects you can pick a resource and/or debug resource binding.
+Instead, you can provide a function that will be called every time resource binding occurs (every (re)connect).
+
+Uses cases:
+
+- Have the user choose a resource every time
+- Do not ask for resource before connection is made
+- Debug resource binding
+- Perform an asynchronous operation to get the resource
 
 ```js
 const {xmpp} = require('@xmpp/client')
-const client = xmpp({resource: chooseResource})
-async function chooseResource(bind) {
+const client = xmpp({resource: bindResource})
+
+async function bindResource(bind) {
   console.debug('bind')
-  const value = await prompt('please choose a resource')
+  const value = await prompt('enter resource')
   console.debug('binding')
   try {
     const {resource} = await bind(value)
     console.debug('bound', resource)
   } catch (err) {
     console.error(err)
+    throw err
   }
 }
 ```

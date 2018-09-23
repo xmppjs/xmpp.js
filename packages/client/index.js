@@ -17,8 +17,8 @@ const resolve = require('@xmpp/resolve')
 
 // Stream features - order matters and define priority
 const starttls = require('@xmpp/starttls')
-const sasl = require('@xmpp/sasl')
-const resourceBinding = require('@xmpp/resource-binding')
+const _sasl = require('@xmpp/sasl')
+const _resourceBinding = require('@xmpp/resource-binding')
 const sessionEstablishment = require('@xmpp/session-establishment')
 
 // SASL mechanisms - order matters and define priority
@@ -28,7 +28,7 @@ const plain = require('@xmpp/sasl-plain')
 const _mechanisms = {anonymous, scramsha1, plain}
 
 function xmpp(options = {}) {
-  const {resource} = options
+  const {resource, credentials} = options
 
   const client = new Client()
   resolve({entity: client})
@@ -38,19 +38,17 @@ function xmpp(options = {}) {
 
   const iqCaller = _iqCaller({middleware, entity: client})
 
-  const _sasl = sasl()
-
   if (starttls.streamFeature) {
     streamFeatures.use(...starttls.streamFeature())
   }
-  router.use('stream:features', _sasl.route())
-  resourceBinding({iqCaller, streamFeatures}, resource)
+  const sasl = _sasl({streamFeatures}, credentials)
+  const resourceBinding = _resourceBinding({iqCaller, streamFeatures}, resource)
   router.use('stream:features', sessionEstablishment({iqCaller}))
 
   const mechanisms = Object.entries(_mechanisms)
     // Ignore browserify stubs
     .filter(([, v]) => typeof v === 'function')
-    .map(([k, v]) => ({[k]: v(_sasl)}))
+    .map(([k, v]) => ({[k]: v(sasl)}))
 
   const exports = Object.assign(
     {
@@ -58,6 +56,7 @@ function xmpp(options = {}) {
       middleware,
       router,
       sasl,
+      resourceBinding,
     },
     // ...features,
     ...mechanisms,
