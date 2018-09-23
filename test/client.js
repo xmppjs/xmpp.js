@@ -26,7 +26,7 @@ test.afterEach(t => {
 test.cb('client', t => {
   t.plan(7)
 
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({credentials, service: domain})
   debug(client)
 
   client.on('connect', () => {
@@ -43,7 +43,7 @@ test.cb('client', t => {
     t.is(id.bare().toString(), JID)
   })
 
-  client.start(domain).then(id => {
+  client.start().then(id => {
     t.true(id instanceof jid.JID)
     t.is(id.bare().toString(), JID)
     t.end()
@@ -56,6 +56,7 @@ test.cb('bad credentials', t => {
   t.plan(6)
 
   const {client} = xmpp({
+    service: domain,
     credentials: Object.assign({}, credentials, {password: 'nope'}),
   })
   debug(client)
@@ -75,7 +76,7 @@ test.cb('bad credentials', t => {
   })
 
   client
-    .start(domain)
+    .start()
     .then(() => t.fail())
     .catch(err => {
       t.is(err, error)
@@ -89,7 +90,7 @@ test.cb('reconnects when server restarts', t => {
   t.plan(2)
   let c = 0
 
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({credentials, service: domain})
   debug(client)
 
   client.on('error', () => {})
@@ -106,7 +107,7 @@ test.cb('reconnects when server restarts', t => {
     }
   })
 
-  client.start(domain)
+  client.start()
 
   t.context.client = client
 })
@@ -114,7 +115,7 @@ test.cb('reconnects when server restarts', t => {
 test.cb('does not reconnect when stop is called', t => {
   t.plan(5)
 
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({service: domain, credentials})
   debug(client)
 
   client.on('online', () => {
@@ -132,7 +133,7 @@ test.cb('does not reconnect when stop is called', t => {
 
   client.on('offline', () => t.pass())
 
-  client.start(domain)
+  client.start()
 
   t.context.client = client
 })
@@ -140,7 +141,7 @@ test.cb('does not reconnect when stop is called', t => {
 test.cb('anonymous authentication', t => {
   t.plan(5)
 
-  const {client} = xmpp()
+  const {client} = xmpp({service: domain, domain: 'anon.' + domain})
   debug(client)
 
   client.on('online', () => {
@@ -158,134 +159,136 @@ test.cb('anonymous authentication', t => {
 
   client.on('offline', () => t.pass())
 
-  client.start({uri: domain, domain: 'anon.' + domain})
+  client.start()
 
   t.context.client = client
 })
 
 test('auto', t => {
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({credentials, service: domain})
   debug(client)
   t.context.client = client
-  return client.start(domain).then(id => t.is(id.bare().toString(), JID))
+  return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
 // Prosody 404 https://prosody.im/issues/issue/932
 test.skip('ws IPv4', t => {
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({
+    credentials,
+    service: 'ws://127.0.0.1:5280/xmpp-websocket',
+    domain,
+  })
   debug(client)
   t.context.client = client
-  return client
-    .start({uri: 'ws://127.0.0.1:5280/xmpp-websocket', domain})
-    .then(id => t.is(id.bare().toString(), JID))
+  return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
 // Prosody 404 https://prosody.im/issues/issue/932
 test.skip('ws IPv6', t => {
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({
+    credentials,
+    service: 'ws://[::1]:5280/xmpp-websocket',
+    domain,
+  })
   debug(client)
   t.context.client = client
-  return client
-    .start({uri: 'ws://[::1]:5280/xmpp-websocket', domain})
-    .then(id => t.is(id.bare().toString(), JID))
+  return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
 test('ws domain', t => {
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({
+    credentials,
+    service: 'ws://localhost:5280/xmpp-websocket',
+  })
   debug(client)
   t.context.client = client
-  return client
-    .start('ws://localhost:5280/xmpp-websocket')
-    .then(id => t.is(id.bare().toString(), JID))
+  return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
 // Prosody 404 https://prosody.im/issues/issue/932
 test.skip('wss IPv4', t => {
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({
+    credentials,
+    service: 'wss://127.0.0.1:5281/xmpp-websocket',
+    domain,
+  })
   debug(client)
   t.context.client = client
-  return client
-    .start({uri: 'wss://127.0.0.1:5281/xmpp-websocket', domain})
-    .then(id => t.is(id.bare().toString(), JID))
+  return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
 // Prosody 404 https://prosody.im/issues/issue/932
 test.skip('wss IPv6', t => {
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({
+    credentials,
+    service: 'wss://[::1]:5281/xmpp-websocket',
+    domain,
+  })
   debug(client)
   t.context.client = client
-  return client
-    .start({uri: 'wss://[::1]:5281/xmpp-websocket', domain})
-    .then(id => t.is(id.bare().toString(), JID))
+  return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
 test('wss domain', t => {
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({
+    credentials,
+    service: 'wss://localhost:5281/xmpp-websocket',
+  })
   debug(client)
   t.context.client = client
-  return client
-    .start('wss://localhost:5281/xmpp-websocket')
-    .then(id => t.is(id.bare().toString(), JID))
+  return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
 test('xmpp IPv4', t => {
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({credentials, service: 'xmpp://127.0.0.1:5222', domain})
   debug(client)
   t.context.client = client
-  return client
-    .start({uri: 'xmpp://127.0.0.1:5222', domain})
-    .then(id => t.is(id.bare().toString(), JID))
+  return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
 test('xmpp IPv6', t => {
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({credentials, service: 'xmpp://[::1]:5222', domain})
   debug(client)
   t.context.client = client
   // No local IPv6 on travis https://github.com/travis-ci/travis-ci/issues/4964
   if (process.env.TRAVIS) {
     return t.pass()
   }
-  return client
-    .start({uri: 'xmpp://[::1]:5222', domain})
-    .then(id => t.is(id.bare().toString(), JID))
+  return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
 test('xmpp domain', t => {
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({credentials, service: 'xmpp://localhost:5222'})
   debug(client)
   t.context.client = client
-  return client
-    .start('xmpp://localhost:5222')
-    .then(id => t.is(id.bare().toString(), JID))
+  return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
 test('xmpps IPv4', t => {
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({
+    credentials,
+    service: 'xmpps://127.0.0.1:5223',
+    domain,
+  })
   debug(client)
   t.context.client = client
-  return client
-    .start({uri: 'xmpps://127.0.0.1:5223', domain})
-    .then(id => t.is(id.bare().toString(), JID))
+  return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
 test('xmpps IPv6', t => {
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({credentials, service: 'xmpps://[::1]:5223', domain})
   debug(client)
   t.context.client = client
   // No local IPv6 on travis https://github.com/travis-ci/travis-ci/issues/4964
   if (process.env.TRAVIS) {
     return t.pass()
   }
-  return client
-    .start({uri: 'xmpps://[::1]:5223', domain})
-    .then(id => t.is(id.bare().toString(), JID))
+  return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
 test('xmpps domain', t => {
-  const {client} = xmpp({credentials})
+  const {client} = xmpp({credentials, service: 'xmpps://localhost:5223'})
   debug(client)
   t.context.client = client
-  return client
-    .start('xmpps://localhost:5223')
-    .then(id => t.is(id.bare().toString(), JID))
+  return client.start().then(id => t.is(id.bare().toString(), JID))
 })

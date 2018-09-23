@@ -16,6 +16,7 @@ const password = 'foobar'
 const credentials = {username, password}
 const domain = 'localhost'
 const JID = jid(username, domain).toString()
+const service = 'ws://localhost:5280/xmpp-websocket'
 
 const xmppjs = readFileSync('./packages/client/dist/xmpp.js', {
   encoding: 'utf-8',
@@ -34,10 +35,13 @@ test.beforeEach(t => {
 })
 
 test('client ws://', t => {
-  const {client} = t.context({credentials})
+  const {client} = t.context({
+    credentials,
+    service,
+  })
   debug(client)
 
-  return client.start('ws://localhost:5280/xmpp-websocket').then(id => {
+  return client.start().then(id => {
     t.is(id.bare().toString(), JID)
   })
 })

@@ -57,12 +57,12 @@ async function fallbackConnect(entity, uris) {
 
 module.exports = function({entity}) {
   const _connect = entity.connect
-  entity.connect = async function connect(domain) {
-    if (domain.length === 0 || domain.match(/:\/\//)) {
-      return _connect.call(this, domain)
+  entity.connect = async function connect(service) {
+    if (!service || service.match(/:\/\//)) {
+      return _connect.call(this, service)
     }
 
-    const uris = filterSupportedURIs(entity, await fetchURIs(domain))
+    const uris = filterSupportedURIs(entity, await fetchURIs(service))
 
     if (uris.length === 0) {
       throw new Error('No compatible transport found.')

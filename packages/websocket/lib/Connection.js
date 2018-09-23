@@ -29,8 +29,8 @@ class ConnectionWebSocket extends Connection {
     return el
   }
 
-  socketParameters(uri) {
-    return uri.match(/^wss?:\/\//) ? uri : undefined
+  socketParameters(service) {
+    return service.match(/^wss?:\/\//) ? service : undefined
   }
 }
 

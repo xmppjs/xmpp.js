@@ -18,18 +18,18 @@ class Client extends Connection {
     return super.send(element, ...args)
   }
 
-  _findTransport(uri) {
+  _findTransport(service) {
     return this.transports.find(Transport => {
       try {
-        return Transport.prototype.socketParameters(uri) !== undefined
+        return Transport.prototype.socketParameters(service) !== undefined
       } catch (err) {
         return false
       }
     })
   }
 
-  connect(uri) {
-    const Transport = this._findTransport(uri)
+  connect(service) {
+    const Transport = this._findTransport(service)
 
     if (!Transport) {
       throw new Error('No compatible connection method found.')
@@ -39,7 +39,7 @@ class Client extends Connection {
     this.Socket = Transport.prototype.Socket
     this.Parser = Transport.prototype.Parser
 
-    return super.connect(uri)
+    return super.connect(service)
   }
 
   socketParameters(...args) {

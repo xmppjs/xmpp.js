@@ -30,7 +30,7 @@ const _mechanisms = {anonymous, scramsha1, plain}
 function xmpp(options = {}) {
   const {resource, credentials} = options
 
-  const client = new Client()
+  const client = new Client(options)
   resolve({entity: client})
   const middleware = _middleware(client)
   const router = _router(middleware)

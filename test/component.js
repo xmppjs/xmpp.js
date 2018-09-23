@@ -6,6 +6,10 @@ const debug = require('../packages/debug')
 const server = require('../server')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+const password = 'foobar'
+const service = 'xmpp://localhost:5347'
+const domain = 'component.localhost'
+const options = {password, service, domain}
 
 test.beforeEach(() => {
   return server.restart()
@@ -18,9 +22,9 @@ test.afterEach(t => {
 })
 
 test.cb('component', t => {
-  t.plan(8)
+  t.plan(6)
 
-  const {component} = xmpp()
+  const {component} = xmpp(options)
   debug(component)
 
   component.on('connect', () => {
@@ -31,23 +35,16 @@ test.cb('component', t => {
     t.true(el instanceof xml.Element)
   })
 
-  component.handle('authenticate', auth => {
-    t.is(typeof auth, 'function')
-    return auth('foobar').then(() => t.pass())
-  })
-
   component.on('online', id => {
     t.true(id instanceof jid.JID)
     t.is(id.toString(), 'component.localhost')
   })
 
-  component
-    .start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
-    .then(id => {
-      t.true(id instanceof jid.JID)
-      t.is(id.toString(), 'component.localhost')
-      component.stop().then(() => t.end())
-    })
+  component.start().then(id => {
+    t.true(id instanceof jid.JID)
+    t.is(id.toString(), 'component.localhost')
+    component.stop().then(() => t.end())
+  })
 
   t.context.component = component
 })
@@ -56,14 +53,10 @@ test.cb('reconnects when server restarts', t => {
   t.plan(2)
   let c = 0
 
-  const {component} = xmpp()
+  const {component} = xmpp(options)
   debug(component)
 
   component.on('error', () => {})
-
-  component.handle('authenticate', auth => {
-    return auth('foobar')
-  })
 
   component.on('online', () => {
     c++
@@ -77,7 +70,7 @@ test.cb('reconnects when server restarts', t => {
     }
   })
 
-  component.start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
+  component.start()
 
   t.context.component = component
 })
@@ -85,12 +78,8 @@ test.cb('reconnects when server restarts', t => {
 test.cb('does not reconnect when stop is called', t => {
   t.plan(5)
 
-  const {component} = xmpp()
+  const {component} = xmpp(options)
   debug(component)
-
-  component.handle('authenticate', auth => {
-    return auth('foobar')
-  })
 
   component.on('online', () => {
     t.pass()
@@ -107,7 +96,7 @@ test.cb('does not reconnect when stop is called', t => {
 
   component.on('offline', () => t.pass())
 
-  component.start({uri: 'xmpp://localhost:5347', domain: 'component.localhost'})
+  component.start()
 
   t.context.component = component
 })
