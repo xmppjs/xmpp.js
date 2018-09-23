@@ -19,7 +19,7 @@ const resolve = require('@xmpp/resolve')
 const starttls = require('@xmpp/starttls')
 const _sasl = require('@xmpp/sasl')
 const _resourceBinding = require('@xmpp/resource-binding')
-const sessionEstablishment = require('@xmpp/session-establishment')
+const _sessionEstablishment = require('@xmpp/session-establishment')
 
 // SASL mechanisms - order matters and define priority
 const anonymous = require('@xmpp/sasl-anonymous')
@@ -38,12 +38,13 @@ function xmpp(options = {}) {
 
   const iqCaller = _iqCaller({middleware, entity: client})
 
+  // Stream features
   if (starttls.streamFeature) {
     streamFeatures.use(...starttls.streamFeature())
   }
   const sasl = _sasl({streamFeatures}, credentials)
   const resourceBinding = _resourceBinding({iqCaller, streamFeatures}, resource)
-  router.use('stream:features', sessionEstablishment({iqCaller}))
+  const sessionEstablishment = _sessionEstablishment({iqCaller, streamFeatures})
 
   const mechanisms = Object.entries(_mechanisms)
     // Ignore browserify stubs
@@ -60,6 +61,7 @@ function xmpp(options = {}) {
       iqCaller,
       sasl,
       resourceBinding,
+      sessionEstablishment,
     },
     // ...features,
     ...mechanisms,

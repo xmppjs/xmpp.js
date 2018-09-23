@@ -7,7 +7,7 @@ test('without resource', async t => {
   const resource = Math.random().toString()
   const jid = 'foo@bar/' + resource
 
-  const {client} = mockClient()
+  const {client, entity} = mockClient()
 
   client.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -27,14 +27,14 @@ test('without resource', async t => {
 
   await delay()
 
-  t.is(client.jid.toString(), jid)
+  t.is(entity.jid.toString(), jid)
 })
 
 test('with string resource', async t => {
   const resource = Math.random().toString()
   const jid = 'foo@bar/' + resource
 
-  const client = mockClient({resource})
+  const {client, entity} = mockClient({resource})
 
   client.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -59,14 +59,14 @@ test('with string resource', async t => {
 
   await delay()
 
-  t.is(client.jid.toString(), jid)
+  t.is(entity.jid.toString(), jid)
 })
 
 test('with function resource', async t => {
   const resource = Math.random().toString()
   const jid = 'foo@bar/' + resource
 
-  const client = mockClient({
+  const {client, entity} = mockClient({
     resource: async bind => {
       await delay()
       t.is((await bind(resource)).toString(), jid)
@@ -96,5 +96,5 @@ test('with function resource', async t => {
 
   await delay()
 
-  t.is(client.jid.toString(), jid)
+  t.is(entity.jid.toString(), jid)
 })
