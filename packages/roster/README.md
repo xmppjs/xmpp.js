@@ -7,14 +7,15 @@ Supports Node.js and browsers.
 ## Install
 
 ```js
-npm install @xmpp/plugins
+npm install @xmpp/roster
 ```
 
 ## Usage
 
-
 ```js
-const roster = client.plugin(require('@xmpp/plugins/roster'))
+const {xmpp} = require('@xmpp/client')
+const {entity, iqCaller, iqCallee} = xmpp(...)
+const roster = require('@xmpp/roster/consumer')({entity, iqCaller, iqCallee})
 ```
 
 ### Get
@@ -24,14 +25,14 @@ Retrieve the roster.
 `ver` is optional and refers to [roster versioning](https://xmpp.org/rfcs/rfc6121.html#roster-versioning-request).
 
 ```js
-roster.get(ver).then([roster, newver] => {
-  if (!roster) {
-    // the roster hasn't changed since last version
-    return
-  }
+const [roster, newever] = await roster.get(ver)
+if (!roster) {
+  // the roster hasn't changed since last version
+  return
+}
 
-  console.log(roster)
-  /*
+console.log(roster)
+/*
   [
     {
       jid: JID('foo@bar'), // see https://github.com/xmppjs/xmpp.js/tree/master/packages/jid
@@ -44,8 +45,7 @@ roster.get(ver).then([roster, newver] => {
     ...
 
   ]
-  */
-})
+*/
 ```
 
 ### Set
@@ -53,9 +53,7 @@ roster.get(ver).then([roster, newver] => {
 Add or update a roster entry.
 
 ```js
-roster.set({jid: 'foo@bar', name: 'Foo Bar'}).then(() => {
-  console.log('success')
-})
+await roster.set({jid: 'foo@bar', name: 'Foo Bar'})
 ```
 
 ### Remove
@@ -63,9 +61,7 @@ roster.set({jid: 'foo@bar', name: 'Foo Bar'}).then(() => {
 Remove a roster entry.
 
 ```js
-roster.remove(jid).then(() => {
-  console.log('success')
-})
+await roster.remove(jid)
 ```
 
 ### Set event

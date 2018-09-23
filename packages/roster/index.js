@@ -1,3 +1,3 @@
 'use strict'
 
-module.exports.caller = require('./caller')
+module.exports.NS = 'jabber:iq:roster'

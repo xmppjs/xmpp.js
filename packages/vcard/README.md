@@ -7,13 +7,13 @@ Supports Node.js and browsers.
 ## Install
 
 ```js
-npm install @xmpp/plugins
+npm install @xmpp/vcard
 ```
 
 ## Usage
 
 ```js
-const vcard = client.plugin(require('@xmpp/plugins/vcard'))
+const vcard = client.plugin(require('@xmpp/vcard/caller'))
 ```
 
 ## set
@@ -36,15 +36,16 @@ vcard.set({
 })
 ```
 
-
 ## get
 
 set vcard
 
 ```js
-vcard.get([service]).then((vcard) => {
-  console.log(vcard)
-  /*
+vcard
+  .get([service])
+  .then(vcard => {
+    console.log(vcard)
+    /*
   {
     FN: 'John',
     N: {
@@ -53,10 +54,10 @@ vcard.get([service]).then((vcard) => {
     }
   }
   */
-})
-.catch((err) => {
-  console.error('couldn\t get vcard', err)
-})
+  })
+  .catch(err => {
+    console.error('couldn\t get vcard', err)
+  })
 ```
 
 ## References

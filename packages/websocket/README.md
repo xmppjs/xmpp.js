@@ -15,8 +15,8 @@ npm install @xmpp/websocket
 ## Usage
 
 ```js
-require('@xmpp/websocket')(client)
-client.start('ws://localhost:5280/xmpp-websocket')
+const websocket = require('@xmpp/websocket')
+websocket(client)
 ```
 
 ## References
