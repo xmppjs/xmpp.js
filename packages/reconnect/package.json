@@ -7,9 +7,6 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.3.0",
   "license": "ISC",
-  "dependencies": {
-    "@xmpp/events": "^0.3.0"
-  },
   "keywords": ["XMPP", "reconnect"],
   "engines": {
     "node": ">= 9.6.1",

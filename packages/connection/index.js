@@ -43,28 +43,31 @@ function socketConnect(socket, ...params) {
   })
 }
 
-function getDomain(uri) {
+function getDomain(service) {
   // WHATWG URL parser requires a protocol
-  if (!uri.includes('://')) {
-    uri = 'http://' + uri
+  if (!service.includes('://')) {
+    service = 'http://' + service
   }
-  const url = new URL(uri)
+  const url = new URL(service)
   // WHATWG URL parser doesn't support non Web protocols in browser
   url.protocol = 'http:'
   return url.hostname
 }
 
 class Connection extends EventEmitter {
-  constructor(options) {
+  constructor(options = {}) {
     super()
+
+    options = Object.assign({}, options)
+    if (!options.domain && options.service) {
+      options.domain = getDomain(options.service)
+    }
+
     this.domain = ''
     this.lang = ''
     this.jid = null
     this.timeout = 2000
-    this.options = typeof options === 'object' ? options : {}
-    this.startOptions = null
-    this.openOptions = null
-    this.connectOptions = null
+    this.options = options
     this.socketListeners = Object.create(null)
     this.parserListeners = Object.create(null)
     this.status = 'offline'
@@ -212,26 +215,17 @@ class Connection extends EventEmitter {
   /**
    * Opens the socket then opens the stream
    */
-  async start(options) {
+  async start() {
     if (this.status !== 'offline') {
       throw new Error('Connection is not offline')
     }
 
-    this.startOptions = options
+    const {service, domain, lang} = this.options
 
-    if (typeof options === 'string') {
-      options = {uri: options}
-    }
-
-    if (!options.domain) {
-      options.domain = getDomain(options.uri)
-    }
-
-    await this.connect(options.uri)
+    await this.connect(service)
 
     const promiseOnline = promise(this, 'online')
 
-    const {domain, lang} = options
     await this.open({domain, lang})
 
     return promiseOnline
@@ -241,12 +235,11 @@ class Connection extends EventEmitter {
    * Connects the socket
    */
   // eslint-disable-next-line require-await
-  async connect(options) {
+  async connect(service) {
     this._status('connecting')
-    this.connectOptions = options
     this._attachSocket(new this.Socket())
     // The 'connect' status is set by the socket 'connect' listener
-    return socketConnect(this.socket, this.socketParameters(options))
+    return socketConnect(this.socket, this.socketParameters(service))
   }
 
   /**
@@ -268,8 +261,6 @@ class Connection extends EventEmitter {
    */
   async open(options) {
     this._status('opening')
-    // Useful for stream-features restart
-    this.openOptions = options
     if (typeof options === 'string') {
       options = {domain: options}
     }
@@ -342,7 +333,8 @@ class Connection extends EventEmitter {
   async restart() {
     this._detachParser()
     this._attachParser(new this.Parser())
-    return this.open(this.openOptions)
+    const {domain, lang} = this.options
+    return this.open({domain, lang})
   }
 
   // eslint-disable-next-line require-await

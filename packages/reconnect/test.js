@@ -20,11 +20,10 @@ test('#reconnect', t => {
   const reconnect = _reconnect(entity)
 
   entity.status = 'foobar'
-  entity.startOptions = {}
+  entity.options = {}
 
-  entity.start = arg => {
+  entity.start = () => {
     t.is(entity.status, 'offline')
-    t.is(arg, entity.startOptions)
     return Promise.resolve()
   }
 

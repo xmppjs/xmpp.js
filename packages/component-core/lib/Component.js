@@ -16,8 +16,8 @@ function getServerDomain(domain) {
 const NS = 'jabber:component:accept'
 
 class Component extends Connection {
-  socketParameters(uri) {
-    const params = super.socketParameters(uri)
+  socketParameters(service) {
+    const params = super.socketParameters(service)
     params.port = params.port || 5347
     return params
   }
@@ -36,30 +36,18 @@ class Component extends Connection {
   }
 
   // https://xmpp.org/extensions/xep-0114.html#example-3
-  open(...args) {
-    return super.open(...args).then(el => {
-      this._status('authenticate')
-      return this.delegate('authenticate', secret =>
-        this.authenticate(el.attrs.id, secret)
-      )
-    })
-  }
-
-  // https://xmpp.org/extensions/xep-0114.html#example-3
   authenticate(id, password) {
-    this._status('authenticating')
     const hash = crypto.createHash('sha1')
     hash.update(id + password, 'binary')
-    return this.sendReceive(
-      xml('handshake', {}, hash.digest('hex'))
-    ).then(el => {
-      if (el.name !== 'handshake') {
-        throw new Error('Unexpected server response')
+    return this.sendReceive(xml('handshake', {}, hash.digest('hex'))).then(
+      el => {
+        if (el.name !== 'handshake') {
+          throw new Error('Unexpected server response')
+        }
+        this._jid(this.domain)
+        this._status('online', this.jid)
       }
-      this._status('authenticated')
-      this._jid(this.domain)
-      this._status('online', this.jid)
-    })
+    )
   }
 }
 
