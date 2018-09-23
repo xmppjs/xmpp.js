@@ -53,8 +53,11 @@ function xmpp(options = {}) {
   const exports = Object.assign(
     {
       client,
+      entity: client,
       middleware,
       router,
+      streamFeatures,
+      iqCaller,
       sasl,
       resourceBinding,
     },

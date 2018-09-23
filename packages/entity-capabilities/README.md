@@ -6,17 +6,15 @@ Supports Node.js and browsers.
 
 ## Install
 
-```js
-npm install @xmpp/plugins
+```
+npm install @xmpp/entity-capabilities
 ```
 
 ## Usage
 
 ```js
-const caps = client.plugin(require('@xmpp/plugins/entity-capabilities'))
+const caps = require('@xmpp/plugins/entity-capabilities')
 ```
-
-This plugin will automatically add your entity capabilities to outgoing presences.
 
 ## References
 

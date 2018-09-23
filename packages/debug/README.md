@@ -12,7 +12,7 @@ npm install @xmpp/debug
 
 ```javascript
 // file.js
-const xmpp = require('@xmpp/client') // or component, ...
+const {xmpp} = require('@xmpp/client') // or component, ...
 const debug = require('@xmpp/debug')
 const entity = xmpp()
 debug(entity)

@@ -5,5 +5,5 @@ const context = require('./context')
 
 module.exports = function(options) {
   const _ = xmpp(options)
-  return Object.assign(_.client, context(_.client), {client: _.client})
+  return Object.assign(_, {client: context(_.client)})
 }

@@ -1,26 +1,18 @@
 'use strict'
 
 const test = require('ava')
-const {context} = require('@xmpp/test')
-const _middleware = require('@xmpp/middleware')
-const _iqCaller = require('@xmpp/iq/caller')
+const {mockClient, promise} = require('@xmpp/test')
+
 const _iqCallee = require('@xmpp/iq/callee')
-const _rosterCaller = require('./caller')
-const {promise} = require('@xmpp/events')
+const _roster = require('./consumer')
 const JID = require('@xmpp/jid')
 
-test.beforeEach(t => {
-  const ctx = context()
-  const {entity} = ctx
-  const middleware = _middleware(entity)
-  const iqCaller = _iqCaller({middleware, entity})
-  const iqCallee = _iqCallee({middleware, entity})
-  ctx.rosterCaller = _rosterCaller({iqCaller, entity, iqCallee})
-  t.context = ctx
-})
-
 test('get', t => {
-  t.context.scheduleIncomingResult(
+  const {client, entity, iqCaller, middleware} = mockClient()
+  const iqCallee = _iqCallee({middleware, entity})
+  const roster = _roster({entity, iqCaller, iqCallee})
+
+  client.scheduleIncomingResult(
     <query xmlns="jabber:iq:roster" ver="ver1">
       <item jid="foo@foobar.com" ask="subscribe" name="Foo" subscription="both">
         <group>Friends</group>
@@ -36,10 +28,10 @@ test('get', t => {
   )
 
   return Promise.all([
-    t.context.catchOutgoingGet().then(child => {
+    client.catchOutgoingGet().then(child => {
       t.deepEqual(child, <query xmlns="jabber:iq:roster" />)
     }),
-    t.context.rosterCaller.get().then(val => {
+    roster.get().then(val => {
       t.deepEqual(val, [
         [
           {
@@ -66,38 +58,50 @@ test('get', t => {
 })
 
 test('get empty roster', t => {
-  t.context.scheduleIncomingResult(<query xmlns="jabber:iq:roster" />)
+  const {client, entity, iqCaller, middleware} = mockClient()
+  const iqCallee = _iqCallee({middleware, entity})
+  const roster = _roster({entity, iqCaller, iqCallee})
 
-  return t.context.rosterCaller.get().then(val => {
+  client.scheduleIncomingResult(<query xmlns="jabber:iq:roster" />)
+
+  return roster.get().then(val => {
     t.deepEqual(val, [[], undefined])
   })
 })
 
 test('get with ver, no changes', t => {
-  t.context.scheduleIncomingResult()
+  const {client, entity, iqCaller, middleware} = mockClient()
+  const iqCallee = _iqCallee({middleware, entity})
+  const roster = _roster({entity, iqCaller, iqCallee})
+
+  client.scheduleIncomingResult()
 
   return Promise.all([
-    t.context.catchOutgoingGet().then(child => {
+    client.catchOutgoingGet().then(child => {
       t.deepEqual(child, <query xmlns="jabber:iq:roster" ver="ver6" />)
     }),
-    t.context.rosterCaller.get('ver6').then(val => {
+    roster.get('ver6').then(val => {
       t.deepEqual(val, [])
     }),
   ])
 })
 
 test('get with ver, new roster', t => {
-  t.context.scheduleIncomingResult(
+  const {client, entity, iqCaller, middleware} = mockClient()
+  const iqCallee = _iqCallee({middleware, entity})
+  const roster = _roster({entity, iqCaller, iqCallee})
+
+  client.scheduleIncomingResult(
     <query xmlns="jabber:iq:roster" ver="ver7">
       <item jid="foo@bar" />
     </query>
   )
 
   return Promise.all([
-    t.context.catchOutgoingGet().then(child => {
+    client.catchOutgoingGet().then(child => {
       t.deepEqual(child, <query xmlns="jabber:iq:roster" ver="ver6" />)
     }),
-    t.context.rosterCaller.get('ver6').then(val => {
+    roster.get('ver6').then(val => {
       t.deepEqual(val, [
         [
           {
@@ -116,10 +120,14 @@ test('get with ver, new roster', t => {
 })
 
 test('set with string', t => {
-  t.context.scheduleIncomingResult()
+  const {client, entity, iqCaller, middleware} = mockClient()
+  const iqCallee = _iqCallee({middleware, entity})
+  const roster = _roster({entity, iqCaller, iqCallee})
+
+  client.scheduleIncomingResult()
 
   return Promise.all([
-    t.context.catchOutgoingSet().then(child => {
+    client.catchOutgoingSet().then(child => {
       t.deepEqual(
         child,
         <query xmlns="jabber:iq:roster">
@@ -127,17 +135,21 @@ test('set with string', t => {
         </query>
       )
     }),
-    t.context.rosterCaller.set('foo@bar').then(val => {
+    roster.set('foo@bar').then(val => {
       t.deepEqual(val, undefined)
     }),
   ])
 })
 
 test('set with jid', t => {
-  t.context.scheduleIncomingResult()
+  const {client, entity, iqCaller, middleware} = mockClient()
+  const iqCallee = _iqCallee({middleware, entity})
+  const roster = _roster({entity, iqCaller, iqCallee})
+
+  client.scheduleIncomingResult()
 
   return Promise.all([
-    t.context.catchOutgoingSet().then(child => {
+    client.catchOutgoingSet().then(child => {
       t.deepEqual(
         child,
         <query xmlns="jabber:iq:roster">
@@ -145,17 +157,21 @@ test('set with jid', t => {
         </query>
       )
     }),
-    t.context.rosterCaller.set(new JID('foo@bar')).then(val => {
+    roster.set(new JID('foo@bar')).then(val => {
       t.deepEqual(val, undefined)
     }),
   ])
 })
 
 test('set with object', t => {
-  t.context.scheduleIncomingResult()
+  const {client, entity, iqCaller, middleware} = mockClient()
+  const iqCallee = _iqCallee({middleware, entity})
+  const roster = _roster({entity, iqCaller, iqCallee})
+
+  client.scheduleIncomingResult()
 
   return Promise.all([
-    t.context.catchOutgoingSet().then(child => {
+    client.catchOutgoingSet().then(child => {
       t.deepEqual(
         child,
         <query xmlns="jabber:iq:roster">
@@ -166,7 +182,7 @@ test('set with object', t => {
         </query>
       )
     }),
-    t.context.rosterCaller
+    roster
       .set({jid: 'foo@bar', groups: ['a', 'b'], name: 'foobar'})
       .then(val => {
         t.deepEqual(val, undefined)
@@ -175,10 +191,14 @@ test('set with object', t => {
 })
 
 test('remove', t => {
-  t.context.scheduleIncomingResult()
+  const {client, entity, iqCaller, middleware} = mockClient()
+  const iqCallee = _iqCallee({middleware, entity})
+  const roster = _roster({entity, iqCaller, iqCallee})
+
+  client.scheduleIncomingResult()
 
   return Promise.all([
-    t.context.catchOutgoingSet().then(child => {
+    client.catchOutgoingSet().then(child => {
       t.deepEqual(
         child,
         <query xmlns="jabber:iq:roster">
@@ -186,19 +206,23 @@ test('remove', t => {
         </query>
       )
     }),
-    t.context.rosterCaller.remove('foo@bar').then(val => {
+    roster.remove('foo@bar').then(val => {
       t.deepEqual(val, undefined)
     }),
   ])
 })
 
-test.serial('push remove', t => {
+test('push remove', t => {
+  const {client, entity, iqCaller, middleware} = mockClient()
+  const iqCallee = _iqCallee({middleware, entity})
+  const roster = _roster({entity, iqCaller, iqCallee})
+
   return Promise.all([
-    promise(t.context.rosterCaller, 'remove').then(([jid, ver]) => {
+    promise(roster, 'remove').then(([jid, ver]) => {
       t.deepEqual(jid, new JID('foo@bar'))
       t.is(ver, 'v1')
     }),
-    t.context
+    client
       .fakeIncomingSet(
         <query xmlns="jabber:iq:roster" ver="v1">
           <item jid="foo@bar" subscription="remove" />
@@ -210,9 +234,13 @@ test.serial('push remove', t => {
   ])
 })
 
-test.serial('push set', t => {
+test('push set', t => {
+  const {client, entity, iqCaller, middleware} = mockClient()
+  const iqCallee = _iqCallee({middleware, entity})
+  const roster = _roster({entity, iqCaller, iqCallee})
+
   return Promise.all([
-    promise(t.context.rosterCaller, 'set').then(([item, ver]) => {
+    promise(roster, 'set').then(([item, ver]) => {
       t.deepEqual(item, {
         jid: new JID('foo@bar'),
         name: '',
@@ -223,7 +251,7 @@ test.serial('push set', t => {
       })
       t.is(ver, undefined)
     }),
-    t.context
+    client
       .fakeIncomingSet(
         <query xmlns="jabber:iq:roster">
           <item jid="foo@bar" subscription="none" />

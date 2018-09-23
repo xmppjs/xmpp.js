@@ -15,14 +15,11 @@
     "yarn": ">= 1.0.0"
   },
   "dependencies": {
-    "@xmpp/events": "^0.3.0",
     "@xmpp/jid": "^0.3.0",
     "@xmpp/xml": "^0.3.0"
   },
   "devDependencies": {
-    "@xmpp/events": "^0.3.0",
     "@xmpp/iq": "^0.3.0",
-    "@xmpp/jid": "^0.3.0",
     "@xmpp/middleware": "^0.3.0"
   }
 }
