@@ -1,6 +1,6 @@
 'use strict'
 
-// Makes xmpp.js package exports all other packages
+// Makes xmpp.js package require and exports all other packages
 
 const fs = require('fs')
 const path = require('path')
@@ -20,13 +20,4 @@ pkg.dependencies = packages.reduce((dict, name) => {
 fs.writeFileSync(
   path.join(__dirname, 'package.json'),
   JSON.stringify(pkg, null, 2) + '\n'
-)
-
-// Write index.js
-fs.writeFileSync(
-  path.join(__dirname, 'index.js'),
-  packages.reduce((s, name) => {
-    s += `module.exports['${name}'] = require('@xmpp/${name}')\n`
-    return s
-  }, `'use strict'\n\n`)
 )

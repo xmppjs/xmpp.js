@@ -16,7 +16,7 @@ const _iqCaller = require('@xmpp/iq/caller')
 const resolve = require('@xmpp/resolve')
 
 // Stream features - order matters and define priority
-const _starttls = require('@xmpp/starttls')
+const _starttls = require('@xmpp/starttls/client')
 const _sasl = require('@xmpp/sasl')
 const _resourceBinding = require('@xmpp/resource-binding')
 const _sessionEstablishment = require('@xmpp/session-establishment')
