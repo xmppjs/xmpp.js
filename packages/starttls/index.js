@@ -2,7 +2,6 @@
 
 const xml = require('@xmpp/xml')
 const tls = require('tls')
-const net = require('net')
 
 /*
  * References
@@ -11,43 +10,33 @@ const net = require('net')
 
 const NS = 'urn:ietf:params:xml:ns:xmpp-tls'
 
-function proceed(entity, options) {
+function proceed(entity, options = {}) {
   return new Promise((resolve, reject) => {
-    options.socket = entity.socket
-    entity._detachSocket()
-    const tlsSocket = tls.connect(options, err => {
-      if (err) {
-        return reject(err)
+    options.socket = entity._detachSocket()
+    const tlsSocket = tls.connect(
+      options,
+      err => {
+        if (err) return reject(err)
+        entity._attachSocket(tlsSocket)
+        resolve()
       }
-      entity._attachSocket(tlsSocket)
-      resolve()
-    })
+    )
   })
 }
 
-function starttls(entity) {
-  return entity.sendReceive(xml('starttls', {xmlns: NS})).then(element => {
-    if (element.is('failure', NS)) {
-      throw new Error('STARTTLS_FAILURE')
-    } else if (element.is('proceed', NS)) {
-      return proceed(entity, {})
-    }
-  })
-}
-
-function route() {
-  return function({entity}, next) {
-    // https://prosody.im/issues/issue/837
-    if (entity.socket.constructor !== net.Socket) return next()
-    return starttls(entity).then(() => {
-      return entity.restart()
-    })
+async function starttls(entity) {
+  const element = await entity.sendReceive(xml('starttls', {xmlns: NS}))
+  if (element.is('proceed', NS)) {
+    return element
   }
+
+  throw new Error('STARTTLS_FAILURE')
 }
 
-module.exports.proceed = proceed
-module.exports.starttls = starttls
-module.exports.route = route
-module.exports.streamFeature = function() {
-  return ['starttls', NS, route()]
+module.exports = function({streamFeatures}) {
+  return streamFeatures.use('starttls', NS, async ({entity}) => {
+    await starttls(entity)
+    await proceed(entity)
+    await entity.restart()
+  })
 }

@@ -2,6 +2,8 @@
 
 const xml = require('@xmpp/xml')
 
+// https://tools.ietf.org/html/draft-cridland-xmpp-session-01
+
 const NS = 'urn:ietf:params:xml:ns:xmpp-session'
 
 module.exports = function({iqCaller, streamFeatures}) {

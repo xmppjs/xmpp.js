@@ -20,7 +20,7 @@ pidfile = "prosody.pid";
 allow_registration = true;
 
 allow_unencrypted_plain_auth = true;
-c2s_require_encryption = false
+c2s_require_encryption = false;
 
 consider_websocket_secure = true;
 consider_bosh_secure = true;
