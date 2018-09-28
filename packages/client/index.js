@@ -16,7 +16,7 @@ const _iqCaller = require('@xmpp/iq/caller')
 const resolve = require('@xmpp/resolve')
 
 // Stream features - order matters and define priority
-const starttls = require('@xmpp/starttls')
+const _starttls = require('@xmpp/starttls')
 const _sasl = require('@xmpp/sasl')
 const _resourceBinding = require('@xmpp/resource-binding')
 const _sessionEstablishment = require('@xmpp/session-establishment')
@@ -39,9 +39,8 @@ function xmpp(options = {}) {
   const iqCaller = _iqCaller({middleware, entity: client})
 
   // Stream features
-  if (starttls.streamFeature) {
-    streamFeatures.use(...starttls.streamFeature())
-  }
+  const starttls =
+    typeof _starttls === 'function' ? _starttls({streamFeatures}) : undefined
   const sasl = _sasl({streamFeatures}, credentials)
   const resourceBinding = _resourceBinding({iqCaller, streamFeatures}, resource)
   const sessionEstablishment = _sessionEstablishment({iqCaller, streamFeatures})
@@ -59,6 +58,7 @@ function xmpp(options = {}) {
       router,
       streamFeatures,
       iqCaller,
+      starttls,
       sasl,
       resourceBinding,
       sessionEstablishment,

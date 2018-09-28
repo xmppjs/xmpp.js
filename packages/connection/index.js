@@ -38,7 +38,6 @@ function socketConnect(socket, ...params) {
 
     socket.once('error', onError)
     socket.once('connect', onConnect)
-
     socket.connect(...params)
   })
 }
@@ -136,12 +135,13 @@ class Connection extends EventEmitter {
   }
 
   _detachSocket() {
-    const listeners = this.socketListeners
-    Object.getOwnPropertyNames(listeners).forEach(k => {
-      this.socket.removeListener(k, listeners[k])
-      delete listeners[k]
+    const {socketListeners, socket} = this
+    Object.getOwnPropertyNames(socketListeners).forEach(k => {
+      socket.removeListener(k, socketListeners[k])
+      delete socketListeners[k]
     })
     this.socket = null
+    return socket
   }
 
   _onElement(element) {
