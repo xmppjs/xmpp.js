@@ -11,8 +11,7 @@
   "dependencies": {
     "@xmpp/component-core": "^0.3.0",
     "@xmpp/middleware": "^0.3.0",
-    "@xmpp/reconnect": "^0.3.0",
-    "@xmpp/router": "^0.3.0"
+    "@xmpp/reconnect": "^0.3.0"
   },
   "engines": {
     "node": ">= 9.6.1",

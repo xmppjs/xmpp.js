@@ -4,8 +4,7 @@ const {Component, xml, jid} = require('@xmpp/component-core')
 
 const reconnect = require('@xmpp/reconnect')
 const middleware = require('@xmpp/middleware')
-const router = require('@xmpp/router')
-const packages = {reconnect, middleware, router}
+const packages = {reconnect, middleware}
 
 function xmpp(options) {
   const {password, service, domain} = options

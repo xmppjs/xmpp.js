@@ -9,7 +9,6 @@ const tls = require('@xmpp/tls')
 const packages = {reconnect, tcp, websocket, tls}
 
 const _middleware = require('@xmpp/middleware')
-const _router = require('@xmpp/router')
 const _streamFeatures = require('@xmpp/stream-features')
 
 const _iqCaller = require('@xmpp/iq/caller')
@@ -25,7 +24,6 @@ const _sessionEstablishment = require('@xmpp/session-establishment')
 const anonymous = require('@xmpp/sasl-anonymous')
 const scramsha1 = require('@xmpp/sasl-scram-sha-1')
 const plain = require('@xmpp/sasl-plain')
-const _mechanisms = {anonymous, scramsha1, plain}
 
 function xmpp(options = {}) {
   const {resource, credentials} = options
@@ -33,19 +31,18 @@ function xmpp(options = {}) {
   const client = new Client(options)
   resolve({entity: client})
   const middleware = _middleware(client)
-  const router = _router(middleware)
   const streamFeatures = _streamFeatures(middleware)
-
   const iqCaller = _iqCaller({middleware, entity: client})
 
-  // Stream features
+  // Stream features - order matters and define priority
   const starttls =
     typeof _starttls === 'function' ? _starttls({streamFeatures}) : undefined
   const sasl = _sasl({streamFeatures}, credentials)
   const resourceBinding = _resourceBinding({iqCaller, streamFeatures}, resource)
   const sessionEstablishment = _sessionEstablishment({iqCaller, streamFeatures})
 
-  const mechanisms = Object.entries(_mechanisms)
+  // SASL mechanisms - order matters and define priority
+  const mechanisms = Object.entries({anonymous, scramsha1, plain})
     // Ignore browserify stubs
     .filter(([, v]) => typeof v === 'function')
     .map(([k, v]) => ({[k]: v(sasl)}))
@@ -55,7 +52,6 @@ function xmpp(options = {}) {
       client,
       entity: client,
       middleware,
-      router,
       streamFeatures,
       iqCaller,
       starttls,

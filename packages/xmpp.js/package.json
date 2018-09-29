@@ -36,7 +36,6 @@
     "@xmpp/resolve": "^0.3.0",
     "@xmpp/resource-binding": "^0.3.0",
     "@xmpp/roster": "^0.3.0",
-    "@xmpp/router": "^0.3.0",
     "@xmpp/sasl": "^0.3.0",
     "@xmpp/sasl-anonymous": "^0.3.0",
     "@xmpp/sasl-plain": "^0.3.0",
