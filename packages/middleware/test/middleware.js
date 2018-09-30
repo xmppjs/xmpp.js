@@ -8,7 +8,8 @@ const middleware = require('..')
 
 test.beforeEach(t => {
   t.context = context()
-  t.context.middleware = middleware(t.context.entity)
+  const {entity} = t.context
+  t.context.middleware = middleware({entity})
 })
 
 test.cb('use', t => {

@@ -2,17 +2,14 @@
 
 const {xml, jid, Client} = require('@xmpp/client-core')
 
-const reconnect = require('@xmpp/reconnect')
-const tcp = require('@xmpp/tcp')
-const websocket = require('@xmpp/websocket')
-const tls = require('@xmpp/tls')
-const packages = {reconnect, tcp, websocket, tls}
-
+const _reconnect = require('@xmpp/reconnect')
+const _websocket = require('@xmpp/websocket')
+const _tcp = require('@xmpp/tcp')
+const _tls = require('@xmpp/tls')
 const _middleware = require('@xmpp/middleware')
 const _streamFeatures = require('@xmpp/stream-features')
-
 const _iqCaller = require('@xmpp/iq/caller')
-const resolve = require('@xmpp/resolve')
+const _resolve = require('@xmpp/resolve')
 
 // Stream features - order matters and define priority
 const _starttls = require('@xmpp/starttls/client')
@@ -25,52 +22,73 @@ const anonymous = require('@xmpp/sasl-anonymous')
 const scramsha1 = require('@xmpp/sasl-scram-sha-1')
 const plain = require('@xmpp/sasl-plain')
 
-function xmpp(options = {}) {
-  const {resource, credentials} = options
+const URL = global.URL || require('url').URL // eslint-disable-line node/no-unsupported-features/node-builtins
 
-  const client = new Client(options)
-  resolve({entity: client})
-  const middleware = _middleware(client)
-  const streamFeatures = _streamFeatures(middleware)
-  const iqCaller = _iqCaller({middleware, entity: client})
+function getDomain(service) {
+  // WHATWG URL parser requires a protocol
+  if (!service.includes('://')) {
+    service = 'http://' + service
+  }
+  const url = new URL(service)
+  // WHATWG URL parser doesn't support non Web protocols in browser
+  url.protocol = 'http:'
+  return url.hostname
+}
 
+function client(options = {}) {
+  const {resource, username, password, domain, service} = options
+  if (!domain && service) {
+    options.domain = getDomain(service)
+  }
+  const credentials = options.credentials || {username, password}
+
+  const entity = new Client(options)
+
+  const reconnect = _reconnect({entity})
+  const websocket = _websocket({entity})
+  const tcp = typeof _tcp === 'function' ? _tcp({entity}) : undefined
+  const tls = typeof _tls === 'function' ? _tls({entity}) : undefined
+
+  const middleware = _middleware({entity})
+  const streamFeatures = _streamFeatures({middleware})
+  const iqCaller = _iqCaller({middleware, entity})
+  const resolve = _resolve({entity})
   // Stream features - order matters and define priority
   const starttls =
     typeof _starttls === 'function' ? _starttls({streamFeatures}) : undefined
   const sasl = _sasl({streamFeatures}, credentials)
   const resourceBinding = _resourceBinding({iqCaller, streamFeatures}, resource)
   const sessionEstablishment = _sessionEstablishment({iqCaller, streamFeatures})
-
   // SASL mechanisms - order matters and define priority
   const mechanisms = Object.entries({anonymous, scramsha1, plain})
     // Ignore browserify stubs
     .filter(([, v]) => typeof v === 'function')
     .map(([k, v]) => ({[k]: v(sasl)}))
 
-  const exports = Object.assign(
-    {
-      client,
-      entity: client,
-      middleware,
-      streamFeatures,
-      iqCaller,
-      starttls,
-      sasl,
-      resourceBinding,
-      sessionEstablishment,
-    },
-    // ...features,
-    ...mechanisms,
-    ...Object.entries(packages)
-      // Ignore browserify stubs
-      .filter(([, v]) => typeof v === 'function')
-      .map(([k, v]) => ({[k]: v(client)}))
-  )
-
-  return exports
+  return Object.assign(entity, {
+    entity,
+    // FIXME remove
+    client: entity,
+    reconnect,
+    tcp,
+    websocket,
+    tls,
+    middleware,
+    streamFeatures,
+    iqCaller,
+    resolve,
+    starttls,
+    sasl,
+    resourceBinding,
+    sessionEstablishment,
+    mechanisms,
+  })
 }
 
 module.exports.Client = Client
 module.exports.xml = xml
 module.exports.jid = jid
-module.exports.xmpp = xmpp
+module.exports.client = client
+module.exports.getDomain = getDomain
+// FIXME remove
+module.exports.xmpp = client

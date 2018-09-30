@@ -2,40 +2,42 @@
 
 const {Component, xml, jid} = require('@xmpp/component-core')
 
-const reconnect = require('@xmpp/reconnect')
-const middleware = require('@xmpp/middleware')
-const packages = {reconnect, middleware}
+const _reconnect = require('@xmpp/reconnect')
+const _middleware = require('@xmpp/middleware')
 
-function xmpp(options) {
+function component(options) {
   const {password, service, domain} = options
 
-  const component = new Component({service, domain})
+  const entity = new Component({service, domain})
 
-  component.on('open', async el => {
+  const reconnect = _reconnect({entity})
+  const middleware = _middleware({entity})
+
+  entity.on('open', async el => {
     try {
       const {id} = el.attrs
       if (typeof password === 'function') {
-        await password(creds => component.authenticate(id, creds))
+        await password(creds => entity.authenticate(id, creds))
       } else {
-        await component.authenticate(id, password)
+        await entity.authenticate(id, password)
       }
     } catch (err) {
-      component.emit('error', err)
+      entity.emit('error', err)
     }
   })
 
-  return Object.assign(
-    {
-      component,
-    },
-    Object.entries(packages)
-      // Ignore browserify stubs
-      .filter(([, v]) => typeof v === 'function')
-      .map(([k, v]) => ({[k]: v(component)}))
-  )
+  return Object.assign(entity, {
+    entity,
+    // FIXME remove
+    component: entity,
+    reconnect,
+    middleware,
+  })
 }
 
 module.exports.Component = Component
 module.exports.xml = xml
 module.exports.jid = jid
-module.exports.xmpp = xmpp
+module.exports.component = component
+// FIXME remove
+module.exports.xmpp = component

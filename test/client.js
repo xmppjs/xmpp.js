@@ -23,7 +23,7 @@ test.afterEach(t => {
   }
 })
 
-test.cb('client', t => {
+test.serial.cb('client', t => {
   t.plan(7)
 
   const {client} = xmpp({credentials, service: domain})
@@ -38,21 +38,21 @@ test.cb('client', t => {
     t.true(el instanceof xml.Element)
   })
 
-  client.on('online', id => {
-    t.true(id instanceof jid.JID)
-    t.is(id.bare().toString(), JID)
+  client.on('online', address => {
+    t.true(address instanceof jid.JID)
+    t.is(address.bare().toString(), JID)
   })
 
-  client.start().then(id => {
-    t.true(id instanceof jid.JID)
-    t.is(id.bare().toString(), JID)
+  client.start().then(address => {
+    t.true(address instanceof jid.JID)
+    t.is(address.bare().toString(), JID)
     t.end()
   })
 
   t.context.client = client
 })
 
-test.cb('bad credentials', t => {
+test.serial.cb('bad credentials', t => {
   t.plan(6)
 
   const {client} = xmpp({
@@ -86,7 +86,7 @@ test.cb('bad credentials', t => {
   t.context.client = client
 })
 
-test.cb('reconnects when server restarts', t => {
+test.serial.cb('reconnects when server restarts', t => {
   t.plan(2)
   let c = 0
 
@@ -95,7 +95,7 @@ test.cb('reconnects when server restarts', t => {
 
   client.on('error', () => {})
 
-  client.on('online', () => {
+  client.on('online', async () => {
     c++
     t.pass()
     if (c === 2) {
@@ -103,7 +103,7 @@ test.cb('reconnects when server restarts', t => {
         t.end()
       })
     } else {
-      server.restart()
+      await server.restart()
     }
   })
 
@@ -112,7 +112,7 @@ test.cb('reconnects when server restarts', t => {
   t.context.client = client
 })
 
-test.cb('does not reconnect when stop is called', t => {
+test.serial.cb('does not reconnect when stop is called', t => {
   t.plan(5)
 
   const {client} = xmpp({service: domain, credentials})
@@ -138,7 +138,7 @@ test.cb('does not reconnect when stop is called', t => {
   t.context.client = client
 })
 
-test.cb('anonymous authentication', t => {
+test.serial.cb('anonymous authentication', t => {
   t.plan(5)
 
   const {client} = xmpp({service: domain, domain: 'anon.' + domain})
@@ -164,7 +164,7 @@ test.cb('anonymous authentication', t => {
   t.context.client = client
 })
 
-test('auto', t => {
+test.serial('auto', t => {
   const {client} = xmpp({credentials, service: domain})
   debug(client)
   t.context.client = client
@@ -172,7 +172,7 @@ test('auto', t => {
 })
 
 // Prosody 404 https://prosody.im/issues/issue/932
-test.skip('ws IPv4', t => {
+test.serial.skip('ws IPv4', t => {
   const {client} = xmpp({
     credentials,
     service: 'ws://127.0.0.1:5280/xmpp-websocket',
@@ -184,7 +184,7 @@ test.skip('ws IPv4', t => {
 })
 
 // Prosody 404 https://prosody.im/issues/issue/932
-test.skip('ws IPv6', t => {
+test.serial.skip('ws IPv6', t => {
   const {client} = xmpp({
     credentials,
     service: 'ws://[::1]:5280/xmpp-websocket',
@@ -195,7 +195,7 @@ test.skip('ws IPv6', t => {
   return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
-test('ws domain', t => {
+test.serial('ws domain', t => {
   const {client} = xmpp({
     credentials,
     service: 'ws://localhost:5280/xmpp-websocket',
@@ -206,7 +206,7 @@ test('ws domain', t => {
 })
 
 // Prosody 404 https://prosody.im/issues/issue/932
-test.skip('wss IPv4', t => {
+test.serial.skip('wss IPv4', t => {
   const {client} = xmpp({
     credentials,
     service: 'wss://127.0.0.1:5281/xmpp-websocket',
@@ -218,7 +218,7 @@ test.skip('wss IPv4', t => {
 })
 
 // Prosody 404 https://prosody.im/issues/issue/932
-test.skip('wss IPv6', t => {
+test.serial.skip('wss IPv6', t => {
   const {client} = xmpp({
     credentials,
     service: 'wss://[::1]:5281/xmpp-websocket',
@@ -229,7 +229,7 @@ test.skip('wss IPv6', t => {
   return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
-test('wss domain', t => {
+test.serial('wss domain', t => {
   const {client} = xmpp({
     credentials,
     service: 'wss://localhost:5281/xmpp-websocket',
@@ -239,14 +239,14 @@ test('wss domain', t => {
   return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
-test('xmpp IPv4', t => {
+test.serial('xmpp IPv4', t => {
   const {client} = xmpp({credentials, service: 'xmpp://127.0.0.1:5222', domain})
   debug(client)
   t.context.client = client
   return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
-test('xmpp IPv6', t => {
+test.serial('xmpp IPv6', t => {
   const {client} = xmpp({credentials, service: 'xmpp://[::1]:5222', domain})
   debug(client)
   t.context.client = client
@@ -257,14 +257,14 @@ test('xmpp IPv6', t => {
   return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
-test('xmpp domain', t => {
+test.serial('xmpp domain', t => {
   const {client} = xmpp({credentials, service: 'xmpp://localhost:5222'})
   debug(client)
   t.context.client = client
   return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
-test('xmpps IPv4', t => {
+test.serial('xmpps IPv4', t => {
   const {client} = xmpp({
     credentials,
     service: 'xmpps://127.0.0.1:5223',
@@ -275,7 +275,7 @@ test('xmpps IPv4', t => {
   return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
-test('xmpps IPv6', t => {
+test.serial('xmpps IPv6', t => {
   const {client} = xmpp({credentials, service: 'xmpps://[::1]:5223', domain})
   debug(client)
   t.context.client = client
@@ -286,7 +286,7 @@ test('xmpps IPv6', t => {
   return client.start().then(id => t.is(id.bare().toString(), JID))
 })
 
-test('xmpps domain', t => {
+test.serial('xmpps domain', t => {
   const {client} = xmpp({credentials, service: 'xmpps://localhost:5223'})
   debug(client)
   t.context.client = client

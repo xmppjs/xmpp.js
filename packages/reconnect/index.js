@@ -62,7 +62,7 @@ class Reconnect extends EventEmitter {
   }
 }
 
-module.exports = function reconnect(entity) {
+module.exports = function reconnect({entity}) {
   const r = new Reconnect(entity)
   r.start()
   return r

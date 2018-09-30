@@ -8,7 +8,7 @@ const _iqCaller = require('./caller')
 test.beforeEach(t => {
   const ctx = context()
   const {entity} = ctx
-  const middleware = _middleware(entity)
+  const middleware = _middleware({entity})
   ctx.iqCaller = _iqCaller({middleware, entity})
   t.context = ctx
 })

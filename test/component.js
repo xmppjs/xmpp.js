@@ -21,7 +21,7 @@ test.afterEach(t => {
   }
 })
 
-test.cb('component', t => {
+test.serial.cb('component', t => {
   t.plan(6)
 
   const {component} = xmpp(options)
@@ -49,7 +49,7 @@ test.cb('component', t => {
   t.context.component = component
 })
 
-test.cb('reconnects when server restarts', t => {
+test.serial.cb('reconnects when server restarts', t => {
   t.plan(2)
   let c = 0
 
@@ -75,7 +75,7 @@ test.cb('reconnects when server restarts', t => {
   t.context.component = component
 })
 
-test.cb('does not reconnect when stop is called', t => {
+test.serial.cb('does not reconnect when stop is called', t => {
   t.plan(5)
 
   const {component} = xmpp(options)

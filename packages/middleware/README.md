@@ -17,7 +17,7 @@ const {Client} = require('@xmpp/client')
 const middleware = require('@xmpp/middlware')
 
 const client = new Client()
-const app = middleware(client)
+const app = middleware({entity: client})
 ```
 
 ### use

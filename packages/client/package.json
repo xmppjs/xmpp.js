@@ -24,6 +24,7 @@
     "@xmpp/websocket": "^0.3.0"
   },
   "browser": {
+    "url": false,
     "@xmpp/tcp": false,
     "@xmpp/tls": false,
     "@xmpp/starttls": false,

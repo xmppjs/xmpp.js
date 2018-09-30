@@ -6,7 +6,7 @@ const EventEmitter = require('events')
 
 test('it schedule a reconnect when disconnect is emitted', t => {
   const entity = new EventEmitter()
-  const reconnect = _reconnect(entity)
+  const reconnect = _reconnect({entity})
 
   reconnect.scheduleReconnect = () => {
     t.pass()
@@ -17,7 +17,7 @@ test('it schedule a reconnect when disconnect is emitted', t => {
 
 test('#reconnect', t => {
   const entity = new EventEmitter()
-  const reconnect = _reconnect(entity)
+  const reconnect = _reconnect({entity})
 
   entity.status = 'foobar'
   entity.options = {}

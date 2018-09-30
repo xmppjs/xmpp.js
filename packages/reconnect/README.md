@@ -8,19 +8,7 @@ Supports Node.js and browsers.
 
 Each reconnect will re-use the options provided to the entity `start` method.
 
-## Install
-
-```
-npm install @xmpp/reconnect
-```
-
-## Usage
-
-```javascript
-const reconnect = require('@xmpp/reconnect')(entity)
-```
-
-### delay property
+## delay property
 
 Property to set/get the delay in milliseconds between connection closed and
 reconnecting.
@@ -32,7 +20,7 @@ reconnect.delay // 1000
 reconnect.delay = 2000
 ```
 
-### reconnecting event
+## reconnecting event
 
 Emitted each time a re-connection is attempted.
 
@@ -42,7 +30,7 @@ reconnect.on('reconnecting', () => {
 })
 ```
 
-### reconnected event
+## reconnected event
 
 Emitted each time a re-connection succeed.
 
@@ -52,7 +40,7 @@ reconnect.on('reconnected', () => {
 })
 ```
 
-### error event
+## error event
 
 Emitted on entity each time a re-connection fails.
 

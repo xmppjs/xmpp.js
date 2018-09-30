@@ -9,7 +9,7 @@
 
 const route = require('./route')
 
-module.exports = function(middleware) {
+module.exports = function({middleware}) {
   middleware.use(route())
 
   function use(name, xmlns, handler) {
