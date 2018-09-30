@@ -34,7 +34,7 @@ test.beforeEach(t => {
   return server.restart()
 })
 
-test('client ws://', t => {
+test.serial('client ws://', t => {
   const {client} = t.context({
     credentials,
     service,

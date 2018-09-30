@@ -8,7 +8,7 @@ const password = 'bar'
 const credentials = {username, password}
 
 test('no compatibles mechanisms', async t => {
-  const {client, entity} = mockClient({credentials})
+  const {client, entity} = mockClient({username, password})
 
   client.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">

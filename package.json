@@ -25,8 +25,7 @@
     "node-fetch": "^2.2.0",
     "prettier": "^1.14.2",
     "sinon": "^6.3.3",
-    "uglify-es": "^3.3.9",
-    "util.promisify": "^1.0.0"
+    "uglify-es": "^3.3.9"
   },
   "ava": {
     "require": "babel-register",

@@ -14,9 +14,6 @@
     "@xmpp/streamparser": "^0.0.6",
     "@xmpp/xml": "^0.3.0"
   },
-  "browser": {
-    "url": false
-  },
   "engines": {
     "node": ">= 9.6.1",
     "yarn": ">= 1.0.0"

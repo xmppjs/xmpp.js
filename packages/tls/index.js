@@ -2,6 +2,6 @@
 
 const ConnectionTLS = require('./lib/Connection')
 
-module.exports = function tls(entity) {
+module.exports = function tls({entity}) {
   entity.transports.push(ConnectionTLS)
 }

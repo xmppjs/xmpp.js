@@ -1,9 +1,10 @@
 'use strict'
 
-const {xmpp} = require('@xmpp/client')
+const {client} = require('@xmpp/client')
 const context = require('./context')
 
 module.exports = function(options) {
-  const _ = xmpp(options)
-  return Object.assign(_, {client: context(_.client)})
+  const xmpp = client(options)
+  const ctx = context(xmpp)
+  return Object.assign(xmpp, ctx)
 }

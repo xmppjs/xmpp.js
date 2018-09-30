@@ -11,13 +11,11 @@ const xml = require('@xmpp/xml')
 
 const recipient = 'user@example.com'
 const days = ['Monday', 'Tuesday']
-const message = (
-  xml('message', {to: recipient},
-    xml('body', {}, 1 + 2),
-    xml('days',
-      days.map(day => xml('day', {}, day))
-    )
-  )
+const message = xml(
+  'message',
+  {to: recipient},
+  xml('body', {}, 1 + 2),
+  xml('days', days.map(day => xml('day', {}, day)))
 )
 ```
 
@@ -36,7 +34,9 @@ const message = (
   <message to={recipient}>
     <body>{1 + 2}</body>
     <days>
-      {days.map(day => <day>${day}</day>)}
+      {days.map(day => (
+        <day>${day}</day>
+      ))}
     </days>
   </message>
 )
@@ -107,7 +107,6 @@ Set the text value of an element
 message.getChild('body').text('Hello world')
 ```
 
-
 ### append
 
 Adds text or element nodes to the last position.
@@ -158,19 +157,20 @@ message.remove(body)
 You can embed JSON anywhere but it is recommended to use an appropriate semantic.
 
 ```js
+/** @jsx xml */
+
 // write
 message.append(
-  <myevent xmlns="xmpp:example.org"> // context
-    <json xmlns="urn:xmpp:json:0">   // type
-      JSON.stringify(days)           // data
-    </json>
+  <myevent xmlns="xmpp:example.org">
+    <json xmlns="urn:xmpp:json:0">{JSON.stringify(days)}</json>
   </myevent>
 )
 
 // read
-JSON.parse(message
-  .getChild('myevent', 'xmpp:example.org')
-  .getChildText('json', 'urn:xmpp:json:0')
+JSON.parse(
+  message
+    .getChild('myevent', 'xmpp:example.org')
+    .getChildText('json', 'urn:xmpp:json:0')
 )
 ```
 

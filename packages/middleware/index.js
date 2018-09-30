@@ -12,7 +12,7 @@ function listener(entity, middleware, Context) {
   }
 }
 
-module.exports = function(entity) {
+module.exports = function({entity}) {
   const incoming = []
   const outgoing = []
 

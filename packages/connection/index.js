@@ -3,7 +3,6 @@
 const {timeout, EventEmitter, promise} = require('@xmpp/events')
 const jid = require('@xmpp/jid')
 const xml = require('@xmpp/xml')
-const URL = global.URL || require('url').URL // eslint-disable-line node/no-unsupported-features/node-builtins
 
 const NS_STREAM = 'urn:ietf:params:xml:ns:xmpp-streams'
 
@@ -42,26 +41,9 @@ function socketConnect(socket, ...params) {
   })
 }
 
-function getDomain(service) {
-  // WHATWG URL parser requires a protocol
-  if (!service.includes('://')) {
-    service = 'http://' + service
-  }
-  const url = new URL(service)
-  // WHATWG URL parser doesn't support non Web protocols in browser
-  url.protocol = 'http:'
-  return url.hostname
-}
-
 class Connection extends EventEmitter {
   constructor(options = {}) {
     super()
-
-    options = Object.assign({}, options)
-    if (!options.domain && options.service) {
-      options.domain = getDomain(options.service)
-    }
-
     this.domain = ''
     this.lang = ''
     this.jid = null
@@ -423,7 +405,6 @@ Connection.prototype.Socket = null
 Connection.prototype.Parser = null
 
 module.exports = Connection
-module.exports.getDomain = getDomain
 module.exports.XMPPError = XMPPError
 module.exports.StreamError = StreamError
 module.exports.socketConnect = socketConnect
