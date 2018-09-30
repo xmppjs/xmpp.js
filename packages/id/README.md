@@ -1,13 +1,10 @@
-id
-===
+# id
 
 XMPP id generator for JavaScript.
 
 ## Install
 
-```
-npm install @xmpp/id
-```
+`npm install @xmpp/id` or `yarn add @xmpp/id`
 
 ## Usage
 

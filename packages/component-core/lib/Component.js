@@ -6,12 +6,9 @@ const xml = require('@xmpp/xml')
 
 /*
  * References
- * https://xmpp.org/extensions/xep-0114.html
+ * https://xmpp.org/extensions/xep-0114.html done
+ * https://xmpp.org/extensions/xep-0225.html) todo
  */
-
-function getServerDomain(domain) {
-  return domain.substr(domain.indexOf('.') + 1)
-}
 
 const NS = 'jabber:component:accept'
 
@@ -28,8 +25,8 @@ class Component extends Connection {
       el.attrs.from = this.jid.toString()
     }
 
-    if (this.jid && !el.attrs.to) {
-      el.attrs.to = getServerDomain(this.jid.toString())
+    if (this.domain && !el.attrs.to) {
+      el.attrs.to = this.domain
     }
 
     return super.send(el)

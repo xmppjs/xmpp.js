@@ -6,11 +6,9 @@ Supports Node.js and browsers.
 
 ## Install
 
-```js
-npm install @xmpp/iq-caller
-```
+`npm install @xmpp/iq` or `yarn add @xmpp/iq`
 
-## Usage
+## Caller
 
 ```js
 const _iqCaller = require('@xmpp/iq-caller')
@@ -38,7 +36,7 @@ iqCaller.set(xml('vCard', 'vcard-temp', xml('FN', 'bot'))).then(() => {
 
 ```js
 const _iqCallee = require('@xmpp/iq-callee')
-const callee = _iqCaller({middleware, entity})
+const callee = _iqCallee({middleware, entity})
 ```
 
 ```js
