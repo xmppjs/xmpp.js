@@ -32,7 +32,7 @@ test('calling send sanitize the to attribute', t => {
   entity.send(el)
   t.is(el.attrs.to, undefined)
 
-  entity.jid = 'test.foobar'
+  entity.domain = 'foobar'
 
   el = xml('el')
   entity.send(el)

@@ -4,18 +4,13 @@ Prints to the console debug information for an entity.
 
 ## Install
 
-```
-npm install @xmpp/debug
-```
+`npm install @xmpp/component` or `yarn add @xmpp/component`
 
-## Usage
+## Example
 
 ```javascript
-// file.js
-const {xmpp} = require('@xmpp/client') // or component, ...
+const {client} = require('@xmpp/client') // or component, ...
 const debug = require('@xmpp/debug')
-const entity = xmpp()
-debug(entity)
+const xmpp = client()
+debug(xmpp, true)
 ```
-
-`XMPP_DEBUG=true node file.js`
