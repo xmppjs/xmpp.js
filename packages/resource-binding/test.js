@@ -7,21 +7,21 @@ test('without resource', async t => {
   const resource = Math.random().toString()
   const jid = 'foo@bar/' + resource
 
-  const {client, entity} = mockClient()
+  const {entity} = mockClient()
 
-  client.mockInput(
+  entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
       <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind" />
     </features>
   )
 
-  client.scheduleIncomingResult(
+  entity.scheduleIncomingResult(
     <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
       <jid>{jid}</jid>
     </bind>
   )
 
-  await client.catchOutgoingSet().then(child => {
+  await entity.catchOutgoingSet().then(child => {
     t.deepEqual(child, <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind" />)
   })
 
@@ -34,21 +34,21 @@ test('with string resource', async t => {
   const resource = Math.random().toString()
   const jid = 'foo@bar/' + resource
 
-  const {client, entity} = mockClient({resource})
+  const {entity} = mockClient({resource})
 
-  client.mockInput(
+  entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
       <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind" />
     </features>
   )
 
-  client.scheduleIncomingResult(
+  entity.scheduleIncomingResult(
     <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
       <jid>{jid}</jid>
     </bind>
   )
 
-  await client.catchOutgoingSet().then(child => {
+  await entity.catchOutgoingSet().then(child => {
     t.deepEqual(
       child,
       <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
@@ -66,26 +66,26 @@ test('with function resource', async t => {
   const resource = Math.random().toString()
   const jid = 'foo@bar/' + resource
 
-  const {client, entity} = mockClient({
+  const {entity} = mockClient({
     resource: async bind => {
       await delay()
       t.is((await bind(resource)).toString(), jid)
     },
   })
 
-  client.mockInput(
+  entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
       <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind" />
     </features>
   )
 
-  client.scheduleIncomingResult(
+  entity.scheduleIncomingResult(
     <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
       <jid>{jid}</jid>
     </bind>
   )
 
-  await client.catchOutgoingSet().then(child => {
+  await entity.catchOutgoingSet().then(child => {
     t.deepEqual(
       child,
       <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">

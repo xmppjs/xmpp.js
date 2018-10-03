@@ -8,11 +8,11 @@ const _roster = require('./consumer')
 const JID = require('@xmpp/jid')
 
 test('get', t => {
-  const {client, entity, iqCaller, middleware} = mockClient()
+  const {entity, iqCaller, middleware} = mockClient()
   const iqCallee = _iqCallee({middleware, entity})
   const roster = _roster({entity, iqCaller, iqCallee})
 
-  client.scheduleIncomingResult(
+  entity.scheduleIncomingResult(
     <query xmlns="jabber:iq:roster" ver="ver1">
       <item jid="foo@foobar.com" ask="subscribe" name="Foo" subscription="both">
         <group>Friends</group>
@@ -28,7 +28,7 @@ test('get', t => {
   )
 
   return Promise.all([
-    client.catchOutgoingGet().then(child => {
+    entity.catchOutgoingGet().then(child => {
       t.deepEqual(child, <query xmlns="jabber:iq:roster" />)
     }),
     roster.get().then(val => {
@@ -58,11 +58,11 @@ test('get', t => {
 })
 
 test('get empty roster', t => {
-  const {client, entity, iqCaller, middleware} = mockClient()
+  const {entity, iqCaller, middleware} = mockClient()
   const iqCallee = _iqCallee({middleware, entity})
   const roster = _roster({entity, iqCaller, iqCallee})
 
-  client.scheduleIncomingResult(<query xmlns="jabber:iq:roster" />)
+  entity.scheduleIncomingResult(<query xmlns="jabber:iq:roster" />)
 
   return roster.get().then(val => {
     t.deepEqual(val, [[], undefined])
@@ -70,14 +70,14 @@ test('get empty roster', t => {
 })
 
 test('get with ver, no changes', t => {
-  const {client, entity, iqCaller, middleware} = mockClient()
+  const {entity, iqCaller, middleware} = mockClient()
   const iqCallee = _iqCallee({middleware, entity})
   const roster = _roster({entity, iqCaller, iqCallee})
 
-  client.scheduleIncomingResult()
+  entity.scheduleIncomingResult()
 
   return Promise.all([
-    client.catchOutgoingGet().then(child => {
+    entity.catchOutgoingGet().then(child => {
       t.deepEqual(child, <query xmlns="jabber:iq:roster" ver="ver6" />)
     }),
     roster.get('ver6').then(val => {
@@ -87,18 +87,18 @@ test('get with ver, no changes', t => {
 })
 
 test('get with ver, new roster', t => {
-  const {client, entity, iqCaller, middleware} = mockClient()
+  const {entity, iqCaller, middleware} = mockClient()
   const iqCallee = _iqCallee({middleware, entity})
   const roster = _roster({entity, iqCaller, iqCallee})
 
-  client.scheduleIncomingResult(
+  entity.scheduleIncomingResult(
     <query xmlns="jabber:iq:roster" ver="ver7">
       <item jid="foo@bar" />
     </query>
   )
 
   return Promise.all([
-    client.catchOutgoingGet().then(child => {
+    entity.catchOutgoingGet().then(child => {
       t.deepEqual(child, <query xmlns="jabber:iq:roster" ver="ver6" />)
     }),
     roster.get('ver6').then(val => {
@@ -120,14 +120,14 @@ test('get with ver, new roster', t => {
 })
 
 test('set with string', t => {
-  const {client, entity, iqCaller, middleware} = mockClient()
+  const {entity, iqCaller, middleware} = mockClient()
   const iqCallee = _iqCallee({middleware, entity})
   const roster = _roster({entity, iqCaller, iqCallee})
 
-  client.scheduleIncomingResult()
+  entity.scheduleIncomingResult()
 
   return Promise.all([
-    client.catchOutgoingSet().then(child => {
+    entity.catchOutgoingSet().then(child => {
       t.deepEqual(
         child,
         <query xmlns="jabber:iq:roster">
@@ -142,14 +142,14 @@ test('set with string', t => {
 })
 
 test('set with jid', t => {
-  const {client, entity, iqCaller, middleware} = mockClient()
+  const {entity, iqCaller, middleware} = mockClient()
   const iqCallee = _iqCallee({middleware, entity})
   const roster = _roster({entity, iqCaller, iqCallee})
 
-  client.scheduleIncomingResult()
+  entity.scheduleIncomingResult()
 
   return Promise.all([
-    client.catchOutgoingSet().then(child => {
+    entity.catchOutgoingSet().then(child => {
       t.deepEqual(
         child,
         <query xmlns="jabber:iq:roster">
@@ -164,14 +164,14 @@ test('set with jid', t => {
 })
 
 test('set with object', t => {
-  const {client, entity, iqCaller, middleware} = mockClient()
+  const {entity, iqCaller, middleware} = mockClient()
   const iqCallee = _iqCallee({middleware, entity})
   const roster = _roster({entity, iqCaller, iqCallee})
 
-  client.scheduleIncomingResult()
+  entity.scheduleIncomingResult()
 
   return Promise.all([
-    client.catchOutgoingSet().then(child => {
+    entity.catchOutgoingSet().then(child => {
       t.deepEqual(
         child,
         <query xmlns="jabber:iq:roster">
@@ -191,14 +191,14 @@ test('set with object', t => {
 })
 
 test('remove', t => {
-  const {client, entity, iqCaller, middleware} = mockClient()
+  const {entity, iqCaller, middleware} = mockClient()
   const iqCallee = _iqCallee({middleware, entity})
   const roster = _roster({entity, iqCaller, iqCallee})
 
-  client.scheduleIncomingResult()
+  entity.scheduleIncomingResult()
 
   return Promise.all([
-    client.catchOutgoingSet().then(child => {
+    entity.catchOutgoingSet().then(child => {
       t.deepEqual(
         child,
         <query xmlns="jabber:iq:roster">
@@ -213,7 +213,7 @@ test('remove', t => {
 })
 
 test('push remove', t => {
-  const {client, entity, iqCaller, middleware} = mockClient()
+  const {entity, iqCaller, middleware} = mockClient()
   const iqCallee = _iqCallee({middleware, entity})
   const roster = _roster({entity, iqCaller, iqCallee})
 
@@ -222,7 +222,7 @@ test('push remove', t => {
       t.deepEqual(jid, new JID('foo@bar'))
       t.is(ver, 'v1')
     }),
-    client
+    entity
       .fakeIncomingSet(
         <query xmlns="jabber:iq:roster" ver="v1">
           <item jid="foo@bar" subscription="remove" />
@@ -235,7 +235,7 @@ test('push remove', t => {
 })
 
 test('push set', t => {
-  const {client, entity, iqCaller, middleware} = mockClient()
+  const {entity, iqCaller, middleware} = mockClient()
   const iqCallee = _iqCallee({middleware, entity})
   const roster = _roster({entity, iqCaller, iqCallee})
 
@@ -251,7 +251,7 @@ test('push set', t => {
       })
       t.is(ver, undefined)
     }),
-    client
+    entity
       .fakeIncomingSet(
         <query xmlns="jabber:iq:roster">
           <item jid="foo@bar" subscription="none" />

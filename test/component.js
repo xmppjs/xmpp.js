@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const {xmpp, xml, jid} = require('../packages/component')
+const {component, xml, jid} = require('../packages/component')
 const debug = require('../packages/debug')
 const server = require('../server')
 
@@ -16,53 +16,53 @@ test.beforeEach(() => {
 })
 
 test.afterEach(t => {
-  if (t.context.component) {
-    return t.context.component.stop()
+  if (t.context.xmpp) {
+    return t.context.xmpp.stop()
   }
 })
 
 test.serial.cb('component', t => {
   t.plan(6)
 
-  const {component} = xmpp(options)
-  debug(component)
+  const xmpp = component(options)
+  debug(xmpp)
 
-  component.on('connect', () => {
+  xmpp.on('connect', () => {
     t.pass()
   })
 
-  component.on('open', el => {
+  xmpp.on('open', el => {
     t.true(el instanceof xml.Element)
   })
 
-  component.on('online', id => {
+  xmpp.on('online', id => {
     t.true(id instanceof jid.JID)
     t.is(id.toString(), 'component.localhost')
   })
 
-  component.start().then(id => {
+  xmpp.start().then(id => {
     t.true(id instanceof jid.JID)
     t.is(id.toString(), 'component.localhost')
-    component.stop().then(() => t.end())
+    xmpp.stop().then(() => t.end())
   })
 
-  t.context.component = component
+  t.context.xmpp = xmpp
 })
 
 test.serial.cb('reconnects when server restarts', t => {
   t.plan(2)
   let c = 0
 
-  const {component} = xmpp(options)
-  debug(component)
+  const xmpp = component(options)
+  debug(xmpp)
 
-  component.on('error', () => {})
+  xmpp.on('error', () => {})
 
-  component.on('online', () => {
+  xmpp.on('online', () => {
     c++
     t.pass()
     if (c === 2) {
-      component.stop().then(() => {
+      xmpp.stop().then(() => {
         t.end()
       })
     } else {
@@ -70,20 +70,20 @@ test.serial.cb('reconnects when server restarts', t => {
     }
   })
 
-  component.start()
+  xmpp.start()
 
-  t.context.component = component
+  t.context.xmpp = xmpp
 })
 
 test.serial.cb('does not reconnect when stop is called', t => {
   t.plan(5)
 
-  const {component} = xmpp(options)
-  debug(component)
+  const xmpp = component(options)
+  debug(xmpp)
 
-  component.on('online', () => {
+  xmpp.on('online', () => {
     t.pass()
-    component.stop().then(() => {
+    xmpp.stop().then(() => {
       t.pass()
       server.stop().then(() => {
         t.pass()
@@ -92,11 +92,11 @@ test.serial.cb('does not reconnect when stop is called', t => {
     })
   })
 
-  component.on('close', () => t.pass())
+  xmpp.on('close', () => t.pass())
 
-  component.on('offline', () => t.pass())
+  xmpp.on('offline', () => t.pass())
 
-  component.start()
+  xmpp.start()
 
-  t.context.component = component
+  t.context.xmpp = xmpp
 })

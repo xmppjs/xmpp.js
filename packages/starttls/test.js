@@ -4,9 +4,9 @@ const test = require('ava')
 const {mockClient, promise} = require('@xmpp/test')
 
 test('failure', async t => {
-  const {client, entity} = mockClient()
+  const {entity} = mockClient()
 
-  client.mockInput(
+  entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
       <starttls xmlns="urn:ietf:params:xml:ns:xmpp-tls" />
     </features>
@@ -17,7 +17,7 @@ test('failure', async t => {
     <starttls xmlns="urn:ietf:params:xml:ns:xmpp-tls" />
   )
 
-  client.mockInput(<failure xmlns="urn:ietf:params:xml:ns:xmpp-tls" />)
+  entity.mockInput(<failure xmlns="urn:ietf:params:xml:ns:xmpp-tls" />)
 
   const err = await promise(entity, 'error')
   t.true(err instanceof Error)

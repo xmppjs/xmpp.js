@@ -4,17 +4,17 @@ const test = require('ava')
 const {mockClient, promise, timeout} = require('@xmpp/test')
 
 test('mandatory', async t => {
-  const {client, entity} = mockClient()
+  const {entity} = mockClient()
 
-  client.mockInput(
+  entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
       <session xmlns="urn:ietf:params:xml:ns:xmpp-session" />
     </features>
   )
 
-  client.scheduleIncomingResult()
+  entity.scheduleIncomingResult()
 
-  await client.catchOutgoingSet().then(child => {
+  await entity.catchOutgoingSet().then(child => {
     t.deepEqual(child, <session xmlns="urn:ietf:params:xml:ns:xmpp-session" />)
   })
 
@@ -22,9 +22,9 @@ test('mandatory', async t => {
 })
 
 test('optional', async t => {
-  const {client, entity} = mockClient()
+  const {entity} = mockClient()
 
-  client.mockInput(
+  entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
       <session xmlns="urn:ietf:params:xml:ns:xmpp-session">
         <optional />
