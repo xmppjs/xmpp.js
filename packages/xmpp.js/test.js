@@ -7,7 +7,7 @@ const path = require('path')
 
 const packages = fs
   .readdirSync(path.join(__dirname, '..'))
-  // For some reason there's a "*"" file on travis
+  // For some reason there's a "*" file on travis
   .filter(p => !['*'].includes(p) && !p.includes('.'))
 
 const dependencies = Object.keys(require('./package.json').dependencies).map(

@@ -1,11 +1,18 @@
 {
   "private": true,
   "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/plugin-transform-react-jsx": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
     "ava": "^1.0.0-beta.8",
     "babel-plugin-jsx-pragmatic": "^1.0.2",
+    "babel-plugin-transform-async-to-promises": "^0.7.1",
+    "babelify": "^10.0.0",
+    "babylon": "^6.18.0",
     "browser-pack-flat": "^3.2.0",
-    "browserify": "^16.2.2",
+    "browserify": "^16.2.3",
     "bundlesize": "^0.17.0",
     "common-shakeify": "^0.5.1",
     "eslint": "^5.6.0",
@@ -22,12 +29,13 @@
     "node-fetch": "^2.2.0",
     "prettier": "^1.14.2",
     "sinon": "^6.3.3",
-    "uglify-es": "^3.3.9"
+    "uglify-js": "^3.4.9"
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "test": "ava",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "preversion": "make bundle"
   },
   "engines": {
     "node": ">= 10.0.0",
@@ -38,8 +46,8 @@
   ],
   "bundlesize": [
     {
-      "path": "./packages/client/dist/xmpp.min.js.gz",
-      "maxSize": "10 kB"
+      "path": "./packages/client/dist/xmpp.min.js",
+      "maxSize": "15 KB"
     }
   ]
 }
