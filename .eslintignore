@@ -2,3 +2,4 @@ node_modules/
 **/dist/*.js
 bundle.js
 packages/xmpp.js/index.js
+ava.config.js

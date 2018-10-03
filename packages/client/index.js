@@ -36,13 +36,14 @@ function getDomain(service) {
 }
 
 function client(options = {}) {
-  const {resource, username, password, domain, service} = options
-  if (!domain && service) {
-    options.domain = getDomain(service)
-  }
-  const credentials = options.credentials || {username, password}
+  const {resource, credentials, username, password, ...params} = options
 
-  const entity = new Client(options)
+  const {domain, service} = params
+  if (!domain && service) {
+    params.domain = getDomain(service)
+  }
+
+  const entity = new Client(params)
 
   const reconnect = _reconnect({entity})
   const websocket = _websocket({entity})
@@ -56,7 +57,7 @@ function client(options = {}) {
   // Stream features - order matters and define priority
   const starttls =
     typeof _starttls === 'function' ? _starttls({streamFeatures}) : undefined
-  const sasl = _sasl({streamFeatures}, credentials)
+  const sasl = _sasl({streamFeatures}, credentials || {username, password})
   const resourceBinding = _resourceBinding({iqCaller, streamFeatures}, resource)
   const sessionEstablishment = _sessionEstablishment({iqCaller, streamFeatures})
   // SASL mechanisms - order matters and define priority

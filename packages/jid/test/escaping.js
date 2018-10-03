@@ -81,12 +81,6 @@ test('escape `space\\20cadet@example.com`', t => {
   t.is(esc.toString(true), 'space cadet@example.com')
 })
 
-test('escape `call me "ishmael"@example.com`', t => {
-  const esc = new JID('call me "ishmael"', 'example.com')
-  t.is(esc.toString(), 'call\\20me\\20\\22ishmael\\22@example.com')
-  t.is(esc.toString(true), 'call me "ishmael"@example.com')
-})
-
 test('escape `at\\26t\\20guy@example.com`', t => {
   const esc = new JID('at\\26t\\20guy', 'example.com')
   t.is(esc.toString(), 'at\\26t\\20guy@example.com')
@@ -127,12 +121,6 @@ test('escape `c\\3a\\5cnet@example.com`', t => {
   const esc = new JID('c\\3a\\5cnet', 'example.com')
   t.is(esc.toString(), 'c\\3a\\5cnet@example.com')
   t.is(esc.toString(true), 'c:\\net@example.com')
-})
-
-test('escape `c:\\\\net@example.com`', t => {
-  const esc = new JID('c:\\\\net', 'example.com')
-  t.is(esc.toString(), 'c\\3a\\5c\\5cnet@example.com')
-  t.is(esc.toString(true), 'c:\\\\net@example.com')
 })
 
 test('escape `c\\3a\\5ccool\\20stuff@example.com`', t => {
