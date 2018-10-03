@@ -8,9 +8,9 @@ const password = 'bar'
 const credentials = {username, password}
 
 test('no compatibles mechanisms', async t => {
-  const {client, entity} = mockClient({username, password})
+  const {entity} = mockClient({username, password})
 
-  client.mockInput(
+  entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
       <mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
         <mechanism>FOO</mechanism>
@@ -24,13 +24,13 @@ test('no compatibles mechanisms', async t => {
 })
 
 test('with object credentials', async t => {
-  const {client, entity} = mockClient({credentials})
+  const {entity} = mockClient({credentials})
   entity.restart = () => {
     entity.emit('open')
     return Promise.resolve()
   }
 
-  client.mockInput(
+  entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
       <mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
         <mechanism>PLAIN</mechanism>
@@ -45,7 +45,7 @@ test('with object credentials', async t => {
     </auth>
   )
 
-  client.mockInput(<success xmlns="urn:ietf:params:xml:ns:xmpp-sasl" />)
+  entity.mockInput(<success xmlns="urn:ietf:params:xml:ns:xmpp-sasl" />)
 
   await promise(entity, 'online')
 })
@@ -58,13 +58,13 @@ test('with function credentials', async t => {
     return auth(credentials)
   }
 
-  const {client, entity} = mockClient({credentials: authenticate})
+  const {entity} = mockClient({credentials: authenticate})
   entity.restart = () => {
     entity.emit('open')
     return Promise.resolve()
   }
 
-  client.mockInput(
+  entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
       <mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
         <mechanism>{mech}</mechanism>
@@ -79,15 +79,15 @@ test('with function credentials', async t => {
     </auth>
   )
 
-  client.mockInput(<success xmlns="urn:ietf:params:xml:ns:xmpp-sasl" />)
+  entity.mockInput(<success xmlns="urn:ietf:params:xml:ns:xmpp-sasl" />)
 
   await promise(entity, 'online')
 })
 
 test('failure', async t => {
-  const {client, entity} = mockClient({credentials})
+  const {entity} = mockClient({credentials})
 
-  client.mockInput(
+  entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
       <mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
         <mechanism>PLAIN</mechanism>
@@ -108,7 +108,7 @@ test('failure', async t => {
     </failure>
   )
 
-  client.mockInput(failure)
+  entity.mockInput(failure)
 
   const error = await promise(entity, 'error')
   t.true(error instanceof Error)

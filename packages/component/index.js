@@ -28,8 +28,6 @@ function component(options) {
 
   return Object.assign(entity, {
     entity,
-    // FIXME remove
-    component: entity,
     reconnect,
     middleware,
   })
@@ -39,5 +37,3 @@ module.exports.Component = Component
 module.exports.xml = xml
 module.exports.jid = jid
 module.exports.component = component
-// FIXME remove
-module.exports.xmpp = component

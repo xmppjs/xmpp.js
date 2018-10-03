@@ -68,8 +68,6 @@ function client(options = {}) {
 
   return Object.assign(entity, {
     entity,
-    // FIXME remove
-    client: entity,
     reconnect,
     tcp,
     websocket,
@@ -91,5 +89,3 @@ module.exports.xml = xml
 module.exports.jid = jid
 module.exports.client = client
 module.exports.getDomain = getDomain
-// FIXME remove
-module.exports.xmpp = client
