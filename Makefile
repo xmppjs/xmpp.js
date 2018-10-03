@@ -49,11 +49,10 @@ restart:
 	./server/ctl restart
 
 bundlesize:
-	gzip -kf9 packages/client/dist/xmpp.min.js
 	./node_modules/.bin/bundlesize
 
 bundle:
-	cd packages/client && yarn run prepublish
+	node bundle.js
 
 size:
 	make bundle
