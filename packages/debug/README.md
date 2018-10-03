@@ -4,7 +4,7 @@ Prints to the console debug information for an entity.
 
 ## Install
 
-`npm install @xmpp/component` or `yarn add @xmpp/component`
+`npm install @xmpp/debug` or `yarn add @xmpp/debug`
 
 ## Example
 

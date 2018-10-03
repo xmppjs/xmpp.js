@@ -17,7 +17,7 @@ env:
 
 parserOptions:
   sourceType: script
-  ecmaVersion: 2017
+  ecmaVersion: 2018
 
 rules:
   strict: [error, global]

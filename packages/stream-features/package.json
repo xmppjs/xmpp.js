@@ -9,7 +9,7 @@
   "license": "ISC",
   "keywords": ["XMPP", "stream", "features"],
   "engines": {
-    "node": ">= 9.6.1",
+    "node": ">= 10.0.0",
     "yarn": ">= 1.0.0"
   }
 }
