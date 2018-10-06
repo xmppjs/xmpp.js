@@ -1,9 +1,10 @@
 'use strict'
 
 const test = require('ava')
-const {context} = require('@xmpp/test')
+const {context, mockClient, mockInput} = require('@xmpp/test')
 const _middleware = require('@xmpp/middleware')
 const _iqCaller = require('./caller')
+const StanzaError = require('@xmpp/middleware/lib/StanzaError')
 
 test.beforeEach(t => {
   const ctx = context()
@@ -137,4 +138,28 @@ test('removes the handler if sending failed', t => {
     t.is(err, error)
     t.is(iqCaller.handlers.size, 0)
   })
+})
+
+test('rejects with a StanzaError for error reply', async t => {
+  const xmpp = mockClient()
+  const {iqCaller} = xmpp
+
+  const id = 'foo'
+
+  const promiseRequest = iqCaller.request(<iq type="get" id={id} />)
+
+  const errorElement = (
+    <error type="modify">
+      <service-unavailable />
+    </error>
+  )
+  const stanzaElement = (
+    <iq type="error" id={id}>
+      {errorElement}
+    </iq>
+  )
+  mockInput(xmpp, stanzaElement)
+
+  const err = await t.throwsAsync(promiseRequest)
+  t.deepEqual(err, StanzaError.fromElement(errorElement))
 })

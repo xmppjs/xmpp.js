@@ -2,23 +2,31 @@
 
 const xml = require('@xmpp/xml')
 const xid = require('@xmpp/id')
+const StanzaError = require('@xmpp/middleware/lib/StanzaError')
+const {Deferred} = require('@xmpp/events')
+
+function isReply({name, type}) {
+  if (name !== 'iq') return false
+  if (type !== 'error' && type !== 'result') return false
+  return true
+}
 
 module.exports = function iqCaller({entity, middleware}) {
   const handlers = new Map()
 
   middleware.use(({type, name, id, stanza}, next) => {
-    if (name !== 'iq' || !['error', 'result'].includes(type)) return next()
+    if (!isReply({name, type})) return next()
 
-    const handler = handlers.get(id)
+    const deferred = handlers.get(id)
 
-    if (!handler) {
+    if (!deferred) {
       return next()
     }
 
     if (type === 'error') {
-      handler[1](stanza.getChild('error'))
+      deferred.reject(StanzaError.fromElement(stanza.getChild('error')))
     } else {
-      handler[0](stanza.children[0])
+      deferred.resolve(stanza.children[0])
     }
     handlers.delete(id)
   })
@@ -31,7 +39,7 @@ module.exports = function iqCaller({entity, middleware}) {
     set(child, ...args) {
       return this.request(xml('iq', {type: 'set'}, child), ...args)
     },
-    request(stanza, params) {
+    async request(stanza, params) {
       if (typeof params === 'string') {
         params = {to: params}
       }
@@ -47,15 +55,17 @@ module.exports = function iqCaller({entity, middleware}) {
         stanza.attrs.id = xid()
       }
 
-      return Promise.all([
-        new Promise((resolve, reject) => {
-          handlers.set(stanza.attrs.id, [resolve, reject])
-        }),
-        entity.send(stanza).catch(err => {
-          handlers.delete(stanza.attrs.id)
-          throw err
-        }),
-      ]).then(([res]) => res)
+      const deferred = new Deferred()
+      handlers.set(stanza.attrs.id, deferred)
+
+      try {
+        await entity.send(stanza)
+      } catch (err) {
+        handlers.delete(stanza.attrs.id)
+        throw err
+      }
+
+      return deferred.promise
     },
   }
 }

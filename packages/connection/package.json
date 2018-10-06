@@ -10,6 +10,7 @@
   "keywords": ["XMPP", "connection"],
   "dependencies": {
     "@xmpp/events": "^0.3.0",
+    "@xmpp/error": "^0.3.0",
     "@xmpp/jid": "^0.3.0",
     "@xmpp/streamparser": "^0.0.6",
     "@xmpp/xml": "^0.3.0"

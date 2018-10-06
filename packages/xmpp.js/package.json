@@ -25,6 +25,7 @@
     "@xmpp/connection-tcp": "^0.3.0",
     "@xmpp/debug": "^0.3.0",
     "@xmpp/entity-capabilities": "^0.3.0",
+    "@xmpp/error": "^0.3.0",
     "@xmpp/events": "^0.3.0",
     "@xmpp/id": "^0.3.0",
     "@xmpp/iq": "^0.3.0",

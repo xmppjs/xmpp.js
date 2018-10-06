@@ -1,20 +1,13 @@
 'use strict'
 
 const {encode, decode} = require('./lib/b64')
+const SASLError = require('./lib/SASLError')
 const xml = require('@xmpp/xml')
-const {XMPPError} = require('@xmpp/connection')
 const SASLFactory = require('saslmechanisms')
 
 // https://xmpp.org/rfcs/rfc6120.html#sasl
 
 const NS = 'urn:ietf:params:xml:ns:xmpp-sasl'
-
-class SASLError extends XMPPError {
-  constructor(...args) {
-    super(...args)
-    this.name = 'SASLError'
-  }
-}
 
 function getMechanismNames(features) {
   return features.getChild('mechanisms', NS).children.map(el => el.text())
@@ -99,13 +92,7 @@ async function authenticate(SASL, entity, mechname, credentials) {
       }
 
       if (element.name === 'failure') {
-        reject(
-          new SASLError(
-            element.children[0].name,
-            element.getChildText('text') || '',
-            element
-          )
-        )
+        reject(SASLError.fromElement(element))
       } else if (element.name === 'success') {
         resolve()
       }

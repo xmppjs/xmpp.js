@@ -1,67 +1,126 @@
 'use strict'
 
+/**
+ * References
+ * https://xmpp.org/rfcs/rfc6120.html#stanzas-semantics-iq
+ * https://xmpp.org/rfcs/rfc6120.html#stanzas-error
+ */
+
 const xml = require('@xmpp/xml')
 
 const NS_STANZA = 'urn:ietf:params:xml:ns:xmpp-stanzas'
 
-module.exports = function({middleware, entity}) {
+function isQuery({name, type}) {
+  if (name !== 'iq') return false
+  if (type === 'error' || type === 'result') return false
+  return true
+}
+
+function isValidQuery({type, stanza}, child) {
+  if (type !== 'get' && type !== 'set') return false
+  if (stanza.children.length !== 1) return false
+  if (!child) return false
+  return true
+}
+
+function buildReply({stanza}) {
+  return xml('iq', {
+    to: stanza.attrs.from,
+    from: stanza.attrs.to,
+    id: stanza.attrs.id,
+  })
+}
+
+function buildReplyResult(ctx, child) {
+  const reply = buildReply(ctx)
+  reply.attrs.type = 'result'
+  if (child) {
+    reply.append(child.clone())
+  }
+  return reply
+}
+
+function buildReplyError(ctx, error, child) {
+  const reply = buildReply(ctx)
+  reply.attrs.type = 'error'
+  if (child) {
+    reply.append(child.clone())
+  }
+  reply.append(error)
+  return reply
+}
+
+function buildError(type, condition) {
+  return xml('error', {type}, xml(condition, NS_STANZA))
+}
+
+module.exports = function({middleware}) {
   const getters = new Map()
   const setters = new Map()
 
-  middleware.use(({type, name, id, stanza}, next) => {
-    if (name !== 'iq' || !['get', 'set'].includes(type) || !id) return next()
+  middleware.use(async (ctx, next) => {
+    if (!isQuery(ctx)) return next()
 
-    const iq = xml('iq', {
-      to: stanza.attrs.from,
-      id,
-    })
-
+    const {entity, stanza} = ctx
     const [child] = stanza.children
-    const handler = (type === 'get' ? getters : setters).get(child.attrs.xmlns)
 
-    if (!handler) {
-      iq.attrs.type = 'error'
-      iq.append(child.clone())
-      iq.append(
-        xml('error', {type: 'cancel'}, xml('service-unvailable', NS_STANZA))
-      )
-      entity.send(iq)
-      return
+    if (!isValidQuery(ctx, child)) {
+      return buildReplyError(ctx, buildError('modify', 'bad-request'), child)
     }
 
-    Promise.resolve(handler(child))
-      .then(el => {
-        iq.attrs.type = 'result'
-        if (el) {
-          iq.append(el)
-        }
-        entity.send(iq)
-      })
-      .catch(err => {
-        iq.attrs.type = 'error'
-        iq.append(child.clone())
-        if (err instanceof xml.Element) {
-          iq.append(err)
-        } else if (err) {
-          iq.append(
-            xml(
-              'error',
-              {type: 'cancel'},
-              xml('internal-server-error', NS_STANZA)
-            )
-          )
-        }
-        entity.send(iq)
-      })
+    const {type} = ctx
+
+    let handler
+    if (type === 'get') handler = getters.get(child.attrs.xmlns)
+    else if (type === 'set') handler = setters.get(child.attrs.xmlns)
+
+    if (!handler) {
+      return buildReplyError(
+        ctx,
+        buildError('cancel', 'service-unavailable'),
+        child
+      )
+    }
+
+    let reply
+    ctx.element = child
+
+    try {
+      reply = buildReplyResult(ctx, await handler(ctx))
+    } catch (err) {
+      if (err instanceof xml.Element) {
+        reply = buildReplyError(ctx, err, child)
+      } else {
+        reply = buildReplyError(
+          ctx,
+          buildError('cancel', 'internal-server-error'),
+          child
+        )
+        entity.emit('error', err)
+      }
+    }
+
+    return reply
   })
 
   return {
-    get(ns, fn) {
+    addGetHandler(ns, fn) {
       getters.set(ns, fn)
     },
-
-    set(ns, fn) {
+    get(ns, fn) {
+      this.addGetHandler(ns, fn)
+    },
+    removeGetHandler(ns) {
+      getters.remove(ns)
+    },
+    addSetHandler(ns, fn) {
       setters.set(ns, fn)
+    },
+    set(ns, fn) {
+      this.addSetHandler(ns, fn)
+    },
+    removeSetHandler(ns) {
+      setters.remove(ns)
     },
   }
 }

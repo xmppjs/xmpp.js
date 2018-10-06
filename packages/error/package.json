@@ -1,16 +1,14 @@
 {
-  "name": "@xmpp/events",
-  "description": "XMPP events utilities.",
+  "name": "@xmpp/error",
+  "description": "XMPP error.",
   "repository": "github:xmppjs/xmpp.js",
-  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/events",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/error",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.3.0",
   "license": "ISC",
   "keywords": [
-    "event",
-    "events",
-    "promise",
-    "EventEmitter"
+    "xmpp",
+    "error"
   ],
   "engines": {
     "node": ">= 10.0.0",
