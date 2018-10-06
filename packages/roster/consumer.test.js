@@ -226,7 +226,8 @@ test('push remove', t => {
       .fakeIncomingSet(
         <query xmlns="jabber:iq:roster" ver="v1">
           <item jid="foo@bar" subscription="remove" />
-        </query>
+        </query>,
+        {from: entity.jid.bare()}
       )
       .then(child => {
         t.is(child, undefined)
@@ -255,7 +256,8 @@ test('push set', t => {
       .fakeIncomingSet(
         <query xmlns="jabber:iq:roster">
           <item jid="foo@bar" subscription="none" />
-        </query>
+        </query>,
+        {from: entity.jid.bare()}
       )
       .then(child => {
         t.is(child, undefined)

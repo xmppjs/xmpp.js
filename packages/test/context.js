@@ -75,27 +75,25 @@ module.exports = function context(entity = client()) {
         return this.fakeIncomingError(child, id)
       })
     },
-    fakeIncomingGet(child) {
-      return this.fakeIncomingIq(xml('iq', {type: 'get'}, child)).then(
-        stanza => {
-          const [child] = stanza.children
-          if (child) {
-            child.parent = null
-          }
-          return child
+    fakeIncomingGet(child, attrs = {}) {
+      attrs.type = 'get'
+      return this.fakeIncomingIq(xml('iq', attrs, child)).then(stanza => {
+        const [child] = stanza.children
+        if (child) {
+          child.parent = null
         }
-      )
+        return child
+      })
     },
-    fakeIncomingSet(child) {
-      return this.fakeIncomingIq(xml('iq', {type: 'set'}, child)).then(
-        stanza => {
-          const [child] = stanza.children
-          if (child) {
-            child.parent = null
-          }
-          return child
+    fakeIncomingSet(child, attrs = {}) {
+      attrs.type = 'set'
+      return this.fakeIncomingIq(xml('iq', attrs, child)).then(stanza => {
+        const [child] = stanza.children
+        if (child) {
+          child.parent = null
         }
-      )
+        return child
+      })
     },
     fakeIncomingResult(child, id) {
       return this.fakeIncomingIq(xml('iq', {type: 'result', id}, child)).then(

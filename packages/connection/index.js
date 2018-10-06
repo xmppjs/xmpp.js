@@ -3,25 +3,9 @@
 const {timeout, EventEmitter, promise} = require('@xmpp/events')
 const jid = require('@xmpp/jid')
 const xml = require('@xmpp/xml')
+const StreamError = require('./lib/StreamError')
 
 const NS_STREAM = 'urn:ietf:params:xml:ns:xmpp-streams'
-
-class XMPPError extends Error {
-  constructor(condition, text, element) {
-    super(condition + (text ? ` - ${text}` : ''))
-    this.name = 'XMPPError'
-    this.condition = condition
-    this.text = text
-    this.element = element
-  }
-}
-
-class StreamError extends XMPPError {
-  constructor(...args) {
-    super(...args)
-    this.name = 'StreamError'
-  }
-}
 
 function socketConnect(socket, ...params) {
   return new Promise((resolve, reject) => {
@@ -131,14 +115,7 @@ class Connection extends EventEmitter {
     this.emit(this.isStanza(element) ? 'stanza' : 'nonza', element)
     // https://xmpp.org/rfcs/rfc6120.html#streams-error
     if (element.name !== 'stream:error') return
-    this.emit(
-      'error',
-      new StreamError(
-        element.children[0].name,
-        element.getChildText('text', NS_STREAM) || '',
-        element
-      )
-    )
+    this.emit('error', StreamError.fromElement(element))
     // "Stream Errors Are Unrecoverable"
     // "The entity that receives the stream error then SHALL close the stream"
     this._end()
@@ -405,6 +382,4 @@ Connection.prototype.Socket = null
 Connection.prototype.Parser = null
 
 module.exports = Connection
-module.exports.XMPPError = XMPPError
-module.exports.StreamError = StreamError
 module.exports.socketConnect = socketConnect

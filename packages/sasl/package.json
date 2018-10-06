@@ -8,7 +8,7 @@
   "license": "ISC",
   "keywords": ["XMPP", "sasl"],
   "dependencies": {
-    "@xmpp/connection": "^0.3.0",
+    "@xmpp/error": "^0.3.0",
     "@xmpp/xml": "^0.3.0",
     "saslmechanisms": "^0.1.1"
   },

@@ -3,17 +3,19 @@
 const xml = require('@xmpp/xml')
 const JID = require('@xmpp/jid')
 const EventEmitter = require('events')
-const {NS} = require('.')
+
+const NS = 'jabber:iq:roster'
 
 function parseItem(item) {
-  return Object.assign({}, item.attrs, {
+  return {
+    ...item.attrs,
     groups: item.getChildren('group').map(group => group.text()),
     approved: item.attrs.approved === 'true',
     ask: item.attrs.ask === 'subscribe',
     name: item.attrs.name || '',
     subscription: item.attrs.subscription || 'none',
     jid: new JID(item.attrs.jid),
-  })
+  }
 }
 
 class RosterConsumer extends EventEmitter {
@@ -22,22 +24,21 @@ class RosterConsumer extends EventEmitter {
     this.iqCaller = iqCaller
     this.entity = entity
 
-    iqCallee.set(NS, child => this._onRosterPush(child))
+    iqCallee.set(NS, ctx => this._onRosterPush(ctx))
   }
 
-  _onRosterPush(child) {
-    if (
-      child.parent.attrs.from &&
-      child.parent.attrs.from !== this.entity.jid.bare()
-    ) {
+  _onRosterPush({element, from}) {
+    if (!from.bare().equals(this.entity.jid.bare())) {
       return
     }
 
-    const item = parseItem(child.getChild('item'))
+    const {ver} = element.attrs
+
+    const item = parseItem(element.getChild('item'))
     if (item.subscription === 'remove') {
-      this.emit('remove', [item.jid, child.attrs.ver])
+      this.emit('remove', [item.jid, ver])
     } else {
-      this.emit('set', [item, child.attrs.ver])
+      this.emit('set', [item, ver])
     }
   }
 

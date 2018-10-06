@@ -3,7 +3,7 @@
 const test = require('ava')
 const IncomingContext = require('../lib/IncomingContext')
 const OutgoingContext = require('../lib/OutgoingContext')
-const {context} = require('@xmpp/test')
+const {context, mockClient, mockInput, promiseError} = require('@xmpp/test')
 const middleware = require('..')
 
 test.beforeEach(t => {
@@ -38,4 +38,22 @@ test.cb('filter', t => {
   })
   /* eslint-enable array-callback-return */
   t.context.fakeOutgoing(stanza)
+})
+
+test('emits an error event if a middleware throws', async t => {
+  const xmpp = mockClient()
+  const {middleware} = xmpp
+
+  const error = new Error('foobar')
+  const willError = promiseError(xmpp)
+
+  middleware.use(async () => {
+    await Promise.resolve()
+    throw error
+  })
+
+  mockInput(xmpp, <presence id="hello" />)
+
+  const err = await willError
+  t.deepEqual(err, error)
 })

@@ -14,3 +14,19 @@ module.exports.mockClient = mockClient
 module.exports.delay = delay
 module.exports.promise = promise
 module.exports.timeout = timeout
+module.exports.mockInput = (entity, el) => {
+  entity.emit('input', el.toString())
+  entity._onElement(el)
+}
+
+module.exports.promiseSend = async entity => {
+  const stanza = await promise(entity, 'send', '')
+  delete stanza.attrs.xmlns
+  return stanza
+}
+module.exports.promiseError = entity => {
+  return promise(entity, 'error', '')
+}
+
+// FIXME remove
+module.exports.promiseOutput = module.exports.promiseSend

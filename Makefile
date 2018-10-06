@@ -5,7 +5,7 @@ setup:
 	yarn
 	./node_modules/.bin/lerna bootstrap
 	cd packages/xmpp.js/ && yarn run prepublish
-	cd packages/client/ && yarn run prepublish
+	node bundle.js
 
 lint:
 	./node_modules/.bin/eslint .
@@ -14,7 +14,7 @@ test:
 	cd packages/xmpp.js/ && yarn run prepublish
 	yarn
 	./node_modules/.bin/lerna bootstrap
-	cd packages/client/ && yarn run prepublish
+	node bundle.js
 	./node_modules/.bin/ava
 	make lint
 	make bundlesize

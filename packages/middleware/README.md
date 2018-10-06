@@ -25,9 +25,7 @@ const app = middleware({entity: client})
 The `use` method registers a middleware for incoming stanzas.
 
 ```js
-app.use(ctx (ctx, next) => {
-
-})
+app.use((ctx, next) => {})
 ```
 
 ### filter
@@ -35,7 +33,5 @@ app.use(ctx (ctx, next) => {
 The `filter` method registers a middleware for outgoing stanzas.
 
 ```js
-app.use(ctx (ctx, next) => {
-
-})
+app.filter((ctx, next) => {})
 ```

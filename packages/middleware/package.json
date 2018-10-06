@@ -9,6 +9,7 @@
   "license": "ISC",
   "keywords": ["XMPP", "middleware"],
   "dependencies": {
+    "@xmpp/error": "^0.3.0",
     "@xmpp/jid": "^0.3.0",
     "@xmpp/xml": "^0.3.0",
     "koa-compose": "^4.1.0"

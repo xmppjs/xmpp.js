@@ -12,8 +12,16 @@ function listener(entity, middleware, Context) {
   }
 }
 
+function errorHandler(entity) {
+  return function(ctx, next) {
+    next()
+      .then(reply => reply && entity.send(reply))
+      .catch(err => entity.emit('error', err))
+  }
+}
+
 module.exports = function({entity}) {
-  const incoming = []
+  const incoming = [errorHandler(entity)]
   const outgoing = []
 
   const incomingListener = listener(entity, incoming, IncomingContext)
@@ -23,11 +31,6 @@ module.exports = function({entity}) {
   entity.hookOutgoing = outgoingListener
 
   return {
-    entity,
-    incoming,
-    outgoing,
-    incomingListener,
-    outgoingListener,
     use(fn) {
       incoming.push(fn)
       return fn
