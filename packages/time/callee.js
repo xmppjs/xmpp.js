@@ -7,7 +7,7 @@ const NS_TIME = 'urn:xmpp:time'
 
 module.exports = function({discoCallee, iqCallee}) {
   discoCallee.features.add(NS_TIME)
-  iqCallee.get(NS_TIME, () => {
+  iqCallee.get(NS_TIME, 'time', () => {
     const tzo = time.offset()
     const utc = time.datetime()
 
