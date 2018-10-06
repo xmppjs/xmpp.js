@@ -8,7 +8,6 @@ const NS = 'jabber:iq:roster'
 
 function parseItem(item) {
   return {
-    ...item.attrs,
     groups: item.getChildren('group').map(group => group.text()),
     approved: item.attrs.approved === 'true',
     ask: item.attrs.ask === 'subscribe',
@@ -24,7 +23,7 @@ class RosterConsumer extends EventEmitter {
     this.iqCaller = iqCaller
     this.entity = entity
 
-    iqCallee.set(NS, ctx => this._onRosterPush(ctx))
+    iqCallee.set(NS, 'query', ctx => this._onRosterPush(ctx))
   }
 
   _onRosterPush({element, from}) {
@@ -40,6 +39,8 @@ class RosterConsumer extends EventEmitter {
     } else {
       this.emit('set', [item, ver])
     }
+
+    return true
   }
 
   get(ver, ...args) {

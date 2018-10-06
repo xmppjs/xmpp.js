@@ -18,7 +18,6 @@ module.exports.mockInput = (entity, el) => {
   entity.emit('input', el.toString())
   entity._onElement(el)
 }
-
 module.exports.promiseSend = async entity => {
   const stanza = await promise(entity, 'send', '')
   delete stanza.attrs.xmlns
@@ -27,6 +26,3 @@ module.exports.promiseSend = async entity => {
 module.exports.promiseError = entity => {
   return promise(entity, 'error', '')
 }
-
-// FIXME remove
-module.exports.promiseOutput = module.exports.promiseSend

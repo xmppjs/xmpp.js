@@ -41,14 +41,14 @@ const callee = _iqCallee({middleware, entity})
 
 ```js
 // handle iq get query with that namespace
-callee.get('jabber:iq:version', query => {
-  console.log(query)
+callee.get('jabber:iq:version', 'query', ctx => {
+  console.log(query.element)
   return Promise.resolve()
 })
 
 // handle iq set query with that namespace
-callee.set('jabber:iq:version', query => {
-  console.log(query)
+callee.set('jabber:iq:version', 'query', ctx => {
+  console.log(query.element)
   return Promise.resolve()
 })
 ```

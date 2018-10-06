@@ -17,7 +17,7 @@ module.exports = function({iqCallee}) {
   const features = new Set([NS_DISCO_INFO])
   const identities = new Set()
 
-  iqCallee.get(NS_DISCO_INFO, () => {
+  iqCallee.get(NS_DISCO_INFO, 'query', () => {
     return build(features, identities)
   })
 
