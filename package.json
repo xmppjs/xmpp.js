@@ -26,7 +26,7 @@
     "eslint-plugin-unicorn": "^6.0.1",
     "exorcist": "^1.0.1",
     "jsdom": "^12.1.0",
-    "lerna": "^3.4.0",
+    "lerna": "^3.4.1",
     "node-fetch": "^2.2.0",
     "prettier": "^1.14.2",
     "sinon": "^6.3.5",
