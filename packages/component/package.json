@@ -2,17 +2,19 @@
   "name": "@xmpp/component",
   "description": "XMPP component for JavaScript",
   "repository": "github:xmppjs/xmpp.js",
-  "homepage":
-    "https://github.com/xmppjs/xmpp.js/tree/master/packages/component",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/component",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "license": "ISC",
-  "keywords": ["XMPP", "component"],
+  "keywords": [
+    "XMPP",
+    "component"
+  ],
   "dependencies": {
-    "@xmpp/component-core": "^0.3.0",
-    "@xmpp/iq": "^0.3.0",
-    "@xmpp/middleware": "^0.3.0",
-    "@xmpp/reconnect": "^0.3.0"
+    "@xmpp/component-core": "^0.4.0",
+    "@xmpp/iq": "^0.4.0",
+    "@xmpp/middleware": "^0.4.0",
+    "@xmpp/reconnect": "^0.4.0"
   },
   "engines": {
     "node": ">= 10.0.0",

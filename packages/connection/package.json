@@ -2,18 +2,20 @@
   "name": "@xmpp/connection",
   "description": "XMPP connection for JavaScript",
   "repository": "github:xmppjs/xmpp.js",
-  "homepage":
-    "https://github.com/xmppjs/xmpp.js/tree/master/packages/connection",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/connection",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "license": "ISC",
-  "keywords": ["XMPP", "connection"],
+  "keywords": [
+    "XMPP",
+    "connection"
+  ],
   "dependencies": {
-    "@xmpp/events": "^0.3.0",
-    "@xmpp/error": "^0.3.0",
-    "@xmpp/jid": "^0.3.0",
+    "@xmpp/error": "^0.4.0",
+    "@xmpp/events": "^0.4.0",
+    "@xmpp/jid": "^0.4.0",
     "@xmpp/streamparser": "^0.0.6",
-    "@xmpp/xml": "^0.3.0"
+    "@xmpp/xml": "^0.4.0"
   },
   "engines": {
     "node": ">= 10.0.0",
