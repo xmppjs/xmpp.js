@@ -29,19 +29,18 @@ test.beforeEach(t => {
   const scriptEl = document.createElement('script')
   scriptEl.textContent = xmppjs
   document.body.appendChild(scriptEl)
-  const {XMPP} = window
-  t.context = XMPP.xmpp
+  t.context = window.XMPP.client
   return server.restart()
 })
 
 test.serial('client ws://', t => {
-  const {client} = t.context({
+  const xmpp = t.context({
     credentials,
     service,
   })
-  debug(client)
+  debug(xmpp)
 
-  return client.start().then(id => {
+  return xmpp.start().then(id => {
     t.is(id.bare().toString(), JID)
   })
 })

@@ -1,55 +1,88 @@
 # iq
 
-Requests for `@xmpp/client` and `@xmpp/component`.
+> Info/Query, or IQ, is a "request-response" mechanism, similar in some ways to the Hypertext Transfer Protocol [HTTP]. The semantics of IQ enable an entity to make a request of, and receive a response from, another entity.
 
-Supports Node.js and browsers.
+[XMPP Core: IQ Semantics](https://xmpp.org/rfcs/rfc6120.html#stanzas-semantics-iq)
 
-## Install
-
-`npm install @xmpp/iq` or `yarn add @xmpp/iq`
+Included in `@xmpp/client` and `@xmpp/component`.
 
 ## Caller
 
+Implements the caller side of iq semantics.
+
 ```js
-const _iqCaller = require('@xmpp/iq-caller')
-const iqCaller = _iqCaller({middleware, entity})
+const {client} = require('@xmpp/client') // or component
+
+const xmpp = client(...)
+const {iqCaller} = xmpp
 ```
 
-### Get
+### request
+
+Sends a request and returns a promise.
+
+- The promise resolves with the response when it is received.
+- The promise rejects with a `StanzaError` when an error is received or with an `Error` if a network error occurs.
+
+- The request `id` attribute is optional and will be added if omitted.
+- The request `to` attribute is optional and will default to the server.
 
 ```js
-iqCaller.get(xml('time', 'urn:xmpp:time')).then(time => {
-  console.log(time.getChildText('tzo'))
-  console.log(time.getChildText('utc'))
-})
+const response = await iqCaller.request(
+  xml('iq', {type: 'get'}, xml('foo', 'foo:bar'))
+)
+const foo = response.getChild('foo', 'foo:bar')
+console.log(foo)
 ```
 
-### Set
+### get
+
+Sends a `get` request with a child element and resolves with the child response.
 
 ```js
-iqCaller.set(xml('vCard', 'vcard-temp', xml('FN', 'bot'))).then(() => {
-  console.log('done')
-})
+const foo = await iqCaller.get(xml('foo', 'foo:bar'), attrs)
+console.log(foo)
+```
+
+### set
+
+Sends a `set` request with a child element and resolves with the child response.
+
+```js
+const foo = await iqCaller.set(xml('foo', 'foo:bar'))
+console.log(foo)
 ```
 
 ## Callee
 
+Implements the callee side of iq semantics.
+
+You can think of this as http routing expect there are only 2 methods; `get` and `set` and you would pass a namespace and a tag name instead of an url. The return value of the handler will be the child element of the response sent to the caller.
+
 ```js
-const _iqCallee = require('@xmpp/iq-callee')
-const callee = _iqCallee({middleware, entity})
+const {client} = require('@xmpp/client') // or component
+
+const xmpp = client(...)
+const {iqCallee} = xmpp
 ```
 
-```js
-// handle iq get query with that namespace
-callee.get('jabber:iq:version', 'query', ctx => {
-  console.log(query.element)
-  return Promise.resolve()
-})
+## get
 
-// handle iq set query with that namespace
-callee.set('jabber:iq:version', 'query', ctx => {
-  console.log(query.element)
-  return Promise.resolve()
+Add a `get` handler.
+
+```js
+iqCallee.get('foo:bar', 'foo', ctx => {
+  return xml('foo', {xmlns: 'foo:bar'})
+})
+```
+
+## set
+
+Add a `set` handler.
+
+```js
+iqCallee.set('foo:bar', 'foo', ctx => {
+  return xml('foo', {xmlns: 'foo:bar'})
 })
 ```
 
