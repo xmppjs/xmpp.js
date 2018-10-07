@@ -20,5 +20,8 @@
     "@xmpp/events": "^0.4.0",
     "@xmpp/jid": "^0.4.0",
     "@xmpp/xml": "^0.4.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

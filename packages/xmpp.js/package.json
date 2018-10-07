@@ -50,5 +50,8 @@
   },
   "scripts": {
     "prepublish": "node script.js"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
