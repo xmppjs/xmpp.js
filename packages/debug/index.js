@@ -1,5 +1,7 @@
 'use strict'
 
+/* eslint no-console: 0 */
+
 module.exports = function debug(entity, force) {
   if (process.env.XMPP_DEBUG || force === true) {
     entity.on('input', data => console.log('⮈', data))

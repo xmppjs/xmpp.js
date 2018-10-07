@@ -9,6 +9,7 @@ const _tls = require('@xmpp/tls')
 const _middleware = require('@xmpp/middleware')
 const _streamFeatures = require('@xmpp/stream-features')
 const _iqCaller = require('@xmpp/iq/caller')
+const _iqCallee = require('@xmpp/iq/callee')
 const _resolve = require('@xmpp/resolve')
 
 // Stream features - order matters and define priority
@@ -53,6 +54,7 @@ function client(options = {}) {
   const middleware = _middleware({entity})
   const streamFeatures = _streamFeatures({middleware})
   const iqCaller = _iqCaller({middleware, entity})
+  const iqCallee = _iqCallee({middleware, entity})
   const resolve = _resolve({entity})
   // Stream features - order matters and define priority
   const starttls =
@@ -67,6 +69,7 @@ function client(options = {}) {
     .map(([k, v]) => ({[k]: v(sasl)}))
 
   return Object.assign(entity, {
+    ...entity,
     entity,
     reconnect,
     tcp,
@@ -75,6 +78,7 @@ function client(options = {}) {
     middleware,
     streamFeatures,
     iqCaller,
+    iqCallee,
     resolve,
     starttls,
     sasl,
@@ -84,7 +88,6 @@ function client(options = {}) {
   })
 }
 
-module.exports.Client = Client
 module.exports.xml = xml
 module.exports.jid = jid
 module.exports.client = client

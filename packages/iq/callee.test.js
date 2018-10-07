@@ -2,13 +2,12 @@
 
 const test = require('ava')
 const {mockClient, promiseSend, mockInput, promiseError} = require('@xmpp/test')
-const _iqCallee = require('./callee')
 
 test('empty result when the handler returns true', async t => {
   const xmpp = mockClient()
-  const callee = _iqCallee(xmpp)
+  const {iqCallee} = xmpp
 
-  callee.get('bar', 'foo', () => true)
+  iqCallee.get('bar', 'foo', () => true)
 
   mockInput(
     xmpp,
@@ -22,9 +21,9 @@ test('empty result when the handler returns true', async t => {
 
 test('non empty result when the handler returns an xml.Element', async t => {
   const xmpp = mockClient()
-  const callee = _iqCallee(xmpp)
+  const {iqCallee} = xmpp
 
-  callee.get('bar', 'foo', () => {
+  iqCallee.get('bar', 'foo', () => {
     return <hello />
   })
 
@@ -45,7 +44,6 @@ test('non empty result when the handler returns an xml.Element', async t => {
 
 test('service unavailable error reply when there are no handler', async t => {
   const xmpp = mockClient()
-  _iqCallee(xmpp)
 
   xmpp.mockInput(
     <iq type="get" id="123">
@@ -66,13 +64,13 @@ test('service unavailable error reply when there are no handler', async t => {
 
 test('internal server error reply when handler throws an error', async t => {
   const xmpp = mockClient()
-  const callee = _iqCallee(xmpp)
+  const {iqCallee} = xmpp
 
   const error = new Error('foobar')
   const errorPromise = promiseError(xmpp)
   const outputPromise = promiseSend(xmpp)
 
-  callee.get('bar', 'foo', () => {
+  iqCallee.get('bar', 'foo', () => {
     throw error
   })
 
@@ -97,13 +95,13 @@ test('internal server error reply when handler throws an error', async t => {
 
 test('internal server error reply when handler rejects with an error', async t => {
   const xmpp = mockClient()
-  const callee = _iqCallee(xmpp)
+  const {iqCallee} = xmpp
 
   const error = new Error('foobar')
   const errorPromise = promiseError(xmpp)
   const outputPromise = promiseSend(xmpp)
 
-  callee.set('bar', 'foo', () => {
+  iqCallee.set('bar', 'foo', () => {
     return Promise.reject(error)
   })
 
@@ -128,7 +126,7 @@ test('internal server error reply when handler rejects with an error', async t =
 
 test('stanza error reply when handler returns an error element', async t => {
   const xmpp = mockClient()
-  const callee = _iqCallee(xmpp)
+  const {iqCallee} = xmpp
 
   const outputPromise = promiseSend(xmpp)
 
@@ -138,7 +136,7 @@ test('stanza error reply when handler returns an error element', async t => {
     </error>
   )
 
-  callee.set('bar', 'foo', () => {
+  iqCallee.set('bar', 'foo', () => {
     return errorElement
   })
 

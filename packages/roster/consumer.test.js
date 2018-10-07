@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const {mockClient, promise} = require('@xmpp/test')
+const {mockClient, promise, mockInput} = require('@xmpp/test')
 
 const _iqCallee = require('@xmpp/iq/callee')
 const _roster = require('./consumer')
@@ -212,55 +212,50 @@ test('remove', t => {
   ])
 })
 
-test('push remove', t => {
+test('push remove', async t => {
   const {entity, iqCaller, middleware} = mockClient()
   const iqCallee = _iqCallee({middleware, entity})
   const roster = _roster({entity, iqCaller, iqCallee})
 
-  return Promise.all([
-    promise(roster, 'remove').then(([jid, ver]) => {
-      t.deepEqual(jid, new JID('foo@bar'))
-      t.is(ver, 'v1')
-    }),
-    entity
-      .fakeIncomingSet(
-        <query xmlns="jabber:iq:roster" ver="v1">
-          <item jid="foo@bar" subscription="remove" />
-        </query>,
-        {from: entity.jid.bare()}
-      )
-      .then(child => {
-        t.is(child, undefined)
-      }),
-  ])
+  const promiseRosterRemove = promise(roster, 'remove')
+
+  mockInput(
+    entity,
+    <iq type="set" from={entity.jid.bare()}>
+      <query xmlns="jabber:iq:roster" ver="v1">
+        <item jid="foo@bar" subscription="remove" />
+      </query>
+    </iq>
+  )
+
+  t.deepEqual(await promiseRosterRemove, [new JID('foo@bar'), 'v1'])
 })
 
-test('push set', t => {
+test('push set', async t => {
   const {entity, iqCaller, middleware} = mockClient()
   const iqCallee = _iqCallee({middleware, entity})
   const roster = _roster({entity, iqCaller, iqCallee})
 
-  return Promise.all([
-    promise(roster, 'set').then(([item, ver]) => {
-      t.deepEqual(item, {
-        jid: new JID('foo@bar'),
-        name: '',
-        ask: false,
-        approved: false,
-        subscription: 'none',
-        groups: [],
-      })
-      t.is(ver, undefined)
-    }),
-    entity
-      .fakeIncomingSet(
-        <query xmlns="jabber:iq:roster">
-          <item jid="foo@bar" subscription="none" />
-        </query>,
-        {from: entity.jid.bare()}
-      )
-      .then(child => {
-        t.is(child, undefined)
-      }),
+  const promiseRosterSet = promise(roster, 'set')
+
+  mockInput(
+    entity,
+    <iq type="set" from={entity.jid.bare()}>
+      <query xmlns="jabber:iq:roster">
+        <item jid="foo@bar" subscription="none" />
+      </query>
+    </iq>
+  )
+
+  t.deepEqual(await promiseRosterSet, [
+    {
+      jid: new JID('foo@bar'),
+      name: '',
+      ask: false,
+      approved: false,
+      subscription: 'none',
+      groups: [],
+    },
+    undefined,
   ])
 })

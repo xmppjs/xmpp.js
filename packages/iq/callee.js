@@ -54,35 +54,40 @@ function buildError(type, condition) {
   return xml('error', {type}, xml(condition, NS_STANZA))
 }
 
-async function iqHandler(ctx, next) {
-  if (!isQuery(ctx)) return next()
+function iqHandler(entity) {
+  return async function iqHandler(ctx, next) {
+    if (!isQuery(ctx)) return next()
 
-  const {entity, stanza} = ctx
-  const [child] = stanza.children
+    const {stanza} = ctx
+    const [child] = stanza.children
 
-  if (!isValidQuery(ctx, child)) {
-    return buildReplyError(ctx, buildError('modify', 'bad-request'), child)
+    if (!isValidQuery(ctx, child)) {
+      return buildReplyError(ctx, buildError('modify', 'bad-request'), child)
+    }
+
+    ctx.element = child
+
+    let reply
+    try {
+      reply = await next()
+    } catch (err) {
+      entity.emit('error', err)
+      reply = buildError('cancel', 'internal-server-error')
+    }
+
+    if (!reply) {
+      reply = buildError('cancel', 'service-unavailable')
+    }
+
+    if (reply instanceof xml.Element && reply.is('error')) {
+      return buildReplyError(ctx, reply, child)
+    }
+
+    return buildReplyResult(
+      ctx,
+      reply instanceof xml.Element ? reply : undefined
+    )
   }
-
-  ctx.element = child
-
-  let reply
-  try {
-    reply = await next()
-  } catch (err) {
-    entity.emit('error', err)
-    reply = buildError('cancel', 'internal-server-error')
-  }
-
-  if (!reply) {
-    reply = buildError('cancel', 'service-unavailable')
-  }
-
-  if (reply instanceof xml.Element && reply.is('error')) {
-    return buildReplyError(ctx, reply, child)
-  }
-
-  return buildReplyResult(ctx, reply instanceof xml.Element ? reply : undefined)
 }
 
 function route(type, ns, name, handler) {
@@ -93,8 +98,8 @@ function route(type, ns, name, handler) {
   }
 }
 
-module.exports = function({middleware}) {
-  middleware.use(iqHandler)
+module.exports = function({middleware, entity}) {
+  middleware.use(iqHandler(entity))
 
   return {
     get(ns, name, handler) {

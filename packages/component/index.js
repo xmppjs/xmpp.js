@@ -4,6 +4,8 @@ const {Component, xml, jid} = require('@xmpp/component-core')
 
 const _reconnect = require('@xmpp/reconnect')
 const _middleware = require('@xmpp/middleware')
+const _iqCaller = require('@xmpp/iq/caller')
+const _iqCallee = require('@xmpp/iq/callee')
 
 function component(options) {
   const {password, service, domain} = options
@@ -12,6 +14,8 @@ function component(options) {
 
   const reconnect = _reconnect({entity})
   const middleware = _middleware({entity})
+  const iqCaller = _iqCaller({entity, middleware})
+  const iqCallee = _iqCallee({entity, middleware})
 
   entity.on('open', async el => {
     try {
@@ -30,10 +34,11 @@ function component(options) {
     entity,
     reconnect,
     middleware,
+    iqCaller,
+    iqCallee,
   })
 }
 
-module.exports.Component = Component
 module.exports.xml = xml
 module.exports.jid = jid
 module.exports.component = component

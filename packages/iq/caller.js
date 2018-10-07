@@ -26,18 +26,26 @@ module.exports = function iqCaller({entity, middleware}) {
     if (type === 'error') {
       deferred.reject(StanzaError.fromElement(stanza.getChild('error')))
     } else {
-      deferred.resolve(stanza.children[0])
+      deferred.resolve(stanza)
     }
     handlers.delete(id)
   })
 
   return {
     handlers,
-    get(child, ...args) {
-      return this.request(xml('iq', {type: 'get'}, child), ...args)
+    async get(child, ...args) {
+      const response = await this.request(
+        xml('iq', {type: 'get'}, child),
+        ...args
+      )
+      return response.children[0]
     },
-    set(child, ...args) {
-      return this.request(xml('iq', {type: 'set'}, child), ...args)
+    async set(child, ...args) {
+      const response = await this.request(
+        xml('iq', {type: 'set'}, child),
+        ...args
+      )
+      return response.children[0]
     },
     async request(stanza, params) {
       if (typeof params === 'string') {
