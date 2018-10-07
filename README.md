@@ -14,28 +14,10 @@
 
 - [client](/packages/client)
 - [component](/packages/component)
-
-## Packages
-
-- [debug](/packages/debug)
-- [iq](/packages/iq)
-- [jid](/packages/jid)
-- [middleware](/packages/middleware)
-- [ping](/packages/ping)
-- [pubsub](/packages/pubsub)
-- [reconnect](/packages/reconnect)
-- [resolve](/packages/resolve)
-- [resource-binding](/packages/resource-binding)
-- [roster](/packages/roster)
-- [sasl](/packages/sasl)
-- [service-discovery](/packages/service-discovery)
-- [starttls](/packages/starttls)
-- [time](/packages/time)
-- [tls](/packages/tls)
-- [uri](/packages/uri)
-- [vcard](/packages/vcard)
-- [version](/packages/version)
 - [xml](/packages/xml)
+- [jid](/packages/jid)
+- [time](/packages/time)
+- [uri](/packages/uri)
 
 ## goals
 

@@ -38,9 +38,7 @@ function offset(d = new Date()) {
   return formatOffset(d.getTimezoneOffset())
 }
 
-module.exports = {
-  date,
-  time,
-  datetime,
-  offset,
-}
+module.exports.date = date
+module.exports.time = time
+module.exports.datetime = datetime
+module.exports.offset = offset
