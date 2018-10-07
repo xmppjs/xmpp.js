@@ -4,17 +4,25 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/resolve",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "license": "ISC",
-  "keywords": ["XMPP", "dns", "records", "srv", "txt", "lookup", "resolve"],
+  "keywords": [
+    "XMPP",
+    "dns",
+    "records",
+    "srv",
+    "txt",
+    "lookup",
+    "resolve"
+  ],
   "browser": {
     "dns": false,
     "./lib/dns": false,
     "node-fetch": false
   },
   "dependencies": {
-    "@xmpp/connection": "^0.3.0",
-    "@xmpp/xml": "^0.3.0",
+    "@xmpp/connection": "^0.4.0",
+    "@xmpp/xml": "^0.4.0",
     "node-fetch": "^2.2.0"
   },
   "engines": {

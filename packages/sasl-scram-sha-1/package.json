@@ -2,12 +2,15 @@
   "name": "@xmpp/sasl-scram-sha-1",
   "description": "XMPP SASL plain for JavaScript",
   "repository": "github:xmppjs/xmpp.js",
-  "homepage":
-    "https://github.com/xmppjs/xmpp.js/tree/master/packages/sasl-scram-sha-1",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/sasl-scram-sha-1",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "license": "ISC",
-  "keywords": ["XMPP", "sasl", "plain"],
+  "keywords": [
+    "XMPP",
+    "sasl",
+    "plain"
+  ],
   "dependencies": {
     "sasl-scram-sha-1": "^1.2.0"
   },
