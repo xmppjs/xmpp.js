@@ -26,6 +26,7 @@ test-ci:
 	make lint
 	make restart
 	./node_modules/.bin/lerna run prepublish
+	node bundle.js
 	./node_modules/.bin/ava --serial --fail-fast test/
 	make bundlesize
 
