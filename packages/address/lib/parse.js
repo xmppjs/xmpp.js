@@ -1,6 +1,6 @@
 'use strict'
 
-const JID = require('../lib/JID')
+const Address = require('../lib/Address')
 
 module.exports = function parse(s) {
   let local
@@ -18,5 +18,5 @@ module.exports = function parse(s) {
     s = s.substr(atStart + 1)
   }
 
-  return new JID(local, s, resource)
+  return new Address(local, s, resource)
 }

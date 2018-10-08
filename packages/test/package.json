@@ -18,7 +18,7 @@
     "@xmpp/client": "^0.5.0",
     "@xmpp/debug": "^0.5.0",
     "@xmpp/events": "^0.5.0",
-    "@xmpp/jid": "^0.5.0",
+    "@xmpp/address": "^0.5.0",
     "@xmpp/xml": "^0.5.0"
   },
   "publishConfig": {

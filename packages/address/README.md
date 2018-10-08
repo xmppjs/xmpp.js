@@ -1,23 +1,23 @@
-# JID
+# address
 
-XMPP identifiers (JID) for JavaScript
+XMPP address (JID) for JavaScript
 
-| JID type | local |  @  |     domain     |  /  |  resource  |         usage          |
-| :------: | :---: | :-: | :------------: | :-: | :--------: | :--------------------: |
-|  domain  |       |     | wonderland.net |     |            | servers and components |
-|   bare   | alice |  @  | wonderland.net |     |            |         users          |
-|   full   | alice |  @  | wonderland.net |  /  | rabbithole | user resource (device) |
+|  type  | local |  @  |     domain     |  /  |  resource  |         usage          |
+| :----: | :---: | :-: | :------------: | :-: | :--------: | :--------------------: |
+| domain |       |     | wonderland.net |     |            | servers and components |
+|  bare  | alice |  @  | wonderland.net |     |            |         users          |
+|  full  | alice |  @  | wonderland.net |  /  | rabbithole | user resource (device) |
 
 https://en.wikipedia.org/wiki/XMPP#Decentralization_and_addressing
 
 ## Install
 
-`npm install @xmpp/jid` or `yarn add @xmpp/jid`
+`npm install @xmpp/address` or `yarn add @xmpp/address`
 
 ## Usage
 
 ```js
-var jid = require('@xmpp/jid')
+var jid = require('@xmpp/address')
 
 /*
  * All return an instance of jid.JID

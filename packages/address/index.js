@@ -1,19 +1,20 @@
 'use strict'
 
-const JID = require('./lib/JID')
+const Address = require('./lib/Address')
 const escaping = require('./lib/escaping')
 const parse = require('./lib/parse')
 
-function jid(...args) {
+function address(...args) {
   if (!args[1] && !args[2]) {
     return parse(...args)
   }
-  return new JID(...args)
+  return new Address(...args)
 }
 
-exports = module.exports = jid.bind()
-exports.jid = jid
-exports.JID = JID
+exports = module.exports = address.bind()
+exports.jid = address
+exports.JID = Address
+exports.Address = Address
 exports.equal = function(a, b) {
   return a.equals(b)
 }

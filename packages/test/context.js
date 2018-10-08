@@ -4,7 +4,7 @@ const client = require('./client')
 const {promise} = require('@xmpp/events')
 const xml = require('@xmpp/xml')
 const debug = require('@xmpp/debug')
-const JID = require('@xmpp/jid')
+const JID = require('@xmpp/address')
 
 module.exports = function context(entity = client()) {
   debug(entity)

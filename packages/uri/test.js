@@ -2,7 +2,7 @@
 
 const test = require('ava')
 const {parse} = require('.')
-const jid = require('@xmpp/jid')
+const jid = require('@xmpp/address')
 
 test('parse', t => {
   t.deepEqual(

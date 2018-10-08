@@ -2,7 +2,7 @@
 
 const context = require('./context')
 const xml = require('@xmpp/xml')
-const jid = require('@xmpp/jid')
+const jid = require('@xmpp/address')
 const mockClient = require('./mockClient')
 const {delay, promise, timeout} = require('@xmpp/events')
 

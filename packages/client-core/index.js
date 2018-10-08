@@ -2,7 +2,7 @@
 
 const Client = require('./lib/Client')
 const xml = require('@xmpp/xml')
-const jid = require('@xmpp/jid')
+const jid = require('@xmpp/address')
 
 module.exports.Client = Client
 module.exports.xml = xml

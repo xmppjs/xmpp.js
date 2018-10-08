@@ -1,7 +1,7 @@
 'use strict'
 
 const {timeout, EventEmitter, promise} = require('@xmpp/events')
-const jid = require('@xmpp/jid')
+const jid = require('@xmpp/address')
 const xml = require('@xmpp/xml')
 const StreamError = require('./lib/StreamError')
 

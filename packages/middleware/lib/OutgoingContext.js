@@ -1,7 +1,7 @@
 'use strict'
 
 const Context = require('./Context')
-const JID = require('@xmpp/jid')
+const JID = require('@xmpp/address')
 
 module.exports = class OutgoingContext extends Context {
   constructor(entity, stanza) {
