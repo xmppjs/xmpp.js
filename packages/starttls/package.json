@@ -4,14 +4,14 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/starttls",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "license": "ISC",
   "keywords": [
     "XMPP",
     "STARTTLS"
   ],
   "dependencies": {
-    "@xmpp/xml": "^0.4.0"
+    "@xmpp/xml": "^0.5.0"
   },
   "engines": {
     "node": ">= 10.0.0",
