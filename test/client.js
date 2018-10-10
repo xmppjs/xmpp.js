@@ -18,7 +18,7 @@ test.beforeEach(() => {
 })
 
 test.afterEach(t => {
-  if (t.context.xmpp) {
+  if (t.context.xmpp && t.context.xmpp.status === 'online') {
     return t.context.xmpp.stop()
   }
 })
@@ -57,7 +57,7 @@ test.serial.cb('bad credentials', t => {
 
   const xmpp = client({
     service: domain,
-    credentials: Object.assign({}, credentials, {password: 'nope'}),
+    credentials: {...credentials, password: 'nope'},
   })
   debug(client)
 

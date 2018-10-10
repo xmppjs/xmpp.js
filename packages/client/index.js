@@ -69,7 +69,6 @@ function client(options = {}) {
     .map(([k, v]) => ({[k]: v(sasl)}))
 
   return Object.assign(entity, {
-    ...entity,
     entity,
     reconnect,
     tcp,
