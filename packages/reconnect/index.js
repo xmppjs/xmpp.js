@@ -27,22 +27,16 @@ class Reconnect extends EventEmitter {
     }, delay)
   }
 
-  reconnect() {
+  async reconnect() {
     const {entity} = this
+    const {service, domain, lang} = entity.options
+
     this.emit('reconnecting')
 
-    // Allow calling start() even though status is not offline
-    // reset status property right after
-    const {status} = entity
-    entity.status = 'offline'
+    await entity.connect(service)
+    await entity.open({domain, lang})
 
-    const start = entity.start(entity.startOptions)
-
-    entity.status = status
-
-    return start.then(() => {
-      this.emit('reconnected')
-    })
+    this.emit('reconnected')
   }
 
   start() {

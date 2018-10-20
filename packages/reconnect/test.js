@@ -19,15 +19,22 @@ test('#reconnect', t => {
   const entity = new EventEmitter()
   const reconnect = _reconnect({entity})
 
-  entity.status = 'foobar'
-  entity.options = {}
+  const options = (entity.options = {
+    service: 'service',
+    domain: 'domain',
+    lang: 'lang',
+  })
 
-  entity.start = () => {
-    t.is(entity.status, 'offline')
+  entity.connect = service => {
+    t.is(service, options.service)
     return Promise.resolve()
   }
 
-  return reconnect.reconnect().then(() => {
-    t.is(entity.status, 'foobar')
-  })
+  entity.open = ({domain, lang}) => {
+    t.is(domain, options.domain)
+    t.is(lang, options.lang)
+    return Promise.resolve()
+  }
+
+  return reconnect.reconnect()
 })

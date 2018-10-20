@@ -1,3 +1,5 @@
+plugin_paths = { "./prosody-modules" }
+
 modules_enabled = {
   "roster";
   "saslauth";
@@ -12,6 +14,10 @@ modules_enabled = {
   "http_files";
   "time";
   "version";
+
+  -- prosody-modules
+  "smacks";
+  -- "smacks_offline";
 };
 
 daemonize = true;
