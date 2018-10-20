@@ -13,10 +13,12 @@
   "dependencies": {
     "@xmpp/error": "^0.5.0",
     "@xmpp/xml": "^0.5.0",
+    "js-base64": "^2.4.9",
     "saslmechanisms": "^0.1.1"
   },
   "browser": {
-    "buffer": false
+    "buffer": false,
+    "js-base64": false
   },
   "engines": {
     "node": ">= 10.0.0",

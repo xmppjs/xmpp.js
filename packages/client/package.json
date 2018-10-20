@@ -23,13 +23,8 @@
     "@xmpp/tls": "^0.5.0",
     "@xmpp/websocket": "^0.5.0"
   },
-  "browser": {
-    "url": false,
-    "@xmpp/tcp": false,
-    "@xmpp/tls": false,
-    "@xmpp/starttls": false,
-    "@xmpp/sasl-scram-sha-1": false
-  },
+  "browser": "./browser.js",
+  "react-native": "./browser.js",
   "engines": {
     "node": ">= 10.0.0",
     "yarn": ">= 1.0.0"

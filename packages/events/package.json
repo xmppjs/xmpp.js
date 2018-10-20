@@ -18,5 +18,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "events": "^3.0.0"
   }
 }
