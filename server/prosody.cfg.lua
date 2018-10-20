@@ -1,3 +1,5 @@
+plugin_paths = { "./prosody-modules" }
+
 modules_enabled = {
   "roster";
   "saslauth";
@@ -11,6 +13,10 @@ modules_enabled = {
   "websocket";
   "time";
   "version";
+
+  -- prosody-modules
+  "smacks";
+  -- "smacks_offline";
 };
 
 modules_disabled = {

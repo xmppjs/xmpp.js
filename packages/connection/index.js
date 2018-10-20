@@ -319,7 +319,7 @@ class Connection extends EventEmitter {
     const {name} = element
     const NS = element.attrs.xmlns
     return (
-      // This.online && FIXME
+      // FIXME && this.online
       (NS ? NS === this.NS : true) &&
       (name === 'iq' || name === 'message' || name === 'presence')
     )

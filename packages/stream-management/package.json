@@ -1,0 +1,25 @@
+{
+  "name": "@xmpp/stream-management",
+  "description": "XMPP stream management for JavaScript",
+  "repository": "github:xmppjs/xmpp.js",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/stream-management",
+  "bugs": "http://github.com/xmppjs/xmpp.js/issues",
+  "version": "0.6.0",
+  "license": "ISC",
+  "keywords": [
+    "XMPP",
+    "stream",
+    "management"
+  ],
+  "dependencies": {
+    "@xmpp/middleware": "^0.6.0",
+    "@xmpp/xml": "^0.6.0"
+  },
+  "engines": {
+    "node": ">= 10.0.0",
+    "yarn": ">= 1.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
