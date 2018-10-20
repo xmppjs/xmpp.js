@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const {getDomain} = require('..')
+const getDomain = require('../lib/getDomain')
 
 test('getDomain', t => {
   t.is(getDomain('ws://foo:123/foobar'), 'foo')

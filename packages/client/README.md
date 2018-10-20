@@ -2,17 +2,33 @@
 
 An XMPP client is an entity that connects to an XMPP server.
 
-`@xmpp/client` package includes a minimal set of features to connect /authenticate securely and reliably.
+`@xmpp/client` package includes a minimal set of features to connect and authenticate securely and reliably.
+
+It supports Node.js, browser and React Native. See [Connection Method](#connection-methods) for differences.
 
 ## Install
 
 `npm install @xmpp/client` or `yarn add @xmpp/client`
 
-## Example
+## Setup
 
 ```js
 const {client, xml, jid} = require('@xmpp/client')
+```
 
+or
+
+```html
+<script src="https://unpkg.com/@xmpp/client/dist/xmpp.min.js" crossorigin></script>
+```
+
+```js
+const {client, xml, jid} = window.XMPP
+```
+
+## Example
+
+```js
 const xmpp = client({
   service: 'ws://localhost:5280/xmpp-websocket',
   domain: 'localhost',
@@ -63,7 +79,7 @@ See [jid package](/packages/jid)
 
   - `service` `<string>` The service to connect to, accepts an URI or a domain.
     - `domain` lookup and connect to the most secure endpoint using [@xmpp/resolve](/packages/resolve)
-    - `xmpp://hostname:port` plain TCP, can be upgraded to TLS using [@xmpp/starttls](/packages/starttls)
+    - `xmpp://hostname:port` plain TCP, may be upgraded to TLS by [@xmpp/starttls](/packages/starttls)
     - `xmpps://hostname:port` direct TLS
     - `ws://hostname:port/path` plain WebSocket
     - `wss://hostname:port/path` secure WebSocket
@@ -163,3 +179,28 @@ xmpp.send(xml('presence'))
 ### xmpp.reconnect
 
 See [@xmpp/reconnect](/packages/reconnect).
+
+## Connection methods
+
+XMPP supports multiple transports, this table list `@xmpp/client` supported and unsupported transport for each environment.
+
+|            transport             |   protocols   | Node.js | Browser | React Native |
+| :------------------------------: | :-----------: | :-----: | :-----: | :----------: |
+| [WebSocket](/packages/websocket) | ws://, wss:// |    ✔    |    ✔    |      ✔       |
+|       [TCP](/packages/tcp)       |    xmpp://    |    ✔    |    ✗    |      ✗       |
+|       [TLS](/packages/tls)       |   xmpps://    |    ✔    |    ✗    |      ✗       |
+
+## Authentication methods
+
+Multiple authentication mechanisms are supported.
+PLAIN should only be used over secure WebSocket (`wss://)`, direct TLS (`xmpps:`) or a TCP (`xmpp:`) connection upgraded to TLS via [STARTTLS](/starttls)
+
+|                   SASL                    | Node.js | Browser | React Native |
+| :---------------------------------------: | :-----: | :-----: | :----------: |
+|   [ANONYMOUS](/packages/sasl-anonymous)   |    ✔    |    ✔    |      ✔       |
+|       [PLAIN](/packages/sasl-plain)       |    ✔    |    ✔    |      ✔       |
+| [SCRAM-SHA-1](/packages/sasl-scram-sha-1) |    ✔    |    ☐    |      ✗       |
+
+- ☐ : Optional
+- ✗ : Unavailable
+- ✔ : Included

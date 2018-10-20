@@ -4,7 +4,7 @@ STARTTLS negotiation for `@xmpp/client`.
 
 Included and enabled in `@xmpp/client` for Node.js
 
-STARTTLS will automatically be negotiated upon TCP connection.
+STARTTLS will automatically upgrade the TCP connection to TLS upon connecton if the server supports it.
 
 ## References
 
