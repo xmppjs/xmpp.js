@@ -5,15 +5,12 @@ const {promise} = require('@xmpp/events')
 const xml = require('@xmpp/xml')
 const debug = require('@xmpp/debug')
 const JID = require('@xmpp/jid')
+const mockSocket = require('./mockSocket')
 
 module.exports = function context(entity = client()) {
   debug(entity)
 
-  entity.socket = {
-    write(data, cb) {
-      cb()
-    },
-  }
+  entity.socket = mockSocket()
   entity.jid = new JID('foo@bar/test')
   entity.domain = 'bar'
 
