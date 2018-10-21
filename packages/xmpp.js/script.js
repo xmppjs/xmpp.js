@@ -9,15 +9,16 @@ const packages = fs
   .readdirSync(path.join(__dirname, '..'))
   // For some reason there's a * file on travis
   .filter(p => !['*'].includes(p) && !p.includes('.'))
+  .map(name => require(path.join(__dirname, '..', name, 'package.json')))
 
-const pkg = require(path.join(__dirname, 'package.json'))
+const xmppjsPackage = require(path.join(__dirname, 'package.json'))
 
 // Write package.json dependencies
-pkg.dependencies = packages.reduce((dict, name) => {
-  dict[`@xmpp/${name}`] = `^${pkg.version}`
+xmppjsPackage.dependencies = packages.reduce((dict, pkg) => {
+  dict[pkg.name] = `^${pkg.version}`
   return dict
 }, {})
 fs.writeFileSync(
   path.join(__dirname, 'package.json'),
-  JSON.stringify(pkg, null, 2) + '\n'
+  JSON.stringify(xmppjsPackage, null, 2) + '\n'
 )
