@@ -12,9 +12,8 @@ const NS = 'urn:ietf:params:xml:ns:xmpp-tls'
 
 function proceed(entity, options = {}) {
   return new Promise((resolve, reject) => {
-    options.socket = entity._detachSocket()
     const tlsSocket = tls.connect(
-      options,
+      {socket: entity._detachSocket(), host: entity.options.domain, ...options},
       err => {
         if (err) return reject(err)
         entity._attachSocket(tlsSocket)
