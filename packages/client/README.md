@@ -19,7 +19,7 @@ const {client, xml, jid} = require('@xmpp/client')
 or
 
 ```html
-<script src="https://unpkg.com/@xmpp/client/dist/xmpp.min.js" crossorigin></script>
+<script src="https://unpkg.com/@xmpp/client@0.5.2/dist/xmpp.min.js" crossorigin></script>
 ```
 
 ```js

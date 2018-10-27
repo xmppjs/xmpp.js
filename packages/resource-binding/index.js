@@ -13,12 +13,13 @@ function makeBindElement(resource) {
   return xml('bind', {xmlns: NS}, resource && xml('resource', {}, resource))
 }
 
-function bind(entity, iqCaller, resource) {
-  return iqCaller.set(makeBindElement(resource)).then(result => {
-    const jid = result.getChildText('jid')
-    entity._jid(jid)
-    return jid
-  })
+async function bind(entity, iqCaller, resource) {
+  const result = await iqCaller.request(
+    xml('iq', {type: 'set'}, makeBindElement(resource))
+  )
+  const jid = result.getChild('bind', NS).getChildText('jid')
+  entity._jid(jid)
+  return jid
 }
 
 function route({iqCaller}, resource) {

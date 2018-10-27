@@ -1,9 +1,9 @@
 'use strict'
 
-const xml = require('@xmpp/xml')
 const xid = require('@xmpp/id')
 const StanzaError = require('@xmpp/middleware/lib/StanzaError')
 const {Deferred} = require('@xmpp/events')
+const timeoutPromise = require('@xmpp/events').timeout
 
 function isReply({name, type}) {
   if (name !== 'iq') return false
@@ -33,33 +33,8 @@ module.exports = function iqCaller({entity, middleware}) {
 
   return {
     handlers,
-    async get(child, ...args) {
-      const response = await this.request(
-        xml('iq', {type: 'get'}, child),
-        ...args
-      )
-      return response.children[0]
-    },
-    async set(child, ...args) {
-      const response = await this.request(
-        xml('iq', {type: 'set'}, child),
-        ...args
-      )
-      return response.children[0]
-    },
-    async request(stanza, params) {
-      if (typeof params === 'string') {
-        params = {to: params}
-      }
-
-      const {to, id} = params || {}
-      if (to) {
-        stanza.attrs.to = to
-      }
-
-      if (id) {
-        stanza.attrs.id = id
-      } else if (!stanza.attrs.id) {
+    async request(stanza, timeout = 30 * 1000) {
+      if (!stanza.attrs.id) {
         stanza.attrs.id = xid()
       }
 
@@ -68,6 +43,7 @@ module.exports = function iqCaller({entity, middleware}) {
 
       try {
         await entity.send(stanza)
+        await timeoutPromise(deferred.promise, timeout)
       } catch (err) {
         handlers.delete(stanza.attrs.id)
         throw err

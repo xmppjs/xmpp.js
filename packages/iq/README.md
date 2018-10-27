@@ -19,37 +19,22 @@ const {iqCaller} = xmpp
 
 ### request
 
-Sends a request and returns a promise.
+Sends a an iq and returns a promise.
 
-- The promise resolves with the response when it is received.
-- The promise rejects with a `StanzaError` when an error is received or with an `Error` if a network error occurs.
+- Resolves with the response when it is received.
+- Rejects with a `StanzaError` when an error is received
+- Rejects with a `TimouetError` if a reply wasn't received within the specified or default timeout
+- Rejects with an `Error` if a network error occurs
 
-- The request `id` attribute is optional and will be added if omitted.
-- The request `to` attribute is optional and will default to the server.
+* The request `id` attribute is optional and will be added if omitted.
+* The request `to` attribute is optional and will default to the server.
 
 ```js
 const response = await iqCaller.request(
-  xml('iq', {type: 'get'}, xml('foo', 'foo:bar'))
+  xml('iq', {type: 'get'}, xml('foo', 'foo:bar')),
+  30 * 1000 // 30 seconds timeout - default
 )
 const foo = response.getChild('foo', 'foo:bar')
-console.log(foo)
-```
-
-### get
-
-Sends a `get` request with a child element and resolves with the child response.
-
-```js
-const foo = await iqCaller.get(xml('foo', 'foo:bar'), attrs)
-console.log(foo)
-```
-
-### set
-
-Sends a `set` request with a child element and resolves with the child response.
-
-```js
-const foo = await iqCaller.set(xml('foo', 'foo:bar'))
 console.log(foo)
 ```
 
@@ -57,7 +42,7 @@ console.log(foo)
 
 Implements the callee side of iq semantics.
 
-You can think of this as http routing expect there are only 2 methods; `get` and `set` and you would pass a namespace and a tag name instead of an url. The return value of the handler will be the child element of the response sent to the caller.
+You can think of this as http routing except there are only 2 methods; `get` and `set` and you would pass a namespace and a tag name instead of an url. The return value of the handler will be the child element of the response sent to the caller.
 
 ```js
 const {client} = require('@xmpp/client') // or component
