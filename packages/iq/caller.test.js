@@ -1,61 +1,14 @@
 'use strict'
 
 const test = require('ava')
-const {context, mockClient, mockInput} = require('@xmpp/test')
-const _middleware = require('@xmpp/middleware')
-const _iqCaller = require('./caller')
+const { mockClient, mockInput } = require('@xmpp/test')
 const StanzaError = require('@xmpp/middleware/lib/StanzaError')
 
-test.beforeEach(t => {
-  const ctx = context()
-  const {entity} = ctx
-  const middleware = _middleware({entity})
-  ctx.iqCaller = _iqCaller({middleware, entity})
-  t.context = ctx
-})
-
-test.cb('#get', t => {
-  const {iqCaller, entity} = t.context
-
-  entity.send = el => {
-    t.is(typeof el.attrs.id, 'string')
-    delete el.attrs.id
-    t.deepEqual(
-      el,
-      <iq type="get">
-        <foo />
-      </iq>
-    )
-    t.end()
-    return Promise.resolve()
-  }
-
-  iqCaller.get(<foo />)
-})
-
-test.cb('#set', t => {
-  const {iqCaller, entity} = t.context
-
-  entity.send = el => {
-    t.is(typeof el.attrs.id, 'string')
-    delete el.attrs.id
-    t.deepEqual(
-      el,
-      <iq type="set">
-        <foo />
-      </iq>
-    )
-    t.end()
-    return Promise.resolve()
-  }
-
-  iqCaller.set(<foo />)
-})
-
 test.cb('#request', t => {
-  const {iqCaller, entity} = t.context
+  const xmpp = mockClient()
+  const { iqCaller } = xmpp
 
-  entity.send = el => {
+  xmpp.send = el => {
     t.deepEqual(
       el,
       <iq type="get" id="foobar">
@@ -73,56 +26,13 @@ test.cb('#request', t => {
   )
 })
 
-test.cb('#request with param as string', t => {
-  const {iqCaller, entity} = t.context
-
-  entity.send = el => {
-    t.deepEqual(
-      el,
-      <iq type="get" id="foobar" to="service">
-        <foo />
-      </iq>
-    )
-    t.end()
-    return Promise.resolve()
-  }
-
-  iqCaller.request(
-    <iq type="get" id="foobar">
-      <foo />
-    </iq>,
-    'service'
-  )
-})
-
-test.cb('#request with id and to parameters', t => {
-  const {iqCaller, entity} = t.context
-
-  entity.send = el => {
-    t.deepEqual(
-      el,
-      <iq type="get" id="foobar" to="service">
-        <foo />
-      </iq>
-    )
-    t.end()
-    return Promise.resolve()
-  }
-
-  iqCaller.request(
-    <iq type="get">
-      <foo />
-    </iq>,
-    {to: 'service', id: 'foobar'}
-  )
-})
-
-test('removes the handler if sending failed', t => {
-  const {iqCaller, entity} = t.context
+test('removes the handler if sending failed', async t => {
+  const xmpp = mockClient()
+  const { iqCaller } = xmpp
 
   const error = new Error('foobar')
 
-  entity.send = () => {
+  xmpp.send = () => {
     return Promise.reject(error)
   }
 
@@ -134,10 +44,12 @@ test('removes the handler if sending failed', t => {
 
   t.is(iqCaller.handlers.size, 1)
 
-  return promise.catch(err => {
+  try {
+    await promise
+  } catch (err) {
     t.is(err, error)
     t.is(iqCaller.handlers.size, 0)
-  })
+  }
 })
 
 test('rejects with a StanzaError for error reply', async t => {
@@ -162,4 +74,25 @@ test('rejects with a StanzaError for error reply', async t => {
 
   const err = await t.throwsAsync(promiseRequest)
   t.deepEqual(err, StanzaError.fromElement(errorElement))
+})
+
+
+test('rejects with a TimeoutError if no answer is received within timeout', async t => {
+  const xmpp = mockClient()
+  const { iqCaller } = xmpp
+
+  const promise = iqCaller.request(
+    <iq type="get">
+      <foo />
+    </iq>, 1
+  )
+
+  t.is(iqCaller.handlers.size, 1)
+
+  try {
+    await promise
+  } catch (err) {
+    t.is(err.name, 'TimeoutError')
+    t.is(iqCaller.handlers.size, 0)
+  }
 })
