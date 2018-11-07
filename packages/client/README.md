@@ -46,6 +46,9 @@ xmpp.on('offline', () => {
 })
 
 xmpp.on('online', async address => {
+  // shows itself online
+  xmpp.send(xml('presence'))
+  
   console.log('🗸', 'online as', address.toString())
 
   // Sends a chat message to itself
