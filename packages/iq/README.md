@@ -19,7 +19,7 @@ const {iqCaller} = xmpp
 
 ### request
 
-Sends a an iq and returns a promise.
+Sends an iq and returns a promise.
 
 - Resolves with the response when it is received.
 - Rejects with a `StanzaError` when an error is received
