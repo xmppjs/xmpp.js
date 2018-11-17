@@ -4,7 +4,7 @@ An XMPP client is an entity that connects to an XMPP server.
 
 `@xmpp/client` package includes a minimal set of features to connect and authenticate securely and reliably.
 
-It supports Node.js, browser and React Native. See [Connection Method](#connection-methods) for differences.
+It supports Node.js, browser and React Native. See [below](#transports) for differences.
 
 ## Install
 
@@ -46,10 +46,10 @@ xmpp.on('offline', () => {
 })
 
 xmpp.on('online', async address => {
-  // shows itself online
-  xmpp.send(xml('presence'))
-  
   console.log('🗸', 'online as', address.toString())
+
+  // Makes itself available
+  xmpp.send(xml('presence'))
 
   // Sends a chat message to itself
   const message = xml(
@@ -183,7 +183,7 @@ xmpp.send(xml('presence'))
 
 See [@xmpp/reconnect](/packages/reconnect).
 
-## Connection methods
+## Transports
 
 XMPP supports multiple transports, this table list `@xmpp/client` supported and unsupported transport for each environment.
 
@@ -193,7 +193,7 @@ XMPP supports multiple transports, this table list `@xmpp/client` supported and 
 |       [TCP](/packages/tcp)       |    xmpp://    |    ✔    |    ✗    |      ✗       |
 |       [TLS](/packages/tls)       |   xmpps://    |    ✔    |    ✗    |      ✗       |
 
-## Authentication methods
+## Authentication
 
 Multiple authentication mechanisms are supported.
 PLAIN should only be used over secure WebSocket (`wss://)`, direct TLS (`xmpps:`) or a TCP (`xmpp:`) connection upgraded to TLS via [STARTTLS](/starttls)
