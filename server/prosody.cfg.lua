@@ -49,7 +49,7 @@ data_path = "."
 VirtualHost "localhost"
 
 Component "component.localhost"
-  component_secret = "foobar"
+  component_secret = "mysecretcomponentpassword"
 
 VirtualHost "anon.localhost"
   authentication = "anonymous"

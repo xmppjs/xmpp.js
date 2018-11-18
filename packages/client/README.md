@@ -32,6 +32,8 @@ const {client, xml, jid} = window.XMPP
 ## Example
 
 ```js
+const {client, xml} = require('@xmpp/client')
+
 const xmpp = client({
   service: 'ws://localhost:5280/xmpp-websocket',
   domain: 'localhost',
@@ -45,14 +47,21 @@ xmpp.on('error', err => {
 })
 
 xmpp.on('offline', () => {
-  console.log('🛈', 'offline')
+  console.log('⏹', 'offline')
+})
+
+xmpp.on('stanza', async stanza => {
+  if (stanza.is('message')) {
+    await xmpp.send(xml('presence', {type: 'unavailable'}))
+    await xmpp.stop()
+  }
 })
 
 xmpp.on('online', async address => {
-  console.log('🗸', 'online as', address.toString())
+  console.log('▶', 'online as', address.toString())
 
   // Makes itself available
-  xmpp.send(xml('presence'))
+  await xmpp.send(xml('presence'))
 
   // Sends a chat message to itself
   const message = xml(
@@ -60,15 +69,21 @@ xmpp.on('online', async address => {
     {type: 'chat', to: address},
     xml('body', 'hello world')
   )
-  xmpp.send(message)
+  await xmpp.send(message)
 })
 
-xmpp.on('stanza', stanza => {
-  console.log('⮈', stanza.toString())
-  xmpp.stop()
+// Debug
+xmpp.on('status', status => {
+  console.debug('🛈', 'status', status)
+})
+xmpp.on('input', input => {
+  console.debug('⮈', input)
+})
+xmpp.on('output', output => {
+  console.debug('⮊', output)
 })
 
-xmpp.start()
+xmpp.start().catch(console.error)
 ```
 
 ## xml
@@ -99,6 +114,41 @@ Returns an [xmpp](#xmpp) object.
 ## xmpp
 
 `xmpp` is an instance of [EventEmitter](https://nodejs.org/api/events.html).
+
+### status
+
+`online` indicates that `xmpp` is authenticated and addressable. It is emitted every time there is a successfull (re)connection.
+
+`offline` indicates that `xmpp` disconnected and no automatic attempt to reconnect will happen (after calling `xmpp.stop()`).
+
+Additional status:
+
+- `connecting`: Socket is connecting
+- `connect`: Socket is connected
+- `opening`: Stream is opening
+- `open`: Stream is open
+- `closing`: Stream is closing
+- `close`: Stream is closed
+- `disconnecting`: Socket is disconnecting
+- `disconnect`: Socket is disconnected
+
+You can read the current status using the `status` property.
+
+```js
+const isOnline = xmpp.status === 'online'
+```
+
+You can listen for status change using the `status` event.
+
+### Event `status`
+
+Emitted when the status changes.
+
+```js
+xmpp.on('status', status => {
+  console.debug(status)
+})
+```
 
 ### Event `error`
 
@@ -144,7 +194,7 @@ xmpp.on('online', address => {
 
 ### Event `offline`
 
-Emitted when the connection is closed an no further attempt to reconnect will happen, usually after [xmpp.stop()](#xmpp.stop).
+Emitted when the connection is closed an no further attempt to reconnect will happen, after calling [xmpp.stop()](#xmpp.stop).
 
 ```js
 xmpp.on('offline', () => {
@@ -154,33 +204,39 @@ xmpp.on('offline', () => {
 
 ### start
 
-Starts the connection. Attempts to reconnect will automatically happen if disconnected.
+Starts the connection. Attempts to reconnect will automatically happen if it cannot connect or gets disconnected.
 
 ```js
-xmpp.start()
+xmpp.start().catch(console.error)
 xmpp.on('online', address => {
   console.log('online', address.toString())
 })
 ```
 
+Returns a promise that resolves if the first attempt succeed or rejects if the first attempt fails.
+
 ### stop
 
-Stops the connection and prevent any further reconnect.
+Stops the connection and prevent any further auto reconnect/retry.
 
 ```js
-xmpp.stop()
+xmpp.stop().catch(console.error)
 xmpp.on('offline', () => {
   console.log('offline')
 })
 ```
+
+Returns a promise that resolves once the stream closes and the socket disconnects.
 
 ### send
 
 Sends a stanza.
 
 ```js
-xmpp.send(xml('presence'))
+xmpp.send(xml('presence')).catch(console.error)
 ```
+
+Returns a promise that resolves once the stanza is serialized and written to the socket or rejects if any of those fails.
 
 ### xmpp.reconnect
 

@@ -5,7 +5,7 @@ const {component, xml, jid} = require('../packages/component')
 const debug = require('../packages/debug')
 const server = require('../server')
 
-const password = 'foobar'
+const password = 'mysecretcomponentpassword'
 const service = 'xmpp://localhost:5347'
 const domain = 'component.localhost'
 const options = {password, service, domain}
