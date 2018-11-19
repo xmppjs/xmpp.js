@@ -2,7 +2,7 @@
 
 ## Install
 
-Note, if you're using `@xml/client` or `@xml/component`, you don't need to install `@xmpp/xml` yourself.
+Note, if you're using `@xmpp/client` or `@xmpp/component`, you don't need to install `@xmpp/xml` yourself.
 
 `npm install @xmpp/xml` or `yarn add @xmpp/xml`
 
