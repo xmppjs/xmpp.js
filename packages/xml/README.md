@@ -143,9 +143,9 @@ Adds text or element nodes to the first position.
 Returns the parent.
 
 ```js
-message.append(xml('foo'))
-message.append('bar')
-message.append(days.map(day => xml('day', {}, day)))
+message.prepend(xml('foo'))
+message.prepend('bar')
+message.prepend(days.map(day => xml('day', {}, day)))
 // <message>
 //   <day>Tuesday</day>
 //   <day>Monday</day>
