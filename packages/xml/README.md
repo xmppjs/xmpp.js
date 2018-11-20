@@ -2,7 +2,7 @@
 
 ## Install
 
-Note, if you're using `@xml/client` or `@xml/component`, you don't need to install `@xmpp/xml` yourself.
+Note, if you're using `@xmpp/client` or `@xmpp/component`, you don't need to install `@xmpp/xml` yourself.
 
 `npm install @xmpp/xml` or `yarn add @xmpp/xml`
 
@@ -143,9 +143,9 @@ Adds text or element nodes to the first position.
 Returns the parent.
 
 ```js
-message.append(xml('foo'))
-message.append('bar')
-message.append(days.map(day => xml('day', {}, day)))
+message.prepend(xml('foo'))
+message.prepend('bar')
+message.prepend(days.map(day => xml('day', {}, day)))
 // <message>
 //   <day>Tuesday</day>
 //   <day>Monday</day>
