@@ -1850,10 +1850,10 @@ babel-plugin-syntax-jsx@^6.0.0:
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-jsx/-/babel-plugin-syntax-jsx-6.18.0.tgz#0af32a9a6e13ca7a3fd5069e62d7b0f58d0d8946"
   integrity sha1-CvMqmm4Tyno/1QaeYtew9Y0NiUY=
 
-babel-plugin-transform-async-to-promises@^0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-async-to-promises/-/babel-plugin-transform-async-to-promises-0.7.2.tgz#4bcdb8cb3dc3bc58afc214f92c5a23214f6206ac"
-  integrity sha512-S+kfkY2IyS8fDRoZcHzjUELYOt4b2ajfbW1o+1gHz2bqz7pWvHXIszgtDQgnzeNIHxjgbezclPLP28+z6S/4Sw==
+babel-plugin-transform-async-to-promises@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-async-to-promises/-/babel-plugin-transform-async-to-promises-0.8.0.tgz#c258e66e2df593b9d1d3c31d7e1c39ad2984143d"
+  integrity sha512-zw6TZAdLozag+8kMdttsHDWBKX2qR2/K/+hjTDT4CB9NBeRAwYwHTS+zpKZT328aDRppjcrE6jNOZwVZ8yhpsQ==
 
 babelify@^10.0.0:
   version "10.0.0"
@@ -3570,11 +3570,6 @@ eslint-plugin-promise@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-promise/-/eslint-plugin-promise-4.0.1.tgz#2d074b653f35a23d1ba89d8e976a985117d1c6a2"
   integrity sha512-Si16O0+Hqz1gDHsys6RtFRrW7cCTB6P7p3OJmKp3Y3dxpQE2qwOA7d3xnV+0mBmrPoi0RBnxlCKvqu70te6wjg==
-
-eslint-plugin-standard@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-standard/-/eslint-plugin-standard-4.0.0.tgz#f845b45109c99cd90e77796940a344546c8f6b5c"
-  integrity sha512-OwxJkR6TQiYMmt1EsNRMe5qG3GsbjlcOhbGUBY4LtavF9DsLaTcoR+j2Tdjqi23oUwKNUqX7qcn5fPStafMdlA==
 
 eslint-plugin-unicorn@^6.0.1:
   version "6.0.1"

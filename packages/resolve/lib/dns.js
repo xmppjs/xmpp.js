@@ -95,19 +95,18 @@ function sortSrv(records) {
 function lookupSrvs(srvs, options) {
   const addresses = []
   return Promise.all(
-    srvs.map(srv => {
-      return lookup(srv.name, options).then(srvAddresses => {
-        srvAddresses.forEach(address => {
-          const {port, service} = srv
-          const addr = address.address
-          addresses.push(
-            Object.assign({}, address, srv, {
-              uri: `${service.split('-')[0]}://${address.family === 6
-                ? '[' + addr + ']'
-                : addr}:${port}`,
-            })
-          )
-        })
+    srvs.map(async srv => {
+      const srvAddresses = await lookup(srv.name, options)
+      srvAddresses.forEach(address => {
+        const {port, service} = srv
+        const addr = address.address
+        addresses.push(
+          Object.assign({}, address, srv, {
+            uri: `${service.split('-')[0]}://${
+              address.family === 6 ? '[' + addr + ']' : addr
+            }:${port}`,
+          })
+        )
       })
     })
   ).then(() => addresses)
@@ -162,12 +161,11 @@ function resolve(domain, options = {}) {
   return lookup(domain, options).then(addresses => {
     return Promise.all(
       options.srv.map(srv => {
-        return resolveSrv(
-          domain,
-          Object.assign({}, srv, {family})
-        ).then(records => {
-          return lookupSrvs(records, options)
-        })
+        return resolveSrv(domain, Object.assign({}, srv, {family})).then(
+          records => {
+            return lookupSrvs(records, options)
+          }
+        )
       })
     )
       .then(srvs => sortSrv([].concat(...srvs)).concat(addresses))

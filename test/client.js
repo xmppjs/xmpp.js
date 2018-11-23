@@ -23,11 +23,11 @@ test.afterEach(t => {
   }
 })
 
-test.serial.cb('client', t => {
+test.serial('client', async t => {
   t.plan(7)
 
   const xmpp = client({credentials, service: domain})
-  debug(client)
+  debug(xmpp)
 
   xmpp.on('connect', () => {
     t.pass()
@@ -43,11 +43,9 @@ test.serial.cb('client', t => {
     t.is(address.bare().toString(), JID)
   })
 
-  xmpp.start().then(address => {
-    t.true(address instanceof jid.JID)
-    t.is(address.bare().toString(), JID)
-    t.end()
-  })
+  const address = await xmpp.start()
+  t.true(address instanceof jid.JID)
+  t.is(address.bare().toString(), JID)
 
   t.context.xmpp = xmpp
 })
@@ -59,7 +57,7 @@ test.serial.cb('bad credentials', t => {
     service: domain,
     credentials: {...credentials, password: 'nope'},
   })
-  debug(client)
+  debug(xmpp)
 
   let error
 
@@ -91,7 +89,7 @@ test.serial.cb('reconnects when server restarts', t => {
   let c = 0
 
   const xmpp = client({credentials, service: domain})
-  debug(client)
+  debug(xmpp)
 
   xmpp.on('error', () => {})
 
@@ -99,9 +97,8 @@ test.serial.cb('reconnects when server restarts', t => {
     c++
     t.pass()
     if (c === 2) {
-      xmpp.stop().then(() => {
-        t.end()
-      })
+      await xmpp.stop()
+      t.end()
     } else {
       await server.restart()
     }
@@ -113,20 +110,15 @@ test.serial.cb('reconnects when server restarts', t => {
 })
 
 test.serial.cb('does not reconnect when stop is called', t => {
-  t.plan(5)
+  t.plan(2)
 
   const xmpp = client({service: domain, credentials})
-  debug(client)
+  debug(xmpp)
 
-  xmpp.on('online', () => {
-    t.pass()
-    xmpp.stop().then(() => {
-      t.pass()
-      server.stop().then(() => {
-        t.pass()
-        t.end()
-      })
-    })
+  xmpp.on('online', async () => {
+    await xmpp.stop()
+    server.stop()
+    t.end()
   })
 
   xmpp.on('close', () => t.pass())
@@ -139,20 +131,15 @@ test.serial.cb('does not reconnect when stop is called', t => {
 })
 
 test.serial.cb('anonymous authentication', t => {
-  t.plan(5)
+  t.plan(2)
 
   const xmpp = client({service: domain, domain: 'anon.' + domain})
-  debug(client)
+  debug(xmpp)
 
-  xmpp.on('online', () => {
-    t.pass()
-    xmpp.stop().then(() => {
-      t.pass()
-      server.stop().then(() => {
-        t.pass()
-        t.end()
-      })
-    })
+  xmpp.on('online', async () => {
+    await xmpp.stop()
+    await server.stop()
+    t.end()
   })
 
   xmpp.on('close', () => t.pass())
@@ -164,131 +151,144 @@ test.serial.cb('anonymous authentication', t => {
   t.context.xmpp = xmpp
 })
 
-test.serial('auto', t => {
+test.serial('auto', async t => {
   const xmpp = client({credentials, service: domain})
-  debug(client)
+  debug(xmpp)
   t.context.xmpp = xmpp
-  return xmpp.start().then(id => t.is(id.bare().toString(), JID))
+  const address = await xmpp.start()
+  t.is(address.bare().toString(), JID)
 })
 
 // Prosody 404 https://prosody.im/issues/issue/932
-test.serial.skip('ws IPv4', t => {
+test.serial.skip('ws IPv4', async t => {
   const xmpp = client({
     credentials,
     service: 'ws://127.0.0.1:5280/xmpp-websocket',
     domain,
   })
-  debug(client)
+  debug(xmpp)
   t.context.xmpp = xmpp
-  return xmpp.start().then(id => t.is(id.bare().toString(), JID))
+  const address = await xmpp.start()
+  t.is(address.bare().toString(), JID)
 })
 
 // Prosody 404 https://prosody.im/issues/issue/932
-test.serial.skip('ws IPv6', t => {
+test.serial.skip('ws IPv6', async t => {
   const xmpp = client({
     credentials,
     service: 'ws://[::1]:5280/xmpp-websocket',
     domain,
   })
-  debug(client)
+  debug(xmpp)
   t.context.xmpp = xmpp
-  return xmpp.start().then(id => t.is(id.bare().toString(), JID))
+  const address = await xmpp.start()
+  t.is(address.bare().toString(), JID)
 })
 
-test.serial('ws domain', t => {
+test.serial('ws domain', async t => {
   const xmpp = client({
     credentials,
     service: 'ws://localhost:5280/xmpp-websocket',
   })
-  debug(client)
+  debug(xmpp)
   t.context.xmpp = xmpp
-  return xmpp.start().then(id => t.is(id.bare().toString(), JID))
+  const address = await xmpp.start()
+  t.is(address.bare().toString(), JID)
 })
 
 // Prosody 404 https://prosody.im/issues/issue/932
-test.serial.skip('wss IPv4', t => {
+test.serial.skip('wss IPv4', async t => {
   const xmpp = client({
     credentials,
     service: 'wss://127.0.0.1:5281/xmpp-websocket',
     domain,
   })
-  debug(client)
+  debug(xmpp)
   t.context.xmpp = xmpp
-  return xmpp.start().then(id => t.is(id.bare().toString(), JID))
+  const address = await xmpp.start()
+  t.is(address.bare().toString(), JID)
 })
 
 // Prosody 404 https://prosody.im/issues/issue/932
-test.serial.skip('wss IPv6', t => {
+test.serial.skip('wss IPv6', async t => {
   const xmpp = client({
     credentials,
     service: 'wss://[::1]:5281/xmpp-websocket',
     domain,
   })
-  debug(client)
+  debug(xmpp)
   t.context.xmpp = xmpp
-  return xmpp.start().then(id => t.is(id.bare().toString(), JID))
+  const address = await xmpp.start()
+  t.is(address.bare().toString(), JID)
 })
 
-test.serial('wss domain', t => {
+test.serial('wss domain', async t => {
   const xmpp = client({
     credentials,
     service: 'wss://localhost:5281/xmpp-websocket',
   })
-  debug(client)
+  debug(xmpp)
   t.context.xmpp = xmpp
-  return xmpp.start().then(id => t.is(id.bare().toString(), JID))
+  const address = await xmpp.start()
+  t.is(address.bare().toString(), JID)
 })
 
-test.serial('xmpp IPv4', t => {
+test.serial('xmpp IPv4', async t => {
   const xmpp = client({credentials, service: 'xmpp://127.0.0.1:5222', domain})
-  debug(client)
+  debug(xmpp)
   t.context.xmpp = xmpp
-  return xmpp.start().then(id => t.is(id.bare().toString(), JID))
+  const address = await xmpp.start()
+  t.is(address.bare().toString(), JID)
 })
 
-test.serial('xmpp IPv6', t => {
+test.serial.only('xmpp IPv6', async t => {
   const xmpp = client({credentials, service: 'xmpp://[::1]:5222', domain})
-  debug(client)
+  debug(xmpp)
   t.context.xmpp = xmpp
   // No local IPv6 on travis https://github.com/travis-ci/travis-ci/issues/4964
   if (process.env.TRAVIS) {
     return t.pass()
   }
-  return xmpp.start().then(id => t.is(id.bare().toString(), JID))
+  const address = await xmpp.start()
+  t.is(address.bare().toString(), JID)
 })
 
-test.serial('xmpp domain', t => {
+test.serial('xmpp domain', async t => {
   const xmpp = client({credentials, service: 'xmpp://localhost:5222'})
-  debug(client)
+  debug(xmpp)
   t.context.xmpp = xmpp
-  return xmpp.start().then(id => t.is(id.bare().toString(), JID))
+  const address = await xmpp.start()
+  t.is(address.bare().toString(), JID)
 })
 
-test.serial('xmpps IPv4', t => {
+test.serial('xmpps IPv4', async t => {
   const xmpp = client({
     credentials,
     service: 'xmpps://127.0.0.1:5223',
     domain,
   })
-  debug(client)
+  debug(xmpp)
   t.context.xmpp = xmpp
-  return xmpp.start().then(id => t.is(id.bare().toString(), JID))
+  const address = await xmpp.start()
+  t.is(address.bare().toString(), JID)
 })
 
-test.serial('xmpps IPv6', t => {
+test.serial('xmpps IPv6', async t => {
   const xmpp = client({credentials, service: 'xmpps://[::1]:5223', domain})
-  debug(client)
+  debug(xmpp)
   t.context.xmpp = xmpp
   // No local IPv6 on travis https://github.com/travis-ci/travis-ci/issues/4964
   if (process.env.TRAVIS) {
     return t.pass()
   }
-  return xmpp.start().then(id => t.is(id.bare().toString(), JID))
+  const address = await xmpp.start()
+  t.is(address.bare().toString(), JID)
 })
 
-test.serial('xmpps domain', t => {
+test.serial('xmpps domain', async t => {
   const xmpp = client({credentials, service: 'xmpps://localhost:5223'})
-  debug(client)
+  debug(xmpp)
   t.context.xmpp = xmpp
-  return xmpp.start().then(id => t.is(id.bare().toString(), JID))
+  const address = await xmpp.start()
+  t.is(address.bare().toString(), JID)
 })

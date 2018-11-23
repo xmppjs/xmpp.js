@@ -33,18 +33,15 @@ class Component extends Connection {
   }
 
   // https://xmpp.org/extensions/xep-0114.html#example-3
-  authenticate(id, password) {
+  async authenticate(id, password) {
     const hash = crypto.createHash('sha1')
     hash.update(id + password, 'binary')
-    return this.sendReceive(xml('handshake', {}, hash.digest('hex'))).then(
-      el => {
-        if (el.name !== 'handshake') {
-          throw new Error('Unexpected server response')
-        }
-        this._jid(this.domain)
-        this._status('online', this.jid)
-      }
-    )
+    const el = await this.sendReceive(xml('handshake', {}, hash.digest('hex')))
+    if (el.name !== 'handshake') {
+      throw new Error('Unexpected server response')
+    }
+    this._jid(this.domain)
+    this._status('online', this.jid)
   }
 }
 

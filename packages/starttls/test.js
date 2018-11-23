@@ -16,7 +16,7 @@ test('success', async t => {
     .once()
     .withArgs({socket, host})
     .callsFake((options, callback) => {
-      Promise.resolve().then(callback)
+      process.nextTick(callback)
       return {}
     })
 
