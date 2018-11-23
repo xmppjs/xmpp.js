@@ -41,13 +41,13 @@ clean:
 	rm -f lerna-debug.log
 
 start:
-	./server/ctl start
+	./server/ctl.js start
 
 stop:
-	./server/ctl stop
+	./server/ctl.js stop
 
 restart:
-	./server/ctl restart
+	./server/ctl.js restart
 
 bundlesize:
 	./node_modules/.bin/bundlesize

@@ -21,30 +21,25 @@ global.fetch = url => {
 }
 const {resolve} = require('../lib/http')
 
-test.cb('parse', t => {
-  resolve(domain)
-    .then(result => {
-      t.deepEqual(result, [
-        {
-          rel: 'urn:xmpp:alt-connections:websocket',
-          href: 'wss://example.com/ws',
-          method: 'websocket',
-          uri: 'wss://example.com/ws',
-        },
-        {
-          rel: 'urn:xmpp:alt-connections:xbosh',
-          href: 'http://example.com/bosh',
-          method: 'xbosh',
-          uri: 'http://example.com/bosh',
-        },
-        {
-          rel: 'urn:xmpp:alt-connections:httppoll',
-          href: 'http://example.com/http-poll',
-          method: 'httppoll',
-          uri: 'http://example.com/http-poll',
-        },
-      ])
-      t.end()
-    })
-    .catch(t.end)
+test('parse', async t => {
+  t.deepEqual(await resolve(domain), [
+    {
+      rel: 'urn:xmpp:alt-connections:websocket',
+      href: 'wss://example.com/ws',
+      method: 'websocket',
+      uri: 'wss://example.com/ws',
+    },
+    {
+      rel: 'urn:xmpp:alt-connections:xbosh',
+      href: 'http://example.com/bosh',
+      method: 'xbosh',
+      uri: 'http://example.com/bosh',
+    },
+    {
+      rel: 'urn:xmpp:alt-connections:httppoll',
+      href: 'http://example.com/http-poll',
+      method: 'httppoll',
+      uri: 'http://example.com/http-poll',
+    },
+  ])
 })

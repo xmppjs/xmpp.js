@@ -15,19 +15,23 @@ test('it schedule a reconnect when disconnect is emitted', t => {
   entity.emit('disconnect')
 })
 
-test('#reconnect', t => {
+test('#reconnect', async t => {
   const entity = new EventEmitter()
   const reconnect = _reconnect({entity})
 
-  entity.status = 'foobar'
-  entity.options = {}
+  const options = (entity.options = {
+    service: 'service',
+    lang: 'lang',
+    domain: 'domain',
+  })
 
-  entity.start = () => {
-    t.is(entity.status, 'offline')
-    return Promise.resolve()
+  entity.connect = service => {
+    t.is(service, options.service)
+  }
+  entity.open = ({domain, lang}) => {
+    t.is(domain, options.domain)
+    t.is(lang, options.lang)
   }
 
-  return reconnect.reconnect().then(() => {
-    t.is(entity.status, 'foobar')
-  })
+  await reconnect.reconnect()
 })

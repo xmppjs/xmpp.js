@@ -11,7 +11,7 @@ const NS_FRAMING = 'urn:ietf:params:xml:ns:xmpp-framing'
  * WebSocket protocol https://tools.ietf.org/html/rfc6455
  * WebSocket Web API https://html.spec.whatwg.org/multipage/comms.html#network
  * XMPP over WebSocket https://tools.ietf.org/html/rfc7395
-*/
+ */
 
 class ConnectionWebSocket extends Connection {
   // https://tools.ietf.org/html/rfc7395#section-3.6

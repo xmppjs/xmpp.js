@@ -60,7 +60,7 @@ test.cb('error on status closing', t => {
   conn.parser.emit('end')
 })
 
-test.cb('resolves', t => {
+test('resolves', async t => {
   t.plan(2)
   const conn = new Connection()
   conn.parser = new EventEmitter()
@@ -74,11 +74,13 @@ test.cb('resolves', t => {
   conn.on('output', el => {
     t.is(el, '<hello/>')
   })
-  conn.close().then(el => {
-    t.is(el.toString(), `<goodbye/>`)
-    t.end()
-  })
+
+  const promiseClose = conn.close()
   conn.parser.emit('end', xml('goodbye'))
+
+  const el = await promiseClose
+
+  t.is(el.toString(), `<goodbye/>`)
 })
 
 test('emits closing status', t => {

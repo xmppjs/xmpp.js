@@ -33,14 +33,13 @@ test.beforeEach(t => {
   return server.restart()
 })
 
-test.serial('client ws://', t => {
+test.serial('client ws://', async t => {
   const xmpp = t.context({
     credentials,
     service,
   })
   debug(xmpp)
 
-  return xmpp.start().then(id => {
-    t.is(id.bare().toString(), JID)
-  })
+  const address = await xmpp.start()
+  t.is(address.bare().toString(), JID)
 })

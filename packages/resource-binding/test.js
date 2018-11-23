@@ -21,9 +21,8 @@ test('without resource', async t => {
     </bind>
   )
 
-  await entity.catchOutgoingSet().then(child => {
-    t.deepEqual(child, <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind" />)
-  })
+  const child = await entity.catchOutgoingSet()
+  t.deepEqual(child, <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind" />)
 
   await delay()
 
@@ -48,14 +47,13 @@ test('with string resource', async t => {
     </bind>
   )
 
-  await entity.catchOutgoingSet().then(child => {
-    t.deepEqual(
-      child,
-      <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
-        <resource>{resource}</resource>
-      </bind>
-    )
-  })
+  const child = await entity.catchOutgoingSet()
+  t.deepEqual(
+    child,
+    <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
+      <resource>{resource}</resource>
+    </bind>
+  )
 
   await delay()
 
@@ -85,14 +83,13 @@ test('with function resource', async t => {
     </bind>
   )
 
-  await entity.catchOutgoingSet().then(child => {
-    t.deepEqual(
-      child,
-      <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
-        <resource>{resource}</resource>
-      </bind>
-    )
-  })
+  const child = await entity.catchOutgoingSet()
+  t.deepEqual(
+    child,
+    <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
+      <resource>{resource}</resource>
+    </bind>
+  )
 
   await delay()
 
