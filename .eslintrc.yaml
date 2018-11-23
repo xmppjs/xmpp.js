@@ -1,7 +1,6 @@
 plugins:
   - node
   - promise
-  - standard
   - unicorn
   - prettier
 
@@ -10,7 +9,8 @@ extends:
   - plugin:unicorn/recommended
   - plugin:node/recommended
   - xo/esnext
-  - prettier
+  - plugin:prettier/recommended
+  - plugin:promise/recommended
 
 env:
   es6: true
@@ -21,9 +21,6 @@ parserOptions:
 
 rules:
   strict: [error, global]
-  semi: [error, never]
-  comma-dangle: [error, always-multiline]
-  indent: [error, 2]
   no-multi-assign: 0
   func-names: 0
   operator-linebreak: [error, after, {overrides: {'?': before, ':': 'before'}}]
@@ -40,10 +37,9 @@ rules:
   # node https://github.com/mysticatea/eslint-plugin-node
   node/no-unpublished-require: 0 # doesn't play nice with monorepo
   node/no-extraneous-require: [error, allowModules: [ava, sinon, '@xmpp/test']]
-  node/no-unsupported-features/es-syntax: [error]
-  node/no-unsupported-features/es-builtins: [error]
-  # standard https://github.com/xjamundx/eslint-plugin-standard
-  standard/no-callback-literal: [error, [cb, callback]]
+  # promise https://github.com/xjamundx/eslint-plugin-promise
+  # promise/prefer-await-to-then: [error]
+  # promise/prefer-await-to-callbacks: [error]
   # unicorn https://github.com/sindresorhus/eslint-plugin-unicorn
   unicorn/filename-case: 0
   unicorn/catch-error-name: ['error', {'name': 'err'}]

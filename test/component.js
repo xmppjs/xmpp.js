@@ -5,7 +5,6 @@ const {component, xml, jid} = require('../packages/component')
 const debug = require('../packages/debug')
 const server = require('../server')
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 const password = 'foobar'
 const service = 'xmpp://localhost:5347'
 const domain = 'component.localhost'
@@ -21,7 +20,7 @@ test.afterEach(t => {
   }
 })
 
-test.serial.cb('component', t => {
+test.serial('component', async t => {
   t.plan(6)
 
   const xmpp = component(options)
@@ -40,13 +39,14 @@ test.serial.cb('component', t => {
     t.is(id.toString(), 'component.localhost')
   })
 
-  xmpp.start().then(id => {
-    t.true(id instanceof jid.JID)
-    t.is(id.toString(), 'component.localhost')
-    xmpp.stop().then(() => t.end())
-  })
+  const id = await xmpp.start()
+
+  t.true(id instanceof jid.JID)
+  t.is(id.toString(), 'component.localhost')
 
   t.context.xmpp = xmpp
+
+  await xmpp.stop
 })
 
 test.serial.cb('reconnects when server restarts', t => {
@@ -58,13 +58,12 @@ test.serial.cb('reconnects when server restarts', t => {
 
   xmpp.on('error', () => {})
 
-  xmpp.on('online', () => {
+  xmpp.on('online', async () => {
     c++
     t.pass()
     if (c === 2) {
-      xmpp.stop().then(() => {
-        t.end()
-      })
+      await xmpp.stop()
+      t.end()
     } else {
       server.restart()
     }
@@ -76,20 +75,15 @@ test.serial.cb('reconnects when server restarts', t => {
 })
 
 test.serial.cb('does not reconnect when stop is called', t => {
-  t.plan(5)
+  t.plan(2)
 
   const xmpp = component(options)
   debug(xmpp)
 
-  xmpp.on('online', () => {
-    t.pass()
-    xmpp.stop().then(() => {
-      t.pass()
-      server.stop().then(() => {
-        t.pass()
-        t.end()
-      })
-    })
+  xmpp.on('online', async () => {
+    await xmpp.stop()
+    await server.stop()
+    t.end()
   })
 
   xmpp.on('close', () => t.pass())

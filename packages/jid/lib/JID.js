@@ -49,8 +49,8 @@ class JID {
   }
 
   /**
-     * Comparison function
-     * */
+   * Comparison function
+   * */
   equals(other) {
     return (
       this._local === other._local &&

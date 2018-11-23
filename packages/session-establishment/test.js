@@ -14,9 +14,8 @@ test('mandatory', async t => {
 
   entity.scheduleIncomingResult()
 
-  await entity.catchOutgoingSet().then(child => {
-    t.deepEqual(child, <session xmlns="urn:ietf:params:xml:ns:xmpp-session" />)
-  })
+  const child = await entity.catchOutgoingSet()
+  t.deepEqual(child, <session xmlns="urn:ietf:params:xml:ns:xmpp-session" />)
 
   await promise(entity, 'online')
 })

@@ -111,14 +111,14 @@ module.exports = function context(entity = client()) {
       }
       return this.fakeIncoming(stanza)
     },
-    fakeIncoming(el) {
+    async fakeIncoming(el) {
       const p = promise(entity, 'send')
       const stanza = el.clone()
       delete stanza.attrs.xmlns
-      Promise.resolve().then(() => this.mockInput(el))
-      return p.then(el => {
-        return this.sanitize(el).stanza
-      })
+      await Promise.resolve()
+      this.mockInput(el)
+      await p
+      return this.sanitize(el).stanza
     },
     fakeOutgoing(el) {
       entity.hookOutgoing(el)

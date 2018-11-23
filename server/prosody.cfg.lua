@@ -9,10 +9,13 @@ modules_enabled = {
   "posix";
   "bosh";
   "websocket";
-  "http_files";
   "time";
   "version";
 };
+
+modules_disabled = {
+  "s2s";
+}
 
 daemonize = true;
 pidfile = "prosody.pid";
@@ -42,12 +45,6 @@ ssl = {
 }
 
 data_path = "."
-
-http_dir_listing = true; -- doesn't seem to work, getting a 403 Forbidden
-http_files_dir = "..";
-http_paths = {
-      files = "/";
-  }
 
 VirtualHost "localhost"
 

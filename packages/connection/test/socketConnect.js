@@ -10,15 +10,14 @@ class Socket extends EventEmitter {
     this.fn = fn
   }
 
-  connect() {
+  async connect() {
     if (!this.fn) return
-    Promise.resolve().then(() => {
-      this.fn()
-    })
+    await Promise.resolve()
+    this.fn()
   }
 }
 
-test('resolves if "connect" is emitted', t => {
+test('resolves if "connect" is emitted', async t => {
   const value = {}
   const socket = new Socket(function() {
     this.emit('connect', value)
@@ -28,11 +27,10 @@ test('resolves if "connect" is emitted', t => {
   const p = socketConnect(socket, 'foo')
   t.is(socket.listenerCount('error'), 1)
   t.is(socket.listenerCount('connect'), 1)
-  return p.then(result => {
-    t.is(result, value)
-    t.is(socket.listenerCount('error'), 0)
-    t.is(socket.listenerCount('connect'), 0)
-  })
+  const result = await p
+  t.is(result, value)
+  t.is(socket.listenerCount('error'), 0)
+  t.is(socket.listenerCount('connect'), 0)
 })
 
 test('rejects if "error" is emitted', t => {

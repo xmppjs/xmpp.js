@@ -300,15 +300,8 @@ class Connection extends EventEmitter {
   async send(element) {
     this.emit('outgoing', element)
 
-    const proceed = () => {
-      return this.write(element).then(() => {
-        this.emit('send', element)
-      })
-    }
-
-    return this.hookOutgoing
-      ? this.hookOutgoing(element).then(proceed)
-      : proceed()
+    await this.write(element)
+    this.emit('send', element)
   }
 
   sendReceive(element, ms = this.timeout) {
