@@ -4,11 +4,11 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/websocket",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "license": "ISC",
   "dependencies": {
-    "@xmpp/connection": "^0.5.1",
-    "@xmpp/xml": "^0.5.0",
+    "@xmpp/connection": "^0.6.0",
+    "@xmpp/xml": "^0.6.0",
     "ws": "^6.1.2"
   },
   "browser": {
