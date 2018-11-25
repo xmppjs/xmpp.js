@@ -1,6 +1,6 @@
 {
   "name": "@xmpp/sasl-scram-sha-1",
-  "description": "XMPP SASL plain for JavaScript",
+  "description": "XMPP SASL SCRAM-SHA-1 for JavaScript",
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/sasl-scram-sha-1",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
