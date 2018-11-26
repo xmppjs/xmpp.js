@@ -1,8 +1,13 @@
 'use strict'
 
-module.exports = function promise(EE, event, rejectEvent = 'error') {
+const TimeoutError = require('./TimeoutError')
+
+module.exports = function promise(EE, event, rejectEvent = 'error', timeout) {
   return new Promise((resolve, reject) => {
+    let timeoutId
+
     const cleanup = () => {
+      clearTimeout(timeoutId)
       EE.removeListener(event, onEvent)
       EE.removeListener(rejectEvent, onError)
     }
@@ -17,6 +22,13 @@ module.exports = function promise(EE, event, rejectEvent = 'error') {
     EE.once(event, onEvent)
     if (rejectEvent) {
       EE.once(rejectEvent, onError)
+    }
+
+    if (timeout) {
+      timeoutId = setTimeout(() => {
+        cleanup()
+        reject(new TimeoutError())
+      }, timeout)
     }
   })
 }

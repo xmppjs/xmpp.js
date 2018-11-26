@@ -20,7 +20,7 @@ or
 
 ```html
 <script
-  src="https://unpkg.com/@xmpp/client@0.5.2/dist/xmpp.min.js"
+  src="https://unpkg.com/@xmpp/client@0.5.3/dist/xmpp.min.js"
   crossorigin
 ></script>
 ```
