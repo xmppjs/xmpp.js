@@ -1,6 +1,6 @@
 'use strict'
 
-const {timeout, EventEmitter, promise} = require('@xmpp/events')
+const {EventEmitter, promise} = require('@xmpp/events')
 const jid = require('@xmpp/jid')
 const xml = require('@xmpp/xml')
 const StreamError = require('./lib/StreamError')
@@ -206,13 +206,13 @@ class Connection extends EventEmitter {
    * https://xmpp.org/rfcs/rfc6120.html#streams-close
    * https://tools.ietf.org/html/rfc7395#section-3.6
    */
-  async disconnect(ms = this.timeout) {
+  async disconnect(timeout = this.timeout) {
     if (this.socket) this._status('disconnecting')
 
     this.socket.end()
 
     // The 'disconnect' status is set by the socket 'close' listener
-    await timeout(promise(this.socket, 'close'), ms)
+    await promise(this.socket, 'close', 'error', timeout)
   }
 
   /**
@@ -220,11 +220,11 @@ class Connection extends EventEmitter {
    */
   async open(options) {
     this._status('opening')
+
     if (typeof options === 'string') {
       options = {domain: options}
     }
-
-    const {domain, lang} = options
+    const {domain, lang, timeout = this.timeout} = options
 
     const headerElement = this.headerElement()
     headerElement.attrs.to = domain
@@ -234,26 +234,12 @@ class Connection extends EventEmitter {
 
     await this.write(this.header(headerElement))
 
-    const promiseStart = async () => {
-      const el = await promise(this.parser, 'start')
-      // FIXME what about version and xmlns:stream ?
-      if (
-        el.name !== headerElement.name ||
-        el.attrs.xmlns !== headerElement.attrs.xmlns ||
-        el.attrs.from !== headerElement.attrs.to ||
-        !el.attrs.id
-      ) {
-        return promise(this, 'error')
-      }
+    const el = await promise(this.parser, 'start', 'error', timeout)
 
-      this.domain = domain
-      this.lang = el.attrs['xml:lang']
-      this._status('open', el)
+    this.domain = domain
+    this.lang = el.attrs['xml:lang']
 
-      return el
-    }
-
-    return timeout(promiseStart(), options.timeout || this.timeout)
+    this._status('open', el)
   }
 
   /**
@@ -272,9 +258,9 @@ class Connection extends EventEmitter {
    * https://xmpp.org/rfcs/rfc6120.html#streams-close
    * https://tools.ietf.org/html/rfc7395#section-3.6
    */
-  async close(ms = this.timeout) {
+  async close(timeout = this.timeout) {
     const p = Promise.all([
-      timeout(promise(this.parser, 'end'), ms),
+      promise(this.parser, 'end', 'error', timeout),
       this.write(this.footer(this.footerElement())),
     ])
 
@@ -291,8 +277,7 @@ class Connection extends EventEmitter {
   // eslint-disable-next-line require-await
   async restart() {
     this._detachParser()
-    this._attachParser(new this.Parser())
-    const {domain, lang} = this.options
+    const {domain, lang} = this
     return this.open({domain, lang})
   }
 
@@ -304,10 +289,10 @@ class Connection extends EventEmitter {
     this.emit('send', element)
   }
 
-  sendReceive(element, ms = this.timeout) {
+  sendReceive(element, timeout = this.timeout) {
     return Promise.all([
       this.send(element),
-      timeout(promise(this, 'element'), ms),
+      promise(this, 'element', 'error', timeout),
     ]).then(([, el]) => el)
   }
 
