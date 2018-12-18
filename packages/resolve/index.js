@@ -3,7 +3,7 @@
 const resolve = require('./resolve')
 const {socketConnect} = require('@xmpp/connection')
 
-async function fetchURIs(domain) {
+const fetchURIs = async (domain) => {
   return [
     // Remove duplicates
     ...new Set(
@@ -27,7 +27,7 @@ function filterSupportedURIs(entity, uris) {
   return uris.filter(uri => entity._findTransport(uri))
 }
 
-async function fallbackConnect(entity, uris) {
+const fallbackConnect = async (entity, uris) => {
   if (uris.length === 0) {
     throw new Error("Couldn't connect")
   }
