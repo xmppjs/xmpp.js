@@ -22,16 +22,14 @@ There's 2 methods for writing XML with xmpp.js
 const xml = require('@xmpp/xml')
 
 const recipient = 'user@example.com'
-const days = ['Monday', 'Tuesday']
+const days = ['Monday', 'Tuesday', 'Wednesday']
 const message = xml(
   'message',
   {to: recipient},
   xml('body', {}, 1 + 2),
-  xml('days', days.map(day => xml('day', {}, day)))
+  xml('days', {}, days.map((day, idx) => xml('day', {idx}, day)))
 )
 ```
-
-Used in xmpp.js source code.
 
 ### JSX
 
@@ -46,23 +44,21 @@ const message = (
   <message to={recipient}>
     <body>{1 + 2}</body>
     <days>
-      {days.map(day => (
-        <day>${day}</day>
+      {days.map((day, idx) => (
+        <day idx={idx}>${day}</day>
       ))}
     </days>
   </message>
 )
 ```
 
-Used in xmpp.js tests.
-
-Requires a [preprocessor](https://www.npmjs.com/package/babel-plugin-transform-react-jsx) but if you're already using [Babel](http://babeljs.io/) and/or need to write big chunks of XML it's a good choice. See our [.babelrc](/.babelrc) for a configuration example.
+Requires a [preprocessor](https://www.npmjs.com/package/babel-plugin-transform-react-jsx) such as [Babel](http://babeljs.io/) with [@babel/plugin-transform-react-jsx](https://babeljs.io/docs/en/next/babel-plugin-transform-react-jsx.html).
 
 ## Reading
 
 ### attributes
 
-The `attrs` properties holds xml attributes for an element.
+The `attrs` property is an object that holds xml attributes of the element.
 
 ```js
 message.attrs.to // user@example.com
@@ -81,15 +77,7 @@ message.getChild('body').text() // '3'
 Get child element by name.
 
 ```js
-message.getChild('body').toString() // <body>3</body>
-```
-
-### getChildren
-
-Get children elements by name.
-
-```js
-message.getChild('days').getChildren('day') // [...]
+message.getChild('body').toString() // '<body>3</body>'
 ```
 
 ### getChildText
@@ -100,11 +88,32 @@ Get child element text value.
 message.getChildText('body') // '3'
 ```
 
+### getChildren
+
+Get children elements by name.
+
+```js
+message.getChild('days').getChildren('day') // [...]
+```
+
+Since `getChildren` returns an array, you can use JavaScript array methods such as [filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) and [find](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find) to build more complex queries.
+
+```js
+const days = message.getChild('days').getChildren('day')
+
+// Find Monday element
+days.find(day => day.text() === 'Monday')
+days.find(day => day.attrs.idx === 0)
+
+// Find all days after Tuesday
+days.filter(day => day.attrs.idx > 2)
+```
+
 ## Editing
 
 ### attributes
 
-The `attrs` properties holds xml attributes for an element.
+The `attrs` property is an object that holds xml attributes of the element.
 
 ```js
 message.attrs.type = 'chat'
