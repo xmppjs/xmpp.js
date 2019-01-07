@@ -13,21 +13,6 @@ function getMechanismNames(features) {
   return features.getChild('mechanisms', NS).children.map(el => el.text())
 }
 
-function getAvailableMechanisms(SASL) {
-  return SASL._mechs.map(({name}) => name)
-}
-
-function getUsableMechanisms(SASL, mechs) {
-  const supported = getAvailableMechanisms(SASL)
-  return mechs.filter(mech => {
-    return supported.indexOf(mech) > -1
-  })
-}
-
-function getMechanism(usable) {
-  return usable[0] // FIXME prefer SHA-1, ... maybe order usable, available, ... by preferred?
-}
-
 function findMechanism(SASL, name) {
   return SASL.create([name])
 }
@@ -45,9 +30,12 @@ async function handleMechanism(SASL, entity, mech, features, credentials) {
 
 function gotFeatures(SASL, entity, features, credentials) {
   const offered = getMechanismNames(features)
-  const usable = getUsableMechanisms(SASL, offered)
+  const supported = SASL._mechs.map(({name}) => name)
+  const intersection = supported.filter(mech => {
+    return offered.includes(mech)
+  })
+  const mech = intersection[0]
 
-  const mech = getMechanism(usable)
   return handleMechanism(SASL, entity, mech, features, credentials)
 }
 
