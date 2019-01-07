@@ -3,7 +3,7 @@
 const {promisify} = require('util')
 const path = require('path')
 const readFile = promisify(require('fs').readFile)
-const execFile = promisify(require('child_process').execFile)
+const exec = promisify(require('child_process').exec)
 const removeFile = promisify(require('fs').unlink)
 const net = require('net')
 const {promise, delay} = require('../packages/events')
@@ -71,9 +71,10 @@ async function getPid() {
 async function _start() {
   const opening = waitPortOpen()
 
-  await execFile('prosody', {
+  await exec('prosody', {
     cwd: DATA_PATH,
     env: {
+      ...process.env,
       PROSODY_CONFIG: 'prosody.cfg.lua',
     },
   })
@@ -81,13 +82,10 @@ async function _start() {
   return opening
 }
 
-function start() {
-  return isPortOpen().then(open => {
-    if (open) {
-      return Promise.resolve()
-    }
-    return clean().then(() => _start())
-  })
+async function start() {
+  if (await isPortOpen()) return
+  await clean()
+  return _start()
 }
 
 async function stop() {
