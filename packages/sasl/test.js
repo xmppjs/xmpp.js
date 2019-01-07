@@ -116,3 +116,18 @@ test('failure', async t => {
   t.is(error.condition, 'some-condition')
   t.is(error.element, failure)
 })
+
+test('prefers SCRAM-SHA-1', async t => {
+  const {entity} = mockClient({credentials})
+
+  entity.mockInput(
+    <features xmlns="http://etherx.jabber.org/streams">
+      <mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
+        <mechanism>PLAIN</mechanism>
+        <mechanism>SCRAM-SHA-1</mechanism>
+      </mechanisms>
+    </features>
+  )
+
+  t.deepEqual((await promise(entity, 'send')).attrs.mechanism, 'SCRAM-SHA-1')
+})
