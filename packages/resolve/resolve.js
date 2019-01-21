@@ -13,4 +13,5 @@ module.exports = function resolve(...args) {
 if (dns.resolve) {
   module.exports.dns = dns
 }
+
 module.exports.http = http

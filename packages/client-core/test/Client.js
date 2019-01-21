@@ -9,9 +9,11 @@ test('_findTransport', t => {
       if (uri === 'a') {
         return uri
       }
+
       if (uri === 'b') {
         return undefined
       }
+
       throw new Error('foobar')
     }
   }

@@ -4,6 +4,7 @@ function date(d = new Date()) {
   if (typeof d === 'string') {
     d = new Date(d)
   }
+
   return datetime(d).split('T')[0]
 }
 
@@ -11,6 +12,7 @@ function time(d = new Date()) {
   if (typeof d === 'string') {
     d = new Date(d)
   }
+
   return datetime(d).split('T')[1]
 }
 
@@ -18,6 +20,7 @@ function datetime(d = new Date()) {
   if (typeof d === 'string') {
     d = new Date(d)
   }
+
   return new Date(d).toISOString().split('.')[0] + 'Z'
 }
 
@@ -35,6 +38,7 @@ function offset(d = new Date()) {
   if (typeof d === 'string') {
     d = new Date(d)
   }
+
   return formatOffset(d.getTimezoneOffset())
 }
 

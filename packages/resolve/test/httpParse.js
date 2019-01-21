@@ -19,6 +19,7 @@ global.fetch = url => {
     },
   })
 }
+
 const {resolve} = require('../lib/http')
 
 test('parse', async t => {

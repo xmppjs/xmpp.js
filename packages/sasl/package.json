@@ -13,7 +13,7 @@
   "dependencies": {
     "@xmpp/error": "^0.6.0",
     "@xmpp/xml": "^0.6.2",
-    "js-base64": "^2.4.9",
+    "js-base64": "^2.5.1",
     "saslmechanisms": "^0.1.1"
   },
   "browser": {

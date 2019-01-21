@@ -29,12 +29,14 @@ function parse(str) {
   if (type) {
     delete params[type]
   }
+
   if (query) {
     uri.query = {
       type: type.substr(1),
       params,
     }
   }
+
   return uri
 }
 

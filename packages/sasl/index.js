@@ -87,6 +87,7 @@ async function authenticate(SASL, entity, mechname, credentials) {
 
       entity.removeListener('nonza', handler)
     }
+
     entity.on('nonza', handler)
 
     if (mech.clientFirst) {

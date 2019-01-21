@@ -44,6 +44,7 @@ class Reconnect extends EventEmitter {
     listeners.disconnect = () => {
       this.scheduleReconnect()
     }
+
     this.listeners = listeners
     entity.on('disconnect', listeners.disconnect)
   }

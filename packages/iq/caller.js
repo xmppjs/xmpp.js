@@ -28,6 +28,7 @@ module.exports = function iqCaller({entity, middleware}) {
     } else {
       deferred.resolve(stanza)
     }
+
     handlers.delete(id)
   })
 

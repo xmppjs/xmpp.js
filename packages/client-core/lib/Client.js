@@ -15,6 +15,7 @@ class Client extends Connection {
     ) {
       element.attrs.xmlns = 'jabber:client' // FIXME no need for TCP/TLS transports
     }
+
     return super.send(element, ...args)
   }
 

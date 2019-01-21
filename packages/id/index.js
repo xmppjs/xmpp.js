@@ -7,5 +7,6 @@ module.exports = function id() {
       .toString(36)
       .substr(2, 12)
   }
+
   return i
 }

@@ -84,16 +84,20 @@ class Connection extends EventEmitter {
     listeners.data = data => {
       this._onData(data)
     }
+
     listeners.close = (dirty, event) => {
       this._reset()
       this._status('disconnect', {clean: !dirty, event})
     }
+
     listeners.connect = () => {
       this._status('connect')
     }
+
     listeners.error = error => {
       this.emit('error', error)
     }
+
     sock.on('close', listeners.close)
     sock.on('data', listeners.data)
     sock.on('error', listeners.error)
@@ -127,14 +131,17 @@ class Connection extends EventEmitter {
     listeners.element = element => {
       this._onElement(element)
     }
+
     listeners.error = error => {
       this._detachParser()
       this.emit('error', error)
     }
+
     listeners.end = element => {
       this._detachParser()
       this._status('close', element)
     }
+
     parser.on('error', listeners.error)
     parser.on('element', listeners.element)
     parser.on('end', listeners.end)
@@ -165,9 +172,11 @@ class Connection extends EventEmitter {
     try {
       el = await this.close()
     } catch (err) {}
+
     try {
       await this.disconnect()
     } catch (err) {}
+
     return el
   }
 
@@ -224,6 +233,7 @@ class Connection extends EventEmitter {
     if (typeof options === 'string') {
       options = {domain: options}
     }
+
     const {domain, lang, timeout = this.timeout} = options
 
     const headerElement = this.headerElement()
@@ -304,11 +314,13 @@ class Connection extends EventEmitter {
         reject(new Error('Connection is closing'))
         return
       }
+
       const str = data.toString('utf8')
       this.socket.write(str, err => {
         if (err) {
           return reject(err)
         }
+
         this.emit('output', str)
         resolve()
       })

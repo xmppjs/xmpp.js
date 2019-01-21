@@ -23,6 +23,7 @@ module.exports.detect = function(local) {
   if (search === -1) {
     return false
   }
+
   return true
 }
 

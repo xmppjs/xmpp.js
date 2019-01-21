@@ -28,6 +28,7 @@ test('#reconnect', async t => {
   entity.connect = service => {
     t.is(service, options.service)
   }
+
   entity.open = ({domain, lang}) => {
     t.is(domain, options.domain)
     t.is(lang, options.lang)

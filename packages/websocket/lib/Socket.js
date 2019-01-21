@@ -23,6 +23,7 @@ class Socket extends EventEmitter {
     listeners.open = () => {
       this.emit('connect')
     }
+
     listeners.message = ({data}) => this.emit('data', data)
     listeners.error = event => {
       // WS
@@ -33,10 +34,12 @@ class Socket extends EventEmitter {
         error.errno = CODE
         error.code = CODE
       }
+
       error.event = event
       error.url = this.url
       this.emit('error', error)
     }
+
     listeners.close = event => {
       this._detachSocket()
       this.emit('close', !event.wasClean, event)

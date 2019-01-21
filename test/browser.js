@@ -28,7 +28,7 @@ test.beforeEach(t => {
   const {document} = window
   const scriptEl = document.createElement('script')
   scriptEl.textContent = xmppjs
-  document.body.appendChild(scriptEl)
+  document.body.append(scriptEl)
   t.context = window.XMPP.client
   return server.restart()
 })
