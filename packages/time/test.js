@@ -32,6 +32,7 @@ test('offset', t => {
       },
     }
   }
+
   t.is(time.offset(fake(120)), '-02:00')
   t.is(time.offset(fake(-120)), '+02:00')
   t.is(time.offset(fake(90)), '-01:30')

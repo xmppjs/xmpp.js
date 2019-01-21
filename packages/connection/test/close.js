@@ -27,10 +27,12 @@ test.cb('timeout', t => {
   conn.footerElement = () => {
     return xml('hello')
   }
+
   conn.socket = new EventEmitter()
   conn.socket.write = (data, cb) => {
     return cb()
   }
+
   conn.on('output', el => {
     t.is(el, '<hello/>')
   })
@@ -47,10 +49,12 @@ test.cb('error on status closing', t => {
   conn.footerElement = () => {
     return xml('hello')
   }
+
   conn.socket = new EventEmitter()
   conn.socket.write = (data, cb) => {
     return cb()
   }
+
   conn.status = 'closing'
   conn.close().catch(err => {
     t.is(err.name, 'Error')
@@ -67,10 +71,12 @@ test('resolves', async t => {
   conn.footerElement = () => {
     return xml('hello')
   }
+
   conn.socket = new EventEmitter()
   conn.socket.write = (data, cb) => {
     return cb()
   }
+
   conn.on('output', el => {
     t.is(el, '<hello/>')
   })
@@ -89,6 +95,7 @@ test('emits closing status', t => {
   conn.footerElement = () => {
     return xml('hello')
   }
+
   conn.socket = new EventEmitter()
   conn.socket.write = (data, cb) => {
     return cb()
@@ -110,6 +117,7 @@ test('do not emit closing status if parser property is missing', t => {
   conn.footerElement = () => {
     return xml('hello')
   }
+
   conn.socket = new EventEmitter()
   conn.socket.write = (data, cb) => {
     return cb()

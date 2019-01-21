@@ -16,6 +16,7 @@ test.cb('#_onData', t => {
     t.is(condition, 'bad-format')
     t.end()
   }
+
   conn.on('input', data => {
     t.is(data, foo)
   })

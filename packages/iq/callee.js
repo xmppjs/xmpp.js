@@ -37,6 +37,7 @@ function buildReplyResult(ctx, child) {
   if (child) {
     reply.append(child)
   }
+
   return reply
 }
 
@@ -46,6 +47,7 @@ function buildReplyError(ctx, error, child) {
   if (child) {
     reply.append(child)
   }
+
   reply.append(error)
   return reply
 }

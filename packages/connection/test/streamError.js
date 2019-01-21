@@ -17,9 +17,11 @@ test('#_streamError', t => {
     )
     return Promise.resolve()
   }
+
   conn._end = () => {
     t.pass()
     return Promise.resolve()
   }
+
   return conn._streamError('foo-bar')
 })

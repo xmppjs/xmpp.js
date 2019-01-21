@@ -40,6 +40,7 @@ class Component extends Connection {
     if (el.name !== 'handshake') {
       throw new Error('Unexpected server response')
     }
+
     this._jid(this.domain)
     this._status('online', this.jid)
   }

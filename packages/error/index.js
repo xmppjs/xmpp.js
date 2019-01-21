@@ -20,6 +20,7 @@ class XMPPError extends Error {
       } else if (second) {
         application = second
       }
+
       if (third) application = third
     }
 

@@ -157,6 +157,7 @@ function resolve(domain, options = {}) {
       },
     ]
   }
+
   const family = {options}
   return lookup(domain, options).then(addresses => {
     return Promise.all(

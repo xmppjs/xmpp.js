@@ -34,6 +34,7 @@ module.exports = function context(entity = client()) {
             resolve(stanza)
           }
         }
+
         entity.on('send', onSend)
       })
     },
@@ -48,6 +49,7 @@ module.exports = function context(entity = client()) {
       if (child) {
         child.parent = null
       }
+
       return child
     },
     async catchOutgoingSet(match = () => true) {
@@ -58,6 +60,7 @@ module.exports = function context(entity = client()) {
       if (child) {
         child.parent = null
       }
+
       return child
     },
     scheduleIncomingResult(child) {
@@ -79,6 +82,7 @@ module.exports = function context(entity = client()) {
         if (child) {
           child.parent = null
         }
+
         return child
       })
     },
@@ -89,6 +93,7 @@ module.exports = function context(entity = client()) {
           if (child) {
             child.parent = null
           }
+
           return child
         }
       )
@@ -101,6 +106,7 @@ module.exports = function context(entity = client()) {
           if (child) {
             child.parent = null
           }
+
           return child
         })
     },
@@ -109,6 +115,7 @@ module.exports = function context(entity = client()) {
       if (stanza.is('iq') && !stanza.attrs.id) {
         stanza.attrs.id = 'fake'
       }
+
       return this.fakeIncoming(stanza)
     },
     async fakeIncoming(el) {

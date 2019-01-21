@@ -15,8 +15,10 @@ test('calls _reset and _status', t => {
     t.is(clean, false)
     t.is(event, evt)
   }
+
   conn._reset = () => {
     t.pass()
   }
+
   sock.emit('close', true, evt)
 })

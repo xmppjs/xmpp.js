@@ -17,6 +17,7 @@ function x(name, attrs, ...children) {
   for (let i = 0; i < children.length; i++) {
     append(el, children[i])
   }
+
   return el
 }
 

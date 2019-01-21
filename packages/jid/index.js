@@ -8,6 +8,7 @@ function jid(...args) {
   if (!args[1] && !args[2]) {
     return parse(...args)
   }
+
   return new JID(...args)
 }
 
@@ -17,6 +18,7 @@ exports.JID = JID
 exports.equal = function(a, b) {
   return a.equals(b)
 }
+
 exports.detectEscape = escaping.detect
 exports.escapeLocal = escaping.escape
 exports.unescapeLocal = escaping.unescape

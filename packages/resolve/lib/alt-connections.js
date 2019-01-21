@@ -13,6 +13,7 @@ module.exports.compare = function compare(a, b) {
   } else {
     secure = 0
   }
+
   if (secure !== 0) {
     return secure
   }
@@ -35,6 +36,7 @@ module.exports.compare = function compare(a, b) {
   } else {
     method = 0
   }
+
   if (method !== 0) {
     return method
   }

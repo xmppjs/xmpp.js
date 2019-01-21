@@ -14,6 +14,7 @@ test('calls _detachParser and emits error', t => {
   conn._detachParser = () => {
     t.pass()
   }
+
   conn.on('error', err => {
     t.is(err, error)
   })

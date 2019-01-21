@@ -57,6 +57,7 @@ class Parser extends EventEmitter {
       if (cursor.name.startsWith('stream:')) {
         cursor.attrs['xmlns:stream'] = root.attrs['xmlns:stream']
       }
+
       this.emit('element', cursor)
       this.cursor = root
       return
@@ -71,6 +72,7 @@ class Parser extends EventEmitter {
       this.emit('error', new XMLError(`${str} must be a child.`))
       return
     }
+
     cursor.t(str)
   }
 

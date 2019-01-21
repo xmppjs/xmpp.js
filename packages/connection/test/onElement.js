@@ -34,6 +34,7 @@ test.cb('#_onElement stream:error', t => {
     t.end()
     return Promise.resolve()
   }
+
   conn.on('element', el => {
     t.is(el, foo)
   })

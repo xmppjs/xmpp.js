@@ -66,5 +66,6 @@ test('socket close', t => {
   socket._detachSocket = () => {
     t.pass()
   }
+
   socket.socket.emit('close', evt)
 })

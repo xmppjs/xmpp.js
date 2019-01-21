@@ -6,7 +6,7 @@
 
 const server = require('.')
 
-const [, , method] = process.argv
+const method = process.argv[2]
 
 const commands = {
   start() {

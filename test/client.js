@@ -249,6 +249,7 @@ test.serial.only('xmpp IPv6', async t => {
   if (process.env.TRAVIS) {
     return t.pass()
   }
+
   const address = await xmpp.start()
   t.is(address.bare().toString(), JID)
 })
@@ -281,6 +282,7 @@ test.serial('xmpps IPv6', async t => {
   if (process.env.TRAVIS) {
     return t.pass()
   }
+
   const address = await xmpp.start()
   t.is(address.bare().toString(), JID)
 })

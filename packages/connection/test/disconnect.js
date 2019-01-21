@@ -43,6 +43,7 @@ test.cb('rejects if socket.end throws', t => {
   sock.end = () => {
     throw error
   }
+
   conn.disconnect().catch(err => {
     t.is(err, error)
     t.end()
