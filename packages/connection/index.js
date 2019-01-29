@@ -28,8 +28,6 @@ function socketConnect(socket, ...params) {
 class Connection extends EventEmitter {
   constructor(options = {}) {
     super()
-    this.domain = ''
-    this.lang = ''
     this.jid = null
     this.timeout = 2000
     this.options = options
@@ -41,8 +39,6 @@ class Connection extends EventEmitter {
   }
 
   _reset() {
-    this.domain = ''
-    this.lang = ''
     this.jid = null
     this.status = 'offline'
     this._detachSocket()
@@ -245,10 +241,6 @@ class Connection extends EventEmitter {
     await this.write(this.header(headerElement))
 
     const el = await promise(this.parser, 'start', 'error', timeout)
-
-    this.domain = domain
-    this.lang = el.attrs['xml:lang']
-
     this._status('open', el)
   }
 
@@ -287,7 +279,7 @@ class Connection extends EventEmitter {
   // eslint-disable-next-line require-await
   async restart() {
     this._detachParser()
-    const {domain, lang} = this
+    const {domain, lang} = this.options
     return this.open({domain, lang})
   }
 

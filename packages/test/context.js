@@ -12,7 +12,6 @@ module.exports = function context(entity = client()) {
 
   entity.socket = mockSocket()
   entity.jid = new JID('foo@bar/test')
-  entity.domain = 'bar'
 
   const ctx = {
     entity,

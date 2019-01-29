@@ -34,7 +34,6 @@ test.serial('client', async t => {
   })
 
   xmpp.once('open', el => {
-    t.is(xmpp.domain, 'localhost')
     t.true(el instanceof xml.Element)
   })
 

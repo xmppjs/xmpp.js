@@ -7,8 +7,6 @@ const xml = require('@xmpp/xml')
 
 test('new Connection()', t => {
   const conn = new Connection()
-  t.is(conn.domain, '')
-  t.is(conn.lang, '')
   t.is(conn.jid, null)
   t.is(conn.timeout, 2000)
   t.true(conn instanceof EventEmitter)
