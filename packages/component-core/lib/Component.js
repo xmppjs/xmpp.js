@@ -25,10 +25,6 @@ class Component extends Connection {
       el.attrs.from = this.jid.toString()
     }
 
-    if (this.domain && !el.attrs.to) {
-      el.attrs.to = this.domain
-    }
-
     return super.send(el)
   }
 
@@ -41,7 +37,7 @@ class Component extends Connection {
       throw new Error('Unexpected server response')
     }
 
-    this._jid(this.domain)
+    this._jid(this.options.domain)
     this._status('online', this.jid)
   }
 }
