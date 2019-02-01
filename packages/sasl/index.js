@@ -13,52 +13,23 @@ function getMechanismNames(features) {
   return features.getChild('mechanisms', NS).children.map(el => el.text())
 }
 
-function findMechanism(SASL, name) {
-  return SASL.create([name])
-}
-
-async function handleMechanism(SASL, entity, mech, features, credentials) {
-  if (typeof credentials === 'function') {
-    await credentials(
-      creds => authenticate(SASL, entity, mech, creds, features),
-      mech
-    )
-  } else {
-    await authenticate(SASL, entity, mech, credentials, features)
-  }
-}
-
-function gotFeatures(SASL, entity, features, credentials) {
-  const offered = getMechanismNames(features)
-  const supported = SASL._mechs.map(({name}) => name)
-  const intersection = supported.filter(mech => {
-    return offered.includes(mech)
-  })
-  const mech = intersection[0]
-
-  return handleMechanism(SASL, entity, mech, features, credentials)
-}
-
-// eslint-disable-next-line require-await
 async function authenticate(SASL, entity, mechname, credentials) {
-  const mech = findMechanism(SASL, mechname)
+  const mech = SASL.create([mechname])
   if (!mech) {
     throw new Error('No compatible mechanism')
   }
 
   const {domain} = entity.options
-  const creds = Object.assign(
-    {
-      username: null,
-      password: null,
-      server: domain,
-      host: domain,
-      realm: domain,
-      serviceType: 'xmpp',
-      serviceName: domain,
-    },
-    credentials
-  )
+  const creds = {
+    username: null,
+    password: null,
+    server: domain,
+    host: domain,
+    realm: domain,
+    serviceType: 'xmpp',
+    serviceName: domain,
+    ...credentials,
+  }
 
   return new Promise((resolve, reject) => {
     const handler = element => {
@@ -106,12 +77,27 @@ module.exports = function sasl({streamFeatures}, credentials) {
   const SASL = new SASLFactory()
 
   streamFeatures.use('mechanisms', NS, async ({stanza, entity}) => {
-    try {
-      await gotFeatures(SASL, entity, stanza, credentials)
-      await entity.restart()
-    } catch (err) {
-      throw err
+    const offered = getMechanismNames(stanza)
+    const supported = SASL._mechs.map(({name}) => name)
+    const intersection = supported.filter(mech => {
+      return offered.includes(mech)
+    })
+    let mech = intersection[0]
+
+    if (typeof credentials === 'function') {
+      await credentials(
+        creds => authenticate(SASL, entity, mech, creds, stanza),
+        mech
+      )
+    } else {
+      if (!credentials.username && !credentials.password) {
+        mech = 'ANONYMOUS'
+      }
+
+      await authenticate(SASL, entity, mech, credentials, stanza)
     }
+
+    await entity.restart()
   })
 
   return {

@@ -123,6 +123,7 @@ test('prefers SCRAM-SHA-1', async t => {
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
       <mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
+        <mechanism>ANONYMOUS</mechanism>
         <mechanism>PLAIN</mechanism>
         <mechanism>SCRAM-SHA-1</mechanism>
       </mechanisms>
@@ -130,4 +131,20 @@ test('prefers SCRAM-SHA-1', async t => {
   )
 
   t.deepEqual((await promise(entity, 'send')).attrs.mechanism, 'SCRAM-SHA-1')
+})
+
+test('use ANONYMOUS if username and password are not provided', async t => {
+  const {entity} = mockClient()
+
+  entity.mockInput(
+    <features xmlns="http://etherx.jabber.org/streams">
+      <mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
+        <mechanism>ANONYMOUS</mechanism>
+        <mechanism>PLAIN</mechanism>
+        <mechanism>SCRAM-SHA-1</mechanism>
+      </mechanisms>
+    </features>
+  )
+
+  t.deepEqual((await promise(entity, 'send')).attrs.mechanism, 'ANONYMOUS')
 })
