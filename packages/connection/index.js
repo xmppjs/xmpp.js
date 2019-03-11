@@ -180,7 +180,7 @@ class Connection extends EventEmitter {
    * Opens the socket then opens the stream
    */
   async start() {
-    if (this.status !== 'offline') {
+    if (this.socket) {
       throw new Error('Connection is not offline')
     }
 
