@@ -85,6 +85,17 @@ module.exports = function context(entity = client()) {
         return child
       })
     },
+    fakeIncomingSet(context, child, attrs = {}) {
+      attrs.type = 'set'
+      return context.fakeIncomingIq(xml('iq', attrs, child)).then(stanza => {
+        const [child] = stanza.children
+        if (child) {
+          child.parent = null
+        }
+
+        return child
+      })
+    },
     fakeIncomingResult(child, id) {
       return this.fakeIncomingIq(xml('iq', {type: 'result', id}, child)).then(
         stanza => {
