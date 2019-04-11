@@ -24,7 +24,26 @@ const scramsha1 = require('@xmpp/sasl-scram-sha-1')
 const plain = require('@xmpp/sasl-plain')
 const anonymous = require('@xmpp/sasl-anonymous')
 
-function client(options = {}) {
+function configureClient(client, options) {
+  const {resource, credentials, username, password} = options
+  const {iqCaller, streamFeatures} = client
+
+  // Stream features - order matters and define priority
+  const sasl = _sasl({streamFeatures}, credentials || {username, password})
+  const resourceBinding = _resourceBinding({iqCaller, streamFeatures}, resource)
+  // SASL mechanisms - order matters and define priority
+  const mechanisms = Object.entries({scramsha1, plain, anonymous}).map(
+    ([k, v]) => ({[k]: v(sasl)})
+  )
+
+  return Object.assign(client, {
+    sasl,
+    resourceBinding,
+    mechanisms,
+  })
+}
+
+function createClient(options = {}) {
   const {resource, credentials, username, password, ...params} = options
 
   const {domain, service} = params
@@ -44,15 +63,8 @@ function client(options = {}) {
   const iqCaller = _iqCaller({middleware, entity})
   const iqCallee = _iqCallee({middleware, entity})
   const resolve = _resolve({entity})
-  // Stream features - order matters and define priority
   const starttls = _starttls({streamFeatures})
-  const sasl = _sasl({streamFeatures}, credentials || {username, password})
-  const resourceBinding = _resourceBinding({iqCaller, streamFeatures}, resource)
   const sessionEstablishment = _sessionEstablishment({iqCaller, streamFeatures})
-  // SASL mechanisms - order matters and define priority
-  const mechanisms = Object.entries({scramsha1, plain, anonymous}).map(
-    ([k, v]) => ({[k]: v(sasl)})
-  )
 
   return Object.assign(entity, {
     entity,
@@ -66,13 +78,18 @@ function client(options = {}) {
     iqCallee,
     resolve,
     starttls,
-    sasl,
-    resourceBinding,
     sessionEstablishment,
-    mechanisms,
   })
+}
+
+function client(options = {}) {
+  const {resource, credentials, username, password, ...params} = options
+  const clnt = createClient(params)
+  return configureClient(clnt, {resource, credentials, username, password})
 }
 
 module.exports.xml = xml
 module.exports.jid = jid
 module.exports.client = client
+module.exports.createClient = createClient
+module.exports.configureClient = configureClient
