@@ -16,9 +16,9 @@ function isQuery({name, type}) {
   return true
 }
 
-function isValidQuery({type, stanza}, child) {
+function isValidQuery({type}, children, child) {
   if (type !== 'get' && type !== 'set') return false
-  if (stanza.children.length !== 1) return false
+  if (children.length !== 1) return false
   if (!child) return false
   return true
 }
@@ -61,9 +61,10 @@ function iqHandler(entity) {
     if (!isQuery(ctx)) return next()
 
     const {stanza} = ctx
-    const [child] = stanza.children
+    const children = stanza.getChildElements()
+    const [child] = children
 
-    if (!isValidQuery(ctx, child)) {
+    if (!isValidQuery(ctx, children, child)) {
       return buildReplyError(ctx, buildError('modify', 'bad-request'), child)
     }
 

@@ -19,6 +19,49 @@ test('empty result when the handler returns true', async t => {
   t.deepEqual(await promiseSend(xmpp), <iq id="123" type="result" />)
 })
 
+test('iqs with text children are valid', async t => {
+  const xmpp = mockClient()
+  const {iqCallee} = xmpp
+
+  iqCallee.get('bar', 'foo', () => true)
+
+  mockInput(
+    xmpp,
+    <iq type="get" id="123">
+      {'\n'}
+      <foo xmlns="bar" />
+      {'foo'}
+    </iq>
+  )
+
+  t.deepEqual(await promiseSend(xmpp), <iq id="123" type="result" />)
+})
+
+test('iqs with multiple element children are invalid', async t => {
+  const xmpp = mockClient()
+  const {iqCallee} = xmpp
+
+  iqCallee.get('bar', 'foo', () => true)
+
+  mockInput(
+    xmpp,
+    <iq type="get" id="123">
+      <foo xmlns="bar" />
+      <foo xmlns="bar" />
+    </iq>
+  )
+
+  t.deepEqual(
+    await promiseSend(xmpp),
+    <iq id="123" type="error">
+      <foo xmlns="bar" />
+      <error type="modify">
+        <bad-request xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
+      </error>
+    </iq>
+  )
+})
+
 test('non empty result when the handler returns an xml.Element', async t => {
   const xmpp = mockClient()
   const {iqCallee} = xmpp
