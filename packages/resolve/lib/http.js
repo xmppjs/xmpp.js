@@ -10,13 +10,12 @@ function resolve(domain) {
     .then(res => {
       return parse(res)
         .getChildren('Link')
-        .filter(
-          link =>
-            [
-              'urn:xmpp:alt-connections:websocket',
-              'urn:xmpp:alt-connections:httppoll',
-              'urn:xmpp:alt-connections:xbosh',
-            ].indexOf(link.attrs.rel) > -1
+        .filter(link =>
+          [
+            'urn:xmpp:alt-connections:websocket',
+            'urn:xmpp:alt-connections:httppoll',
+            'urn:xmpp:alt-connections:xbosh',
+          ].includes(link.attrs.rel)
         )
         .map(({attrs}) => ({
           rel: attrs.rel,
