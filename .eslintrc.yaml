@@ -43,3 +43,4 @@ rules:
   # unicorn https://github.com/sindresorhus/eslint-plugin-unicorn
   unicorn/filename-case: 0
   unicorn/catch-error-name: ['error', {'name': 'err'}]
+  unicorn/prevent-abbreviations: 0
