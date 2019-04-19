@@ -3189,18 +3189,21 @@ eslint-plugin-promise@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-promise/-/eslint-plugin-promise-4.0.1.tgz#2d074b653f35a23d1ba89d8e976a985117d1c6a2"
 
-eslint-plugin-unicorn@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-unicorn/-/eslint-plugin-unicorn-7.0.0.tgz#b03ade717684d620392bf5458a51758e8e77ea47"
-  integrity sha512-Tz2/2nUwT0qzYzHfOzpib6dltmwivdJd+Kf7GZ4e/xg4INCpVMevl1MKFNFv19n9+g2KMdC7yXgPHdUnXmtiBQ==
+eslint-plugin-unicorn@^8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-unicorn/-/eslint-plugin-unicorn-8.0.2.tgz#a1f6192c39916d7385c057f79a95ffcdf47f4636"
+  integrity sha512-Ik2/Bt/PvPnf1lZgUnNFK2310XoRn/4LYiP5gkEPVDa4w9HCoii7I6SeKh2X5Rdp2WLy4eUiLcYtiBUp+q2IRw==
   dependencies:
     clean-regexp "^1.0.0"
     eslint-ast-utils "^1.0.0"
     import-modules "^1.1.0"
     lodash.camelcase "^4.1.1"
+    lodash.defaultsdeep "^4.6.0"
     lodash.kebabcase "^4.0.1"
     lodash.snakecase "^4.0.1"
+    lodash.topairs "^4.3.0"
     lodash.upperfirst "^4.2.0"
+    reserved-words "^0.1.2"
     safe-regex "^2.0.1"
 
 eslint-scope@^4.0.3:
@@ -4752,6 +4755,11 @@ lodash.debounce@^4.0.3, lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
 
+lodash.defaultsdeep@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/lodash.defaultsdeep/-/lodash.defaultsdeep-4.6.0.tgz#bec1024f85b1bd96cbea405b23c14ad6443a6f81"
+  integrity sha1-vsECT4WxvZbL6kBbI8FK1kQ6b4E=
+
 lodash.difference@^4.3.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.difference/-/lodash.difference-4.5.0.tgz#9ccb4e505d486b91651345772885a2df27fd017c"
@@ -4809,6 +4817,11 @@ lodash.templatesettings@^4.0.0:
   resolved "https://registry.yarnpkg.com/lodash.templatesettings/-/lodash.templatesettings-4.1.0.tgz#2b4d4e95ba440d915ff08bc899e4553666713316"
   dependencies:
     lodash._reinterpolate "~3.0.0"
+
+lodash.topairs@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/lodash.topairs/-/lodash.topairs-4.3.0.tgz#3b6deaa37d60fb116713c46c5f17ea190ec48d64"
+  integrity sha1-O23qo31g+xFnE8RsXxfqGQ7EjWQ=
 
 lodash.uniq@^4.5.0:
   version "4.5.0"
@@ -6394,6 +6407,11 @@ require-main-filename@^1.0.1:
 require-precompiled@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/require-precompiled/-/require-precompiled-0.1.0.tgz#5a1b52eb70ebed43eb982e974c85ab59571e56fa"
+
+reserved-words@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/reserved-words/-/reserved-words-0.1.2.tgz#00a0940f98cd501aeaaac316411d9adc52b31ab1"
+  integrity sha1-AKCUD5jNUBrqqsMWQR2a3FKzGrE=
 
 resolve-cwd@^2.0.0:
   version "2.0.0"
