@@ -2529,10 +2529,10 @@ common-path-prefix@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/common-path-prefix/-/common-path-prefix-1.0.0.tgz#cd52f6f0712e0baab97d6f9732874f22f47752c0"
 
-common-shakeify@^0.5.3:
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/common-shakeify/-/common-shakeify-0.5.3.tgz#9fc4170bcfec45142755b2320d8d956fa2b0d796"
-  integrity sha512-NUCGFv3bYHrDWuIAuIQ0xFxcCKs9ohHDFyJ33YC8b2/cwfEpG1tTrthVrgJqf2pUVN2KXP+ESw3he7ahrwBPVA==
+common-shakeify@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/common-shakeify/-/common-shakeify-0.6.0.tgz#34178f288f74460a8ebcce8e61ce50f22547f9b5"
+  integrity sha512-Khlxkok7vEskxsCQfa/lyTmv+ZVjNz1PMGaEImWsZzhnEqArh2yBUhOqYMkiNPbkqqcCzwA/quFkqL3zw3dgAA==
   dependencies:
     "@goto-bus-stop/common-shake" "^2.2.0"
     convert-source-map "^1.5.1"
