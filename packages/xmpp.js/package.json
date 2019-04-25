@@ -4,7 +4,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/xmpp.js",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "license": "ISC",
   "keywords": [
     "XMPP",
@@ -41,7 +41,7 @@
     "@xmpp/starttls": "^0.7.0",
     "@xmpp/stream-features": "^0.7.0",
     "@xmpp/tcp": "^0.7.0",
-    "@xmpp/test": "^0.7.1",
+    "@xmpp/test": "^0.7.2",
     "@xmpp/time": "^0.7.0",
     "@xmpp/tls": "^0.7.0",
     "@xmpp/uri": "^0.7.0",
