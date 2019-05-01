@@ -9,7 +9,7 @@
   "dependencies": {
     "@xmpp/connection": "^0.7.0",
     "@xmpp/xml": "^0.7.0",
-    "ws": "^6.1.2"
+    "ws": "^7.0.0"
   },
   "browser": {
     "ws": false
