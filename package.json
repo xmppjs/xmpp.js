@@ -19,7 +19,7 @@
     "eslint": "^5.12.1",
     "eslint-config-prettier": "^4.1.0",
     "eslint-config-xo": "^0.26.0",
-    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-node": "^9.0.1",
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-unicorn": "^8.0.2",
