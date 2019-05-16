@@ -3,7 +3,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "http://github.com/xmppjs/xmpp.js",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.7.1",
+  "version": "0.7.3",
   "license": "ISC",
   "dependencies": {
     "@xmpp/client-core": "^0.7.0",
@@ -21,7 +21,7 @@
     "@xmpp/stream-features": "^0.7.0",
     "@xmpp/tcp": "^0.7.0",
     "@xmpp/tls": "^0.7.0",
-    "@xmpp/websocket": "^0.7.0"
+    "@xmpp/websocket": "^0.7.3"
   },
   "browser": "./browser.js",
   "react-native": "./browser.js",

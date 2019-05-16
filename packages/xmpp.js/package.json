@@ -4,7 +4,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/xmpp.js",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "license": "ISC",
   "keywords": [
     "XMPP",
@@ -17,7 +17,7 @@
     "yarn": ">= 1.0.0"
   },
   "dependencies": {
-    "@xmpp/client": "^0.7.1",
+    "@xmpp/client": "^0.7.3",
     "@xmpp/client-core": "^0.7.0",
     "@xmpp/component": "^0.7.1",
     "@xmpp/component-core": "^0.7.0",
@@ -41,11 +41,11 @@
     "@xmpp/starttls": "^0.7.0",
     "@xmpp/stream-features": "^0.7.0",
     "@xmpp/tcp": "^0.7.0",
-    "@xmpp/test": "^0.7.2",
+    "@xmpp/test": "^0.7.3",
     "@xmpp/time": "^0.7.0",
     "@xmpp/tls": "^0.7.0",
     "@xmpp/uri": "^0.7.0",
-    "@xmpp/websocket": "^0.7.0",
+    "@xmpp/websocket": "^0.7.3",
     "@xmpp/xml": "^0.7.0"
   },
   "scripts": {
