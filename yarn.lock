@@ -1938,9 +1938,9 @@ brotli-size@0.0.1:
     iltorb "^1.0.9"
 
 browser-pack-flat@^3.2.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/browser-pack-flat/-/browser-pack-flat-3.4.0.tgz#1ecdd64ffc6edfec79cc734da645be77c84cd0d8"
-  integrity sha512-IS7E+jHSoyBVy3b6Re3xcjCOY5020Vi4OVOMyCE4Oe1T8sj5lTe77qcq90/os6P/n2axvB3K3FnyGvvR036byQ==
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/browser-pack-flat/-/browser-pack-flat-3.4.1.tgz#5c013658178004c891b4da7d4b20aabac0113497"
+  integrity sha512-be3dbRLC5reoGvVKO4YBAfVvFxeH+1VD0/ZGLbL97Ee894JBxdoaxpiDckMxeIe4QeBysGOLNl6n0WpoI1aAnw==
   dependencies:
     JSONStream "^1.3.2"
     combine-source-map "^0.8.0"
