@@ -3361,10 +3361,10 @@ eslint-plugin-promise@^4.0.1:
   resolved "https://registry.yarnpkg.com/eslint-plugin-promise/-/eslint-plugin-promise-4.1.1.tgz#1e08cb68b5b2cd8839f8d5864c796f56d82746db"
   integrity sha512-faAHw7uzlNPy7b45J1guyjazw28M+7gJokKUjC5JSFoYfUEyy6Gw/i7YQvmv2Yk00sUjWcmzXQLpU1Ki/C2IZQ==
 
-eslint-plugin-unicorn@^8.0.2:
-  version "8.0.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-unicorn/-/eslint-plugin-unicorn-8.0.2.tgz#a1f6192c39916d7385c057f79a95ffcdf47f4636"
-  integrity sha512-Ik2/Bt/PvPnf1lZgUnNFK2310XoRn/4LYiP5gkEPVDa4w9HCoii7I6SeKh2X5Rdp2WLy4eUiLcYtiBUp+q2IRw==
+eslint-plugin-unicorn@^9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-unicorn/-/eslint-plugin-unicorn-9.1.0.tgz#b5ec3c65ae28d8163f6f6b340b183e11862ec295"
+  integrity sha512-OknjtY1daSxHd60KsXBxP9d2LExA3JZ2XuPOtqSZbLjwGaKjZXYMCaPI2xg70Qc791rXoi0pW4UEzVCnwlRi+Q==
   dependencies:
     clean-regexp "^1.0.0"
     eslint-ast-utils "^1.0.0"
@@ -3375,6 +3375,7 @@ eslint-plugin-unicorn@^8.0.2:
     lodash.snakecase "^4.0.1"
     lodash.topairs "^4.3.0"
     lodash.upperfirst "^4.2.0"
+    regexpp "^2.0.1"
     reserved-words "^0.1.2"
     safe-regex "^2.0.1"
 

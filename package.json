@@ -22,7 +22,7 @@
     "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-unicorn": "^8.0.2",
+    "eslint-plugin-unicorn": "^9.1.0",
     "exorcist": "^1.0.1",
     "jsdom": "^15.0.0",
     "lerna": "^3.10.6",
