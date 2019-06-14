@@ -14,6 +14,7 @@ function xml(...args) {
   return x(...args)
 }
 
+// eslint-disable-next-line no-global-assign
 exports = module.exports = xml
 
 Object.assign(exports, {

@@ -14,6 +14,7 @@ function append(el, child) {
 
 function x(name, attrs, ...children) {
   const el = new Element(name, attrs)
+  // eslint-disable-next-line unicorn/no-for-loop
   for (let i = 0; i < children.length; i++) {
     append(el, children[i])
   }
