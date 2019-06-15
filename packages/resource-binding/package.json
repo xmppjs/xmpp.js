@@ -4,7 +4,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/resource-binding",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.7.0",
+  "version": "0.7.4",
   "license": "ISC",
   "keywords": [
     "XMPP",
@@ -12,7 +12,7 @@
     "resource"
   ],
   "dependencies": {
-    "@xmpp/xml": "^0.7.0"
+    "@xmpp/xml": "^0.7.4"
   },
   "engines": {
     "node": ">= 10.0.0",
