@@ -24,7 +24,7 @@
     "@xmpp/websocket": "^0.7.3"
   },
   "browser": "./browser.js",
-  "react-native": "./browser.js",
+  "react-native": "./react-native.js",
   "engines": {
     "node": ">= 10.0.0",
     "yarn": ">= 1.0.0"
