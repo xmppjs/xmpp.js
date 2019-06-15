@@ -20,10 +20,12 @@ or
 
 ```html
 <script
-  src="https://unpkg.com/@xmpp/client@0.5.3/dist/xmpp.min.js"
+  src="https://unpkg.com/@xmpp/client@VERSION/dist/xmpp.min.js"
   crossorigin
 ></script>
 ```
+
+Replace `VERSION` with the desired version number.
 
 ```js
 const {client, xml, jid} = window.XMPP
@@ -266,3 +268,10 @@ PLAIN should only be used over secure WebSocket (`wss://)`, direct TLS (`xmpps:`
 - ☐ : Optional
 - ✗ : Unavailable
 - ✔ : Included
+
+## Common issues
+
+<details>
+  <summary><strong>Unable to resolve module</strong></summary>
+  <p>If you are using an older React Native version, please require/import <code>@xmpp/client/reat-native</code> instead of <code>@xmpp/client</code>.</p>
+</details>
