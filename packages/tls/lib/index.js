@@ -1,6 +1,6 @@
 'use strict'
 
-const ConnectionTLS = require('./lib/Connection')
+const ConnectionTLS = require('./Connection')
 
 module.exports = function tls({entity}) {
   entity.transports.push(ConnectionTLS)

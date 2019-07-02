@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const Connection = require('..')
+const Connection = require('../lib')
 
 test('rejects if connection is not offline', t => {
   const conn = new Connection()

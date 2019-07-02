@@ -2,7 +2,7 @@
 
 const test = require('ava')
 const {spy} = require('sinon')
-const jid = require('..')
+const jid = require('../lib')
 const JID = require('../lib/JID')
 
 test('equal calls equals on the first argument with the second argument', t => {

@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const Connection = require('..')
+const Connection = require('../lib')
 
 test('resolves if socket property is undefined', async t => {
   const conn = new Connection()

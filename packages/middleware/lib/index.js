@@ -2,8 +2,8 @@
 
 const compose = require('koa-compose')
 
-const IncomingContext = require('./lib/IncomingContext')
-const OutgoingContext = require('./lib/OutgoingContext')
+const IncomingContext = require('./IncomingContext')
+const OutgoingContext = require('./OutgoingContext')
 
 function listener(entity, middleware, Context) {
   return function(stanza) {

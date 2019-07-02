@@ -20,6 +20,16 @@
     "buffer": false,
     "js-base64": false
   },
+  "scripts": {
+    "build": "rollup -c ../../rollup.config.js --sourcemap",
+    "prepare": "npm run build"
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "browser": "dist/umd/index.js",
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">= 10.0.0",
     "yarn": ">= 1.0.0"

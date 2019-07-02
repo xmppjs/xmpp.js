@@ -3,7 +3,7 @@
 const {EventEmitter, promise} = require('@xmpp/events')
 const jid = require('@xmpp/jid')
 const xml = require('@xmpp/xml')
-const StreamError = require('./lib/StreamError')
+const StreamError = require('./StreamError')
 
 const NS_STREAM = 'urn:ietf:params:xml:ns:xmpp-streams'
 

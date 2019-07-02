@@ -1,7 +1,7 @@
 'use strict'
 
-const dns = require('./lib/dns')
-const http = require('./lib/http')
+const dns = require('./dns')
+const http = require('./http')
 
 module.exports = function resolve(...args) {
   return Promise.all([

@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const _reconnect = require('.')
+const _reconnect = require('./lib')
 const EventEmitter = require('events')
 
 test('it schedule a reconnect when disconnect is emitted', t => {

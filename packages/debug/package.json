@@ -6,6 +6,16 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.7.0",
   "license": "ISC",
+  "scripts": {
+    "build": "rollup -c ../../rollup.config.js --sourcemap",
+    "prepare": "npm run build"
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "browser": "dist/umd/index.js",
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "XMPP",
     "debug"

@@ -1,8 +1,8 @@
 'use strict'
 
-const x = require('./lib/x')
-const Element = require('./lib/Element')
-const Parser = require('./lib/Parser')
+const x = require('./x')
+const Element = require('./Element')
+const Parser = require('./Parser')
 const {
   escapeXML,
   unescapeXML,

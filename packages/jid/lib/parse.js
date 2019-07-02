@@ -1,6 +1,6 @@
 'use strict'
 
-const JID = require('../lib/JID')
+const JID = require('./JID')
 
 module.exports = function parse(s) {
   let local

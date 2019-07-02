@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const jid = require('..')
+const jid = require('../lib')
 
 test('Should not change string - issue 43', t => {
   const test = 'test\u001A@example.com'

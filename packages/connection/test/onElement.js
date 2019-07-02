@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const Connection = require('..')
+const Connection = require('../lib')
 const xml = require('@xmpp/xml')
 
 test.cb('#_onElement', t => {

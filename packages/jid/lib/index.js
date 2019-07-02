@@ -1,8 +1,8 @@
 'use strict'
 
-const JID = require('./lib/JID')
-const escaping = require('./lib/escaping')
-const parse = require('./lib/parse')
+const JID = require('./JID')
+const escaping = require('./escaping')
+const parse = require('./parse')
 
 function jid(...args) {
   if (!args[1] && !args[2]) {

@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const {parse} = require('.')
+const {parse} = require('./lib')
 const jid = require('@xmpp/jid')
 
 test('parse', t => {

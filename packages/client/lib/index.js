@@ -1,7 +1,7 @@
 'use strict'
 
 const {xml, jid, Client} = require('@xmpp/client-core')
-const getDomain = require('./lib/getDomain')
+const getDomain = require('./getDomain')
 
 const _reconnect = require('@xmpp/reconnect')
 const _websocket = require('@xmpp/websocket')
@@ -9,12 +9,12 @@ const _tcp = require('@xmpp/tcp')
 const _tls = require('@xmpp/tls')
 const _middleware = require('@xmpp/middleware')
 const _streamFeatures = require('@xmpp/stream-features')
-const _iqCaller = require('@xmpp/iq/caller')
-const _iqCallee = require('@xmpp/iq/callee')
+const _iqCaller = require('@xmpp/iq').iqCaller
+const _iqCallee = require('@xmpp/iq').iqCallee
 const _resolve = require('@xmpp/resolve')
 
 // Stream features - order matters and define priority
-const _starttls = require('@xmpp/starttls/client')
+const _starttls = require('@xmpp/starttls').client
 const _sasl = require('@xmpp/sasl')
 const _resourceBinding = require('@xmpp/resource-binding')
 const _sessionEstablishment = require('@xmpp/session-establishment')

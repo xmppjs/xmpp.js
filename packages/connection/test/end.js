@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const Connection = require('..')
+const Connection = require('../lib')
 
 test('#_end', t => {
   t.plan(2)

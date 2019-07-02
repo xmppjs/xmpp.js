@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const jid = require('..')
+const jid = require('../lib')
 
 test('should parsed JIDs should be equal', t => {
   const j1 = jid('foo@bar/baz')

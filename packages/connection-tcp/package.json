@@ -11,6 +11,16 @@
     "connection",
     "TCP"
   ],
+  "scripts": {
+    "build": "rollup -c ../../rollup.config.js --sourcemap",
+    "prepare": "npm run build"
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "browser": "dist/umd/index.js",
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "@xmpp/connection": "^0.7.4",
     "@xmpp/streamparser": "^0.0.6",

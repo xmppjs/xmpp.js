@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const Connection = require('..')
+const Connection = require('../lib')
 const {EventEmitter} = require('@xmpp/events')
 const xml = require('@xmpp/xml')
 

@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const {socketConnect} = require('..')
+const {socketConnect} = require('../lib')
 const EventEmitter = require('events')
 
 class Socket extends EventEmitter {

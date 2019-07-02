@@ -1,6 +1,6 @@
 'use strict'
 
-const ConnectionWebSocket = require('./lib/Connection')
+const ConnectionWebSocket = require('./Connection')
 
 module.exports = function websocket({entity}) {
   entity.transports.push(ConnectionWebSocket)

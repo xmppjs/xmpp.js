@@ -1,11 +1,11 @@
 'use strict'
 
-const timeout = require('./lib/timeout')
-const delay = require('./lib/delay')
-const TimeoutError = require('./lib/TimeoutError')
-const promise = require('./lib/promise')
+const timeout = require('./timeout')
+const delay = require('./delay')
+const TimeoutError = require('./TimeoutError')
+const promise = require('./promise')
 const EventEmitter = require('events')
-const Deferred = require('./lib/Deferred')
+const Deferred = require('./Deferred')
 
 exports.EventEmitter = EventEmitter
 exports.timeout = timeout
