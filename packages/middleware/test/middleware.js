@@ -4,7 +4,7 @@ const test = require('ava')
 const IncomingContext = require('../lib/IncomingContext')
 const OutgoingContext = require('../lib/OutgoingContext')
 const {context, mockClient, mockInput, promiseError} = require('@xmpp/test')
-const middleware = require('..')
+const middleware = require('../lib')
 
 test.beforeEach(t => {
   t.context = context()

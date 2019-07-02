@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const xml = require('..')
+const xml = require('../lib')
 const x = require('../lib/x')
 const Element = require('../lib/Element')
 const Parser = require('../lib/Parser')
