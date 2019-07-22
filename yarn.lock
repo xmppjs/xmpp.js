@@ -2021,9 +2021,9 @@ babel-plugin-syntax-jsx@^6.0.0:
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-jsx/-/babel-plugin-syntax-jsx-6.18.0.tgz#0af32a9a6e13ca7a3fd5069e62d7b0f58d0d8946"
 
 babel-plugin-transform-async-to-promises@^0.8.12:
-  version "0.8.12"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-async-to-promises/-/babel-plugin-transform-async-to-promises-0.8.12.tgz#281917387606f2f925eb6e9e368703cb6c436337"
-  integrity sha512-hkTh5yCZAGFUrOsBJgwJlhnnW4BxOn7GBdnJ7Dy4/JLgLdBqsWX+6+VYXv3/T2Xm+4r5mX6scvmxOTU+eTi5cA==
+  version "0.8.13"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-async-to-promises/-/babel-plugin-transform-async-to-promises-0.8.13.tgz#d45895658a670ddf16f4b8f0a16487d89bb43cd0"
+  integrity sha512-EG665Sn79e5ndzNIbbgtIGFUXggr6j8PIDEL7kWyRbmeli7/Gva2/osjEsVayz4k7U82LKrRa8B/kkL/7n0prQ==
 
 babelify@^10.0.0:
   version "10.0.0"
