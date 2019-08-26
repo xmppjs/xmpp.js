@@ -16,7 +16,7 @@
     "browserify": "^16.2.3",
     "bundlesize": "^0.18.0",
     "common-shakeify": "^0.6.0",
-    "eslint": "^5.12.1",
+    "eslint": "^6.2.2",
     "eslint-config-prettier": "^6.0.0",
     "eslint-config-xo": "^0.26.0",
     "eslint-plugin-node": "^9.1.0",
