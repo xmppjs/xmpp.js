@@ -27,6 +27,7 @@ test.serial('client', async t => {
   t.plan(7)
 
   const xmpp = client({credentials, service: domain})
+  t.context.xmpp = xmpp
   debug(xmpp)
 
   xmpp.on('connect', () => {
@@ -45,8 +46,6 @@ test.serial('client', async t => {
   const address = await xmpp.start()
   t.true(address instanceof jid.JID)
   t.is(address.bare().toString(), JID)
-
-  t.context.xmpp = xmpp
 })
 
 test.serial.cb('bad credentials', t => {

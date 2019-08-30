@@ -24,6 +24,7 @@ test.serial('component', async t => {
   t.plan(6)
 
   const xmpp = component(options)
+  t.context.xmpp = xmpp
   debug(xmpp)
 
   xmpp.on('connect', () => {
@@ -43,9 +44,6 @@ test.serial('component', async t => {
 
   t.true(id instanceof jid.JID)
   t.is(id.toString(), 'component.localhost')
-
-  t.context.xmpp = xmpp
-
   await xmpp.stop
 })
 
