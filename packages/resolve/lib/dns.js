@@ -3,6 +3,8 @@
 const dns = require('dns')
 const compareAltConnections = require('./alt-connections').compare
 
+const IGNORE_CODES = ['ENOTFOUND', 'ENODATA']
+
 function lookup(domain, options = {}) {
   options.all = true
   return new Promise((resolve, reject) => {
@@ -35,7 +37,7 @@ function lookup(domain, options = {}) {
 function resolveTxt(domain, {owner = '_xmppconnect'}) {
   return new Promise((resolve, reject) => {
     dns.resolveTxt(`${owner}.${domain}`, (err, records) => {
-      if (err && err.code === 'ENOTFOUND') {
+      if (err && IGNORE_CODES.includes(err.code)) {
         resolve([])
       } else if (err) {
         reject(err)
@@ -61,7 +63,7 @@ function resolveTxt(domain, {owner = '_xmppconnect'}) {
 function resolveSrv(domain, {service, protocol}) {
   return new Promise((resolve, reject) => {
     dns.resolveSrv(`_${service}._${protocol}.${domain}`, (err, records) => {
-      if (err && err.code === 'ENOTFOUND') {
+      if (err && IGNORE_CODES.includes(err.code)) {
         resolve([])
       } else if (err) {
         reject(err)

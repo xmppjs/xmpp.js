@@ -2,11 +2,15 @@
 
 const tls = require('tls')
 const ConnectionTCP = require('@xmpp/connection-tcp')
-const {URL} = require('url')
 
 class ConnectionTLS extends ConnectionTCP {
   socketParameters(service) {
-    const {port, hostname, protocol} = new URL(service)
+    let {port, hostname, protocol} = new URL(service)
+    // https://github.com/nodejs/node/issues/12410#issuecomment-294138912
+    if (hostname === '[::1]') {
+      hostname = '::1'
+    }
+
     return protocol === 'xmpps:'
       ? {port: Number(port) || 5223, host: hostname}
       : undefined
