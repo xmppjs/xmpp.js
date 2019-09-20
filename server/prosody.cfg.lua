@@ -1,3 +1,5 @@
+local lfs = require "lfs";
+
 modules_enabled = {
   "roster";
   "saslauth";
@@ -18,7 +20,7 @@ modules_disabled = {
 }
 
 daemonize = true;
-pidfile = "prosody.pid";
+pidfile = lfs.currentdir() .. "/prosody.pid";
 
 allow_registration = true;
 
@@ -35,16 +37,16 @@ authentication = "internal_plain"
 legacy_ssl_ports = { 5223 };
 
 log = {
-  debug = "prosody.log";
-  error = "prosody.err";
+  debug = lfs.currentdir() .. "/prosody.log";
+  error = lfs.currentdir() .. "/prosody.err";
 }
 
 ssl = {
-  certificate = "localhost.crt";
-  key = "localhost.key";
+  certificate = lfs.currentdir() .. "/localhost.crt";
+  key = lfs.currentdir() .. "/localhost.key";
 }
 
-data_path = "."
+data_path = lfs.currentdir()
 
 VirtualHost "localhost"
 

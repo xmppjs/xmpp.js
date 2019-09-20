@@ -1,6 +1,4 @@
-sudo: required
-
-dist: trusty
+dist: bionic
 
 language: node_js
 
@@ -17,10 +15,10 @@ cache:
 addons:
   apt:
     sources:
-      - sourceline: 'deb http://packages.prosody.im/debian trusty main'
+      - sourceline: 'deb http://packages.prosody.im/debian bionic main'
         key_url: 'https://prosody.im/files/prosody-debian-packages.key'
     packages:
-      - prosody-0.10
+      - prosody
       - lua-bitop # websocket
       - lua-sec # tls
 

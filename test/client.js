@@ -24,7 +24,7 @@ test.afterEach(t => {
 })
 
 test.serial('client', async t => {
-  t.plan(7)
+  t.plan(6)
 
   const xmpp = client({credentials, service: domain})
   t.context.xmpp = xmpp
@@ -239,7 +239,7 @@ test.serial('xmpp IPv4', async t => {
   t.is(address.bare().toString(), JID)
 })
 
-test.serial.only('xmpp IPv6', async t => {
+test.serial('xmpp IPv6', async t => {
   const xmpp = client({credentials, service: 'xmpp://[::1]:5222', domain})
   debug(xmpp)
   t.context.xmpp = xmpp
