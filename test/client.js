@@ -82,7 +82,7 @@ test.serial.cb('bad credentials', t => {
   t.context.xmpp = xmpp
 })
 
-test.serial.cb('reconnects when server restarts', t => {
+test.serial.cb('reconnects when server restarts gracefully', t => {
   t.plan(2)
   let c = 0
 
@@ -99,6 +99,31 @@ test.serial.cb('reconnects when server restarts', t => {
       t.end()
     } else {
       await server.restart()
+    }
+  })
+
+  xmpp.start()
+
+  t.context.xmpp = xmpp
+})
+
+test.serial.cb('reconnects when server restarts non-gracefully', t => {
+  t.plan(2)
+  let c = 0
+
+  const xmpp = client({credentials, service: domain})
+  debug(xmpp)
+
+  xmpp.on('error', () => {})
+
+  xmpp.on('online', async () => {
+    c++
+    t.pass()
+    if (c === 2) {
+      await xmpp.stop()
+      t.end()
+    } else {
+      await server.restart('SIGKILL')
     }
   })
 

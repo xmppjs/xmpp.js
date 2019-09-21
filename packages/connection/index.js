@@ -286,7 +286,6 @@ class Connection extends EventEmitter {
   // eslint-disable-next-line require-await
   async send(element) {
     this.emit('outgoing', element)
-
     await this.write(element)
     this.emit('send', element)
   }
@@ -321,12 +320,7 @@ class Connection extends EventEmitter {
 
   isStanza(element) {
     const {name} = element
-    const NS = element.attrs.xmlns
-    return (
-      // This.online && FIXME
-      (NS ? NS === this.NS : true) &&
-      (name === 'iq' || name === 'message' || name === 'presence')
-    )
+    return name === 'iq' || name === 'message' || name === 'presence'
   }
 
   isNonza(element) {

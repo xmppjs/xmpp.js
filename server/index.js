@@ -51,9 +51,10 @@ async function waitPortClose() {
 }
 
 // eslint-disable-next-line require-await
-async function kill(pid) {
+async function kill(signal = 'SIGTERM') {
+  const pid = await getPid()
   try {
-    process.kill(pid, 'SIGTERM')
+    process.kill(pid, signal)
   } catch (err) {
     if (err.code !== 'ESRCH') throw err
   }
@@ -88,19 +89,18 @@ async function start() {
   return _start()
 }
 
-async function stop() {
+async function stop(signal) {
   if (!(await isPortOpen())) {
     return clean()
   }
 
   const closing = waitPortClose()
-  const pid = await getPid()
-  await kill(pid)
+  await kill(signal)
   return closing
 }
 
-async function restart() {
-  await stop()
+async function restart(signal) {
+  await stop(signal)
   return _start()
 }
 
@@ -111,3 +111,4 @@ exports.getPid = getPid
 exports.start = start
 exports.stop = stop
 exports.restart = restart
+exports.kill = kill

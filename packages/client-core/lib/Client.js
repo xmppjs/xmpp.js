@@ -9,14 +9,7 @@ class Client extends Connection {
   }
 
   send(element, ...args) {
-    if (
-      !element.attrs.xmlns &&
-      (element.is('iq') || element.is('message') || element.is('presence'))
-    ) {
-      element.attrs.xmlns = 'jabber:client' // FIXME no need for TCP/TLS transports
-    }
-
-    return super.send(element, ...args)
+    return this.Transport.prototype.send.call(this, element, ...args)
   }
 
   _findTransport(service) {

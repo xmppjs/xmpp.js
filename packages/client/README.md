@@ -248,11 +248,11 @@ See [@xmpp/reconnect](/packages/reconnect).
 
 XMPP supports multiple transports, this table list `@xmpp/client` supported and unsupported transport for each environment.
 
-|            transport             |   protocols   | Node.js | Browser | React Native |
-| :------------------------------: | :-----------: | :-----: | :-----: | :----------: |
-| [WebSocket](/packages/websocket) | ws://, wss:// |    ✔    |    ✔    |      ✔       |
-|       [TCP](/packages/tcp)       |    xmpp://    |    ✔    |    ✗    |      ✗       |
-|       [TLS](/packages/tls)       |   xmpps://    |    ✔    |    ✗    |      ✗       |
+|            transport             | protocols  | Node.js | Browser | React Native |
+| :------------------------------: | :--------: | :-----: | :-----: | :----------: |
+| [WebSocket](/packages/websocket) | `ws(s)://` |    ✔    |    ✔    |      ✔       |
+|       [TCP](/packages/tcp)       | `xmpp://`  |    ✔    |    ✗    |      ✗       |
+|       [TLS](/packages/tls)       | `xmpps://` |    ✔    |    ✗    |      ✗       |
 
 ## Authentication
 

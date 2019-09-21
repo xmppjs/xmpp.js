@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@xmpp/client": "^0.7.4",
+    "@xmpp/connection": "^0.7.4",
     "@xmpp/debug": "^0.7.0",
     "@xmpp/events": "^0.7.0",
     "@xmpp/jid": "^0.7.4",
