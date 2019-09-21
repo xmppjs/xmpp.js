@@ -17,13 +17,14 @@ module.exports = function({middleware}) {
       const {stanza} = ctx
       if (!stanza.is('features', 'http://etherx.jabber.org/streams'))
         return next()
+      sf.features = stanza
       const feature = stanza.getChild(name, xmlns)
       if (!feature) return next()
       return handler(ctx, next, feature)
     })
   }
 
-  return {
-    use,
-  }
+  const sf = {use}
+
+  return sf
 }

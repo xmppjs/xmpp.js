@@ -33,6 +33,7 @@
     "@xmpp/reconnect": "^0.8.0",
     "@xmpp/resolve": "^0.8.0",
     "@xmpp/resource-binding": "^0.8.0",
+    "@xmpp/roster": "^0.8.0",
     "@xmpp/sasl": "^0.8.0",
     "@xmpp/sasl-anonymous": "^0.8.0",
     "@xmpp/sasl-plain": "^0.8.0",
