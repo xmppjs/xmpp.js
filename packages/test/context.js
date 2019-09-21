@@ -109,16 +109,16 @@ module.exports = function context(entity = client()) {
       )
     },
     fakeIncomingError(child, id) {
-      return this.fakeIncomingIq(xml('iq', {type: 'error', id}, child))
-        .then()
-        .then(stanza => {
+      return this.fakeIncomingIq(xml('iq', {type: 'error', id}, child)).then(
+        stanza => {
           const [child] = stanza.children
           if (child) {
             child.parent = null
           }
 
           return child
-        })
+        }
+      )
     },
     fakeIncomingIq(el) {
       const stanza = el.clone()

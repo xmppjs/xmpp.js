@@ -14,6 +14,14 @@ const NS_FRAMING = 'urn:ietf:params:xml:ns:xmpp-framing'
  */
 
 class ConnectionWebSocket extends Connection {
+  send(element, ...args) {
+    if (!element.attrs.xmlns && super.isStanza(element)) {
+      element.attrs.xmlns = 'jabber:client'
+    }
+
+    return super.send(element, ...args)
+  }
+
   // https://tools.ietf.org/html/rfc7395#section-3.6
   footerElement() {
     return new xml.Element('close', {
