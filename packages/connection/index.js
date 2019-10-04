@@ -4,6 +4,7 @@ const {EventEmitter, promise} = require('@xmpp/events')
 const jid = require('@xmpp/jid')
 const xml = require('@xmpp/xml')
 const StreamError = require('./lib/StreamError')
+const {parseHost, parseService} = require('./lib/util')
 
 const NS_STREAM = 'urn:ietf:params:xml:ns:xmpp-streams'
 
@@ -45,12 +46,12 @@ class Connection extends EventEmitter {
     this._detachParser()
   }
 
-  async _streamError(condition) {
+  async _streamError(condition, children) {
     try {
       await this.send(
         // prettier-ignore
         xml('stream:error', {}, [
-          xml(condition, {xmlns: NS_STREAM}),
+          xml(condition, {xmlns: NS_STREAM}, children),
         ])
       )
     } catch (err) {}
@@ -113,12 +114,49 @@ class Connection extends EventEmitter {
   _onElement(element) {
     this.emit('element', element)
     this.emit(this.isStanza(element) ? 'stanza' : 'nonza', element)
-    // https://xmpp.org/rfcs/rfc6120.html#streams-error
-    if (element.name !== 'stream:error') return
-    this.emit('error', StreamError.fromElement(element))
+
+    if (element.name === 'stream:error') {
+      this._onStreamError(element)
+    }
+  }
+
+  // https://xmpp.org/rfcs/rfc6120.html#streams-error
+  _onStreamError(element) {
+    const error = StreamError.fromElement(element)
+
+    if (error.condition === 'see-other-host') {
+      this._onSeeOtherHost(error)
+    } else {
+      this.emit('error', error)
+    }
+
     // "Stream Errors Are Unrecoverable"
     // "The entity that receives the stream error then SHALL close the stream"
     this._end()
+  }
+
+  // https://xmpp.org/rfcs/rfc6120.html#streams-error-conditions-see-other-host
+  async _onSeeOtherHost(error) {
+    const {protocol} = parseService(this.options.service)
+
+    const host = error.element.getChildText('see-other-host')
+    const {port} = parseHost(host)
+
+    let service
+    if (port) {
+      service = `${protocol || 'xmpp:'}//${host}`
+    } else {
+      service = (protocol ? `${protocol}//` : '') + host
+    }
+
+    try {
+      await promise(this, 'disconnect')
+      const {domain, lang} = this.options
+      await this.connect(service)
+      await this.open({domain, lang})
+    } catch (err) {
+      this.emit('error', err)
+    }
   }
 
   _attachParser(p) {
