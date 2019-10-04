@@ -47,7 +47,7 @@ test.serial.only('see-other-host', async t => {
   await promise(seeOtherHostServer, 'listening')
 
   const xmpp = client({credentials, service: 'xmpp://localhost:5486'})
-  debug(xmpp, true)
+  debug(xmpp)
   t.context.xmpp = xmpp
   const address = await xmpp.start()
   t.is(address.bare().toString(), JID)

@@ -29,8 +29,9 @@ class ConnectionTCP extends Connection {
 
   // https://xmpp.org/rfcs/rfc6120.html#streams-open
   header(el) {
-    const frag = el.toString()
-    return `<?xml version='1.0'?>` + frag.substr(0, frag.length - 2) + '>'
+    const str = el.toString()
+    const frag = str.substring(0, str.length - 2)
+    return `<?xml version='1.0'?>${frag}>`
   }
 
   // https://xmpp.org/rfcs/rfc6120.html#streams-close
