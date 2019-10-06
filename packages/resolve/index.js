@@ -44,6 +44,7 @@ async function fallbackConnect(entity, uris) {
 
   try {
     await socketConnect(socket, params)
+    // eslint-disable-next-line no-unused-vars
   } catch (err) {
     return fallbackConnect(entity, uris)
   }

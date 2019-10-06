@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-/* eslint-disable no-console */
-
 'use strict' // eslint-disable-line node/shebang
 
 const server = require('.')

@@ -21,6 +21,7 @@ class Reconnect extends EventEmitter {
 
       try {
         await this.reconnect()
+        // eslint-disable-next-line no-unused-vars
       } catch (err) {
         // Ignoring the rejection is safe because the error is emitted on entity by #start
       }

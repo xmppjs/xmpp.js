@@ -5,5 +5,5 @@ const resolve = require('./resolve')
 // const resolve = require('@xmpp/resolve')
 
 resolve('jabberfr.org')
-  .then(console.log) // eslint-disable-line no-console
-  .catch(console.error) // eslint-disable-line no-console
+  .then(console.log)
+  .catch(console.error)

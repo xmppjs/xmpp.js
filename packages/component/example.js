@@ -1,4 +1,4 @@
-/* eslint-disable no-console,node/no-extraneous-require */
+/* eslint-disable node/no-extraneous-require */
 
 'use strict'
 

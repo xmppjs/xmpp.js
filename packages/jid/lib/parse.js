@@ -8,14 +8,14 @@ module.exports = function parse(s) {
 
   const resourceStart = s.indexOf('/')
   if (resourceStart !== -1) {
-    resource = s.substr(resourceStart + 1)
-    s = s.substr(0, resourceStart)
+    resource = s.slice(resourceStart + 1)
+    s = s.slice(0, resourceStart)
   }
 
   const atStart = s.indexOf('@')
   if (atStart !== -1) {
-    local = s.substr(0, atStart)
-    s = s.substr(atStart + 1)
+    local = s.slice(0, atStart)
+    s = s.slice(atStart + 1)
   }
 
   return new JID(local, s, resource)

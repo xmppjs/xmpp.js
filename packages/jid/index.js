@@ -12,7 +12,6 @@ function jid(...args) {
   return new JID(...args)
 }
 
-// eslint-disable-next-line no-global-assign
 exports = module.exports = jid.bind()
 exports.jid = jid
 exports.JID = JID

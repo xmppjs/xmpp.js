@@ -50,7 +50,6 @@ async function waitPortClose() {
   return waitPortClose()
 }
 
-// eslint-disable-next-line require-await
 async function kill(signal = 'SIGTERM') {
   const pid = await getPid()
   try {

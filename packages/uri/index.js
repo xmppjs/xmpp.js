@@ -16,7 +16,7 @@ function parse(str) {
   const uri = {}
 
   const path = iri.path()
-  uri.path = jid(path.startsWith('/') ? path.substr(1) : path)
+  uri.path = jid(path.startsWith('/') ? path.slice(1) : path)
 
   const authority = iri.authority()
   if (authority) {
@@ -32,7 +32,7 @@ function parse(str) {
 
   if (query) {
     uri.query = {
-      type: type.substr(1),
+      type: type.slice(1),
       params,
     }
   }

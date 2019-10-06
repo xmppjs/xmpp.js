@@ -54,6 +54,7 @@ class Connection extends EventEmitter {
           xml(condition, {xmlns: NS_STREAM}, children),
         ])
       )
+      // eslint-disable-next-line no-unused-vars
     } catch (err) {}
 
     return this._end()
@@ -64,6 +65,7 @@ class Connection extends EventEmitter {
     this.emit('input', str)
     try {
       await this.parser.write(str)
+      // eslint-disable-next-line no-unused-vars
     } catch (err) {
       // https://xmpp.org/rfcs/rfc6120.html#streams-error-conditions-bad-format
       // "This error can be used instead of the more specific XML-related errors,
@@ -71,6 +73,7 @@ class Connection extends EventEmitter {
       // and <unsupported-encoding/>. However, the more specific errors are RECOMMENDED."
       try {
         this._streamError('bad-format')
+        // eslint-disable-next-line no-unused-vars
       } catch (err) {}
     }
   }
@@ -205,10 +208,12 @@ class Connection extends EventEmitter {
     let el
     try {
       el = await this.close()
+      // eslint-disable-next-line no-unused-vars
     } catch (err) {}
 
     try {
       await this.disconnect()
+      // eslint-disable-next-line no-unused-vars
     } catch (err) {}
 
     return el
@@ -236,7 +241,6 @@ class Connection extends EventEmitter {
   /**
    * Connects the socket
    */
-  // eslint-disable-next-line require-await
   async connect(service) {
     this._status('connecting')
     this._attachSocket(new this.Socket())
@@ -314,14 +318,12 @@ class Connection extends EventEmitter {
    * Restart the stream
    * https://xmpp.org/rfcs/rfc6120.html#streams-negotiation-restart
    */
-  // eslint-disable-next-line require-await
   async restart() {
     this._detachParser()
     const {domain, lang} = this.options
     return this.open({domain, lang})
   }
 
-  // eslint-disable-next-line require-await
   async send(element) {
     this.emit('outgoing', element)
     await this.write(element)

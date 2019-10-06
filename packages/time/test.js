@@ -24,15 +24,15 @@ test('datetime', t => {
   t.is(time.datetime(s), '1969-07-21T02:56:00Z')
 })
 
-test('offset', t => {
-  function fake(value) {
-    return {
-      getTimezoneOffset() {
-        return value
-      },
-    }
+function fake(value) {
+  return {
+    getTimezoneOffset() {
+      return value
+    },
   }
+}
 
+test('offset', t => {
   t.is(time.offset(fake(120)), '-02:00')
   t.is(time.offset(fake(-120)), '+02:00')
   t.is(time.offset(fake(90)), '-01:30')
