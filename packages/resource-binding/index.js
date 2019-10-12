@@ -14,10 +14,8 @@ function makeBindElement(resource) {
 }
 
 async function bind(entity, iqCaller, resource) {
-  const result = await iqCaller.request(
-    xml('iq', {type: 'set'}, makeBindElement(resource))
-  )
-  const jid = result.getChild('bind', NS).getChildText('jid')
+  const result = await iqCaller.set(makeBindElement(resource))
+  const jid = result.getChildText('jid')
   entity._jid(jid)
   return jid
 }

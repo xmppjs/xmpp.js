@@ -22,9 +22,9 @@ const {iqCaller} = xmpp
 Sends an iq and returns a promise.
 
 - Resolves with the response when it is received.
-- Rejects with a `StanzaError` when an error is received
-- Rejects with a `TimouetError` if a reply wasn't received within the specified or default timeout
-- Rejects with an `Error` if a network error occurs
+- Rejects with `StanzaError` when an error is received
+- Rejects with `TimeoutError` if a reply wasn't received within the specified or default timeout
+- Rejects with `Error` for anything else
 
 * The request `id` attribute is optional and will be added if omitted.
 * The request `to` attribute is optional and will default to the server.
@@ -35,6 +35,32 @@ const response = await iqCaller.request(
   30 * 1000 // 30 seconds timeout - default
 )
 const foo = response.getChild('foo', 'foo:bar')
+console.log(foo)
+```
+
+### get
+
+A convenient method to send a `get` request. Behaves like [request](#request) but accepts/returns a child element instead of an `iq`.
+
+```js
+const foo = await iqCaller.get(
+  xml('foo', 'foo:bar'),
+  to, // "to" attribute, optional
+  timeout // 30 seconds timeout - default
+)
+console.log(foo)
+```
+
+### set
+
+A convenient method to send a `set` request. Behaves like [request](#request) but accepts/returns a child element instead of an `iq`.
+
+```js
+const foo = await iqCaller.set(
+  xml('foo', 'foo:bar'),
+  to, // "to" attribute, optional
+  timeout // 30 seconds timeout - default
+)
 console.log(foo)
 ```
 
