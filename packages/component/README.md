@@ -44,12 +44,13 @@ xmpp.on('online', async address => {
   const message = xml(
     'message',
     {type: 'chat', to: address},
-    xml('body', 'hello world')
+    xml('body', null, 'hello world')
   )
   await xmpp.send(message)
 })
 
 // Debug
+// See also @xmpp/debug https://github.com/xmppjs/xmpp.js/tree/master/packages/debug
 xmpp.on('status', status => {
   console.debug('🛈', 'status', status)
 })

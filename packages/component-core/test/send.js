@@ -5,6 +5,7 @@ const {Component, xml} = require('..')
 
 test('from attribute', t => {
   const entity = new Component()
+  entity.jid = 'test.foobar'
   entity.write = () => Promise.resolve()
   let el
 
@@ -12,9 +13,7 @@ test('from attribute', t => {
   entity.send(el)
   t.is(el.attrs.from, undefined)
 
-  entity.jid = 'test.foobar'
-
-  el = xml('el')
+  el = xml('message')
   entity.send(el)
   t.is(el.attrs.from, 'test.foobar')
 
