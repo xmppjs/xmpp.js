@@ -52,6 +52,20 @@ test('removes the handler if sending failed', async t => {
   }
 })
 
+test('resolves with with the stanza for result reply', async t => {
+  const xmpp = mockClient()
+  const {iqCaller} = xmpp
+
+  const id = 'foo'
+
+  const promiseRequest = iqCaller.request(<iq type="get" id={id} />)
+
+  const reply = <iq type="result" id={id} />
+  mockInput(xmpp, reply)
+
+  t.deepEqual(await promiseRequest, reply)
+})
+
 test('rejects with a StanzaError for error reply', async t => {
   const xmpp = mockClient()
   const {iqCaller} = xmpp
@@ -95,4 +109,42 @@ test('rejects with a TimeoutError if no answer is received within timeout', asyn
     t.is(err.name, 'TimeoutError')
     t.is(iqCaller.handlers.size, 0)
   }
+})
+
+test('#get', async t => {
+  const xmpp = mockClient()
+  const {iqCaller} = xmpp
+
+  const requestChild = <foo xmlns="foo:bar" />
+  const promiseGet = iqCaller.get(requestChild, 'hello@there')
+  const {id} = requestChild.parent.attrs
+
+  const replyChild = <foo xmlns="foo:bar" />
+  const reply = (
+    <iq type="result" id={id} from="hello@there">
+      {replyChild}
+    </iq>
+  )
+  mockInput(xmpp, reply)
+
+  t.deepEqual(await promiseGet, replyChild)
+})
+
+test('#set', async t => {
+  const xmpp = mockClient()
+  const {iqCaller} = xmpp
+
+  const requestChild = <foo xmlns="foo:bar" />
+  const promiseSet = iqCaller.set(requestChild, 'hello@there')
+  const {id} = requestChild.parent.attrs
+
+  const replyChild = <foo xmlns="foo:bar" />
+  const reply = (
+    <iq type="result" id={id} from="hello@there">
+      {replyChild}
+    </iq>
+  )
+  mockInput(xmpp, reply)
+
+  t.deepEqual(await promiseSet, replyChild)
 })
