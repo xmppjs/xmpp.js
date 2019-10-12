@@ -109,6 +109,22 @@ days.find(day => day.attrs.idx === 0)
 days.filter(day => day.attrs.idx > 2)
 ```
 
+### parent
+
+You can get the parent node using the parent property.
+
+```js
+console.log(message.getChild('days').parent === message)
+```
+
+### root
+
+You can get the root node using the root method.
+
+```js
+console.log(message.getChild('days').root() === message)
+```
+
 ## Editing
 
 ### attributes
