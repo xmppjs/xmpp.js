@@ -1,7 +1,7 @@
 'use strict'
 
 const xml = require('@xmpp/xml')
-const EventEmitter = require('events')
+const {EventEmitter} = require('@xmpp/events')
 
 const NS = 'jabber:iq:roster'
 const NS_ROSTER_VER = 'urn:xmpp:features:rosterver'
@@ -11,18 +11,36 @@ function isRosterVersioningSupported(streamFeatures) {
   return features && features.getChild('ver', NS_ROSTER_VER)
 }
 
+function removeRosterItem(roster, jid) {
+  const child = roster
+    .getChildren('item', NS)
+    .find(item => item.attrs.jid === jid)
+  roster.remove(child)
+  return child
+}
+
 class RosterConsumer extends EventEmitter {
-  constructor({iqCaller, iqCallee, entity, streamFeatures}) {
+  constructor({iqCaller, iqCallee, entity, streamFeatures}, storage) {
     super()
     this.iqCaller = iqCaller
     this.entity = entity
     this.iqCallee = iqCallee
     this.streamFeatures = streamFeatures
+    this.roster = null
+
+    if (storage) {
+      this.save = storage.save
+      this.read = storage.read
+    }
   }
 
   start() {
     this.iqCallee.set(NS, 'query', this._onRosterPush.bind(this))
   }
+
+  save() {}
+
+  read() {}
 
   // https://xmpp.org/rfcs/rfc6121.html#roster-syntax-actions-push
   _onRosterPush({element}) {
@@ -35,16 +53,40 @@ class RosterConsumer extends EventEmitter {
     }
 
     const item = element.getChild('item')
+    removeRosterItem(this.roster, item.attrs.jid)
+    this.roster.attrs.ver = element.attrs.ver
     if (item.subscription === 'remove') {
       this.emit('delete', item)
     } else {
+      this.roster.append(item)
       this.emit('set', item)
     }
+
+    this.save(this.roster, this.entity.jid.bare().toString())
 
     return true
   }
 
-  async get(ver, timeout) {
+  async get(timeout) {
+    let roster
+
+    const local = await this.read(this.entity.jid.bare().toString())
+    const remote = await this.fetch(local ? local.attrs.ver : null, timeout)
+
+    if (remote) {
+      // Roster has changed
+      roster = remote
+      this.save(roster, this.entity.jid.bare().toString())
+    } else {
+      // Roster has not changed
+      roster = local
+    }
+
+    this.roster = roster
+    return roster
+  }
+
+  async fetch(ver, timeout) {
     // If the server does not advertise support for roster versioning, the client MUST NOT include the 'ver' attribute.
     if (!isRosterVersioningSupported(this.streamFeatures)) {
       ver = undefined

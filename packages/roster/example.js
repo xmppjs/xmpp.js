@@ -13,30 +13,37 @@ const debug = require('@xmpp/debug')
 const Roster = require('.') // @xmpp/roster
 
 const xmpp = client({
-  service: 'ws://localhost:5280/xmpp-websocket',
-  domain: 'localhost',
+  // service: 'ws://localhost:5280/xmpp-websocket',
+  // domain: 'localhost',
+  service: 'localhost',
   username: 'username',
   password: 'password',
 })
 debug(xmpp, true)
 
 // eslint-disable-next-line new-cap
-xmpp.roster = Roster(xmpp)
+xmpp.roster = Roster(xmpp, {
+  save,
+  read,
+})
 
 const {promisify} = require('util')
 const fs = require('fs')
-
 const writeFile = promisify(fs.writeFile)
-const stringify = require('@xmpp/xml/lib/stringify')
-async function saveRoster(query) {
-  return writeFile('/tmp/xmpp-roster', stringify(query))
+const readFile = promisify(fs.readFile)
+
+const serialize = require('@xmpp/xml/lib/serialize')
+async function save(roster, address) {
+  return writeFile(
+    `/tmp/${address}-roster.xml`,
+    `<?xml version='1.0' encoding='utf-8'?>\n${serialize(roster, 2)}\n`
+  )
 }
 
-const readFile = promisify(fs.readFile)
 const parse = require('@xmpp/xml/lib/parse')
-async function readRoster() {
+async function read(address) {
   try {
-    const str = await readFile('/tmp/xmpp-roster')
+    const str = await readFile(`/tmp/${address}-roster.xml`)
     return parse(str)
     // eslint-disable-next-line no-unused-vars
   } catch (err) {
@@ -44,47 +51,24 @@ async function readRoster() {
   }
 }
 
-function onRoster(roster) {
-  console.log('version', roster.attrs.ver)
-  console.log(
-    roster.getChildren('item').map(item => {
-      return item.attrs.jid
-    })
-  )
-}
-
-// function removeRosterItem(roster, jid) {
-//   roster.
-// }
-
 ;(async function main() {
-  // The roster can be displayed before being connected
-  let roster = await readRoster()
-  if (roster) onRoster(roster)
-
-  // xmpp.roster.on('delete', item => {
-  //   const {ver} = item.parent.attrs
-  // })
-
-  // xmpp.roster.on('set', item => {
-  //   const {ver} = item.parent.attrs
-  // })
-
-  // https://xmpp.org/rfcs/rfc6121.html#roster-login
   xmpp.on('online', async () => {
-    const res = await xmpp.roster.get(roster ? roster.attrs.ver : null)
-    if (res) {
-      // Roster has changed
-      roster = res
-      onRoster(res)
-      await saveRoster(res)
-    } else {
-      // Roster hasn't changed
-    }
+    const roster = await xmpp.roster.get()
+    console.log(
+      roster.getChildren('item').map(item => {
+        return item.attrs.jid
+      })
+    )
 
-    await xmpp.send(xml('presence'))
+    // await xmpp.send(xml('presence'))
 
-    await xmpp.roster.set(xml('item', {jid: 'foo@bar'}))
+    await xmpp.roster.set(
+      xml('item', {
+        jid: `${Math.random()
+          .toString()
+          .slice(2)}@foo`,
+      })
+    )
   })
 
   await xmpp.start()
