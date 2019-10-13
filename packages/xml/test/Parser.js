@@ -6,14 +6,18 @@ const Parser = require('../lib/Parser')
 test.cb('stream parser', t => {
   const parser = new Parser()
 
-  t.plan(4)
+  t.plan(5)
+
+  let startElement
 
   parser.on('start', el => {
     t.is(el.toString(), '<foo/>')
+    startElement = el
   })
 
   parser.on('element', el => {
-    t.is(el.parent, null)
+    t.is(el.parent, startElement)
+    t.is(startElement.children.length, 0)
     t.is(el.toString(), '<bar>hello</bar>')
   })
 

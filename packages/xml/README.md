@@ -31,6 +31,14 @@ const message = xml(
 )
 ```
 
+If the second argument passed to `xml` is a `string` instead of an `object`, it will be set as the `xmlns` attribute.
+
+```js
+// both are equivalent
+xml('time', 'urn:xmpp:time')
+xml('time', {xmlns: 'urn:xmpp:time'})
+```
+
 ### JSX
 
 ```js

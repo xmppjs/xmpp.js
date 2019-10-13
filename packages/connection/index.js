@@ -37,6 +37,7 @@ class Connection extends EventEmitter {
     this.status = 'offline'
     this.socket = null
     this.parser = null
+    this.root = null
   }
 
   _reset() {
@@ -81,6 +82,7 @@ class Connection extends EventEmitter {
   _attachSocket(socket) {
     const sock = (this.socket = socket)
     const listeners = this.socketListeners
+
     listeners.data = data => {
       this._onData(data)
     }
@@ -165,6 +167,7 @@ class Connection extends EventEmitter {
   _attachParser(p) {
     const parser = (this.parser = p)
     const listeners = this.parserListeners
+
     listeners.element = element => {
       this._onElement(element)
     }
@@ -277,6 +280,7 @@ class Connection extends EventEmitter {
     const headerElement = this.headerElement()
     headerElement.attrs.to = domain
     headerElement.attrs['xml:lang'] = lang
+    this.root = headerElement
 
     this._attachParser(new this.Parser())
 
@@ -310,6 +314,7 @@ class Connection extends EventEmitter {
 
     if (this.parser && this.socket) this._status('closing')
     const [el] = await p
+    this.root = null
     return el
     // The 'close' status is set by the parser 'end' listener
   }
@@ -325,6 +330,7 @@ class Connection extends EventEmitter {
   }
 
   async send(element) {
+    element.parent = this.root
     this.emit('outgoing', element)
     await this.write(element)
     this.emit('send', element)

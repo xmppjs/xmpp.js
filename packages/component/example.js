@@ -3,6 +3,7 @@
 'use strict'
 
 const {component, xml} = require('@xmpp/component')
+const debug = require('@xmpp/debug')
 
 const xmpp = component({
   service: 'xmpp://localhost:5347',
@@ -10,9 +11,7 @@ const xmpp = component({
   password: 'mysecretcomponentpassword',
 })
 
-xmpp.on('error', err => {
-  console.error('❌', err.toString())
-})
+debug(xmpp, true)
 
 xmpp.on('offline', () => {
   console.log('⏹', 'offline')
@@ -31,20 +30,9 @@ xmpp.on('online', async address => {
   const message = xml(
     'message',
     {type: 'chat', to: address},
-    xml('body', 'hello world')
+    xml('body', null, 'hello world')
   )
   await xmpp.send(message)
-})
-
-// Debug
-xmpp.on('status', status => {
-  console.debug('🛈', 'status', status)
-})
-xmpp.on('input', input => {
-  console.debug('⮈', input)
-})
-xmpp.on('output', output => {
-  console.debug('⮊', output)
 })
 
 xmpp.start().catch(console.error)

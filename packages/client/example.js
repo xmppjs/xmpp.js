@@ -3,6 +3,7 @@
 'use strict'
 
 const {client, xml} = require('@xmpp/client')
+const debug = require('@xmpp/debug')
 
 const xmpp = client({
   service: 'ws://localhost:5280/xmpp-websocket',
@@ -11,6 +12,8 @@ const xmpp = client({
   username: 'username',
   password: 'password',
 })
+
+debug(xmpp, true)
 
 xmpp.on('error', err => {
   console.error('❌', err.toString())
@@ -40,17 +43,6 @@ xmpp.on('online', async address => {
     xml('body', null, 'hello world')
   )
   await xmpp.send(message)
-})
-
-// Debug
-xmpp.on('status', status => {
-  console.debug('🛈', 'status', status)
-})
-xmpp.on('input', input => {
-  console.debug('⮈', input)
-})
-xmpp.on('output', output => {
-  console.debug('⮊', output)
 })
 
 xmpp.start().catch(console.error)

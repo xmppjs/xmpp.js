@@ -75,6 +75,7 @@ xmpp.on('online', async address => {
 })
 
 // Debug
+// See also @xmpp/debug https://github.com/xmppjs/xmpp.js/tree/master/packages/debug
 xmpp.on('status', status => {
   console.debug('🛈', 'status', status)
 })
