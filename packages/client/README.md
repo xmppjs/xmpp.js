@@ -4,11 +4,11 @@ An XMPP client is an entity that connects to an XMPP server.
 
 `@xmpp/client` package includes a minimal set of features to connect and authenticate securely and reliably.
 
-It supports Node.js, browser and React Native. See [below](#transports) for differences.
+It supports Node.js, browsers and React Native. See [below](#transports) for differences.
 
 ## Install
 
-`npm install @xmpp/client` or `yarn add @xmpp/client`
+`npm install @xmpp/client @xmpp/debug` or `yarn add @xmpp/client @xmpp/debug`
 
 ## Setup
 
@@ -44,12 +44,14 @@ const xmpp = client({
   password: 'password',
 })
 
+debug(xmpp, true)
+
 xmpp.on('error', err => {
-  console.error('❌', err.toString())
+  console.error(err)
 })
 
 xmpp.on('offline', () => {
-  console.log('⏹', 'offline')
+  console.log('offline')
 })
 
 xmpp.on('stanza', async stanza => {
@@ -60,8 +62,6 @@ xmpp.on('stanza', async stanza => {
 })
 
 xmpp.on('online', async address => {
-  console.log('▶', 'online as', address.toString())
-
   // Makes itself available
   await xmpp.send(xml('presence'))
 
@@ -72,18 +72,6 @@ xmpp.on('online', async address => {
     xml('body', {}, 'hello world')
   )
   await xmpp.send(message)
-})
-
-// Debug
-// See also @xmpp/debug https://github.com/xmppjs/xmpp.js/tree/master/packages/debug
-xmpp.on('status', status => {
-  console.debug('🛈', 'status', status)
-})
-xmpp.on('input', input => {
-  console.debug('⮈', input)
-})
-xmpp.on('output', output => {
-  console.debug('⮊', output)
 })
 
 xmpp.start().catch(console.error)

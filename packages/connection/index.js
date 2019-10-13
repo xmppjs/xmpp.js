@@ -65,17 +65,14 @@ class Connection extends EventEmitter {
     const str = data.toString('utf8')
     this.emit('input', str)
     try {
-      await this.parser.write(str)
+      this.parser.write(str)
       // eslint-disable-next-line no-unused-vars
     } catch (err) {
       // https://xmpp.org/rfcs/rfc6120.html#streams-error-conditions-bad-format
       // "This error can be used instead of the more specific XML-related errors,
       // such as <bad-namespace-prefix/>, <invalid-xml/>, <not-well-formed/>, <restricted-xml/>,
       // and <unsupported-encoding/>. However, the more specific errors are RECOMMENDED."
-      try {
-        this._streamError('bad-format')
-        // eslint-disable-next-line no-unused-vars
-      } catch (err) {}
+      this._streamError('bad-format')
     }
   }
 
@@ -182,9 +179,14 @@ class Connection extends EventEmitter {
       this._status('close', element)
     }
 
+    listeners.start = element => {
+      this._status('open', element)
+    }
+
     parser.on('error', listeners.error)
     parser.on('element', listeners.element)
     parser.on('end', listeners.end)
+    parser.on('start', listeners.start)
   }
 
   _detachParser() {
@@ -245,7 +247,7 @@ class Connection extends EventEmitter {
    * Connects the socket
    */
   async connect(service) {
-    this._status('connecting')
+    this._status('connecting', service)
     this._attachSocket(new this.Socket())
     // The 'connect' status is set by the socket 'connect' listener
     return socketConnect(this.socket, this.socketParameters(service))
@@ -285,9 +287,7 @@ class Connection extends EventEmitter {
     this._attachParser(new this.Parser())
 
     await this.write(this.header(headerElement))
-
-    const el = await promise(this.parser, 'start', 'error', timeout)
-    this._status('open', el)
+    return promise(this, 'open', 'error', timeout)
   }
 
   /**
