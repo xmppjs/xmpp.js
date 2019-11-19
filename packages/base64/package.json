@@ -1,21 +1,20 @@
 {
-  "name": "@xmpp/sasl",
-  "description": "XMPP SASL for JavaScript",
+  "name": "@xmpp/base64",
+  "description": "base64 for JavaScript",
   "repository": "github:xmppjs/xmpp.js",
-  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/sasl",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/base64",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.8.0",
   "license": "ISC",
   "keywords": [
     "XMPP",
-    "sasl"
+    "base64"
   ],
   "dependencies": {
-    "@xmpp/base64": "^0.8.0",
-    "@xmpp/error": "^0.8.0",
-    "@xmpp/xml": "^0.8.0",
-    "saslmechanisms": "^0.1.1"
+    "base-64": "^0.1.0"
   },
+  "react-native": "index.js",
+  "browser": "browser.js",
   "engines": {
     "node": ">= 10.0.0",
     "yarn": ">= 1.0.0"

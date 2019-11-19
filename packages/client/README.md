@@ -69,7 +69,7 @@ xmpp.on('online', async address => {
   const message = xml(
     'message',
     {type: 'chat', to: address},
-    xml('body', 'hello world')
+    xml('body', {}, 'hello world')
   )
   await xmpp.send(message)
 })

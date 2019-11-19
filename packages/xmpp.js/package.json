@@ -17,6 +17,7 @@
     "yarn": ">= 1.0.0"
   },
   "dependencies": {
+    "@xmpp/base64": "^0.8.0",
     "@xmpp/client": "^0.8.0",
     "@xmpp/client-core": "^0.8.0",
     "@xmpp/component": "^0.8.0",
