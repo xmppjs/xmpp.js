@@ -10,7 +10,7 @@ See [XEP-0114: Jabber Component Protocol](https://xmpp.org/extensions/xep-0114.h
 
 ## Install
 
-`npm install @xmpp/component` or `yarn add @xmpp/component`
+`npm install @xmpp/component @xmpp/debug` or `yarn add @xmpp/component @xmpp/debug`
 
 ## Example
 
@@ -23,12 +23,14 @@ const xmpp = component({
   password: 'mysecretcomponentpassword',
 })
 
+debug(xmpp, true)
+
 xmpp.on('error', err => {
-  console.error('❌', err.toString())
+  console.error(err)
 })
 
 xmpp.on('offline', () => {
-  console.log('⏹', 'offline')
+  console.log('offline')
 })
 
 xmpp.on('stanza', async stanza => {
@@ -38,7 +40,7 @@ xmpp.on('stanza', async stanza => {
 })
 
 xmpp.on('online', async address => {
-  console.log('▶', 'online as', address.toString())
+  console.log('online as', address.toString())
 
   // Sends a chat message to itself
   const message = xml(
@@ -47,18 +49,6 @@ xmpp.on('online', async address => {
     xml('body', {}, 'hello world')
   )
   await xmpp.send(message)
-})
-
-// Debug
-// See also @xmpp/debug https://github.com/xmppjs/xmpp.js/tree/master/packages/debug
-xmpp.on('status', status => {
-  console.debug('🛈', 'status', status)
-})
-xmpp.on('input', input => {
-  console.debug('⮈', input)
-})
-xmpp.on('output', output => {
-  console.debug('⮊', output)
 })
 
 xmpp.start().catch(console.error)

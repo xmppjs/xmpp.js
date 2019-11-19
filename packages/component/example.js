@@ -13,8 +13,12 @@ const xmpp = component({
 
 debug(xmpp, true)
 
+xmpp.on('error', err => {
+  console.error(err)
+})
+
 xmpp.on('offline', () => {
-  console.log('⏹', 'offline')
+  console.log('offline')
 })
 
 xmpp.on('stanza', async stanza => {
@@ -24,7 +28,7 @@ xmpp.on('stanza', async stanza => {
 })
 
 xmpp.on('online', async address => {
-  console.log('▶', 'online as', address.toString())
+  console.log('online as', address.toString())
 
   // Sends a chat message to itself
   const message = xml(

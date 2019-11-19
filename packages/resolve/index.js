@@ -39,6 +39,7 @@ async function fallbackConnect(entity, uris) {
     return fallbackConnect(entity, uris)
   }
 
+  entity._status('connecting', uri)
   const params = Transport.prototype.socketParameters(uri)
   const socket = new Transport.prototype.Socket()
 
