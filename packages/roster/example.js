@@ -11,6 +11,7 @@
 const {client, xml} = require('@xmpp/client')
 const debug = require('@xmpp/debug')
 const Roster = require('.') // @xmpp/roster
+const Storage = require('./Storage') // @xmpp/storage
 
 const xmpp = client({
   // service: 'ws://localhost:5280/xmpp-websocket',
@@ -21,55 +22,28 @@ const xmpp = client({
 })
 debug(xmpp, true)
 
+const storage = new Storage(xmpp)
+
 // eslint-disable-next-line new-cap
-xmpp.roster = Roster(xmpp, {
-  save,
-  read,
+xmpp.roster = Roster({...xmpp, storage})
+
+xmpp.on('online', async () => {
+  const roster = await xmpp.roster.get()
+  console.log(
+    roster.getChildren('item').map(item => {
+      return item.attrs.jid
+    })
+  )
+
+  await xmpp.send(xml('presence'))
+
+  await xmpp.roster.set(
+    xml('item', {
+      jid: `${Math.random()
+        .toString()
+        .slice(2)}@foo`,
+    })
+  )
 })
 
-const {promisify} = require('util')
-const fs = require('fs')
-const writeFile = promisify(fs.writeFile)
-const readFile = promisify(fs.readFile)
-
-const serialize = require('@xmpp/xml/lib/serialize')
-async function save(roster, address) {
-  return writeFile(
-    `/tmp/${address}-roster.xml`,
-    `<?xml version='1.0' encoding='utf-8'?>\n${serialize(roster, 2)}\n`
-  )
-}
-
-const parse = require('@xmpp/xml/lib/parse')
-async function read(address) {
-  try {
-    const str = await readFile(`/tmp/${address}-roster.xml`)
-    return parse(str)
-    // eslint-disable-next-line no-unused-vars
-  } catch (err) {
-    return null
-  }
-}
-
-;(async function main() {
-  xmpp.on('online', async () => {
-    const roster = await xmpp.roster.get()
-    console.log(
-      roster.getChildren('item').map(item => {
-        return item.attrs.jid
-      })
-    )
-
-    // await xmpp.send(xml('presence'))
-
-    await xmpp.roster.set(
-      xml('item', {
-        jid: `${Math.random()
-          .toString()
-          .slice(2)}@foo`,
-      })
-    )
-  })
-
-  await xmpp.start()
-})().catch(console.error)
+xmpp.start().catch(console.error)

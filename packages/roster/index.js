@@ -20,27 +20,28 @@ function removeRosterItem(roster, jid) {
 }
 
 class RosterConsumer extends EventEmitter {
-  constructor({iqCaller, iqCallee, entity, streamFeatures}, storage) {
+  constructor({iqCaller, iqCallee, entity, streamFeatures, storage}) {
     super()
     this.iqCaller = iqCaller
     this.entity = entity
     this.iqCallee = iqCallee
     this.streamFeatures = streamFeatures
-    this.roster = null
-
-    if (storage) {
-      this.save = storage.save
-      this.read = storage.read
-    }
+    this.storage = storage
   }
 
   start() {
     this.iqCallee.set(NS, 'query', this._onRosterPush.bind(this))
   }
 
-  save() {}
+  async save(roster) {
+    if (!this.storage) return null
+    return this.storage.set('roster', roster)
+  }
 
-  read() {}
+  async read() {
+    if (!this.storage) return null
+    return this.storage.get('roster')
+  }
 
   // https://xmpp.org/rfcs/rfc6121.html#roster-syntax-actions-push
   _onRosterPush({element}) {
@@ -62,22 +63,22 @@ class RosterConsumer extends EventEmitter {
       this.emit('set', item)
     }
 
-    this.save(this.roster, this.entity.jid.bare().toString())
+    this.save(this.roster)
 
     return true
   }
 
   async get(timeout) {
-    let roster
+    let roster = null
 
-    const local = await this.read(this.entity.jid.bare().toString())
+    const local = await this.read('roster')
     const remote = await this.fetch(local ? local.attrs.ver : null, timeout)
 
     if (remote) {
       // Roster has changed
       roster = remote
-      this.save(roster, this.entity.jid.bare().toString())
-    } else {
+      await this.save(remote)
+    } else if (local) {
       // Roster has not changed
       roster = local
     }

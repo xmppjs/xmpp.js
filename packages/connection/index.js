@@ -72,10 +72,7 @@ class Connection extends EventEmitter {
       // "This error can be used instead of the more specific XML-related errors,
       // such as <bad-namespace-prefix/>, <invalid-xml/>, <not-well-formed/>, <restricted-xml/>,
       // and <unsupported-encoding/>. However, the more specific errors are RECOMMENDED."
-      try {
-        this._streamError('bad-format')
-        // eslint-disable-next-line no-unused-vars
-      } catch (err) {}
+      this._streamError('bad-format')
     }
   }
 
