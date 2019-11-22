@@ -16,7 +16,12 @@ function errorHandler(entity) {
   return function(ctx, next) {
     next()
       .then(reply => reply && entity.send(reply))
-      .catch(err => entity.emit('error', err))
+      .catch(err => {
+        try {
+          entity.emit('error', err)
+          // eslint-disable-next-line no-unused-vars
+        } catch (err) {}
+      })
   }
 }
 

@@ -19,7 +19,11 @@ module.exports = class FramedParser extends Parser {
     const {cursor} = this
     if (name !== cursor.name) {
       // <foo></bar>
-      this.emit('error', new XMLError(`${cursor.name} must be closed.`))
+      try {
+        this.emit('error', new XMLError(`${cursor.name} must be closed.`))
+        // eslint-disable-next-line no-unused-vars
+      } catch (err) {}
+
       return
     }
 

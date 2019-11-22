@@ -74,7 +74,11 @@ function iqHandler(entity) {
     try {
       reply = await next()
     } catch (err) {
-      entity.emit('error', err)
+      try {
+        entity.emit('error', err)
+        // eslint-disable-next-line no-unused-vars
+      } catch (err) {}
+
       reply = buildError('cancel', 'internal-server-error')
     }
 

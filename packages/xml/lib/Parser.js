@@ -44,7 +44,11 @@ class Parser extends EventEmitter {
     const {root, cursor} = this
     if (name !== cursor.name) {
       // <foo></bar>
-      this.emit('error', new XMLError(`${cursor.name} must be closed.`))
+      try {
+        this.emit('error', new XMLError(`${cursor.name} must be closed.`))
+        // eslint-disable-next-line no-unused-vars
+      } catch (err) {}
+
       return
     }
 
@@ -66,7 +70,11 @@ class Parser extends EventEmitter {
   onText(str) {
     const {cursor} = this
     if (!cursor) {
-      this.emit('error', new XMLError(`${str} must be a child.`))
+      try {
+        this.emit('error', new XMLError(`${str} must be a child.`))
+        // eslint-disable-next-line no-unused-vars
+      } catch (err) {}
+
       return
     }
 

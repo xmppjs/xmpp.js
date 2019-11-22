@@ -37,7 +37,10 @@ class Socket extends EventEmitter {
 
       error.event = event
       error.url = this.url
-      this.emit('error', error)
+      try {
+        this.emit('error', error)
+        // eslint-disable-next-line no-unused-vars
+      } catch (err) {}
     }
 
     listeners.close = event => {

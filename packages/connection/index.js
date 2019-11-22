@@ -94,7 +94,10 @@ class Connection extends EventEmitter {
     }
 
     listeners.error = error => {
-      this.emit('error', error)
+      try {
+        this.emit('error', error)
+        // eslint-disable-next-line no-unused-vars
+      } catch (err) {}
     }
 
     sock.on('close', listeners.close)
@@ -129,7 +132,10 @@ class Connection extends EventEmitter {
     if (error.condition === 'see-other-host') {
       this._onSeeOtherHost(error)
     } else {
-      this.emit('error', error)
+      try {
+        this.emit('error', error)
+        // eslint-disable-next-line no-unused-vars
+      } catch (err) {}
     }
 
     // "Stream Errors Are Unrecoverable"
@@ -157,7 +163,10 @@ class Connection extends EventEmitter {
       await this.connect(service)
       await this.open({domain, lang})
     } catch (err) {
-      this.emit('error', err)
+      try {
+        this.emit('error', err)
+        // eslint-disable-next-line no-unused-vars
+      } catch (err) {}
     }
   }
 
@@ -171,7 +180,10 @@ class Connection extends EventEmitter {
 
     listeners.error = error => {
       this._detachParser()
-      this.emit('error', error)
+      try {
+        this.emit('error', error)
+        // eslint-disable-next-line no-unused-vars
+      } catch (err) {}
     }
 
     listeners.end = element => {
