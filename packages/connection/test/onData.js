@@ -3,18 +3,14 @@
 const test = require('ava')
 const Connection = require('..')
 
-test.cb('#_onData', t => {
+test('#_onData', t => {
   t.plan(2)
   const foo = '<foo>'
   const conn = new Connection()
   conn.parser = {
-    write() {
-      throw new Error('foo')
+    write(str) {
+      t.is(str, foo)
     },
-  }
-  conn._streamError = condition => {
-    t.is(condition, 'bad-format')
-    t.end()
   }
 
   conn.on('input', data => {
