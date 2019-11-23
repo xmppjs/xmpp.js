@@ -52,6 +52,14 @@ Included in [`@xmpp/client`](packages/client)
 
 ---
 
+[XEP-0156](https://xmpp.org/extensions/xep-0156.html): Discovering Alternative XMPP Connection Methods
+
+See [`@xmpp/resolve`](packages/resolve)
+
+Included in [`@xmpp/client`](packages/client)
+
+---
+
 [XEP-0114](https://xmpp.org/extensions/xep-0114.html): Jabber Component Protocol
 
 See [`@xmpp/component-core`](packages/component-core)
