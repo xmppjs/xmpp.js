@@ -24,7 +24,7 @@ Included in [`@xmpp/client`](packages/client)
 
 See [`@xmpp/jid`](packages/jid)
 
-Included in `@xmpp/client` and `@xmpp/component`
+Included in [`@xmpp/client`](packages/client) and [`@xmpp/component`](packages/component)
 
 ---
 
@@ -32,7 +32,7 @@ Included in `@xmpp/client` and `@xmpp/component`
 
 See [`@xmpp/websocket`](packages/websocket)
 
-Included in `@xmpp/client`
+Included in [`@xmpp/client`](packages/client)
 
 ---
 
@@ -40,7 +40,7 @@ Included in `@xmpp/client`
 
 See [`@xmpp/session-establishment`](packages/session-establishment)
 
-Included in `@xmpp/client`
+Included in [`@xmpp/client`](packages/client)
 
 ---
 
@@ -48,7 +48,7 @@ Included in `@xmpp/client`
 
 See [`@xmpp/resolve`](packages/resolve)
 
-Included in `@xmpp/client`
+Included in [`@xmpp/client`](packages/client)
 
 ---
 
@@ -56,7 +56,7 @@ Included in `@xmpp/client`
 
 See [`@xmpp/component-core`](packages/component-core)
 
-Included in `@xmpp/component`
+Included in [`@xmpp/component`](packages/component)
 
 ---
 
