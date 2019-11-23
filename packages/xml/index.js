@@ -9,6 +9,7 @@ const {
   escapeXMLText,
   unescapeXMLText,
 } = require('ltx/lib/escape')
+const XMLError = require('./lib/XMLError')
 
 function xml(...args) {
   return x(...args)
@@ -24,4 +25,5 @@ Object.assign(exports, {
   unescapeXML,
   escapeXMLText,
   unescapeXMLText,
+  XMLError,
 })

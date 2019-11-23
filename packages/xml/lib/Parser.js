@@ -3,13 +3,7 @@
 const LtxParser = require('ltx/lib/parsers/ltx')
 const Element = require('./Element')
 const EventEmitter = require('events')
-
-class XMLError extends Error {
-  constructor(...args) {
-    super(...args)
-    this.name = 'XMLError'
-  }
-}
+const XMLError = require('./XMLError')
 
 class Parser extends EventEmitter {
   constructor() {

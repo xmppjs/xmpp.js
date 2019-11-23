@@ -61,28 +61,27 @@ class Connection extends EventEmitter {
     return this._end()
   }
 
-  async _onData(data) {
+  _onData(data) {
     const str = data.toString('utf8')
     this.emit('input', str)
-    try {
-      this.parser.write(str)
-      // eslint-disable-next-line no-unused-vars
-    } catch (err) {
-      // https://xmpp.org/rfcs/rfc6120.html#streams-error-conditions-bad-format
-      // "This error can be used instead of the more specific XML-related errors,
-      // such as <bad-namespace-prefix/>, <invalid-xml/>, <not-well-formed/>, <restricted-xml/>,
-      // and <unsupported-encoding/>. However, the more specific errors are RECOMMENDED."
-      this._streamError('bad-format')
-    }
+    this.parser.write(str)
+  }
+
+  _onParserError(error) {
+    // https://xmpp.org/rfcs/rfc6120.html#streams-error-conditions-bad-format
+    // "This error can be used instead of the more specific XML-related errors,
+    // such as <bad-namespace-prefix/>, <invalid-xml/>, <not-well-formed/>, <restricted-xml/>,
+    // and <unsupported-encoding/>. However, the more specific errors are RECOMMENDED."
+    this._streamError('bad-format')
+    this._detachParser()
+    this.emit('error', error)
   }
 
   _attachSocket(socket) {
     const sock = (this.socket = socket)
     const listeners = this.socketListeners
 
-    listeners.data = data => {
-      this._onData(data)
-    }
+    listeners.data = this._onData.bind(this)
 
     listeners.close = (dirty, event) => {
       this._reset()
@@ -165,14 +164,8 @@ class Connection extends EventEmitter {
     const parser = (this.parser = p)
     const listeners = this.parserListeners
 
-    listeners.element = element => {
-      this._onElement(element)
-    }
-
-    listeners.error = error => {
-      this._detachParser()
-      this.emit('error', error)
-    }
+    listeners.element = this._onElement.bind(this)
+    listeners.error = this._onParserError.bind(this)
 
     listeners.end = element => {
       this._detachParser()
