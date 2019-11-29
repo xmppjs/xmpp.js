@@ -8,6 +8,9 @@ class Element extends _Element {
       this.attrs.xmlns = attrs
     } else if (attrs) {
       Object.keys(attrs).forEach(function(key) {
+        // https://github.com/facebook/react/pull/4596
+        // https://www.npmjs.com/package/babel-plugin-transform-react-jsx-source
+        if (key === '__source' || key === '__self') return
         const val = attrs[key]
         if (val !== undefined && val !== null)
           this.attrs[key.toString()] = val.toString()
