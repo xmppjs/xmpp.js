@@ -3,7 +3,8 @@
 const test = require('ava')
 const Element = require('../lib/Element')
 
-test('ignore __self and __source properties', t => {
+// TODO probably better to ignore in serialization instead
+test('ignore __self and __source attributes', t => {
   const el = new Element('foo', {
     __source: 'source',
     __self: 'self',

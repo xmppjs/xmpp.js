@@ -3,11 +3,12 @@
 const Element = require('./Element')
 
 function append(el, child) {
+  if (child === false || child === null || child === undefined) return
   if (child instanceof Element) {
     el.append(child)
   } else if (Array.isArray(child)) {
     child.forEach(c => append(el, c))
-  } else if (child !== null && child !== undefined) {
+  } else {
     el.append(String(child))
   }
 }
