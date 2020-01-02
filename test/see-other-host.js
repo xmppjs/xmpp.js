@@ -23,7 +23,7 @@ test.afterEach(t => {
   }
 })
 
-test.serial.only('see-other-host', async t => {
+test.serial('see-other-host', async t => {
   const net = require('net')
   const Connection = require('../packages/connection-tcp')
   const {promise} = require('../packages/events')

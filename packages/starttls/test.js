@@ -4,9 +4,18 @@ const {mock, stub} = require('sinon')
 const test = require('ava')
 const {mockClient, promise, delay} = require('@xmpp/test')
 const tls = require('tls')
+const net = require('net')
+const EventEmitter = require('events')
+
+function mockSocket() {
+  const socket = new net.Socket()
+  socket.write = (data, cb) => cb()
+  return socket
+}
 
 test('success', async t => {
   const {entity} = mockClient()
+  entity.socket = mockSocket()
   const {socket} = entity
   const host = (entity.options.domain = 'foobar')
 
@@ -15,9 +24,8 @@ test('success', async t => {
     .expects('connect')
     .once()
     .withArgs({socket, host})
-    .callsFake((options, callback) => {
-      process.nextTick(callback)
-      return {}
+    .callsFake(() => {
+      return new EventEmitter()
     })
 
   stub(entity, '_attachSocket')
@@ -43,6 +51,7 @@ test('success', async t => {
 
 test('failure', async t => {
   const {entity} = mockClient()
+  entity.socket = mockSocket()
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">

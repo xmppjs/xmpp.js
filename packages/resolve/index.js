@@ -1,7 +1,7 @@
 'use strict'
 
 const resolve = require('./resolve')
-const {socketConnect} = require('@xmpp/connection')
+const {promise} = require('@xmpp/events')
 
 async function fetchURIs(domain) {
   return [
@@ -44,7 +44,8 @@ async function fallbackConnect(entity, uris) {
   const socket = new Transport.prototype.Socket()
 
   try {
-    await socketConnect(socket, params)
+    socket.connect(params)
+    await promise(socket, 'connect')
     // eslint-disable-next-line no-unused-vars
   } catch (err) {
     return fallbackConnect(entity, uris)

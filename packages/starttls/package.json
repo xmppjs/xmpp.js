@@ -11,6 +11,7 @@
     "STARTTLS"
   ],
   "dependencies": {
+    "@xmpp/events": "^0.9.0",
     "@xmpp/xml": "^0.9.1"
   },
   "engines": {

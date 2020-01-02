@@ -28,7 +28,7 @@ rules:
   operator-linebreak: [error, after, {overrides: {'?': before, ':': 'before'}}]
   capitalized-comments:
     [
-      error,
+      warn,
       always,
       {ignorePattern: prettier-ignore, ignoreConsecutiveComments: true},
     ]

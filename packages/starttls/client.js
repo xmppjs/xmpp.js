@@ -1,7 +1,7 @@
 'use strict'
 
 const xml = require('@xmpp/xml')
-const tls = require('tls')
+const {canUpgrade, upgrade} = require('./starttls')
 
 /*
  * References
@@ -10,20 +10,7 @@ const tls = require('tls')
 
 const NS = 'urn:ietf:params:xml:ns:xmpp-tls'
 
-function proceed(entity, options = {}) {
-  return new Promise((resolve, reject) => {
-    const tlsSocket = tls.connect(
-      {socket: entity._detachSocket(), host: entity.options.domain, ...options},
-      err => {
-        if (err) return reject(err)
-        entity._attachSocket(tlsSocket)
-        resolve()
-      }
-    )
-  })
-}
-
-async function starttls(entity) {
+async function negotiate(entity) {
   const element = await entity.sendReceive(xml('starttls', {xmlns: NS}))
   if (element.is('proceed', NS)) {
     return element
@@ -33,9 +20,16 @@ async function starttls(entity) {
 }
 
 module.exports = function({streamFeatures}) {
-  return streamFeatures.use('starttls', NS, async ({entity}) => {
-    await starttls(entity)
-    await proceed(entity)
+  return streamFeatures.use('starttls', NS, async ({entity}, next) => {
+    const {socket} = entity
+    if (!canUpgrade(socket)) {
+      return next()
+    }
+
+    await negotiate(entity)
+    const tlsSocket = await upgrade(socket, {host: entity.options.domain})
+    entity._attachSocket(tlsSocket)
+
     await entity.restart()
   })
 }
