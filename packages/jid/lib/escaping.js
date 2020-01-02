@@ -19,6 +19,7 @@ module.exports.detect = function(local) {
     .replace(/\\5c/g, '')
 
   // Detect if we have unescaped sequences
+  // eslint-disable-next-line unicorn/regex-shorthand
   const search = tmp.search(/\\| |"|&|'|\/|:|<|>|@/g)
   if (search === -1) {
     return false

@@ -4,7 +4,6 @@ plugins:
   - node
   - promise
   - unicorn
-  - prettier
 
 extends:
   - eslint:recommended
