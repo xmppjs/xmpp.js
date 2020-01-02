@@ -8,24 +8,6 @@ const {parseHost, parseService} = require('./lib/util')
 
 const NS_STREAM = 'urn:ietf:params:xml:ns:xmpp-streams'
 
-function socketConnect(socket, ...params) {
-  return new Promise((resolve, reject) => {
-    function onError(err) {
-      socket.removeListener('connect', onConnect)
-      reject(err)
-    }
-
-    function onConnect(value) {
-      socket.removeListener('error', onError)
-      resolve(value)
-    }
-
-    socket.once('error', onError)
-    socket.once('connect', onConnect)
-    socket.connect(...params)
-  })
-}
-
 class Connection extends EventEmitter {
   constructor(options = {}) {
     super()
@@ -241,9 +223,11 @@ class Connection extends EventEmitter {
    */
   async connect(service) {
     this._status('connecting', service)
-    this._attachSocket(new this.Socket())
+    const socket = new this.Socket()
+    this._attachSocket(socket)
     // The 'connect' status is set by the socket 'connect' listener
-    return socketConnect(this.socket, this.socketParameters(service))
+    socket.connect(this.socketParameters(service))
+    return promise(socket, 'connect')
   }
 
   /**
@@ -397,4 +381,3 @@ Connection.prototype.Socket = null
 Connection.prototype.Parser = null
 
 module.exports = Connection
-module.exports.socketConnect = socketConnect

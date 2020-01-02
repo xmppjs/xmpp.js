@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('ava')
-const {socketConnect} = require('..')
+const {promise} = require('..')
 const EventEmitter = require('events')
 
 class Socket extends EventEmitter {
@@ -17,14 +17,15 @@ class Socket extends EventEmitter {
   }
 }
 
-test('resolves if "connect" is emitted', async t => {
+test('resolves if "event" is emitted', async t => {
   const value = {}
   const socket = new Socket(function() {
     this.emit('connect', value)
   })
   t.is(socket.listenerCount('error'), 0)
   t.is(socket.listenerCount('connect'), 0)
-  const p = socketConnect(socket, 'foo')
+  socket.connect()
+  const p = promise(socket, 'connect')
   t.is(socket.listenerCount('error'), 1)
   t.is(socket.listenerCount('connect'), 1)
   const result = await p
@@ -33,14 +34,15 @@ test('resolves if "connect" is emitted', async t => {
   t.is(socket.listenerCount('connect'), 0)
 })
 
-test('rejects if "error" is emitted', t => {
+test('rejects if "errorEvent" is emitted', t => {
   const error = new Error('foobar')
   const socket = new Socket(function() {
     this.emit('error', error)
   })
   t.is(socket.listenerCount('error'), 0)
   t.is(socket.listenerCount('connect'), 0)
-  const p = socketConnect(socket, 'foo')
+  socket.connect()
+  const p = promise(socket, 'connect', 'error')
   t.is(socket.listenerCount('error'), 1)
   t.is(socket.listenerCount('connect'), 1)
   return p.catch(err => {
