@@ -4,7 +4,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/resolve",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "license": "ISC",
   "keywords": [
     "XMPP",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@xmpp/events": "^0.9.0",
-    "@xmpp/xml": "^0.9.1",
+    "@xmpp/xml": "^0.9.2",
     "node-fetch": "^2.3.0"
   },
   "engines": {
