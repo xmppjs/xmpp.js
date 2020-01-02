@@ -7,18 +7,20 @@ async function fetchURIs(domain) {
   return [
     // Remove duplicates
     ...new Set(
-      (await resolve(domain, {
-        srv: [
-          {
-            service: 'xmpps-client',
-            protocol: 'tcp',
-          },
-          {
-            service: 'xmpp-client',
-            protocol: 'tcp',
-          },
-        ],
-      })).map(record => record.uri)
+      (
+        await resolve(domain, {
+          srv: [
+            {
+              service: 'xmpps-client',
+              protocol: 'tcp',
+            },
+            {
+              service: 'xmpp-client',
+              protocol: 'tcp',
+            },
+          ],
+        })
+      ).map(record => record.uri)
     ),
   ]
 }
@@ -53,11 +55,9 @@ async function fallbackConnect(entity, uris) {
 
   entity._attachSocket(socket)
   socket.emit('connect')
-  /* eslint-disable require-atomic-updates */
   entity.Transport = Transport
   entity.Socket = Transport.prototype.Socket
   entity.Parser = Transport.prototype.Parser
-  /* eslint-enable require-atomic-updates */
 }
 
 module.exports = function({entity}) {
