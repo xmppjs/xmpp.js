@@ -35,6 +35,7 @@ const {client, xml, jid} = window.XMPP
 
 ```js
 const {client, xml} = require('@xmpp/client')
+const debug = require('@xmpp/debug')
 
 const xmpp = client({
   service: 'ws://localhost:5280/xmpp-websocket',
