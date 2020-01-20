@@ -73,3 +73,7 @@ Included in [`@xmpp/component`](packages/component)
 See [`@xmpp/time`](packages/time)
 
 ---
+
+[XEP-0198](https://xmpp.org/extensions/xep-0198.html): Stream Management
+
+See [`@xmpp/stream-management`](packages/stream-management)

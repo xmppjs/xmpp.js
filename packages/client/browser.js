@@ -15,6 +15,7 @@ const _resolve = require('@xmpp/resolve')
 const _sasl = require('@xmpp/sasl')
 const _resourceBinding = require('@xmpp/resource-binding')
 const _sessionEstablishment = require('@xmpp/session-establishment')
+const _streamManagement = require('@xmpp/stream-management')
 
 // SASL mechanisms - order matters and define priority
 const anonymous = require('@xmpp/sasl-anonymous')
@@ -40,6 +41,11 @@ function client(options = {}) {
   const resolve = _resolve({entity})
   // Stream features - order matters and define priority
   const sasl = _sasl({streamFeatures}, credentials || {username, password})
+  const streamManagement = _streamManagement({
+    streamFeatures,
+    entity,
+    middleware,
+  })
   const resourceBinding = _resourceBinding({iqCaller, streamFeatures}, resource)
   const sessionEstablishment = _sessionEstablishment({iqCaller, streamFeatures})
   // SASL mechanisms - order matters and define priority
@@ -59,6 +65,7 @@ function client(options = {}) {
     sasl,
     resourceBinding,
     sessionEstablishment,
+    streamManagement,
     mechanisms,
   })
 }

@@ -1,5 +1,7 @@
 local lfs = require "lfs";
 
+plugin_paths = { lfs.currentdir() .. "/prosody-modules" }
+
 modules_enabled = {
   "roster";
   "saslauth";
@@ -13,6 +15,10 @@ modules_enabled = {
   "websocket";
   "time";
   "version";
+
+  -- prosody-modules
+  "smacks";
+  -- "smacks_offline";
 };
 
 modules_disabled = {

@@ -5,7 +5,7 @@ module.exports = function route() {
     if (!stanza.is('features', 'http://etherx.jabber.org/streams'))
       return next()
 
-    await next()
-    if (entity.jid) entity._status('online', entity.jid)
+    const prevent = await next()
+    if (!prevent && entity.jid) entity._status('online', entity.jid)
   }
 }

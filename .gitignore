@@ -5,6 +5,7 @@ server/localhost/
 server/prosody.err
 server/prosody.log
 server/prosody.pid
+server/prosody-modules/
 
 !.gitkeep
 !.editorconfig

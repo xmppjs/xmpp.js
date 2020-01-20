@@ -26,3 +26,4 @@ time.datetime(new Date('05 October 2011 14:48 UTC')) // '2011-10-05T14:48:00.000
 
 - [XEP-0082: XMPP Date and Time Profiles](https://xmpp.org/extensions/xep-0082.html)
 - [XEP-0202: Entity Time](https://xmpp.org/extensions/xep-0202.html)
+- [XEP-0203: Delayed Delivery](https://xmpp.org/extensions/xep-0203.html)
