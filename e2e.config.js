@@ -1,4 +1,6 @@
 export default {
+  failFast: true,
+  serial: true,
   babel: {
     testOptions: {
       babelrc: false,
@@ -19,10 +21,5 @@ export default {
       ],
     },
   },
-  files: [
-    'packages/**/test.js',
-    'packages/**/test/*.js',
-    'packages/**/*.test.js',
-    '!packages/test/*.js',
-  ],
+  files: ['test/*.js'],
 }

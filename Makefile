@@ -27,7 +27,7 @@ test-ci:
 	make restart
 	./node_modules/.bin/lerna run prepublish
 	node bundle.js
-	./node_modules/.bin/ava --serial --fail-fast test/*
+	./node_modules/.bin/ava --config e2e.config.js
 	make bundlesize
 
 clean:
