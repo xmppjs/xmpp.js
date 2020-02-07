@@ -3,3 +3,4 @@ node_modules/
 bundle.js
 packages/xmpp.js/index.js
 ava.config.js
+e2e.config.js
