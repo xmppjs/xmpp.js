@@ -247,7 +247,7 @@ XMPP supports multiple transports, this table list `@xmpp/client` supported and 
 ## Authentication
 
 Multiple authentication mechanisms are supported.
-PLAIN should only be used over secure WebSocket (`wss://)`, direct TLS (`xmpps:`) or a TCP (`xmpp:`) connection upgraded to TLS via [STARTTLS](/starttls)
+PLAIN should only be used over secure WebSocket (`wss://)`, direct TLS (`xmpps:`) or a TCP (`xmpp:`) connection upgraded to TLS via [STARTTLS](/packages/starttls)
 
 |                   SASL                    | Node.js | Browser | React Native |
 | :---------------------------------------: | :-----: | :-----: | :----------: |
