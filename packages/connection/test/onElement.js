@@ -24,7 +24,7 @@ test.cb('#_onElement stream:error', t => {
 
   const application = xml('application')
 
-  const foo = xml('stream:error', {}, [
+  const foo = xml('error', {xmlns: 'http://etherx.jabber.org/streams'}, [
     xml('foo-bar', {xmlns: 'urn:ietf:params:xml:ns:xmpp-streams'}),
     xml('text', {}, 'hello'),
     application,

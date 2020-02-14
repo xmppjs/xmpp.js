@@ -102,13 +102,13 @@ function lookupSrvs(srvs, options) {
       srvAddresses.forEach(address => {
         const {port, service} = srv
         const addr = address.address
-        addresses.push(
-          Object.assign({}, address, srv, {
-            uri: `${service.split('-')[0]}://${
-              address.family === 6 ? '[' + addr + ']' : addr
-            }:${port}`,
-          })
-        )
+        addresses.push({
+          ...address,
+          ...srv,
+          uri: `${service.split('-')[0]}://${
+            address.family === 6 ? '[' + addr + ']' : addr
+          }:${port}`,
+        })
       })
     })
   ).then(() => addresses)
@@ -164,11 +164,9 @@ function resolve(domain, options = {}) {
   return lookup(domain, options).then(addresses => {
     return Promise.all(
       options.srv.map(srv => {
-        return resolveSrv(domain, Object.assign({}, srv, {family})).then(
-          records => {
-            return lookupSrvs(records, options)
-          }
-        )
+        return resolveSrv(domain, {...srv, family}).then(records => {
+          return lookupSrvs(records, options)
+        })
       })
     )
       .then(srvs => sortSrv([].concat(...srvs)).concat(addresses))

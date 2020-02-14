@@ -7,6 +7,7 @@ const StreamError = require('./lib/StreamError')
 const {parseHost, parseService} = require('./lib/util')
 
 const NS_STREAM = 'urn:ietf:params:xml:ns:xmpp-streams'
+const NS_JABBER_STREAM = 'http://etherx.jabber.org/streams'
 
 class Connection extends EventEmitter {
   constructor(options = {}) {
@@ -95,11 +96,19 @@ class Connection extends EventEmitter {
   }
 
   _onElement(element) {
+    const isStreamError = element.is('error', NS_JABBER_STREAM)
+
+    if (isStreamError) {
+      this._onStreamError(element)
+    }
+
     this.emit('element', element)
     this.emit(this.isStanza(element) ? 'stanza' : 'nonza', element)
 
-    if (element.name === 'stream:error') {
-      this._onStreamError(element)
+    if (isStreamError) {
+      // "Stream Errors Are Unrecoverable"
+      // "The entity that receives the stream error then SHALL close the stream"
+      this._end()
     }
   }
 
@@ -108,14 +117,10 @@ class Connection extends EventEmitter {
     const error = StreamError.fromElement(element)
 
     if (error.condition === 'see-other-host') {
-      this._onSeeOtherHost(error)
-    } else {
-      this.emit('error', error)
+      return this._onSeeOtherHost(error)
     }
 
-    // "Stream Errors Are Unrecoverable"
-    // "The entity that receives the stream error then SHALL close the stream"
-    this._end()
+    this.emit('error', error)
   }
 
   // https://xmpp.org/rfcs/rfc6120.html#streams-error-conditions-see-other-host
