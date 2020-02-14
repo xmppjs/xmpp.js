@@ -4,7 +4,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/session-establishment",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "license": "ISC",
   "keywords": [
     "XMPP",
@@ -12,7 +12,7 @@
     "establishment"
   ],
   "dependencies": {
-    "@xmpp/xml": "^0.10.0"
+    "@xmpp/xml": "^0.11.0"
   },
   "engines": {
     "node": ">= 10.0.0",
