@@ -4,6 +4,7 @@
 
 const serialize = require('@xmpp/xml/lib/serialize')
 const xml = require('@xmpp/xml')
+const clone = require('@xmpp/xml/lib/clone')
 
 const NS_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl'
 const NS_COMPONENT = 'jabber:component:accept'
@@ -33,7 +34,7 @@ function hideSensitive(element) {
 }
 
 function format(element) {
-  return serialize(hideSensitive(element.clone()), 2)
+  return serialize(hideSensitive(clone(element), 2))
 }
 
 module.exports = function debug(entity, force) {
@@ -53,3 +54,5 @@ module.exports = function debug(entity, force) {
     })
   }
 }
+
+module.exports.hideSensitive = hideSensitive
