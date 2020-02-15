@@ -3,7 +3,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "http://github.com/xmppjs/xmpp.js",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "license": "ISC",
   "dependencies": {
     "@xmpp/client-core": "^0.11.0",
@@ -19,7 +19,7 @@
     "@xmpp/session-establishment": "^0.11.0",
     "@xmpp/starttls": "^0.11.0",
     "@xmpp/stream-features": "^0.11.0",
-    "@xmpp/stream-management": "^0.11.0",
+    "@xmpp/stream-management": "^0.11.1",
     "@xmpp/tcp": "^0.11.0",
     "@xmpp/tls": "^0.11.0",
     "@xmpp/websocket": "^0.11.0"
