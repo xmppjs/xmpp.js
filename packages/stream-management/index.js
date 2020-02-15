@@ -1,22 +1,31 @@
 'use strict'
 
 const xml = require('@xmpp/xml')
-const StanzaError = require('@xmpp/middleware/lib/StanzaError')
 
 // https://xmpp.org/extensions/xep-0198.html
 
 const NS = 'urn:xmpp:sm:3'
 
 async function enable(entity, resume, max) {
-  const response = await entity.sendReceive(
+  entity.send(
     xml('enable', {xmlns: NS, max, resume: resume ? 'true' : undefined})
   )
 
-  if (!response.is('enabled')) {
-    throw StanzaError.fromElement(response)
-  }
+  return new Promise((resolve, reject) => {
+    function listener(nonza) {
+      if (nonza.is('enabled', NS)) {
+        resolve(nonza)
+      } else if (nonza.is('failed', NS)) {
+        reject(nonza)
+      } else {
+        return
+      }
 
-  return response
+      entity.removeListener('nonza', listener)
+    }
+
+    entity.on('nonza', listener)
+  })
 }
 
 async function resume(entity, h, previd) {
@@ -24,8 +33,8 @@ async function resume(entity, h, previd) {
     xml('resume', {xmlns: NS, h, previd})
   )
 
-  if (!response.is('resumed')) {
-    throw StanzaError.fromElement(response)
+  if (!response.is('resumed', NS)) {
+    throw response
   }
 
   return response
@@ -48,14 +57,13 @@ module.exports = function({streamFeatures, entity, middleware}) {
     address = jid
     sm.outbound = 0
     sm.inbound = 0
-    sm.enabled = false
   })
 
   entity.on('offline', () => {
-    address = null
     sm.outbound = 0
     sm.inbound = 0
     sm.enabled = false
+    sm.id = ''
   })
 
   middleware.use((context, next) => {
@@ -73,19 +81,24 @@ module.exports = function({streamFeatures, entity, middleware}) {
     return next()
   })
 
+  // https://xmpp.org/extensions/xep-0198.html#enable
+  // For client-to-server connections, the client MUST NOT attempt to enable stream management until after it has completed Resource Binding unless it is resuming a previous session
+
   streamFeatures.use('sm', NS, async (context, next) => {
     // Resuming
-    if (sm.id && address) {
+    if (sm.id) {
       try {
         await resume(entity, sm.inbound, sm.id)
+        sm.enabled = true
         entity.jid = address
         entity.status = 'online'
         return true
+        // If resumption fails, continue with session establishment
         // eslint-disable-next-line no-unused-vars
       } catch (err) {
         sm.id = ''
-        address = null
         sm.enabled = false
+        sm.outbound = 0
       }
     }
 
@@ -99,10 +112,18 @@ module.exports = function({streamFeatures, entity, middleware}) {
     // > The counter for an entity's own sent stanzas is set to zero and started after sending either <enable/> or <enabled/>.
     sm.outbound = 0
 
-    const response = await promiseEnable
+    try {
+      const response = await promiseEnable
+      sm.enabled = true
+      sm.id = response.attrs.id
+      sm.max = response.attrs.max
+      // eslint-disable-next-line no-unused-vars
+    } catch (err) {
+      sm.enabled = false
+    }
+
     sm.inbound = 0
-    sm.enabled = true
-    sm.id = response.attrs.id
-    sm.max = response.attrs.max
   })
+
+  return sm
 }
