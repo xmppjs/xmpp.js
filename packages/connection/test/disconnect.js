@@ -7,8 +7,8 @@ const { EventEmitter } = require("@xmpp/events");
 test.cb("rejects with TimeoutError if socket doesn't close", (t) => {
   t.plan(2);
   const conn = new Connection();
-  const sock = (conn.socket = new EventEmitter());
-  sock.end = () => {};
+  conn.socket = new EventEmitter();
+  conn.socket.end = () => {};
   conn.disconnect().catch((err) => {
     t.is(err.name, "TimeoutError");
     t.end();
@@ -37,10 +37,12 @@ test.cb("resolves", (t) => {
 
 test.cb("rejects if socket.end throws", (t) => {
   t.plan(1);
-  const conn = new Connection();
-  const sock = (conn.socket = new EventEmitter());
+
   const error = new Error("foobar");
-  sock.end = () => {
+
+  const conn = new Connection();
+  conn.socket = new EventEmitter();
+  conn.socket.end = () => {
     throw error;
   };
 

@@ -19,19 +19,19 @@ test("#reconnect", async (t) => {
   const entity = new EventEmitter();
   const reconnect = _reconnect({ entity });
 
-  const options = (entity.options = {
+  entity.options = {
     service: "service",
     lang: "lang",
     domain: "domain",
-  });
+  };
 
   entity.connect = (service) => {
-    t.is(service, options.service);
+    t.is(service, entity.options.service);
   };
 
   entity.open = ({ domain, lang }) => {
-    t.is(domain, options.domain);
-    t.is(lang, options.lang);
+    t.is(domain, entity.options.domain);
+    t.is(lang, entity.options.lang);
   };
 
   await reconnect.reconnect();

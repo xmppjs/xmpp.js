@@ -60,7 +60,7 @@ async function fallbackConnect(entity, uris) {
   entity.Parser = Transport.prototype.Parser;
 }
 
-module.exports = function ({ entity }) {
+module.exports = function resolve({ entity }) {
   const _connect = entity.connect;
   entity.connect = async function connect(service) {
     if (!service || service.match(/:\/\//)) {

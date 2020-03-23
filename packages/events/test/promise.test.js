@@ -19,6 +19,7 @@ class Socket extends EventEmitter {
 
 test('resolves if "event" is emitted', async (t) => {
   const value = {};
+  // eslint-disable-next-line func-names
   const socket = new Socket(function () {
     this.emit("connect", value);
   });
@@ -36,6 +37,7 @@ test('resolves if "event" is emitted', async (t) => {
 
 test('rejects if "errorEvent" is emitted', (t) => {
   const error = new Error("foobar");
+  // eslint-disable-next-line func-names
   const socket = new Socket(function () {
     this.emit("error", error);
   });

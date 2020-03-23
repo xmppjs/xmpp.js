@@ -18,7 +18,7 @@ class Socket extends EventEmitter {
   }
 
   _attachSocket(socket) {
-    const sock = (this.socket = socket);
+    this.socket = socket;
     const { listeners } = this;
     listeners.open = () => {
       this.emit("connect");
@@ -45,10 +45,10 @@ class Socket extends EventEmitter {
       this.emit("close", !event.wasClean, event);
     };
 
-    sock.addEventListener("open", listeners.open);
-    sock.addEventListener("message", listeners.message);
-    sock.addEventListener("error", listeners.error);
-    sock.addEventListener("close", listeners.close);
+    this.socket.addEventListener("open", listeners.open);
+    this.socket.addEventListener("message", listeners.message);
+    this.socket.addEventListener("error", listeners.error);
+    this.socket.addEventListener("close", listeners.close);
   }
 
   _detachSocket() {

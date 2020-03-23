@@ -21,7 +21,7 @@ async function bind(entity, iqCaller, resource) {
 }
 
 function route({ iqCaller }, resource) {
-  return async function ({ entity }, next) {
+  return async ({ entity }, next) => {
     if (typeof resource === "function") {
       await resource((resource) => bind(entity, iqCaller, resource));
     } else {
@@ -32,6 +32,9 @@ function route({ iqCaller }, resource) {
   };
 }
 
-module.exports = function ({ streamFeatures, iqCaller }, resource) {
+module.exports = function resourceBinding(
+  { streamFeatures, iqCaller },
+  resource,
+) {
   streamFeatures.use("bind", NS, route({ iqCaller }, resource));
 };
