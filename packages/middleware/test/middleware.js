@@ -6,13 +6,13 @@ const OutgoingContext = require('../lib/OutgoingContext')
 const {context, mockClient, mockInput, promiseError} = require('@xmpp/test')
 const middleware = require('..')
 
-test.beforeEach(t => {
+test.beforeEach((t) => {
   t.context = context()
   const {entity} = t.context
   t.context.middleware = middleware({entity})
 })
 
-test.cb('use', t => {
+test.cb('use', (t) => {
   t.plan(4)
   const stanza = <presence />
   t.context.middleware.use((ctx, next) => {
@@ -25,7 +25,7 @@ test.cb('use', t => {
   t.context.fakeIncoming(stanza)
 })
 
-test.cb('filter', t => {
+test.cb('filter', (t) => {
   t.plan(4)
   const stanza = <presence />
   /* eslint-disable array-callback-return */
@@ -40,7 +40,7 @@ test.cb('filter', t => {
   t.context.fakeOutgoing(stanza)
 })
 
-test('emits an error event if a middleware throws', async t => {
+test('emits an error event if a middleware throws', async (t) => {
   const xmpp = mockClient()
   const {middleware} = xmpp
 

@@ -4,10 +4,10 @@ const test = require('ava')
 const {mockClient} = require('@xmpp/test')
 
 function tick() {
-  return new Promise(resolve => process.nextTick(resolve))
+  return new Promise((resolve) => process.nextTick(resolve))
 }
 
-test('enable - enabled', async t => {
+test('enable - enabled', async (t) => {
   const {entity} = mockClient()
 
   entity.mockInput(
@@ -42,7 +42,7 @@ test('enable - enabled', async t => {
   t.is(entity.streamManagement.enabled, true)
 })
 
-test('enable - message - enabled', async t => {
+test('enable - message - enabled', async (t) => {
   const {entity} = mockClient()
 
   entity.mockInput(
@@ -82,7 +82,7 @@ test('enable - message - enabled', async t => {
   t.is(entity.streamManagement.enabled, true)
 })
 
-test('enable - failed', async t => {
+test('enable - failed', async (t) => {
   const {entity} = mockClient()
 
   entity.mockInput(
@@ -108,7 +108,7 @@ test('enable - failed', async t => {
   t.is(entity.streamManagement.enabled, false)
 })
 
-test('resume - resumed', async t => {
+test('resume - resumed', async (t) => {
   const {entity} = mockClient()
 
   entity.status = 'offline'
@@ -139,7 +139,7 @@ test('resume - resumed', async t => {
   t.is(entity.status, 'online')
 })
 
-test('resume - failed', async t => {
+test('resume - failed', async (t) => {
   const {entity} = mockClient()
 
   entity.status = 'bar'

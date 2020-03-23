@@ -47,7 +47,10 @@ function client(options = {}) {
     middleware,
   })
   const resourceBinding = _resourceBinding({iqCaller, streamFeatures}, resource)
-  const sessionEstablishment = _sessionEstablishment({iqCaller, streamFeatures})
+  const sessionEstablishment = _sessionEstablishment({
+    iqCaller,
+    streamFeatures,
+  })
   // SASL mechanisms - order matters and define priority
   const mechanisms = Object.entries({plain, anonymous}).map(([k, v]) => ({
     [k]: v(sasl),

@@ -6,21 +6,21 @@ const IncomingContext = require('./lib/IncomingContext')
 const OutgoingContext = require('./lib/OutgoingContext')
 
 function listener(entity, middleware, Context) {
-  return function(stanza) {
+  return function (stanza) {
     const ctx = new Context(entity, stanza)
     return compose(middleware)(ctx)
   }
 }
 
 function errorHandler(entity) {
-  return function(ctx, next) {
+  return function (ctx, next) {
     next()
-      .then(reply => reply && entity.send(reply))
-      .catch(err => entity.emit('error', err))
+      .then((reply) => reply && entity.send(reply))
+      .catch((err) => entity.emit('error', err))
   }
 }
 
-module.exports = function({entity}) {
+module.exports = function ({entity}) {
   const incoming = [errorHandler(entity)]
   const outgoing = []
 

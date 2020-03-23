@@ -3,7 +3,7 @@
 const test = require('ava')
 const {mockClient, promise, timeout} = require('@xmpp/test')
 
-test('mandatory', async t => {
+test('mandatory', async (t) => {
   const {entity} = mockClient()
 
   entity.mockInput(
@@ -20,7 +20,7 @@ test('mandatory', async t => {
   await promise(entity, 'online')
 })
 
-test('optional', async t => {
+test('optional', async (t) => {
   const {entity} = mockClient()
 
   entity.mockInput(
@@ -35,7 +35,7 @@ test('optional', async t => {
 
   await promise(entity, 'online')
 
-  await timeout(promiseSend, 0).catch(err => {
+  await timeout(promiseSend, 0).catch((err) => {
     t.is(err.name, 'TimeoutError')
   })
 })

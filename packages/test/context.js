@@ -23,10 +23,10 @@ module.exports = function context(entity = client()) {
       return {stanza, id}
     },
     catch() {
-      return promise(entity, 'send').then(s => this.sanitize(s))
+      return promise(entity, 'send').then((s) => this.sanitize(s))
     },
     catchOutgoing(match = () => true) {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         function onSend(stanza) {
           if (match(stanza)) {
             entity.removeListener('send', onSend)
@@ -38,11 +38,11 @@ module.exports = function context(entity = client()) {
       })
     },
     catchOutgoingIq(match = () => true) {
-      return this.catchOutgoing(stanza => stanza.is('iq') && match(stanza))
+      return this.catchOutgoing((stanza) => stanza.is('iq') && match(stanza))
     },
     async catchOutgoingGet(match = () => true) {
       const stanza = await this.catchOutgoingIq(
-        stanza => stanza.attrs.type === 'get' && match(stanza)
+        (stanza) => stanza.attrs.type === 'get' && match(stanza)
       )
       const [child] = stanza.children
       if (child) {
@@ -53,7 +53,7 @@ module.exports = function context(entity = client()) {
     },
     async catchOutgoingSet(match = () => true) {
       const stanza = await this.catchOutgoingIq(
-        stanza => stanza.attrs.type === 'set' && match(stanza)
+        (stanza) => stanza.attrs.type === 'set' && match(stanza)
       )
       const [child] = stanza.children
       if (child) {
@@ -63,20 +63,20 @@ module.exports = function context(entity = client()) {
       return child
     },
     scheduleIncomingResult(child) {
-      return promise(entity, 'send').then(stanza => {
+      return promise(entity, 'send').then((stanza) => {
         const {id} = stanza.attrs
         return this.fakeIncomingResult(child, id)
       })
     },
     scheduleIncomingError(child) {
-      return promise(entity, 'send').then(stanza => {
+      return promise(entity, 'send').then((stanza) => {
         const {id} = stanza.attrs
         return this.fakeIncomingError(child, id)
       })
     },
     fakeIncomingGet(child, attrs = {}) {
       attrs.type = 'get'
-      return this.fakeIncomingIq(xml('iq', attrs, child)).then(stanza => {
+      return this.fakeIncomingIq(xml('iq', attrs, child)).then((stanza) => {
         const [child] = stanza.children
         if (child) {
           child.parent = null
@@ -87,7 +87,7 @@ module.exports = function context(entity = client()) {
     },
     fakeIncomingSet(child, attrs = {}) {
       attrs.type = 'set'
-      return this.fakeIncomingIq(xml('iq', attrs, child)).then(stanza => {
+      return this.fakeIncomingIq(xml('iq', attrs, child)).then((stanza) => {
         const [child] = stanza.children
         if (child) {
           child.parent = null
@@ -98,7 +98,7 @@ module.exports = function context(entity = client()) {
     },
     fakeIncomingResult(child, id) {
       return this.fakeIncomingIq(xml('iq', {type: 'result', id}, child)).then(
-        stanza => {
+        (stanza) => {
           const [child] = stanza.children
           if (child) {
             child.parent = null
@@ -110,7 +110,7 @@ module.exports = function context(entity = client()) {
     },
     fakeIncomingError(child, id) {
       return this.fakeIncomingIq(xml('iq', {type: 'error', id}, child)).then(
-        stanza => {
+        (stanza) => {
           const [child] = stanza.children
           if (child) {
             child.parent = null

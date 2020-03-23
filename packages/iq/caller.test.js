@@ -4,11 +4,11 @@ const test = require('ava')
 const {mockClient, mockInput} = require('@xmpp/test')
 const StanzaError = require('@xmpp/middleware/lib/StanzaError')
 
-test.cb('#request', t => {
+test.cb('#request', (t) => {
   const xmpp = mockClient()
   const {iqCaller} = xmpp
 
-  xmpp.send = el => {
+  xmpp.send = (el) => {
     t.deepEqual(
       el,
       <iq type="get" id="foobar">
@@ -26,7 +26,7 @@ test.cb('#request', t => {
   )
 })
 
-test('removes the handler if sending failed', async t => {
+test('removes the handler if sending failed', async (t) => {
   const xmpp = mockClient()
   const {iqCaller} = xmpp
 
@@ -52,7 +52,7 @@ test('removes the handler if sending failed', async t => {
   }
 })
 
-test('resolves with with the stanza for result reply', async t => {
+test('resolves with with the stanza for result reply', async (t) => {
   const xmpp = mockClient()
   const {iqCaller} = xmpp
 
@@ -66,7 +66,7 @@ test('resolves with with the stanza for result reply', async t => {
   t.deepEqual(await promiseRequest, reply)
 })
 
-test('rejects with a StanzaError for error reply', async t => {
+test('rejects with a StanzaError for error reply', async (t) => {
   const xmpp = mockClient()
   const {iqCaller} = xmpp
 
@@ -90,7 +90,7 @@ test('rejects with a StanzaError for error reply', async t => {
   t.deepEqual(err, StanzaError.fromElement(errorElement))
 })
 
-test('rejects with a TimeoutError if no answer is received within timeout', async t => {
+test('rejects with a TimeoutError if no answer is received within timeout', async (t) => {
   const xmpp = mockClient()
   const {iqCaller} = xmpp
 
@@ -111,7 +111,7 @@ test('rejects with a TimeoutError if no answer is received within timeout', asyn
   }
 })
 
-test('#get', async t => {
+test('#get', async (t) => {
   const xmpp = mockClient()
   const {iqCaller} = xmpp
 
@@ -130,7 +130,7 @@ test('#get', async t => {
   t.deepEqual(await promiseGet, replyChild)
 })
 
-test('#set', async t => {
+test('#set', async (t) => {
   const xmpp = mockClient()
   const {iqCaller} = xmpp
 

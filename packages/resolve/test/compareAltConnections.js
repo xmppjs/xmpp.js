@@ -3,7 +3,7 @@
 const test = require('ava')
 const {compare} = require('../lib/alt-connections')
 
-test('by security', t => {
+test('by security', (t) => {
   t.deepEqual(
     [
       {uri: 'http://web.example.org:5280/bosh', method: 'xbosh'},
@@ -27,7 +27,7 @@ test('by security', t => {
   )
 })
 
-test('by method', t => {
+test('by method', (t) => {
   t.deepEqual(
     [
       {uri: 'https://web.example.org:5280/http-poll', method: 'httppoll'},

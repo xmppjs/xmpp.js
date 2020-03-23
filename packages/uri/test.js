@@ -4,7 +4,7 @@ const test = require('ava')
 const {parse} = require('.')
 const jid = require('@xmpp/jid')
 
-test('parse', t => {
+test('parse', (t) => {
   t.deepEqual(
     parse(
       'xmpp://guest@example.com/support@example.com/truc?message;subject=Hello%20World'

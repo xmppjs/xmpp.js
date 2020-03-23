@@ -7,7 +7,7 @@ class Element extends _Element {
     if (typeof attrs === 'string') {
       this.attrs.xmlns = attrs
     } else if (attrs) {
-      Object.keys(attrs).forEach(function(key) {
+      Object.keys(attrs).forEach(function (key) {
         // https://github.com/facebook/react/pull/4596
         // https://www.npmjs.com/package/babel-plugin-transform-react-jsx-source
         if (key === '__source' || key === '__self') return
@@ -20,7 +20,7 @@ class Element extends _Element {
 
   append(nodes) {
     nodes = Array.isArray(nodes) ? nodes : [nodes]
-    nodes.forEach(node => {
+    nodes.forEach((node) => {
       this.children.push(node)
       if (typeof node === 'object') {
         node.parent = this
@@ -31,7 +31,7 @@ class Element extends _Element {
 
   prepend(nodes) {
     nodes = Array.isArray(nodes) ? nodes : [nodes]
-    nodes.forEach(node => {
+    nodes.forEach((node) => {
       this.children.unshift(node)
       if (typeof node === 'object') {
         node.parent = this

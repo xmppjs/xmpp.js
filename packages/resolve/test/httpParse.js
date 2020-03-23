@@ -3,7 +3,7 @@
 const test = require('ava')
 
 const domain = 'example.com'
-global.fetch = url => {
+global.fetch = (url) => {
   if (url !== `https://${domain}/.well-known/host-meta`) {
     throw new Error('Fetch URL incorrect')
   }
@@ -22,7 +22,7 @@ global.fetch = url => {
 
 const {resolve} = require('../lib/http')
 
-test('parse', async t => {
+test('parse', async (t) => {
   t.deepEqual(await resolve(domain), [
     {
       rel: 'urn:xmpp:alt-connections:websocket',

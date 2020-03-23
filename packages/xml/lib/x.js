@@ -7,7 +7,7 @@ function append(el, child) {
   if (child instanceof Element) {
     el.append(child)
   } else if (Array.isArray(child)) {
-    child.forEach(c => append(el, c))
+    child.forEach((c) => append(el, c))
   } else {
     el.append(String(child))
   }

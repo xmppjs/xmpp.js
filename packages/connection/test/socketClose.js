@@ -4,7 +4,7 @@ const test = require('ava')
 const Connection = require('..')
 const {EventEmitter} = require('@xmpp/events')
 
-test('calls _reset and _status', t => {
+test('calls _reset and _status', (t) => {
   t.plan(3)
   const conn = new Connection()
   const sock = new EventEmitter()

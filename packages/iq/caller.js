@@ -63,9 +63,10 @@ class IQCaller {
   _childRequest(type, element, to, ...args) {
     const {name} = element
     const {xmlns} = element.attrs
-    return this.request(xml('iq', {type, to}, element), ...args).then(stanza =>
-      stanza.getChild(name, xmlns)
-    )
+    return this.request(
+      xml('iq', {type, to}, element),
+      ...args
+    ).then((stanza) => stanza.getChild(name, xmlns))
   }
 
   async get(...args) {

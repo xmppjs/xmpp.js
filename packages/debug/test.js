@@ -3,7 +3,7 @@
 const test = require('ava')
 const {hideSensitive} = require('.')
 
-test('SASL', t => {
+test('SASL', (t) => {
   t.deepEqual(
     hideSensitive(<auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl">foo</auth>),
     <auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
@@ -39,7 +39,7 @@ test('SASL', t => {
   )
 })
 
-test('component handshake', t => {
+test('component handshake', (t) => {
   t.deepEqual(
     hideSensitive(<handshake xmlns="jabber:component:accept">foo</handshake>),
     <handshake xmlns="jabber:component:accept">

@@ -7,22 +7,22 @@ const net = require('net')
 
 const NS_STREAM = 'http://etherx.jabber.org/streams'
 
-test('new Connection()', t => {
+test('new Connection()', (t) => {
   const conn = new Connection()
   t.true(conn instanceof _Connection)
   t.is(conn.NS, NS_STREAM)
 })
 
-test('Socket', t => {
+test('Socket', (t) => {
   const conn = new Connection()
   t.is(conn.Socket, net.Socket)
 })
 
-test('NS', t => {
+test('NS', (t) => {
   t.is(Connection.prototype.NS, NS_STREAM)
 })
 
-test('header()', t => {
+test('header()', (t) => {
   const conn = new Connection()
   conn.NS = 'foobar'
   t.is(
@@ -31,12 +31,12 @@ test('header()', t => {
   )
 })
 
-test('footer()', t => {
+test('footer()', (t) => {
   const conn = new Connection()
   t.is(conn.footer(), '</stream:stream>')
 })
 
-test('socketParameters()', t => {
+test('socketParameters()', (t) => {
   t.deepEqual(Connection.prototype.socketParameters('xmpp://foo'), {
     port: null,
     host: 'foo',

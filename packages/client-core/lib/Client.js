@@ -13,7 +13,7 @@ class Client extends Connection {
   }
 
   _findTransport(service) {
-    return this.transports.find(Transport => {
+    return this.transports.find((Transport) => {
       try {
         return Transport.prototype.socketParameters(service) !== undefined
         // eslint-disable-next-line no-unused-vars

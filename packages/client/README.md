@@ -47,7 +47,7 @@ const xmpp = client({
 
 debug(xmpp, true)
 
-xmpp.on('error', err => {
+xmpp.on('error', (err) => {
   console.error(err)
 })
 
@@ -55,14 +55,14 @@ xmpp.on('offline', () => {
   console.log('offline')
 })
 
-xmpp.on('stanza', async stanza => {
+xmpp.on('stanza', async (stanza) => {
   if (stanza.is('message')) {
     await xmpp.send(xml('presence', {type: 'unavailable'}))
     await xmpp.stop()
   }
 })
 
-xmpp.on('online', async address => {
+xmpp.on('online', async (address) => {
   // Makes itself available
   await xmpp.send(xml('presence'))
 
@@ -137,7 +137,7 @@ You can listen for status change using the `status` event.
 Emitted when the status changes.
 
 ```js
-xmpp.on('status', status => {
+xmpp.on('status', (status) => {
   console.debug(status)
 })
 ```
@@ -149,7 +149,7 @@ Emitted when an error occurs. For connection errors, `xmpp` will reconnect on it
 - `<Error>`
 
 ```js
-xmpp.on('error', error => {
+xmpp.on('error', (error) => {
   console.error(error)
 })
 ```
@@ -162,7 +162,7 @@ Emitted when a stanza is received and parsed.
 
 ```js
 // Simple echo bot example
-xmpp.on('stanza', stanza => {
+xmpp.on('stanza', (stanza) => {
   console.log(stanza.toString())
   if (!stanza.is('message')) return
 
@@ -179,7 +179,7 @@ Emitted when connected, authenticated and ready to receive/send stanzas.
 - [`<Jid>`](/packages/jid)
 
 ```js
-xmpp.on('online', address => {
+xmpp.on('online', (address) => {
   console.log('online as', address.toString())
 })
 ```
@@ -200,7 +200,7 @@ Starts the connection. Attempts to reconnect will automatically happen if it can
 
 ```js
 xmpp.start().catch(console.error)
-xmpp.on('online', address => {
+xmpp.on('online', (address) => {
   console.log('online', address.toString())
 })
 ```

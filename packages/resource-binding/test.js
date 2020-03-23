@@ -3,7 +3,7 @@
 const test = require('ava')
 const {mockClient, delay} = require('@xmpp/test')
 
-test('without resource', async t => {
+test('without resource', async (t) => {
   const resource = Math.random().toString()
   const jid = 'foo@bar/' + resource
 
@@ -29,7 +29,7 @@ test('without resource', async t => {
   t.is(entity.jid.toString(), jid)
 })
 
-test('with string resource', async t => {
+test('with string resource', async (t) => {
   const resource = Math.random().toString()
   const jid = 'foo@bar/' + resource
 
@@ -60,12 +60,12 @@ test('with string resource', async t => {
   t.is(entity.jid.toString(), jid)
 })
 
-test('with function resource', async t => {
+test('with function resource', async (t) => {
   const resource = Math.random().toString()
   const jid = 'foo@bar/' + resource
 
   const {entity} = mockClient({
-    resource: async bind => {
+    resource: async (bind) => {
       await delay()
       t.is((await bind(resource)).toString(), jid)
     },

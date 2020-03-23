@@ -17,18 +17,18 @@ test.beforeEach(() => {
   return server.restart()
 })
 
-test.afterEach(t => {
+test.afterEach((t) => {
   if (t.context.xmpp && t.context.xmpp.status === 'online') {
     return t.context.xmpp.stop()
   }
 })
 
-test.serial('see-other-host', async t => {
+test.serial('see-other-host', async (t) => {
   const net = require('net')
   const Connection = require('../packages/connection-tcp')
   const {promise} = require('../packages/events')
 
-  const seeOtherHostServer = net.createServer(socket => {
+  const seeOtherHostServer = net.createServer((socket) => {
     const conn = new Connection()
     conn._attachSocket(socket)
     const parser = new conn.Parser()

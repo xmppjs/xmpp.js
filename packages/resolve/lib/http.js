@@ -6,11 +6,11 @@ const compareAltConnections = require('./alt-connections').compare
 
 function resolve(domain) {
   return fetch(`https://${domain}/.well-known/host-meta`)
-    .then(res => res.text())
-    .then(res => {
+    .then((res) => res.text())
+    .then((res) => {
       return parse(res)
         .getChildren('Link')
-        .filter(link =>
+        .filter((link) =>
           [
             'urn:xmpp:alt-connections:websocket',
             'urn:xmpp:alt-connections:httppoll',

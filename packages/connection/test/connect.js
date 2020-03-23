@@ -13,27 +13,27 @@ function socket(fn) {
   }
 }
 
-test('emits "connecting" status', t => {
+test('emits "connecting" status', (t) => {
   const conn = new Connection()
-  conn.Socket = socket(function() {
+  conn.Socket = socket(function () {
     this.emit('connect')
   })
 
   return Promise.all([
     promise(conn, 'connecting'),
-    promise(conn, 'status').then(status => t.is(status, 'connecting')),
+    promise(conn, 'status').then((status) => t.is(status, 'connecting')),
     conn.connect('url'),
   ])
 })
 
-test('rejects if an error is emitted before connected', async t => {
+test('rejects if an error is emitted before connected', async (t) => {
   const conn = new Connection()
   const error = {}
 
-  conn.Socket = socket(function() {
+  conn.Socket = socket(function () {
     this.emit('error', error)
   })
-  conn.on('error', err => t.is(err, error))
+  conn.on('error', (err) => t.is(err, error))
 
   try {
     await conn.connect('url')
@@ -42,9 +42,9 @@ test('rejects if an error is emitted before connected', async t => {
   }
 })
 
-test('resolves if socket connects', async t => {
+test('resolves if socket connects', async (t) => {
   const conn = new Connection()
-  conn.Socket = socket(function() {
+  conn.Socket = socket(function () {
     this.emit('connect')
   })
   await conn.connect('url')

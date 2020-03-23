@@ -14,13 +14,13 @@ test.beforeEach(() => {
   return server.restart()
 })
 
-test.afterEach(t => {
+test.afterEach((t) => {
   if (t.context.xmpp) {
     return t.context.xmpp.stop()
   }
 })
 
-test.serial('component', async t => {
+test.serial('component', async (t) => {
   t.plan(6)
 
   const xmpp = component(options)
@@ -31,11 +31,11 @@ test.serial('component', async t => {
     t.pass()
   })
 
-  xmpp.on('open', el => {
+  xmpp.on('open', (el) => {
     t.true(el instanceof xml.Element)
   })
 
-  xmpp.on('online', id => {
+  xmpp.on('online', (id) => {
     t.true(id instanceof jid.JID)
     t.is(id.toString(), 'component.localhost')
   })
@@ -47,7 +47,7 @@ test.serial('component', async t => {
   await xmpp.stop
 })
 
-test.serial.cb('reconnects when server restarts', t => {
+test.serial.cb('reconnects when server restarts', (t) => {
   t.plan(2)
   let c = 0
 
@@ -72,7 +72,7 @@ test.serial.cb('reconnects when server restarts', t => {
   t.context.xmpp = xmpp
 })
 
-test.serial.cb('does not reconnect when stop is called', t => {
+test.serial.cb('does not reconnect when stop is called', (t) => {
   t.plan(2)
 
   const xmpp = component(options)

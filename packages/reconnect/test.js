@@ -4,7 +4,7 @@ const test = require('ava')
 const _reconnect = require('.')
 const EventEmitter = require('events')
 
-test('it schedule a reconnect when disconnect is emitted', t => {
+test('it schedule a reconnect when disconnect is emitted', (t) => {
   const entity = new EventEmitter()
   const reconnect = _reconnect({entity})
 
@@ -15,7 +15,7 @@ test('it schedule a reconnect when disconnect is emitted', t => {
   entity.emit('disconnect')
 })
 
-test('#reconnect', async t => {
+test('#reconnect', async (t) => {
   const entity = new EventEmitter()
   const reconnect = _reconnect({entity})
 
@@ -25,7 +25,7 @@ test('#reconnect', async t => {
     domain: 'domain',
   })
 
-  entity.connect = service => {
+  entity.connect = (service) => {
     t.is(service, options.service)
   }
 

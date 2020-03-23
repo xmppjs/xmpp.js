@@ -3,7 +3,7 @@
 const test = require('ava')
 const sort = require('../lib/dns').sortSrv
 
-test('by priority', t => {
+test('by priority', (t) => {
   t.deepEqual(
     sort([
       {priority: 2, weight: 0},
@@ -27,7 +27,7 @@ test('by priority', t => {
   )
 })
 
-test('by weight', t => {
+test('by weight', (t) => {
   t.deepEqual(
     sort([
       {weight: 1, priority: 0},

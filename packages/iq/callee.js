@@ -94,14 +94,14 @@ function iqHandler(entity) {
 }
 
 function route(type, ns, name, handler) {
-  return function(ctx, next) {
+  return function (ctx, next) {
     if ((ctx.type !== type) | !ctx.element || !ctx.element.is(name, ns))
       return next()
     return handler(ctx, next)
   }
 }
 
-module.exports = function({middleware, entity}) {
+module.exports = function ({middleware, entity}) {
   middleware.use(iqHandler(entity))
 
   return {

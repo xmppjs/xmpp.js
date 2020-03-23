@@ -5,7 +5,7 @@ const {IRI} = require('iri')
 const querystring = require('querystring')
 
 function findQueryType(params) {
-  return Object.getOwnPropertyNames(params).find(k => {
+  return Object.getOwnPropertyNames(params).find((k) => {
     return k[0] === '?' && params[k] === ''
   })
 }

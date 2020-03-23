@@ -15,7 +15,7 @@ const xmpp = client({
 
 debug(xmpp, true)
 
-xmpp.on('error', err => {
+xmpp.on('error', (err) => {
   console.error(err)
 })
 
@@ -23,14 +23,14 @@ xmpp.on('offline', () => {
   console.log('offline')
 })
 
-xmpp.on('stanza', async stanza => {
+xmpp.on('stanza', async (stanza) => {
   if (stanza.is('message')) {
     await xmpp.send(xml('presence', {type: 'unavailable'}))
     await xmpp.stop()
   }
 })
 
-xmpp.on('online', async address => {
+xmpp.on('online', async (address) => {
   console.log('online as', address.toString())
 
   // Makes itself available

@@ -12,19 +12,19 @@ const {
   unescapeXMLText,
 } = require('ltx/lib/escape')
 
-test('exports x', t => {
+test('exports x', (t) => {
   t.is(xml.x, x)
 })
 
-test('exports Parser', t => {
+test('exports Parser', (t) => {
   t.is(xml.Parser, Parser)
 })
 
-test('exports Element', t => {
+test('exports Element', (t) => {
   t.is(xml.Element, Element)
 })
 
-test('exports escape methods', t => {
+test('exports escape methods', (t) => {
   t.is(xml.escapeXML, escapeXML)
   t.is(xml.unescapeXML, unescapeXML)
   t.is(xml.escapeXMLText, escapeXMLText)
