@@ -15,44 +15,44 @@ See [XEP-0114: Jabber Component Protocol](https://xmpp.org/extensions/xep-0114.h
 ## Example
 
 ```js
-const {component, xml, jid} = require('@xmpp/component')
-const debug = require('@xmpp/debug')
+const { component, xml, jid } = require("@xmpp/component");
+const debug = require("@xmpp/debug");
 
 const xmpp = component({
-  service: 'xmpp://localhost:5347',
-  domain: 'component.localhost',
-  password: 'mysecretcomponentpassword',
-})
+  service: "xmpp://localhost:5347",
+  domain: "component.localhost",
+  password: "mysecretcomponentpassword",
+});
 
-debug(xmpp, true)
+debug(xmpp, true);
 
-xmpp.on('error', (err) => {
-  console.error(err)
-})
+xmpp.on("error", (err) => {
+  console.error(err);
+});
 
-xmpp.on('offline', () => {
-  console.log('offline')
-})
+xmpp.on("offline", () => {
+  console.log("offline");
+});
 
-xmpp.on('stanza', async (stanza) => {
-  if (stanza.is('message')) {
-    await xmpp.stop()
+xmpp.on("stanza", async (stanza) => {
+  if (stanza.is("message")) {
+    await xmpp.stop();
   }
-})
+});
 
-xmpp.on('online', async (address) => {
-  console.log('online as', address.toString())
+xmpp.on("online", async (address) => {
+  console.log("online as", address.toString());
 
   // Sends a chat message to itself
   const message = xml(
-    'message',
-    {type: 'chat', to: address},
-    xml('body', {}, 'hello world')
-  )
-  await xmpp.send(message)
-})
+    "message",
+    { type: "chat", to: address },
+    xml("body", {}, "hello world"),
+  );
+  await xmpp.send(message);
+});
 
-xmpp.start().catch(console.error)
+xmpp.start().catch(console.error);
 ```
 
 ## xml
@@ -97,7 +97,7 @@ Additional status:
 You can read the current status using the `status` property.
 
 ```js
-const isOnline = xmpp.status === 'online'
+const isOnline = xmpp.status === "online";
 ```
 
 You can listen for status change using the `status` event.
@@ -107,9 +107,9 @@ You can listen for status change using the `status` event.
 Emitted when the status changes.
 
 ```js
-xmpp.on('status', (status) => {
-  console.debug(status)
-})
+xmpp.on("status", (status) => {
+  console.debug(status);
+});
 ```
 
 ### Event `error`
@@ -119,9 +119,9 @@ Emitted when an error occurs. For connection errors, `xmpp` will reconnect on it
 - `<Error>`
 
 ```js
-xmpp.on('error', (error) => {
-  console.error(error)
-})
+xmpp.on("error", (error) => {
+  console.error(error);
+});
 ```
 
 ### Event `stanza`
@@ -132,14 +132,14 @@ Emitted when a stanza is received and parsed.
 
 ```js
 // Simple echo bot example
-xmpp.on('stanza', (stanza) => {
-  console.log(stanza.toString())
-  if (!stanza.is('message')) return
+xmpp.on("stanza", (stanza) => {
+  console.log(stanza.toString());
+  if (!stanza.is("message")) return;
 
-  const message = stanza.clone()
-  message.attrs.to = stanza.attrs.from
-  xmpp.send(message)
-})
+  const message = stanza.clone();
+  message.attrs.to = stanza.attrs.from;
+  xmpp.send(message);
+});
 ```
 
 ### Event `online`
@@ -149,9 +149,9 @@ Emitted when connected, authenticated and ready to receive/send stanzas.
 - [`<Jid>`](/packages/jid)
 
 ```js
-xmpp.on('online', (address) => {
-  console.log('online as', address.toString())
-})
+xmpp.on("online", (address) => {
+  console.log("online as", address.toString());
+});
 ```
 
 ### Event `offline`
@@ -159,9 +159,9 @@ xmpp.on('online', (address) => {
 Emitted when the connection is closed an no further attempt to reconnect will happen, usually after [xmpp.stop()](#xmpp.stop).
 
 ```js
-xmpp.on('offline', () => {
-  console.log('offline')
-})
+xmpp.on("offline", () => {
+  console.log("offline");
+});
 ```
 
 ### start
@@ -169,10 +169,10 @@ xmpp.on('offline', () => {
 Starts the connection. Attempts to reconnect will automatically happen if it cannot connect or gets disconnected.
 
 ```js
-xmpp.start().catch(console.error)
-xmpp.on('online', (address) => {
-  console.log('online', address.toString())
-})
+xmpp.start().catch(console.error);
+xmpp.on("online", (address) => {
+  console.log("online", address.toString());
+});
 ```
 
 Returns a promise that resolves if the first attempt succeed or rejects if the first attempt fails.
@@ -182,10 +182,10 @@ Returns a promise that resolves if the first attempt succeed or rejects if the f
 Stops the connection and prevent any further auto reconnect/retry.
 
 ```js
-xmpp.stop().catch(console.error)
-xmpp.on('offline', () => {
-  console.log('offline')
-})
+xmpp.stop().catch(console.error);
+xmpp.on("offline", () => {
+  console.log("offline");
+});
 ```
 
 Returns a promise that resolves once the stream closes and the socket disconnects.
@@ -195,7 +195,7 @@ Returns a promise that resolves once the stream closes and the socket disconnect
 Sends a stanza.
 
 ```js
-xmpp.send(xml('presence')).catch(console.error)
+xmpp.send(xml("presence")).catch(console.error);
 ```
 
 Returns a promise that resolves once the stanza is serialized and written to the socket or rejects if any of those fails.

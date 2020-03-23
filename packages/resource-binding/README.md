@@ -11,8 +11,8 @@ Resource is optional and will be chosen by the server if omitted.
 ### string
 
 ```js
-const {xmpp} = require('@xmpp/client')
-const client = xmpp({resource: 'laptop'})
+const { xmpp } = require("@xmpp/client");
+const client = xmpp({ resource: "laptop" });
 ```
 
 ### function
@@ -27,19 +27,19 @@ Uses cases:
 - Perform an asynchronous operation to get the resource
 
 ```js
-const {xmpp} = require('@xmpp/client')
-const client = xmpp({resource: bindResource})
+const { xmpp } = require("@xmpp/client");
+const client = xmpp({ resource: bindResource });
 
 async function bindResource(bind) {
-  console.debug('bind')
-  const value = await prompt('enter resource')
-  console.debug('binding')
+  console.debug("bind");
+  const value = await prompt("enter resource");
+  console.debug("binding");
   try {
-    const {resource} = await bind(value)
-    console.debug('bound', resource)
+    const { resource } = await bind(value);
+    console.debug("bound", resource);
   } catch (err) {
-    console.error(err)
-    throw err
+    console.error(err);
+    throw err;
   }
 }
 ```

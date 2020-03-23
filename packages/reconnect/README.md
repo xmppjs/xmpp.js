@@ -16,8 +16,8 @@ reconnecting.
 Default is `1000`.
 
 ```js
-reconnect.delay // 1000
-reconnect.delay = 2000
+reconnect.delay; // 1000
+reconnect.delay = 2000;
 ```
 
 ## reconnecting event
@@ -25,9 +25,9 @@ reconnect.delay = 2000
 Emitted each time a re-connection is attempted.
 
 ```js
-reconnect.on('reconnecting', () => {
-  console.log('reconnecting')
-})
+reconnect.on("reconnecting", () => {
+  console.log("reconnecting");
+});
 ```
 
 ## reconnected event
@@ -35,9 +35,9 @@ reconnect.on('reconnecting', () => {
 Emitted each time a re-connection succeed.
 
 ```js
-reconnect.on('reconnected', () => {
-  console.log('reconnected')
-})
+reconnect.on("reconnected", () => {
+  console.log("reconnected");
+});
 ```
 
 ## error event
@@ -45,7 +45,7 @@ reconnect.on('reconnected', () => {
 Emitted on entity each time a re-connection fails.
 
 ```js
-entity.on('error', (err) => {
-  console.error(err)
-})
+entity.on("error", (err) => {
+  console.error(err);
+});
 ```

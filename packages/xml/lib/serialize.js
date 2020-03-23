@@ -1,5 +1,5 @@
-'use strict'
+"use strict";
 
-const serialize = require('ltx/lib/stringify')
+const serialize = require("ltx/lib/stringify");
 
-module.exports = serialize
+module.exports = serialize;

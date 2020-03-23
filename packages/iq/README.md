@@ -31,11 +31,11 @@ Sends an iq and returns a promise.
 
 ```js
 const response = await iqCaller.request(
-  xml('iq', {type: 'get'}, xml('foo', 'foo:bar')),
-  30 * 1000 // 30 seconds timeout - default
-)
-const foo = response.getChild('foo', 'foo:bar')
-console.log(foo)
+  xml("iq", { type: "get" }, xml("foo", "foo:bar")),
+  30 * 1000, // 30 seconds timeout - default
+);
+const foo = response.getChild("foo", "foo:bar");
+console.log(foo);
 ```
 
 ### get
@@ -44,11 +44,11 @@ A convenient method to send a `get` request. Behaves like [request](#request) bu
 
 ```js
 const foo = await iqCaller.get(
-  xml('foo', 'foo:bar'),
+  xml("foo", "foo:bar"),
   to, // "to" attribute, optional
-  timeout // 30 seconds timeout - default
-)
-console.log(foo)
+  timeout, // 30 seconds timeout - default
+);
+console.log(foo);
 ```
 
 ### set
@@ -57,11 +57,11 @@ A convenient method to send a `set` request. Behaves like [request](#request) bu
 
 ```js
 const foo = await iqCaller.set(
-  xml('foo', 'foo:bar'),
+  xml("foo", "foo:bar"),
   to, // "to" attribute, optional
-  timeout // 30 seconds timeout - default
-)
-console.log(foo)
+  timeout, // 30 seconds timeout - default
+);
+console.log(foo);
 ```
 
 ## Callee
@@ -82,9 +82,9 @@ const {iqCallee} = xmpp
 Add a `get` handler.
 
 ```js
-iqCallee.get('foo:bar', 'foo', (ctx) => {
-  return xml('foo', {xmlns: 'foo:bar'})
-})
+iqCallee.get("foo:bar", "foo", (ctx) => {
+  return xml("foo", { xmlns: "foo:bar" });
+});
 ```
 
 ## set
@@ -92,9 +92,9 @@ iqCallee.get('foo:bar', 'foo', (ctx) => {
 Add a `set` handler.
 
 ```js
-iqCallee.set('foo:bar', 'foo', (ctx) => {
-  return xml('foo', {xmlns: 'foo:bar'})
-})
+iqCallee.set("foo:bar", "foo", (ctx) => {
+  return xml("foo", { xmlns: "foo:bar" });
+});
 ```
 
 ## References

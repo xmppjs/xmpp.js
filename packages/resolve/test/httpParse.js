@@ -1,11 +1,11 @@
-'use strict'
+"use strict";
 
-const test = require('ava')
+const test = require("ava");
 
-const domain = 'example.com'
+const domain = "example.com";
 global.fetch = (url) => {
   if (url !== `https://${domain}/.well-known/host-meta`) {
-    throw new Error('Fetch URL incorrect')
+    throw new Error("Fetch URL incorrect");
   }
 
   return Promise.resolve({
@@ -15,32 +15,32 @@ global.fetch = (url) => {
                 <Link rel='urn:xmpp:alt-connections:websocket' href='wss://example.com/ws' />
                 <Link rel='urn:xmpp:alt-connections:xbosh' href='http://example.com/bosh' />
                 <Link rel='urn:xmpp:alt-connections:httppoll' href='http://example.com/http-poll' />
-              </XRD>`
+              </XRD>`;
     },
-  })
-}
+  });
+};
 
-const {resolve} = require('../lib/http')
+const { resolve } = require("../lib/http");
 
-test('parse', async (t) => {
+test("parse", async (t) => {
   t.deepEqual(await resolve(domain), [
     {
-      rel: 'urn:xmpp:alt-connections:websocket',
-      href: 'wss://example.com/ws',
-      method: 'websocket',
-      uri: 'wss://example.com/ws',
+      rel: "urn:xmpp:alt-connections:websocket",
+      href: "wss://example.com/ws",
+      method: "websocket",
+      uri: "wss://example.com/ws",
     },
     {
-      rel: 'urn:xmpp:alt-connections:xbosh',
-      href: 'http://example.com/bosh',
-      method: 'xbosh',
-      uri: 'http://example.com/bosh',
+      rel: "urn:xmpp:alt-connections:xbosh",
+      href: "http://example.com/bosh",
+      method: "xbosh",
+      uri: "http://example.com/bosh",
     },
     {
-      rel: 'urn:xmpp:alt-connections:httppoll',
-      href: 'http://example.com/http-poll',
-      method: 'httppoll',
-      uri: 'http://example.com/http-poll',
+      rel: "urn:xmpp:alt-connections:httppoll",
+      href: "http://example.com/http-poll",
+      method: "httppoll",
+      uri: "http://example.com/http-poll",
     },
-  ])
-})
+  ]);
+});

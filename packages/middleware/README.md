@@ -13,11 +13,11 @@ npm install @xmpp/middleware
 ## Usage
 
 ```js
-const {Client} = require('@xmpp/client')
-const middleware = require('@xmpp/middlware')
+const { Client } = require("@xmpp/client");
+const middleware = require("@xmpp/middlware");
 
-const client = new Client()
-const app = middleware({entity: client})
+const client = new Client();
+const app = middleware({ entity: client });
 ```
 
 ### use
@@ -25,7 +25,7 @@ const app = middleware({entity: client})
 The `use` method registers a middleware for incoming stanzas.
 
 ```js
-app.use((ctx, next) => {})
+app.use((ctx, next) => {});
 ```
 
 ### filter
@@ -33,5 +33,5 @@ app.use((ctx, next) => {})
 The `filter` method registers a middleware for outgoing stanzas.
 
 ```js
-app.filter((ctx, next) => {})
+app.filter((ctx, next) => {});
 ```

@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 /**
  * References
@@ -7,23 +7,23 @@
  * https://xmpp.org/registrar/stream-features.html XML Stream Features
  */
 
-const route = require('./route')
+const route = require("./route");
 
-module.exports = function ({middleware}) {
-  middleware.use(route())
+module.exports = function ({ middleware }) {
+  middleware.use(route());
 
   function use(name, xmlns, handler) {
     return middleware.use((ctx, next) => {
-      const {stanza} = ctx
-      if (!stanza.is('features', 'http://etherx.jabber.org/streams'))
-        return next()
-      const feature = stanza.getChild(name, xmlns)
-      if (!feature) return next()
-      return handler(ctx, next, feature)
-    })
+      const { stanza } = ctx;
+      if (!stanza.is("features", "http://etherx.jabber.org/streams"))
+        return next();
+      const feature = stanza.getChild(name, xmlns);
+      if (!feature) return next();
+      return handler(ctx, next, feature);
+    });
   }
 
   return {
     use,
-  }
-}
+  };
+};

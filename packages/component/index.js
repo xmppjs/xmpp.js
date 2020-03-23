@@ -1,34 +1,34 @@
-'use strict'
+"use strict";
 
-const {Component, xml, jid} = require('@xmpp/component-core')
+const { Component, xml, jid } = require("@xmpp/component-core");
 
-const _reconnect = require('@xmpp/reconnect')
-const _middleware = require('@xmpp/middleware')
-const _iqCaller = require('@xmpp/iq/caller')
-const _iqCallee = require('@xmpp/iq/callee')
+const _reconnect = require("@xmpp/reconnect");
+const _middleware = require("@xmpp/middleware");
+const _iqCaller = require("@xmpp/iq/caller");
+const _iqCallee = require("@xmpp/iq/callee");
 
 function component(options) {
-  const {password, service, domain} = options
+  const { password, service, domain } = options;
 
-  const entity = new Component({service, domain})
+  const entity = new Component({ service, domain });
 
-  const reconnect = _reconnect({entity})
-  const middleware = _middleware({entity})
-  const iqCaller = _iqCaller({entity, middleware})
-  const iqCallee = _iqCallee({entity, middleware})
+  const reconnect = _reconnect({ entity });
+  const middleware = _middleware({ entity });
+  const iqCaller = _iqCaller({ entity, middleware });
+  const iqCallee = _iqCallee({ entity, middleware });
 
-  entity.on('open', async (el) => {
+  entity.on("open", async (el) => {
     try {
-      const {id} = el.attrs
-      if (typeof password === 'function') {
-        await password((creds) => entity.authenticate(id, creds))
+      const { id } = el.attrs;
+      if (typeof password === "function") {
+        await password((creds) => entity.authenticate(id, creds));
       } else {
-        await entity.authenticate(id, password)
+        await entity.authenticate(id, password);
       }
     } catch (err) {
-      entity.emit('error', err)
+      entity.emit("error", err);
     }
-  })
+  });
 
   return Object.assign(entity, {
     entity,
@@ -36,9 +36,9 @@ function component(options) {
     middleware,
     iqCaller,
     iqCallee,
-  })
+  });
 }
 
-module.exports.xml = xml
-module.exports.jid = jid
-module.exports.component = component
+module.exports.xml = xml;
+module.exports.jid = jid;
+module.exports.component = component;
