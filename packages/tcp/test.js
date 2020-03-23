@@ -3,7 +3,7 @@
 const test = require('ava')
 const ConnectionTCP = require('./lib/Connection')
 
-test('socketParameters()', t => {
+test('socketParameters()', (t) => {
   let params
 
   params = ConnectionTCP.prototype.socketParameters('xmpp://foo')

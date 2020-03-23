@@ -3,7 +3,7 @@
 const test = require('ava')
 const Connection = require('..')
 
-test('#_end', t => {
+test('#_end', (t) => {
   t.plan(2)
   const conn = new Connection()
   conn.close = () => {
@@ -19,7 +19,7 @@ test('#_end', t => {
   return conn._end()
 })
 
-test('#_end with close rejection', t => {
+test('#_end with close rejection', (t) => {
   t.plan(2)
   const conn = new Connection()
   conn.close = () => {
@@ -35,7 +35,7 @@ test('#_end with close rejection', t => {
   return conn._end()
 })
 
-test('#_end with disconnect rejection', t => {
+test('#_end with disconnect rejection', (t) => {
   t.plan(2)
   const conn = new Connection()
   conn.close = () => {
@@ -51,7 +51,7 @@ test('#_end with disconnect rejection', t => {
   return conn._end()
 })
 
-test('#_end with close and disconnect rejection', t => {
+test('#_end with close and disconnect rejection', (t) => {
   t.plan(2)
   const conn = new Connection()
   conn.close = () => {

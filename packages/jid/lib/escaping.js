@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports.detect = function(local) {
+module.exports.detect = function (local) {
   if (!local) {
     return false
   }
@@ -20,7 +20,7 @@ module.exports.detect = function(local) {
 
   // Detect if we have unescaped sequences
   // eslint-disable-next-line unicorn/regex-shorthand
-  const search = tmp.search(/\\| |"|&|'|\/|:|<|>|@/g)
+  const search = tmp.search(/[ "&'/:<>@\\]/g)
   if (search === -1) {
     return false
   }
@@ -35,7 +35,7 @@ module.exports.detect = function(local) {
  * @param String local local part of a jid
  * @return An escaped local part
  */
-module.exports.escape = function(local) {
+module.exports.escape = function (local) {
   if (local === null) {
     return null
   }
@@ -62,7 +62,7 @@ module.exports.escape = function(local) {
  * @param String local local part of a jid
  * @return unescaped local part
  */
-module.exports.unescape = function(local) {
+module.exports.unescape = function (local) {
   if (local === null) {
     return null
   }

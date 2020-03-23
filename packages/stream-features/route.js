@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = function route() {
-  return async function({stanza, entity}, next) {
+  return async function ({stanza, entity}, next) {
     if (!stanza.is('features', 'http://etherx.jabber.org/streams'))
       return next()
 

@@ -3,7 +3,7 @@
 const test = require('ava')
 const Client = require('../lib/Client')
 
-test('_findTransport', t => {
+test('_findTransport', (t) => {
   class Transport {
     socketParameters(uri) {
       if (uri === 'a') {

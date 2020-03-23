@@ -13,7 +13,7 @@ function mockSocket() {
   return socket
 }
 
-test('success', async t => {
+test('success', async (t) => {
   const {entity} = mockClient()
   entity.socket = mockSocket()
   const {socket} = entity
@@ -49,7 +49,7 @@ test('success', async t => {
   expectTLSConnect.verify()
 })
 
-test('failure', async t => {
+test('failure', async (t) => {
   const {entity} = mockClient()
   entity.socket = mockSocket()
 

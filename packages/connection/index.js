@@ -75,7 +75,7 @@ class Connection extends EventEmitter {
       this._status('connect')
     }
 
-    listeners.error = error => {
+    listeners.error = (error) => {
       this.emit('error', error)
     }
 
@@ -87,7 +87,7 @@ class Connection extends EventEmitter {
 
   _detachSocket() {
     const {socketListeners, socket} = this
-    Object.getOwnPropertyNames(socketListeners).forEach(k => {
+    Object.getOwnPropertyNames(socketListeners).forEach((k) => {
       socket.removeListener(k, socketListeners[k])
       delete socketListeners[k]
     })
@@ -154,12 +154,12 @@ class Connection extends EventEmitter {
     listeners.element = this._onElement.bind(this)
     listeners.error = this._onParserError.bind(this)
 
-    listeners.end = element => {
+    listeners.end = (element) => {
       this._detachParser()
       this._status('close', element)
     }
 
-    listeners.start = element => {
+    listeners.start = (element) => {
       this._status('open', element)
     }
 
@@ -171,7 +171,7 @@ class Connection extends EventEmitter {
 
   _detachParser() {
     const listeners = this.parserListeners
-    Object.getOwnPropertyNames(listeners).forEach(k => {
+    Object.getOwnPropertyNames(listeners).forEach((k) => {
       this.parser.removeListener(k, listeners[k])
       delete listeners[k]
     })
@@ -335,7 +335,7 @@ class Connection extends EventEmitter {
       }
 
       const str = data.toString('utf8')
-      this.socket.write(str, err => {
+      this.socket.write(str, (err) => {
         if (err) {
           return reject(err)
         }

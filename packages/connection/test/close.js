@@ -5,7 +5,7 @@ const Connection = require('..')
 const {EventEmitter, promise, timeout} = require('@xmpp/events')
 const xml = require('@xmpp/xml')
 
-test('resets properties on socket close event', t => {
+test('resets properties on socket close event', (t) => {
   const conn = new Connection()
   conn._attachSocket(new EventEmitter())
   conn.jid = {}
@@ -16,7 +16,7 @@ test('resets properties on socket close event', t => {
   t.is(conn.status, 'disconnect')
 })
 
-test.cb('timeout', t => {
+test.cb('timeout', (t) => {
   t.plan(2)
   const conn = new Connection()
   conn.parser = new EventEmitter()
@@ -29,16 +29,16 @@ test.cb('timeout', t => {
     return cb()
   }
 
-  conn.on('output', el => {
+  conn.on('output', (el) => {
     t.is(el, '<hello/>')
   })
-  conn.close().catch(err => {
+  conn.close().catch((err) => {
     t.is(err.name, 'TimeoutError')
     t.end()
   })
 })
 
-test.cb('error on status closing', t => {
+test.cb('error on status closing', (t) => {
   t.plan(2)
   const conn = new Connection()
   conn.parser = new EventEmitter()
@@ -52,7 +52,7 @@ test.cb('error on status closing', t => {
   }
 
   conn.status = 'closing'
-  conn.close().catch(err => {
+  conn.close().catch((err) => {
     t.is(err.name, 'Error')
     t.is(err.message, 'Connection is closing')
     t.end()
@@ -60,7 +60,7 @@ test.cb('error on status closing', t => {
   conn.parser.emit('end')
 })
 
-test('resolves', async t => {
+test('resolves', async (t) => {
   t.plan(2)
   const conn = new Connection()
   conn.parser = new EventEmitter()
@@ -73,7 +73,7 @@ test('resolves', async t => {
     return cb()
   }
 
-  conn.on('output', el => {
+  conn.on('output', (el) => {
     t.is(el, '<hello/>')
   })
 
@@ -85,7 +85,7 @@ test('resolves', async t => {
   t.is(el.toString(), `<goodbye/>`)
 })
 
-test('emits closing status', t => {
+test('emits closing status', (t) => {
   const conn = new Connection()
   conn.parser = new EventEmitter()
   conn.footerElement = () => {
@@ -98,7 +98,7 @@ test('emits closing status', t => {
   }
 
   const p = Promise.all([
-    promise(conn, 'status').then(status => t.is(status, 'closing')),
+    promise(conn, 'status').then((status) => t.is(status, 'closing')),
     conn.close(),
   ])
 
@@ -106,7 +106,7 @@ test('emits closing status', t => {
   return p
 })
 
-test('do not emit closing status if parser property is missing', t => {
+test('do not emit closing status if parser property is missing', (t) => {
   t.plan(2)
   const conn = new Connection()
   conn.parser = null
@@ -120,9 +120,9 @@ test('do not emit closing status if parser property is missing', t => {
   }
 
   return Promise.all([
-    timeout(promise(conn, 'status'), 500).catch(err =>
+    timeout(promise(conn, 'status'), 500).catch((err) =>
       t.is(err.name, 'TimeoutError')
     ),
-    conn.close().catch(err => t.pass(err)),
+    conn.close().catch((err) => t.pass(err)),
   ])
 })

@@ -27,7 +27,11 @@ const message = xml(
   'message',
   {to: recipient},
   xml('body', {}, 1 + 2),
-  xml('days', {}, days.map((day, idx) => xml('day', {idx}, day)))
+  xml(
+    'days',
+    {},
+    days.map((day, idx) => xml('day', {idx}, day))
+  )
 )
 ```
 
@@ -110,11 +114,11 @@ Since `getChildren` returns an array, you can use JavaScript array methods such 
 const days = message.getChild('days').getChildren('day')
 
 // Find Monday element
-days.find(day => day.text() === 'Monday')
-days.find(day => day.attrs.idx === 0)
+days.find((day) => day.text() === 'Monday')
+days.find((day) => day.attrs.idx === 0)
 
 // Find all days after Tuesday
-days.filter(day => day.attrs.idx > 2)
+days.filter((day) => day.attrs.idx > 2)
 ```
 
 ### parent
@@ -160,7 +164,7 @@ Returns the parent.
 ```js
 message.append(xml('foo'))
 message.append('bar')
-message.append(days.map(day => xml('day', {}, day)))
+message.append(days.map((day) => xml('day', {}, day)))
 // <message>
 //   ...
 //   <foo/>
@@ -178,7 +182,7 @@ Returns the parent.
 ```js
 message.prepend(xml('foo'))
 message.prepend('bar')
-message.prepend(days.map(day => xml('day', {}, day)))
+message.prepend(days.map((day) => xml('day', {}, day)))
 // <message>
 //   <day>Tuesday</day>
 //   <day>Monday</day>

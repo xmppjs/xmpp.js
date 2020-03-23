@@ -82,7 +82,7 @@ const {iqCallee} = xmpp
 Add a `get` handler.
 
 ```js
-iqCallee.get('foo:bar', 'foo', ctx => {
+iqCallee.get('foo:bar', 'foo', (ctx) => {
   return xml('foo', {xmlns: 'foo:bar'})
 })
 ```
@@ -92,7 +92,7 @@ iqCallee.get('foo:bar', 'foo', ctx => {
 Add a `set` handler.
 
 ```js
-iqCallee.set('foo:bar', 'foo', ctx => {
+iqCallee.set('foo:bar', 'foo', (ctx) => {
   return xml('foo', {xmlns: 'foo:bar'})
 })
 ```

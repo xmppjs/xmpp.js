@@ -3,7 +3,7 @@
 const test = require('ava')
 const {Component, xml} = require('..')
 
-test('from attribute', t => {
+test('from attribute', (t) => {
   const entity = new Component()
   entity.jid = 'test.foobar'
   entity.write = () => Promise.resolve()

@@ -4,10 +4,10 @@ const test = require('ava')
 const Connection = require('..')
 const xml = require('@xmpp/xml')
 
-test('#_streamError', t => {
+test('#_streamError', (t) => {
   t.plan(2)
   const conn = new Connection()
-  conn.send = el => {
+  conn.send = (el) => {
     t.deepEqual(
       el,
       // prettier-ignore

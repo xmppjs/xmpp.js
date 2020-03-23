@@ -19,7 +19,7 @@ const SENSITIVES = [
 
 function isSensitive(element) {
   if (element.children.length === 0) return false
-  return SENSITIVES.some(sensitive => {
+  return SENSITIVES.some((sensitive) => {
     return element.is(...sensitive)
   })
 }
@@ -39,11 +39,11 @@ function format(element) {
 
 module.exports = function debug(entity, force) {
   if (process.env.XMPP_DEBUG || force === true) {
-    entity.on('element', data => {
+    entity.on('element', (data) => {
       console.debug(`IN\n${format(data)}`)
     })
 
-    entity.on('send', data => {
+    entity.on('send', (data) => {
       console.debug(`OUT\n${format(data)}`)
     })
 

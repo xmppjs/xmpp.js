@@ -6,11 +6,11 @@ const Socket = require('../lib/Socket')
 const EventEmitter = require('events')
 const xml = require('@xmpp/xml')
 
-test('send() adds jabber:client xmlns', t => {
+test('send() adds jabber:client xmlns', (t) => {
   const connection = new ConnectionWebSocket()
   const element = xml('presence')
 
-  connection.write = element => {
+  connection.write = (element) => {
     t.is(element, element)
     t.is(element.attrs.xmlns, 'jabber:client')
   }
@@ -18,7 +18,7 @@ test('send() adds jabber:client xmlns', t => {
   connection.send(element)
 })
 
-test('socketParameters()', t => {
+test('socketParameters()', (t) => {
   let params
 
   params = ConnectionWebSocket.prototype.socketParameters('ws://foo')
@@ -31,14 +31,14 @@ test('socketParameters()', t => {
   t.is(params, undefined)
 })
 
-test('DOM WebSocket error', t => {
+test('DOM WebSocket error', (t) => {
   const socket = new Socket()
   const sock = new EventEmitter()
   sock.addEventListener = sock.addListener
   socket._attachSocket(sock)
   socket.url = 'ws://foobar'
   const evt = {}
-  socket.on('error', err => {
+  socket.on('error', (err) => {
     t.is(err.message, 'WebSocket ECONNERROR ws://foobar')
     t.is(err.errno, 'ECONNERROR')
     t.is(err.code, 'ECONNERROR')
@@ -48,7 +48,7 @@ test('DOM WebSocket error', t => {
   socket.socket.emit('error', evt)
 })
 
-test('WS WebSocket error', t => {
+test('WS WebSocket error', (t) => {
   const socket = new Socket()
   const sock = new EventEmitter()
   sock.addEventListener = sock.addListener
@@ -56,7 +56,7 @@ test('WS WebSocket error', t => {
   socket.url = 'ws://foobar'
   const error = {}
   const evt = {error}
-  socket.on('error', err => {
+  socket.on('error', (err) => {
     t.is(err, error)
     t.is(err.event, evt)
     t.is(err.url, 'ws://foobar')
@@ -64,7 +64,7 @@ test('WS WebSocket error', t => {
   socket.socket.emit('error', evt)
 })
 
-test('socket close', t => {
+test('socket close', (t) => {
   t.plan(3)
   const socket = new Socket()
   const sock = new EventEmitter()

@@ -17,11 +17,11 @@ function component(options) {
   const iqCaller = _iqCaller({entity, middleware})
   const iqCallee = _iqCallee({entity, middleware})
 
-  entity.on('open', async el => {
+  entity.on('open', async (el) => {
     try {
       const {id} = el.attrs
       if (typeof password === 'function') {
-        await password(creds => entity.authenticate(id, creds))
+        await password((creds) => entity.authenticate(id, creds))
       } else {
         await entity.authenticate(id, password)
       }

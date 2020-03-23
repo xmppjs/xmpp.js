@@ -17,9 +17,9 @@ class Socket extends EventEmitter {
   }
 }
 
-test('resolves if "event" is emitted', async t => {
+test('resolves if "event" is emitted', async (t) => {
   const value = {}
-  const socket = new Socket(function() {
+  const socket = new Socket(function () {
     this.emit('connect', value)
   })
   t.is(socket.listenerCount('error'), 0)
@@ -34,9 +34,9 @@ test('resolves if "event" is emitted', async t => {
   t.is(socket.listenerCount('connect'), 0)
 })
 
-test('rejects if "errorEvent" is emitted', t => {
+test('rejects if "errorEvent" is emitted', (t) => {
   const error = new Error('foobar')
-  const socket = new Socket(function() {
+  const socket = new Socket(function () {
     this.emit('error', error)
   })
   t.is(socket.listenerCount('error'), 0)
@@ -45,7 +45,7 @@ test('rejects if "errorEvent" is emitted', t => {
   const p = promise(socket, 'connect', 'error')
   t.is(socket.listenerCount('error'), 1)
   t.is(socket.listenerCount('connect'), 1)
-  return p.catch(err => {
+  return p.catch((err) => {
     t.is(err, error)
     t.is(socket.listenerCount('error'), 0)
     t.is(socket.listenerCount('connect'), 0)

@@ -8,13 +8,13 @@ module.exports = function parse(data) {
   let result = null
   let error = null
 
-  p.on('start', el => {
+  p.on('start', (el) => {
     result = el
   })
-  p.on('element', el => {
+  p.on('element', (el) => {
     result.append(el)
   })
-  p.on('error', err => {
+  p.on('error', (err) => {
     error = err
   })
 

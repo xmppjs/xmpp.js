@@ -4,7 +4,7 @@ const test = require('ava')
 const Connection = require('..')
 const {EventEmitter} = require('@xmpp/events')
 
-test('calls _detachParser, sends a bad-format stream error and emit an error', t => {
+test('calls _detachParser, sends a bad-format stream error and emit an error', (t) => {
   t.plan(3)
   const conn = new Connection()
   const parser = new EventEmitter()
@@ -15,11 +15,11 @@ test('calls _detachParser, sends a bad-format stream error and emit an error', t
     t.pass()
   }
 
-  conn._streamError = condition => {
+  conn._streamError = (condition) => {
     t.is(condition, 'bad-format')
   }
 
-  conn.on('error', err => {
+  conn.on('error', (err) => {
     t.is(err, error)
   })
 

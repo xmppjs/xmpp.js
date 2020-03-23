@@ -20,13 +20,13 @@ async function fetchURIs(domain) {
             },
           ],
         })
-      ).map(record => record.uri)
+      ).map((record) => record.uri)
     ),
   ]
 }
 
 function filterSupportedURIs(entity, uris) {
-  return uris.filter(uri => entity._findTransport(uri))
+  return uris.filter((uri) => entity._findTransport(uri))
 }
 
 async function fallbackConnect(entity, uris) {
@@ -60,7 +60,7 @@ async function fallbackConnect(entity, uris) {
   entity.Parser = Transport.prototype.Parser
 }
 
-module.exports = function({entity}) {
+module.exports = function ({entity}) {
   const _connect = entity.connect
   entity.connect = async function connect(service) {
     if (!service || service.match(/:\/\//)) {

@@ -40,7 +40,7 @@ async function resume(entity, h, previd) {
   return response
 }
 
-module.exports = function({streamFeatures, entity, middleware}) {
+module.exports = function ({streamFeatures, entity, middleware}) {
   let address = null
 
   const sm = {
@@ -53,7 +53,7 @@ module.exports = function({streamFeatures, entity, middleware}) {
     max: null,
   }
 
-  entity.on('online', jid => {
+  entity.on('online', (jid) => {
     address = jid
     sm.outbound = 0
     sm.inbound = 0

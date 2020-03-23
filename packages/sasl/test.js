@@ -7,7 +7,7 @@ const username = 'foo'
 const password = 'bar'
 const credentials = {username, password}
 
-test('no compatibles mechanisms', async t => {
+test('no compatibles mechanisms', async (t) => {
   const {entity} = mockClient({username, password})
 
   entity.mockInput(
@@ -23,7 +23,7 @@ test('no compatibles mechanisms', async t => {
   t.is(error.message, 'No compatible mechanism')
 })
 
-test('with object credentials', async t => {
+test('with object credentials', async (t) => {
   const {entity} = mockClient({credentials})
   entity.restart = () => {
     entity.emit('open')
@@ -50,7 +50,7 @@ test('with object credentials', async t => {
   await promise(entity, 'online')
 })
 
-test('with function credentials', async t => {
+test('with function credentials', async (t) => {
   const mech = 'PLAIN'
 
   function authenticate(auth, mechanism) {
@@ -84,7 +84,7 @@ test('with function credentials', async t => {
   await promise(entity, 'online')
 })
 
-test('failure', async t => {
+test('failure', async (t) => {
   const {entity} = mockClient({credentials})
 
   entity.mockInput(
@@ -117,7 +117,7 @@ test('failure', async t => {
   t.is(error.element, failure)
 })
 
-test('prefers SCRAM-SHA-1', async t => {
+test('prefers SCRAM-SHA-1', async (t) => {
   const {entity} = mockClient({credentials})
 
   entity.mockInput(
@@ -133,7 +133,7 @@ test('prefers SCRAM-SHA-1', async t => {
   t.deepEqual((await promise(entity, 'send')).attrs.mechanism, 'SCRAM-SHA-1')
 })
 
-test('use ANONYMOUS if username and password are not provided', async t => {
+test('use ANONYMOUS if username and password are not provided', async (t) => {
   const {entity} = mockClient()
 
   entity.mockInput(

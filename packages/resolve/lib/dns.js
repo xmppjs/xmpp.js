@@ -44,7 +44,7 @@ function resolveTxt(domain, {owner = '_xmppconnect'}) {
       } else {
         resolve(
           records
-            .map(record => {
+            .map((record) => {
               const [attribute, value] = record[0].split('=')
               return {
                 attribute,
@@ -69,7 +69,7 @@ function resolveSrv(domain, {service, protocol}) {
         reject(err)
       } else {
         resolve(
-          records.map(record => {
+          records.map((record) => {
             return Object.assign(record, {service, protocol})
           })
         )
@@ -97,9 +97,9 @@ function sortSrv(records) {
 function lookupSrvs(srvs, options) {
   const addresses = []
   return Promise.all(
-    srvs.map(async srv => {
+    srvs.map(async (srv) => {
       const srvAddresses = await lookup(srv.name, options)
-      srvAddresses.forEach(address => {
+      srvAddresses.forEach((address) => {
         const {port, service} = srv
         const addr = address.address
         addresses.push({
@@ -161,17 +161,17 @@ function resolve(domain, options = {}) {
   }
 
   const family = {options}
-  return lookup(domain, options).then(addresses => {
+  return lookup(domain, options).then((addresses) => {
     return Promise.all(
-      options.srv.map(srv => {
-        return resolveSrv(domain, {...srv, family}).then(records => {
+      options.srv.map((srv) => {
+        return resolveSrv(domain, {...srv, family}).then((records) => {
           return lookupSrvs(records, options)
         })
       })
     )
-      .then(srvs => sortSrv([].concat(...srvs)).concat(addresses))
-      .then(records => {
-        return resolveTxt(domain, options).then(txtRecords => {
+      .then((srvs) => sortSrv([].concat(...srvs)).concat(addresses))
+      .then((records) => {
+        return resolveTxt(domain, options).then((txtRecords) => {
           return records.concat(txtRecords)
         })
       })

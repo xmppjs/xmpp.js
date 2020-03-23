@@ -10,7 +10,7 @@ const SASLFactory = require('saslmechanisms')
 const NS = 'urn:ietf:params:xml:ns:xmpp-sasl'
 
 function getMechanismNames(features) {
-  return features.getChild('mechanisms', NS).children.map(el => el.text())
+  return features.getChild('mechanisms', NS).children.map((el) => el.text())
 }
 
 async function authenticate(SASL, entity, mechname, credentials) {
@@ -32,7 +32,7 @@ async function authenticate(SASL, entity, mechname, credentials) {
   }
 
   return new Promise((resolve, reject) => {
-    const handler = element => {
+    const handler = (element) => {
       if (element.attrs.xmlns !== NS) {
         return
       }
@@ -79,14 +79,14 @@ module.exports = function sasl({streamFeatures}, credentials) {
   streamFeatures.use('mechanisms', NS, async ({stanza, entity}) => {
     const offered = getMechanismNames(stanza)
     const supported = SASL._mechs.map(({name}) => name)
-    const intersection = supported.filter(mech => {
+    const intersection = supported.filter((mech) => {
       return offered.includes(mech)
     })
     let mech = intersection[0]
 
     if (typeof credentials === 'function') {
       await credentials(
-        creds => authenticate(SASL, entity, mech, creds, stanza),
+        (creds) => authenticate(SASL, entity, mech, creds, stanza),
         mech
       )
     } else {

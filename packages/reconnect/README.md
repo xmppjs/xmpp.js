@@ -45,7 +45,7 @@ reconnect.on('reconnected', () => {
 Emitted on entity each time a re-connection fails.
 
 ```js
-entity.on('error', err => {
+entity.on('error', (err) => {
   console.error(err)
 })
 ```

@@ -3,7 +3,7 @@
 const test = require('ava')
 const Connection = require('..')
 
-test('resolves if socket property is undefined', async t => {
+test('resolves if socket property is undefined', async (t) => {
   const conn = new Connection()
   conn.footerElement = () => <foo />
   conn.socket = undefined
@@ -11,7 +11,7 @@ test('resolves if socket property is undefined', async t => {
   t.pass()
 })
 
-test('resolves if close rejects', async t => {
+test('resolves if close rejects', async (t) => {
   const conn = new Connection()
   conn.close = () => Promise.reject()
   conn.disconnect = () => Promise.resolve()
@@ -19,7 +19,7 @@ test('resolves if close rejects', async t => {
   t.pass()
 })
 
-test('resolves if disconnect rejects', async t => {
+test('resolves if disconnect rejects', async (t) => {
   const conn = new Connection()
   conn.disconnect = () => Promise.reject()
   conn.close = () => Promise.resolve()
@@ -27,7 +27,7 @@ test('resolves if disconnect rejects', async t => {
   t.pass()
 })
 
-test('resolves with the result of close', async t => {
+test('resolves with the result of close', async (t) => {
   const conn = new Connection()
   conn.socket = {}
   const el = {}

@@ -14,7 +14,7 @@ const PROSODY_PORT = 5347
 
 function clean() {
   return Promise.all(
-    ['prosody.err', 'prosody.log', 'prosody.pid'].map(file =>
+    ['prosody.err', 'prosody.log', 'prosody.pid'].map((file) =>
       removeFile(path.join(__dirname, file))
     )
   ).catch(() => {})

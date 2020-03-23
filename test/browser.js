@@ -22,7 +22,7 @@ const xmppjs = readFileSync('./packages/client/dist/xmpp.js', {
   encoding: 'utf-8',
 })
 
-test.beforeEach(t => {
+test.beforeEach((t) => {
   const {window} = new JSDOM(``, {runScripts: 'dangerously'})
   window.fetch = fetch
   const {document} = window
@@ -33,7 +33,7 @@ test.beforeEach(t => {
   return server.restart()
 })
 
-test.serial('client ws://', async t => {
+test.serial('client ws://', async (t) => {
   const xmpp = t.context({
     credentials,
     service,

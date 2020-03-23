@@ -22,9 +22,7 @@ const options = {
   owner: '_xmppconnect', // TXT owner
 }
 
-resolve('xmppjs.org', options)
-  .then(console.log)
-  .catch(console.error)
+resolve('xmppjs.org', options).then(console.log).catch(console.error)
 ```
 
 ```javascript

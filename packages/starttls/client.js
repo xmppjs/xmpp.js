@@ -19,7 +19,7 @@ async function negotiate(entity) {
   throw new Error('STARTTLS_FAILURE')
 }
 
-module.exports = function({streamFeatures}) {
+module.exports = function ({streamFeatures}) {
   return streamFeatures.use('starttls', NS, async ({entity}, next) => {
     const {socket} = entity
     if (!canUpgrade(socket)) {

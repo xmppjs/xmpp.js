@@ -3,7 +3,7 @@
 const test = require('ava')
 const {mockClient, promiseSend, mockInput, promiseError} = require('@xmpp/test')
 
-test('empty result when the handler returns true', async t => {
+test('empty result when the handler returns true', async (t) => {
   const xmpp = mockClient()
   const {iqCallee} = xmpp
 
@@ -19,7 +19,7 @@ test('empty result when the handler returns true', async t => {
   t.deepEqual(await promiseSend(xmpp), <iq id="123" type="result" />)
 })
 
-test('iqs with text children are valid', async t => {
+test('iqs with text children are valid', async (t) => {
   const xmpp = mockClient()
   const {iqCallee} = xmpp
 
@@ -37,7 +37,7 @@ test('iqs with text children are valid', async t => {
   t.deepEqual(await promiseSend(xmpp), <iq id="123" type="result" />)
 })
 
-test('iqs with multiple element children are invalid', async t => {
+test('iqs with multiple element children are invalid', async (t) => {
   const xmpp = mockClient()
   const {iqCallee} = xmpp
 
@@ -62,7 +62,7 @@ test('iqs with multiple element children are invalid', async t => {
   )
 })
 
-test('non empty result when the handler returns an xml.Element', async t => {
+test('non empty result when the handler returns an xml.Element', async (t) => {
   const xmpp = mockClient()
   const {iqCallee} = xmpp
 
@@ -85,7 +85,7 @@ test('non empty result when the handler returns an xml.Element', async t => {
   )
 })
 
-test('service unavailable error reply when there are no handler', async t => {
+test('service unavailable error reply when there are no handler', async (t) => {
   const xmpp = mockClient()
 
   xmpp.mockInput(
@@ -105,7 +105,7 @@ test('service unavailable error reply when there are no handler', async t => {
   )
 })
 
-test('internal server error reply when handler throws an error', async t => {
+test('internal server error reply when handler throws an error', async (t) => {
   const xmpp = mockClient()
   const {iqCallee} = xmpp
 
@@ -136,7 +136,7 @@ test('internal server error reply when handler throws an error', async t => {
   )
 })
 
-test('internal server error reply when handler rejects with an error', async t => {
+test('internal server error reply when handler rejects with an error', async (t) => {
   const xmpp = mockClient()
   const {iqCallee} = xmpp
 
@@ -167,7 +167,7 @@ test('internal server error reply when handler rejects with an error', async t =
   )
 })
 
-test('stanza error reply when handler returns an error element', async t => {
+test('stanza error reply when handler returns an error element', async (t) => {
   const xmpp = mockClient()
   const {iqCallee} = xmpp
 

@@ -25,7 +25,7 @@ class Socket extends EventEmitter {
     }
 
     listeners.message = ({data}) => this.emit('data', data)
-    listeners.error = event => {
+    listeners.error = (event) => {
       // WS
       let {error} = event
       // DOM
@@ -40,7 +40,7 @@ class Socket extends EventEmitter {
       this.emit('error', error)
     }
 
-    listeners.close = event => {
+    listeners.close = (event) => {
       this._detachSocket()
       this.emit('close', !event.wasClean, event)
     }
@@ -54,7 +54,7 @@ class Socket extends EventEmitter {
   _detachSocket() {
     delete this.url
     const {socket, listeners} = this
-    Object.getOwnPropertyNames(listeners).forEach(k => {
+    Object.getOwnPropertyNames(listeners).forEach((k) => {
       socket.removeEventListener(k, listeners[k])
       delete listeners[k]
     })
