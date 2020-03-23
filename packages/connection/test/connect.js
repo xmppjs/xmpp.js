@@ -15,6 +15,7 @@ function socket(fn) {
 
 test('emits "connecting" status', (t) => {
   const conn = new Connection();
+  // eslint-disable-next-line func-names
   conn.Socket = socket(function () {
     this.emit("connect");
   });
@@ -30,6 +31,7 @@ test("rejects if an error is emitted before connected", async (t) => {
   const conn = new Connection();
   const error = {};
 
+  // eslint-disable-next-line func-names
   conn.Socket = socket(function () {
     this.emit("error", error);
   });
@@ -44,6 +46,7 @@ test("rejects if an error is emitted before connected", async (t) => {
 
 test("resolves if socket connects", async (t) => {
   const conn = new Connection();
+  // eslint-disable-next-line func-names
   conn.Socket = socket(function () {
     this.emit("connect");
   });

@@ -48,7 +48,7 @@
   "bundlesize": [
     {
       "path": "./packages/client/dist/xmpp.min.js",
-      "maxSize": "15 KB"
+      "maxSize": "16 KB"
     }
   ]
 }

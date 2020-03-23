@@ -40,7 +40,11 @@ async function resume(entity, h, previd) {
   return response;
 }
 
-module.exports = function ({ streamFeatures, entity, middleware }) {
+module.exports = function streamManagement({
+  streamFeatures,
+  entity,
+  middleware,
+}) {
   let address = null;
 
   const sm = {

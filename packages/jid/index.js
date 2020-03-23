@@ -12,14 +12,14 @@ function jid(...args) {
   return new JID(...args);
 }
 
-exports = module.exports = jid.bind();
-exports.jid = jid;
-exports.JID = JID;
-exports.equal = function (a, b) {
+module.exports = jid.bind();
+module.exports.jid = jid;
+module.exports.JID = JID;
+module.exports.equal = function equal(a, b) {
   return a.equals(b);
 };
 
-exports.detectEscape = escaping.detect;
-exports.escapeLocal = escaping.escape;
-exports.unescapeLocal = escaping.unescape;
-exports.parse = parse;
+module.exports.detectEscape = escaping.detect;
+module.exports.escapeLocal = escaping.escape;
+module.exports.unescapeLocal = escaping.unescape;
+module.exports.parse = parse;

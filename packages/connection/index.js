@@ -61,7 +61,7 @@ class Connection extends EventEmitter {
   }
 
   _attachSocket(socket) {
-    const sock = (this.socket = socket);
+    this.socket = socket;
     const listeners = this.socketListeners;
 
     listeners.data = this._onData.bind(this);
@@ -79,10 +79,10 @@ class Connection extends EventEmitter {
       this.emit("error", error);
     };
 
-    sock.on("close", listeners.close);
-    sock.on("data", listeners.data);
-    sock.on("error", listeners.error);
-    sock.on("connect", listeners.connect);
+    this.socket.on("close", listeners.close);
+    this.socket.on("data", listeners.data);
+    this.socket.on("error", listeners.error);
+    this.socket.on("connect", listeners.connect);
   }
 
   _detachSocket() {
@@ -147,8 +147,8 @@ class Connection extends EventEmitter {
     }
   }
 
-  _attachParser(p) {
-    const parser = (this.parser = p);
+  _attachParser(parser) {
+    this.parser = parser;
     const listeners = this.parserListeners;
 
     listeners.element = this._onElement.bind(this);
@@ -163,10 +163,10 @@ class Connection extends EventEmitter {
       this._status("open", element);
     };
 
-    parser.on("error", listeners.error);
-    parser.on("element", listeners.element);
-    parser.on("end", listeners.end);
-    parser.on("start", listeners.start);
+    this.parser.on("error", listeners.error);
+    this.parser.on("element", listeners.element);
+    this.parser.on("end", listeners.end);
+    this.parser.on("start", listeners.start);
   }
 
   _detachParser() {

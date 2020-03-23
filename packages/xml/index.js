@@ -15,9 +15,9 @@ function xml(...args) {
   return x(...args);
 }
 
-exports = module.exports = xml;
+module.exports = xml;
 
-Object.assign(exports, {
+Object.assign(module.exports, {
   x,
   Element,
   Parser,

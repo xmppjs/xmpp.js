@@ -17,13 +17,13 @@ test("success", async (t) => {
   const { entity } = mockClient();
   entity.socket = mockSocket();
   const { socket } = entity;
-  const host = (entity.options.domain = "foobar");
+  entity.options.domain = "foobar";
 
   const mockTLS = mock(tls);
   const expectTLSConnect = mockTLS
     .expects("connect")
     .once()
-    .withArgs({ socket, host })
+    .withArgs({ socket, host: "foobar" })
     .callsFake(() => {
       return new EventEmitter();
     });
