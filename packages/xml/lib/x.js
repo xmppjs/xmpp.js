@@ -1,26 +1,26 @@
-'use strict'
+"use strict";
 
-const Element = require('./Element')
+const Element = require("./Element");
 
 function append(el, child) {
-  if (child === false || child === null || child === undefined) return
+  if (child === false || child === null || child === undefined) return;
   if (child instanceof Element) {
-    el.append(child)
+    el.append(child);
   } else if (Array.isArray(child)) {
-    child.forEach((c) => append(el, c))
+    child.forEach((c) => append(el, c));
   } else {
-    el.append(String(child))
+    el.append(String(child));
   }
 }
 
 function x(name, attrs, ...children) {
-  const el = new Element(name, attrs)
+  const el = new Element(name, attrs);
   // eslint-disable-next-line unicorn/no-for-loop
   for (let i = 0; i < children.length; i++) {
-    append(el, children[i])
+    append(el, children[i]);
   }
 
-  return el
+  return el;
 }
 
-module.exports = x
+module.exports = x;

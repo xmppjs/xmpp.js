@@ -1,7 +1,7 @@
-'use strict'
+"use strict";
 
-const ConnectionTCP = require('./lib/Connection')
+const ConnectionTCP = require("./lib/Connection");
 
-module.exports = function tcp({entity}) {
-  entity.transports.push(ConnectionTCP)
-}
+module.exports = function tcp({ entity }) {
+  entity.transports.push(ConnectionTCP);
+};

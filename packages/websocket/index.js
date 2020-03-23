@@ -1,7 +1,7 @@
-'use strict'
+"use strict";
 
-const ConnectionWebSocket = require('./lib/Connection')
+const ConnectionWebSocket = require("./lib/Connection");
 
-module.exports = function websocket({entity}) {
-  entity.transports.push(ConnectionWebSocket)
-}
+module.exports = function websocket({ entity }) {
+  entity.transports.push(ConnectionWebSocket);
+};

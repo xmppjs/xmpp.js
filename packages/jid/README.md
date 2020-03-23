@@ -17,52 +17,52 @@ https://en.wikipedia.org/wiki/XMPP#Decentralization_and_addressing
 ## Usage
 
 ```js
-var jid = require('@xmpp/jid')
+var jid = require("@xmpp/jid");
 
 /*
  * All return an instance of jid.JID
  */
-var addr = jid('alice@wonderland.net/rabbithole')
-var addr = jid('alice', 'wonderland.net', 'rabbithole')
+var addr = jid("alice@wonderland.net/rabbithole");
+var addr = jid("alice", "wonderland.net", "rabbithole");
 
-addr instanceof jid.JID // true
+addr instanceof jid.JID; // true
 
 // domain JIDs are created passing the domain as the first argument
-var addr = jid('wonderland.net')
+var addr = jid("wonderland.net");
 
 /*
  * local
  */
-addr.local = 'alice'
-addr.local // alice
+addr.local = "alice";
+addr.local; // alice
 // same as
-addr.setLocal('alice')
-addr.getLocal() // alice
+addr.setLocal("alice");
+addr.getLocal(); // alice
 
 /*
  * domain
  */
-addr.domain = 'wonderland.net'
-addr.domain // wonderland.net
+addr.domain = "wonderland.net";
+addr.domain; // wonderland.net
 // same as
-addr.setDomain('wonderland.net')
-addr.getDomain() // wonderland.net
+addr.setDomain("wonderland.net");
+addr.getDomain(); // wonderland.net
 
 /*
  * resource
  */
-addr.resource = 'rabbithole'
-addr.resource // rabbithole
+addr.resource = "rabbithole";
+addr.resource; // rabbithole
 // same as
-addr.setResource('rabbithole')
-addr.getResource() // rabbithole
+addr.setResource("rabbithole");
+addr.getResource(); // rabbithole
 
-addr.toString() // alice@wonderland.net/rabbithole
-addr.bare() // returns a JID without resource
+addr.toString(); // alice@wonderland.net/rabbithole
+addr.bare(); // returns a JID without resource
 
-addr.equals(some_jid) // returns true if the two JIDs are equal, false otherwise
+addr.equals(some_jid); // returns true if the two JIDs are equal, false otherwise
 // same as
-jid.equal(addr, some_jid)
+jid.equal(addr, some_jid);
 ```
 
 ## Escaping
@@ -70,18 +70,18 @@ jid.equal(addr, some_jid)
 The [XEP-0106](http://xmpp.org/extensions/xep-0106.html) defines a method to escape and unescape characters that aren't allowed in the local part of the JID. This library fully implement it.
 
 ```js
-const addr = jid('contact@example.net', 'xmpp.net')
-addr.toString() // contact\40example.net@xmpp.net
+const addr = jid("contact@example.net", "xmpp.net");
+addr.toString(); // contact\40example.net@xmpp.net
 // for display purpose only
-addr.toString(true) // contact@example.net@xmpp.net
+addr.toString(true); // contact@example.net@xmpp.net
 ```
 
 For user input, use
 
 ```js
-jid('contact@example.net', 'xmpp.net')
+jid("contact@example.net", "xmpp.net");
 // over
-jid('contact@example.net@xmpp.net')
+jid("contact@example.net@xmpp.net");
 ```
 
 ## References

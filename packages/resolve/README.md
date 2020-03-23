@@ -13,47 +13,47 @@ npm install @xmpp/resolve
 ## Usage
 
 ```javascript
-const resolve = require('@xmpp/resolve')
+const resolve = require("@xmpp/resolve");
 
 // optional
 const options = {
-  srv: [{service: 'xmpp-client', protocol: 'tcp'}], // SRV records
+  srv: [{ service: "xmpp-client", protocol: "tcp" }], // SRV records
   family: undefined, // IP version; 4, 6 or undefined for both
-  owner: '_xmppconnect', // TXT owner
-}
+  owner: "_xmppconnect", // TXT owner
+};
 
-resolve('xmppjs.org', options).then(console.log).catch(console.error)
+resolve("xmppjs.org", options).then(console.log).catch(console.error);
 ```
 
 ```javascript
-;[
+[
   {
-    address: '93.113.206.189',
+    address: "93.113.206.189",
     family: 4,
-    name: 'xmppjs.org',
+    name: "xmppjs.org",
     port: 5222,
     priority: 5,
     weight: 0,
   },
   {
-    address: '2a03:75c0:39:3458::1',
+    address: "2a03:75c0:39:3458::1",
     family: 6,
-    name: 'xmppjs.org',
+    name: "xmppjs.org",
     port: 5222,
     priority: 5,
     weight: 0,
   },
-  {address: '93.113.206.189', family: 4},
-  {address: '2a03:75c0:39:3458::1', family: 6},
+  { address: "93.113.206.189", family: 4 },
+  { address: "2a03:75c0:39:3458::1", family: 6 },
   {
-    attribute: '_xmpp-client-websocket',
-    uri: 'wss://xmppjs.org:443/websocket',
+    attribute: "_xmpp-client-websocket",
+    uri: "wss://xmppjs.org:443/websocket",
   },
   {
-    attribute: '_xmpp-client-xbosh',
-    uri: 'https://xmppjs.org:443/bosh',
+    attribute: "_xmpp-client-xbosh",
+    uri: "https://xmppjs.org:443/bosh",
   },
-]
+];
 ```
 
 ## References

@@ -29,22 +29,22 @@ Uses cases:
 - Perform an asynchronous operation to get credentials
 
 ```js
-const {xmpp} = require('@xmpp/client')
-const client = xmpp({credentials: authenticate})
+const { xmpp } = require("@xmpp/client");
+const client = xmpp({ credentials: authenticate });
 
 async function authenticate(auth, mechanism) {
-  console.debug('authenticate', mechanism)
+  console.debug("authenticate", mechanism);
   const credentials = {
-    username: await prompt('enter username'),
-    password: await prompt('enter password'),
-  }
-  console.debug('authenticating')
+    username: await prompt("enter username"),
+    password: await prompt("enter password"),
+  };
+  console.debug("authenticating");
   try {
-    await auth(credentials)
-    console.debug('authenticated')
+    await auth(credentials);
+    console.debug("authenticated");
   } catch (err) {
-    console.error(err)
-    throw err
+    console.error(err);
+    throw err;
   }
 }
 ```

@@ -1,32 +1,32 @@
-'use strict'
+"use strict";
 
 module.exports.detect = function (local) {
   if (!local) {
-    return false
+    return false;
   }
 
   // Remove all escaped sequences
   const tmp = local
-    .replace(/\\20/g, '')
-    .replace(/\\22/g, '')
-    .replace(/\\26/g, '')
-    .replace(/\\27/g, '')
-    .replace(/\\2f/g, '')
-    .replace(/\\3a/g, '')
-    .replace(/\\3c/g, '')
-    .replace(/\\3e/g, '')
-    .replace(/\\40/g, '')
-    .replace(/\\5c/g, '')
+    .replace(/\\20/g, "")
+    .replace(/\\22/g, "")
+    .replace(/\\26/g, "")
+    .replace(/\\27/g, "")
+    .replace(/\\2f/g, "")
+    .replace(/\\3a/g, "")
+    .replace(/\\3c/g, "")
+    .replace(/\\3e/g, "")
+    .replace(/\\40/g, "")
+    .replace(/\\5c/g, "");
 
   // Detect if we have unescaped sequences
   // eslint-disable-next-line unicorn/regex-shorthand
-  const search = tmp.search(/[ "&'/:<>@\\]/g)
+  const search = tmp.search(/[ "&'/:<>@\\]/g);
   if (search === -1) {
-    return false
+    return false;
   }
 
-  return true
-}
+  return true;
+};
 
 /**
  * Escape the local part of a JID.
@@ -37,23 +37,23 @@ module.exports.detect = function (local) {
  */
 module.exports.escape = function (local) {
   if (local === null) {
-    return null
+    return null;
   }
 
   return local
-    .replace(/^\s+|\s+$/g, '')
-    .replace(/\\/g, '\\5c')
-    .replace(/ /g, '\\20')
-    .replace(/"/g, '\\22')
-    .replace(/&/g, '\\26')
-    .replace(/'/g, '\\27')
-    .replace(/\//g, '\\2f')
-    .replace(/:/g, '\\3a')
-    .replace(/</g, '\\3c')
-    .replace(/>/g, '\\3e')
-    .replace(/@/g, '\\40')
-    .replace(/\3a/g, '\u0005c3a')
-}
+    .replace(/^\s+|\s+$/g, "")
+    .replace(/\\/g, "\\5c")
+    .replace(/ /g, "\\20")
+    .replace(/"/g, "\\22")
+    .replace(/&/g, "\\26")
+    .replace(/'/g, "\\27")
+    .replace(/\//g, "\\2f")
+    .replace(/:/g, "\\3a")
+    .replace(/</g, "\\3c")
+    .replace(/>/g, "\\3e")
+    .replace(/@/g, "\\40")
+    .replace(/\3a/g, "\u0005c3a");
+};
 
 /**
  * Unescape a local part of a JID.
@@ -64,18 +64,18 @@ module.exports.escape = function (local) {
  */
 module.exports.unescape = function (local) {
   if (local === null) {
-    return null
+    return null;
   }
 
   return local
-    .replace(/\\20/g, ' ')
+    .replace(/\\20/g, " ")
     .replace(/\\22/g, '"')
-    .replace(/\\26/g, '&')
+    .replace(/\\26/g, "&")
     .replace(/\\27/g, "'")
-    .replace(/\\2f/g, '/')
-    .replace(/\\3a/g, ':')
-    .replace(/\\3c/g, '<')
-    .replace(/\\3e/g, '>')
-    .replace(/\\40/g, '@')
-    .replace(/\\5c/g, '\\')
-}
+    .replace(/\\2f/g, "/")
+    .replace(/\\3a/g, ":")
+    .replace(/\\3c/g, "<")
+    .replace(/\\3e/g, ">")
+    .replace(/\\40/g, "@")
+    .replace(/\\5c/g, "\\");
+};

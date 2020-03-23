@@ -4,25 +4,25 @@ export default {
       babelrc: false,
       plugins: [
         [
-          '@babel/plugin-transform-react-jsx',
+          "@babel/plugin-transform-react-jsx",
           {
-            pragma: 'xml',
+            pragma: "xml",
           },
         ],
         [
-          'babel-plugin-jsx-pragmatic',
+          "babel-plugin-jsx-pragmatic",
           {
-            module: '@xmpp/xml',
-            import: 'xml',
+            module: "@xmpp/xml",
+            import: "xml",
           },
         ],
       ],
     },
   },
   files: [
-    'packages/**/test.js',
-    'packages/**/test/*.js',
-    'packages/**/*.test.js',
-    '!packages/test/*.js',
+    "packages/**/test.js",
+    "packages/**/test/*.js",
+    "packages/**/*.test.js",
+    "!packages/test/*.js",
   ],
-}
+};

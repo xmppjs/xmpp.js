@@ -1,11 +1,11 @@
-'use strict'
+"use strict";
 
-const {Client} = require('../client-core')
-const JID = require('@xmpp/jid')
-const mockSocket = require('./mockSocket')
+const { Client } = require("../client-core");
+const JID = require("@xmpp/jid");
+const mockSocket = require("./mockSocket");
 
 module.exports = function client(entity = new Client()) {
-  entity.socket = mockSocket()
-  entity.jid = new JID('foo@bar/test')
-  return entity
-}
+  entity.socket = mockSocket();
+  entity.jid = new JID("foo@bar/test");
+  return entity;
+};

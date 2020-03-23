@@ -1,54 +1,54 @@
-'use strict'
+"use strict";
 
-const test = require('ava')
-const _Connection = require('../../../packages/connection')
-const Connection = require('..')
-const net = require('net')
+const test = require("ava");
+const _Connection = require("../../../packages/connection");
+const Connection = require("..");
+const net = require("net");
 
-const NS_STREAM = 'http://etherx.jabber.org/streams'
+const NS_STREAM = "http://etherx.jabber.org/streams";
 
-test('new Connection()', (t) => {
-  const conn = new Connection()
-  t.true(conn instanceof _Connection)
-  t.is(conn.NS, NS_STREAM)
-})
+test("new Connection()", (t) => {
+  const conn = new Connection();
+  t.true(conn instanceof _Connection);
+  t.is(conn.NS, NS_STREAM);
+});
 
-test('Socket', (t) => {
-  const conn = new Connection()
-  t.is(conn.Socket, net.Socket)
-})
+test("Socket", (t) => {
+  const conn = new Connection();
+  t.is(conn.Socket, net.Socket);
+});
 
-test('NS', (t) => {
-  t.is(Connection.prototype.NS, NS_STREAM)
-})
+test("NS", (t) => {
+  t.is(Connection.prototype.NS, NS_STREAM);
+});
 
-test('header()', (t) => {
-  const conn = new Connection()
-  conn.NS = 'foobar'
+test("header()", (t) => {
+  const conn = new Connection();
+  conn.NS = "foobar";
   t.is(
     conn.header(conn.headerElement()),
-    `<?xml version='1.0'?><stream:stream version="1.0" xmlns="foobar" xmlns:stream="${NS_STREAM}">`
-  )
-})
+    `<?xml version='1.0'?><stream:stream version="1.0" xmlns="foobar" xmlns:stream="${NS_STREAM}">`,
+  );
+});
 
-test('footer()', (t) => {
-  const conn = new Connection()
-  t.is(conn.footer(), '</stream:stream>')
-})
+test("footer()", (t) => {
+  const conn = new Connection();
+  t.is(conn.footer(), "</stream:stream>");
+});
 
-test('socketParameters()', (t) => {
-  t.deepEqual(Connection.prototype.socketParameters('xmpp://foo'), {
+test("socketParameters()", (t) => {
+  t.deepEqual(Connection.prototype.socketParameters("xmpp://foo"), {
     port: null,
-    host: 'foo',
-  })
+    host: "foo",
+  });
 
-  t.deepEqual(Connection.prototype.socketParameters('xmpp://foo:1234'), {
+  t.deepEqual(Connection.prototype.socketParameters("xmpp://foo:1234"), {
     port: 1234,
-    host: 'foo',
-  })
+    host: "foo",
+  });
 
   t.deepEqual(
-    Connection.prototype.socketParameters('xmpps://foo:1234'),
-    undefined
-  )
-})
+    Connection.prototype.socketParameters("xmpps://foo:1234"),
+    undefined,
+  );
+});

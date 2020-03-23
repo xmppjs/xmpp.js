@@ -1,38 +1,38 @@
-'use strict'
+"use strict";
 
-const TimeoutError = require('./TimeoutError')
+const TimeoutError = require("./TimeoutError");
 
 // eslint-disable-next-line default-param-last
-module.exports = function promise(EE, event, rejectEvent = 'error', timeout) {
+module.exports = function promise(EE, event, rejectEvent = "error", timeout) {
   return new Promise((resolve, reject) => {
-    let timeoutId
+    let timeoutId;
 
     const cleanup = () => {
-      clearTimeout(timeoutId)
-      EE.removeListener(event, onEvent)
-      EE.removeListener(rejectEvent, onError)
-    }
+      clearTimeout(timeoutId);
+      EE.removeListener(event, onEvent);
+      EE.removeListener(rejectEvent, onError);
+    };
 
     function onError(reason) {
-      reject(reason)
-      cleanup()
+      reject(reason);
+      cleanup();
     }
 
     function onEvent(value) {
-      resolve(value)
-      cleanup()
+      resolve(value);
+      cleanup();
     }
 
-    EE.once(event, onEvent)
+    EE.once(event, onEvent);
     if (rejectEvent) {
-      EE.once(rejectEvent, onError)
+      EE.once(rejectEvent, onError);
     }
 
     if (timeout) {
       timeoutId = setTimeout(() => {
-        cleanup()
-        reject(new TimeoutError())
-      }, timeout)
+        cleanup();
+        reject(new TimeoutError());
+      }, timeout);
     }
-  })
-}
+  });
+};
