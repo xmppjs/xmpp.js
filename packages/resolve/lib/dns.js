@@ -3,6 +3,7 @@
 const dns = require("dns");
 const compareAltConnections = require("./alt-connections").compare;
 
+// eslint-disable-next-line unicorn/prefer-set-has
 const IGNORE_CODES = ["ENOTFOUND", "ENODATA"];
 
 function lookup(domain, options = {}) {
