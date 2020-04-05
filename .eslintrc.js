@@ -55,5 +55,6 @@ module.exports = {
     "unicorn/filename-case": 0,
     "unicorn/catch-error-name": ["error", { name: "err" }],
     "unicorn/prevent-abbreviations": 0,
+    "unicorn/prefer-number-properties": 0,
   },
 };
