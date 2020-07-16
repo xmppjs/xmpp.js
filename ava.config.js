@@ -20,6 +20,9 @@ export default {
     },
   },
   files: [
-    "packages/middleware/test/middleware.js",
+    "packages/**/test.js",
+    "packages/**/test/*.js",
+    "packages/**/*.test.js",
+    "!packages/test/*.js",
   ],
 };
