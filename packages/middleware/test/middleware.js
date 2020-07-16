@@ -25,6 +25,117 @@ test.cb("use", (t) => {
   t.context.fakeIncoming(stanza);
 });
 
+test.cb("use with name condition", (t) => {
+  t.plan(4);
+  const stanza = <presence />;
+  t.context.middleware.use("presence", (ctx, next) => {
+    t.true(ctx instanceof IncomingContext);
+    t.deepEqual(ctx.stanza, stanza);
+    t.is(ctx.entity, t.context.entity);
+    t.true(next() instanceof Promise);
+    t.end();
+  });
+  t.context.fakeIncoming(stanza);
+});
+
+test.cb("use with name and type condition", (t) => {
+  t.plan(4);
+  const stanza = <message type="chat" />;
+  t.context.middleware.use("message", "*", "*", "chat", (ctx, next) => {
+    t.true(ctx instanceof IncomingContext);
+    t.deepEqual(ctx.stanza, stanza);
+    t.is(ctx.entity, t.context.entity);
+    t.true(next() instanceof Promise);
+    t.end();
+  });
+  t.context.fakeIncoming(stanza);
+});
+
+test.cb("use with name, child name and type condition", (t) => {
+  t.plan(4);
+  const stanza = (
+    <message type="chat">
+      <x />
+    </message>
+  );
+  t.context.middleware.use("message", "x", "*", "chat", (ctx, next) => {
+    t.true(ctx instanceof IncomingContext);
+    t.deepEqual(ctx.stanza, stanza);
+    t.is(ctx.entity, t.context.entity);
+    t.true(next() instanceof Promise);
+    t.end();
+  });
+  t.context.fakeIncoming(stanza);
+});
+
+test.cb("use with name, child name with xmlns and type condition", (t) => {
+  t.plan(4);
+  const stanza = (
+    <message type="chat">
+      <x xmlns="http://jabber.org/protocol/muc#user">
+        <invite />
+      </x>
+    </message>
+  );
+  t.context.middleware.use(
+    "message",
+    "x",
+    "http://jabber.org/protocol/muc#user",
+    "chat",
+    (ctx, next) => {
+      t.true(ctx instanceof IncomingContext);
+      t.deepEqual(ctx.stanza, stanza);
+      t.is(ctx.entity, t.context.entity);
+      t.true(next() instanceof Promise);
+      t.end();
+    },
+  );
+  t.context.fakeIncoming(stanza);
+});
+
+test.cb("use with name, child name with xmlns without type condition", (t) => {
+  t.plan(4);
+  const stanza = (
+    <message type="chat">
+      <x xmlns="http://jabber.org/protocol/muc#user">
+        <invite />
+      </x>
+    </message>
+  );
+  t.context.middleware.use(
+    "message",
+    "x",
+    "http://jabber.org/protocol/muc#user",
+    (ctx, next) => {
+      t.true(ctx instanceof IncomingContext);
+      t.deepEqual(ctx.stanza, stanza);
+      t.is(ctx.entity, t.context.entity);
+      t.true(next() instanceof Promise);
+      t.end();
+    },
+  );
+  t.context.fakeIncoming(stanza);
+});
+
+test.cb("use with name, child name without xmlns and type condition", (t) => {
+  t.plan(4);
+  const stanza = (
+    <message type="chat">
+      <x xmlns="http://jabber.org/protocol/muc#user">
+        <invite />
+      </x>
+    </message>
+  );
+  t.context.middleware.use("message", "x", (ctx, next) => {
+    t.true(ctx instanceof IncomingContext);
+    t.deepEqual(ctx.stanza, stanza);
+    t.is(ctx.entity, t.context.entity);
+    t.true(next() instanceof Promise);
+    t.end();
+  });
+  t.context.fakeIncoming(stanza);
+});
+
 test.cb("filter", (t) => {
   t.plan(4);
   const stanza = <presence />;
@@ -37,6 +148,31 @@ test.cb("filter", (t) => {
     t.end();
   });
   /* eslint-enable array-callback-return */
+  t.context.fakeOutgoing(stanza);
+});
+
+test.cb("filter with name, child name with xmlns and type condition", (t) => {
+  t.plan(4);
+  const stanza = (
+    <message type="chat">
+      <x xmlns="http://jabber.org/protocol/muc#user">
+        <invite />
+      </x>
+    </message>
+  );
+  t.context.middleware.filter(
+    "message",
+    "x",
+    "http://jabber.org/protocol/muc#user",
+    "chat",
+    (ctx, next) => {
+      t.true(ctx instanceof OutgoingContext);
+      t.deepEqual(ctx.stanza, stanza);
+      t.is(ctx.entity, t.context.entity);
+      t.true(next() instanceof Promise);
+      t.end();
+    },
+  );
   t.context.fakeOutgoing(stanza);
 });
 
