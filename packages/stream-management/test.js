@@ -4,7 +4,9 @@ const test = require("ava");
 const { mockClient } = require("@xmpp/test");
 
 function tick() {
-  return new Promise((resolve) => process.nextTick(resolve));
+  return new Promise((resolve) => {
+    process.nextTick(resolve);
+  });
 }
 
 test("enable - enabled", async (t) => {

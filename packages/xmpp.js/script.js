@@ -1,5 +1,7 @@
 "use strict";
 
+const fromentries = require("fromentries");
+
 // Makes xmpp.js package require and exports all other packages
 
 const fs = require("fs");
@@ -14,10 +16,11 @@ const packages = fs
 const xmppjsPackage = require(path.join(__dirname, "package.json"));
 
 // Write package.json dependencies
-xmppjsPackage.dependencies = packages.reduce((dict, pkg) => {
-  dict[pkg.name] = `^${pkg.version}`;
-  return dict;
-}, {});
+xmppjsPackage.dependencies = fromentries(
+  packages.map((pkg) => {
+    return [pkg.name, `^${pkg.version}`];
+  }),
+);
 fs.writeFileSync(
   path.join(__dirname, "package.json"),
   JSON.stringify(xmppjsPackage, null, 2) + "\n",

@@ -38,8 +38,7 @@ class Connection extends EventEmitter {
           xml(condition, {xmlns: NS_STREAM}, children),
         ]),
       );
-      // eslint-disable-next-line no-unused-vars
-    } catch (err) {}
+    } catch {}
 
     return this._end();
   }
@@ -193,13 +192,11 @@ class Connection extends EventEmitter {
     let el;
     try {
       el = await this.close();
-      // eslint-disable-next-line no-unused-vars
-    } catch (err) {}
+    } catch {}
 
     try {
       await this.disconnect();
-      // eslint-disable-next-line no-unused-vars
-    } catch (err) {}
+    } catch {}
 
     return el;
   }

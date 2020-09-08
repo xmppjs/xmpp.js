@@ -20,7 +20,7 @@ module.exports = {
 
   parserOptions: {
     sourceType: "script",
-    ecmaVersion: 2018,
+    ecmaVersion: 2019,
   },
 
   rules: {
@@ -32,29 +32,36 @@ module.exports = {
       "after",
       { overrides: { "?": "before", ":": "before" } },
     ],
-    "capitalized-comments": [
-      "warn",
-      "always",
-      { ignorePattern: "prettier-ignore", ignoreConsecutiveComments: true },
-    ],
-    // ES2015 http://eslint.org/docs/rules/#ecmascript-6
+    "capitalized-comments": 0,
+
+    // ES2015
+    // http://eslint.org/docs/rules/#ecmascript-6
     "prefer-rest-params": ["error"],
     "prefer-spread": ["error"],
     "prefer-destructuring": ["error"],
     "prefer-arrow-callback": ["error", { allowNamedFunctions: true }],
-    // node https://github.com/mysticatea/eslint-plugin-node
+
+    // node
+    // https://github.com/mysticatea/eslint-plugin-node
     "node/no-unpublished-require": 0, // doesn't play nice with monorepo
     "node/no-extraneous-require": [
       "error",
       { allowModules: ["ava", "sinon", "@xmpp/test"] },
     ],
-    // promise https://github.com/xjamundx/eslint-plugin-promise
+
+    // promise
+    // https://github.com/xjamundx/eslint-plugin-promise
     // promise/prefer-await-to-then: [error]
     // promise/prefer-await-to-callbacks: [error]
     // unicorn https://github.com/sindresorhus/eslint-plugin-unicorn
+
+    // unicorn
+    // https://github.com/sindresorhus/eslint-plugin-unicorn
     "unicorn/filename-case": 0,
     "unicorn/catch-error-name": ["error", { name: "err" }],
     "unicorn/prevent-abbreviations": 0,
     "unicorn/prefer-number-properties": 0,
+    "unicorn/no-useless-undefined": 0,
+    "unicorn/no-null": 0,
   },
 };
