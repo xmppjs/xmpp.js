@@ -2,35 +2,35 @@
   "private": true,
   "devDependencies": {
     "@ava/babel": "^1.0.1",
-    "@babel/core": "^7.9.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.9.0",
-    "@babel/plugin-transform-react-jsx": "^7.9.4",
-    "@babel/plugin-transform-runtime": "^7.9.0",
-    "@babel/preset-env": "^7.9.0",
-    "@babel/runtime": "^7.9.2",
-    "ava": "^3.6.0",
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
+    "@babel/plugin-transform-react-jsx": "^7.10.4",
+    "@babel/plugin-transform-runtime": "^7.11.5",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/runtime": "^7.11.2",
+    "ava": "^3.12.1",
     "babel-plugin-jsx-pragmatic": "^1.0.2",
     "babel-plugin-transform-async-to-promises": "^0.8.15",
     "babelify": "^10.0.0",
     "babylon": "^6.18.0",
     "browser-pack-flat": "^3.4.2",
-    "browserify": "^16.5.1",
+    "browserify": "^16.5.2",
     "bundlesize": "^0.18.0",
     "common-shakeify": "^0.6.2",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.1",
-    "eslint-config-xo": "^0.29.1",
+    "eslint": "^7.8.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-xo": "^0.32.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-unicorn": "^18.0.1",
+    "eslint-plugin-unicorn": "^21.0.0",
     "exorcist": "^1.0.1",
-    "jsdom": "^16.2.2",
-    "lerna": "^3.20.2",
-    "node-fetch": "^2.6.0",
-    "prettier": "^2.0.2",
-    "sinon": "^9.0.1",
-    "uglify-js": "^3.8.1"
+    "jsdom": "^16.4.0",
+    "lerna": "^3.22.1",
+    "node-fetch": "^2.6.1",
+    "prettier": "^2.1.1",
+    "sinon": "^9.0.3",
+    "uglify-js": "^3.10.4"
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
@@ -48,7 +48,7 @@
   "bundlesize": [
     {
       "path": "./packages/client/dist/xmpp.min.js",
-      "maxSize": "16 KB"
+      "maxSize": "15 KB"
     }
   ]
 }

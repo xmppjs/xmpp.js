@@ -79,6 +79,7 @@ module.exports = function sasl({ streamFeatures }, credentials) {
   streamFeatures.use("mechanisms", NS, async ({ stanza, entity }) => {
     const offered = getMechanismNames(stanza);
     const supported = SASL._mechs.map(({ name }) => name);
+    // eslint-disable-next-line unicorn/prefer-array-find
     const intersection = supported.filter((mech) => {
       return offered.includes(mech);
     });

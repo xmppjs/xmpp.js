@@ -99,7 +99,7 @@ module.exports = function streamManagement({
         return true;
         // If resumption fails, continue with session establishment
         // eslint-disable-next-line no-unused-vars
-      } catch (err) {
+      } catch {
         sm.id = "";
         sm.enabled = false;
         sm.outbound = 0;
@@ -122,7 +122,7 @@ module.exports = function streamManagement({
       sm.id = response.attrs.id;
       sm.max = response.attrs.max;
       // eslint-disable-next-line no-unused-vars
-    } catch (err) {
+    } catch {
       sm.enabled = false;
     }
 
