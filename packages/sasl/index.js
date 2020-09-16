@@ -83,6 +83,7 @@ module.exports = function sasl({ streamFeatures }, credentials) {
     const intersection = supported.filter((mech) => {
       return offered.includes(mech);
     });
+    // eslint-disable-next-line prefer-destructuring
     let mech = intersection[0];
 
     if (typeof credentials === "function") {

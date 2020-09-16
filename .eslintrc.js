@@ -3,13 +3,10 @@
 module.exports = {
   root: true,
 
-  plugins: ["node", "promise", "unicorn"],
-
   extends: [
     "eslint:recommended",
     "plugin:unicorn/recommended",
     "plugin:node/recommended",
-    "xo/esnext",
     "plugin:prettier/recommended",
     "plugin:promise/recommended",
   ],
@@ -21,10 +18,14 @@ module.exports = {
   parserOptions: {
     sourceType: "script",
     ecmaVersion: 2019,
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
 
   rules: {
     strict: ["error", "global"],
+    "no-empty": ["error", { allowEmptyCatch: true }],
     // "no-multi-assign": 0,
     "func-names": ["error", "as-needed"],
     "operator-linebreak": [
@@ -33,12 +34,15 @@ module.exports = {
       { overrides: { "?": "before", ":": "before" } },
     ],
     "capitalized-comments": 0,
-
-    // ES2015
-    // http://eslint.org/docs/rules/#ecmascript-6
     "prefer-rest-params": ["error"],
     "prefer-spread": ["error"],
-    "prefer-destructuring": ["error"],
+    "prefer-destructuring": [
+      "error",
+      {
+        array: false,
+        object: true,
+      },
+    ],
     "prefer-arrow-callback": ["error", { allowNamedFunctions: true }],
 
     // node
