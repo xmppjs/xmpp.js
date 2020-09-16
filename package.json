@@ -17,7 +17,7 @@
     "browserify": "^16.5.2",
     "bundlesize": "^0.18.0",
     "common-shakeify": "^0.6.2",
-    "eslint": "^7.8.1",
+    "eslint": "^7.9.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-xo": "^0.32.1",
     "eslint-plugin-node": "^11.1.0",
@@ -28,7 +28,7 @@
     "jsdom": "^16.4.0",
     "lerna": "^3.22.1",
     "node-fetch": "^2.6.1",
-    "prettier": "^2.1.1",
+    "prettier": "^2.1.2",
     "sinon": "^9.0.3",
     "uglify-js": "^3.10.4"
   },
@@ -36,7 +36,8 @@
     "bootstrap": "lerna bootstrap",
     "test": "ava",
     "lint": "eslint .",
-    "preversion": "make bundle"
+    "preversion": "make bundle",
+    "ncu": "ncu && for dir in packages/*; do (cd \"$dir\" && ncu); done"
   },
   "engines": {
     "node": ">= 10.0.0",
