@@ -21,25 +21,40 @@
 
 ## goals
 
-#### universal
+### universal
 
 It aims to run everywhere JavaScript runs and make use of the best network transport available.
 
-#### reliable
+### reliable
 
 By default, it handles errors and will automatically reconnect. With appropriate configuration it will even loop through a list of endpoints. You don't have to write a single line of code to handle network failures.
 
 Releases follow the [Semantic Versionning specification](http://semver.org/)
 
-#### modular
+### modular
 
-Thanks to [lerna](https://lernajs.io/), xmpp.js is highly modular, each feature is implemented as a package and can be included or excluded. (even XMPP core features)
+Each feature is implemented as a module that can be added or removed easily. Including core XMPP features.
 
-This allows to hand-pick what you need and reduce browser bundle. Additionally packages can be dynamically imported on demand.
+### small
 
-#### modern
+We avoid third party dependencies.
 
-Written in ES2015, it provides a modern promise based API and will keep up with meaningful additions to the language.
+For the web, we make the sure the default [client](/packages/client) doesn't exceed 15 kb (gzipped), for reference, that's less than half the size of [React](https://reactjs.org/blog/2017/09/26/react-v16.0.html#reduced-file-size).
+
+## Built with xmpp.js
+
+- [Simplo](https://simplo.app/?lang=en) - [hiring!](simplo.app/jobs)
+- [Crypho](https://www.crypho.com/)
+- [HearMe.App](https://www.hearme.app/)
+- [Wobbly](https://wobbly.app/)
+- [Alcatel-Lucent Rainbow](https://www.openrainbow.com/)
+- [ConnectyCube](https://connectycube.com/)
+- [Sockethub](http://sockethub.org/)
+- [matrix-bitfrost](https://github.com/matrix-org/matrix-bifrost)
+- [WordPress Telegram Bot](https://github.com/Automattic/wp-telegram-bot)
+- [Logictech Harmony Hub library](https://github.com/AirBorne04/harmonyhub)
+
+<small> Feel free to send a PR to add your project or organization to this list.</small>
 
 ## credits
 
