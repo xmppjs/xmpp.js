@@ -168,6 +168,7 @@ xmpp.on("stanza", (stanza) => {
 
   const message = stanza.clone();
   message.attrs.to = stanza.attrs.from;
+  message.attrs.from = stanza.attrs.to;
   xmpp.send(message);
 });
 ```
