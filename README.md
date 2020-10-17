@@ -48,6 +48,7 @@ For the web, we make the sure the default [client](/packages/client) doesn't exc
 - [HearMe.App](https://www.hearme.app/)
 - [Wobbly](https://wobbly.app/)
 - [Alcatel-Lucent Rainbow](https://www.openrainbow.com/)
+- [Telldus](https://telldus.com/)
 - [ConnectyCube](https://connectycube.com/)
 - [Sockethub](http://sockethub.org/)
 - [matrix-bitfrost](https://github.com/matrix-org/matrix-bifrost)
