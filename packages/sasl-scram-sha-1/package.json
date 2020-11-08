@@ -15,7 +15,7 @@
     "sasl-scram-sha-1": "^1.2.1"
   },
   "engines": {
-    "node": ">= 10.0.0",
+    "node": ">= 12.4.0",
     "yarn": ">= 1.0.0"
   },
   "publishConfig": {

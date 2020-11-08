@@ -11,12 +11,12 @@
     "base64"
   ],
   "dependencies": {
-    "base-64": "^0.1.0"
+    "base-64": "^1.0.0"
   },
   "react-native": "index.js",
   "browser": "browser.js",
   "engines": {
-    "node": ">= 10.0.0",
+    "node": ">= 12.4.0",
     "yarn": ">= 1.0.0"
   },
   "publishConfig": {
