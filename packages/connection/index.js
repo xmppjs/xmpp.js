@@ -130,11 +130,9 @@ class Connection extends EventEmitter {
     const { port } = parseHost(host);
 
     let service;
-    if (port) {
-      service = `${protocol || "xmpp:"}//${host}`;
-    } else {
-      service = (protocol ? `${protocol}//` : "") + host;
-    }
+    service = port
+      ? `${protocol || "xmpp:"}//${host}`
+      : (protocol ? `${protocol}//` : "") + host;
 
     try {
       await promise(this, "disconnect");

@@ -20,11 +20,9 @@ function component(options) {
   entity.on("open", async (el) => {
     try {
       const { id } = el.attrs;
-      if (typeof password === "function") {
-        await password((creds) => entity.authenticate(id, creds));
-      } else {
-        await entity.authenticate(id, password);
-      }
+      await (typeof password === "function"
+        ? password((creds) => entity.authenticate(id, creds))
+        : entity.authenticate(id, password));
     } catch (err) {
       entity.emit("error", err);
     }

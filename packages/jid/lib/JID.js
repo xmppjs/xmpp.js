@@ -82,11 +82,7 @@ class JID {
     unescape = unescape || false;
     let local = null;
 
-    if (unescape) {
-      local = escaping.unescape(this._local);
-    } else {
-      local = this._local;
-    }
+    local = unescape ? escaping.unescape(this._local) : this._local;
 
     return local;
   }
