@@ -39,7 +39,7 @@
     "ncu": "ncu && for dir in packages/*; do (cd \"$dir\" && ncu); done"
   },
   "engines": {
-    "node": ">= 12.0.0",
+    "node": ">= 12.4.0",
     "yarn": ">= 1.0.0"
   },
   "workspaces": [
