@@ -13,7 +13,7 @@
     "component"
   ],
   "engines": {
-    "node": ">= 10.0.0",
+    "node": ">= 12.0.0",
     "yarn": ">= 1.0.0"
   },
   "dependencies": {
@@ -56,7 +56,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "devDependencies": {
-    "fromentries": "^1.2.1"
-  }
+  "devDependencies": {}
 }
