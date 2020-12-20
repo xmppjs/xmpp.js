@@ -284,9 +284,11 @@ class Connection extends EventEmitter {
    * https://tools.ietf.org/html/rfc7395#section-3.6
    */
   async close(timeout = this.timeout) {
+    const fragment = this.footer(this.footerElement());
+
     const p = Promise.all([
       promise(this.parser, "end", "error", timeout),
-      this.write(this.footer(this.footerElement())),
+      this.write(fragment),
     ]);
 
     if (this.parser && this.socket) this._status("closing");

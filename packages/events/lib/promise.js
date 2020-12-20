@@ -2,7 +2,6 @@
 
 const TimeoutError = require("./TimeoutError");
 
-// eslint-disable-next-line default-param-last
 module.exports = function promise(EE, event, rejectEvent = "error", timeout) {
   return new Promise((resolve, reject) => {
     let timeoutId;

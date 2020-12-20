@@ -43,7 +43,7 @@ For the web, we make the sure the default [client](/packages/client) doesn't exc
 
 ## Built with xmpp.js
 
-- [Simplo](https://simplo.app/?lang=en) - [we are hiring!](https://simplo.app/jobs)
+- [Simplo](https://simplo.app/?lang=en)
 - [Crypho](https://www.crypho.com/)
 - [HearMe.App](https://www.hearme.app/)
 - [Wobbly](https://wobbly.app/)
