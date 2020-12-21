@@ -8,14 +8,13 @@ const xml = require("@xmpp/xml");
 
 test("send() adds jabber:client xmlns", (t) => {
   const connection = new ConnectionWebSocket();
+  connection.write = () => {};
+
   const element = xml("presence");
 
-  connection.write = (element) => {
-    t.is(element, element);
-    t.is(element.attrs.xmlns, "jabber:client");
-  };
-
+  t.is(element.attrs.xmlns, undefined);
   connection.send(element);
+  t.is(element.attrs.xmlns, "jabber:client");
 });
 
 test("socketParameters()", (t) => {

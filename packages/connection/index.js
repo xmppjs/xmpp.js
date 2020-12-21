@@ -308,11 +308,19 @@ class Connection extends EventEmitter {
     return this.open({ domain, lang });
   }
 
-  async send(element) {
-    element.parent = this.root;
-    this.emit("outgoing", element);
-    await this.write(element);
-    this.emit("send", element);
+  async send(...elements) {
+    let fragment = "";
+
+    for (const element of elements) {
+      element.parent = this.root;
+      fragment += element.toString();
+    }
+
+    await this.write(fragment);
+
+    for (const element of elements) {
+      this.emit("send", element);
+    }
   }
 
   sendReceive(element, timeout = this.timeout) {
@@ -322,7 +330,7 @@ class Connection extends EventEmitter {
     ]).then(([, el]) => el);
   }
 
-  write(data) {
+  write(string) {
     return new Promise((resolve, reject) => {
       // https://xmpp.org/rfcs/rfc6120.html#streams-close
       // "Refrain from sending any further data over its outbound stream to the other entity"
@@ -331,13 +339,12 @@ class Connection extends EventEmitter {
         return;
       }
 
-      const str = data.toString("utf8");
-      this.socket.write(str, (err) => {
+      this.socket.write(string, (err) => {
         if (err) {
           return reject(err);
         }
 
-        this.emit("output", str);
+        this.emit("output", string);
         resolve();
       });
     });
