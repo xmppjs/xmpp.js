@@ -3,12 +3,12 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "http://github.com/xmppjs/xmpp.js",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "license": "ISC",
   "dependencies": {
-    "@xmpp/connection": "^0.11.0",
-    "@xmpp/jid": "^0.11.0",
-    "@xmpp/xml": "^0.11.0"
+    "@xmpp/connection": "^0.12.0",
+    "@xmpp/jid": "^0.12.0",
+    "@xmpp/xml": "^0.12.0"
   },
   "engines": {
     "node": ">= 12.4.0",

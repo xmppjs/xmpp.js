@@ -35,3 +35,8 @@ test("resolves with the result of close", async (t) => {
   conn.disconnect = () => Promise.resolve();
   t.is(await conn.stop(), el);
 });
+
+test("does not throw if connection is not established", async (t) => {
+  const conn = new Connection();
+  await t.notThrowsAsync(conn.stop());
+});

@@ -230,6 +230,17 @@ xmpp.send(xml("presence")).catch(console.error);
 
 Returns a promise that resolves once the stanza is serialized and written to the socket or rejects if any of those fails.
 
+You can also pass multiple stanzas. Here is an example sending the same text message to multiple recipients.
+
+```js
+const message = "Hello";
+const recipients = ["romeo@example.com", "juliet@example.com"];
+const stanzas = recipients.map((address) =>
+  xml("message", { to: address, type: "chat" }, xml("body", null, message)),
+);
+xmpp.send(...stanzas).catch(console.error);
+```
+
 ### xmpp.reconnect
 
 See [@xmpp/reconnect](/packages/reconnect).
