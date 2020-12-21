@@ -31,8 +31,3 @@ test("isNonza()", (t) => {
   t.is(conn.isNonza(xml("iq")), false);
   t.is(conn.isNonza(xml("message")), false);
 });
-
-test("stop", async (t) => {
-  const conn = new Connection();
-  await t.notThrowsAsync(conn.stop());
-});
