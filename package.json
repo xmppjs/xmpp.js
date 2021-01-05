@@ -35,8 +35,7 @@
     "bootstrap": "lerna bootstrap",
     "test": "ava",
     "lint": "eslint .",
-    "preversion": "make bundle",
-    "ncu": "ncu && for dir in packages/*; do (cd \"$dir\" && ncu); done"
+    "preversion": "make bundle"
   },
   "engines": {
     "node": ">= 12.4.0",

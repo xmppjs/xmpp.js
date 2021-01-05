@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 15.x]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{github.workspace}}/node_modules
+            ${{github.workspace}}/*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install prosody
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install prosody lua-bitop lua-sec
+          sudo service prosody stop
+
+      - run: make
+      - run: make test-ci
+
+      - name: The job has failed
+        if: ${{ failure() }}
+        run: cat server/prosody.err
