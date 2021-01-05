@@ -61,3 +61,6 @@ size:
 
 cert:
 	cd server && openssl req -new -x509 -days 365 -nodes -out "localhost.crt" -newkey rsa:2048 -keyout "localhost.key" -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost"
+
+ncu:
+	ncu && yarn lerna exec ncu
