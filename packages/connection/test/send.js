@@ -4,7 +4,7 @@ const xml = require("@xmpp/xml");
 const test = require("ava");
 const Connection = require("..");
 
-test("single element", (t) => {
+test("send", (t) => {
   t.plan(3);
   const conn = new Connection();
   conn.root = xml("root");
@@ -26,21 +26,4 @@ test("single element", (t) => {
   conn.on("send", (element) => {
     t.is(element, foo);
   });
-});
-
-test("multiple elements", (t) => {
-  t.plan(1);
-  const conn = new Connection();
-  conn.root = xml("root");
-
-  const foo = xml("foo");
-  const bar = xml("bar");
-
-  conn.socket = {
-    write(str) {
-      t.is(str, "<foo/><bar/>");
-    },
-  };
-
-  conn.send(foo, bar);
 });
