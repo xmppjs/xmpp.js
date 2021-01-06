@@ -12,6 +12,10 @@ class Client extends Connection {
     return this.Transport.prototype.send.call(this, element, ...args);
   }
 
+  sendMultiple(...args) {
+    return this.Transport.prototype.sendMultiple.call(this, ...args);
+  }
+
   _findTransport(service) {
     return this.transports.find((Transport) => {
       try {

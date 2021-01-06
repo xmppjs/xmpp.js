@@ -22,6 +22,10 @@ class ConnectionWebSocket extends Connection {
     return super.send(element, ...args);
   }
 
+  async sendMultiple(...elements) {
+    return Promise.all(elements.map((element) => this.send(element)));
+  }
+
   // https://tools.ietf.org/html/rfc7395#section-3.6
   footerElement() {
     return new xml.Element("close", {
