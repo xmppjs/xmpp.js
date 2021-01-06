@@ -4,6 +4,7 @@ const test = require("ava");
 const _Connection = require("../../../packages/connection");
 const Connection = require("..");
 const net = require("net");
+const xml = require("@xmpp/xml");
 
 const NS_STREAM = "http://etherx.jabber.org/streams";
 
@@ -51,4 +52,22 @@ test("socketParameters()", (t) => {
     Connection.prototype.socketParameters("xmpps://foo:1234"),
     undefined,
   );
+});
+
+test("sendMultiple", async (t) => {
+  t.plan(1);
+  const conn = new Connection();
+  conn.root = xml("root");
+
+  const foo = xml("foo");
+  const bar = xml("bar");
+
+  conn.socket = {
+    write(str, fn) {
+      t.is(str, "<foo/><bar/>");
+      fn();
+    },
+  };
+
+  await conn.sendMultiple([foo, bar]);
 });

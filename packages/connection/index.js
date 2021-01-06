@@ -308,19 +308,10 @@ class Connection extends EventEmitter {
     return this.open({ domain, lang });
   }
 
-  async send(...elements) {
-    let fragment = "";
-
-    for (const element of elements) {
-      element.parent = this.root;
-      fragment += element.toString();
-    }
-
-    await this.write(fragment);
-
-    for (const element of elements) {
-      this.emit("send", element);
-    }
+  async send(element) {
+    element.parent = this.root;
+    await this.write(element.toString());
+    this.emit("send", element);
   }
 
   sendReceive(element, timeout = this.timeout) {
