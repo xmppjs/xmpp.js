@@ -201,6 +201,16 @@ const body = message.getChild("body");
 message.remove(body);
 ```
 
+## Parsing XML string
+
+To parse a string into an XML Element, there's a helper script included in the module.
+
+```js
+const parse = require('@xmpp/xml/lib/parse');
+const ctx = parse('<message><body>hello world</body></message>');
+ctx.getChildText("body"); // hello world
+```
+
 ## JSON
 
 You can embed JSON anywhere but it is recommended to use an appropriate semantic.
