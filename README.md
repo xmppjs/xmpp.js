@@ -1,9 +1,5 @@
 # xmpp.js
 
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-[![build status](https://img.shields.io/travis/xmppjs/xmpp.js/master.svg?maxAge=2592000&style=flat-square)](https://travis-ci.org/xmppjs/xmpp.js/branches)
-[![license](https://img.shields.io/github/license/xmppjs/xmpp.js.svg?maxAge=2592000&style=flat-square)](https://raw.githubusercontent.com/xmppjs/xmpp.js/master/LICENSE)
-
 > XMPP is an open technology for real-time communication, which powers a wide range of applications including instant messaging, presence, multi-party chat, voice and video calls, collaboration, lightweight middleware, content syndication, and generalized routing of XML data.
 
 > [xmpp.org/about-xmpp/technology-overview/](https://xmpp.org/about/technology-overview.html)
