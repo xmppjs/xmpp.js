@@ -61,8 +61,10 @@ class IQCaller {
   }
 
   _childRequest(type, element, to, ...args) {
-    const { name } = element;
-    const { xmlns } = element.attrs;
+    const {
+      name,
+      attrs: { xmlns },
+    } = element;
     return this.request(
       xml("iq", { type, to }, element),
       ...args,

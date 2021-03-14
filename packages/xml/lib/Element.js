@@ -7,36 +7,36 @@ class Element extends _Element {
     if (typeof attrs === "string") {
       this.attrs.xmlns = attrs;
     } else if (attrs) {
-      Object.keys(attrs).forEach((key) => {
+      for (const key of Object.keys(attrs)) {
         // https://github.com/facebook/react/pull/4596
         // https://www.npmjs.com/package/babel-plugin-transform-react-jsx-source
-        if (key === "__source" || key === "__self") return;
+        if (key === "__source" || key === "__self") continue;
         const val = attrs[key];
         if (val !== undefined && val !== null)
           this.attrs[key.toString()] = val.toString();
-      }, this);
+      }
     }
   }
 
   append(nodes) {
     nodes = Array.isArray(nodes) ? nodes : [nodes];
-    nodes.forEach((node) => {
+    for (const node of nodes) {
       this.children.push(node);
       if (typeof node === "object") {
         node.parent = this;
       }
-    });
+    }
     return this;
   }
 
   prepend(nodes) {
     nodes = Array.isArray(nodes) ? nodes : [nodes];
-    nodes.forEach((node) => {
+    for (const node of nodes) {
       this.children.unshift(node);
       if (typeof node === "object") {
         node.parent = this;
       }
-    });
+    }
     return this;
   }
 }

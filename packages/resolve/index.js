@@ -62,7 +62,7 @@ async function fallbackConnect(entity, uris) {
 module.exports = function resolve({ entity }) {
   const _connect = entity.connect;
   entity.connect = async function connect(service) {
-    if (!service || service.match(/:\/\//)) {
+    if (!service || /:\/\//.test(service)) {
       return _connect.call(this, service);
     }
 
