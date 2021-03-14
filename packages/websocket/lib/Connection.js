@@ -44,7 +44,7 @@ class ConnectionWebSocket extends Connection {
   }
 
   socketParameters(service) {
-    return service.match(/^wss?:\/\//) ? service : undefined;
+    return /^wss?:\/\//.test(service) ? service : undefined;
   }
 }
 

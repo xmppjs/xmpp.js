@@ -1,3 +1,4 @@
+/* eslint-disable promise/no-nesting */
 "use strict";
 
 const dns = require("dns");
@@ -15,7 +16,7 @@ function lookup(domain, options = {}) {
       }
 
       const result = [];
-      addresses.forEach(({ family, address }) => {
+      for (const { family, address } of addresses) {
         const uri = `://${family === 4 ? address : "[" + address + "]"}:`;
         result.push(
           {
@@ -29,7 +30,7 @@ function lookup(domain, options = {}) {
             uri: "xmpp" + uri + "5222",
           },
         );
-      });
+      }
       resolve(result);
     });
   });
@@ -100,7 +101,7 @@ function lookupSrvs(srvs, options) {
   return Promise.all(
     srvs.map(async (srv) => {
       const srvAddresses = await lookup(srv.name, options);
-      srvAddresses.forEach((address) => {
+      for (const address of srvAddresses) {
         const { port, service } = srv;
         const addr = address.address;
         addresses.push({
@@ -110,7 +111,7 @@ function lookupSrvs(srvs, options) {
             address.family === 6 ? "[" + addr + "]" : addr
           }:${port}`,
         });
-      });
+      }
     }),
   ).then(() => addresses);
 }
@@ -170,10 +171,10 @@ function resolve(domain, options = {}) {
         });
       }),
     )
-      .then((srvs) => sortSrv([].concat(...srvs)).concat(addresses))
+      .then((srvs) => [...sortSrv(srvs.flat()), ...addresses])
       .then((records) => {
         return resolveTxt(domain, options).then((txtRecords) => {
-          return records.concat(txtRecords);
+          return [...records, ...txtRecords];
         });
       });
   });
