@@ -8,7 +8,7 @@ setup:
 	node bundle.js
 
 lint:
-	./node_modules/.bin/eslint .
+	./node_modules/.bin/eslint --cache .
 
 test:
 	cd packages/xmpp.js/ && yarn run prepublish

@@ -26,17 +26,18 @@ class Socket extends EventEmitter {
 
     listeners.message = ({ data }) => this.emit("data", data);
     listeners.error = (event) => {
+      const { url } = this;
       // WS
       let { error } = event;
       // DOM
       if (!error) {
-        error = new Error(`WebSocket ${CODE} ${this.url}`);
+        error = new Error(`WebSocket ${CODE} ${url}`);
         error.errno = CODE;
         error.code = CODE;
       }
 
       error.event = event;
-      error.url = this.url;
+      error.url = url;
       this.emit("error", error);
     };
 
@@ -54,10 +55,10 @@ class Socket extends EventEmitter {
   _detachSocket() {
     delete this.url;
     const { socket, listeners } = this;
-    Object.getOwnPropertyNames(listeners).forEach((k) => {
+    for (const k of Object.getOwnPropertyNames(listeners)) {
       socket.removeEventListener(k, listeners[k]);
       delete listeners[k];
-    });
+    }
     delete this.socket;
   }
 

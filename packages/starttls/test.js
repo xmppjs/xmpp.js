@@ -16,8 +16,8 @@ function mockSocket() {
 test("success", async (t) => {
   const { entity } = mockClient();
   entity.socket = mockSocket();
-  const { socket } = entity;
-  entity.options.domain = "foobar";
+  const { socket, options } = entity;
+  options.domain = "foobar";
 
   const mockTLS = mock(tls);
   const expectTLSConnect = mockTLS

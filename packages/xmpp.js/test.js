@@ -10,7 +10,7 @@ const packages = fs
   // For some reason there's a "*" file on travis
   .filter((p) => !["*"].includes(p) && !p.includes("."))
   .map((name) => require(path.join(__dirname, "..", name, "package.json")))
-  // eslint-disable-next-line unicorn/no-reduce
+  // eslint-disable-next-line unicorn/no-array-reduce
   .reduce((dict, pkg) => {
     dict[pkg.name] = `^${pkg.version}`;
     return dict;

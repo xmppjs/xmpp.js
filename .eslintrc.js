@@ -7,8 +7,8 @@ module.exports = {
     "eslint:recommended",
     "plugin:unicorn/recommended",
     "plugin:node/recommended",
-    "plugin:prettier/recommended",
     "plugin:promise/recommended",
+    "plugin:prettier/recommended",
   ],
 
   env: {

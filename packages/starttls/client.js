@@ -21,13 +21,13 @@ async function negotiate(entity) {
 
 module.exports = function starttls({ streamFeatures }) {
   return streamFeatures.use("starttls", NS, async ({ entity }, next) => {
-    const { socket } = entity;
+    const { socket, options } = entity;
     if (!canUpgrade(socket)) {
       return next();
     }
 
     await negotiate(entity);
-    const tlsSocket = await upgrade(socket, { host: entity.options.domain });
+    const tlsSocket = await upgrade(socket, { host: options.domain });
     entity._attachSocket(tlsSocket);
 
     await entity.restart();
