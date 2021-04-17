@@ -25,7 +25,7 @@ It aims to run everywhere JavaScript runs and make use of the best network trans
 
 By default, it handles errors and will automatically reconnect. With appropriate configuration it will even loop through a list of endpoints. You don't have to write a single line of code to handle network failures.
 
-Releases follow the [Semantic Versionning specification](http://semver.org/)
+Releases follow the [Semantic Versioning specification](http://semver.org/)
 
 ### modular
 
