@@ -26,7 +26,7 @@ const plain = require("@xmpp/sasl-plain");
 const anonymous = require("@xmpp/sasl-anonymous");
 
 function client(options = {}) {
-  const { resource, credentials, username, password, ...params } = options;
+  const { resource, credentials, username, password, disableStreamManagement, ...params } = options;
 
   const { domain, service } = params;
   if (!domain && service) {
@@ -48,11 +48,13 @@ function client(options = {}) {
   // Stream features - order matters and define priority
   const starttls = _starttls({ streamFeatures });
   const sasl = _sasl({ streamFeatures }, credentials || { username, password });
-  const streamManagement = _streamManagement({
+
+  const streamManagement = !disableStreamManagement ? _streamManagement({
     streamFeatures,
     entity,
     middleware,
-  });
+  }) : null;
+    
   const resourceBinding = _resourceBinding(
     { iqCaller, streamFeatures },
     resource,
