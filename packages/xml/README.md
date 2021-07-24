@@ -223,7 +223,7 @@ JSON.parse(
 );
 ```
 
-See [JSON Containers](https://xmpp.org/extensions/xep-0335.html)
+See also [JSON Containers](https://xmpp.org/extensions/xep-0335.html) and [Simple JSON Messaging](https://xmpp.org/extensions/xep-0432.html).
 
 ## Parsing XML strings
 
