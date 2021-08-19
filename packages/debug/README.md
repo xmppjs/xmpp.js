@@ -6,7 +6,7 @@ Sensitive information (authentication) is replaced with `<hidden xmlns="xmpp.js"
 
 ## Install
 
-`npm install @xmpp/debug` or `yarn add @xmpp/debug`
+`npm install @xmpp/debug`
 
 ## Example
 

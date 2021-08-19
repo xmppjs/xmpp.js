@@ -4,7 +4,7 @@ XMPP [Date and Time Profiles](https://xmpp.org/extensions/xep-0082.html) for Jav
 
 ## Install
 
-`npm install @xmpp/time` or `yarn add @xmpp/time`
+`npm install @xmpp/time`
 
 ## Usage
 

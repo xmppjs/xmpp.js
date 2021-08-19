@@ -1,6 +1,4 @@
 node_modules/
 **/dist/*.js
 bundle.js
-package.json
-.yarn/
 server/prosody-modules/

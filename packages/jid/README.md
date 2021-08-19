@@ -12,7 +12,7 @@ https://en.wikipedia.org/wiki/XMPP#Decentralization_and_addressing
 
 ## Install
 
-`npm install @xmpp/jid` or `yarn add @xmpp/jid`
+`npm install @xmpp/jid`
 
 ## Usage
 

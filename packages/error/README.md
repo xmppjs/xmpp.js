@@ -4,7 +4,7 @@ XMPP error abstraction for JavaScript.
 
 ## Install
 
-`npm install @xmpp/error` or `yarn add @xmpp/error`
+`npm install @xmpp/error`
 
 ## Usage
 

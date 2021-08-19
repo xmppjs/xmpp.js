@@ -11,17 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 15.x]
+        node-version: [12.x, 14.x, 16.x]
     steps:
       - uses: actions/checkout@v2
 
-      - name: Cache
-        uses: actions/cache@v2
+      - uses: actions/cache@v2
         with:
-          path: |
-            ${{github.workspace}}/node_modules
-            ${{github.workspace}}/*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -34,6 +33,7 @@ jobs:
           sudo apt-get -y install prosody lua-bitop lua-sec
           sudo service prosody stop
 
+      - run: npm install -g npm
       - run: make
       - run: make test-ci
 
