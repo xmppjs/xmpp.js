@@ -2,7 +2,7 @@
   "name": "@xmpp/tcp",
   "description": "XMPP TCP for JavaScript",
   "repository": "github:xmppjs/xmpp.js",
-  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/tcp",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/tcp",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.12.0",
   "license": "ISC",

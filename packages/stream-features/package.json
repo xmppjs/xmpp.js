@@ -2,7 +2,7 @@
   "name": "@xmpp/stream-features",
   "description": "XMPP stream features for JavaScript",
   "repository": "github:xmppjs/xmpp.js",
-  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/stream-features",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/stream-features",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.12.0",
   "license": "ISC",

@@ -2,7 +2,7 @@
   "name": "@xmpp/events",
   "description": "XMPP events utilities.",
   "repository": "github:xmppjs/xmpp.js",
-  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/events",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/events",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.12.0",
   "license": "ISC",

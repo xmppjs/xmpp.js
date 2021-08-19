@@ -2,7 +2,7 @@
   "name": "@xmpp/connection",
   "description": "XMPP connection for JavaScript",
   "repository": "github:xmppjs/xmpp.js",
-  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/connection",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/connection",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.12.0",
   "license": "ISC",
