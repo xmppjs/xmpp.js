@@ -13,8 +13,7 @@
     "callee"
   ],
   "engines": {
-    "node": ">= 12.4.0",
-    "yarn": ">= 1.0.0"
+    "node": ">= 12.4.0"
   },
   "dependencies": {
     "@xmpp/events": "^0.12.0",
@@ -23,7 +22,7 @@
     "@xmpp/xml": "^0.12.0"
   },
   "devDependencies": {
-    "@xmpp/middleware": "^0.11.0"
+    "@xmpp/middleware": "^0.12.0"
   },
   "publishConfig": {
     "access": "public"

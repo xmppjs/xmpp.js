@@ -10,7 +10,7 @@ See [XEP-0114: Jabber Component Protocol](https://xmpp.org/extensions/xep-0114.h
 
 ## Install
 
-`npm install @xmpp/component @xmpp/debug` or `yarn add @xmpp/component @xmpp/debug`
+`npm install @xmpp/component @xmpp/debug`
 
 ## Example
 

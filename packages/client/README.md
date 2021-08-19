@@ -8,7 +8,7 @@ It supports Node.js, browsers and React Native. See [below](#transports) for dif
 
 ## Install
 
-`npm install @xmpp/client @xmpp/debug` or `yarn add @xmpp/client @xmpp/debug`
+`npm install @xmpp/client @xmpp/debug`
 
 ## Setup
 

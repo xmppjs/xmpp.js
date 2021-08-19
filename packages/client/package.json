@@ -6,10 +6,10 @@
   "version": "0.12.0",
   "license": "ISC",
   "dependencies": {
-    "@babel/cli": "^7.12.10",
-    "@babel/core": "^7.12.10",
-    "@babel/node": "^7.12.10",
-    "@babel/plugin-transform-react-jsx": "^7.12.11",
+    "@babel/cli": "^7.14.8",
+    "@babel/core": "^7.15.0",
+    "@babel/node": "^7.14.9",
+    "@babel/plugin-transform-react-jsx": "^7.14.9",
     "@xmpp/client-core": "^0.12.0",
     "@xmpp/iq": "^0.12.0",
     "@xmpp/middleware": "^0.12.0",
@@ -32,8 +32,7 @@
   "browser": "./browser.js",
   "react-native": "./react-native.js",
   "engines": {
-    "node": ">= 12.4.0",
-    "yarn": ">= 1.0.0"
+    "node": ">= 12.4.0"
   },
   "publishConfig": {
     "access": "public"
