@@ -2,17 +2,17 @@
 
 setup:
 	node packages/xmpp.js/script.js
-	yarn
+	npm install
 	./node_modules/.bin/lerna bootstrap
-	cd packages/xmpp.js/ && yarn run prepublish
+	cd packages/xmpp.js/ && npm run prepublish
 	node bundle.js
 
 lint:
 	./node_modules/.bin/eslint --cache .
 
 test:
-	cd packages/xmpp.js/ && yarn run prepublish
-	yarn
+	cd packages/xmpp.js/ && npm run prepublish
+	npm install
 	./node_modules/.bin/lerna bootstrap
 	node bundle.js
 	./node_modules/.bin/ava
@@ -20,7 +20,7 @@ test:
 	make bundlesize
 
 test-ci:
-	yarn
+	npm install
 	./node_modules/.bin/lerna bootstrap
 	./node_modules/.bin/ava
 	make lint
@@ -63,4 +63,4 @@ cert:
 	cd server && openssl req -new -x509 -days 365 -nodes -out "localhost.crt" -newkey rsa:2048 -keyout "localhost.key" -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost"
 
 ncu:
-	ncu && yarn lerna exec ncu
+	ncu && npx lerna exec ncu

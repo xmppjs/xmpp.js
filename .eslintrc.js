@@ -67,5 +67,7 @@ module.exports = {
     "unicorn/prefer-number-properties": 0,
     "unicorn/no-useless-undefined": 0,
     "unicorn/no-null": 0,
+    "unicorn/prefer-module": 0,
+    "unicorn/numeric-separators-style": 0, // Requires Node.js 12.8
   },
 };

@@ -5,16 +5,21 @@ const test = require("ava");
 const fs = require("fs");
 const path = require("path");
 
-const packages = fs
-  .readdirSync(path.join(__dirname, ".."))
-  // For some reason there's a "*" file on travis
-  .filter((p) => !["*"].includes(p) && !p.includes("."))
-  .map((name) => require(path.join(__dirname, "..", name, "package.json")))
-  // eslint-disable-next-line unicorn/no-array-reduce
-  .reduce((dict, pkg) => {
-    dict[pkg.name] = `^${pkg.version}`;
-    return dict;
-  }, {});
+const packages = Object.fromEntries(
+  fs
+    .readdirSync(path.join(__dirname, ".."))
+    // For some reason there's a "*" file on travis
+    .filter((p) => !["*"].includes(p) && !p.includes("."))
+    .map((dirname) => {
+      const { name, version } = require(path.join(
+        __dirname,
+        "..",
+        dirname,
+        "package.json",
+      ));
+      return [name, `^${version}`];
+    }),
+);
 
 const { dependencies } = require("./package.json");
 
