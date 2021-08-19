@@ -2,7 +2,7 @@
   "name": "@xmpp/resource-binding",
   "description": "XMPP resource binding for JavaScript",
   "repository": "github:xmppjs/xmpp.js",
-  "homepage": "https://github.com/xmppjs/xmpp.js/tree/master/packages/resource-binding",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/resource-binding",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.12.0",
   "license": "ISC",
