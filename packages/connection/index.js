@@ -263,10 +263,10 @@ class Connection extends EventEmitter {
 
     this._attachParser(new this.Parser());
 
-    // Sending this 'whitespace keepalive' packet before the stream header improves
-    // compatibility with some TLSv1.3 server implementations. For more info, see:
+    // Sending this empty packet before the stream header improves compatibility
+    // with some TLSv1.3 server implementations. For more info, see:
     // https://github.com/xmppjs/xmpp.js/issues/889#issuecomment-902686879
-    await this.write(" ");
+    await this.write("");
 
     await this.write(this.header(headerElement));
     return promise(this, "open", "error", timeout);
