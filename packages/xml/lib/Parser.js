@@ -1,7 +1,7 @@
 "use strict";
 
 const LtxParser = require("ltx/lib/parsers/ltx");
-const Element = require("./Element");
+const Element = require("ltx/lib/Element");
 const EventEmitter = require("events");
 const XMLError = require("./XMLError");
 

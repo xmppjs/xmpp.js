@@ -6,6 +6,7 @@ const xml = require("@xmpp/xml");
 const debug = require("@xmpp/debug");
 const JID = require("@xmpp/jid");
 const mockSocket = require("./mockSocket");
+const clone = require("ltx/lib/clone");
 
 module.exports = function context(entity = client()) {
   debug(entity);
@@ -16,7 +17,7 @@ module.exports = function context(entity = client()) {
   const ctx = {
     entity,
     sanitize(s) {
-      const stanza = s.clone();
+      const stanza = clone(s);
       const { id } = stanza.attrs;
       delete stanza.attrs.id;
       delete stanza.attrs.xmlns;
@@ -121,7 +122,7 @@ module.exports = function context(entity = client()) {
       );
     },
     fakeIncomingIq(el) {
-      const stanza = el.clone();
+      const stanza = clone(el);
       if (stanza.is("iq") && !stanza.attrs.id) {
         stanza.attrs.id = "fake";
       }
@@ -130,7 +131,7 @@ module.exports = function context(entity = client()) {
     },
     async fakeIncoming(el) {
       const p = promise(entity, "send");
-      const stanza = el.clone();
+      const stanza = clone(el);
       delete stanza.attrs.xmlns;
       await Promise.resolve();
       this.mockInput(el);
