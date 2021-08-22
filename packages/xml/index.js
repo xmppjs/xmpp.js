@@ -1,7 +1,7 @@
 "use strict";
 
-const x = require("./lib/x");
-const Element = require("./lib/Element");
+const Element = require("ltx/lib/Element");
+const createElement = require("ltx/lib/createElement");
 const Parser = require("./lib/Parser");
 const {
   escapeXML,
@@ -12,14 +12,14 @@ const {
 const XMLError = require("./lib/XMLError");
 
 function xml(...args) {
-  return x(...args);
+  return createElement(...args);
 }
 
 module.exports = xml;
 
 Object.assign(module.exports, {
-  x,
   Element,
+  createElement,
   Parser,
   escapeXML,
   unescapeXML,

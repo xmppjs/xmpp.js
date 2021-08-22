@@ -2,9 +2,9 @@
 
 /* eslint no-console: 0 */
 
-const serialize = require("@xmpp/xml/lib/serialize");
+const stringify = require("ltx/lib/stringify");
 const xml = require("@xmpp/xml");
-const clone = require("@xmpp/xml/lib/clone");
+const clone = require("ltx/lib/clone");
 
 const NS_SASL = "urn:ietf:params:xml:ns:xmpp-sasl";
 const NS_COMPONENT = "jabber:component:accept";
@@ -34,7 +34,7 @@ function hideSensitive(element) {
 }
 
 function format(element) {
-  return serialize(hideSensitive(clone(element), 2));
+  return stringify(hideSensitive(clone(element), 2));
 }
 
 module.exports = function debug(entity, force) {

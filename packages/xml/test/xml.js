@@ -2,8 +2,8 @@
 
 const test = require("ava");
 const xml = require("..");
-const x = require("../lib/x");
-const Element = require("../lib/Element");
+const createElement = require("ltx/lib/createElement");
+const Element = require("ltx/lib/Element");
 const Parser = require("../lib/Parser");
 const {
   escapeXML,
@@ -12,8 +12,8 @@ const {
   unescapeXMLText,
 } = require("ltx/lib/escape");
 
-test("exports x", (t) => {
-  t.is(xml.x, x);
+test("exports createElement", (t) => {
+  t.is(xml.createElement, createElement);
 });
 
 test("exports Parser", (t) => {

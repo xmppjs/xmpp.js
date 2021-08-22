@@ -136,9 +136,10 @@ xmpp.on("stanza", (stanza) => {
   console.log(stanza.toString());
   if (!stanza.is("message")) return;
 
-  const message = stanza.clone();
-  message.attrs.to = stanza.attrs.from;
-  xmpp.send(message);
+  const { to, from } = stanza.attrs;
+  stanza.attrs.from = to;
+  stanza.attrs.to = from;
+  xmpp.send(stanza);
 });
 ```
 
