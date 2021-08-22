@@ -5,8 +5,12 @@
 const { client, xml } = require("@xmpp/client");
 const debug = require("@xmpp/debug");
 
+// Insecure!
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 const xmpp = client({
   service: "ws://localhost:5280/xmpp-websocket",
+  // service: "xmpps://localhost:5223",
   domain: "localhost",
   resource: "example",
   username: "username",

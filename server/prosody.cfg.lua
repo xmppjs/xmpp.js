@@ -1,3 +1,7 @@
+-- This server configuration is insecure by design
+-- DO NOT COPY BLINDLY
+-- see https://prosody.im/doc/configure
+
 local lfs = require "lfs";
 
 plugin_paths = { lfs.currentdir() .. "/prosody-modules" }
