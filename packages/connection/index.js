@@ -287,7 +287,7 @@ class Connection extends EventEmitter {
     const fragment = this.footer(this.footerElement());
 
     const p = Promise.all([
-      this.parser && promise(this.parser, "end", "error", timeout),
+      promise(this.parser, "end", "error", timeout),
       this.write(fragment),
     ]);
 
