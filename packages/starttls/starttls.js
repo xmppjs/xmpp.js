@@ -13,6 +13,9 @@ module.exports.canUpgrade = canUpgrade;
 async function upgrade(socket, options = {}) {
   const tlsSocket = tls.connect({ socket, ...options });
   await promise(tlsSocket, "secureConnect");
+  await new Promise((resolve) => {
+    setTimeout(resolve, 1);
+  });
 
   return tlsSocket;
 }
