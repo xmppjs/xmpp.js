@@ -11,7 +11,7 @@ const NS_STREAM = "http://etherx.jabber.org/streams";
  * Extensible Messaging and Presence Protocol (XMPP): Core http://xmpp.org/rfcs/rfc6120.html
  */
 class ConnectionTCP extends Connection {
-  async sendMultiple(elements) {
+  async sendMany(elements) {
     let fragment = "";
 
     for (const element of elements) {

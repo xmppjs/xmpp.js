@@ -82,7 +82,7 @@ test("socket close", (t) => {
   socket.socket.emit("close", evt);
 });
 
-test("sendMultiple", async (t) => {
+test("sendMany", async (t) => {
   t.plan(2);
   const conn = new ConnectionWebSocket();
   conn.root = xml("root");
@@ -94,5 +94,5 @@ test("sendMultiple", async (t) => {
     t.pass();
   };
 
-  await conn.sendMultiple([foo, bar]);
+  await conn.sendMany([foo, bar]);
 });

@@ -22,7 +22,7 @@ class ConnectionWebSocket extends Connection {
     return super.send(element, ...args);
   }
 
-  async sendMultiple(elements) {
+  async sendMany(elements) {
     for (const element of elements) {
       await this.send(element);
     }

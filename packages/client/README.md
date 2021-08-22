@@ -231,7 +231,7 @@ xmpp.send(xml("presence")).catch(console.error);
 
 Returns a promise that resolves once the stanza is serialized and written to the socket or rejects if any of those fails.
 
-### sendMultiple
+### sendMany
 
 Sends multiple stanzas.
 
@@ -243,7 +243,7 @@ const recipients = ["romeo@example.com", "juliet@example.com"];
 const stanzas = recipients.map((address) =>
   xml("message", { to: address, type: "chat" }, xml("body", null, message)),
 );
-xmpp.sendMultiple(stanzas).catch(console.error);
+xmpp.sendMany(stanzas).catch(console.error);
 ```
 
 Returns a promise that resolves once all the stanzas have been sent.

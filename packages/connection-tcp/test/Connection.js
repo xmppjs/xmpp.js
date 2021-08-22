@@ -54,7 +54,7 @@ test("socketParameters()", (t) => {
   );
 });
 
-test("sendMultiple", async (t) => {
+test("sendMany", async (t) => {
   t.plan(1);
   const conn = new Connection();
   conn.root = xml("root");
@@ -69,5 +69,5 @@ test("sendMultiple", async (t) => {
     },
   };
 
-  await conn.sendMultiple([foo, bar]);
+  await conn.sendMany([foo, bar]);
 });
