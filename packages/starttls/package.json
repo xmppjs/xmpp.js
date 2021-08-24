@@ -12,6 +12,7 @@
   ],
   "dependencies": {
     "@xmpp/events": "^0.12.1",
+    "@xmpp/tls": "^0.12.1",
     "@xmpp/xml": "^0.12.1"
   },
   "engines": {
