@@ -4,17 +4,17 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/component",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "license": "ISC",
   "keywords": [
     "XMPP",
     "component"
   ],
   "dependencies": {
-    "@xmpp/component-core": "^0.12.1",
-    "@xmpp/iq": "^0.12.1",
-    "@xmpp/middleware": "^0.12.1",
-    "@xmpp/reconnect": "^0.12.1"
+    "@xmpp/component-core": "^0.13.0",
+    "@xmpp/iq": "^0.13.0",
+    "@xmpp/middleware": "^0.13.0",
+    "@xmpp/reconnect": "^0.13.0"
   },
   "engines": {
     "node": ">= 12.4.0"
