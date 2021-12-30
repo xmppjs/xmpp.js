@@ -4,24 +4,22 @@ const resolve = require("./resolve");
 const { promise } = require("@xmpp/events");
 
 async function fetchURIs(domain) {
+  const result = await resolve(domain, {
+    srv: [
+      {
+        service: "xmpps-client",
+        protocol: "tcp",
+      },
+      {
+        service: "xmpp-client",
+        protocol: "tcp",
+      },
+    ],
+  });
+
   return [
     // Remove duplicates
-    ...new Set(
-      (
-        await resolve(domain, {
-          srv: [
-            {
-              service: "xmpps-client",
-              protocol: "tcp",
-            },
-            {
-              service: "xmpp-client",
-              protocol: "tcp",
-            },
-          ],
-        })
-      ).map((record) => record.uri),
-    ),
+    ...new Set(result.map((record) => record.uri)),
   ];
 }
 

@@ -130,7 +130,8 @@ test("prefers SCRAM-SHA-1", async (t) => {
     </features>,
   );
 
-  t.deepEqual((await promise(entity, "send")).attrs.mechanism, "SCRAM-SHA-1");
+  const result = await promise(entity, "send");
+  t.deepEqual(result.attrs.mechanism, "SCRAM-SHA-1");
 });
 
 test("use ANONYMOUS if username and password are not provided", async (t) => {
@@ -146,5 +147,6 @@ test("use ANONYMOUS if username and password are not provided", async (t) => {
     </features>,
   );
 
-  t.deepEqual((await promise(entity, "send")).attrs.mechanism, "ANONYMOUS");
+  const result = await promise(entity, "send");
+  t.deepEqual(result.attrs.mechanism, "ANONYMOUS");
 });
