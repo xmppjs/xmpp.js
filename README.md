@@ -49,7 +49,7 @@ For the web, we make the sure the default [client](/packages/client) doesn't exc
 - [Sockethub](http://sockethub.org/)
 - [matrix-bitfrost](https://github.com/matrix-org/matrix-bifrost)
 - [WordPress Telegram Bot](https://github.com/Automattic/wp-telegram-bot)
-- [Logictech Harmony Hub library](https://github.com/AirBorne04/harmonyhub)
+- [Logitech Harmony Hub library](https://github.com/AirBorne04/harmonyhub)
 
 <small> Feel free to send a PR to add your project or organization to this list.</small>
 
