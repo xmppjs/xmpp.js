@@ -21,6 +21,8 @@
 
 It aims to run everywhere JavaScript runs and make use of the best network transport available.
 
+xmpp.js is known to be used in Node.js, browsers, React Native, GJS and Duktape.
+
 ### reliable
 
 By default, it handles errors and will automatically reconnect. With appropriate configuration it will even loop through a list of endpoints. You don't have to write a single line of code to handle network failures.
