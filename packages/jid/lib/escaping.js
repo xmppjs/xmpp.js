@@ -50,8 +50,7 @@ module.exports.escape = function escape(local) {
     .replace(/:/g, "\\3a")
     .replace(/</g, "\\3c")
     .replace(/>/g, "\\3e")
-    .replace(/@/g, "\\40")
-    .replace(/\3a/g, "\u0005c3a");
+    .replace(/@/g, "\\40");
 };
 
 /**
