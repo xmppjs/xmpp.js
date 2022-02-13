@@ -2,7 +2,6 @@
 "use strict";
 
 const dns = require("dns");
-const compareAltConnections = require("./alt-connections").compare;
 
 // eslint-disable-next-line unicorn/prefer-set-has
 const IGNORE_CODES = ["ENOTFOUND", "ENODATA"];
@@ -32,32 +31,6 @@ function lookup(domain, options = {}) {
         );
       }
       resolve(result);
-    });
-  });
-}
-
-function resolveTxt(domain, { owner = "_xmppconnect" }) {
-  return new Promise((resolve, reject) => {
-    dns.resolveTxt(`${owner}.${domain}`, (err, records) => {
-      if (err && IGNORE_CODES.includes(err.code)) {
-        resolve([]);
-      } else if (err) {
-        reject(err);
-      } else {
-        resolve(
-          records
-            .map((record) => {
-              const [attribute, value] = record[0].split("=");
-              return {
-                attribute,
-                value,
-                method: attribute.split("-").pop(),
-                uri: value,
-              };
-            })
-            .sort(compareAltConnections),
-        );
-      }
     });
   });
 }
@@ -170,13 +143,7 @@ function resolve(domain, options = {}) {
           return lookupSrvs(records, options);
         });
       }),
-    )
-      .then((srvs) => [...sortSrv(srvs.flat()), ...addresses])
-      .then((records) => {
-        return resolveTxt(domain, options).then((txtRecords) => {
-          return [...records, ...txtRecords];
-        });
-      });
+    ).then((srvs) => [...sortSrv(srvs.flat()), ...addresses]);
   });
 }
 

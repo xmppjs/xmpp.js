@@ -13,16 +13,15 @@ npm install @xmpp/resolve
 ## Usage
 
 ```javascript
-const resolve = require("@xmpp/resolve");
+const resolve = require("@xmpp/resolve/resolve");
 
 // optional
 const options = {
   srv: [{ service: "xmpp-client", protocol: "tcp" }], // SRV records
   family: undefined, // IP version; 4, 6 or undefined for both
-  owner: "_xmppconnect", // TXT owner
 };
 
-resolve("xmppjs.org", options).then(console.log).catch(console.error);
+resolve("jabberfr.org", options).then(console.log).catch(console.error);
 ```
 
 ```javascript
