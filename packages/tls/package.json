@@ -4,11 +4,11 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/tls",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "license": "ISC",
   "dependencies": {
-    "@xmpp/connection": "^0.13.0",
-    "@xmpp/connection-tcp": "^0.13.0"
+    "@xmpp/connection": "^0.13.1",
+    "@xmpp/connection-tcp": "^0.13.1"
   },
   "keywords": [
     "XMPP",
