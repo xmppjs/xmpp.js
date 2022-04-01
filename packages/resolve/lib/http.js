@@ -4,7 +4,10 @@ const fetch = global.fetch || require("node-fetch");
 const parse = require("@xmpp/xml/lib/parse");
 const compareAltConnections = require("./alt-connections").compare;
 
-function resolve(domain) {
+function resolve(domain, options = {}) {
+  if (options.skip_http) {
+    return [];
+  }
   return fetch(`https://${domain}/.well-known/host-meta`)
     .then((res) => res.text())
     .then((res) => {

@@ -207,9 +207,9 @@ class Connection extends EventEmitter {
       throw new Error("Connection is not offline");
     }
 
-    const { service, domain, lang } = this.options;
+    const { service, domain, lang, skip_http } = this.options;
 
-    await this.connect(service);
+    await this.connect(service, { skip_http });
 
     const promiseOnline = promise(this, "online");
 

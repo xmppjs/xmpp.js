@@ -3,7 +3,7 @@
 const resolve = require("./resolve");
 const { promise } = require("@xmpp/events");
 
-async function fetchURIs(domain) {
+async function fetchURIs(domain, options = {}) {
   const result = await resolve(domain, {
     srv: [
       {
@@ -15,6 +15,7 @@ async function fetchURIs(domain) {
         protocol: "tcp",
       },
     ],
+    ...options,
   });
 
   return [
@@ -59,12 +60,12 @@ async function fallbackConnect(entity, uris) {
 
 module.exports = function resolve({ entity }) {
   const _connect = entity.connect;
-  entity.connect = async function connect(service) {
+  entity.connect = async function connect(service, options = {}) {
     if (!service || /:\/\//.test(service)) {
       return _connect.call(this, service);
     }
 
-    const uris = filterSupportedURIs(entity, await fetchURIs(service));
+    const uris = filterSupportedURIs(entity, await fetchURIs(service, options));
 
     if (uris.length === 0) {
       throw new Error("No compatible transport found.");
