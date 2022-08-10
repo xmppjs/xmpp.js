@@ -39,6 +39,10 @@ We avoid third party dependencies.
 
 For the web, we make the sure the default [client](/packages/client) doesn't exceed 15 kb (gzipped), for reference, that's less than half the size of [React](https://reactjs.org/blog/2017/09/26/react-v16.0.html#reduced-file-size).
 
+## Getting help
+
+Do you need help with working with xmpp.js? Please reach out to our community by posting in the [Discussions section](https://github.com/xmppjs/xmpp.js/discussions) of this project.
+
 ## Built with xmpp.js
 
 - [Simplo](https://simplo.app/?lang=en)
