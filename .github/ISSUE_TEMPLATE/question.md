@@ -1,6 +1,6 @@
 ---
 name: Question
-about: ""
+about: "Where to ask questions?"
 title: ""
 labels: ""
 assignees: ""
