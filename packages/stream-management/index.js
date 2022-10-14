@@ -7,7 +7,7 @@ const xml = require("@xmpp/xml");
 const NS = "urn:xmpp:sm:3";
 
 async function enable(entity, resume, max) {
-  entity.send(
+  await entity.send(
     xml("enable", { xmlns: NS, max, resume: resume ? "true" : undefined }),
   );
 
