@@ -7,6 +7,8 @@ const exec = promisify(require("child_process").exec);
 const removeFile = promisify(require("fs").unlink);
 const net = require("net");
 const { promise, delay } = require("../packages/events");
+const selfsigned = require("selfsigned");
+const { writeFileSync } = require("fs");
 
 const DATA_PATH = path.join(__dirname);
 const PID_PATH = path.join(DATA_PATH, "prosody.pid");
@@ -41,6 +43,14 @@ async function waitPortOpen() {
   return waitPortOpen();
 }
 
+function makeCertificate() {
+  const attrs = [{ name: "commonName", value: "localhost" }];
+  const pems = selfsigned.generate(attrs, { days: 365, keySize: 2048 });
+
+  writeFileSync(path.join(__dirname, "localhost.crt"), pems.cert);
+  writeFileSync(path.join(__dirname, "localhost.key"), pems.private);
+}
+
 async function waitPortClose() {
   if (!(await isPortOpen())) {
     return;
@@ -70,6 +80,8 @@ async function getPid() {
 
 async function _start() {
   const opening = waitPortOpen();
+
+  makeCertificate();
 
   await exec("prosody", {
     cwd: DATA_PATH,

@@ -4,6 +4,8 @@ const test = require("ava");
 const ConnectionTLS = require("./lib/Connection");
 const tls = require("tls");
 const { promise } = require("@xmpp/test");
+// eslint-disable-next-line node/no-extraneous-require
+const selfsigned = require("selfsigned");
 
 test("socketParameters()", (t) => {
   t.deepEqual(ConnectionTLS.prototype.socketParameters("xmpps://foo"), {
@@ -97,60 +99,13 @@ NebQHyTBqa5P7vjSioiWiSRCNOIL4HywMWtN/nZVk0cl8zwlLtMaGt9Tz7ty2OgL
 });
 
 test("rejects self signed certificates", async (t) => {
-  const options = {
-    key: `-----BEGIN PRIVATE KEY-----
-MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDGMXUuq7NZXEt6
-fiSSkfTGuXHdpMbM/Bn4YVwaNrEmW0I8ZpROHQsEPo6AA/Dz5XM6zkXc+HZoxVfg
-Va6T91NRrNnwJYan6+InZOcJI50axYu5KrOyi2X5HBqlUW2MrB+y5LgE1/22id/4
-pIGXxfTK3GbzE7qzmB/ff+Mn5gIY1QysBayFG4xtpGLVg+kVkxSDLSMOmX/ezdG5
-wNfejVMenBzyylKB8NX50E5Hj28jnVk5zyoXptjsb31/rp82YI3YIFxl8OKX4zEC
-GmTULCy19b5c/OeqKL+/XnR6db91Iort80F54p0SCApth+yH0eLsssJpzWaEG05/
-+bAc8F/rAgMBAAECggEARsuP4jXvALKZO44nnjuIxhuj8tpTMRG0bSbJ8YsryFm8
-1TqHK0fwkXmPCWdfAKArgwv/pKkUEuS7OSUiETS9jGVEDCY7bWwzAoNmi7su+Usr
-V99LBTIKIOvLENZ/XUp2oD5XBVPqCvRBDt4kdIR/pp8IHzgi7tgeOoXCLJRal2eS
-C+h4+QxkRVk7ML9Qywydh+U/FIvnS95FWUqXy9YF5X5Gv9onYF3jDFC4wA3cFPYD
-/h5ppYKnGWvmItxAnzqXJaLUZaqSKFHvr3ub6OL3d6XURbAtmDBrbBiB/mA+V75H
-IHNwgINtg24jTeimj12yWjFWD/v1JqAIXhKhnkbH4QKBgQDjAXm61tNMDF0K9RFP
-nBtIbIfjkTnD0dcyQEteUx1ETpZLEtgxCTdafu9RX0lZwZa4JAhX7kzn1BjPcI90
-zhnQ8jyiVOjsaxA09ptX3VaK7qMXbNhXndKNAqfx2Fwi/PtK6nafjKSDE7RC/iPT
-R0UBexOx8zxRuqxRXknlDM/PwwKBgQDfgeH/LjDVyJpLR3+NWp1MtMlCRQYFfvWw
-6RE0zKi05/3P+Hmm4QN02dLIMJKWN0n1qKLNTpgoeLwqilxM/bUjeHKFrhkWqmgJ
-CunadWoLbj//PI4etWvVNg3RfYd2G5amwW4kvNfEUL2xNrOum+cUZ4rPGSI0Z+ty
-Hk7BRtgUuQKBgQC2SdIJskbc87SnfuIWzqGuB9Ebcdw0HkaziKO9K/r9hin0QT6w
-Kdl0ZyggbOcHF4jDd9PnYGoLY+tEcPwR7QsYGd2M8ahVaSgLj9hwt0GusTDwN6yG
-tyqDp5VbhMWAJyxYHW2Cc7sLsv/3KAN2vu1v4fiP1mYir0d+07t9HkumZwKBgQDV
-0YNKg/3kBwzUh4nWyKFDCJCg/TdNeq/AlrcHM+MRbf66PpLiutB7sQaczRru6eWv
-Ray5jD60OQyKBeNXJD9tt4SXrn4B2PO98trVSw4v8UD4BA5SAm0ug4+kodo9excc
-YF/mdWJVRIi0SAiNOkhOlN+OUBUQ3Xm4qpXdANEmwQKBgDOJbGNzV9exj83FSJIA
-3vE2ec9mESWNOKsVbGmY6J5dqkE/tU0UZw/jyym2f1C5UKS3HIdTWyq1+EMn94iQ
-mfmZ/2a0ypN53Z0JMpfKHUBK0XPrRaaKMqnYV7CBm5Os217bpNp2eojocZW+X/GR
-6xMKh//fd6uKBFPCqf4cp2Ct
------END PRIVATE KEY-----`,
-    cert: `-----BEGIN CERTIFICATE-----
-MIIDjTCCAnWgAwIBAgIUB6DHC0wV8ht//JFAJGanpRBapKIwDQYJKoZIhvcNAQEL
-BQAwVjELMAkGA1UEBhMCWFgxFTATBgNVBAcMDERlZmF1bHQgQ2l0eTEcMBoGA1UE
-CgwTRGVmYXVsdCBDb21wYW55IEx0ZDESMBAGA1UEAwwJbG9jYWxob3N0MB4XDTIx
-MDgyMjA5NTU1N1oXDTIyMDgyMjA5NTU1N1owVjELMAkGA1UEBhMCWFgxFTATBgNV
-BAcMDERlZmF1bHQgQ2l0eTEcMBoGA1UECgwTRGVmYXVsdCBDb21wYW55IEx0ZDES
-MBAGA1UEAwwJbG9jYWxob3N0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAxjF1LquzWVxLen4kkpH0xrlx3aTGzPwZ+GFcGjaxJltCPGaUTh0LBD6OgAPw
-8+VzOs5F3Ph2aMVX4FWuk/dTUazZ8CWGp+viJ2TnCSOdGsWLuSqzsotl+RwapVFt
-jKwfsuS4BNf9tonf+KSBl8X0ytxm8xO6s5gf33/jJ+YCGNUMrAWshRuMbaRi1YPp
-FZMUgy0jDpl/3s3RucDX3o1THpwc8spSgfDV+dBOR49vI51ZOc8qF6bY7G99f66f
-NmCN2CBcZfDil+MxAhpk1CwstfW+XPznqii/v150enW/dSKK7fNBeeKdEggKbYfs
-h9Hi7LLCac1mhBtOf/mwHPBf6wIDAQABo1MwUTAdBgNVHQ4EFgQUVwsfTVjMB0gO
-62nwCNGHLmlM8WYwHwYDVR0jBBgwFoAUVwsfTVjMB0gO62nwCNGHLmlM8WYwDwYD
-VR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAs/o3MhYjPNceA65Yc0mI
-DZpSD/Ds0rSoPtnUX4pXwzcpAh7yVlgqhzex+l/bJuq0tBnxUuM0NYc1US26SHCf
-4+pPhYgrACqMG5ecMebzgwMP0vnZsqtt22eeO1mzhz9z3hPYJciyMOU00gotZJHS
-GM9inlF4SFttfwgopJSAb4rAvI0u5jzhLrEvu5wRmWEc0zHWmcTGF46gzXW+79ti
-jlJ03ZMth8cH6wL8BcbuPBTKj4hjaLdtIcQiQ0a6wG/+z/vaS2XiahNJ6pMDlV3m
-aUOpdCwFaeFw/eL7rQr8rQqCtOO8BsNJ54tS4qbTwmHNb+UqcZQRq8qIq/b+z3qp
-yA==
------END CERTIFICATE-----`,
-  };
+  const attrs = [{ name: "commonName", value: "localhost" }];
+  const pem = selfsigned.generate(attrs, {
+    days: 365,
+    keySize: 2048,
+  });
 
-  const server = tls.createServer(options);
+  const server = tls.createServer({ key: pem.private, cert: pem.cert });
   server.listen(0);
   await promise(server, "listening");
 
@@ -158,7 +113,7 @@ yA==
   conn.connect(`xmpps://localhost:${server.address().port}`).catch(() => {});
 
   const error = await promise(conn, "error");
-  t.is(error.message, "self signed certificate");
+  t.is(error.code, "DEPTH_ZERO_SELF_SIGNED_CERT");
 
   await conn.close().catch(() => {});
   server.close();

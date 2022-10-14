@@ -32,9 +32,11 @@ test-ci:
 
 clean:
 	make stop
-	rm -f prosody/prosody.err
-	rm -f prosody/prosody.log
-	rm -f prosody/prosody.pid
+	rm -f server/localhost.key
+	rm -f server/localhost.crt
+	rm -f server/prosody.err
+	rm -f server/prosody.log
+	rm -f server/prosody.pid
 	./node_modules/.bin/lerna clean --yes
 	rm -rf node_modules/
 	rm -f packages/*/dist/*.js

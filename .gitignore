@@ -2,6 +2,8 @@
 node_modules/
 **/dist/*
 server/localhost/
+server/localhost.crt
+server/localhost.key
 server/prosody.err
 server/prosody.log
 server/prosody.pid
