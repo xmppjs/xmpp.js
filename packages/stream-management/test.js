@@ -25,6 +25,8 @@ test("enable - enabled", async (t) => {
     <enable xmlns="urn:xmpp:sm:3" resume="true" />,
   );
 
+  await tick();
+
   t.is(entity.streamManagement.outbound, 0);
   t.is(entity.streamManagement.enabled, false);
   t.is(entity.streamManagement.id, "");
@@ -42,6 +44,25 @@ test("enable - enabled", async (t) => {
 
   t.is(entity.streamManagement.id, "some-long-sm-id");
   t.is(entity.streamManagement.enabled, true);
+});
+
+test("enable - send rejects", async (t) => {
+  const { entity } = mockClient();
+
+  entity.send = () => Promise.reject(new Error("nope"));
+
+  entity.mockInput(
+    <enabled
+      xmlns="urn:xmpp:sm:3"
+      id="some-long-sm-id"
+      location="[2001:41D0:1:A49b::1]:9222"
+      resume="true"
+    />,
+  );
+
+  await tick();
+
+  t.is(entity.streamManagement.enabled, false);
 });
 
 test("enable - message - enabled", async (t) => {
@@ -63,6 +84,8 @@ test("enable - message - enabled", async (t) => {
   t.is(entity.streamManagement.outbound, 0);
   t.is(entity.streamManagement.enabled, false);
   t.is(entity.streamManagement.id, "");
+
+  await tick();
 
   entity.mockInput(<message />);
 
@@ -102,6 +125,8 @@ test("enable - failed", async (t) => {
 
   t.is(entity.streamManagement.outbound, 0);
   entity.streamManagement.enabled = true;
+
+  await tick();
 
   entity.mockInput(<failed xmlns="urn:xmpp:sm:3" />);
 
