@@ -13,7 +13,7 @@
     "callee"
   ],
   "engines": {
-    "node": ">= 12.4.0"
+    "node": ">= 14"
   },
   "dependencies": {
     "@xmpp/events": "^0.13.0",

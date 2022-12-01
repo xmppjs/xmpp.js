@@ -16,7 +16,7 @@
   "react-native": "index.js",
   "browser": "browser.js",
   "engines": {
-    "node": ">= 12.4.0"
+    "node": ">= 14"
   },
   "publishConfig": {
     "access": "public"
