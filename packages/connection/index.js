@@ -25,7 +25,6 @@ class Connection extends EventEmitter {
 
   _reset() {
     this.jid = null;
-    this.status = "offline";
     this._detachSocket();
     this._detachParser();
   }
@@ -181,6 +180,7 @@ class Connection extends EventEmitter {
   }
 
   _status(status, ...args) {
+    if (this.status === status) return;
     this.status = status;
     this.emit("status", status, ...args);
     this.emit(status, ...args);
@@ -274,7 +274,7 @@ class Connection extends EventEmitter {
    */
   async stop() {
     const el = await this._end();
-    if (this.status !== "offline") this._status("offline", el);
+    this._status("offline", el);
     return el;
   }
 
