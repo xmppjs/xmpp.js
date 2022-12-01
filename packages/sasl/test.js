@@ -2,6 +2,7 @@
 
 const test = require("ava");
 const { mockClient, promise } = require("@xmpp/test");
+const parse = require("@xmpp/xml/lib/parse.js");
 
 const username = "foo";
 const password = "bar";
@@ -145,6 +146,27 @@ test("use ANONYMOUS if username and password are not provided", async (t) => {
         <mechanism>SCRAM-SHA-1</mechanism>
       </mechanisms>
     </features>,
+  );
+
+  const result = await promise(entity, "send");
+  t.deepEqual(result.attrs.mechanism, "ANONYMOUS");
+});
+
+test("with whitespaces", async (t) => {
+  const { entity } = mockClient();
+
+  entity.mockInput(
+    parse(
+      `
+      <features xmlns="http://etherx.jabber.org/streams">
+        <mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
+          <mechanism>ANONYMOUS</mechanism>
+          <mechanism>PLAIN</mechanism>
+          <mechanism>SCRAM-SHA-1</mechanism>
+        </mechanisms>
+      </features>
+      `.trim(),
+    ),
   );
 
   const result = await promise(entity, "send");

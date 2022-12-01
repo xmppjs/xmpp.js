@@ -12,7 +12,7 @@ class XMPPError extends Error {
   }
 
   static fromElement(element) {
-    const [condition, second, third] = element.children;
+    const [condition, second, third] = element.getChildElements();
     let text;
     let application;
 

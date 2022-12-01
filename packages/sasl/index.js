@@ -10,7 +10,10 @@ const SASLFactory = require("saslmechanisms");
 const NS = "urn:ietf:params:xml:ns:xmpp-sasl";
 
 function getMechanismNames(features) {
-  return features.getChild("mechanisms", NS).children.map((el) => el.text());
+  return features
+    .getChild("mechanisms", NS)
+    .getChildElements()
+    .map((el) => el.text());
 }
 
 async function authenticate(SASL, entity, mechname, credentials) {

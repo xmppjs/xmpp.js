@@ -7,6 +7,7 @@ export default {
           "@babel/plugin-transform-react-jsx",
           {
             pragma: "xml",
+            throwIfNamespace: false,
           },
         ],
         [
