@@ -282,7 +282,7 @@ test.serial("xmpp domain", async (t) => {
   t.is(address.bare().toString(), JID);
 });
 
-test.serial("xmpps IPv4", async (t) => {
+test.serial.skip("xmpps IPv4", async (t) => {
   const xmpp = client({
     credentials,
     service: "xmpps://127.0.0.1:5223",
