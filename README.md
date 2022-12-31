@@ -21,7 +21,7 @@
 
 It aims to run everywhere JavaScript runs and make use of the best network transport available.
 
-xmpp.js is known to be used in Node.js, browsers, React Native, GJS and Duktape.
+xmpp.js is known to be used with Node.js, browsers, React Native, GJS and Duktape.
 
 ### reliable
 
@@ -45,8 +45,11 @@ Do you need help with working with xmpp.js? Please reach out to our community by
 
 ## Built with xmpp.js
 
+- [WorkAdventure](https://workadventu.re/)
 - [Simplo](https://simplo.app/?lang=en)
 - [Crypho](https://www.crypho.com/)
+- [MeshCentral](https://meshcentral.com/)
+- [openHAB](https://www.openhab.org/)
 - [HearMe.App](https://www.hearme.app/)
 - [Wobbly](https://wobbly.app/)
 - [Alcatel-Lucent Rainbow](https://www.openrainbow.com/)

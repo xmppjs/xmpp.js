@@ -47,8 +47,8 @@ function makeCertificate() {
   const attrs = [{ name: "commonName", value: "localhost" }];
   const pems = selfsigned.generate(attrs, { days: 365, keySize: 2048 });
 
-  writeFileSync(path.join(__dirname, "localhost.crt"), pems.cert);
-  writeFileSync(path.join(__dirname, "localhost.key"), pems.private);
+  writeFileSync(path.join(__dirname, "certs/localhost.crt"), pems.cert);
+  writeFileSync(path.join(__dirname, "certs/localhost.key"), pems.private);
 }
 
 async function waitPortClose() {

@@ -1,4 +1,4 @@
-.PHONY: setup test clean bundle start stop restart size bundlesize
+.PHONY: setup lint test ci clean start stop restart bundlesize bundle size cert ncu
 
 setup:
 	node packages/xmpp.js/script.js
@@ -19,7 +19,7 @@ test:
 	make lint
 	make bundlesize
 
-test-ci:
+ci:
 	npm install
 	./node_modules/.bin/lerna bootstrap
 	./node_modules/.bin/ava
@@ -60,9 +60,6 @@ bundle:
 size:
 	make bundle
 	make bundlesize
-
-cert:
-	cd server && openssl req -new -x509 -days 365 -nodes -out "localhost.crt" -newkey rsa:2048 -keyout "localhost.key" -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost"
 
 ncu:
 	ncu && npx lerna exec ncu

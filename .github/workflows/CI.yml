@@ -35,7 +35,7 @@ jobs:
 
       - run: npm install -g npm
       - run: make
-      - run: make test-ci
+      - run: make ci
 
       - name: The job has failed
         if: ${{ failure() }}

@@ -182,8 +182,7 @@ test.serial("auto", async (t) => {
   t.is(address.bare().toString(), JID);
 });
 
-// Prosody 404 https://prosody.im/issues/issue/932
-test.serial.skip("ws IPv4", async (t) => {
+test.serial("ws IPv4", async (t) => {
   const xmpp = client({
     credentials,
     service: "ws://127.0.0.1:5280/xmpp-websocket",
@@ -195,8 +194,7 @@ test.serial.skip("ws IPv4", async (t) => {
   t.is(address.bare().toString(), JID);
 });
 
-// Prosody 404 https://prosody.im/issues/issue/932
-test.serial.skip("ws IPv6", async (t) => {
+test.serial("ws IPv6", async (t) => {
   const xmpp = client({
     credentials,
     service: "ws://[::1]:5280/xmpp-websocket",
@@ -220,7 +218,7 @@ test.serial("ws domain", async (t) => {
 });
 
 // Prosody 404 https://prosody.im/issues/issue/932
-test.serial.skip("wss IPv4", async (t) => {
+test.serial("wss IPv4", async (t) => {
   const xmpp = client({
     credentials,
     service: "wss://127.0.0.1:5281/xmpp-websocket",
@@ -233,7 +231,7 @@ test.serial.skip("wss IPv4", async (t) => {
 });
 
 // Prosody 404 https://prosody.im/issues/issue/932
-test.serial.skip("wss IPv6", async (t) => {
+test.serial("wss IPv6", async (t) => {
   const xmpp = client({
     credentials,
     service: "wss://[::1]:5281/xmpp-websocket",
@@ -272,11 +270,6 @@ test.serial("xmpp IPv6", async (t) => {
   const xmpp = client({ credentials, service: "xmpp://[::1]:5222", domain });
   debug(xmpp);
   t.context.xmpp = xmpp;
-  // No local IPv6 on travis https://github.com/travis-ci/travis-ci/issues/4964
-  if (process.env.TRAVIS) {
-    return t.pass();
-  }
-
   const address = await xmpp.start();
   t.is(address.bare().toString(), JID);
 });
@@ -305,11 +298,6 @@ test.serial("xmpps IPv6", async (t) => {
   const xmpp = client({ credentials, service: "xmpps://[::1]:5223", domain });
   debug(xmpp);
   t.context.xmpp = xmpp;
-  // No local IPv6 on travis https://github.com/travis-ci/travis-ci/issues/4964
-  if (process.env.TRAVIS) {
-    return t.pass();
-  }
-
   const address = await xmpp.start();
   t.is(address.bare().toString(), JID);
 });
