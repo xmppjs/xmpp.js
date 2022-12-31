@@ -31,8 +31,8 @@ jobs:
         run: |
           echo deb http://packages.prosody.im/debian $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/prosody.list
           sudo wget https://prosody.im/files/prosody-debian-packages.key -O/etc/apt/trusted.gpg.d/prosody.gpg
-          sudo apt update
-          sudo apt -y install prosody lua-bitop lua-sec
+          sudo apt-get update
+          sudo apt-get -y install prosody lua-bitop lua-sec
           sudo service prosody stop
 
       - run: npm install -g npm

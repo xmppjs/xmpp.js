@@ -283,11 +283,6 @@ test.serial("xmpp domain", async (t) => {
 });
 
 test.serial("xmpps IPv4", async (t) => {
-  // ECONNREFUSED on Github Actions for some reason
-  if (process.env.GITHUB_ACTION) {
-    return t.pass();
-  }
-
   const xmpp = client({
     credentials,
     service: "xmpps://127.0.0.1:5223",
@@ -300,11 +295,6 @@ test.serial("xmpps IPv4", async (t) => {
 });
 
 test.serial("xmpps IPv6", async (t) => {
-  // ECONNREFUSED on Github Actions for some reason
-  if (process.env.GITHUB_ACTION) {
-    return t.pass();
-  }
-
   const xmpp = client({ credentials, service: "xmpps://[::1]:5223", domain });
   debug(xmpp);
   t.context.xmpp = xmpp;
@@ -313,11 +303,6 @@ test.serial("xmpps IPv6", async (t) => {
 });
 
 test.serial("xmpps domain", async (t) => {
-  // ECONNREFUSED on Github Actions for some reason
-  if (process.env.GITHUB_ACTION) {
-    return t.pass();
-  }
-
   const xmpp = client({ credentials, service: "xmpps://localhost:5223" });
   debug(xmpp);
   t.context.xmpp = xmpp;
