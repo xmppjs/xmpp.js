@@ -27,7 +27,7 @@ ci:
 	make restart
 	./node_modules/.bin/lerna run prepublish
 	node bundle.js
-	./node_modules/.bin/ava --config e2e.config.js
+	./node_modules/.bin/ava --tap --config e2e.config.js
 	make bundlesize
 
 clean:
