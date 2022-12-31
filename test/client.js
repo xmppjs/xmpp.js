@@ -294,7 +294,7 @@ test.serial.skip("xmpps IPv4", async (t) => {
   t.is(address.bare().toString(), JID);
 });
 
-test.serial("xmpps IPv6", async (t) => {
+test.serial.skip("xmpps IPv6", async (t) => {
   const xmpp = client({ credentials, service: "xmpps://[::1]:5223", domain });
   debug(xmpp);
   t.context.xmpp = xmpp;
