@@ -29,10 +29,10 @@ See [ava CLI](https://github.com/avajs/ava/blob/main/docs/05-command-line.md).
 ## Submitting
 
 When submitting a pull request, additional tests will be run on GitHub actions.
-In most cases it shouldn't be necessary but if they fail, you can run them locally after installing prosody with
+In most cases it shouldn't be necessary but if they fail, you can run them locally after installing prosody >= 0.12 with
 
 ```
-make test-ci
+make ci
 ```
 
 Good luck and feel free to ask for help in https://github.com/xmppjs/xmpp.js/discussions

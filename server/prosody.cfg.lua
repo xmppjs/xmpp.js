@@ -4,8 +4,6 @@
 
 local lfs = require "lfs";
 
-plugin_paths = { lfs.currentdir() .. "/prosody-modules" }
-
 modules_enabled = {
   "roster";
   "saslauth";
@@ -19,10 +17,7 @@ modules_enabled = {
   "websocket";
   "time";
   "version";
-
-  -- prosody-modules
   "smacks";
-  -- "smacks_offline";
 };
 
 modules_disabled = {
@@ -44,7 +39,7 @@ cross_domain_websocket = true;
 
 authentication = "internal_plain"
 
-legacy_ssl_ports = { 5223 };
+c2s_direct_tls_ports = { 5223 };
 
 log = {
   debug = lfs.currentdir() .. "/prosody.log";
@@ -52,8 +47,8 @@ log = {
 }
 
 ssl = {
-  certificate = lfs.currentdir() .. "/localhost.crt";
-  key = lfs.currentdir() .. "/localhost.key";
+  certificate = lfs.currentdir() .. "/certs/localhost.crt";
+  key = lfs.currentdir() .. "/certs/localhost.key";
 }
 
 data_path = lfs.currentdir()
