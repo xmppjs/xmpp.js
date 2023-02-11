@@ -7,7 +7,8 @@ module.exports = class OutgoingContext extends Context {
   constructor(entity, stanza) {
     super(entity, stanza);
 
-    const { jid, domain } = entity;
+    const { jid } = entity;
+    const { domain } = entity.options;
 
     const from = stanza.attrs.from || (jid && jid.toString());
     const to = stanza.attrs.to || domain;
