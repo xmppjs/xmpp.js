@@ -50,7 +50,6 @@ Do you need help with working with xmpp.js? Please reach out to our community by
 - [Crypho](https://www.crypho.com/)
 - [MeshCentral](https://meshcentral.com/)
 - [openHAB](https://www.openhab.org/)
-- [HearMe.App](https://www.hearme.app/)
 - [Wobbly](https://wobbly.app/)
 - [Alcatel-Lucent Rainbow](https://www.openrainbow.com/)
 - [Telldus](https://telldus.com/)
