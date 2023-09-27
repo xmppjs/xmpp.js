@@ -55,6 +55,11 @@ module.exports = function streamManagement({
     outbound: 0,
     inbound: 0,
     max: null,
+    sendAck: () => {
+      if (sm.enabled && sm.inbound) {
+        entity.send(xml("a", { xmlns: NS, h: sm.inbound })).catch(() => {});
+      }
+    }
   };
 
   entity.on("online", (jid) => {
