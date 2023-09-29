@@ -92,14 +92,15 @@ module.exports = function streamManagement({
     // Resuming
     if (sm.id) {
       try {
+        entity.jid = address;
         await resume(entity, sm.inbound, sm.id);
         sm.enabled = true;
-        entity.jid = address;
         entity.status = "online";
         return true;
         // If resumption fails, continue with session establishment
         // eslint-disable-next-line no-unused-vars
       } catch {
+        entity.jid = null;
         sm.id = "";
         sm.enabled = false;
         sm.outbound = 0;
