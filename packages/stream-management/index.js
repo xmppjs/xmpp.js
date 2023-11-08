@@ -69,6 +69,7 @@ module.exports = function streamManagement({
   });
 
   entity.on("offline", () => {
+    sm.sendAck();
     sm.outbound = 0;
     sm.inbound = 0;
     sm.enabled = false;
