@@ -2,6 +2,7 @@
 
 const Element = require("ltx/lib/Element");
 const createElement = require("ltx/lib/createElement");
+const clone = require("ltx/lib/clone");
 const Parser = require("./lib/Parser");
 const {
   escapeXML,
@@ -19,6 +20,7 @@ module.exports = xml;
 
 Object.assign(module.exports, {
   Element,
+  clone,
   createElement,
   Parser,
   escapeXML,
