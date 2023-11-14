@@ -139,7 +139,7 @@ module.exports = function context(entity = client()) {
       return this.sanitize(el).stanza;
     },
     fakeOutgoing(el) {
-      entity.hookOutgoing(el);
+      entity.emit("send", el);
     },
     mockInput(el) {
       entity.emit("input", el.toString());
