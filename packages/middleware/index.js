@@ -28,7 +28,7 @@ module.exports = function middleware({ entity }) {
   const outgoingListener = listener(entity, outgoing, OutgoingContext);
 
   entity.on("element", incomingListener);
-  entity.hookOutgoing = outgoingListener;
+  entity.on("send", outgoingListener);
 
   return {
     use(fn) {
