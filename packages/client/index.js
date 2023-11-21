@@ -15,6 +15,7 @@ const _resolve = require("@xmpp/resolve");
 
 // Stream features - order matters and define priority
 const _starttls = require("@xmpp/starttls/client");
+const _sasl2 = require("@xmpp/sasl2");
 const _sasl = require("@xmpp/sasl");
 const _resourceBinding = require("@xmpp/resource-binding");
 const _sessionEstablishment = require("@xmpp/session-establishment");
@@ -22,11 +23,13 @@ const _streamManagement = require("@xmpp/stream-management");
 
 // SASL mechanisms - order matters and define priority
 const scramsha1 = require("@xmpp/sasl-scram-sha-1");
+const htsha256 = require("@xmpp/sasl-ht-sha-256-none");
 const plain = require("@xmpp/sasl-plain");
 const anonymous = require("@xmpp/sasl-anonymous");
 
 function client(options = {}) {
   const { resource, credentials, username, password, ...params } = options;
+  const { clientId, software, device } = params;
 
   const { domain, service } = params;
   if (!domain && service) {
@@ -47,6 +50,11 @@ function client(options = {}) {
   const resolve = _resolve({ entity });
   // Stream features - order matters and define priority
   const starttls = _starttls({ streamFeatures });
+  const sasl2 = _sasl2(
+    { streamFeatures },
+    credentials || { username, password },
+    { clientId, software, device },
+  );
   const sasl = _sasl({ streamFeatures }, credentials || { username, password });
   const streamManagement = _streamManagement({
     streamFeatures,
@@ -64,9 +72,10 @@ function client(options = {}) {
   // SASL mechanisms - order matters and define priority
   const mechanisms = Object.entries({
     scramsha1,
+    htsha256,
     plain,
     anonymous,
-  }).map(([k, v]) => ({ [k]: v(sasl) }));
+  }).map(([k, v]) => ({ [k]: [v(sasl2), v(sasl)] }));
 
   return Object.assign(entity, {
     entity,
@@ -80,6 +89,7 @@ function client(options = {}) {
     iqCallee,
     resolve,
     starttls,
+    sasl2,
     sasl,
     resourceBinding,
     sessionEstablishment,
