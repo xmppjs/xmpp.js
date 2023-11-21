@@ -258,6 +258,13 @@ class Connection extends EventEmitter {
 
     const headerElement = this.headerElement();
     headerElement.attrs.to = domain;
+    if (
+      this.socket.secure &&
+      this.socket.secure() &&
+      (this.streamFrom || this.jid)
+    ) {
+      headerElement.attrs.from = (this.streamFrom || this.jid).toString();
+    }
     headerElement.attrs["xml:lang"] = lang;
     this.root = headerElement;
 

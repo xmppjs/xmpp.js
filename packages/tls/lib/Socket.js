@@ -10,6 +10,10 @@ class Socket extends EventEmitter {
     this.timeout = null;
   }
 
+  secure() {
+    return true;
+  }
+
   connect(...args) {
     this._attachSocket(tls.connect(...args));
   }
