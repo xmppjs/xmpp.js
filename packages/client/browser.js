@@ -53,6 +53,7 @@ function client(options = {}) {
     streamFeatures,
     entity,
     middleware,
+    sasl2,
   });
   const resourceBinding = _resourceBinding(
     { iqCaller, streamFeatures },
