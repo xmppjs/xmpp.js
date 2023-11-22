@@ -44,6 +44,7 @@ module.exports = function streamManagement({
   streamFeatures,
   entity,
   middleware,
+  sasl2,
 }) {
   let address = null;
 
@@ -88,24 +89,30 @@ module.exports = function streamManagement({
   // https://xmpp.org/extensions/xep-0198.html#enable
   // For client-to-server connections, the client MUST NOT attempt to enable stream management until after it has completed Resource Binding unless it is resuming a previous session
 
+  const resumeSuccess = () => {
+    sm.enabled = true;
+    if (address) entity.jid = address;
+    entity.status = "online";
+  };
+
+  const resumeFailed = () => {
+    sm.id = "";
+    sm.enabled = false;
+    sm.outbound = 0;
+  };
+
   streamFeatures.use("sm", NS, async (context, next) => {
     // Resuming
     if (sm.id) {
       try {
-        await resume(entity, sm.inbound, sm.id);
-        sm.enabled = true;
-        entity.jid = address;
-        entity.status = "online";
+        resumeSuccess(await resume(entity, sm.inbound, sm.id));
         return true;
         // If resumption fails, continue with session establishment
         // eslint-disable-next-line no-unused-vars
       } catch {
-        sm.id = "";
-        sm.enabled = false;
-        sm.outbound = 0;
+        resumeFailed();
       }
     }
-
     // Enabling
 
     // Resource binding first
@@ -123,6 +130,47 @@ module.exports = function streamManagement({
       sm.max = response.attrs.max;
       // eslint-disable-next-line no-unused-vars
     } catch {
+      sm.enabled = false;
+    }
+
+    sm.inbound = 0;
+  });
+
+  sasl2?.inline("sm", NS, async (_, addInline) => {
+    if (sm.id) {
+      const success = await addInline(
+        xml("resume", { xmlns: NS, h: sm.inbound, previd: sm.id }),
+      );
+      const resumed = success.getChild("resumed", NS);
+      if (resumed) {
+        resumeSuccess(resumed);
+      } else {
+        resumeFailed();
+      }
+    }
+  });
+
+  sasl2?.bindInline(NS, async (addInline) => {
+    const success = await addInline(
+      xml("enable", {
+        xmlns: NS,
+        max: sm.preferredMaximum,
+        resume: sm.allowResume ? "true" : undefined,
+      }),
+    );
+    const bound = success.getChild("bound", "urn:xmpp:bind:0");
+    if (!bound) return; // Did a resume or something, don't need this
+
+    const enabled = bound?.getChild("enabled", NS);
+    if (enabled) {
+      if (sm.outbound_q.length > 0) {
+        throw "Stream Management assertion failure, queue should be empty after enable";
+      }
+      sm.outbound = 0;
+      sm.enabled = true;
+      sm.id = enabled.attrs.id;
+      sm.max = enabled.attrs.max;
+    } else {
       sm.enabled = false;
     }
 
