@@ -14,6 +14,8 @@ const FAST_NS = "urn:xmpp:fast:0";
 
 async function authenticate(
   SASL,
+  inlineHandlers,
+  bindInlineHandlers,
   entity,
   mechname,
   credentials,
@@ -37,7 +39,7 @@ async function authenticate(
     ...credentials,
   };
 
-  return new Promise((resolve, reject) => {
+  const promise = new Promise((resolve, reject) => {
     const handler = (element) => {
       if (element.attrs.xmlns !== NS) {
         return;
@@ -84,7 +86,7 @@ async function authenticate(
           if (token) {
             entity.emit("fast-token", token);
           }
-          resolve();
+          resolve(element);
           break;
         }
       }
@@ -93,45 +95,76 @@ async function authenticate(
     };
 
     entity.on("nonza", handler);
-
-    const bind2 = features
-      .getChild("authentication", NS)
-      .getChild("inline")
-      ?.getChild("bind", BIND2_NS);
-
-    entity.send(
-      xml("authenticate", { xmlns: NS, mechanism: mech.name }, [
-        mech.clientFirst &&
-          xml("initial-response", {}, encode(mech.response(creds))),
-        (userAgent?.clientId || userAgent?.software || userAgent?.device) &&
-          xml(
-            "user-agent",
-            userAgent.clientId ? { id: userAgent.clientId } : {},
-            [
-              userAgent.software && xml("software", {}, userAgent.software),
-              userAgent.device && xml("device", {}, userAgent.device),
-            ],
-          ),
-        bind2 != null &&
-          userAgent?.clientId &&
-          xml("bind", { xmlns: BIND2_NS }, [
-            userAgent?.software && xml("tag", {}, userAgent.software),
-          ]),
-        credentials.requestToken &&
-          xml(
-            "request-token",
-            { xmlns: FAST_NS, mechanism: credentials.requestToken },
-            [],
-          ),
-        (credentials.fastCount || credentials.fastCount === 0) &&
-          xml("fast", { xmlns: FAST_NS, count: credentials.fastCount }, []),
-      ]),
-    );
   });
+
+  const sendInline = [];
+  const hPromises = [];
+  const inline = features.getChild("authentication", NS).getChild("inline");
+  for (const el of inline?.children || []) {
+    const h = inlineHandlers["{" + el.attrs.xmlns + "}" + el.name];
+    if (h) {
+      hPromises.push(
+        h(el, (addEl) => {
+          sendInline.push(addEl);
+          return promise;
+        }),
+      );
+    }
+  }
+
+  const bindInline = [];
+  const bind2 = inline?.getChild("bind", BIND2_NS);
+  for (const el of bind2?.getChild("inline")?.getChildren("feature") || []) {
+    const h = bindInlineHandlers[el.attrs.var];
+    if (h) {
+      hPromises.push(
+        h((addEl) => {
+          bindInline.push(addEl);
+          return promise;
+        }),
+      );
+    }
+  }
+
+  entity.send(
+    xml("authenticate", { xmlns: NS, mechanism: mech.name }, [
+      mech.clientFirst &&
+        xml("initial-response", {}, encode(mech.response(creds))),
+      (userAgent?.clientId || userAgent?.software || userAgent?.device) &&
+        xml(
+          "user-agent",
+          userAgent.clientId ? { id: userAgent.clientId } : {},
+          [
+            userAgent.software && xml("software", {}, userAgent.software),
+            userAgent.device && xml("device", {}, userAgent.device),
+          ],
+        ),
+      bind2 != null &&
+        userAgent?.clientId &&
+        xml("bind", { xmlns: BIND2_NS }, [
+          userAgent?.software && xml("tag", {}, userAgent.software),
+          ...bindInline,
+        ]),
+      credentials.requestToken &&
+        xml(
+          "request-token",
+          { xmlns: FAST_NS, mechanism: credentials.requestToken },
+          [],
+        ),
+      (credentials.fastCount || credentials.fastCount === 0) &&
+        xml("fast", { xmlns: FAST_NS, count: credentials.fastCount }, []),
+      ...sendInline,
+    ]),
+  );
+
+  await promise;
+  await Promise.all(hPromises);
 }
 
 module.exports = function sasl({ streamFeatures }, credentials, userAgent) {
   const SASL = new SASLFactory();
+  const handlers = {};
+  const bindHandlers = {};
 
   streamFeatures.use("authentication", NS, async ({ stanza, entity }) => {
     const offered = new Set(
@@ -161,7 +194,16 @@ module.exports = function sasl({ streamFeatures }, credentials, userAgent) {
     if (typeof credentials === "function") {
       await credentials(
         (creds, mech) =>
-          authenticate(SASL, entity, mech, creds, userAgent, stanza),
+          authenticate(
+            SASL,
+            handlers,
+            bindHandlers,
+            entity,
+            mech,
+            creds,
+            userAgent,
+            stanza,
+          ),
         intersection,
       );
     } else {
@@ -170,7 +212,16 @@ module.exports = function sasl({ streamFeatures }, credentials, userAgent) {
         mech = "ANONYMOUS";
       }
 
-      await authenticate(SASL, entity, mech, credentials, userAgent, stanza);
+      await authenticate(
+        SASL,
+        handlers,
+        bindHandlers,
+        entity,
+        mech,
+        credentials,
+        userAgent,
+        stanza,
+      );
     }
 
     return true; // Not online yet, wait for next features
@@ -179,6 +230,12 @@ module.exports = function sasl({ streamFeatures }, credentials, userAgent) {
   return {
     use(...args) {
       return SASL.use(...args);
+    },
+    inline(name, xmlns, handler) {
+      handlers["{" + xmlns + "}" + name] = handler;
+    },
+    bindInline(feature, handler) {
+      bindHandlers[feature] = handler;
     },
   };
 };
