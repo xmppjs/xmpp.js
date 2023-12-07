@@ -6,6 +6,8 @@ module.exports = function route() {
       return next();
 
     const prevent = await next();
-    if (!prevent && entity.jid) entity._status("online", entity.jid);
+    if (!prevent && entity.jid && entity.status !== "online") {
+      entity._status("online", entity.jid);
+    }
   };
 };

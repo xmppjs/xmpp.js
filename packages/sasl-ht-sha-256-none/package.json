@@ -1,0 +1,23 @@
+{
+  "name": "@xmpp/sasl-ht-sha-256-none",
+  "description": "XMPP SASL HT-SHA-256-NONE for JavaScript",
+  "repository": "github:xmppjs/xmpp.js",
+  "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/sasl-ht-sha-256-none",
+  "bugs": "http://github.com/xmppjs/xmpp.js/issues",
+  "version": "0.13.0",
+  "license": "ISC",
+  "keywords": [
+    "XMPP",
+    "sasl",
+    "plain"
+  ],
+  "dependencies": {
+    "create-hmac": "^1.1.7"
+  },
+  "engines": {
+    "node": ">= 14"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
