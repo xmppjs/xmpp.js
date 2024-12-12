@@ -20,7 +20,6 @@ const _streamManagement = require("@xmpp/stream-management");
 
 // SASL mechanisms - order matters and define priority
 const anonymous = require("@xmpp/sasl-anonymous");
-const htsha256 = require("@xmpp/sasl-ht-sha-256-none");
 const plain = require("@xmpp/sasl-plain");
 
 function client(options = {}) {
@@ -65,7 +64,6 @@ function client(options = {}) {
   });
   // SASL mechanisms - order matters and define priority
   const mechanisms = Object.entries({
-    htsha256,
     plain,
     anonymous,
   }).map(([k, v]) => ({ [k]: [v(sasl2), v(sasl)] }));

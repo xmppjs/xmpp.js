@@ -2,7 +2,7 @@
 
 const { encode, decode } = require("@xmpp/base64");
 const SASLError = require("./lib/SASLError");
-var jid = require("@xmpp/jid");
+const jid = require("@xmpp/jid");
 const xml = require("@xmpp/xml");
 const SASLFactory = require("saslmechanisms");
 
@@ -163,7 +163,7 @@ async function authenticate(
   await Promise.all(hPromises);
 }
 
-module.exports = function sasl({ streamFeatures }, credentials, userAgent) {
+module.exports = function sasl2({ streamFeatures }, credentials, userAgent) {
   const SASL = new SASLFactory();
   const handlers = {};
   const bindHandlers = {};
