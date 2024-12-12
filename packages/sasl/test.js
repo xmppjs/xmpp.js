@@ -153,6 +153,8 @@ test("use ANONYMOUS if username and password are not provided", async (t) => {
 });
 
 test("with whitespaces", async (t) => {
+  console.log("truc");
+
   const { entity } = mockClient();
 
   entity.mockInput(

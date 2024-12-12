@@ -1,6 +1,7 @@
 "use strict";
 
-const fetch = global.fetch || require("node-fetch");
+// eslint-disable-next-line n/no-unsupported-features/node-builtins
+const fetch = globalThis.fetch || require("node-fetch");
 const parse = require("@xmpp/xml/lib/parse");
 const compareAltConnections = require("./alt-connections").compare;
 

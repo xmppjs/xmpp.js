@@ -10,7 +10,6 @@ server/prosody.pid
 !.gitkeep
 !.editorconfig
 !.gitignore
-!.travis.yml
 
 npm-debug.log
 lerna-debug.log

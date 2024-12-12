@@ -4,10 +4,10 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/tcp",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "license": "ISC",
   "dependencies": {
-    "@xmpp/connection-tcp": "^0.13.1"
+    "@xmpp/connection-tcp": "^0.13.2"
   },
   "keywords": [
     "XMPP",

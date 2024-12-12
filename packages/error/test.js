@@ -2,7 +2,7 @@
 
 const test = require("ava");
 const XMPPError = require(".");
-// eslint-disable-next-line node/no-extraneous-require
+// eslint-disable-next-line n/no-extraneous-require
 const parse = require("@xmpp/xml/lib/parse.js");
 
 test("fromElement", (t) => {

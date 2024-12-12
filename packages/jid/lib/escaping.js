@@ -7,16 +7,16 @@ module.exports.detect = function detect(local) {
 
   // Remove all escaped sequences
   const tmp = local
-    .replace(/\\20/g, "")
-    .replace(/\\22/g, "")
-    .replace(/\\26/g, "")
-    .replace(/\\27/g, "")
-    .replace(/\\2f/g, "")
-    .replace(/\\3a/g, "")
-    .replace(/\\3c/g, "")
-    .replace(/\\3e/g, "")
-    .replace(/\\40/g, "")
-    .replace(/\\5c/g, "");
+    .replaceAll(String.raw`\20`, "")
+    .replaceAll(String.raw`\22`, "")
+    .replaceAll(String.raw`\26`, "")
+    .replaceAll(String.raw`\27`, "")
+    .replaceAll(String.raw`\2f`, "")
+    .replaceAll(String.raw`\3a`, "")
+    .replaceAll(String.raw`\3c`, "")
+    .replaceAll(String.raw`\3e`, "")
+    .replaceAll(String.raw`\40`, "")
+    .replaceAll(String.raw`\5c`, "");
 
   // Detect if we have unescaped sequences
   const search = tmp.search(/[ "&'/:<>@\\]/g);
@@ -40,17 +40,17 @@ module.exports.escape = function escape(local) {
   }
 
   return local
-    .replace(/^\s+|\s+$/g, "")
-    .replace(/\\/g, "\\5c")
-    .replace(/ /g, "\\20")
-    .replace(/"/g, "\\22")
-    .replace(/&/g, "\\26")
-    .replace(/'/g, "\\27")
-    .replace(/\//g, "\\2f")
-    .replace(/:/g, "\\3a")
-    .replace(/</g, "\\3c")
-    .replace(/>/g, "\\3e")
-    .replace(/@/g, "\\40");
+    .replaceAll(/^\s+|\s+$/g, "")
+    .replaceAll("\\", String.raw`\5c`)
+    .replaceAll(" ", String.raw`\20`)
+    .replaceAll('"', String.raw`\22`)
+    .replaceAll("&", String.raw`\26`)
+    .replaceAll("'", String.raw`\27`)
+    .replaceAll("/", String.raw`\2f`)
+    .replaceAll(":", String.raw`\3a`)
+    .replaceAll("<", String.raw`\3c`)
+    .replaceAll(">", String.raw`\3e`)
+    .replaceAll("@", String.raw`\40`);
 };
 
 /**
@@ -66,14 +66,14 @@ module.exports.unescape = function unescape(local) {
   }
 
   return local
-    .replace(/\\20/g, " ")
-    .replace(/\\22/g, '"')
-    .replace(/\\26/g, "&")
-    .replace(/\\27/g, "'")
-    .replace(/\\2f/g, "/")
-    .replace(/\\3a/g, ":")
-    .replace(/\\3c/g, "<")
-    .replace(/\\3e/g, ">")
-    .replace(/\\40/g, "@")
-    .replace(/\\5c/g, "\\");
+    .replaceAll(String.raw`\20`, " ")
+    .replaceAll(String.raw`\22`, '"')
+    .replaceAll(String.raw`\26`, "&")
+    .replaceAll(String.raw`\27`, "'")
+    .replaceAll(String.raw`\2f`, "/")
+    .replaceAll(String.raw`\3a`, ":")
+    .replaceAll(String.raw`\3c`, "<")
+    .replaceAll(String.raw`\3e`, ">")
+    .replaceAll(String.raw`\40`, "@")
+    .replaceAll(String.raw`\5c`, "\\");
 };
