@@ -23,6 +23,6 @@ Mechanism.prototype.final = (data) => {
   }
 };
 
-module.exports = (sasl) => {
+module.exports = function sasl2(sasl) {
   sasl.use(Mechanism);
 };

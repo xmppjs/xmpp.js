@@ -59,13 +59,15 @@ async function authenticate(
       }
 
       switch (element.name) {
-        case "failure":
+        case "failure": {
           reject(SASLError.fromElement(element));
           break;
-        case "continue":
+        }
+        case "continue": {
           // No tasks supported yet
           reject();
           break;
+        }
         case "success": {
           const additionalData = element.getChild("additional-data")?.text();
           if (additionalData && mech.final) {
@@ -182,7 +184,7 @@ module.exports = function sasl({ streamFeatures }, credentials, userAgent) {
         ?.map((m) => m.text()) || [],
     );
     const supported = SASL._mechs.map(({ name }) => name);
-    // eslint-disable-next-line unicorn/prefer-array-find
+
     const intersection = supported
       .map((mech) => ({
         name: mech,
