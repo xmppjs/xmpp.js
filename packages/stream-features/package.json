@@ -4,7 +4,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/stream-features",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "license": "ISC",
   "keywords": [
     "XMPP",
