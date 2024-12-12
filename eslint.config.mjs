@@ -65,6 +65,7 @@ export default [
         "error",
         { allowModules: ["ava", "sinon", "@xmpp/test"] },
       ],
+      "n/no-missing-require": "off",
 
       // promise
       // https://github.com/xjamundx/eslint-plugin-promise
