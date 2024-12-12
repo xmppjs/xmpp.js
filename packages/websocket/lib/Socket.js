@@ -1,7 +1,8 @@
 "use strict";
 
 const WS = require("ws");
-const WebSocket = global.WebSocket || WS;
+// eslint-disable-next-line n/no-unsupported-features/node-builtins
+const WebSocket = globalThis.WebSocket || WS;
 const EventEmitter = require("events");
 
 const CODE = "ECONNERROR";

@@ -3,7 +3,6 @@
 setup:
 	node packages/xmpp.js/script.js
 	npm install
-	./node_modules/.bin/lerna bootstrap
 	cd packages/xmpp.js/ && npm run prepublish
 	node bundle.js
 
@@ -13,7 +12,6 @@ lint:
 test:
 	cd packages/xmpp.js/ && npm run prepublish
 	npm install
-	./node_modules/.bin/lerna bootstrap
 	node bundle.js
 	./node_modules/.bin/ava
 	make lint
@@ -21,13 +19,12 @@ test:
 
 ci:
 	npm install
-	./node_modules/.bin/lerna bootstrap
 	./node_modules/.bin/ava
 	make lint
 	make restart
 	./node_modules/.bin/lerna run prepublish
 	node bundle.js
-	./node_modules/.bin/ava --tap --config e2e.config.js
+	./node_modules/.bin/ava --config e2e.config.js
 	make bundlesize
 
 clean:

@@ -28,7 +28,6 @@ test.cb("use", (t) => {
 test.cb("filter", (t) => {
   t.plan(4);
   const stanza = <presence />;
-  /* eslint-disable array-callback-return */
   t.context.middleware.filter((ctx, next) => {
     t.true(ctx instanceof OutgoingContext);
     t.deepEqual(ctx.stanza, stanza);
@@ -36,7 +35,6 @@ test.cb("filter", (t) => {
     t.true(next() instanceof Promise);
     t.end();
   });
-  /* eslint-enable array-callback-return */
   t.context.fakeOutgoing(stanza);
 });
 

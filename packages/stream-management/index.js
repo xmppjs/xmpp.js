@@ -108,7 +108,6 @@ module.exports = function streamManagement({
         resumeSuccess(await resume(entity, sm.inbound, sm.id));
         return true;
         // If resumption fails, continue with session establishment
-        // eslint-disable-next-line no-unused-vars
       } catch {
         resumeFailed();
       }
@@ -128,7 +127,6 @@ module.exports = function streamManagement({
       sm.enabled = true;
       sm.id = response.attrs.id;
       sm.max = response.attrs.max;
-      // eslint-disable-next-line no-unused-vars
     } catch {
       sm.enabled = false;
     }

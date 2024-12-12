@@ -19,7 +19,7 @@ const JID = jid(username, domain).toString();
 const service = "ws://localhost:5280/xmpp-websocket";
 
 const xmppjs = readFileSync("./packages/client/dist/xmpp.js", {
-  encoding: "utf-8",
+  encoding: "utf8",
 });
 
 test.beforeEach((t) => {
@@ -29,7 +29,6 @@ test.beforeEach((t) => {
   const scriptEl = document.createElement("script");
   scriptEl.textContent = xmppjs;
   document.body.append(scriptEl);
-  // eslint-disable-next-line unicorn/consistent-destructuring
   t.context = window.XMPP.client;
   return server.restart();
 });
