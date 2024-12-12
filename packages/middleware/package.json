@@ -11,9 +11,9 @@
     "middleware"
   ],
   "dependencies": {
-    "@xmpp/error": "^0.13.0",
+    "@xmpp/error": "^0.13.1",
     "@xmpp/jid": "^0.13.1",
-    "@xmpp/xml": "^0.13.0",
+    "@xmpp/xml": "^0.13.1",
     "koa-compose": "^4.1.0"
   },
   "engines": {

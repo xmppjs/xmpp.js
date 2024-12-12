@@ -3,6 +3,7 @@
 const test = require("ava");
 
 const domain = "example.com";
+// eslint-disable-next-line n/no-unsupported-features/node-builtins
 globalThis.fetch = (url) => {
   if (url !== `https://${domain}/.well-known/host-meta`) {
     throw new Error("Fetch URL incorrect");

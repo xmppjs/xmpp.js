@@ -21,9 +21,9 @@
     "node-fetch": false
   },
   "dependencies": {
-    "@xmpp/events": "^0.13.0",
-    "@xmpp/xml": "^0.13.0",
-    "node-fetch": "^2.7.0"
+    "@xmpp/events": "^0.13.1",
+    "@xmpp/xml": "^0.13.1",
+    "node-fetch": "^3.3.2"
   },
   "engines": {
     "node": ">= 14"

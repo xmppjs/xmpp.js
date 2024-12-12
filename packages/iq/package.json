@@ -16,13 +16,13 @@
     "node": ">= 14"
   },
   "dependencies": {
-    "@xmpp/events": "^0.13.0",
-    "@xmpp/id": "^0.13.0",
+    "@xmpp/events": "^0.13.1",
+    "@xmpp/id": "^0.13.1",
     "@xmpp/middleware": "^0.13.1",
-    "@xmpp/xml": "^0.13.0"
+    "@xmpp/xml": "^0.13.1"
   },
   "devDependencies": {
-    "@xmpp/middleware": "^0.13.0"
+    "@xmpp/middleware": "^0.13.1"
   },
   "publishConfig": {
     "access": "public"

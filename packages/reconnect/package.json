@@ -11,7 +11,7 @@
     "reconnect"
   ],
   "dependencies": {
-    "@xmpp/events": "^0.13.0"
+    "@xmpp/events": "^0.13.1"
   },
   "engines": {
     "node": ">= 14"

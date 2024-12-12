@@ -1,3 +1,4 @@
+/* eslint-disable n/no-unsupported-features/node-builtins */
 "use strict";
 
 module.exports.encode = function encode(string) {

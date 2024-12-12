@@ -2,3 +2,5 @@ node_modules/
 **/dist/*.js
 bundle.js
 server/prosody-modules/
+
+/.nx/workspace-data

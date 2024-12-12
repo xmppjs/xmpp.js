@@ -31,7 +31,7 @@ test("calls JID with passed arguments", (t) => {
 });
 
 test("works as expected with new operator", (t) => {
-  const addr = new jid("foo", "bar", "baz"); // eslint-disable-line new-cap
+  const addr = new jid("foo", "bar", "baz");
   t.true(addr instanceof JID);
   t.is(addr.toString(), "foo@bar/baz");
 });

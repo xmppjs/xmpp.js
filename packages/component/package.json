@@ -14,7 +14,7 @@
     "@xmpp/component-core": "^0.13.1",
     "@xmpp/iq": "^0.13.1",
     "@xmpp/middleware": "^0.13.1",
-    "@xmpp/reconnect": "^0.13.0"
+    "@xmpp/reconnect": "^0.13.1"
   },
   "engines": {
     "node": ">= 14"

@@ -8,8 +8,8 @@
   "license": "ISC",
   "dependencies": {
     "@xmpp/connection": "^0.13.1",
-    "@xmpp/xml": "^0.13.0",
-    "ws": "^8.4.0"
+    "@xmpp/xml": "^0.13.1",
+    "ws": "^8.18.0"
   },
   "browser": {
     "ws": false

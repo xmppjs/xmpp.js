@@ -11,9 +11,9 @@
     "sasl"
   ],
   "dependencies": {
-    "@xmpp/base64": "^0.13.0",
-    "@xmpp/error": "^0.13.0",
-    "@xmpp/xml": "^0.13.0",
+    "@xmpp/base64": "^0.13.1",
+    "@xmpp/error": "^0.13.1",
+    "@xmpp/xml": "^0.13.1",
     "saslmechanisms": "^0.1.1"
   },
   "engines": {

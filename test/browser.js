@@ -29,7 +29,6 @@ test.beforeEach((t) => {
   const scriptEl = document.createElement("script");
   scriptEl.textContent = xmppjs;
   document.body.append(scriptEl);
-  // eslint-disable-next-line unicorn/consistent-destructuring
   t.context = window.XMPP.client;
   return server.restart();
 });
