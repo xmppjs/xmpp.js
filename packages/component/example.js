@@ -1,4 +1,4 @@
-/* eslint-disable node/no-extraneous-require */
+/* eslint-disable n/no-extraneous-require */
 
 "use strict";
 

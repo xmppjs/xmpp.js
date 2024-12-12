@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-"use strict"; // eslint-disable-line node/shebang
+"use strict";
 
 const server = require(".");
 

@@ -4,7 +4,7 @@ const test = require("ava");
 const ConnectionTLS = require("./lib/Connection");
 const tls = require("tls");
 const { promise } = require("@xmpp/test");
-// eslint-disable-next-line node/no-extraneous-require
+// eslint-disable-next-line n/no-extraneous-require
 const selfsigned = require("selfsigned");
 
 test("socketParameters()", (t) => {
