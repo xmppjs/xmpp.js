@@ -9,11 +9,16 @@ const SASLFactory = require("saslmechanisms");
 
 const NS = "urn:ietf:params:xml:ns:xmpp-sasl";
 
+console.log("foobar");
 function getMechanismNames(features) {
+  console.log("lol");
   return features
     .getChild("mechanisms", NS)
     .getChildElements()
-    .map((el) => el.text());
+    .map((el) => {
+      console.log(el, typeof el);
+      return el.text();
+    });
 }
 
 async function authenticate(SASL, entity, mechname, credentials) {
@@ -41,6 +46,7 @@ async function authenticate(SASL, entity, mechname, credentials) {
       }
 
       if (element.name === "challenge") {
+        console.log(element, typeof element);
         mech.challenge(decode(element.text()));
         const resp = mech.response(creds);
         entity.send(

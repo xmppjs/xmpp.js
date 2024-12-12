@@ -14,7 +14,7 @@
     "presence"
   ],
   "dependencies": {
-    "ltx": "^3.0.0"
+    "ltx": "3.0.0"
   },
   "engines": {
     "node": ">= 14"
