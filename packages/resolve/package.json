@@ -23,7 +23,7 @@
   "dependencies": {
     "@xmpp/events": "^0.13.0",
     "@xmpp/xml": "^0.13.0",
-    "node-fetch": "^2.6.6"
+    "node-fetch": "^2.7.0"
   },
   "engines": {
     "node": ">= 14"

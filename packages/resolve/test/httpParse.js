@@ -3,7 +3,7 @@
 const test = require("ava");
 
 const domain = "example.com";
-global.fetch = (url) => {
+globalThis.fetch = (url) => {
   if (url !== `https://${domain}/.well-known/host-meta`) {
     throw new Error("Fetch URL incorrect");
   }

@@ -19,7 +19,7 @@ const JID = jid(username, domain).toString();
 const service = "ws://localhost:5280/xmpp-websocket";
 
 const xmppjs = readFileSync("./packages/client/dist/xmpp.js", {
-  encoding: "utf-8",
+  encoding: "utf8",
 });
 
 test.beforeEach((t) => {

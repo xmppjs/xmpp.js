@@ -1,7 +1,7 @@
 "use strict";
 
 const WS = require("ws");
-const WebSocket = global.WebSocket || WS;
+const WebSocket = globalThis.WebSocket || WS;
 const EventEmitter = require("events");
 
 const CODE = "ECONNERROR";

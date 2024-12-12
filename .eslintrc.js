@@ -69,5 +69,8 @@ module.exports = {
     "unicorn/no-null": 0,
     "unicorn/prefer-module": 0,
     "unicorn/numeric-separators-style": 0, // Requires Node.js 12.8
+    "unicorn/prefer-event-target": 0,
+    "unicorn/prefer-top-level-await": 0,
+    "unicorn/prefer-node-protocol": 0,
   },
 };
