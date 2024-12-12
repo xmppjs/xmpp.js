@@ -41,7 +41,6 @@ async function authenticate(SASL, entity, mechname, credentials) {
       }
 
       if (element.name === "challenge") {
-        console.log(element, typeof element);
         mech.challenge(decode(element.text()));
         const resp = mech.response(creds);
         entity.send(
