@@ -56,6 +56,7 @@ module.exports = function streamManagement({
     outbound: 0,
     inbound: 0,
     max: null,
+    outbound_q: [],
   };
 
   entity.on("online", (jid) => {

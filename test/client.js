@@ -48,6 +48,75 @@ test.serial("client", async (t) => {
   t.is(address.bare().toString(), JID);
 });
 
+test.serial("bind2", async (t) => {
+  t.plan(6);
+
+  const xmpp = client({
+    credentials,
+    service: domain,
+    clientId: "75b2d490-3e3b-4d96-bca1-624b30ea6f82",
+    software: "xmpp.js tests",
+    device: "Test Device",
+  });
+  t.context.xmpp = xmpp;
+  debug(xmpp);
+
+  xmpp.on("connect", () => {
+    t.pass();
+  });
+
+  xmpp.once("open", (el) => {
+    t.true(el instanceof xml.Element);
+  });
+
+  xmpp.on("online", (address) => {
+    t.true(address instanceof jid.JID);
+    t.is(address.bare().toString(), JID);
+  });
+
+  const address = await xmpp.start();
+  t.true(address instanceof jid.JID);
+  t.is(address.bare().toString(), JID);
+});
+
+test.serial("FAST", async (t) => {
+  t.plan(7);
+
+  const xmpp = client({
+    service: domain,
+    credentials: {
+      ...credentials,
+      requestToken: true,
+    },
+    clientId: "75b2d490-3e3b-4d96-bca1-624b30ea6f82",
+    software: "xmpp.js tests",
+    device: "Test Device",
+  });
+  t.context.xmpp = xmpp;
+  debug(xmpp);
+
+  xmpp.on("connect", () => {
+    t.pass();
+  });
+
+  xmpp.once("open", (el) => {
+    t.true(el instanceof xml.Element);
+  });
+
+  xmpp.once("fast-token", (el) => {
+    t.true(typeof el.attrs.token === "string");
+  });
+
+  xmpp.on("online", (address) => {
+    t.true(address instanceof jid.JID);
+    t.is(address.bare().toString(), JID);
+  });
+
+  const address = await xmpp.start();
+  t.true(address instanceof jid.JID);
+  t.is(address.bare().toString(), JID);
+});
+
 test.serial.cb("bad credentials", (t) => {
   t.plan(6);
 
