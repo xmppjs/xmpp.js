@@ -161,8 +161,7 @@ async function authenticate(
     ]),
   );
 
-  await promise;
-  await Promise.all(hPromises);
+  await Promise.all([promise, ...hPromises]);
 }
 
 module.exports = function sasl2({ streamFeatures }, credentials, userAgent) {
