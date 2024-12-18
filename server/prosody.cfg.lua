@@ -30,7 +30,6 @@ modules_disabled = {
   "s2s";
 }
 
-daemonize = true;
 pidfile = lfs.currentdir() .. "/prosody.pid";
 
 allow_registration = true;
