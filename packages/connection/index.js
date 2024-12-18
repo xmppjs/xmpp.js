@@ -263,6 +263,9 @@ class Connection extends EventEmitter {
       this.socket.secure() &&
       (this.streamFrom || this.jid)
     ) {
+      // When the stream is secure there is no leak to setting the stream from
+      // This is suggested in general and in required for FAST implementations
+      // in particular
       headerElement.attrs.from = (this.streamFrom || this.jid).toString();
     }
     headerElement.attrs["xml:lang"] = lang;
