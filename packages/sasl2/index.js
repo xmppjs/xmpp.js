@@ -6,7 +6,9 @@ const jid = require("@xmpp/jid");
 const xml = require("@xmpp/xml");
 const SASLFactory = require("saslmechanisms");
 
-// https://xmpp.org/rfcs/rfc6120.html#sasl
+// https://xmpp.org/extensions/xep-0388.html
+// https://xmpp.org/extensions/xep-0386.html
+// https://xmpp.org/extensions/xep-0484.html
 
 const NS = "urn:xmpp:sasl:2";
 const BIND2_NS = "urn:xmpp:bind:0";
