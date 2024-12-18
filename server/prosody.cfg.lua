@@ -4,6 +4,8 @@
 
 local lfs = require "lfs";
 
+plugin_paths = { "modules" }
+
 modules_enabled = {
   "roster";
   "saslauth";
@@ -18,6 +20,10 @@ modules_enabled = {
   "time";
   "version";
   "smacks";
+  "sasl2";
+  "sasl2_bind2";
+  "sasl2_fast";
+  "sasl2_sm";
 };
 
 modules_disabled = {
