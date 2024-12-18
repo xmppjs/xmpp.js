@@ -1,6 +1,7 @@
 "use strict";
 
-var createHmac = require("create-hmac");
+// https://datatracker.ietf.org/doc/draft-schmaus-kitten-sasl-ht/
+const createHmac = require("create-hmac");
 
 function Mechanism() {}
 
