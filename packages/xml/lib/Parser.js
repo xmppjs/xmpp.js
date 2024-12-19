@@ -1,9 +1,9 @@
 "use strict";
 
-const LtxParser = require("ltx/lib/parsers/ltx");
-const Element = require("ltx/lib/Element");
+const LtxParser = require("ltx/lib/parsers/ltx.js");
+const Element = require("ltx/lib/Element.js");
 const EventEmitter = require("events");
-const XMLError = require("./XMLError");
+const XMLError = require("./XMLError.js");
 
 class Parser extends EventEmitter {
   constructor() {
