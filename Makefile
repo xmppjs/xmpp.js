@@ -13,13 +13,13 @@ test:
 	cd packages/xmpp.js/ && npm run prepublish
 	npm install
 	node bundle.js
-	./node_modules/.bin/ava
+	npx jest
 	make lint
 	make bundlesize
 
 ci:
 	npm install
-	./node_modules/.bin/ava
+	npx jest
 	make lint
 	make restart
 	./node_modules/.bin/lerna run prepublish
