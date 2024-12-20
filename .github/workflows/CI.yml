@@ -10,8 +10,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        # fail-fast: false
         # Do not support --experimental-require-module
         # Commented until we have a solution to run tests without it
         # node-version: [14, 16, 18, 20, 22]
