@@ -20,9 +20,6 @@ export default {
       ],
     },
   },
-  // require: ["@babel/register/experimental-worker.js"],
-  // workerThreads: false,
-  // nodeArguments: ["--loader=babel-register-esm"],
   nodeArguments: ["--experimental-require-module"],
   files: [
     "packages/**/test.js",

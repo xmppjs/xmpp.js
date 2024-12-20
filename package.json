@@ -12,7 +12,7 @@
     "@babel/plugin-transform-runtime": "^7.25.9",
     "@babel/preset-env": "^7.26.0",
     "@babel/runtime": "^7.26.0",
-    "ava": "^3.0.15",
+    "ava": "^3.15.0",
     "babel-plugin-jsx-pragmatic": "^1.0.2",
     "babel-plugin-transform-async-to-promises": "^0.8.18",
     "babel-register-esm": "^1.2.5",
@@ -51,7 +51,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "browserslist": "> 0.25%, not dead",
   "bundlesize": [
     {
       "path": "./packages/client/dist/xmpp.min.js",
