@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   failFast: true,
   serial: true,
   babel: {
