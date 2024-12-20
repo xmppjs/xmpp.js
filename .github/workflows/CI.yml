@@ -10,20 +10,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        node-version: [
-            # Do not support --experimental-require-module
-            # Commented until we have a solution to run tests without it
-            # 14.x,
-            # 16.x,
-            # 18.x,
-            # 20.x,
-            22.x,
-          ]
+        # Do not support --experimental-require-module
+        # Commented until we have a solution to run tests without it
+        # node: [14, 16, 18, 20, 22]
+        # node: [20, 22] // fails on 20 with (0 , _getDomain.default) is not a function
+        node: [22]
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
