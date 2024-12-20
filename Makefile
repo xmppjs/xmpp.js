@@ -52,7 +52,7 @@ bundlesize:
 	./node_modules/.bin/bundlesize
 
 bundle:
-	node bundle.js
+	node bundle.cjs
 
 size:
 	make bundle

@@ -1,19 +1,20 @@
 {
   "private": true,
+  "type": "module",
   "bin": {
     "serverctl": "server/ctl.js"
   },
   "devDependencies": {
-    "@ava/babel": "^2.0.0",
     "@babel/core": "^7.26.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.16.5",
     "@babel/plugin-transform-react-jsx": "^7.25.9",
     "@babel/plugin-transform-runtime": "^7.25.9",
     "@babel/preset-env": "^7.26.0",
     "@babel/runtime": "^7.26.0",
-    "ava": "^3.15.0",
+    "ava": "^4.3.3",
     "babel-plugin-jsx-pragmatic": "^1.0.2",
     "babel-plugin-transform-async-to-promises": "^0.8.18",
+    "babel-register-esm": "^1.2.5",
     "babelify": "^10.0.0",
     "babylon": "^6.18.0",
     "browser-pack-flat": "^3.5.0",
@@ -43,12 +44,13 @@
     "preversion": "make bundle"
   },
   "engines": {
-    "node": ">= 12.4",
+    "node": ">= 14",
     "npm": ">= 7"
   },
   "workspaces": [
     "packages/*"
   ],
+  "browserslist": "> 0.25%, not dead",
   "bundlesize": [
     {
       "path": "./packages/client/dist/xmpp.min.js",

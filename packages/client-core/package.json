@@ -5,6 +5,7 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.13.2",
   "license": "ISC",
+  "type": "commonjs",
   "dependencies": {
     "@xmpp/connection": "^0.13.2",
     "@xmpp/jid": "^0.13.2",

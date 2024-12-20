@@ -32,7 +32,7 @@ export default [
           jsx: true,
         },
       },
-      sourceType: "script",
+      sourceType: "module",
     },
 
     rules: {
@@ -62,6 +62,10 @@ export default [
       // https://github.com/eslint-community/eslint-plugin-n/
       "n/no-unpublished-require": 0, // doesn't play nice with monorepo
       "n/no-extraneous-require": [
+        "error",
+        { allowModules: ["ava", "sinon", "@xmpp/test"] },
+      ],
+      "n/no-extraneous-import": [
         "error",
         { allowModules: ["ava", "sinon", "@xmpp/test"] },
       ],

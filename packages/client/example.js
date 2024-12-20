@@ -1,9 +1,7 @@
-/* eslint-disable n/no-extraneous-require */
+import { client, xml } from "@xmpp/client";
 
-"use strict";
-
-const { client, xml } = require("@xmpp/client");
-const debug = require("@xmpp/debug");
+// eslint-disable-next-line n/no-extraneous-import
+import debug from "@xmpp/debug";
 
 // Insecure!
 // process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
