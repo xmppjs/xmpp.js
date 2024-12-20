@@ -11,7 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.x, 22.x]
+        node-version: [
+            # Do not support --experimental-require-module
+            # Commented until we have a solution to run tests without it
+            # 14.x,
+            # 16.x,
+            # 18.x,
+            # 20.x,
+            22.x,
+          ]
     steps:
       - uses: actions/checkout@v4
 
