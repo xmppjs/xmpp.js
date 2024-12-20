@@ -1,16 +1,14 @@
 "use strict";
 
-const { spy } = require("sinon");
 const jid = require("..");
 const JID = require("../lib/JID");
 
 test("equal calls equals on the first argument with the second argument", () => {
   const A = jid("foo");
   const B = jid("bar");
-  spy(A, "equals");
+  const spy_equals = jest.spyOn(A, "equals");
   jid.equal(A, B);
-  expect(A.equals.calledWith(B)).toBe(true);
-  A.equals.restore();
+  expect(spy_equals).toHaveBeenCalledWith(B);
 });
 
 test("JID exports lib/JID", () => {

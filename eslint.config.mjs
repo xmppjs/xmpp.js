@@ -55,14 +55,8 @@ export default [
       // node
       // https://github.com/eslint-community/eslint-plugin-n/
       "n/no-unpublished-require": 0, // doesn't play nice with monorepo
-      "n/no-extraneous-require": [
-        "error",
-        { allowModules: ["sinon", "@xmpp/test"] },
-      ],
-      "n/no-extraneous-import": [
-        "error",
-        { allowModules: ["sinon", "@xmpp/test"] },
-      ],
+      "n/no-extraneous-require": ["error", { allowModules: ["@xmpp/test"] }],
+      "n/no-extraneous-import": ["error", { allowModules: ["@xmpp/test"] }],
       "n/hashbang": "off",
 
       // promise

@@ -36,7 +36,6 @@
     "node-fetch": "^2.6.12",
     "prettier": "^3.4.2",
     "selfsigned": "^2.4.1",
-    "sinon": "^19.0.2",
     "uglify-js": "^3.19.3"
   },
   "scripts": {

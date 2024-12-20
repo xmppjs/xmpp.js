@@ -1,6 +1,7 @@
 "use strict";
 
-const { mock, stub } = require("sinon");
+jest.mock("tls");
+
 const { mockClient, promise, delay } = require("@xmpp/test");
 const tls = require("tls");
 const net = require("net");
@@ -18,17 +19,9 @@ test("success", async () => {
   const { socket, options } = entity;
   options.domain = "foobar";
 
-  const mockTLS = mock(tls);
-  const expectTLSConnect = mockTLS
-    .expects("connect")
-    .once()
-    .withArgs({ socket, host: "foobar" })
-    .callsFake(() => {
-      return new EventEmitter();
-    });
-
-  stub(entity, "_attachSocket");
-  stub(entity, "restart");
+  tls.connect.mockImplementation(() => {
+    return new EventEmitter();
+  });
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -36,13 +29,16 @@ test("success", async () => {
     </features>,
   );
 
-  expect(await promise(entity, "send")).toEqual(<starttls xmlns="urn:ietf:params:xml:ns:xmpp-tls" />);
+  expect(await promise(entity, "send")).toEqual(
+    <starttls xmlns="urn:ietf:params:xml:ns:xmpp-tls" />,
+  );
 
   entity.mockInput(<proceed xmlns="urn:ietf:params:xml:ns:xmpp-tls" />);
 
   await delay();
 
-  expectTLSConnect.verify();
+  expect(tls.connect).toHaveBeenCalledTimes(1);
+  expect(tls.connect).toHaveBeenCalledWith({ socket, host: "foobar" });
 });
 
 test("failure", async () => {
@@ -55,7 +51,9 @@ test("failure", async () => {
     </features>,
   );
 
-  expect(await promise(entity, "send")).toEqual(<starttls xmlns="urn:ietf:params:xml:ns:xmpp-tls" />);
+  expect(await promise(entity, "send")).toEqual(
+    <starttls xmlns="urn:ietf:params:xml:ns:xmpp-tls" />,
+  );
 
   entity.mockInput(<failure xmlns="urn:ietf:params:xml:ns:xmpp-tls" />);
 
