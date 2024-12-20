@@ -20,7 +20,6 @@
     "babylon": "^6.18.0",
     "browser-pack-flat": "^3.5.0",
     "browserify": "^17.0.1",
-    "bundlesize": "^0.18.2",
     "common-shakeify": "^1.1.2",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^9.1.0",
