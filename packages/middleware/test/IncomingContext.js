@@ -1,64 +1,63 @@
 "use strict";
 
-const test = require("ava");
 const Context = require("../lib/IncomingContext");
 const { JID } = require("@xmpp/test");
 const _Context = require("../lib/Context");
 
-test("is instance of Context", (t) => {
+test("is instance of Context", () => {
   const entity = { jid: new JID("foo@bar"), domain: "bar" };
   const ctx = new Context(entity, { attrs: {} });
-  t.true(ctx instanceof _Context);
+  expect(ctx instanceof _Context).toBe(true);
 });
 
-test("sets the from property", (t) => {
+test("sets the from property", () => {
   const entity = { jid: new JID("foo@bar"), domain: "bar" };
   const ctx = new Context(entity, { attrs: { from: "foo@bar" } });
-  t.deepEqual(ctx.from, new JID("foo@bar"));
+  expect(ctx.from).toEqual(new JID("foo@bar"));
 });
 
-test("from property default to entity jid domain", (t) => {
+test("from property default to entity jid domain", () => {
   const entity = { jid: new JID("foo@bar"), domain: "bar" };
   const ctx = new Context(entity, { attrs: {} });
-  t.deepEqual(ctx.from, new JID("bar"));
+  expect(ctx.from).toEqual(new JID("bar"));
 });
 
-test("sets the to property", (t) => {
+test("sets the to property", () => {
   const entity = { jid: new JID("foo@bar"), domain: "bar" };
   const ctx = new Context(entity, { attrs: { to: "foo@bar" } });
-  t.deepEqual(ctx.to, new JID("foo@bar"));
+  expect(ctx.to).toEqual(new JID("foo@bar"));
 });
 
-test("to property default to entity jid", (t) => {
+test("to property default to entity jid", () => {
   const entity = { jid: new JID("foo@bar"), domain: "bar" };
   const ctx = new Context(entity, { attrs: {} });
-  t.deepEqual(ctx.to, new JID("foo@bar"));
+  expect(ctx.to).toEqual(new JID("foo@bar"));
 });
 
-test("sets the local property to from.local", (t) => {
+test("sets the local property to from.local", () => {
   const entity = { jid: new JID("foo@bar"), domain: "bar" };
   const ctx = new Context(entity, { attrs: { from: "foo@bar" } });
-  t.deepEqual(ctx.local, "foo");
+  expect(ctx.local).toEqual("foo");
 });
 
-test("local property defaults to empty string", (t) => {
+test("local property defaults to empty string", () => {
   const ctx = new Context({}, { attrs: { from: "bar" } });
-  t.deepEqual(ctx.local, "");
+  expect(ctx.local).toEqual("");
 });
 
-test("sets the domain property to from.domain", (t) => {
+test("sets the domain property to from.domain", () => {
   const entity = { jid: new JID("foo@bar") };
   const ctx = new Context(entity, { attrs: { from: "foo@bar" } });
-  t.deepEqual(ctx.domain, "bar");
+  expect(ctx.domain).toEqual("bar");
 });
 
-test("sets the resource property to from.resource", (t) => {
+test("sets the resource property to from.resource", () => {
   const entity = { jid: new JID("foo@bar/test") };
   const ctx = new Context(entity, { attrs: { from: "foo@bar/test" } });
-  t.deepEqual(ctx.resource, "test");
+  expect(ctx.resource).toEqual("test");
 });
 
-test("resource property defaults to empty string", (t) => {
+test("resource property defaults to empty string", () => {
   const ctx = new Context({}, { attrs: { from: "foo@bar" } });
-  t.deepEqual(ctx.resource, "");
+  expect(ctx.resource).toEqual("");
 });

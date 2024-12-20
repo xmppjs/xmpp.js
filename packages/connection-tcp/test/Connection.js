@@ -1,6 +1,5 @@
 "use strict";
 
-const test = require("ava");
 const _Connection = require("../../../packages/connection");
 const Connection = require("..");
 const net = require("net");
@@ -8,54 +7,50 @@ const xml = require("@xmpp/xml");
 
 const NS_STREAM = "http://etherx.jabber.org/streams";
 
-test("new Connection()", (t) => {
+test("new Connection()", () => {
   const conn = new Connection();
-  t.true(conn instanceof _Connection);
-  t.is(conn.NS, NS_STREAM);
+  expect(conn instanceof _Connection).toBe(true);
+  expect(conn.NS).toBe(NS_STREAM);
 });
 
-test("Socket", (t) => {
+test("Socket", () => {
   const conn = new Connection();
-  t.is(conn.Socket, net.Socket);
+  expect(conn.Socket).toBe(net.Socket);
 });
 
-test("NS", (t) => {
-  t.is(Connection.prototype.NS, NS_STREAM);
+test("NS", () => {
+  expect(Connection.prototype.NS).toBe(NS_STREAM);
 });
 
-test("header()", (t) => {
+test("header()", () => {
   const conn = new Connection();
   conn.NS = "foobar";
-  t.is(
-    conn.header(conn.headerElement()),
-    `<?xml version='1.0'?><stream:stream version="1.0" xmlns="foobar" xmlns:stream="${NS_STREAM}">`,
+  expect(conn.header(conn.headerElement())).toBe(
+    `<?xml version='1.0'?><stream:stream version="1.0" xmlns="foobar" xmlns:stream="${NS_STREAM}">`
   );
 });
 
-test("footer()", (t) => {
+test("footer()", () => {
   const conn = new Connection();
-  t.is(conn.footer(), "</stream:stream>");
+  expect(conn.footer()).toBe("</stream:stream>");
 });
 
-test("socketParameters()", (t) => {
-  t.deepEqual(Connection.prototype.socketParameters("xmpp://foo"), {
+test("socketParameters()", () => {
+  expect(Connection.prototype.socketParameters("xmpp://foo")).toEqual({
     port: null,
     host: "foo",
   });
 
-  t.deepEqual(Connection.prototype.socketParameters("xmpp://foo:1234"), {
+  expect(Connection.prototype.socketParameters("xmpp://foo:1234")).toEqual({
     port: 1234,
     host: "foo",
   });
 
-  t.deepEqual(
-    Connection.prototype.socketParameters("xmpps://foo:1234"),
-    undefined,
-  );
+  expect(Connection.prototype.socketParameters("xmpps://foo:1234")).toEqual(undefined);
 });
 
-test("sendMany", async (t) => {
-  t.plan(1);
+test("sendMany", async () => {
+  expect.assertions(1);
   const conn = new Connection();
   conn.root = xml("root");
 
@@ -64,7 +59,7 @@ test("sendMany", async (t) => {
 
   conn.socket = {
     write(str, fn) {
-      t.is(str, "<foo/><bar/>");
+      expect(str).toBe("<foo/><bar/>");
       fn();
     },
   };

@@ -1,6 +1,5 @@
 "use strict";
 
-const test = require("ava");
 const { client, jid } = require("../packages/client");
 const debug = require("../packages/debug");
 const server = require("../server");
@@ -13,17 +12,17 @@ const credentials = { username, password };
 const domain = "localhost";
 const JID = jid(username, domain).toString();
 
-test.beforeEach(() => {
+beforeEach(() => {
   return server.restart();
 });
 
-test.afterEach((t) => {
+afterEach(() => {
   if (t.context.xmpp && t.context.xmpp.status === "online") {
     return t.context.xmpp.stop();
   }
 });
 
-test.serial("see-other-host", async (t) => {
+test("see-other-host", async () => {
   const net = require("net");
   const Connection = require("../packages/connection-tcp");
   const { promise } = require("../packages/events");
@@ -50,5 +49,5 @@ test.serial("see-other-host", async (t) => {
   debug(xmpp);
   t.context.xmpp = xmpp;
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });

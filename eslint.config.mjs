@@ -4,6 +4,7 @@ import globals from "globals";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import eslintNodePlugin from "eslint-plugin-n";
 import pluginPromise from "eslint-plugin-promise";
+import pluginJest from "eslint-plugin-jest";
 
 export default [
   {
@@ -95,6 +96,20 @@ export default [
     files: ["packages/client/**/*.js"],
     languageOptions: {
       sourceType: "module",
+    },
+  },
+  {
+    files: ["**/*.spec.js", "**/*.test.js", "**/test.js", "**/test/**.js"],
+    plugins: { jest: pluginJest },
+    languageOptions: {
+      globals: pluginJest.environments.globals.globals,
+    },
+    rules: {
+      "jest/no-disabled-tests": "warn",
+      "jest/no-focused-tests": "error",
+      "jest/no-identical-title": "error",
+      "jest/prefer-to-have-length": "warn",
+      "jest/valid-expect": "error",
     },
   },
 ];

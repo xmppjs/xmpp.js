@@ -1,33 +1,32 @@
 "use strict";
 
-const test = require("ava");
 const Connection = require("..");
 const { EventEmitter } = require("@xmpp/events");
 const xml = require("@xmpp/xml");
 
-test("new Connection()", (t) => {
+test("new Connection()", () => {
   const conn = new Connection();
-  t.is(conn.jid, null);
-  t.is(conn.timeout, 2000);
-  t.true(conn instanceof EventEmitter);
+  expect(conn.jid).toBe(null);
+  expect(conn.timeout).toBe(2000);
+  expect(conn instanceof EventEmitter).toBe(true);
 });
 
-test("isStanza()", (t) => {
+test("isStanza()", () => {
   const conn = new Connection();
 
-  t.is(conn.isStanza(xml("foo")), false);
+  expect(conn.isStanza(xml("foo"))).toBe(false);
 
-  t.is(conn.isStanza(xml("presence")), true);
-  t.is(conn.isStanza(xml("iq")), true);
-  t.is(conn.isStanza(xml("message")), true);
+  expect(conn.isStanza(xml("presence"))).toBe(true);
+  expect(conn.isStanza(xml("iq"))).toBe(true);
+  expect(conn.isStanza(xml("message"))).toBe(true);
 });
 
-test("isNonza()", (t) => {
+test("isNonza()", () => {
   const conn = new Connection();
 
-  t.is(conn.isNonza(xml("foo")), true);
+  expect(conn.isNonza(xml("foo"))).toBe(true);
 
-  t.is(conn.isNonza(xml("presence")), false);
-  t.is(conn.isNonza(xml("iq")), false);
-  t.is(conn.isNonza(xml("message")), false);
+  expect(conn.isNonza(xml("presence"))).toBe(false);
+  expect(conn.isNonza(xml("iq"))).toBe(false);
+  expect(conn.isNonza(xml("message"))).toBe(false);
 });

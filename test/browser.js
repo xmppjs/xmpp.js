@@ -4,7 +4,6 @@ const { JSDOM } = require("jsdom");
 const fetch = require("node-fetch");
 const { readFileSync } = require("fs");
 
-const test = require("ava");
 const { jid } = require("../packages/client");
 const debug = require("../packages/debug");
 const server = require("../server");
@@ -22,7 +21,7 @@ const xmppjs = readFileSync("./packages/client/dist/xmpp.js", {
   encoding: "utf8",
 });
 
-test.beforeEach((t) => {
+beforeEach(() => {
   const { window } = new JSDOM(``, { runScripts: "dangerously" });
   window.fetch = fetch;
   const { document } = window;
@@ -33,7 +32,7 @@ test.beforeEach((t) => {
   return server.restart();
 });
 
-test.serial("client ws://", async (t) => {
+test("client ws://", async () => {
   const xmpp = t.context({
     credentials,
     service,
@@ -41,5 +40,5 @@ test.serial("client ws://", async (t) => {
   debug(xmpp);
 
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });

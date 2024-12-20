@@ -1,7 +1,5 @@
 "use strict";
 
-const test = require("ava");
-
 const fs = require("fs");
 const path = require("path");
 
@@ -23,7 +21,7 @@ const packages = Object.fromEntries(
 
 const { dependencies } = require("./package.json");
 
-test("depends on all other packages", (t) => {
-  t.is(Object.keys(dependencies).length, Object.keys(packages).length);
-  t.deepEqual(dependencies, packages);
+test("depends on all other packages", () => {
+  expect(Object.keys(dependencies).length).toBe(Object.keys(packages).length);
+  expect(dependencies).toEqual(packages);
 });

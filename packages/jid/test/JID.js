@@ -1,14 +1,17 @@
 "use strict";
 
-const test = require("ava");
 const JID = require("../lib/JID");
 
-test("throws TypeError for invalid domain", (t) => {
-  t.throws(() => new JID("foo"), { instanceOf: TypeError });
+test("throws TypeError for invalid domain", () => {
+  expect(() => new JID("foo")).toThrowError(new TypeError("Invalid domain."));
 
-  t.throws(() => new JID(), { instanceOf: TypeError });
+  expect(() => new JID()).toThrowError(new TypeError("Invalid domain."));
 
-  t.throws(() => new JID("foo", "", "r"), { instanceOf: TypeError });
+  expect(() => new JID("foo", "", "r")).toThrowError(
+    new TypeError("Invalid domain."),
+  );
 
-  t.throws(() => new JID("foo", "", "r"), { instanceOf: TypeError });
+  expect(() => new JID("foo", "", "r")).toThrowError(
+    new TypeError("Invalid domain."),
+  );
 });

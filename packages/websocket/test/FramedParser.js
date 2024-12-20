@@ -1,25 +1,24 @@
 "use strict";
 
-const test = require("ava");
 const Parser = require("../lib/FramedParser");
 
-test.cb("framed parser", (t) => {
+test("framed parser", done => {
   const parser = new Parser();
 
-  t.plan(4);
+  expect.assertions(4);
 
   parser.on("start", (el) => {
-    t.is(el.toString(), '<open xmlns="urn:ietf:params:xml:ns:xmpp-framing"/>');
+    expect(el.toString()).toBe('<open xmlns="urn:ietf:params:xml:ns:xmpp-framing"/>');
   });
 
   parser.on("element", (el) => {
-    t.is(el.parent, null);
-    t.is(el.toString(), "<bar>hello</bar>");
+    expect(el.parent).toBe(null);
+    expect(el.toString()).toBe("<bar>hello</bar>");
   });
 
   parser.on("end", (el) => {
-    t.is(el.toString(), '<close xmlns="urn:ietf:params:xml:ns:xmpp-framing"/>');
-    t.end();
+    expect(el.toString()).toBe('<close xmlns="urn:ietf:params:xml:ns:xmpp-framing"/>');
+    done();
   });
 
   parser.write(

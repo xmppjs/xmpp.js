@@ -1,7 +1,6 @@
 "use strict";
 
 const { mock, stub } = require("sinon");
-const test = require("ava");
 const { mockClient, promise, delay } = require("@xmpp/test");
 const tls = require("tls");
 const net = require("net");
@@ -13,7 +12,7 @@ function mockSocket() {
   return socket;
 }
 
-test("success", async (t) => {
+test("success", async () => {
   const { entity } = mockClient();
   entity.socket = mockSocket();
   const { socket, options } = entity;
@@ -37,10 +36,7 @@ test("success", async (t) => {
     </features>,
   );
 
-  t.deepEqual(
-    await promise(entity, "send"),
-    <starttls xmlns="urn:ietf:params:xml:ns:xmpp-tls" />,
-  );
+  expect(await promise(entity, "send")).toEqual(<starttls xmlns="urn:ietf:params:xml:ns:xmpp-tls" />);
 
   entity.mockInput(<proceed xmlns="urn:ietf:params:xml:ns:xmpp-tls" />);
 
@@ -49,7 +45,7 @@ test("success", async (t) => {
   expectTLSConnect.verify();
 });
 
-test("failure", async (t) => {
+test("failure", async () => {
   const { entity } = mockClient();
   entity.socket = mockSocket();
 
@@ -59,14 +55,11 @@ test("failure", async (t) => {
     </features>,
   );
 
-  t.deepEqual(
-    await promise(entity, "send"),
-    <starttls xmlns="urn:ietf:params:xml:ns:xmpp-tls" />,
-  );
+  expect(await promise(entity, "send")).toEqual(<starttls xmlns="urn:ietf:params:xml:ns:xmpp-tls" />);
 
   entity.mockInput(<failure xmlns="urn:ietf:params:xml:ns:xmpp-tls" />);
 
   const err = await promise(entity, "error");
-  t.true(err instanceof Error);
-  t.is(err.message, "STARTTLS_FAILURE");
+  expect(err instanceof Error).toBe(true);
+  expect(err.message).toBe("STARTTLS_FAILURE");
 });

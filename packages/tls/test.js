@@ -1,35 +1,28 @@
 "use strict";
 
-const test = require("ava");
 const ConnectionTLS = require("./lib/Connection");
 const tls = require("tls");
 const { promise } = require("@xmpp/test");
 // eslint-disable-next-line n/no-extraneous-require
 const selfsigned = require("selfsigned");
 
-test("socketParameters()", (t) => {
-  t.deepEqual(ConnectionTLS.prototype.socketParameters("xmpps://foo"), {
+test("socketParameters()", () => {
+  expect(ConnectionTLS.prototype.socketParameters("xmpps://foo")).toEqual({
     port: 5223,
     host: "foo",
   });
 
-  t.deepEqual(ConnectionTLS.prototype.socketParameters("xmpps://foo:1234"), {
+  expect(ConnectionTLS.prototype.socketParameters("xmpps://foo:1234")).toEqual({
     port: 1234,
     host: "foo",
   });
 
-  t.deepEqual(
-    ConnectionTLS.prototype.socketParameters("xmpp://foo"),
-    undefined,
-  );
+  expect(ConnectionTLS.prototype.socketParameters("xmpp://foo")).toEqual(undefined);
 
-  t.deepEqual(
-    ConnectionTLS.prototype.socketParameters("xmpp://foo:1234"),
-    undefined,
-  );
+  expect(ConnectionTLS.prototype.socketParameters("xmpp://foo:1234")).toEqual(undefined);
 });
 
-test("rejects expired certificates", async (t) => {
+test("rejects expired certificates", async () => {
   const options = {
     key: `-----BEGIN PRIVATE KEY-----
 MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDSyWGs4hf07dd5
@@ -92,13 +85,13 @@ NebQHyTBqa5P7vjSioiWiSRCNOIL4HywMWtN/nZVk0cl8zwlLtMaGt9Tz7ty2OgL
   conn.connect(`xmpps://localhost:${server.address().port}`).catch(() => {});
 
   const error = await promise(conn, "error");
-  t.is(error.message, "certificate has expired");
+  expect(error.message).toBe("certificate has expired");
 
   await conn.close().catch(() => {});
   server.close();
 });
 
-test("rejects self signed certificates", async (t) => {
+test("rejects self signed certificates", async () => {
   const attrs = [{ name: "commonName", value: "localhost" }];
   const pem = selfsigned.generate(attrs, {
     days: 365,
@@ -113,13 +106,13 @@ test("rejects self signed certificates", async (t) => {
   conn.connect(`xmpps://localhost:${server.address().port}`).catch(() => {});
 
   const error = await promise(conn, "error");
-  t.is(error.code, "DEPTH_ZERO_SELF_SIGNED_CERT");
+  expect(error.code).toBe("DEPTH_ZERO_SELF_SIGNED_CERT");
 
   await conn.close().catch(() => {});
   server.close();
 });
 
-test("waits before emitting connect on tls 1.3", async (t) => {
+test("waits before emitting connect on tls 1.3", async () => {
   const key = `-----BEGIN PRIVATE KEY-----
 MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDGMXUuq7NZXEt6
 fiSSkfTGuXHdpMbM/Bn4YVwaNrEmW0I8ZpROHQsEPo6AA/Dz5XM6zkXc+HZoxVfg
@@ -205,17 +198,17 @@ yA==
   await promise(conn.socket.socket, "secureConnect");
 
   // If connect was emitted immeditaly after secureConnect this would be true
-  t.is(connect_emitted_on_conn_socket, false);
+  expect(connect_emitted_on_conn_socket).toBe(false);
 
   // Now let's wait for connect to resolve
   // and assert the right protocol is used
   await promiseConnect;
-  t.is(conn.socket.socket.getProtocol(), "TLSv1.3");
+  expect(conn.socket.socket.getProtocol()).toBe("TLSv1.3");
 
   // If the previous assertion is false and this one is true
   // it means `connect` was triggered asynchronously after secureConnect
   // which is what we want as it delays the sending of the stream header (conn.open)
-  t.is(connect_emitted_on_conn_socket, true);
+  expect(connect_emitted_on_conn_socket).toBe(true);
 
   await conn.close().catch(() => {});
   server.close();

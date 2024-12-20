@@ -1,6 +1,5 @@
 "use strict";
 
-const test = require("ava");
 const { component, xml, jid } = require("../packages/component");
 const debug = require("../packages/debug");
 const server = require("../server");
@@ -10,45 +9,43 @@ const service = "xmpp://localhost:5347";
 const domain = "component.localhost";
 const options = { password, service, domain };
 
-test.beforeEach(() => {
+beforeEach(() => {
   return server.restart();
 });
 
-test.afterEach((t) => {
+afterEach(() => {
   if (t.context.xmpp) {
     return t.context.xmpp.stop();
   }
 });
 
-test.serial("component", async (t) => {
-  t.plan(6);
+test("component", async () => {
+  expect.assertions(6);
 
   const xmpp = component(options);
   t.context.xmpp = xmpp;
   debug(xmpp);
 
-  xmpp.on("connect", () => {
-    t.pass();
-  });
+  xmpp.on("connect", () => {});
 
   xmpp.on("open", (el) => {
-    t.true(el instanceof xml.Element);
+    expect(el instanceof xml.Element).toBe(true);
   });
 
   xmpp.on("online", (id) => {
-    t.true(id instanceof jid.JID);
-    t.is(id.toString(), "component.localhost");
+    expect(id instanceof jid.JID).toBe(true);
+    expect(id.toString()).toBe("component.localhost");
   });
 
   const id = await xmpp.start();
 
-  t.true(id instanceof jid.JID);
-  t.is(id.toString(), "component.localhost");
+  expect(id instanceof jid.JID).toBe(true);
+  expect(id.toString()).toBe("component.localhost");
   await xmpp.stop;
 });
 
-test.serial.cb("reconnects when server restarts", (t) => {
-  t.plan(2);
+test("reconnects when server restarts", done => {
+  expect.assertions(2);
   let c = 0;
 
   const xmpp = component(options);
@@ -58,10 +55,9 @@ test.serial.cb("reconnects when server restarts", (t) => {
 
   xmpp.on("online", async () => {
     c++;
-    t.pass();
     if (c === 2) {
       await xmpp.stop();
-      t.end();
+      done();
     } else {
       server.restart();
     }
@@ -72,8 +68,8 @@ test.serial.cb("reconnects when server restarts", (t) => {
   t.context.xmpp = xmpp;
 });
 
-test.serial.cb("does not reconnect when stop is called", (t) => {
-  t.plan(2);
+test("does not reconnect when stop is called", done => {
+  expect.assertions(2);
 
   const xmpp = component(options);
   debug(xmpp);
@@ -81,12 +77,12 @@ test.serial.cb("does not reconnect when stop is called", (t) => {
   xmpp.on("online", async () => {
     await xmpp.stop();
     await server.stop();
-    t.end();
+    done();
   });
 
-  xmpp.on("close", () => t.pass());
+  xmpp.on("close", () => );
 
-  xmpp.on("offline", () => t.pass());
+  xmpp.on("offline", () => );
 
   xmpp.start();
 
