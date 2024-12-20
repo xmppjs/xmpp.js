@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
-/* eslint-disable no-console */
-
-'use strict' // eslint-disable-line node/shebang
+'use strict'
 
 const fs = require('fs')
 const path = require('path')

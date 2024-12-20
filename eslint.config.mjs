@@ -8,12 +8,7 @@ import pluginJest from "eslint-plugin-jest";
 
 export default [
   {
-    ignores: [
-      "**/dist/*.js",
-      "bundle.js",
-      "packages/xmpp.js/index.js",
-      "eslint.config.mjs",
-    ],
+    ignores: ["**/dist/*.js", "eslint.config.mjs"],
   },
   js.configs.recommended,
   eslintPluginUnicorn.configs["flat/recommended"],
@@ -68,6 +63,7 @@ export default [
         "error",
         { allowModules: ["sinon", "@xmpp/test"] },
       ],
+      "n/hashbang": "off",
 
       // promise
       // https://github.com/xjamundx/eslint-plugin-promise

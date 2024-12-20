@@ -1,9 +1,6 @@
 {
   "private": true,
   "type": "commonjs",
-  "bin": {
-    "serverctl": "server/ctl.js"
-  },
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.16.5",
@@ -15,7 +12,6 @@
     "babel-jest": "^29.7.0",
     "babel-plugin-jsx-pragmatic": "^1.0.2",
     "babel-plugin-transform-async-to-promises": "^0.8.18",
-    "babel-register-esm": "^1.2.5",
     "babelify": "^10.0.0",
     "babylon": "^6.18.0",
     "browser-pack-flat": "^3.5.0",

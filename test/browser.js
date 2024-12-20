@@ -8,8 +8,6 @@ const { jid } = require("../packages/client");
 const debug = require("../packages/debug");
 const server = require("../server");
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
 const username = "client";
 const password = "foobar";
 const credentials = { username, password };
