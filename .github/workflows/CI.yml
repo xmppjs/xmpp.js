@@ -12,14 +12,9 @@ jobs:
     strategy:
       matrix:
         fail-fast: false
-        node-version:
-          # Do not support --experimental-require-module
-          # Commented until we have a solution to run tests without it
-          - 14
-          - 16
-          - 18
-          - 20
-          - 22
+        # Do not support --experimental-require-module
+        # Commented until we have a solution to run tests without it
+        node-version: [14, 16, 18, 20, 22]
     steps:
       - uses: actions/checkout@v4
 
