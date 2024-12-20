@@ -3,20 +3,21 @@
 const _reconnect = require(".");
 const EventEmitter = require("events");
 
-test("it schedule a reconnect when disconnect is emitted", () => {
-  expect.assertions(1);
-
+test("it schedule a reconnect when disconnect is emitted", (done) => {
   const entity = new EventEmitter();
   const reconnect = _reconnect({ entity });
 
   reconnect.scheduleReconnect = () => {
     expect.pass();
+    done();
   };
 
   entity.emit("disconnect");
 });
 
 test("#reconnect", async () => {
+  expect.assertions(3);
+
   const entity = new EventEmitter();
   const reconnect = _reconnect({ entity });
 
