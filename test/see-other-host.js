@@ -12,14 +12,14 @@ const credentials = { username, password };
 const domain = "localhost";
 const JID = jid(username, domain).toString();
 
+let xmpp;
+
 beforeEach(() => {
   return server.restart();
 });
 
-afterEach(() => {
-  if (t.context.xmpp && t.context.xmpp.status === "online") {
-    return t.context.xmpp.stop();
-  }
+afterEach(async () => {
+  await xmpp?.stop();
 });
 
 test("see-other-host", async () => {
@@ -45,9 +45,8 @@ test("see-other-host", async () => {
   seeOtherHostServer.listen(5486);
   await promise(seeOtherHostServer, "listening");
 
-  const xmpp = client({ credentials, service: "xmpp://localhost:5486" });
+  xmpp = client({ credentials, service: "xmpp://localhost:5486" });
   debug(xmpp);
-  t.context.xmpp = xmpp;
   const address = await xmpp.start();
   expect(address.bare().toString()).toBe(JID);
 });

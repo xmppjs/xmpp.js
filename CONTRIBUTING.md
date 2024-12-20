@@ -22,9 +22,9 @@ At that point you can make changes to the xmpp.js code and run tests with
 make test
 ```
 
-If you want to iterate faster, you can watch a test file with `npx ava --watch packages/debug/test.js`.
+If you want to iterate faster, you can watch a test file with `npx jest --watch packages/debug/test.js`.
 
-See [ava CLI](https://github.com/avajs/ava/blob/main/docs/05-command-line.md).
+See [Jest CLI](https://jestjs.io/docs/cli).
 
 ## Submitting
 

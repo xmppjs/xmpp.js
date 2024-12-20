@@ -9,24 +9,24 @@ const service = "xmpp://localhost:5347";
 const domain = "component.localhost";
 const options = { password, service, domain };
 
+let xmpp;
+
 beforeEach(() => {
+  xmpp = component(options);
+  debug(xmpp);
   return server.restart();
 });
 
-afterEach(() => {
-  if (t.context.xmpp) {
-    return t.context.xmpp.stop();
-  }
+afterEach(async () => {
+  await xmpp?.stop();
 });
 
 test("component", async () => {
   expect.assertions(6);
 
-  const xmpp = component(options);
-  t.context.xmpp = xmpp;
-  debug(xmpp);
-
-  xmpp.on("connect", () => {});
+  xmpp.on("connect", () => {
+    expect().pass();
+  });
 
   xmpp.on("open", (el) => {
     expect(el instanceof xml.Element).toBe(true);
@@ -44,17 +44,15 @@ test("component", async () => {
   await xmpp.stop;
 });
 
-test("reconnects when server restarts", done => {
+test("reconnects when server restarts", (done) => {
   expect.assertions(2);
   let c = 0;
-
-  const xmpp = component(options);
-  debug(xmpp);
 
   xmpp.on("error", () => {});
 
   xmpp.on("online", async () => {
     c++;
+    expect().pass();
     if (c === 2) {
       await xmpp.stop();
       done();
@@ -64,15 +62,10 @@ test("reconnects when server restarts", done => {
   });
 
   xmpp.start();
-
-  t.context.xmpp = xmpp;
 });
 
-test("does not reconnect when stop is called", done => {
+test("does not reconnect when stop is called", (done) => {
   expect.assertions(2);
-
-  const xmpp = component(options);
-  debug(xmpp);
 
   xmpp.on("online", async () => {
     await xmpp.stop();
@@ -80,11 +73,13 @@ test("does not reconnect when stop is called", done => {
     done();
   });
 
-  xmpp.on("close", () => );
+  xmpp.on("close", () => {
+    expect().pass();
+  });
 
-  xmpp.on("offline", () => );
+  xmpp.on("offline", () => {
+    expect().pass();
+  });
 
   xmpp.start();
-
-  t.context.xmpp = xmpp;
 });

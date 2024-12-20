@@ -9,12 +9,9 @@ const packages = Object.fromEntries(
     // For some reason there's a "*" file on travis
     .filter((p) => !["*"].includes(p) && !p.includes("."))
     .map((dirname) => {
-      const { name, version } = require(path.join(
-        __dirname,
-        "..",
-        dirname,
-        "package.json",
-      ));
+      const { name, version } = require(
+        path.join(__dirname, "..", dirname, "package.json"),
+      );
       return [name, `^${version}`];
     }),
 );
@@ -22,6 +19,6 @@ const packages = Object.fromEntries(
 const { dependencies } = require("./package.json");
 
 test("depends on all other packages", () => {
-  expect(Object.keys(dependencies).length).toBe(Object.keys(packages).length);
+  expect(Object.keys(dependencies)).toHaveLength(Object.keys(packages).length);
   expect(dependencies).toEqual(packages);
 });

@@ -21,19 +21,25 @@ const xmppjs = readFileSync("./packages/client/dist/xmpp.js", {
   encoding: "utf8",
 });
 
-beforeEach(() => {
-  const { window } = new JSDOM(``, { runScripts: "dangerously" });
+let window;
+let xmpp;
+
+beforeEach(async () => {
+  ({ window } = new JSDOM(``, { runScripts: "dangerously" }));
   window.fetch = fetch;
   const { document } = window;
   const scriptEl = document.createElement("script");
   scriptEl.textContent = xmppjs;
   document.body.append(scriptEl);
-  t.context = window.XMPP.client;
-  return server.restart();
+  await server.restart();
+});
+
+afterEach(async () => {
+  await xmpp?.stop();
 });
 
 test("client ws://", async () => {
-  const xmpp = t.context({
+  xmpp = window.XMPP.client({
     credentials,
     service,
   });

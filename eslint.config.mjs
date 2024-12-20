@@ -12,8 +12,6 @@ export default [
       "**/dist/*.js",
       "bundle.js",
       "packages/xmpp.js/index.js",
-      "ava.config.js",
-      "e2e.config.js",
       "eslint.config.mjs",
     ],
   },
@@ -64,11 +62,11 @@ export default [
       "n/no-unpublished-require": 0, // doesn't play nice with monorepo
       "n/no-extraneous-require": [
         "error",
-        { allowModules: ["ava", "sinon", "@xmpp/test"] },
+        { allowModules: ["sinon", "@xmpp/test"] },
       ],
       "n/no-extraneous-import": [
         "error",
-        { allowModules: ["ava", "sinon", "@xmpp/test"] },
+        { allowModules: ["sinon", "@xmpp/test"] },
       ],
 
       // promise
@@ -108,8 +106,19 @@ export default [
       "jest/no-disabled-tests": "warn",
       "jest/no-focused-tests": "error",
       "jest/no-identical-title": "error",
-      "jest/prefer-to-have-length": "warn",
-      "jest/valid-expect": "error",
+      "jest/prefer-to-have-length": "error",
+
+      // https://github.com/jest-community/eslint-plugin-jest/pull/1688
+      "jest/valid-expect": "off",
+      // "jest/valid-expect": [
+      //   "error",
+      //   {
+      //     alwaysAwait: true,
+      //     // For jest-extended expect().pass
+      //     minArgs: 0,
+      //   },
+      // ],
+      "promise/no-callback-in-promise": "off",
     },
   },
 ];

@@ -2,7 +2,7 @@
 
 const Parser = require("../lib/Parser");
 
-test("stream parser", done => {
+test("stream parser", (done) => {
   const parser = new Parser();
 
   expect.assertions(5);
@@ -16,7 +16,7 @@ test("stream parser", done => {
 
   parser.on("element", (el) => {
     expect(el.parent).toBe(startElement);
-    expect(startElement.children.length).toBe(0);
+    expect(startElement.children).toHaveLength(0);
     expect(el.toString()).toBe("<bar>hello</bar>");
   });
 

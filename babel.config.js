@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = (api) => {
+module.exports = function config(api) {
   const isTest = api.env("test");
 
   if (isTest) {
