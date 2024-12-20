@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   failFast: true,
   serial: true,
   babel: {
@@ -21,5 +21,6 @@ module.exports = {
       ],
     },
   },
+  nodeArguments: ["--experimental-require-module"],
   files: ["test/*.js"],
 };

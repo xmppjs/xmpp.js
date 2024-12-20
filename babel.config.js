@@ -4,7 +4,7 @@ module.exports = {
       "@babel/preset-env",
       {
         targets: {
-          ie: "11",
+          ie: "10",
         },
         loose: true,
       },
@@ -14,21 +14,5 @@ module.exports = {
     "@babel/plugin-transform-runtime",
     "babel-plugin-transform-async-to-promises",
     "@babel/plugin-proposal-object-rest-spread",
-
-    //   [
-    //     "@babel/plugin-transform-react-jsx",
-    //     {
-    //       pragma: "xml",
-    //       throwIfNamespace: false,
-    //       useBuiltIns: true,
-    //     },
-    //   ],
-    //   [
-    //     "babel-plugin-jsx-pragmatic",
-    //     {
-    //       module: "@xmpp/xml",
-    //       import: "xml",
-    //     },
-    //   ],
   ],
 };
