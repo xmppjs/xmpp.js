@@ -20,6 +20,7 @@ export default {
       ],
     },
   },
+  nodeArguments: ["--experimental-require-module"],
   files: [
     "packages/**/test.js",
     "packages/**/test/*.js",

@@ -32,7 +32,7 @@ export default [
           jsx: true,
         },
       },
-      sourceType: "script",
+      sourceType: "commonjs",
     },
 
     rules: {
@@ -65,6 +65,10 @@ export default [
         "error",
         { allowModules: ["ava", "sinon", "@xmpp/test"] },
       ],
+      "n/no-extraneous-import": [
+        "error",
+        { allowModules: ["ava", "sinon", "@xmpp/test"] },
+      ],
 
       // promise
       // https://github.com/xjamundx/eslint-plugin-promise
@@ -88,10 +92,9 @@ export default [
     },
   },
   {
-    files: ["server/ctl.js"],
-    rules: {
-      "n/no-unsupported-features/es-syntax": "off",
-      "n/no-unsupported-features/es-syntax": "off",
+    files: ["packages/client/**/*.js"],
+    languageOptions: {
+      sourceType: "module",
     },
   },
 ];

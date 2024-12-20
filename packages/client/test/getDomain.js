@@ -1,7 +1,5 @@
-"use strict";
-
-const test = require("ava");
-const getDomain = require("../lib/getDomain");
+import test from "ava";
+import getDomain from "../lib/getDomain.js";
 
 test("getDomain", (t) => {
   t.is(getDomain("ws://foo:123/foobar"), "foo");

@@ -21,5 +21,6 @@ export default {
       ],
     },
   },
+  nodeArguments: ["--experimental-require-module"],
   files: ["test/*.js"],
 };

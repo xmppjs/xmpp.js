@@ -1,5 +1,6 @@
 {
   "private": true,
+  "type": "commonjs",
   "bin": {
     "serverctl": "server/ctl.js"
   },
@@ -43,7 +44,7 @@
     "preversion": "make bundle"
   },
   "engines": {
-    "node": ">= 12.4",
+    "node": ">= 14",
     "npm": ">= 7"
   },
   "workspaces": [

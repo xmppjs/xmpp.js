@@ -5,6 +5,7 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.13.2",
   "license": "ISC",
+  "type": "module",
   "dependencies": {
     "@babel/cli": "^7.26.4",
     "@babel/core": "^7.26.0",
