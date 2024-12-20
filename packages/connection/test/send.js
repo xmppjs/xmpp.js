@@ -1,7 +1,5 @@
-"use strict";
-
-const xml = require("@xmpp/xml");
-const Connection = require("..");
+import Connection from "../index.js";
+import xml from "@xmpp/xml";
 
 test("send", () => {
   expect.assertions(3);

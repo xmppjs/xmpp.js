@@ -1,6 +1,4 @@
-"use strict";
-
-const Client = require("../lib/Client");
+import Client from "../lib/Client.js";
 
 test("_findTransport", () => {
   class Transport {

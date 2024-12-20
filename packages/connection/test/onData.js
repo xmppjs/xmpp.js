@@ -1,6 +1,4 @@
-"use strict";
-
-const Connection = require("..");
+import Connection from "../index.js";
 
 test("#_onData", () => {
   expect.assertions(2);

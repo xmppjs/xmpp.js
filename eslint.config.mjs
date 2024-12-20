@@ -26,7 +26,7 @@ export default [
           jsx: true,
         },
       },
-      sourceType: "commonjs",
+      sourceType: "module",
     },
 
     rules: {
@@ -78,14 +78,19 @@ export default [
       "unicorn/prefer-event-target": 0,
       "unicorn/prefer-top-level-await": 0,
       "unicorn/prefer-node-protocol": 0,
+      "unicorn/prefer-export-from": "off",
     },
   },
-  {
-    files: ["packages/client/**/*.js"],
-    languageOptions: {
-      sourceType: "module",
-    },
-  },
+  // {
+  //   files: [
+  //     "packages/client/**/*.js",
+  //     "packages/events/**/*.js",
+  //     "packages/base64/**/*.js",
+  //   ],
+  //   languageOptions: {
+  //     sourceType: "module",
+  //   },
+  // },
   {
     files: ["**/*.spec.js", "**/*.test.js", "**/test.js", "**/test/**.js"],
     plugins: { jest: pluginJest },

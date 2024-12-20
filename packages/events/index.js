@@ -1,15 +1,9 @@
-"use strict";
+import EventEmitter from "events";
 
-const timeout = require("./lib/timeout");
-const delay = require("./lib/delay");
-const TimeoutError = require("./lib/TimeoutError");
-const promise = require("./lib/promise");
-const EventEmitter = require("events");
-const Deferred = require("./lib/Deferred");
+import timeout from "./lib/timeout.js";
+import delay from "./lib/delay.js";
+import TimeoutError from "./lib/TimeoutError.js";
+import promise from "./lib/promise.js";
+import Deferred from "./lib/Deferred.js";
 
-exports.EventEmitter = EventEmitter;
-exports.timeout = timeout;
-exports.delay = delay;
-exports.TimeoutError = TimeoutError;
-exports.promise = promise;
-exports.Deferred = Deferred;
+export { EventEmitter, timeout, delay, TimeoutError, promise, Deferred };

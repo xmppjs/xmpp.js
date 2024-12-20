@@ -6,13 +6,13 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.13.2",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "keywords": [
     "XMPP",
     "debug"
   ],
   "engines": {
-    "node": ">= 14"
+    "node": ">= 14.13.1"
   },
   "dependencies": {
     "@xmpp/xml": "^0.13.2",

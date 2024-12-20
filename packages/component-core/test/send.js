@@ -1,6 +1,4 @@
-"use strict";
-
-const { Component, xml } = require("..");
+import { Component, xml } from "../index.js";
 
 test("from attribute", () => {
   const entity = new Component();

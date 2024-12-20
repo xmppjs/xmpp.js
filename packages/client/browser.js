@@ -9,13 +9,11 @@ import _iqCaller from "@xmpp/iq/caller.js";
 import _iqCallee from "@xmpp/iq/callee.js";
 import _resolve from "@xmpp/resolve";
 
-// Stream features - order matters and define priority
 import _sasl from "@xmpp/sasl";
 import _resourceBinding from "@xmpp/resource-binding";
 import _sessionEstablishment from "@xmpp/session-establishment";
 import _streamManagement from "@xmpp/stream-management";
 
-// SASL mechanisms - order matters and define priority
 import plain from "@xmpp/sasl-plain";
 import anonymous from "@xmpp/sasl-anonymous";
 
@@ -74,5 +72,4 @@ function client(options = {}) {
   });
 }
 
-// eslint-disable-next-line unicorn/prefer-export-from
 export { xml, jid, client };

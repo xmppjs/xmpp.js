@@ -1,6 +1,4 @@
-"use strict";
-
-const Connection = require("..");
+import Connection from "../index.js";
 
 test("resolves if socket property is undefined", async () => {
   const conn = new Connection();

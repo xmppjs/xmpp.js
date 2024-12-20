@@ -1,9 +1,7 @@
-"use strict";
-
-const { Socket } = require("net");
-const Connection = require("@xmpp/connection");
-const { Parser } = require("@xmpp/xml");
-const { parseURI } = require("@xmpp/connection/lib/util");
+import { Socket } from "net";
+import Connection from "@xmpp/connection";
+import { Parser } from "@xmpp/xml";
+import { parseURI } from "@xmpp/connection/lib/util.js";
 
 const NS_STREAM = "http://etherx.jabber.org/streams";
 
@@ -57,4 +55,4 @@ ConnectionTCP.prototype.NS = NS_STREAM;
 ConnectionTCP.prototype.Socket = Socket;
 ConnectionTCP.prototype.Parser = Parser;
 
-module.exports = ConnectionTCP;
+export default ConnectionTCP;

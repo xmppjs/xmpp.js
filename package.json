@@ -43,7 +43,7 @@
     "preversion": "make bundle"
   },
   "engines": {
-    "node": ">= 14",
+    "node": ">= 14.13.1",
     "npm": ">= 7"
   },
   "workspaces": [

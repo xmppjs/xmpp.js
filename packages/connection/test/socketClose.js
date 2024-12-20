@@ -1,7 +1,5 @@
-"use strict";
-
-const Connection = require("..");
-const { EventEmitter } = require("@xmpp/events");
+import Connection from "../index.js";
+import { EventEmitter } from "@xmpp/events";
 
 test("calls _reset and _status", () => {
   expect.assertions(3);

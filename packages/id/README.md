@@ -9,7 +9,7 @@ XMPP id generator for JavaScript.
 ## Usage
 
 ```js
-const id = require("@xmpp/id");
+import id from "@xmpp/id";
 
 console.log(id()); // ymg806tinn
 ```

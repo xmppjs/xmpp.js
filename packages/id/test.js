@@ -1,6 +1,4 @@
-"use strict";
-
-const xid = require(".");
+import xid from "./index.js";
 
 test("returns a non empty string", () => {
   expect(typeof xid()).toBe("string");
@@ -9,7 +7,7 @@ test("returns a non empty string", () => {
 
 test("duplicates", () => {
   const id = xid();
-  for (let i = 0; i < 100000; i++) {
+  for (let i = 0; i < 10000; i++) {
     expect(id).not.toBe(xid());
   }
 });

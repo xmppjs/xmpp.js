@@ -1,7 +1,5 @@
-"use strict";
-
-const Connection = require("..");
-const xml = require("@xmpp/xml");
+import Connection from "../index.js";
+import xml from "@xmpp/xml";
 
 test("#_streamError", async () => {
   const conn = new Connection();

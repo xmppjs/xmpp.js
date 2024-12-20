@@ -12,7 +12,7 @@
     "JID"
   ],
   "engines": {
-    "node": ">= 14"
+    "node": ">= 14.13.1"
   },
   "publishConfig": {
     "access": "public"

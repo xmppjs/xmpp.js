@@ -1,8 +1,6 @@
-"use strict";
-
-const Connection = require("@xmpp/connection-tcp");
-const { createHash } = require("crypto");
-const xml = require("@xmpp/xml");
+import Connection from "@xmpp/connection-tcp";
+import { createHash } from "crypto";
+import xml from "@xmpp/xml";
 
 /*
  * References
@@ -46,4 +44,4 @@ class Component extends Connection {
 Component.NS = NS;
 Component.prototype.NS = NS;
 
-module.exports = Component;
+export default Component;
