@@ -36,7 +36,7 @@ export default [
     },
 
     rules: {
-      strict: ["error", "global"],
+      // strict: ["error", "global"],
       "no-empty": ["error", { allowEmptyCatch: true }],
       // "no-multi-assign": 0,
       "func-names": ["error", "as-needed"],

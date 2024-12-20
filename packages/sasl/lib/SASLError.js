@@ -1,4 +1,6 @@
-import XMPPError from "@xmpp/error";
+"use strict";
+
+const XMPPError = require("@xmpp/error");
 
 // https://xmpp.org/rfcs/rfc6120.html#sasl-errors
 
@@ -9,4 +11,4 @@ class SASLError extends XMPPError {
   }
 }
 
-export default SASLError;
+module.exports = SASLError;

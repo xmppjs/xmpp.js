@@ -1,6 +1,8 @@
-import test from "ava";
-import { mockClient, promise } from "@xmpp/test";
-import parse from "@xmpp/xml/lib/parse.js";
+"use strict";
+
+const test = require("ava");
+const { mockClient, promise } = require("@xmpp/test");
+const parse = require("@xmpp/xml/lib/parse.js");
 
 const username = "foo";
 const password = "bar";

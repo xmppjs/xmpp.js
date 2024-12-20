@@ -1,36 +1,34 @@
-console.log("YEAH LA PECHE");
-
-export default {
-  // presets: [
-  //   [
-  //     "@babel/preset-env",
-  //     {
-  //       targets: {
-  //         ie: "11",
-  //       },
-  //       loose: true,
-  //     },
-  //   ],
-  // ],
+module.exports = {
+  presets: [
+    [
+      "@babel/preset-env",
+      {
+        targets: {
+          ie: "11",
+        },
+        loose: true,
+      },
+    ],
+  ],
   plugins: [
-    // "@babel/plugin-transform-runtime",
-    // "babel-plugin-transform-async-to-promises",
-    // "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-transform-runtime",
+    "babel-plugin-transform-async-to-promises",
+    "@babel/plugin-proposal-object-rest-spread",
 
-    [
-      "@babel/plugin-transform-react-jsx",
-      {
-        pragma: "xml",
-        throwIfNamespace: false,
-        useBuiltIns: true,
-      },
-    ],
-    [
-      "babel-plugin-jsx-pragmatic",
-      {
-        module: "@xmpp/xml",
-        import: "xml",
-      },
-    ],
+    //   [
+    //     "@babel/plugin-transform-react-jsx",
+    //     {
+    //       pragma: "xml",
+    //       throwIfNamespace: false,
+    //       useBuiltIns: true,
+    //     },
+    //   ],
+    //   [
+    //     "babel-plugin-jsx-pragmatic",
+    //     {
+    //       module: "@xmpp/xml",
+    //       import: "xml",
+    //     },
+    //   ],
   ],
 };
