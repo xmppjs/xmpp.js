@@ -1,4 +1,4 @@
-.PHONY: setup lint test ci clean start stop restart bundlesize bundle size cert ncu
+.PHONY: setup lint test ci clean start stop restart bundlesize bundle size ncu
 
 setup:
 	node packages/xmpp.js/script.js
@@ -7,25 +7,28 @@ setup:
 	node bundle.js
 
 lint:
-	./node_modules/.bin/eslint --cache .
+	npx eslint --cache .
 
 test:
 	cd packages/xmpp.js/ && npm run prepublish
 	npm install
 	node bundle.js
-	./node_modules/.bin/ava
+	npx jest
 	make lint
 	make bundlesize
 
 ci:
 	npm install
-	./node_modules/.bin/ava
+	npx jest
 	make lint
 	make restart
-	./node_modules/.bin/lerna run prepublish
+	npx lerna run prepublish
 	node bundle.js
-	./node_modules/.bin/ava --config e2e.config.js
+	make e2e
 	make bundlesize
+
+e2e:
+	NODE_TLS_REJECT_UNAUTHORIZED=0 npx jest --runInBand --config e2e.config.js
 
 clean:
 	make stop
@@ -34,7 +37,7 @@ clean:
 	rm -f server/prosody.err
 	rm -f server/prosody.log
 	rm -f server/prosody.pid
-	./node_modules/.bin/lerna clean --yes
+	npx lerna clean --yes
 	rm -rf node_modules/
 	rm -f packages/*/dist/*.js
 	rm -f lerna-debug.log
@@ -49,7 +52,7 @@ restart:
 	./server/ctl.js restart
 
 bundlesize:
-	./node_modules/.bin/bundlesize
+	npx bundlesize
 
 bundle:
 	node bundle.js

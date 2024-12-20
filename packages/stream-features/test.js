@@ -1,10 +1,9 @@
 "use strict";
 
-const test = require("ava");
 const streamfeatures = require(".");
 const { xml } = require("@xmpp/test");
 
-test.skip("selectFeature", (t) => {
+test.skip("selectFeature", () => {
   const features = [];
   features.push(
     {
@@ -23,5 +22,5 @@ test.skip("selectFeature", (t) => {
     features,
     xml("foo", {}, xml("bind")),
   );
-  t.is(feature.priority, 2000);
+  expect(feature.priority).toBe(2000);
 });

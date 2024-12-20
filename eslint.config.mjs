@@ -4,17 +4,11 @@ import globals from "globals";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import eslintNodePlugin from "eslint-plugin-n";
 import pluginPromise from "eslint-plugin-promise";
+import pluginJest from "eslint-plugin-jest";
 
 export default [
   {
-    ignores: [
-      "**/dist/*.js",
-      "bundle.js",
-      "packages/xmpp.js/index.js",
-      "ava.config.js",
-      "e2e.config.js",
-      "eslint.config.mjs",
-    ],
+    ignores: ["**/dist/*.js", "eslint.config.mjs"],
   },
   js.configs.recommended,
   eslintPluginUnicorn.configs["flat/recommended"],
@@ -61,14 +55,9 @@ export default [
       // node
       // https://github.com/eslint-community/eslint-plugin-n/
       "n/no-unpublished-require": 0, // doesn't play nice with monorepo
-      "n/no-extraneous-require": [
-        "error",
-        { allowModules: ["ava", "sinon", "@xmpp/test"] },
-      ],
-      "n/no-extraneous-import": [
-        "error",
-        { allowModules: ["ava", "sinon", "@xmpp/test"] },
-      ],
+      "n/no-extraneous-require": ["error", { allowModules: ["@xmpp/test"] }],
+      "n/no-extraneous-import": ["error", { allowModules: ["@xmpp/test"] }],
+      "n/hashbang": "off",
 
       // promise
       // https://github.com/xjamundx/eslint-plugin-promise
@@ -95,6 +84,31 @@ export default [
     files: ["packages/client/**/*.js"],
     languageOptions: {
       sourceType: "module",
+    },
+  },
+  {
+    files: ["**/*.spec.js", "**/*.test.js", "**/test.js", "**/test/**.js"],
+    plugins: { jest: pluginJest },
+    languageOptions: {
+      globals: pluginJest.environments.globals.globals,
+    },
+    rules: {
+      ...pluginJest.configs["flat/style"].rules,
+      ...pluginJest.configs["flat/recommended"].rules,
+      "jest/no-done-callback": "off",
+      "jest/prefer-to-be": "off",
+      "jest/no-conditional-expect": "off",
+      // https://github.com/jest-community/eslint-plugin-jest/pull/1688
+      "jest/valid-expect": "off",
+      // "jest/valid-expect": [
+      //   "error",
+      //   {
+      //     alwaysAwait: true,
+      //     // For jest-extended expect().pass
+      //     minArgs: 0,
+      //   },
+      // ],
+      "promise/no-callback-in-promise": "off",
     },
   },
 ];

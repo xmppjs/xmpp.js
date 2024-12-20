@@ -1,25 +1,24 @@
 "use strict";
 
-const test = require("ava");
 const Connection = require("..");
 const xml = require("@xmpp/xml");
 
-test.cb("#_onElement", (t) => {
-  t.plan(2);
+test("#_onElement", done => {
+  expect.assertions(2);
   const foo = <foo />;
   const conn = new Connection();
   conn.on("element", (el) => {
-    t.is(el, foo);
+    expect(el).toBe(foo);
   });
   conn.on("nonza", (el) => {
-    t.is(el, foo);
-    t.end();
+    expect(el).toBe(foo);
+    done();
   });
   conn._onElement(foo);
 });
 
-test.cb("#_onElement stream:error", (t) => {
-  t.plan(7);
+test("#_onElement stream:error", done => {
+  expect.assertions(7);
   // prettier-ignore
 
   const application = xml('application')
@@ -31,22 +30,22 @@ test.cb("#_onElement stream:error", (t) => {
   ]);
   const conn = new Connection();
   conn._end = () => {
-    t.end();
+    done();
     return Promise.resolve();
   };
 
   conn.on("element", (el) => {
-    t.is(el, foo);
+    expect(el).toBe(foo);
   });
   conn.on("nonza", (el) => {
-    t.is(el, foo);
+    expect(el).toBe(foo);
   });
   conn.on("error", (error) => {
-    t.is(error.name, "StreamError");
-    t.is(error.condition, "foo-bar");
-    t.is(error.message, "foo-bar - hello");
-    t.is(error.application, application);
-    t.is(error.element, foo);
+    expect(error.name).toBe("StreamError");
+    expect(error.condition).toBe("foo-bar");
+    expect(error.message).toBe("foo-bar - hello");
+    expect(error.application).toBe(application);
+    expect(error.element).toBe(foo);
   });
   conn._onElement(foo);
 });

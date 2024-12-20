@@ -1,6 +1,5 @@
 "use strict";
 
-const test = require("ava");
 const {
   mockClient,
   promiseSend,
@@ -8,7 +7,7 @@ const {
   promiseError,
 } = require("@xmpp/test");
 
-test("empty result when the handler returns true", async (t) => {
+test("empty result when the handler returns true", async () => {
   const xmpp = mockClient();
   const { iqCallee } = xmpp;
 
@@ -21,10 +20,10 @@ test("empty result when the handler returns true", async (t) => {
     </iq>,
   );
 
-  t.deepEqual(await promiseSend(xmpp), <iq id="123" type="result" />);
+  expect(await promiseSend(xmpp)).toEqual(<iq id="123" type="result" />);
 });
 
-test("iqs with text children are valid", async (t) => {
+test("iqs with text children are valid", async () => {
   const xmpp = mockClient();
   const { iqCallee } = xmpp;
 
@@ -39,10 +38,10 @@ test("iqs with text children are valid", async (t) => {
     </iq>,
   );
 
-  t.deepEqual(await promiseSend(xmpp), <iq id="123" type="result" />);
+  expect(await promiseSend(xmpp)).toEqual(<iq id="123" type="result" />);
 });
 
-test("iqs with multiple element children are invalid", async (t) => {
+test("iqs with multiple element children are invalid", async () => {
   const xmpp = mockClient();
   const { iqCallee } = xmpp;
 
@@ -56,18 +55,15 @@ test("iqs with multiple element children are invalid", async (t) => {
     </iq>,
   );
 
-  t.deepEqual(
-    await promiseSend(xmpp),
-    <iq id="123" type="error">
-      <foo xmlns="bar" />
-      <error type="modify">
-        <bad-request xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
-      </error>
-    </iq>,
-  );
+  expect(await promiseSend(xmpp)).toEqual(<iq id="123" type="error">
+    <foo xmlns="bar" />
+    <error type="modify">
+      <bad-request xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
+    </error>
+  </iq>);
 });
 
-test("non empty result when the handler returns an xml.Element", async (t) => {
+test("non empty result when the handler returns an xml.Element", async () => {
   const xmpp = mockClient();
   const { iqCallee } = xmpp;
 
@@ -82,15 +78,12 @@ test("non empty result when the handler returns an xml.Element", async (t) => {
     </iq>,
   );
 
-  t.deepEqual(
-    await promiseSend(xmpp),
-    <iq id="123" type="result">
-      <hello />
-    </iq>,
-  );
+  expect(await promiseSend(xmpp)).toEqual(<iq id="123" type="result">
+    <hello />
+  </iq>);
 });
 
-test("service unavailable error reply when there are no handler", async (t) => {
+test("service unavailable error reply when there are no handler", async () => {
   const xmpp = mockClient();
 
   xmpp.mockInput(
@@ -99,18 +92,15 @@ test("service unavailable error reply when there are no handler", async (t) => {
     </iq>,
   );
 
-  t.deepEqual(
-    await promiseSend(xmpp),
-    <iq id="123" type="error">
-      <foo xmlns="bar" />
-      <error type="cancel">
-        <service-unavailable xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
-      </error>
-    </iq>,
-  );
+  expect(await promiseSend(xmpp)).toEqual(<iq id="123" type="error">
+    <foo xmlns="bar" />
+    <error type="cancel">
+      <service-unavailable xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
+    </error>
+  </iq>);
 });
 
-test("internal server error reply when handler throws an error", async (t) => {
+test("internal server error reply when handler throws an error", async () => {
   const xmpp = mockClient();
   const { iqCallee } = xmpp;
 
@@ -129,19 +119,16 @@ test("internal server error reply when handler throws an error", async (t) => {
     </iq>,
   );
 
-  t.is(await errorPromise, error);
-  t.deepEqual(
-    await outputPromise,
-    <iq id="123" type="error">
-      <foo xmlns="bar" />
-      <error type="cancel">
-        <internal-server-error xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
-      </error>
-    </iq>,
-  );
+  expect(await errorPromise).toBe(error);
+  expect(await outputPromise).toEqual(<iq id="123" type="error">
+    <foo xmlns="bar" />
+    <error type="cancel">
+      <internal-server-error xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
+    </error>
+  </iq>);
 });
 
-test("internal server error reply when handler rejects with an error", async (t) => {
+test("internal server error reply when handler rejects with an error", async () => {
   const xmpp = mockClient();
   const { iqCallee } = xmpp;
 
@@ -160,19 +147,16 @@ test("internal server error reply when handler rejects with an error", async (t)
     </iq>,
   );
 
-  t.is(await errorPromise, error);
-  t.deepEqual(
-    await outputPromise,
-    <iq id="123" type="error">
-      <foo xmlns="bar" />
-      <error type="cancel">
-        <internal-server-error xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
-      </error>
-    </iq>,
-  );
+  expect(await errorPromise).toBe(error);
+  expect(await outputPromise).toEqual(<iq id="123" type="error">
+    <foo xmlns="bar" />
+    <error type="cancel">
+      <internal-server-error xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
+    </error>
+  </iq>);
 });
 
-test("stanza error reply when handler returns an error element", async (t) => {
+test("stanza error reply when handler returns an error element", async () => {
   const xmpp = mockClient();
   const { iqCallee } = xmpp;
 
@@ -195,11 +179,8 @@ test("stanza error reply when handler returns an error element", async (t) => {
     </iq>,
   );
 
-  t.deepEqual(
-    await outputPromise,
-    <iq id="123" type="error">
-      <foo xmlns="bar" />
-      {errorElement}
-    </iq>,
-  );
+  expect(await outputPromise).toEqual(<iq id="123" type="error">
+    <foo xmlns="bar" />
+    {errorElement}
+  </iq>);
 });

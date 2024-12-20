@@ -1,20 +1,46 @@
 "use strict";
 
-module.exports = {
-  presets: [
-    [
-      "@babel/preset-env",
-      {
-        targets: {
-          ie: "10",
+module.exports = function config(api) {
+  const isTest = api.env("test");
+
+  if (isTest) {
+    return {
+      plugins: [
+        [
+          "@babel/plugin-transform-react-jsx",
+          {
+            pragma: "xml",
+            throwIfNamespace: false,
+          },
+        ],
+        [
+          "babel-plugin-jsx-pragmatic",
+          {
+            module: "@xmpp/xml",
+            import: "xml",
+          },
+        ],
+        "@babel/plugin-transform-modules-commonjs",
+      ],
+    };
+  }
+
+  return {
+    presets: [
+      [
+        "@babel/preset-env",
+        {
+          targets: {
+            ie: "10",
+          },
+          loose: true,
         },
-        loose: true,
-      },
+      ],
     ],
-  ],
-  plugins: [
-    "@babel/plugin-transform-runtime",
-    "babel-plugin-transform-async-to-promises",
-    "@babel/plugin-proposal-object-rest-spread",
-  ],
+    plugins: [
+      "@babel/plugin-transform-runtime",
+      "babel-plugin-transform-async-to-promises",
+      "@babel/plugin-proposal-object-rest-spread",
+    ],
+  };
 };
