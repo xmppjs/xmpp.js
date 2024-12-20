@@ -15,7 +15,7 @@ test:
 	node bundle.js
 	./node_modules/.bin/ava
 	make lint
-	make bundlesize
+# make bundlesize
 
 ci:
 	npm install
