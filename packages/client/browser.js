@@ -23,8 +23,16 @@ const anonymous = require("@xmpp/sasl-anonymous");
 const plain = require("@xmpp/sasl-plain");
 
 function client(options = {}) {
-  const { resource, credentials, username, password, ...params } = options;
-  const { clientId, software, device } = params;
+  const {
+    resource,
+    credentials,
+    username,
+    password,
+    clientId,
+    software,
+    device,
+    ...params
+  } = options;
 
   const { domain, service } = params;
   if (!domain && service) {
