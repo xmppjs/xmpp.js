@@ -1,5 +1,6 @@
 "use strict";
 
+// eslint-disable-next-line n/no-extraneous-require
 const { defaults } = require("jest-config");
 
 /** @type {import('jest').Config} */

@@ -1,7 +1,12 @@
 "use strict";
 
 const Connection = require("..");
-const { EventEmitter, promise, timeout } = require("@xmpp/events");
+const {
+  EventEmitter,
+  promise,
+  timeout,
+  TimeoutError,
+} = require("@xmpp/events");
 const xml = require("@xmpp/xml");
 
 test("resets properties on socket close event", () => {
@@ -15,7 +20,7 @@ test("resets properties on socket close event", () => {
   expect(conn.status).toBe("disconnect");
 });
 
-test("timeout", (done) => {
+test("timeout", async () => {
   expect.assertions(2);
   const conn = new Connection();
   conn.parser = new EventEmitter();
@@ -31,14 +36,11 @@ test("timeout", (done) => {
   conn.on("output", (el) => {
     expect(el).toBe("<hello/>");
   });
-  conn.close().catch((err) => {
-    expect(err.name).toBe("TimeoutError");
-    done();
-  });
+
+  await expect(conn.close()).rejects.toThrow(new TimeoutError());
 });
 
-test("error on status closing", (done) => {
-  expect.assertions(2);
+test("error on status closing", async () => {
   const conn = new Connection();
   conn.parser = new EventEmitter();
   conn.footerElement = () => {
@@ -51,12 +53,12 @@ test("error on status closing", (done) => {
   };
 
   conn.status = "closing";
-  conn.close().catch((err) => {
-    expect(err.name).toBe("Error");
-    expect(err.message).toBe("Connection is closing");
-    done();
-  });
+
   conn.parser.emit("end");
+
+  await expect(conn.close()).rejects.toThrow(
+    new Error("Connection is closing"),
+  );
 });
 
 test("resolves", async () => {
@@ -105,7 +107,7 @@ test("emits closing status", () => {
   return p;
 });
 
-test("do not emit closing status if parser property is missing", () => {
+test("do not emit closing status if parser property is missing", async () => {
   expect.assertions(2);
   const conn = new Connection();
   conn.parser = null;
@@ -118,12 +120,10 @@ test("do not emit closing status if parser property is missing", () => {
     return cb();
   };
 
-  return Promise.all([
-    timeout(promise(conn, "status"), 500).catch((err) =>
-      expect(err.name).toBe("TimeoutError"),
+  await Promise.all([
+    expect(timeout(promise(conn, "status"), 500)).rejects.toThrow(
+      new TimeoutError(),
     ),
-    conn.close().catch((err) => {
-      expect(err).toBeInstanceOf(Error);
-    }),
+    expect(conn.close()).rejects.toThrow(),
   ]);
 });

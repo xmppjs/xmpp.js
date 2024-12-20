@@ -93,11 +93,11 @@ export default [
       globals: pluginJest.environments.globals.globals,
     },
     rules: {
-      "jest/no-disabled-tests": "warn",
-      "jest/no-focused-tests": "error",
-      "jest/no-identical-title": "error",
-      "jest/prefer-to-have-length": "error",
-
+      ...pluginJest.configs["flat/style"].rules,
+      ...pluginJest.configs["flat/recommended"].rules,
+      "jest/no-done-callback": "off",
+      "jest/prefer-to-be": "off",
+      "jest/no-conditional-expect": "off",
       // https://github.com/jest-community/eslint-plugin-jest/pull/1688
       "jest/valid-expect": "off",
       // "jest/valid-expect": [

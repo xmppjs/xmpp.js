@@ -7,6 +7,7 @@ test("resolves if socket property is undefined", async () => {
   conn.footerElement = () => <foo />;
   conn.socket = undefined;
   await conn.stop();
+  expect().pass();
 });
 
 test("resolves if close rejects", async () => {
@@ -14,6 +15,7 @@ test("resolves if close rejects", async () => {
   conn.close = () => Promise.reject();
   conn.disconnect = () => Promise.resolve();
   await conn.stop();
+  expect().pass();
 });
 
 test("resolves if disconnect rejects", async () => {
@@ -21,6 +23,7 @@ test("resolves if disconnect rejects", async () => {
   conn.disconnect = () => Promise.reject();
   conn.close = () => Promise.resolve();
   await conn.stop();
+  expect().pass();
 });
 
 test("resolves with the result of close", async () => {
@@ -35,4 +38,5 @@ test("resolves with the result of close", async () => {
 test("does not throw if connection is not established", async () => {
   const conn = new Connection();
   await conn.stop();
+  expect().pass();
 });

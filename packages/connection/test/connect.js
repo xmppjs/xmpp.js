@@ -27,6 +27,8 @@ test('emits "connecting" status', () => {
 });
 
 test("rejects if an error is emitted before connected", async () => {
+  expect.assertions(2);
+
   const conn = new Connection();
   const error = {};
 
@@ -34,10 +36,13 @@ test("rejects if an error is emitted before connected", async () => {
   conn.Socket = socket(function () {
     this.emit("error", error);
   });
-  conn.on("error", (err) => expect(err).toBe(error));
+  conn.on("error", (err) => {
+    expect(err).toBe(error);
+  });
 
   try {
     await conn.connect("url");
+    expect.fail();
   } catch (err) {
     expect(err).toBe(error);
   }
@@ -50,4 +55,5 @@ test("resolves if socket connects", async () => {
     this.emit("connect");
   });
   await conn.connect("url");
+  expect().pass();
 });

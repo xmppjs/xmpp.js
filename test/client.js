@@ -44,7 +44,7 @@ test("client", async () => {
   expect(address.bare().toString()).toBe(JID);
 });
 
-test("bad credentials", (done) => {
+test("bad credentials", async () => {
   expect.assertions(6);
 
   xmpp = client({
@@ -62,22 +62,18 @@ test("bad credentials", (done) => {
     expect().pass();
   });
 
-  xmpp.on("online", () => done.fail());
+  xmpp.on("online", () => {
+    expect().fail();
+  });
 
   xmpp.on("error", (err) => {
-    expect(err instanceof Error).toBe(true);
+    expect(err).toBeInstanceOf(Error);
     expect(err.name).toBe("SASLError");
     expect(err.condition).toBe("not-authorized");
     error = err;
   });
 
-  xmpp
-    .start()
-    .then(() => done.fail())
-    .catch((err) => {
-      expect(err).toBe(error);
-      done();
-    });
+  await expect(xmpp.start()).rejects.toThrow(error);
 });
 
 test("reconnects when server restarts gracefully", (done) => {
