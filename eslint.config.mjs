@@ -32,11 +32,11 @@ export default [
           jsx: true,
         },
       },
-      sourceType: "module",
+      sourceType: "commonjs",
     },
 
     rules: {
-      // strict: ["error", "global"],
+      strict: ["error", "global"],
       "no-empty": ["error", { allowEmptyCatch: true }],
       // "no-multi-assign": 0,
       "func-names": ["error", "as-needed"],
@@ -92,10 +92,9 @@ export default [
     },
   },
   {
-    files: ["server/ctl.js"],
-    rules: {
-      "n/no-unsupported-features/es-syntax": "off",
-      "n/no-unsupported-features/es-syntax": "off",
+    files: ["packages/client/**/*.js"],
+    languageOptions: {
+      sourceType: "module",
     },
   },
 ];
