@@ -6,6 +6,7 @@
   "version": "0.13.2",
   "license": "ISC",
   "type": "module",
+  "main": "index.js",
   "dependencies": {
     "@xmpp/client-core": "^0.13.2",
     "@xmpp/iq": "^0.13.2",
