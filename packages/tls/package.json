@@ -7,6 +7,7 @@
   "version": "0.13.2",
   "license": "ISC",
   "type": "module",
+  "main": "index.js",
   "dependencies": {
     "@xmpp/connection": "^0.13.2",
     "@xmpp/connection-tcp": "^0.13.2"
