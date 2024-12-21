@@ -3,7 +3,6 @@ import debug from "../packages/debug/index.js";
 import server from "../server/index.js";
 
 import { JSDOM } from "jsdom";
-import fetch from "node-fetch";
 import { readFileSync } from "fs";
 
 const username = "client";
@@ -22,7 +21,6 @@ let xmpp;
 
 beforeEach(async () => {
   ({ window } = new JSDOM(``, { runScripts: "dangerously" }));
-  window.fetch = fetch;
   const { document } = window;
   const scriptEl = document.createElement("script");
   scriptEl.textContent = xmppjs;

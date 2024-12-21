@@ -33,7 +33,6 @@
     "jsdom": "^25.0.1",
     "lerna": "^8.1.9",
     "lint-staged": "^15.2.11",
-    "node-fetch": "^2.6.12",
     "prettier": "^3.4.2",
     "selfsigned": "^2.4.1",
     "uglify-js": "^3.19.3"
@@ -42,8 +41,7 @@
     "preversion": "make bundle"
   },
   "engines": {
-    "node": ">= 14.13.1",
-    "npm": ">= 7"
+    "node": ">= 20"
   },
   "workspaces": [
     "packages/*"

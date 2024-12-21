@@ -12,7 +12,7 @@
     "test"
   ],
   "engines": {
-    "node": ">= 14.13.1"
+    "node": ">= 20"
   },
   "dependencies": {
     "@xmpp/client-core": "^0.13.2",

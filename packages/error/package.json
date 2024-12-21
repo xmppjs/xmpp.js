@@ -12,7 +12,7 @@
     "error"
   ],
   "engines": {
-    "node": ">= 14.13.1"
+    "node": ">= 20"
   },
   "publishConfig": {
     "access": "public"
