@@ -1,11 +1,14 @@
-// eslint-disable-next-line n/no-unsupported-features/node-builtins
-const fetch = globalThis.fetch || import("node-fetch");
+ 
+// FIXME
+// const fetch = globalThis.fetch || import("node-fetch");
 
 import parse from "@xmpp/xml/lib/parse.js";
 import { compare as compareAltConnections } from "./alt-connections.js";
 
 export function resolve(domain) {
-  return fetch(`https://${domain}/.well-known/host-meta`)
+  // eslint-disable-next-line n/no-unsupported-features/node-builtins
+  return globalThis
+    .fetch(`https://${domain}/.well-known/host-meta`)
     .then((res) => res.text())
     .then((res) => {
       return parse(res)

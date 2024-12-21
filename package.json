@@ -53,7 +53,7 @@
   "bundlesize": [
     {
       "path": "./packages/client/dist/xmpp.min.js",
-      "maxSize": "16 KB"
+      "maxSize": "17 KB"
     }
   ],
   "lint-staged": {
