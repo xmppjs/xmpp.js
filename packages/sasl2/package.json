@@ -6,6 +6,7 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.13.0",
   "license": "ISC",
+  "type": "module",
   "keywords": [
     "XMPP",
     "sasl"
@@ -13,6 +14,7 @@
   "dependencies": {
     "@xmpp/base64": "^0.13.0",
     "@xmpp/error": "^0.13.0",
+    "@xmpp/sasl": "^0.13.2",
     "@xmpp/jid": "^0.13.0",
     "@xmpp/xml": "^0.13.0",
     "saslmechanisms": "^0.1.1"

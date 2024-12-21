@@ -1,14 +1,11 @@
-"use strict";
-
-const test = require("ava");
-const { mockClient, promise } = require("@xmpp/test");
-const parse = require("@xmpp/xml/lib/parse.js");
+import { mockClient, promise } from "@xmpp/test";
+import parse from "@xmpp/xml/lib/parse.js";
 
 const username = "foo";
 const password = "bar";
 const credentials = { username, password };
 
-test("no compatibles mechanisms", async (t) => {
+test("no compatibles mechanisms", async () => {
   const { entity } = mockClient({ username, password });
 
   entity.mockInput(
@@ -20,11 +17,11 @@ test("no compatibles mechanisms", async (t) => {
   );
 
   const error = await promise(entity, "error");
-  t.true(error instanceof Error);
-  t.is(error.message, "No compatible mechanism");
+  expect(error instanceof Error).toBe(true);
+  expect(error.message).toBe("No compatible mechanism");
 });
 
-test("with object credentials", async (t) => {
+test("with object credentials", async () => {
   const { entity } = mockClient({ credentials });
 
   entity.mockInput(
@@ -35,8 +32,7 @@ test("with object credentials", async (t) => {
     </features>,
   );
 
-  t.deepEqual(
-    await promise(entity, "send"),
+  expect(await promise(entity, "send")).toEqual(
     <authenticate xmlns="urn:xmpp:sasl:2" mechanism="PLAIN">
       <initial-response>AGZvbwBiYXI=</initial-response>
     </authenticate>,
@@ -48,11 +44,13 @@ test("with object credentials", async (t) => {
   await promise(entity, "online");
 });
 
-test("with function credentials", async (t) => {
+test("with function credentials", async () => {
   const mech = "PLAIN";
 
   function authenticate(auth, mechanisms) {
-    t.deepEqual(mechanisms, [{ name: mech, canFast: false, canOther: true }]);
+    expect(mechanisms).toEqual([
+      { name: mech, canFast: false, canOther: true },
+    ]);
     return auth(credentials, mech);
   }
 
@@ -66,8 +64,7 @@ test("with function credentials", async (t) => {
     </features>,
   );
 
-  t.deepEqual(
-    await promise(entity, "send"),
+  expect(await promise(entity, "send")).toEqual(
     <authenticate xmlns="urn:xmpp:sasl:2" mechanism={mech}>
       <initial-response>AGZvbwBiYXI=</initial-response>
     </authenticate>,
@@ -79,7 +76,7 @@ test("with function credentials", async (t) => {
   await promise(entity, "online");
 });
 
-test("failure", async (t) => {
+test("failure", async () => {
   const { entity } = mockClient({ credentials });
 
   entity.mockInput(
@@ -90,8 +87,7 @@ test("failure", async (t) => {
     </features>,
   );
 
-  t.deepEqual(
-    await promise(entity, "send"),
+  expect(await promise(entity, "send")).toEqual(
     <authenticate xmlns="urn:xmpp:sasl:2" mechanism="PLAIN">
       <initial-response>AGZvbwBiYXI=</initial-response>
     </authenticate>,
@@ -106,13 +102,13 @@ test("failure", async (t) => {
   entity.mockInput(failure);
 
   const error = await promise(entity, "error");
-  t.true(error instanceof Error);
-  t.is(error.name, "SASLError");
-  t.is(error.condition, "some-condition");
-  t.is(error.element, failure);
+  expect(error instanceof Error).toBe(true);
+  expect(error.name).toBe("SASLError");
+  expect(error.condition).toBe("some-condition");
+  expect(error.element).toBe(failure);
 });
 
-test("prefers SCRAM-SHA-1", async (t) => {
+test("prefers SCRAM-SHA-1", async () => {
   const { entity } = mockClient({ credentials });
 
   entity.mockInput(
@@ -126,10 +122,10 @@ test("prefers SCRAM-SHA-1", async (t) => {
   );
 
   const result = await promise(entity, "send");
-  t.deepEqual(result.attrs.mechanism, "SCRAM-SHA-1");
+  expect(result.attrs.mechanism).toEqual("SCRAM-SHA-1");
 });
 
-test("use ANONYMOUS if username and password are not provided", async (t) => {
+test("use ANONYMOUS if username and password are not provided", async () => {
   const { entity } = mockClient();
 
   entity.mockInput(
@@ -143,10 +139,10 @@ test("use ANONYMOUS if username and password are not provided", async (t) => {
   );
 
   const result = await promise(entity, "send");
-  t.deepEqual(result.attrs.mechanism, "ANONYMOUS");
+  expect(result.attrs.mechanism).toEqual("ANONYMOUS");
 });
 
-test("with whitespaces", async (t) => {
+test("with whitespaces", async () => {
   const { entity } = mockClient();
 
   entity.mockInput(
@@ -164,10 +160,10 @@ test("with whitespaces", async (t) => {
   );
 
   const result = await promise(entity, "send");
-  t.deepEqual(result.attrs.mechanism, "ANONYMOUS");
+  expect(result.attrs.mechanism).toEqual("ANONYMOUS");
 });
 
-test("with bind2", async (t) => {
+test("with bind2", async () => {
   const { entity } = mockClient({
     credentials,
     clientId: "uniqueid",
@@ -186,8 +182,7 @@ test("with bind2", async (t) => {
     </features>,
   );
 
-  t.deepEqual(
-    await promise(entity, "send"),
+  expect(await promise(entity, "send")).toEqual(
     <authenticate xmlns="urn:xmpp:sasl:2" mechanism="PLAIN">
       <initial-response>AGZvbwBiYXI=</initial-response>
       <user-agent id="uniqueid">
@@ -206,10 +201,10 @@ test("with bind2", async (t) => {
   await promise(entity, "online");
 });
 
-test("with FAST", async (t) => {
+test("with FAST", async () => {
   const { entity } = mockClient({
     credentials: (callback, mechanisms) => {
-      t.deepEqual(mechanisms, [
+      expect(mechanisms).toEqual([
         { canFast: true, canOther: false, name: "HT-SHA-256-NONE" },
         { canFast: false, canOther: true, name: "PLAIN" },
       ]);
@@ -233,8 +228,7 @@ test("with FAST", async (t) => {
     </features>,
   );
 
-  t.deepEqual(
-    await promise(entity, "send"),
+  expect(await promise(entity, "send")).toEqual(
     <authenticate xmlns="urn:xmpp:sasl:2" mechanism="PLAIN">
       <initial-response>AGZvbwBiYXI=</initial-response>
       <request-token xmlns="urn:xmpp:fast:0" mechanism="HT-SHA-256-NONE" />
@@ -247,10 +241,10 @@ test("with FAST", async (t) => {
   await promise(entity, "online");
 });
 
-test("with FAST token", async (t) => {
+test("with FAST token", async () => {
   const { entity } = mockClient({
     credentials: (callback, mechanisms) => {
-      t.deepEqual(mechanisms, [
+      expect(mechanisms).toEqual([
         { canFast: true, canOther: false, name: "HT-SHA-256-NONE" },
         { canFast: false, canOther: true, name: "PLAIN" },
       ]);
@@ -271,8 +265,7 @@ test("with FAST token", async (t) => {
     </features>,
   );
 
-  t.deepEqual(
-    await promise(entity, "send"),
+  expect(await promise(entity, "send")).toEqual(
     <authenticate xmlns="urn:xmpp:sasl:2" mechanism="HT-SHA-256-NONE">
       <initial-response>
         bnVsbAAAXAywUfR/w4Mr9SUDUtNAgPDajNI073fqfiZLMYcmfA==

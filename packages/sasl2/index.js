@@ -1,10 +1,8 @@
-"use strict";
-
-const { encode, decode } = require("@xmpp/base64");
-const SASLError = require("./lib/SASLError");
-const jid = require("@xmpp/jid");
-const xml = require("@xmpp/xml");
-const SASLFactory = require("saslmechanisms");
+import { encode, decode } from "@xmpp/base64";
+import SASLError from "@xmpp/sasl/lib/SASLError.js";
+import jid from "@xmpp/jid";
+import xml from "@xmpp/xml";
+import SASLFactory from "saslmechanisms";
 
 // https://xmpp.org/extensions/xep-0388.html
 // https://xmpp.org/extensions/xep-0386.html
@@ -164,7 +162,7 @@ async function authenticate(
   await Promise.all([promise, ...hPromises]);
 }
 
-module.exports = function sasl2({ streamFeatures }, credentials, userAgent) {
+export default function sasl2({ streamFeatures }, credentials, userAgent) {
   const SASL = new SASLFactory();
   const handlers = {};
   const bindHandlers = {};
@@ -195,20 +193,18 @@ module.exports = function sasl2({ streamFeatures }, credentials, userAgent) {
       .filter((mech) => mech.canFast || mech.canOther);
 
     if (typeof credentials === "function") {
-      await credentials(
-        (creds, mech) =>
-          authenticate(
-            SASL,
-            handlers,
-            bindHandlers,
-            entity,
-            mech,
-            creds,
-            userAgent,
-            stanza,
-          ),
-        intersection,
-      );
+      await credentials((creds, mech) => {
+        authenticate(
+          SASL,
+          handlers,
+          bindHandlers,
+          entity,
+          mech,
+          creds,
+          userAgent,
+          stanza,
+        );
+      }, intersection);
     } else {
       let mech = intersection[0]?.name;
       if (!credentials.username && !credentials.password) {
@@ -241,4 +237,4 @@ module.exports = function sasl2({ streamFeatures }, credentials, userAgent) {
       bindHandlers[feature] = handler;
     },
   };
-};
+}

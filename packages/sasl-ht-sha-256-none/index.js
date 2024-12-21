@@ -1,7 +1,5 @@
-"use strict";
-
 // https://datatracker.ietf.org/doc/draft-schmaus-kitten-sasl-ht/
-const createHmac = require("create-hmac");
+import createHmac from "create-hmac";
 
 function Mechanism() {}
 
@@ -24,6 +22,6 @@ Mechanism.prototype.final = (data) => {
   }
 };
 
-module.exports = function sasl2(sasl) {
+export default function sasl2(sasl) {
   sasl.use(Mechanism);
-};
+}

@@ -36,6 +36,8 @@
     "uglify-js": "^3.19.3"
   },
   "scripts": {
+    "test": "npx jest",
+    "e2e": "NODE_TLS_REJECT_UNAUTHORIZED=0 npx jest --runInBand --config e2e.config.cjs",
     "preversion": "make bundle"
   },
   "engines": {
