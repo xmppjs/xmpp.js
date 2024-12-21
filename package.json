@@ -54,5 +54,5 @@
     "*.{js,cjs,mjs}": "eslint --cache --fix",
     "*.{json,md,html,css,yaml,yml}": "prettier --write"
   },
-  "browserslist": "> 0.25%, not dead"
+  "browserslist": "defaults"
 }
