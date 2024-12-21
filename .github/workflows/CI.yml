@@ -14,9 +14,9 @@ jobs:
       matrix:
         # Do not support --experimental-require-module
         # Commented until we have a solution to run tests without it
-        # node: [14, 16, 18, 20, 22]
+        node: [14, 16, 18, 20, 22]
         # node: [20, 22] // fails on 20 with (0 , _getDomain.default) is not a function
-        node: [22]
+        # node: [22]
     steps:
       - uses: actions/checkout@v4
 
