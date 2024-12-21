@@ -7,6 +7,7 @@ import net from "net";
 import { promise, delay } from "@xmpp/events";
 import selfsigned from "selfsigned";
 
+const __dirname = "./server";
 // const __dirname = import.meta.dirname;
 
 const readFile = promisify(fs.readFile);
