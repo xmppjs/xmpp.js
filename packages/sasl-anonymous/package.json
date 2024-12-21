@@ -16,7 +16,7 @@
     "sasl-anonymous": "^0.1.0"
   },
   "engines": {
-    "node": ">= 14.13.1"
+    "node": ">= 20"
   },
   "publishConfig": {
     "access": "public"

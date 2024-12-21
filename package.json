@@ -18,10 +18,10 @@
     "browserify": "^17.0.1",
     "bundlesize": "^0.18.2",
     "common-shakeify": "^1.1.2",
-    "eslint": "^9.16.0",
+    "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^28.10.0",
-    "eslint-plugin-n": "^17.15.0",
+    "eslint-plugin-n": "^17.15.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-unicorn": "^56.0.1",
@@ -33,7 +33,6 @@
     "jsdom": "^25.0.1",
     "lerna": "^8.1.9",
     "lint-staged": "^15.2.11",
-    "node-fetch": "^2.6.12",
     "prettier": "^3.4.2",
     "selfsigned": "^2.4.1",
     "uglify-js": "^3.19.3"
@@ -42,8 +41,7 @@
     "preversion": "make bundle"
   },
   "engines": {
-    "node": ">= 14.13.1",
-    "npm": ">= 7"
+    "node": ">= 20"
   },
   "workspaces": [
     "packages/*"

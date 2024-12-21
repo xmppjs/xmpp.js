@@ -1,3 +1,7 @@
-import { encode, decode } from "base-64";
+export function encode(string) {
+  return globalThis.btoa(string);
+}
 
-export { encode, decode };
+export function decode(string) {
+  return globalThis.atob(string);
+}
