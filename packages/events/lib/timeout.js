@@ -1,9 +1,7 @@
-"use strict";
+import TimeoutError from "./TimeoutError.js";
+import delay from "./delay.js";
 
-const TimeoutError = require("./TimeoutError");
-const delay = require("./delay");
-
-module.exports = function timeout(promise, ms) {
+export default function timeout(promise, ms) {
   const promiseDelay = delay(ms);
 
   function cancelDelay() {
@@ -16,4 +14,4 @@ module.exports = function timeout(promise, ms) {
       throw new TimeoutError();
     }),
   ]);
-};
+}

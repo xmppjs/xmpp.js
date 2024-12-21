@@ -11,10 +11,10 @@ Included in `@xmpp/client` and `@xmpp/component`.
 Implements the caller side of iq semantics.
 
 ```js
-const {client} = require('@xmpp/client') // or component
+import { client } from "@xmpp/client"; // or component
 
-const xmpp = client(...)
-const {iqCaller} = xmpp
+const xmpp = client(...);
+const {iqCaller} = xmpp;
 ```
 
 ### request
@@ -71,10 +71,10 @@ Implements the callee side of iq semantics.
 You can think of this as http routing except there are only 2 methods; `get` and `set` and you would pass a namespace and a tag name instead of an url. The return value of the handler will be the child element of the response sent to the caller.
 
 ```js
-const {client} = require('@xmpp/client') // or component
+import { client } from "@xmpp/client"; // or component
 
-const xmpp = client(...)
-const {iqCallee} = xmpp
+const xmpp = client(...);
+const {iqCallee} = xmpp;
 ```
 
 ## get

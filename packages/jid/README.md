@@ -17,18 +17,18 @@ https://en.wikipedia.org/wiki/XMPP#Decentralization_and_addressing
 ## Usage
 
 ```js
-var jid = require("@xmpp/jid");
+import jid from "@xmpp/jid";
 
 /*
  * All return an instance of jid.JID
  */
-var addr = jid("alice@wonderland.net/rabbithole");
-var addr = jid("alice", "wonderland.net", "rabbithole");
+const addr = jid("alice@wonderland.net/rabbithole");
+const addr = jid("alice", "wonderland.net", "rabbithole");
 
 addr instanceof jid.JID; // true
 
 // domain JIDs are created passing the domain as the first argument
-var addr = jid("wonderland.net");
+const addr = jid("wonderland.net");
 
 /*
  * local

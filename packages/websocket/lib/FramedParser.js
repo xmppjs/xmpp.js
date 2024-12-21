@@ -1,8 +1,6 @@
-"use strict";
+import { Parser, Element, XMLError } from "@xmpp/xml";
 
-const { Parser, Element, XMLError } = require("@xmpp/xml");
-
-module.exports = class FramedParser extends Parser {
+export default class FramedParser extends Parser {
   onStartElement(name, attrs) {
     const element = new Element(name, attrs);
 
@@ -38,4 +36,4 @@ module.exports = class FramedParser extends Parser {
 
     this.cursor = null;
   }
-};
+}

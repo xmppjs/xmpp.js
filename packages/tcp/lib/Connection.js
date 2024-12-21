@@ -1,6 +1,4 @@
-"use strict";
-
-const Connection = require("@xmpp/connection-tcp");
+import Connection from "@xmpp/connection-tcp";
 
 class ConnectionTCP extends Connection {
   socketParameters(service) {
@@ -13,4 +11,4 @@ class ConnectionTCP extends Connection {
 
 ConnectionTCP.prototype.NS = "jabber:client";
 
-module.exports = ConnectionTCP;
+export default ConnectionTCP;

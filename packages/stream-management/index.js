@@ -1,6 +1,4 @@
-"use strict";
-
-const xml = require("@xmpp/xml");
+import xml from "@xmpp/xml";
 
 // https://xmpp.org/extensions/xep-0198.html
 
@@ -40,7 +38,7 @@ async function resume(entity, h, previd) {
   return response;
 }
 
-module.exports = function streamManagement({
+export default function streamManagement({
   streamFeatures,
   entity,
   middleware,
@@ -177,4 +175,4 @@ module.exports = function streamManagement({
   });
 
   return sm;
-};
+}

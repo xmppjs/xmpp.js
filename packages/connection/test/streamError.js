@@ -1,27 +1,19 @@
-"use strict";
+import Connection from "../index.js";
+import xml from "@xmpp/xml";
 
-const test = require("ava");
-const Connection = require("..");
-const xml = require("@xmpp/xml");
-
-test("#_streamError", (t) => {
-  t.plan(2);
+test("#_streamError", async () => {
   const conn = new Connection();
-  conn.send = (el) => {
-    t.deepEqual(
-      el,
-      // prettier-ignore
-      xml('stream:error', {}, [
-        xml('foo-bar', {xmlns: 'urn:ietf:params:xml:ns:xmpp-streams'}),
-      ]),
-    );
-    return Promise.resolve();
-  };
 
-  conn._end = () => {
-    t.pass();
-    return Promise.resolve();
-  };
+  const spy_end = jest.spyOn(conn, "_end");
+  const spy_send = jest.spyOn(conn, "send");
 
-  return conn._streamError("foo-bar");
+  await conn._streamError("foo-bar");
+
+  expect(spy_end).toHaveBeenCalled();
+
+  expect(spy_send).toHaveBeenCalledWith(
+    xml("stream:error", {}, [
+      xml("foo-bar", { xmlns: "urn:ietf:params:xml:ns:xmpp-streams" }),
+    ]),
+  );
 });

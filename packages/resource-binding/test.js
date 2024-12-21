@@ -1,9 +1,6 @@
-"use strict";
+import { mockClient, delay } from "@xmpp/test";
 
-const test = require("ava");
-const { mockClient, delay } = require("@xmpp/test");
-
-test("without resource", async (t) => {
+test("without resource", async () => {
   const resource = Math.random().toString();
   const jid = "foo@bar/" + resource;
 
@@ -22,14 +19,14 @@ test("without resource", async (t) => {
   );
 
   const child = await entity.catchOutgoingSet();
-  t.deepEqual(child, <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind" />);
+  expect(child).toEqual(<bind xmlns="urn:ietf:params:xml:ns:xmpp-bind" />);
 
   await delay();
 
-  t.is(entity.jid.toString(), jid);
+  expect(entity.jid.toString()).toBe(jid);
 });
 
-test("with string resource", async (t) => {
+test("with string resource", async () => {
   const resource = Math.random().toString();
   const jid = "foo@bar/" + resource;
 
@@ -48,8 +45,7 @@ test("with string resource", async (t) => {
   );
 
   const child = await entity.catchOutgoingSet();
-  t.deepEqual(
-    child,
+  expect(child).toEqual(
     <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
       <resource>{resource}</resource>
     </bind>,
@@ -57,10 +53,10 @@ test("with string resource", async (t) => {
 
   await delay();
 
-  t.is(entity.jid.toString(), jid);
+  expect(entity.jid.toString()).toBe(jid);
 });
 
-test("with function resource", async (t) => {
+test("with function resource", async () => {
   const resource = Math.random().toString();
   const jid = "foo@bar/" + resource;
 
@@ -68,7 +64,7 @@ test("with function resource", async (t) => {
     resource: async (bind) => {
       await delay();
       const result = await bind(resource);
-      t.is(result.toString(), jid);
+      expect(result.toString()).toBe(jid);
     },
   });
 
@@ -85,8 +81,7 @@ test("with function resource", async (t) => {
   );
 
   const child = await entity.catchOutgoingSet();
-  t.deepEqual(
-    child,
+  expect(child).toEqual(
     <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
       <resource>{resource}</resource>
     </bind>,
@@ -94,5 +89,5 @@ test("with function resource", async (t) => {
 
   await delay();
 
-  t.is(entity.jid.toString(), jid);
+  expect(entity.jid.toString()).toBe(jid);
 });

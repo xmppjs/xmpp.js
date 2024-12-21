@@ -1,6 +1,7 @@
-"use strict";
+export function encode(string) {
+  return globalThis.btoa(string);
+}
 
-const { encode, decode } = require("base-64");
-
-module.exports.encode = encode;
-module.exports.decode = decode;
+export function decode(string) {
+  return globalThis.atob(string);
+}

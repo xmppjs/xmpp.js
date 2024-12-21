@@ -1,31 +1,26 @@
-"use strict";
+import { xml, jid, Client } from "@xmpp/client-core";
+import getDomain from "./lib/getDomain.js";
 
-const { xml, jid, Client } = require("@xmpp/client-core");
-const getDomain = require("./lib/getDomain");
+import _reconnect from "@xmpp/reconnect";
+import _websocket from "@xmpp/websocket";
+import _tcp from "@xmpp/tcp";
+import _tls from "@xmpp/tls";
+import _middleware from "@xmpp/middleware";
+import _streamFeatures from "@xmpp/stream-features";
+import _iqCaller from "@xmpp/iq/caller.js";
+import _iqCallee from "@xmpp/iq/callee.js";
+import _resolve from "@xmpp/resolve";
+import _starttls from "@xmpp/starttls/client.js";
+import _sasl2 from "@xmpp/sasl2";
+import _sasl from "@xmpp/sasl";
+import _resourceBinding from "@xmpp/resource-binding";
+import _sessionEstablishment from "@xmpp/session-establishment";
+import _streamManagement from "@xmpp/stream-management";
 
-const _reconnect = require("@xmpp/reconnect");
-const _websocket = require("@xmpp/websocket");
-const _tcp = require("@xmpp/tcp");
-const _tls = require("@xmpp/tls");
-const _middleware = require("@xmpp/middleware");
-const _streamFeatures = require("@xmpp/stream-features");
-const _iqCaller = require("@xmpp/iq/caller");
-const _iqCallee = require("@xmpp/iq/callee");
-const _resolve = require("@xmpp/resolve");
-
-// Stream features - order matters and define priority
-const _starttls = require("@xmpp/starttls/client");
-const _sasl2 = require("@xmpp/sasl2");
-const _sasl = require("@xmpp/sasl");
-const _resourceBinding = require("@xmpp/resource-binding");
-const _sessionEstablishment = require("@xmpp/session-establishment");
-const _streamManagement = require("@xmpp/stream-management");
-
-// SASL mechanisms - order matters and define priority
-const scramsha1 = require("@xmpp/sasl-scram-sha-1");
-const htsha256 = require("@xmpp/sasl-ht-sha-256-none");
-const plain = require("@xmpp/sasl-plain");
-const anonymous = require("@xmpp/sasl-anonymous");
+import scramsha1 from "@xmpp/sasl-scram-sha-1";
+import htsha256 from "@xmpp/sasl-ht-sha-256-none";
+import plain from "@xmpp/sasl-plain";
+import anonymous from "@xmpp/sasl-anonymous";
 
 function client(options = {}) {
   const { resource, credentials, username, password, ...params } = options;
@@ -99,6 +94,4 @@ function client(options = {}) {
   });
 }
 
-module.exports.xml = xml;
-module.exports.jid = jid;
-module.exports.client = client;
+export { xml, jid, client };

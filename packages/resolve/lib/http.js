@@ -1,11 +1,8 @@
-"use strict";
+import parse from "@xmpp/xml/lib/parse.js";
+import { compare as compareAltConnections } from "./alt-connections.js";
 
-// eslint-disable-next-line n/no-unsupported-features/node-builtins
-const fetch = globalThis.fetch || require("node-fetch");
-const parse = require("@xmpp/xml/lib/parse");
-const compareAltConnections = require("./alt-connections").compare;
-
-function resolve(domain) {
+export function resolve(domain) {
+  // eslint-disable-next-line n/no-unsupported-features/node-builtins
   return fetch(`https://${domain}/.well-known/host-meta`)
     .then((res) => res.text())
     .then((res) => {
@@ -30,5 +27,3 @@ function resolve(domain) {
       return [];
     });
 }
-
-module.exports.resolve = resolve;

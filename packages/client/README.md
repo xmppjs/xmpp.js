@@ -13,7 +13,7 @@ It supports Node.js, browsers and React Native. See [below](#transports) for dif
 ## Setup
 
 ```js
-const { client, xml, jid } = require("@xmpp/client");
+import { client, xml, jid } from "@xmpp/client";
 ```
 
 or
@@ -34,8 +34,8 @@ const { client, xml, jid } = window.XMPP;
 ## Example
 
 ```js
-const { client, xml } = require("@xmpp/client");
-const debug = require("@xmpp/debug");
+import { client, xml } from "@xmpp/client";
+import debug from "@xmpp/debug";
 
 const xmpp = client({
   service: "ws://localhost:5280/xmpp-websocket",
@@ -260,9 +260,9 @@ XMPP supports multiple transports, this table list `@xmpp/client` supported and 
 
 |            transport             | protocols  | Node.js | Browser | React Native |
 | :------------------------------: | :--------: | :-----: | :-----: | :----------: |
-| [WebSocket](/packages/websocket) | `ws(s)://` |    ✔    |    ✔    |      ✔       |
-|       [TCP](/packages/tcp)       | `xmpp://`  |    ✔    |    ✗    |      ✗       |
-|       [TLS](/packages/tls)       | `xmpps://` |    ✔    |    ✗    |      ✗       |
+| [WebSocket](/packages/websocket) | `ws(s)://` |   ✔    |   ✔    |      ✔      |
+|       [TCP](/packages/tcp)       | `xmpp://`  |   ✔    |    ✗    |      ✗       |
+|       [TLS](/packages/tls)       | `xmpps://` |   ✔    |    ✗    |      ✗       |
 
 ## Authentication
 
@@ -271,9 +271,9 @@ PLAIN should only be used over secure WebSocket (`wss://)`, direct TLS (`xmpps:`
 
 |                   SASL                    | Node.js | Browser | React Native |
 | :---------------------------------------: | :-----: | :-----: | :----------: |
-|   [ANONYMOUS](/packages/sasl-anonymous)   |    ✔    |    ✔    |      ✔       |
-|       [PLAIN](/packages/sasl-plain)       |    ✔    |    ✔    |      ✔       |
-| [SCRAM-SHA-1](/packages/sasl-scram-sha-1) |    ✔    |    ☐    |      ✗       |
+|   [ANONYMOUS](/packages/sasl-anonymous)   |   ✔    |   ✔    |      ✔      |
+|       [PLAIN](/packages/sasl-plain)       |   ✔    |   ✔    |      ✔      |
+| [SCRAM-SHA-1](/packages/sasl-scram-sha-1) |   ✔    |    ☐    |      ✗       |
 
 - ☐ : Optional
 - ✗ : Unavailable

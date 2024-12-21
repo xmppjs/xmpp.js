@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
-"use strict";
-
-const server = require(".");
+import server from "./index.js";
 
 const method = process.argv[2];
 
@@ -27,7 +25,7 @@ const commands = {
 };
 
 if (commands[method]) {
-  commands[method]().catch(console.error);
+  await commands[method]();
 } else {
   console.error("Valid commands are start/stop/restart/status.");
 }

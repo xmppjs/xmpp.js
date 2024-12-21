@@ -1,4 +1,4 @@
-"use strict";
+import route from "./route.js";
 
 /**
  * References
@@ -7,9 +7,7 @@
  * https://xmpp.org/registrar/stream-features.html XML Stream Features
  */
 
-const route = require("./route");
-
-module.exports = function streamFeatures({ middleware }) {
+export default function streamFeatures({ middleware }) {
   middleware.use(route());
 
   function use(name, xmlns, handler) {
@@ -26,4 +24,4 @@ module.exports = function streamFeatures({ middleware }) {
   return {
     use,
   };
-};
+}

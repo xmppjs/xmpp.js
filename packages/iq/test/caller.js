@@ -1,21 +1,17 @@
-"use strict";
+import { mockClient, mockInput } from "@xmpp/test";
+import StanzaError from "@xmpp/middleware/lib/StanzaError.js";
 
-const test = require("ava");
-const { mockClient, mockInput } = require("@xmpp/test");
-const StanzaError = require("@xmpp/middleware/lib/StanzaError");
-
-test.cb("#request", (t) => {
+test("#request", (done) => {
   const xmpp = mockClient();
   const { iqCaller } = xmpp;
 
   xmpp.send = (el) => {
-    t.deepEqual(
-      el,
+    expect(el).toEqual(
       <iq type="get" id="foobar">
         <foo />
       </iq>,
     );
-    t.end();
+    done();
     return Promise.resolve();
   };
 
@@ -26,7 +22,7 @@ test.cb("#request", (t) => {
   );
 });
 
-test("removes the handler if sending failed", async (t) => {
+test("removes the handler if sending failed", async () => {
   const xmpp = mockClient();
   const { iqCaller } = xmpp;
 
@@ -42,17 +38,17 @@ test("removes the handler if sending failed", async (t) => {
     </iq>,
   );
 
-  t.is(iqCaller.handlers.size, 1);
+  expect(iqCaller.handlers.size).toBe(1);
 
   try {
     await promise;
   } catch (err) {
-    t.is(err, error);
-    t.is(iqCaller.handlers.size, 0);
+    expect(err).toBe(error);
+    expect(iqCaller.handlers.size).toBe(0);
   }
 });
 
-test("resolves with with the stanza for result reply", async (t) => {
+test("resolves with with the stanza for result reply", async () => {
   const xmpp = mockClient();
   const { iqCaller } = xmpp;
 
@@ -63,10 +59,11 @@ test("resolves with with the stanza for result reply", async (t) => {
   const reply = <iq type="result" id={id} />;
   mockInput(xmpp, reply);
 
-  t.deepEqual(await promiseRequest, reply);
+  expect(await promiseRequest).toEqual(reply);
 });
 
-test("rejects with a StanzaError for error reply", async (t) => {
+test("rejects with a StanzaError for error reply", async () => {
+  expect.assertions(1);
   const xmpp = mockClient();
   const { iqCaller } = xmpp;
 
@@ -86,11 +83,14 @@ test("rejects with a StanzaError for error reply", async (t) => {
   );
   mockInput(xmpp, stanzaElement);
 
-  const err = await t.throwsAsync(promiseRequest);
-  t.deepEqual(err, StanzaError.fromElement(errorElement));
+  try {
+    await promiseRequest;
+  } catch (err) {
+    expect(err).toEqual(StanzaError.fromElement(errorElement));
+  }
 });
 
-test("rejects with a TimeoutError if no answer is received within timeout", async (t) => {
+test("rejects with a TimeoutError if no answer is received within timeout", async () => {
   const xmpp = mockClient();
   const { iqCaller } = xmpp;
 
@@ -101,17 +101,17 @@ test("rejects with a TimeoutError if no answer is received within timeout", asyn
     1,
   );
 
-  t.is(iqCaller.handlers.size, 1);
+  expect(iqCaller.handlers.size).toBe(1);
 
   try {
     await promise;
   } catch (err) {
-    t.is(err.name, "TimeoutError");
-    t.is(iqCaller.handlers.size, 0);
+    expect(err.name).toBe("TimeoutError");
+    expect(iqCaller.handlers.size).toBe(0);
   }
 });
 
-test("#get", async (t) => {
+test("#get", async () => {
   const xmpp = mockClient();
   const { iqCaller } = xmpp;
 
@@ -127,10 +127,10 @@ test("#get", async (t) => {
   );
   mockInput(xmpp, reply);
 
-  t.deepEqual(await promiseGet, replyChild);
+  expect(await promiseGet).toEqual(replyChild);
 });
 
-test("#set", async (t) => {
+test("#set", async () => {
   const xmpp = mockClient();
   const { iqCaller } = xmpp;
 
@@ -146,5 +146,5 @@ test("#set", async (t) => {
   );
   mockInput(xmpp, reply);
 
-  t.deepEqual(await promiseSet, replyChild);
+  expect(await promiseSet).toEqual(replyChild);
 });

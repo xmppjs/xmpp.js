@@ -1,8 +1,10 @@
-"use strict";
+import JID from "./lib/JID.js";
+import { detect, escape, unescape } from "./lib/escaping.js";
+import parse from "./lib/parse.js";
 
-const JID = require("./lib/JID");
-const escaping = require("./lib/escaping");
-const parse = require("./lib/parse");
+export function equal(a, b) {
+  return a.equals(b);
+}
 
 function jid(...args) {
   if (!args[1] && !args[2]) {
@@ -12,14 +14,21 @@ function jid(...args) {
   return new JID(...args);
 }
 
-module.exports = jid.bind();
-module.exports.jid = jid;
-module.exports.JID = JID;
-module.exports.equal = function equal(a, b) {
-  return a.equals(b);
-};
+const j = jid.bind();
+j.jid = jid;
+j.JID = JID;
+j.parse = parse;
+j.equal = equal;
+j.detectEscape = detect;
+j.escapeLocal = escape;
+j.unescapeLocal = unescape;
 
-module.exports.detectEscape = escaping.detect;
-module.exports.escapeLocal = escaping.escape;
-module.exports.unescapeLocal = escaping.unescape;
-module.exports.parse = parse;
+export default j;
+
+export { jid, JID, parse };
+
+export {
+  detect as detectEscape,
+  escape as escapeLocal,
+  unescape as unescapeLocal,
+};

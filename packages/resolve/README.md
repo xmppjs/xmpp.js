@@ -13,7 +13,7 @@ npm install @xmpp/resolve
 ## Usage
 
 ```javascript
-const resolve = require("@xmpp/resolve/resolve");
+import resolve from "@xmpp/resolve";
 
 // optional
 const options = {

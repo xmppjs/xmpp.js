@@ -1,7 +1,5 @@
-"use strict";
+import ConnectionTCP from "./lib/Connection.js";
 
-const ConnectionTCP = require("./lib/Connection");
-
-module.exports = function tcp({ entity }) {
+export default function tcp({ entity }) {
   entity.transports.push(ConnectionTCP);
-};
+}

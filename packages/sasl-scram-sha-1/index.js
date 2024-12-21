@@ -1,7 +1,5 @@
-"use strict";
+import mech from "sasl-scram-sha-1";
 
-const mech = require("sasl-scram-sha-1");
-
-module.exports = function saslScramSha1(sasl) {
+export default function saslScramSha1(sasl) {
   sasl.use(mech);
-};
+}

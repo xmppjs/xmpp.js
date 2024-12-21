@@ -1,8 +1,6 @@
-"use strict";
+import JID from "./JID.js";
 
-const JID = require("../lib/JID");
-
-module.exports = function parse(s) {
+export default function parse(s) {
   let local;
   let resource;
 
@@ -19,4 +17,4 @@ module.exports = function parse(s) {
   }
 
   return new JID(local, s, resource);
-};
+}

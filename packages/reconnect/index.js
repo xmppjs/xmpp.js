@@ -1,6 +1,4 @@
-"use strict";
-
-const { EventEmitter } = require("@xmpp/events");
+import { EventEmitter } from "@xmpp/events";
 
 class Reconnect extends EventEmitter {
   constructor(entity) {
@@ -56,8 +54,8 @@ class Reconnect extends EventEmitter {
   }
 }
 
-module.exports = function reconnect({ entity }) {
+export default function reconnect({ entity }) {
   const r = new Reconnect(entity);
   r.start();
   return r;
-};
+}

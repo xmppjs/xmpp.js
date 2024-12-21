@@ -1,9 +1,6 @@
-"use strict";
+import { mockClient, promise, timeout } from "@xmpp/test";
 
-const test = require("ava");
-const { mockClient, promise, timeout } = require("@xmpp/test");
-
-test("mandatory", async (t) => {
+test("mandatory", async () => {
   const { entity } = mockClient();
 
   entity.mockInput(
@@ -15,12 +12,14 @@ test("mandatory", async (t) => {
   entity.scheduleIncomingResult();
 
   const child = await entity.catchOutgoingSet();
-  t.deepEqual(child, <session xmlns="urn:ietf:params:xml:ns:xmpp-session" />);
+  expect(child).toEqual(
+    <session xmlns="urn:ietf:params:xml:ns:xmpp-session" />,
+  );
 
   await promise(entity, "online");
 });
 
-test("optional", async (t) => {
+test("optional", async () => {
   const { entity } = mockClient();
 
   entity.mockInput(
@@ -36,6 +35,6 @@ test("optional", async (t) => {
   await promise(entity, "online");
 
   await timeout(promiseSend, 0).catch((err) => {
-    t.is(err.name, "TimeoutError");
+    expect(err.name).toBe("TimeoutError");
   });
 });

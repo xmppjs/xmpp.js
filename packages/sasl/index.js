@@ -1,9 +1,7 @@
-"use strict";
-
-const { encode, decode } = require("@xmpp/base64");
-const SASLError = require("./lib/SASLError");
-const xml = require("@xmpp/xml");
-const SASLFactory = require("saslmechanisms");
+import { encode, decode } from "@xmpp/base64";
+import SASLError from "./lib/SASLError.js";
+import xml from "@xmpp/xml";
+import SASLFactory from "saslmechanisms";
 
 // https://xmpp.org/rfcs/rfc6120.html#sasl
 
@@ -76,7 +74,7 @@ async function authenticate(SASL, entity, mechname, credentials) {
   });
 }
 
-module.exports = function sasl({ streamFeatures }, credentials) {
+export default function sasl({ streamFeatures }, credentials) {
   const SASL = new SASLFactory();
 
   streamFeatures.use("mechanisms", NS, async ({ stanza, entity }) => {
@@ -109,4 +107,4 @@ module.exports = function sasl({ streamFeatures }, credentials) {
       return SASL.use(...args);
     },
   };
-};
+}

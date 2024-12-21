@@ -1,13 +1,10 @@
-"use strict";
+import Connection from "../index.js";
 
-const test = require("ava");
-const Connection = require("..");
-
-test("rejects if connection is not offline", (t) => {
+test("rejects if connection is not offline", () => {
   const conn = new Connection();
   conn.status = "online";
   return conn.start().catch((err) => {
-    t.true(err instanceof Error);
-    t.is(err.message, "Connection is not offline");
+    expect(err instanceof Error).toBe(true);
+    expect(err.message).toBe("Connection is not offline");
   });
 });

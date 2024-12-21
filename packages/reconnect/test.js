@@ -1,21 +1,21 @@
-"use strict";
+import _reconnect from "./index.js";
+import { EventEmitter } from "@xmpp/events";
 
-const test = require("ava");
-const _reconnect = require(".");
-const EventEmitter = require("events");
-
-test("it schedule a reconnect when disconnect is emitted", (t) => {
+test("it schedule a reconnect when disconnect is emitted", (done) => {
   const entity = new EventEmitter();
   const reconnect = _reconnect({ entity });
 
   reconnect.scheduleReconnect = () => {
-    t.pass();
+    expect.pass();
+    done();
   };
 
   entity.emit("disconnect");
 });
 
-test("#reconnect", async (t) => {
+test("#reconnect", async () => {
+  expect.assertions(3);
+
   const entity = new EventEmitter();
   const reconnect = _reconnect({ entity });
 
@@ -26,12 +26,12 @@ test("#reconnect", async (t) => {
   };
 
   entity.connect = (service) => {
-    t.is(service, entity.options.service);
+    expect(service).toBe(entity.options.service);
   };
 
   entity.open = ({ domain, lang }) => {
-    t.is(domain, entity.options.domain);
-    t.is(lang, entity.options.lang);
+    expect(domain).toBe(entity.options.domain);
+    expect(lang).toBe(entity.options.lang);
   };
 
   await reconnect.reconnect();

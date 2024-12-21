@@ -1,6 +1,4 @@
-"use strict";
-
-module.exports.detect = function detect(local) {
+export function detect(local) {
   if (!local) {
     return false;
   }
@@ -25,7 +23,7 @@ module.exports.detect = function detect(local) {
   }
 
   return true;
-};
+}
 
 /**
  * Escape the local part of a JID.
@@ -34,7 +32,7 @@ module.exports.detect = function detect(local) {
  * @param String local local part of a jid
  * @return An escaped local part
  */
-module.exports.escape = function escape(local) {
+export function escape(local) {
   if (local === null) {
     return null;
   }
@@ -51,7 +49,7 @@ module.exports.escape = function escape(local) {
     .replaceAll("<", String.raw`\3c`)
     .replaceAll(">", String.raw`\3e`)
     .replaceAll("@", String.raw`\40`);
-};
+}
 
 /**
  * Unescape a local part of a JID.
@@ -60,7 +58,7 @@ module.exports.escape = function escape(local) {
  * @param String local local part of a jid
  * @return unescaped local part
  */
-module.exports.unescape = function unescape(local) {
+export function unescape(local) {
   if (local === null) {
     return null;
   }
@@ -76,4 +74,4 @@ module.exports.unescape = function unescape(local) {
     .replaceAll(String.raw`\3e`, ">")
     .replaceAll(String.raw`\40`, "@")
     .replaceAll(String.raw`\5c`, "\\");
-};
+}

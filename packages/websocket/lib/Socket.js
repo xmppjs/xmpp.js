@@ -1,13 +1,12 @@
-"use strict";
+import WS from "ws";
+import { EventEmitter } from "@xmpp/events";
 
-const WS = require("ws");
 // eslint-disable-next-line n/no-unsupported-features/node-builtins
 const WebSocket = globalThis.WebSocket || WS;
-const EventEmitter = require("events");
 
 const CODE = "ECONNERROR";
 
-class Socket extends EventEmitter {
+export default class Socket extends EventEmitter {
   constructor() {
     super();
     this.listeners = Object.create(null);
@@ -80,5 +79,3 @@ class Socket extends EventEmitter {
     }
   }
 }
-
-module.exports = Socket;

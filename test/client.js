@@ -1,11 +1,6 @@
-"use strict";
-
-const test = require("ava");
-const { client, xml, jid } = require("../packages/client");
-const debug = require("../packages/debug");
-const server = require("../server");
-
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+import { client, xml, jid } from "../packages/client/index.js";
+import debug from "../packages/debug/index.js";
+import server from "../server/index.js";
 
 const username = "client";
 const password = "foobar";
@@ -13,76 +8,74 @@ const credentials = { username, password };
 const domain = "localhost";
 const JID = jid(username, domain).toString();
 
-test.beforeEach(() => {
-  return server.restart();
+let xmpp;
+
+beforeEach(async () => {
+  await server.restart();
 });
 
-test.afterEach((t) => {
-  if (t.context.xmpp && t.context.xmpp.status === "online") {
-    return t.context.xmpp.stop();
-  }
+afterEach(async () => {
+  await xmpp?.stop();
 });
 
-test.serial("client", async (t) => {
-  t.plan(6);
+test("client", async () => {
+  expect.assertions(6);
 
-  const xmpp = client({ credentials, service: domain });
-  t.context.xmpp = xmpp;
+  xmpp = client({ credentials, service: domain });
   debug(xmpp);
 
   xmpp.on("connect", () => {
-    t.pass();
+    expect().pass();
   });
 
   xmpp.once("open", (el) => {
-    t.true(el instanceof xml.Element);
+    expect(el instanceof xml.Element).toBe(true);
   });
 
   xmpp.on("online", (address) => {
-    t.true(address instanceof jid.JID);
-    t.is(address.bare().toString(), JID);
+    expect(address instanceof jid.JID).toBe(true);
+    expect(address.bare().toString()).toBe(JID);
   });
 
   const address = await xmpp.start();
-  t.true(address instanceof jid.JID);
-  t.is(address.bare().toString(), JID);
+  expect(address instanceof jid.JID).toBe(true);
+  expect(address.bare().toString()).toBe(JID);
 });
 
-test.serial("bind2", async (t) => {
-  t.plan(6);
+test("bind2", async () => {
+  expect.assertions(6);
 
-  const xmpp = client({
+  xmpp = client({
     credentials,
     service: domain,
     clientId: "75b2d490-3e3b-4d96-bca1-624b30ea6f82",
     software: "xmpp.js tests",
     device: "Test Device",
   });
-  t.context.xmpp = xmpp;
   debug(xmpp);
 
   xmpp.on("connect", () => {
-    t.pass();
+    expect().pass();
   });
 
   xmpp.once("open", (el) => {
-    t.true(el instanceof xml.Element);
+    expect(el).toBeInstanceOf(xml.Element);
   });
 
   xmpp.on("online", (address) => {
-    t.true(address instanceof jid.JID);
-    t.is(address.bare().toString(), JID);
+    expect(address).toBeInstanceOf(jid.JID);
+    expect(address.bare().toString()).toBe(JID);
   });
 
   const address = await xmpp.start();
-  t.true(address instanceof jid.JID);
-  t.is(address.bare().toString(), JID);
+  expect(address).toBeInstanceOf(jid.JID);
+  expect(address.bare().toString()).toBe(JID);
 });
 
-test.serial("FAST", async (t) => {
-  t.plan(7);
+test("FAST", async () => {
+  expect.assertions(7);
 
-  const xmpp = client({
+  xmpp = client({
     service: domain,
     credentials: {
       ...credentials,
@@ -92,35 +85,34 @@ test.serial("FAST", async (t) => {
     software: "xmpp.js tests",
     device: "Test Device",
   });
-  t.context.xmpp = xmpp;
   debug(xmpp);
 
   xmpp.on("connect", () => {
-    t.pass();
+    expect().pass();
   });
 
   xmpp.once("open", (el) => {
-    t.true(el instanceof xml.Element);
+    expect(el).toBeInstanceOf(xml.Element);
   });
 
   xmpp.once("fast-token", (el) => {
-    t.true(typeof el.attrs.token === "string");
+    expect(typeof el.attrs.token === "string").toBe(true);
   });
 
   xmpp.on("online", (address) => {
-    t.true(address instanceof jid.JID);
-    t.is(address.bare().toString(), JID);
+    expect(address).toBeInstanceOf(jid.JID);
+    expect(address.bare().toString()).toBe(JID);
   });
 
   const address = await xmpp.start();
-  t.true(address instanceof jid.JID);
-  t.is(address.bare().toString(), JID);
+  expect(address).toBeInstanceOf(jid.JID);
+  expect(address.bare().toString()).toBe(JID);
 });
 
-test.serial.cb("bad credentials", (t) => {
-  t.plan(6);
+test("bad credentials", async () => {
+  expect.assertions(6);
 
-  const xmpp = client({
+  xmpp = client({
     service: domain,
     credentials: { ...credentials, password: "nope" },
   });
@@ -128,253 +120,238 @@ test.serial.cb("bad credentials", (t) => {
 
   let error;
 
-  xmpp.on("connect", () => t.pass());
-  xmpp.once("open", () => t.pass());
+  xmpp.on("connect", () => {
+    expect().pass();
+  });
+  xmpp.once("open", () => {
+    expect().pass();
+  });
 
-  xmpp.on("online", () => t.fail());
+  xmpp.on("online", () => {
+    expect().fail();
+  });
 
   xmpp.on("error", (err) => {
-    t.true(err instanceof Error);
-    t.is(err.name, "SASLError");
-    t.is(err.condition, "not-authorized");
+    expect(err).toBeInstanceOf(Error);
+    expect(err.name).toBe("SASLError");
+    expect(err.condition).toBe("not-authorized");
     error = err;
   });
 
-  xmpp
-    .start()
-    .then(() => t.fail())
-    .catch((err) => {
-      t.is(err, error);
-      t.end();
-    });
-
-  t.context.xmpp = xmpp;
+  await expect(xmpp.start()).rejects.toThrow(error);
 });
 
-test.serial.cb("reconnects when server restarts gracefully", (t) => {
-  t.plan(2);
+test("reconnects when server restarts gracefully", (done) => {
+  expect.assertions(2);
   let c = 0;
 
-  const xmpp = client({ credentials, service: domain });
+  xmpp = client({ credentials, service: domain });
   debug(xmpp);
 
   xmpp.on("error", () => {});
 
   xmpp.on("online", async () => {
     c++;
-    t.pass();
+    expect().pass();
     if (c === 2) {
       await xmpp.stop();
-      t.end();
+      done();
     } else {
       await server.restart();
     }
   });
 
   xmpp.start();
-
-  t.context.xmpp = xmpp;
 });
 
-test.serial.cb("reconnects when server restarts non-gracefully", (t) => {
-  t.plan(2);
+test("reconnects when server restarts non-gracefully", (done) => {
+  expect.assertions(2);
   let c = 0;
 
-  const xmpp = client({ credentials, service: domain });
+  xmpp = client({ credentials, service: domain });
   debug(xmpp);
 
   xmpp.on("error", () => {});
 
   xmpp.on("online", async () => {
     c++;
-    t.pass();
+    expect().pass();
     if (c === 2) {
       await xmpp.stop();
-      t.end();
+      done();
     } else {
       await server.restart("SIGKILL");
     }
   });
 
   xmpp.start();
-
-  t.context.xmpp = xmpp;
 });
 
-test.serial.cb("does not reconnect when stop is called", (t) => {
-  t.plan(2);
+test("does not reconnect when stop is called", (done) => {
+  expect.assertions(2);
 
-  const xmpp = client({ service: domain, credentials });
+  xmpp = client({ service: domain, credentials });
   debug(xmpp);
 
   xmpp.on("online", async () => {
     await xmpp.stop();
     server.stop();
-    t.end();
+    done();
   });
 
-  xmpp.on("close", () => t.pass());
+  xmpp.on("close", () => {
+    expect().pass();
+  });
 
-  xmpp.on("offline", () => t.pass());
+  xmpp.on("offline", () => {
+    expect().pass();
+  });
 
   xmpp.start();
-
-  t.context.xmpp = xmpp;
 });
 
-test.serial.cb("anonymous authentication", (t) => {
-  t.plan(2);
+test("anonymous authentication", (done) => {
+  expect.assertions(2);
 
-  const xmpp = client({ service: domain, domain: "anon." + domain });
+  xmpp = client({ service: domain, domain: "anon." + domain });
   debug(xmpp);
 
   xmpp.on("online", async () => {
     await xmpp.stop();
     await server.stop();
-    t.end();
+    done();
   });
 
-  xmpp.on("close", () => t.pass());
+  xmpp.on("close", () => {
+    expect().pass();
+  });
 
-  xmpp.on("offline", () => t.pass());
+  xmpp.on("offline", () => {
+    expect().pass();
+  });
 
   xmpp.start();
-
-  t.context.xmpp = xmpp;
 });
 
-test.serial("auto", async (t) => {
-  const xmpp = client({ credentials, service: domain });
+test("auto", async () => {
+  xmpp = client({ credentials, service: domain });
   debug(xmpp);
-  t.context.xmpp = xmpp;
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });
 
-test.serial("ws IPv4", async (t) => {
-  const xmpp = client({
+test("ws IPv4", async () => {
+  xmpp = client({
     credentials,
     service: "ws://127.0.0.1:5280/xmpp-websocket",
     domain,
   });
   debug(xmpp);
-  t.context.xmpp = xmpp;
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });
 
-test.serial("ws IPv6", async (t) => {
-  const xmpp = client({
+test("ws IPv6", async () => {
+  xmpp = client({
     credentials,
     service: "ws://[::1]:5280/xmpp-websocket",
     domain,
   });
   debug(xmpp);
-  t.context.xmpp = xmpp;
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });
 
-test.serial("ws domain", async (t) => {
-  const xmpp = client({
+test("ws domain", async () => {
+  xmpp = client({
     credentials,
     service: "ws://localhost:5280/xmpp-websocket",
   });
   debug(xmpp);
-  t.context.xmpp = xmpp;
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });
 
 // Prosody 404 https://prosody.im/issues/issue/932
-test.serial("wss IPv4", async (t) => {
-  const xmpp = client({
+test("wss IPv4", async () => {
+  xmpp = client({
     credentials,
     service: "wss://127.0.0.1:5281/xmpp-websocket",
     domain,
   });
   debug(xmpp);
-  t.context.xmpp = xmpp;
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });
 
 // Prosody 404 https://prosody.im/issues/issue/932
-test.serial("wss IPv6", async (t) => {
-  const xmpp = client({
+test("wss IPv6", async () => {
+  xmpp = client({
     credentials,
     service: "wss://[::1]:5281/xmpp-websocket",
     domain,
   });
   debug(xmpp);
-  t.context.xmpp = xmpp;
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });
 
-test.serial("wss domain", async (t) => {
-  const xmpp = client({
+test("wss domain", async () => {
+  xmpp = client({
     credentials,
     service: "wss://localhost:5281/xmpp-websocket",
   });
   debug(xmpp);
-  t.context.xmpp = xmpp;
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });
 
-test.serial("xmpp IPv4", async (t) => {
-  const xmpp = client({
+test("xmpp IPv4", async () => {
+  xmpp = client({
     credentials,
     service: "xmpp://127.0.0.1:5222",
     domain,
   });
   debug(xmpp);
-  t.context.xmpp = xmpp;
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });
 
-test.serial("xmpp IPv6", async (t) => {
-  const xmpp = client({ credentials, service: "xmpp://[::1]:5222", domain });
+test("xmpp IPv6", async () => {
+  xmpp = client({ credentials, service: "xmpp://[::1]:5222", domain });
   debug(xmpp);
-  t.context.xmpp = xmpp;
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });
 
-test.serial("xmpp domain", async (t) => {
-  const xmpp = client({ credentials, service: "xmpp://localhost:5222" });
+test("xmpp domain", async () => {
+  xmpp = client({ credentials, service: "xmpp://localhost:5222" });
   debug(xmpp);
-  t.context.xmpp = xmpp;
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });
 
-test.serial("xmpps IPv4", async (t) => {
-  const xmpp = client({
+test("xmpps IPv4", async () => {
+  xmpp = client({
     credentials,
     service: "xmpps://127.0.0.1:5223",
     domain,
   });
   debug(xmpp);
-  t.context.xmpp = xmpp;
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });
 
-test.serial("xmpps IPv6", async (t) => {
-  const xmpp = client({ credentials, service: "xmpps://[::1]:5223", domain });
+test("xmpps IPv6", async () => {
+  xmpp = client({ credentials, service: "xmpps://[::1]:5223", domain });
   debug(xmpp);
-  t.context.xmpp = xmpp;
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });
 
-test.serial("xmpps domain", async (t) => {
-  const xmpp = client({ credentials, service: "xmpps://localhost:5223" });
+test("xmpps domain", async () => {
+  xmpp = client({ credentials, service: "xmpps://localhost:5223" });
   debug(xmpp);
-  t.context.xmpp = xmpp;
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });

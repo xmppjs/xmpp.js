@@ -6,6 +6,7 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.13.2",
   "license": "ISC",
+  "type": "module",
   "keywords": [
     "XMPP",
     "dns",
@@ -17,16 +18,14 @@
   ],
   "browser": {
     "dns": false,
-    "./lib/dns": false,
-    "node-fetch": false
+    "./lib/dns": false
   },
   "dependencies": {
     "@xmpp/events": "^0.13.2",
-    "@xmpp/xml": "^0.13.2",
-    "node-fetch": "^2.6.12"
+    "@xmpp/xml": "^0.13.2"
   },
   "engines": {
-    "node": ">= 14"
+    "node": ">= 20"
   },
   "publishConfig": {
     "access": "public"

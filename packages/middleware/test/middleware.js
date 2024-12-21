@@ -1,44 +1,42 @@
-"use strict";
+import IncomingContext from "../lib/IncomingContext.js";
+import OutgoingContext from "../lib/OutgoingContext.js";
+import { context, mockClient, mockInput, promiseError } from "@xmpp/test";
+import _middleware from "../index.js";
 
-const test = require("ava");
-const IncomingContext = require("../lib/IncomingContext");
-const OutgoingContext = require("../lib/OutgoingContext");
-const { context, mockClient, mockInput, promiseError } = require("@xmpp/test");
-const middleware = require("..");
+let ctx;
 
-test.beforeEach((t) => {
-  t.context = context();
-  const { entity } = t.context;
-  t.context.middleware = middleware({ entity });
+beforeEach(() => {
+  ctx = context();
+  const { entity } = ctx;
+  ctx.middleware = _middleware({ entity });
 });
 
-test.cb("use", (t) => {
-  t.plan(4);
+test("use", (done) => {
+  expect.assertions(4);
   const stanza = <presence />;
-  t.context.middleware.use((ctx, next) => {
-    t.true(ctx instanceof IncomingContext);
-    t.deepEqual(ctx.stanza, stanza);
-    t.is(ctx.entity, t.context.entity);
-    t.true(next() instanceof Promise);
-    t.end();
+  ctx.middleware.use((ctx, next) => {
+    expect(ctx instanceof IncomingContext).toBe(true);
+    expect(ctx.stanza).toEqual(stanza);
+    expect(ctx.entity).toBe(ctx.entity);
+    expect(next() instanceof Promise).toBe(true);
+    done();
   });
-  t.context.fakeIncoming(stanza);
+  ctx.fakeIncoming(stanza);
 });
 
-test.cb("filter", (t) => {
-  t.plan(4);
+test("filter", (done) => {
+  expect.assertions(3);
   const stanza = <presence />;
-  t.context.middleware.filter((ctx, next) => {
-    t.true(ctx instanceof OutgoingContext);
-    t.deepEqual(ctx.stanza, stanza);
-    t.is(ctx.entity, t.context.entity);
-    t.true(next() instanceof Promise);
-    t.end();
+  ctx.middleware.filter((ctx, next) => {
+    expect(ctx instanceof OutgoingContext).toBe(true);
+    expect(ctx.stanza).toEqual(stanza);
+    expect(next() instanceof Promise).toBe(true);
+    done();
   });
-  t.context.fakeOutgoing(stanza);
+  ctx.fakeOutgoing(stanza);
 });
 
-test("emits an error event if a middleware throws", async (t) => {
+test("emits an error event if a middleware throws", async () => {
   const xmpp = mockClient();
   const { middleware } = xmpp;
 
@@ -53,5 +51,5 @@ test("emits an error event if a middleware throws", async (t) => {
   mockInput(xmpp, <presence id="hello" />);
 
   const err = await willError;
-  t.deepEqual(err, error);
+  expect(err).toEqual(error);
 });

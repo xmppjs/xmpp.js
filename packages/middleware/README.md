@@ -13,8 +13,8 @@ npm install @xmpp/middleware
 ## Usage
 
 ```js
-const { Client } = require("@xmpp/client");
-const middleware = require("@xmpp/middlware");
+import { Client } from "@xmpp/client";
+import middleware from "@xmpp/middleware";
 
 const client = new Client();
 const app = middleware({ entity: client });

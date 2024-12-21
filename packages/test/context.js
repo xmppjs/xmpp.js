@@ -1,14 +1,12 @@
-"use strict";
+import client from "./client.js";
+import { promise } from "@xmpp/events";
+import { xml } from "@xmpp/xml";
+import debug from "@xmpp/debug";
+import JID from "@xmpp/jid";
+import mockSocket from "./mockSocket.js";
+import clone from "ltx/lib/clone.js";
 
-const client = require("./client");
-const { promise } = require("@xmpp/events");
-const xml = require("@xmpp/xml");
-const debug = require("@xmpp/debug");
-const JID = require("@xmpp/jid");
-const mockSocket = require("./mockSocket");
-const clone = require("ltx/lib/clone");
-
-module.exports = function context(entity = client()) {
+export default function context(entity = client()) {
   debug(entity);
 
   entity.socket = mockSocket();
@@ -139,7 +137,7 @@ module.exports = function context(entity = client()) {
       return this.sanitize(el).stanza;
     },
     fakeOutgoing(el) {
-      entity.hookOutgoing(el);
+      entity.emit("send", el);
     },
     mockInput(el) {
       entity.emit("input", el.toString());
@@ -148,4 +146,4 @@ module.exports = function context(entity = client()) {
   };
 
   return ctx;
-};
+}
