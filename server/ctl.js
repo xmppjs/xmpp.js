@@ -25,7 +25,7 @@ const commands = {
 };
 
 if (commands[method]) {
-  commands[method]().catch(console.error);
+  await commands[method]();
 } else {
   console.error("Valid commands are start/stop/restart/status.");
 }

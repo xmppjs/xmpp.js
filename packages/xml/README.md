@@ -145,7 +145,6 @@ The `attrs` property is an object that holds xml attributes of the element.
 
 ```js
 message.attrs.type = "chat";
-Object.assign(message.attrs, { type: "chat" });
 ```
 
 ### text

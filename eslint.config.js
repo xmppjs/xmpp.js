@@ -33,16 +33,17 @@ export default [
     rules: {
       strict: ["error", "global"],
       "no-empty": ["error", { allowEmptyCatch: true }],
-      // "no-multi-assign": 0,
+      // "no-multi-assign": "off",
       "func-names": ["error", "as-needed"],
       "operator-linebreak": [
         "error",
         "after",
         { overrides: { "?": "before", ":": "before" } },
       ],
-      "capitalized-comments": 0,
+      "capitalized-comments": "off",
       "prefer-rest-params": ["error"],
       "prefer-spread": ["error"],
+      "prefer-object-spread": ["error"],
       "prefer-destructuring": [
         "error",
         {
@@ -55,30 +56,26 @@ export default [
 
       // node
       // https://github.com/eslint-community/eslint-plugin-n/
-      "n/no-unpublished-require": 0, // doesn't play nice with monorepo
+      "n/no-unpublished-require": "off", // doesn't play nice with monorepo
       "n/no-extraneous-require": ["error", { allowModules: ["@xmpp/test"] }],
       "n/no-extraneous-import": ["error", { allowModules: ["@xmpp/test"] }],
       "n/hashbang": "off",
 
       // promise
       // https://github.com/xjamundx/eslint-plugin-promise
-      // promise/prefer-await-to-then: [error]
-      // promise/prefer-await-to-callbacks: [error]
-      // unicorn https://github.com/sindresorhus/eslint-plugin-unicorn
+      "promise/prefer-await-to-then": "off",
+      "promise/prefer-await-to-callbacks": "off",
 
       // unicorn
       // https://github.com/sindresorhus/eslint-plugin-unicorn
-      "unicorn/filename-case": 0,
+      "unicorn/filename-case": "off",
       "unicorn/catch-error-name": ["error", { name: "err" }],
-      "unicorn/prevent-abbreviations": 0,
-      "unicorn/prefer-number-properties": 0,
-      "unicorn/no-useless-undefined": 0,
-      "unicorn/no-null": 0,
-      "unicorn/prefer-module": 0,
-      "unicorn/numeric-separators-style": 0, // Requires Node.js 12.8
-      "unicorn/prefer-event-target": 0,
-      "unicorn/prefer-top-level-await": 0,
-      "unicorn/prefer-node-protocol": 0,
+      "unicorn/prevent-abbreviations": "off",
+      "unicorn/no-useless-undefined": "off",
+      "unicorn/no-null": "off",
+      "unicorn/prefer-event-target": "off",
+      // "unicorn/prefer-top-level-await": "off",
+      "unicorn/prefer-node-protocol": "off",
       "unicorn/prefer-export-from": "off",
     },
   },
@@ -107,7 +104,7 @@ export default [
       //   {
       //     alwaysAwait: true,
       //     // For jest-extended expect().pass
-      //     minArgs: 0,
+      //     minArgs: "off",
       //   },
       // ],
       "promise/no-callback-in-promise": "off",

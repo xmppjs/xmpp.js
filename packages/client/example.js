@@ -47,4 +47,4 @@ xmpp.on("online", async (address) => {
   await xmpp.send(message);
 });
 
-xmpp.start().catch(console.error);
+await xmpp.start();

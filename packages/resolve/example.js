@@ -1,3 +1,4 @@
 import { resolve } from "@xmpp/resolve";
 
-resolve("jabberfr.org").then(console.log).catch(console.error);
+const result = await resolve("jabberfr.org");
+console.log(result);

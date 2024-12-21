@@ -21,7 +21,7 @@ class JID {
 
   [Symbol.toPrimitive](hint) {
     if (hint === "number") {
-      return NaN;
+      return Number.NaN;
     }
 
     return this.toString();

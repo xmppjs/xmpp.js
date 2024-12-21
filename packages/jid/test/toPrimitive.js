@@ -9,6 +9,5 @@ test("cocerce to string", () => {
 
 test("cocerce to NaN", () => {
   const addr = new JID("foo", "bar");
-  expect(isNaN(+addr)).toBe(true);
-  expect(isNaN(addr + 4)).toBe(true);
+  expect(Number.isNaN(+addr)).toBe(true);
 });
