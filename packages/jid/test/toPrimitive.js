@@ -1,6 +1,4 @@
-"use strict";
-
-const JID = require("../lib/JID");
+import JID from "../lib/JID.js";
 
 test("cocerce to string", () => {
   const addr = new JID("foo", "bar");

@@ -1,6 +1,4 @@
-"use strict";
-
-const escaping = require("./escaping");
+import * as escaping from "./escaping.js";
 
 /**
  * JID implements
@@ -126,4 +124,4 @@ Object.defineProperty(JID.prototype, "resource", {
   set: JID.prototype.setResource,
 });
 
-module.exports = JID;
+export default JID;

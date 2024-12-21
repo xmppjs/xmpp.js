@@ -34,4 +34,4 @@ class XMPPError extends Error {
   }
 }
 
-module.exports = XMPPError;
+export default XMPPError;

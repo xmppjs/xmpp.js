@@ -1,8 +1,6 @@
-"use strict";
-
-const Context = require("../lib/IncomingContext");
-const { JID } = require("@xmpp/test");
-const _Context = require("../lib/Context");
+import Context from "../lib/IncomingContext.js";
+import { JID } from "@xmpp/test";
+import _Context from "../lib/Context.js";
 
 test("is instance of Context", () => {
   const entity = { jid: new JID("foo@bar"), domain: "bar" };

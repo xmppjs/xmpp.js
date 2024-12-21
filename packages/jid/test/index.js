@@ -1,13 +1,10 @@
-"use strict";
-
-const jid = require("..");
-const JID = require("../lib/JID");
+import jid, { equal, JID } from "../index.js";
 
 test("equal calls equals on the first argument with the second argument", () => {
   const A = jid("foo");
   const B = jid("bar");
   const spy_equals = jest.spyOn(A, "equals");
-  jid.equal(A, B);
+  equal(A, B);
   expect(spy_equals).toHaveBeenCalledWith(B);
 });
 

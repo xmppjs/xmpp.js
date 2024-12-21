@@ -11,7 +11,8 @@ Resource is optional and will be chosen by the server if omitted.
 ### string
 
 ```js
-const { xmpp } = require("@xmpp/client");
+import { xmpp } from "@xmpp/client";
+
 const client = xmpp({ resource: "laptop" });
 ```
 
@@ -27,7 +28,8 @@ Uses cases:
 - Perform an asynchronous operation to get the resource
 
 ```js
-const { xmpp } = require("@xmpp/client");
+import { xmpp } from "@xmpp/client";
+
 const client = xmpp({ resource: bindResource });
 
 async function bindResource(bind) {

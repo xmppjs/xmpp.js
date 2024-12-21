@@ -1,8 +1,6 @@
-"use strict";
-
-const { parseURI } = require("@xmpp/connection/lib/util");
-const ConnectionTCP = require("@xmpp/connection-tcp");
-const Socket = require("./Socket.js");
+import { parseURI } from "@xmpp/connection/lib/util";
+import ConnectionTCP from "@xmpp/connection-tcp";
+import Socket from "./Socket.js";
 
 class ConnectionTLS extends ConnectionTCP {
   socketParameters(service) {
@@ -19,4 +17,4 @@ class ConnectionTLS extends ConnectionTCP {
 ConnectionTLS.prototype.Socket = Socket;
 ConnectionTLS.prototype.NS = "jabber:client";
 
-module.exports = ConnectionTLS;
+export default ConnectionTLS;

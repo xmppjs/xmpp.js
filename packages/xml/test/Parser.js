@@ -1,6 +1,4 @@
-"use strict";
-
-const Parser = require("../lib/Parser");
+import Parser from "../lib/Parser.js";
 
 test("stream parser", (done) => {
   const parser = new Parser();

@@ -1,8 +1,6 @@
-"use strict";
-
-const { component, xml, jid } = require("../packages/component");
-const debug = require("../packages/debug");
-const server = require("../server");
+import { component, xml, jid } from "../packages/component/index.js";
+import debug from "../packages/debug/index.js";
+import server from "../server/index.js";
 
 const password = "mysecretcomponentpassword";
 const service = "xmpp://localhost:5347";

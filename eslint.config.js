@@ -1,3 +1,4 @@
+// eslint-disable-next-line n/no-extraneous-import
 import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import globals from "globals";
@@ -81,16 +82,12 @@ export default [
       "unicorn/prefer-export-from": "off",
     },
   },
-  // {
-  //   files: [
-  //     "packages/client/**/*.js",
-  //     "packages/events/**/*.js",
-  //     "packages/base64/**/*.js",
-  //   ],
-  //   languageOptions: {
-  //     sourceType: "module",
-  //   },
-  // },
+  {
+    files: ["**/*.cjs"],
+    languageOptions: {
+      sourceType: "commonjs",
+    },
+  },
   {
     files: ["**/*.spec.js", "**/*.test.js", "**/test.js", "**/test/**.js"],
     plugins: { jest: pluginJest },

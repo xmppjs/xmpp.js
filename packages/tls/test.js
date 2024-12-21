@@ -1,10 +1,9 @@
-"use strict";
+import ConnectionTLS from "./lib/Connection.js";
 
-const ConnectionTLS = require("./lib/Connection");
-const tls = require("tls");
-const { promise } = require("@xmpp/test");
-// eslint-disable-next-line n/no-extraneous-require
-const selfsigned = require("selfsigned");
+import tls from "tls";
+import { promise } from "@xmpp/test";
+// eslint-disable-next-line n/no-extraneous-import
+import selfsigned from "selfsigned";
 
 test("socketParameters()", () => {
   expect(ConnectionTLS.prototype.socketParameters("xmpps://foo")).toEqual({
@@ -17,9 +16,13 @@ test("socketParameters()", () => {
     host: "foo",
   });
 
-  expect(ConnectionTLS.prototype.socketParameters("xmpp://foo")).toEqual(undefined);
+  expect(ConnectionTLS.prototype.socketParameters("xmpp://foo")).toEqual(
+    undefined,
+  );
 
-  expect(ConnectionTLS.prototype.socketParameters("xmpp://foo:1234")).toEqual(undefined);
+  expect(ConnectionTLS.prototype.socketParameters("xmpp://foo:1234")).toEqual(
+    undefined,
+  );
 });
 
 test("rejects expired certificates", async () => {

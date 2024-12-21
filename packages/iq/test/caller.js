@@ -1,7 +1,5 @@
-"use strict";
-
-const { mockClient, mockInput } = require("@xmpp/test");
-const StanzaError = require("@xmpp/middleware/lib/StanzaError");
+import { mockClient, mockInput } from "@xmpp/test";
+import StanzaError from "@xmpp/middleware/lib/StanzaError.js";
 
 test("#request", (done) => {
   const xmpp = mockClient();

@@ -1,6 +1,4 @@
-"use strict";
-
-const parse = require("../lib/parse");
+import parse from "../lib/parse.js";
 
 test('should parse a "domain" JID', () => {
   const j = parse("d");

@@ -1,6 +1,4 @@
-"use strict";
-
-const JID = require("../lib/JID");
+import JID from "../lib/JID.js";
 
 test('should serialize a "domain" JID', () => {
   const j = new JID(null, "d");

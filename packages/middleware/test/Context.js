@@ -1,6 +1,4 @@
-"use strict";
-
-const Context = require("../lib/Context");
+import Context from "../lib/Context.js";
 
 test("sets the entity property", () => {
   const entity = {};

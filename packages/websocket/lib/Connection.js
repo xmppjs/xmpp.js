@@ -1,9 +1,7 @@
-"use strict";
-
-const Socket = require("./Socket");
-const Connection = require("@xmpp/connection");
-const xml = require("@xmpp/xml");
-const FramedParser = require("./FramedParser");
+import Socket from "./Socket.js";
+import Connection from "@xmpp/connection";
+import xml from "@xmpp/xml";
+import FramedParser from "./FramedParser.js";
 
 const NS_FRAMING = "urn:ietf:params:xml:ns:xmpp-framing";
 
@@ -52,4 +50,4 @@ ConnectionWebSocket.prototype.Socket = Socket;
 ConnectionWebSocket.prototype.NS = "jabber:client";
 ConnectionWebSocket.prototype.Parser = FramedParser;
 
-module.exports = ConnectionWebSocket;
+export default ConnectionWebSocket;

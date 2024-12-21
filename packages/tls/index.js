@@ -1,7 +1,5 @@
-"use strict";
+import ConnectionTLS from "./lib/Connection.js";
 
-const ConnectionTLS = require("./lib/Connection");
-
-module.exports = function tls({ entity }) {
+export default function tls({ entity }) {
   entity.transports.push(ConnectionTLS);
-};
+}

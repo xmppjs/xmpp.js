@@ -1,4 +1,4 @@
-import { Connection as _Connection } from "@xmpp/connection";
+import _Connection from "@xmpp/connection";
 import Connection from "../index.js";
 
 import net from "net";

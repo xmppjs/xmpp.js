@@ -1,15 +1,14 @@
-"use strict";
+import xml from "../index.js";
 
-const xml = require("..");
-const createElement = require("ltx/lib/createElement.js");
-const Element = require("ltx/lib/Element.js");
-const Parser = require("../lib/Parser.js");
-const {
+import createElement from "ltx/lib/createElement.js";
+import Element from "ltx/lib/Element.js";
+import Parser from "../lib/Parser.js";
+import {
   escapeXML,
   unescapeXML,
   escapeXMLText,
   unescapeXMLText,
-} = require("ltx/lib/escape.js");
+} from "ltx/lib/escape.js";
 
 test("exports createElement", () => {
   expect(xml.createElement).toBe(createElement);

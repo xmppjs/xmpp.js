@@ -1,6 +1,4 @@
-"use strict";
-
-const JID = require("../lib/JID");
+import JID from "../index.js";
 
 test("escape `space cadet@example.com`", () => {
   const esc = new JID("space cadet", "example.com");
@@ -10,7 +8,9 @@ test("escape `space cadet@example.com`", () => {
 
 test('escape `call me "ishmael"@example.com`', () => {
   const esc = new JID('call me "ishmael"', "example.com");
-  expect(esc.toString()).toBe(String.raw`call\20me\20\22ishmael\22@example.com`);
+  expect(esc.toString()).toBe(
+    String.raw`call\20me\20\22ishmael\22@example.com`,
+  );
   expect(esc.toString(true)).toBe('call me "ishmael"@example.com');
 });
 

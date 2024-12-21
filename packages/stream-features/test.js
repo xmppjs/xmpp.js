@@ -1,7 +1,5 @@
-"use strict";
-
-const streamfeatures = require(".");
-const { xml } = require("@xmpp/test");
+import streamfeatures from "./index.js";
+import { xml } from "@xmpp/test";
 
 test.skip("selectFeature", () => {
   const features = [];

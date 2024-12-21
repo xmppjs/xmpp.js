@@ -1,8 +1,6 @@
-"use strict";
-
-const jid = require("@xmpp/jid");
-const { IRI } = require("iri");
-const querystring = require("querystring");
+import jid from "@xmpp/jid";
+import { IRI } from "iri";
+import querystring from "querystring";
 
 function findQueryType(params) {
   return Object.getOwnPropertyNames(params).find((k) => {
@@ -10,7 +8,7 @@ function findQueryType(params) {
   });
 }
 
-function parse(str) {
+export function parse(str) {
   const iri = new IRI(str);
 
   const uri = {};
@@ -39,5 +37,3 @@ function parse(str) {
 
   return uri;
 }
-
-module.exports.parse = parse;

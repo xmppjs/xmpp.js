@@ -1,12 +1,10 @@
-"use strict";
+import { jid } from "../packages/client/index.js";
+import debug from "../packages/debug/index.js";
+import server from "../server/index.js";
 
-const { JSDOM } = require("jsdom");
-const fetch = require("node-fetch");
-const { readFileSync } = require("fs");
-
-const { jid } = require("../packages/client");
-const debug = require("../packages/debug");
-const server = require("../server");
+import { JSDOM } from "jsdom";
+import fetch from "node-fetch";
+import { readFileSync } from "fs";
 
 const username = "client";
 const password = "foobar";

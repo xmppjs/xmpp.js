@@ -9,11 +9,14 @@ Included and enabled in `@xmpp/client`.
 ### object
 
 ```js
-const {xmpp} = require('@xmpp/client')
-const client = xmpp({credentials: {
-  username: 'foo',
-  password: 'bar'
-})
+import { xmpp } from "@xmpp/client";
+
+const client = xmpp({
+  credentials: {
+    username: "foo",
+    password: "bar",
+  },
+});
 ```
 
 ### function
@@ -29,7 +32,8 @@ Uses cases:
 - Perform an asynchronous operation to get credentials
 
 ```js
-const { xmpp } = require("@xmpp/client");
+import { xmpp } from "@xmpp/client";
+
 const client = xmpp({ credentials: authenticate });
 
 async function authenticate(auth, mechanism) {

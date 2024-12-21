@@ -1,8 +1,6 @@
-"use strict";
+import XMPPError from "@xmpp/error";
 
 /* https://xmpp.org/rfcs/rfc6120.html#stanzas-error */
-
-const XMPPError = require("@xmpp/error");
 
 class StanzaError extends XMPPError {
   constructor(condition, text, application, type) {
@@ -18,4 +16,4 @@ class StanzaError extends XMPPError {
   }
 }
 
-module.exports = StanzaError;
+export default StanzaError;

@@ -1,14 +1,15 @@
-"use strict";
+import { promisify } from "util";
+import path from "path";
+import fs, { writeFileSync } from "fs";
+import child_process from "child_process";
+import net from "net";
+// eslint-disable-next-line n/no-extraneous-import
+import { promise, delay } from "@xmpp/events";
+import selfsigned from "selfsigned";
 
-const { promisify } = require("util");
-const path = require("path");
-const readFile = promisify(require("fs").readFile);
-const exec = promisify(require("child_process").exec);
-const removeFile = promisify(require("fs").unlink);
-const net = require("net");
-const { promise, delay } = require("../packages/events");
-const selfsigned = require("selfsigned");
-const { writeFileSync } = require("fs");
+const readFile = promisify(fs.readFile);
+const exec = promisify(child_process.exec);
+const removeFile = promisify(fs.unlink);
 
 const DATA_PATH = path.join(__dirname);
 const PID_PATH = path.join(DATA_PATH, "prosody.pid");
@@ -115,11 +116,13 @@ async function restart(signal) {
   return _start();
 }
 
-exports.isPortOpen = isPortOpen;
-exports.waitPortClose = waitPortClose;
-exports.waitPortOpen = waitPortOpen;
-exports.getPid = getPid;
-exports.start = start;
-exports.stop = stop;
-exports.restart = restart;
-exports.kill = kill;
+export {
+  isPortOpen,
+  waitPortClose,
+  waitPortOpen,
+  getPid,
+  start,
+  stop,
+  restart,
+  kill,
+};

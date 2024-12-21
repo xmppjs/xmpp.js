@@ -1,4 +1,4 @@
-"use strict";
+import { resolve } from "../lib/http.js";
 
 const domain = "example.com";
 // eslint-disable-next-line n/no-unsupported-features/node-builtins
@@ -18,8 +18,6 @@ globalThis.fetch = (url) => {
     },
   });
 };
-
-const { resolve } = require("../lib/http");
 
 test("parse", async () => {
   expect(await resolve(domain)).toEqual([

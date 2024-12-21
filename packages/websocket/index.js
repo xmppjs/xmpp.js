@@ -1,7 +1,5 @@
-"use strict";
+import ConnectionWebSocket from "./lib/Connection.js";
 
-const ConnectionWebSocket = require("./lib/Connection");
-
-module.exports = function websocket({ entity }) {
+export default function websocket({ entity }) {
   entity.transports.push(ConnectionWebSocket);
-};
+}

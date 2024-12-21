@@ -1,6 +1,4 @@
-"use strict";
-
-const ConnectionTCP = require("./lib/Connection");
+import ConnectionTCP from "./lib/Connection.js";
 
 test("socketParameters()", () => {
   let params;

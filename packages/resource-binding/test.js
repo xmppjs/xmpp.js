@@ -1,6 +1,4 @@
-"use strict";
-
-const { mockClient, delay } = require("@xmpp/test");
+import { mockClient, delay } from "@xmpp/test";
 
 test("without resource", async () => {
   const resource = Math.random().toString();
@@ -47,9 +45,11 @@ test("with string resource", async () => {
   );
 
   const child = await entity.catchOutgoingSet();
-  expect(child).toEqual(<bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
-    <resource>{resource}</resource>
-  </bind>);
+  expect(child).toEqual(
+    <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
+      <resource>{resource}</resource>
+    </bind>,
+  );
 
   await delay();
 
@@ -81,9 +81,11 @@ test("with function resource", async () => {
   );
 
   const child = await entity.catchOutgoingSet();
-  expect(child).toEqual(<bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
-    <resource>{resource}</resource>
-  </bind>);
+  expect(child).toEqual(
+    <bind xmlns="urn:ietf:params:xml:ns:xmpp-bind">
+      <resource>{resource}</resource>
+    </bind>,
+  );
 
   await delay();
 

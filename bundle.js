@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-'use strict'
+import fs from "fs"
+import path from "path"
+import browserify from "browserify"
+import commonShake from "common-shakeify"
+import packFlat from "browser-pack-flat"
+import exorcist from "exorcist"
+import { minify } from "uglify-js"
 
-const fs = require('fs')
-const path = require('path')
-const browserify = require('browserify')
-const commonShake = require('common-shakeify')
-const packFlat = require('browser-pack-flat')
-const exorcist = require('exorcist')
-const {minify} = require('uglify-js')
+const __dirname = import.meta.dirname;
 
 const dist = path.join(__dirname, 'packages/client/dist')
 
