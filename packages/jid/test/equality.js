@@ -1,46 +1,45 @@
 "use strict";
 
-const test = require("ava");
 const jid = require("..");
 
-test("should parsed JIDs should be equal", (t) => {
+test("should parsed JIDs should be equal", () => {
   const j1 = jid("foo@bar/baz");
   const j2 = jid("foo@bar/baz");
-  t.is(j1.equals(j2), true);
+  expect(j1.equals(j2)).toBe(true);
 });
 
-test("should parsed JIDs should be not equal", (t) => {
+test("should parsed JIDs should be not equal", () => {
   const j1 = jid("foo@bar/baz");
   const j2 = jid("quux@bar/baz");
-  t.is(j1.equals(j2), false);
+  expect(j1.equals(j2)).toBe(false);
 });
 
-test("should ignore case in user", (t) => {
+test("should ignore case in user", () => {
   const j1 = jid("foo@bar/baz");
   const j2 = jid("FOO@bar/baz");
-  t.is(j1.equals(j2), true);
+  expect(j1.equals(j2)).toBe(true);
 });
 
-test("should ignore case in domain", (t) => {
+test("should ignore case in domain", () => {
   const j1 = jid("foo@bar/baz");
   const j2 = jid("foo@BAR/baz");
-  t.is(j1.equals(j2), true);
+  expect(j1.equals(j2)).toBe(true);
 });
 
-test("should not ignore case in resource", (t) => {
+test("should not ignore case in resource", () => {
   const j1 = jid("foo@bar/baz");
   const j2 = jid("foo@bar/Baz");
-  t.is(j1.equals(j2), false);
+  expect(j1.equals(j2)).toBe(false);
 });
 
-test("should ignore international caseness", (t) => {
+test("should ignore international caseness", () => {
   const j1 = jid("föö@bär/baß");
   const j2 = jid("fÖö@BÄR/baß");
-  t.is(j1.equals(j2), true);
+  expect(j1.equals(j2)).toBe(true);
 });
 
-test("should work with bare JIDs", (t) => {
+test("should work with bare JIDs", () => {
   const j1 = jid("romeo@example.net/9519407536580081");
   const j2 = jid("romeo@example.net");
-  t.is(j1.bare().equals(j2), true);
+  expect(j1.bare().equals(j2)).toBe(true);
 });

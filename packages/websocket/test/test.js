@@ -1,36 +1,35 @@
 "use strict";
 
-const test = require("ava");
 const ConnectionWebSocket = require("../lib/Connection");
 const Socket = require("../lib/Socket");
 const EventEmitter = require("events");
 const xml = require("@xmpp/xml");
 
-test("send() adds jabber:client xmlns", (t) => {
+test("send() adds jabber:client xmlns", () => {
   const connection = new ConnectionWebSocket();
   connection.write = () => {};
 
   const element = xml("presence");
 
-  t.is(element.attrs.xmlns, undefined);
+  expect(element.attrs.xmlns).toBe(undefined);
   connection.send(element);
-  t.is(element.attrs.xmlns, "jabber:client");
+  expect(element.attrs.xmlns).toBe("jabber:client");
 });
 
-test("socketParameters()", (t) => {
+test("socketParameters()", () => {
   let params;
 
   params = ConnectionWebSocket.prototype.socketParameters("ws://foo");
-  t.is(params, "ws://foo");
+  expect(params).toBe("ws://foo");
 
   params = ConnectionWebSocket.prototype.socketParameters("wss://foo");
-  t.is(params, "wss://foo");
+  expect(params).toBe("wss://foo");
 
   params = ConnectionWebSocket.prototype.socketParameters("http://foo");
-  t.is(params, undefined);
+  expect(params).toBe(undefined);
 });
 
-test("DOM WebSocket error", (t) => {
+test("DOM WebSocket error", () => {
   const socket = new Socket();
   const sock = new EventEmitter();
   sock.addEventListener = sock.addListener;
@@ -38,16 +37,16 @@ test("DOM WebSocket error", (t) => {
   socket.url = "ws://foobar";
   const evt = {};
   socket.on("error", (err) => {
-    t.is(err.message, "WebSocket ECONNERROR ws://foobar");
-    t.is(err.errno, "ECONNERROR");
-    t.is(err.code, "ECONNERROR");
-    t.is(err.url, "ws://foobar");
-    t.is(err.event, evt);
+    expect(err.message).toBe("WebSocket ECONNERROR ws://foobar");
+    expect(err.errno).toBe("ECONNERROR");
+    expect(err.code).toBe("ECONNERROR");
+    expect(err.url).toBe("ws://foobar");
+    expect(err.event).toBe(evt);
   });
   socket.socket.emit("error", evt);
 });
 
-test("WS WebSocket error", (t) => {
+test("WS WebSocket error", () => {
   const socket = new Socket();
   const sock = new EventEmitter();
   sock.addEventListener = sock.addListener;
@@ -56,43 +55,43 @@ test("WS WebSocket error", (t) => {
   const error = {};
   const evt = { error };
   socket.on("error", (err) => {
-    t.is(err, error);
-    t.is(err.event, evt);
-    t.is(err.url, "ws://foobar");
+    expect(err).toBe(error);
+    expect(err.event).toBe(evt);
+    expect(err.url).toBe("ws://foobar");
   });
   socket.socket.emit("error", evt);
 });
 
-test("socket close", (t) => {
-  t.plan(3);
+test("socket close", () => {
+  expect.assertions(3);
   const socket = new Socket();
+  const spy_detachSocket = jest.spyOn(socket, "_detachSocket");
+
   const sock = new EventEmitter();
   sock.addEventListener = sock.addListener;
   sock.removeEventListener = sock.removeListener;
   socket._attachSocket(sock);
   const evt = { wasClean: false };
   socket.on("close", (clean, event) => {
-    t.is(clean, true);
-    t.is(evt, event);
+    expect(clean).toBe(true);
+    expect(evt).toBe(event);
+    expect(spy_detachSocket).toHaveBeenCalled();
   });
-  socket._detachSocket = () => {
-    t.pass();
-  };
 
   socket.socket.emit("close", evt);
 });
 
-test("sendMany", async (t) => {
-  t.plan(2);
+test("sendMany", async () => {
   const conn = new ConnectionWebSocket();
-  conn.root = xml("root");
 
   const foo = xml("foo");
   const bar = xml("bar");
 
-  conn.send = () => {
-    t.pass();
-  };
+  const spy_send = (conn.send = jest.fn());
 
   await conn.sendMany([foo, bar]);
+
+  expect(spy_send).toHaveBeenCalledWith(foo);
+  expect(spy_send).toHaveBeenCalledWith(bar);
+  expect(spy_send).toHaveBeenCalledTimes(2);
 });

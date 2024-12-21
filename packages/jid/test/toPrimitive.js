@@ -1,17 +1,16 @@
 "use strict";
 
-const test = require("ava");
 const JID = require("../lib/JID");
 
-test("cocerce to string", (t) => {
+test("cocerce to string", () => {
   const addr = new JID("foo", "bar");
-  t.is(addr + "", addr.toString());
-  t.is("" + addr, addr.toString());
-  t.true(addr == addr.toString());
+  expect(addr + "").toBe(addr.toString());
+  expect("" + addr).toBe(addr.toString());
+  expect(addr == addr.toString()).toBe(true);
 });
 
-test("cocerce to NaN", (t) => {
+test("cocerce to NaN", () => {
   const addr = new JID("foo", "bar");
-  t.true(isNaN(+addr));
-  t.true(isNaN(addr + 4));
+  expect(isNaN(+addr)).toBe(true);
+  expect(isNaN(addr + 4)).toBe(true);
 });

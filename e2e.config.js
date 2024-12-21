@@ -1,26 +1,7 @@
-export default {
-  failFast: true,
-  serial: true,
-  babel: {
-    testOptions: {
-      babelrc: false,
-      plugins: [
-        [
-          "@babel/plugin-transform-react-jsx",
-          {
-            pragma: "xml",
-          },
-        ],
-        [
-          "babel-plugin-jsx-pragmatic",
-          {
-            module: "@xmpp/xml",
-            import: "xml",
-          },
-        ],
-      ],
-    },
-  },
-  nodeArguments: ["--experimental-require-module"],
-  files: ["test/*.js"],
+"use strict";
+
+/** @type {import('jest').Config} */
+module.exports = {
+  testMatch: ["<rootDir>/test/*.js"],
+  setupFilesAfterEnv: ["jest-extended/all"],
 };

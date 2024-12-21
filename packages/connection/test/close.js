@@ -1,23 +1,27 @@
 "use strict";
 
-const test = require("ava");
 const Connection = require("..");
-const { EventEmitter, promise, timeout } = require("@xmpp/events");
+const {
+  EventEmitter,
+  promise,
+  timeout,
+  TimeoutError,
+} = require("@xmpp/events");
 const xml = require("@xmpp/xml");
 
-test("resets properties on socket close event", (t) => {
+test("resets properties on socket close event", () => {
   const conn = new Connection();
   conn._attachSocket(new EventEmitter());
   conn.jid = {};
   conn.status = "online";
   conn.socket.emit("connect");
   conn.socket.emit("close");
-  t.is(conn.jid, null);
-  t.is(conn.status, "disconnect");
+  expect(conn.jid).toBe(null);
+  expect(conn.status).toBe("disconnect");
 });
 
-test.cb("timeout", (t) => {
-  t.plan(2);
+test("timeout", async () => {
+  expect.assertions(2);
   const conn = new Connection();
   conn.parser = new EventEmitter();
   conn.footerElement = () => {
@@ -30,16 +34,13 @@ test.cb("timeout", (t) => {
   };
 
   conn.on("output", (el) => {
-    t.is(el, "<hello/>");
+    expect(el).toBe("<hello/>");
   });
-  conn.close().catch((err) => {
-    t.is(err.name, "TimeoutError");
-    t.end();
-  });
+
+  await expect(conn.close()).rejects.toThrow(new TimeoutError());
 });
 
-test.cb("error on status closing", (t) => {
-  t.plan(2);
+test("error on status closing", async () => {
   const conn = new Connection();
   conn.parser = new EventEmitter();
   conn.footerElement = () => {
@@ -52,16 +53,16 @@ test.cb("error on status closing", (t) => {
   };
 
   conn.status = "closing";
-  conn.close().catch((err) => {
-    t.is(err.name, "Error");
-    t.is(err.message, "Connection is closing");
-    t.end();
-  });
+
   conn.parser.emit("end");
+
+  await expect(conn.close()).rejects.toThrow(
+    new Error("Connection is closing"),
+  );
 });
 
-test("resolves", async (t) => {
-  t.plan(2);
+test("resolves", async () => {
+  expect.assertions(2);
   const conn = new Connection();
   conn.parser = new EventEmitter();
   conn.footerElement = () => {
@@ -74,7 +75,7 @@ test("resolves", async (t) => {
   };
 
   conn.on("output", (el) => {
-    t.is(el, "<hello/>");
+    expect(el).toBe("<hello/>");
   });
 
   const promiseClose = conn.close();
@@ -82,10 +83,10 @@ test("resolves", async (t) => {
 
   const el = await promiseClose;
 
-  t.is(el.toString(), `<goodbye/>`);
+  expect(el.toString()).toBe(`<goodbye/>`);
 });
 
-test("emits closing status", (t) => {
+test("emits closing status", () => {
   const conn = new Connection();
   conn.parser = new EventEmitter();
   conn.footerElement = () => {
@@ -98,7 +99,7 @@ test("emits closing status", (t) => {
   };
 
   const p = Promise.all([
-    promise(conn, "status").then((status) => t.is(status, "closing")),
+    promise(conn, "status").then((status) => expect(status).toBe("closing")),
     conn.close(),
   ]);
 
@@ -106,8 +107,8 @@ test("emits closing status", (t) => {
   return p;
 });
 
-test("do not emit closing status if parser property is missing", (t) => {
-  t.plan(2);
+test("do not emit closing status if parser property is missing", async () => {
+  expect.assertions(2);
   const conn = new Connection();
   conn.parser = null;
   conn.footerElement = () => {
@@ -119,10 +120,10 @@ test("do not emit closing status if parser property is missing", (t) => {
     return cb();
   };
 
-  return Promise.all([
-    timeout(promise(conn, "status"), 500).catch((err) =>
-      t.is(err.name, "TimeoutError"),
+  await Promise.all([
+    expect(timeout(promise(conn, "status"), 500)).rejects.toThrow(
+      new TimeoutError(),
     ),
-    conn.close().catch((err) => t.pass(err)),
+    expect(conn.close()).rejects.toThrow(),
   ]);
 });

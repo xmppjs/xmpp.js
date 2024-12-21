@@ -1,24 +1,23 @@
 "use strict";
 
-const test = require("ava");
 const Connection = require("..");
 const { EventEmitter } = require("@xmpp/events");
 
-test("calls _reset and _status", (t) => {
-  t.plan(3);
+test("calls _reset and _status", () => {
+  expect.assertions(3);
   const conn = new Connection();
   const sock = new EventEmitter();
   conn._attachSocket(sock);
 
   const evt = {};
   conn._status = (status, { clean, event }) => {
-    t.is(clean, false);
-    t.is(event, evt);
+    expect(clean).toBe(false);
+    expect(event).toBe(evt);
   };
 
-  conn._reset = () => {
-    t.pass();
-  };
+  const spy_reset = jest.spyOn(conn, "_reset");
 
   sock.emit("close", true, evt);
+
+  expect(spy_reset).toHaveBeenCalled();
 });

@@ -1,18 +1,17 @@
 "use strict";
 
-const test = require("ava");
 const jid = require("..");
 
-test("Should not change string - issue 43", (t) => {
+test("Should not change string - issue 43", () => {
   const test = "test\u001A@example.com";
 
   const addr = jid(test);
-  t.is(addr.local, "test\u001A");
+  expect(addr.local).toBe("test\u001A");
 });
 
-test("Should escape - issue 43", (t) => {
+test("Should escape - issue 43", () => {
   const test = "test\u001Aa@example.com";
 
   const addr = jid(test);
-  t.is(addr.local, "testa");
+  expect(addr.local).toBe("testa");
 });

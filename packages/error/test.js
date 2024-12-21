@@ -1,11 +1,10 @@
 "use strict";
 
-const test = require("ava");
 const XMPPError = require(".");
 // eslint-disable-next-line n/no-extraneous-require
 const parse = require("@xmpp/xml/lib/parse.js");
 
-test("fromElement", (t) => {
+test("fromElement", () => {
   const application_element = (
     <escape-your-data xmlns="http://example.org/ns" />
   );
@@ -22,14 +21,14 @@ test("fromElement", (t) => {
 
   const error = XMPPError.fromElement(nonza);
 
-  t.is(error instanceof Error, true);
-  t.is(error.name, "XMPPError");
-  t.is(error.condition, "some-condition");
-  t.is(error.text, "foo");
-  t.is(error.application, application_element);
+  expect(error instanceof Error).toBe(true);
+  expect(error.name).toBe("XMPPError");
+  expect(error.condition).toBe("some-condition");
+  expect(error.text).toBe("foo");
+  expect(error.application).toBe(application_element);
 });
 
-test("fromElement - whitespaces", (t) => {
+test("fromElement - whitespaces", () => {
   const nonza = parse(
     `
     <stream:error>
@@ -44,12 +43,9 @@ test("fromElement - whitespaces", (t) => {
 
   const error = XMPPError.fromElement(nonza);
 
-  t.is(error instanceof Error, true);
-  t.is(error.name, "XMPPError");
-  t.is(error.condition, "some-condition");
-  t.is(error.text, "\n        foo\n      ");
-  t.is(
-    error.application.toString(),
-    `<escape-your-data xmlns="http://example.org/ns"/>`,
-  );
+  expect(error instanceof Error).toBe(true);
+  expect(error.name).toBe("XMPPError");
+  expect(error.condition).toBe("some-condition");
+  expect(error.text).toBe("\n        foo\n      ");
+  expect(error.application.toString()).toBe(`<escape-your-data xmlns="http://example.org/ns"/>`);
 });

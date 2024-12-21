@@ -4,12 +4,9 @@ const { JSDOM } = require("jsdom");
 const fetch = require("node-fetch");
 const { readFileSync } = require("fs");
 
-const test = require("ava");
 const { jid } = require("../packages/client");
 const debug = require("../packages/debug");
 const server = require("../server");
-
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const username = "client";
 const password = "foobar";
@@ -22,24 +19,30 @@ const xmppjs = readFileSync("./packages/client/dist/xmpp.js", {
   encoding: "utf8",
 });
 
-test.beforeEach((t) => {
-  const { window } = new JSDOM(``, { runScripts: "dangerously" });
+let window;
+let xmpp;
+
+beforeEach(async () => {
+  ({ window } = new JSDOM(``, { runScripts: "dangerously" }));
   window.fetch = fetch;
   const { document } = window;
   const scriptEl = document.createElement("script");
   scriptEl.textContent = xmppjs;
   document.body.append(scriptEl);
-  t.context = window.XMPP.client;
-  return server.restart();
+  await server.restart();
 });
 
-test.serial("client ws://", async (t) => {
-  const xmpp = t.context({
+afterEach(async () => {
+  await xmpp?.stop();
+});
+
+test("client ws://", async () => {
+  xmpp = window.XMPP.client({
     credentials,
     service,
   });
   debug(xmpp);
 
   const address = await xmpp.start();
-  t.is(address.bare().toString(), JID);
+  expect(address.bare().toString()).toBe(JID);
 });

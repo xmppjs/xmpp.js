@@ -1,11 +1,10 @@
 "use strict";
 
 const xml = require("@xmpp/xml");
-const test = require("ava");
 const Connection = require("..");
 
-test("send", (t) => {
-  t.plan(3);
+test("send", () => {
+  expect.assertions(3);
   const conn = new Connection();
   conn.root = xml("root");
 
@@ -13,17 +12,17 @@ test("send", (t) => {
 
   conn.socket = {
     write(str) {
-      t.is(str, "<foo/>");
+      expect(str).toBe("<foo/>");
     },
   };
 
-  t.is(foo.attrs.parent, undefined);
+  expect(foo.attrs.parent).toBe(undefined);
 
   conn.send(foo);
 
-  t.is(foo.parent, conn.root);
+  expect(foo.parent).toBe(conn.root);
 
   conn.on("send", (element) => {
-    t.is(element, foo);
+    expect(element).toBe(foo);
   });
 });
