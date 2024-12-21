@@ -1,8 +1,6 @@
-"use strict";
-
-const XMPPError = require(".");
-// eslint-disable-next-line n/no-extraneous-require
-const parse = require("@xmpp/xml/lib/parse.js");
+import XMPPError from "./index.js";
+// eslint-disable-next-line n/no-extraneous-import
+import parse from "@xmpp/xml/lib/parse.js";
 
 test("fromElement", () => {
   const application_element = (
@@ -47,5 +45,7 @@ test("fromElement - whitespaces", () => {
   expect(error.name).toBe("XMPPError");
   expect(error.condition).toBe("some-condition");
   expect(error.text).toBe("\n        foo\n      ");
-  expect(error.application.toString()).toBe(`<escape-your-data xmlns="http://example.org/ns"/>`);
+  expect(error.application.toString()).toBe(
+    `<escape-your-data xmlns="http://example.org/ns"/>`,
+  );
 });

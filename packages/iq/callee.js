@@ -1,12 +1,10 @@
-"use strict";
+import xml from "@xmpp/xml";
 
 /**
  * References
  * https://xmpp.org/rfcs/rfc6120.html#stanzas-semantics-iq
  * https://xmpp.org/rfcs/rfc6120.html#stanzas-error
  */
-
-const xml = require("@xmpp/xml");
 
 const NS_STANZA = "urn:ietf:params:xml:ns:xmpp-stanzas";
 
@@ -101,7 +99,7 @@ function route(type, ns, name, handler) {
   };
 }
 
-module.exports = function iqCallee({ middleware, entity }) {
+export default function iqCallee({ middleware, entity }) {
   middleware.use(iqHandler(entity));
 
   return {
@@ -112,4 +110,4 @@ module.exports = function iqCallee({ middleware, entity }) {
       middleware.use(route("set", ns, name, handler));
     },
   };
-};
+}

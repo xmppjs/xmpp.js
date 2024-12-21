@@ -1,9 +1,7 @@
-"use strict";
+import compose from "koa-compose";
 
-const compose = require("koa-compose");
-
-const IncomingContext = require("./lib/IncomingContext");
-const OutgoingContext = require("./lib/OutgoingContext");
+import IncomingContext from "./lib/IncomingContext.js";
+import OutgoingContext from "./lib/OutgoingContext.js";
 
 function listener(entity, middleware, Context) {
   return (stanza) => {
@@ -20,7 +18,7 @@ function errorHandler(entity) {
   };
 }
 
-module.exports = function middleware({ entity }) {
+export default function middleware({ entity }) {
   const incoming = [errorHandler(entity)];
   const outgoing = [];
 
@@ -40,4 +38,4 @@ module.exports = function middleware({ entity }) {
       return fn;
     },
   };
-};
+}

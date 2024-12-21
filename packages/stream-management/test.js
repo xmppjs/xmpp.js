@@ -1,6 +1,4 @@
-"use strict";
-
-const { mockClient } = require("@xmpp/test");
+import { mockClient } from "@xmpp/test";
 
 function tick() {
   return new Promise((resolve) => {
@@ -19,7 +17,9 @@ test("enable - enabled", async () => {
 
   entity.streamManagement.outbound = 45;
 
-  expect(await entity.catchOutgoing()).toEqual(<enable xmlns="urn:xmpp:sm:3" resume="true" />);
+  expect(await entity.catchOutgoing()).toEqual(
+    <enable xmlns="urn:xmpp:sm:3" resume="true" />,
+  );
 
   await tick();
 
@@ -72,7 +72,9 @@ test("enable - message - enabled", async () => {
 
   entity.streamManagement.outbound = 45;
 
-  expect(await entity.catchOutgoing()).toEqual(<enable xmlns="urn:xmpp:sm:3" resume="true" />);
+  expect(await entity.catchOutgoing()).toEqual(
+    <enable xmlns="urn:xmpp:sm:3" resume="true" />,
+  );
 
   expect(entity.streamManagement.outbound).toBe(0);
   expect(entity.streamManagement.enabled).toBe(false);
@@ -111,7 +113,9 @@ test("enable - failed", async () => {
 
   entity.streamManagement.outbound = 45;
 
-  expect(await entity.catchOutgoing()).toEqual(<enable xmlns="urn:xmpp:sm:3" resume="true" />);
+  expect(await entity.catchOutgoing()).toEqual(
+    <enable xmlns="urn:xmpp:sm:3" resume="true" />,
+  );
 
   expect(entity.streamManagement.outbound).toBe(0);
   entity.streamManagement.enabled = true;
@@ -139,7 +143,9 @@ test("resume - resumed", async () => {
 
   entity.streamManagement.outbound = 45;
 
-  expect(await entity.catchOutgoing()).toEqual(<resume xmlns="urn:xmpp:sm:3" previd="bar" h="0" />);
+  expect(await entity.catchOutgoing()).toEqual(
+    <resume xmlns="urn:xmpp:sm:3" previd="bar" h="0" />,
+  );
 
   expect(entity.streamManagement.enabled).toBe(false);
 
@@ -167,7 +173,9 @@ test("resume - failed", async () => {
     </features>,
   );
 
-  expect(await entity.catchOutgoing()).toEqual(<resume xmlns="urn:xmpp:sm:3" previd="bar" h="0" />);
+  expect(await entity.catchOutgoing()).toEqual(
+    <resume xmlns="urn:xmpp:sm:3" previd="bar" h="0" />,
+  );
 
   entity.mockInput(<failed xmlns="urn:xmpp:sm:3" />);
 

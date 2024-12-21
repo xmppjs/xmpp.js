@@ -1,11 +1,4 @@
-"use strict";
-
-const {
-  mockClient,
-  promiseSend,
-  mockInput,
-  promiseError,
-} = require("@xmpp/test");
+import { mockClient, promiseSend, mockInput, promiseError } from "@xmpp/test";
 
 test("empty result when the handler returns true", async () => {
   const xmpp = mockClient();
@@ -55,12 +48,14 @@ test("iqs with multiple element children are invalid", async () => {
     </iq>,
   );
 
-  expect(await promiseSend(xmpp)).toEqual(<iq id="123" type="error">
-    <foo xmlns="bar" />
-    <error type="modify">
-      <bad-request xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
-    </error>
-  </iq>);
+  expect(await promiseSend(xmpp)).toEqual(
+    <iq id="123" type="error">
+      <foo xmlns="bar" />
+      <error type="modify">
+        <bad-request xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
+      </error>
+    </iq>,
+  );
 });
 
 test("non empty result when the handler returns an xml.Element", async () => {
@@ -78,9 +73,11 @@ test("non empty result when the handler returns an xml.Element", async () => {
     </iq>,
   );
 
-  expect(await promiseSend(xmpp)).toEqual(<iq id="123" type="result">
-    <hello />
-  </iq>);
+  expect(await promiseSend(xmpp)).toEqual(
+    <iq id="123" type="result">
+      <hello />
+    </iq>,
+  );
 });
 
 test("service unavailable error reply when there are no handler", async () => {
@@ -92,12 +89,14 @@ test("service unavailable error reply when there are no handler", async () => {
     </iq>,
   );
 
-  expect(await promiseSend(xmpp)).toEqual(<iq id="123" type="error">
-    <foo xmlns="bar" />
-    <error type="cancel">
-      <service-unavailable xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
-    </error>
-  </iq>);
+  expect(await promiseSend(xmpp)).toEqual(
+    <iq id="123" type="error">
+      <foo xmlns="bar" />
+      <error type="cancel">
+        <service-unavailable xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
+      </error>
+    </iq>,
+  );
 });
 
 test("internal server error reply when handler throws an error", async () => {
@@ -120,12 +119,14 @@ test("internal server error reply when handler throws an error", async () => {
   );
 
   expect(await errorPromise).toBe(error);
-  expect(await outputPromise).toEqual(<iq id="123" type="error">
-    <foo xmlns="bar" />
-    <error type="cancel">
-      <internal-server-error xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
-    </error>
-  </iq>);
+  expect(await outputPromise).toEqual(
+    <iq id="123" type="error">
+      <foo xmlns="bar" />
+      <error type="cancel">
+        <internal-server-error xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
+      </error>
+    </iq>,
+  );
 });
 
 test("internal server error reply when handler rejects with an error", async () => {
@@ -148,12 +149,14 @@ test("internal server error reply when handler rejects with an error", async () 
   );
 
   expect(await errorPromise).toBe(error);
-  expect(await outputPromise).toEqual(<iq id="123" type="error">
-    <foo xmlns="bar" />
-    <error type="cancel">
-      <internal-server-error xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
-    </error>
-  </iq>);
+  expect(await outputPromise).toEqual(
+    <iq id="123" type="error">
+      <foo xmlns="bar" />
+      <error type="cancel">
+        <internal-server-error xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
+      </error>
+    </iq>,
+  );
 });
 
 test("stanza error reply when handler returns an error element", async () => {
@@ -179,8 +182,10 @@ test("stanza error reply when handler returns an error element", async () => {
     </iq>,
   );
 
-  expect(await outputPromise).toEqual(<iq id="123" type="error">
-    <foo xmlns="bar" />
-    {errorElement}
-  </iq>);
+  expect(await outputPromise).toEqual(
+    <iq id="123" type="error">
+      <foo xmlns="bar" />
+      {errorElement}
+    </iq>,
+  );
 });

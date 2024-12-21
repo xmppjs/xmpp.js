@@ -1,7 +1,5 @@
-"use strict";
+import mech from "sasl-plain";
 
-const mech = require("sasl-plain");
-
-module.exports = function saslPlain(sasl) {
+export default function saslPlain(sasl) {
   sasl.use(mech);
-};
+}

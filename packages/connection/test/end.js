@@ -1,6 +1,4 @@
-"use strict";
-
-const Connection = require("..");
+import Connection from "../index.js";
 
 test("#_end", async () => {
   const conn = new Connection();

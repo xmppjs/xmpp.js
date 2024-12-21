@@ -1,11 +1,9 @@
-"use strict";
-
 jest.mock("tls");
 
-const { mockClient, promise, delay } = require("@xmpp/test");
-const tls = require("tls");
-const net = require("net");
-const EventEmitter = require("events");
+import { mockClient, promise, delay } from "@xmpp/test";
+import tls from "tls";
+import net from "net";
+import { EventEmitter } from "@xmpp/events";
 
 function mockSocket() {
   const socket = new net.Socket();

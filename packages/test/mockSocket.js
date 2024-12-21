@@ -1,6 +1,4 @@
-"use strict";
-
-const { EventEmitter } = require("@xmpp/events");
+import { EventEmitter } from "@xmpp/events";
 
 class MockSocket extends EventEmitter {
   write(data, cb) {
@@ -8,6 +6,6 @@ class MockSocket extends EventEmitter {
   }
 }
 
-module.exports = function mockSocket() {
+export default function mockSocket() {
   return new MockSocket();
-};
+}

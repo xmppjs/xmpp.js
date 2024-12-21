@@ -1,14 +1,14 @@
-"use strict";
+import Parser from "../lib/FramedParser.js";
 
-const Parser = require("../lib/FramedParser");
-
-test("framed parser", done => {
+test("framed parser", (done) => {
   const parser = new Parser();
 
   expect.assertions(4);
 
   parser.on("start", (el) => {
-    expect(el.toString()).toBe('<open xmlns="urn:ietf:params:xml:ns:xmpp-framing"/>');
+    expect(el.toString()).toBe(
+      '<open xmlns="urn:ietf:params:xml:ns:xmpp-framing"/>',
+    );
   });
 
   parser.on("element", (el) => {
@@ -17,7 +17,9 @@ test("framed parser", done => {
   });
 
   parser.on("end", (el) => {
-    expect(el.toString()).toBe('<close xmlns="urn:ietf:params:xml:ns:xmpp-framing"/>');
+    expect(el.toString()).toBe(
+      '<close xmlns="urn:ietf:params:xml:ns:xmpp-framing"/>',
+    );
     done();
   });
 

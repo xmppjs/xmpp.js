@@ -1,6 +1,4 @@
-"use strict";
-
-const Connection = require("..");
+import Connection from "../index.js";
 
 test("rejects if connection is not offline", () => {
   const conn = new Connection();

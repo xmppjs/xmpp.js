@@ -1,9 +1,8 @@
-"use strict";
+import _Connection from "@xmpp/connection";
+import Connection from "../index.js";
 
-const _Connection = require("../../../packages/connection");
-const Connection = require("..");
-const net = require("net");
-const xml = require("@xmpp/xml");
+import net from "net";
+import xml from "@xmpp/xml";
 
 const NS_STREAM = "http://etherx.jabber.org/streams";
 
@@ -26,7 +25,7 @@ test("header()", () => {
   const conn = new Connection();
   conn.NS = "foobar";
   expect(conn.header(conn.headerElement())).toBe(
-    `<?xml version='1.0'?><stream:stream version="1.0" xmlns="foobar" xmlns:stream="${NS_STREAM}">`
+    `<?xml version='1.0'?><stream:stream version="1.0" xmlns="foobar" xmlns:stream="${NS_STREAM}">`,
   );
 });
 
@@ -46,7 +45,9 @@ test("socketParameters()", () => {
     host: "foo",
   });
 
-  expect(Connection.prototype.socketParameters("xmpps://foo:1234")).toEqual(undefined);
+  expect(Connection.prototype.socketParameters("xmpps://foo:1234")).toEqual(
+    undefined,
+  );
 });
 
 test("sendMany", async () => {

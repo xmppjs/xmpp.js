@@ -1,9 +1,7 @@
-"use strict";
-
-const IncomingContext = require("../lib/IncomingContext");
-const OutgoingContext = require("../lib/OutgoingContext");
-const { context, mockClient, mockInput, promiseError } = require("@xmpp/test");
-const _middleware = require("..");
+import IncomingContext from "../lib/IncomingContext.js";
+import OutgoingContext from "../lib/OutgoingContext.js";
+import { context, mockClient, mockInput, promiseError } from "@xmpp/test";
+import _middleware from "../index.js";
 
 let ctx;
 

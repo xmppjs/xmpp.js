@@ -1,10 +1,7 @@
-"use strict";
-
-const xid = require("@xmpp/id");
-const StanzaError = require("@xmpp/middleware/lib/StanzaError");
-const { Deferred } = require("@xmpp/events");
-const timeoutPromise = require("@xmpp/events").timeout;
-const xml = require("@xmpp/xml");
+import xid from "@xmpp/id";
+import StanzaError from "@xmpp/middleware/lib/StanzaError.js";
+import { Deferred, timeout as timeoutPromise } from "@xmpp/events";
+import xml from "@xmpp/xml";
 
 function isReply({ name, type }) {
   if (name !== "iq") return false;
@@ -79,8 +76,8 @@ class IQCaller {
   }
 }
 
-module.exports = function iqCaller(...args) {
+export default function iqCaller(...args) {
   const iqCaller = new IQCaller(...args);
   iqCaller.start();
   return iqCaller;
-};
+}

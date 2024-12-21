@@ -1,6 +1,4 @@
-"use strict";
-
-const time = require(".");
+import * as time from "./index.js";
 
 const s = "21 Jully 1969 02:56 UTC";
 const d = new Date(s);

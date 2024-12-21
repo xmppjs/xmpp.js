@@ -1,8 +1,6 @@
-"use strict";
+import Parser from "./Parser.js";
 
-const Parser = require("./Parser");
-
-module.exports = function parse(data) {
+export default function parse(data) {
   const p = new Parser();
 
   let result = null;
@@ -26,4 +24,4 @@ module.exports = function parse(data) {
   } else {
     return result;
   }
-};
+}

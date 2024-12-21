@@ -1,6 +1,4 @@
-"use strict";
-
-const { mockClient, promise, timeout } = require("@xmpp/test");
+import { mockClient, promise, timeout } from "@xmpp/test";
 
 test("mandatory", async () => {
   const { entity } = mockClient();
@@ -14,7 +12,9 @@ test("mandatory", async () => {
   entity.scheduleIncomingResult();
 
   const child = await entity.catchOutgoingSet();
-  expect(child).toEqual(<session xmlns="urn:ietf:params:xml:ns:xmpp-session" />);
+  expect(child).toEqual(
+    <session xmlns="urn:ietf:params:xml:ns:xmpp-session" />,
+  );
 
   await promise(entity, "online");
 });

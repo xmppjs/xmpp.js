@@ -1,6 +1,3 @@
-"use strict";
+import { encode, decode } from "base-64";
 
-const { encode, decode } = require("base-64");
-
-module.exports.encode = encode;
-module.exports.decode = decode;
+export { encode, decode };

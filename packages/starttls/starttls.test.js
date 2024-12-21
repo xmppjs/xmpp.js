@@ -1,9 +1,8 @@
-"use strict";
-
-const tls = require("tls");
-const { canUpgrade } = require("./starttls");
-const net = require("net");
-const WebSocket = require("../websocket/lib/Socket");
+import tls from "tls";
+import { canUpgrade } from "./starttls.js";
+import net from "net";
+// eslint-disable-next-line n/no-extraneous-import
+import WebSocket from "@xmpp/websocket/lib/Socket.js";
 
 test("canUpgrade", () => {
   expect(canUpgrade(new WebSocket())).toBe(false);

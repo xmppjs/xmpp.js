@@ -1,7 +1,5 @@
-"use strict";
-
-const Connection = require("..");
-const { EventEmitter, promise } = require("@xmpp/events");
+import Connection from "../index.js";
+import { EventEmitter, promise } from "@xmpp/events";
 
 function socket(fn) {
   return class Socket extends EventEmitter {

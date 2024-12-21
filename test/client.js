@@ -1,8 +1,6 @@
-"use strict";
-
-const { client, xml, jid } = require("../packages/client");
-const debug = require("../packages/debug");
-const server = require("../server");
+import { client, xml, jid } from "../packages/client/index.js";
+import debug from "../packages/debug/index.js";
+import server from "../server/index.js";
 
 const username = "client";
 const password = "foobar";

@@ -1,6 +1,4 @@
-"use strict";
-
-module.exports = class Context {
+export default class Context {
   constructor(entity, stanza) {
     this.stanza = stanza;
     this.entity = entity;
@@ -25,4 +23,4 @@ module.exports = class Context {
     this.domain = "";
     this.resource = "";
   }
-};
+}

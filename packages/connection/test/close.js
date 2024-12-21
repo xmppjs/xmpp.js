@@ -1,13 +1,6 @@
-"use strict";
-
-const Connection = require("..");
-const {
-  EventEmitter,
-  promise,
-  timeout,
-  TimeoutError,
-} = require("@xmpp/events");
-const xml = require("@xmpp/xml");
+import Connection from "../index.js";
+import { EventEmitter, promise, timeout, TimeoutError } from "@xmpp/events";
+import xml from "@xmpp/xml";
 
 test("resets properties on socket close event", () => {
   const conn = new Connection();

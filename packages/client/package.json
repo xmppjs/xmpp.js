@@ -33,7 +33,7 @@
   "browser": "./browser.js",
   "react-native": "./react-native.js",
   "engines": {
-    "node": ">= 14"
+    "node": ">= 14.13.1"
   },
   "publishConfig": {
     "access": "public"

@@ -1,6 +1,4 @@
-"use strict";
-
-const xml = require("@xmpp/xml");
+import xml from "@xmpp/xml";
 
 /*
  * References
@@ -30,9 +28,9 @@ function route({ iqCaller }, resource) {
   };
 }
 
-module.exports = function resourceBinding(
+export default function resourceBinding(
   { streamFeatures, iqCaller },
   resource,
 ) {
   streamFeatures.use("bind", NS, route({ iqCaller }, resource));
-};
+}

@@ -15,8 +15,8 @@ See [XEP-0114: Jabber Component Protocol](https://xmpp.org/extensions/xep-0114.h
 ## Example
 
 ```js
-const { component, xml, jid } = require("@xmpp/component");
-const debug = require("@xmpp/debug");
+import { component, xml, jid } from "@xmpp/component";
+import debug from "@xmpp/debug";
 
 const xmpp = component({
   service: "xmpp://localhost:5347",

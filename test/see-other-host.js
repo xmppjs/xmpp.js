@@ -1,8 +1,10 @@
-"use strict";
+import { client, jid } from "../packages/client/index.js";
+import debug from "../packages/debug/index.js";
+import server from "../server/index.js";
 
-const { client, jid } = require("../packages/client");
-const debug = require("../packages/debug");
-const server = require("../server");
+import net from "net";
+import Connection from "../packages/connection-tcp/index.js";
+import { promise } from "../packages/events/index.js";
 
 const username = "client";
 const password = "foobar";
@@ -21,10 +23,6 @@ afterEach(async () => {
 });
 
 test("see-other-host", async () => {
-  const net = require("net");
-  const Connection = require("../packages/connection-tcp");
-  const { promise } = require("../packages/events");
-
   const seeOtherHostServer = net.createServer((socket) => {
     const conn = new Connection();
     conn._attachSocket(socket);

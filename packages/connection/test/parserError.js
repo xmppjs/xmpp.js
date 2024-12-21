@@ -1,7 +1,5 @@
-"use strict";
-
-const Connection = require("..");
-const { EventEmitter } = require("@xmpp/events");
+import Connection from "../index.js";
+import { EventEmitter } from "@xmpp/events";
 
 test("calls _detachParser, sends a bad-format stream error and emit an error", async () => {
   expect.assertions(4);

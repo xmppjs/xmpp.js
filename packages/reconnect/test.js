@@ -1,7 +1,5 @@
-"use strict";
-
-const _reconnect = require(".");
-const EventEmitter = require("events");
+import _reconnect from "./index.js";
+import { EventEmitter } from "@xmpp/events";
 
 test("it schedule a reconnect when disconnect is emitted", (done) => {
   const entity = new EventEmitter();

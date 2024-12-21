@@ -1,8 +1,6 @@
-"use strict";
-
-const Connection = require("..");
-const { EventEmitter } = require("@xmpp/events");
-const xml = require("@xmpp/xml");
+import Connection from "../index.js";
+import { EventEmitter } from "@xmpp/events";
+import xml from "@xmpp/xml";
 
 test("new Connection()", () => {
   const conn = new Connection();

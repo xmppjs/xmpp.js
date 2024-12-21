@@ -1,9 +1,6 @@
-/* eslint-disable n/no-extraneous-require */
-
-"use strict";
-
-const { component, xml } = require("@xmpp/component");
-const debug = require("@xmpp/debug");
+import { component, xml } from "@xmpp/component";
+// eslint-disable-next-line n/no-extraneous-import
+import debug from "@xmpp/debug";
 
 const xmpp = component({
   service: "xmpp://localhost:5347",

@@ -1,7 +1,6 @@
 /* eslint-disable promise/no-nesting */
-"use strict";
 
-const dns = require("dns");
+import dns from "dns";
 
 // eslint-disable-next-line unicorn/prefer-set-has
 const IGNORE_CODES = ["ENOTFOUND", "ENODATA"];
@@ -147,8 +146,4 @@ function resolve(domain, options = {}) {
   });
 }
 
-module.exports.lookup = lookup;
-module.exports.resolveSrv = resolveSrv;
-module.exports.lookupSrvs = lookupSrvs;
-module.exports.resolve = resolve;
-module.exports.sortSrv = sortSrv;
+export { lookup, resolveSrv, resolve, lookupSrvs, sortSrv };

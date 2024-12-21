@@ -6,15 +6,16 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.13.2",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "keywords": [
     "XMPP",
     "test"
   ],
   "engines": {
-    "node": ">= 14"
+    "node": ">= 14.13.1"
   },
   "dependencies": {
+    "@xmpp/client-core": "^0.13.2",
     "@xmpp/client": "^0.13.2",
     "@xmpp/connection": "^0.13.2",
     "@xmpp/debug": "^0.13.2",

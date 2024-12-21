@@ -1,9 +1,7 @@
-"use strict";
+import Connection from "../index.js";
+import xml from "@xmpp/xml";
 
-const Connection = require("..");
-const xml = require("@xmpp/xml");
-
-test("#_onElement", done => {
+test("#_onElement", (done) => {
   expect.assertions(2);
   const foo = <foo />;
   const conn = new Connection();
@@ -17,7 +15,7 @@ test("#_onElement", done => {
   conn._onElement(foo);
 });
 
-test("#_onElement stream:error", done => {
+test("#_onElement stream:error", (done) => {
   expect.assertions(7);
   // prettier-ignore
 

@@ -1,10 +1,8 @@
-"use strict";
-
-const resolve = require("./resolve");
-const { promise } = require("@xmpp/events");
+import _resolve from "./resolve.js";
+import { promise } from "@xmpp/events";
 
 async function fetchURIs(domain) {
-  const result = await resolve(domain, {
+  const result = await _resolve(domain, {
     srv: [
       {
         service: "xmpps-client",
@@ -57,7 +55,7 @@ async function fallbackConnect(entity, uris) {
   entity.Parser = Transport.prototype.Parser;
 }
 
-module.exports = function resolve({ entity }) {
+export default function resolve({ entity }) {
   const _connect = entity.connect;
   entity.connect = async function connect(service) {
     if (!service || /:\/\//.test(service)) {
@@ -78,4 +76,6 @@ module.exports = function resolve({ entity }) {
       throw err;
     }
   };
-};
+}
+
+export { _resolve as resolve };

@@ -6,7 +6,7 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.13.2",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "keywords": [
     "XMPP",
     "iq",
@@ -14,16 +14,13 @@
     "callee"
   ],
   "engines": {
-    "node": ">= 14"
+    "node": ">= 14.13.1"
   },
   "dependencies": {
     "@xmpp/events": "^0.13.2",
     "@xmpp/id": "^0.13.2",
     "@xmpp/middleware": "^0.13.2",
     "@xmpp/xml": "^0.13.2"
-  },
-  "devDependencies": {
-    "@xmpp/middleware": "^0.13.1"
   },
   "publishConfig": {
     "access": "public"

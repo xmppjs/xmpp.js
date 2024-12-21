@@ -1,9 +1,7 @@
-"use strict";
-
-const ConnectionWebSocket = require("../lib/Connection");
-const Socket = require("../lib/Socket");
-const EventEmitter = require("events");
-const xml = require("@xmpp/xml");
+import ConnectionWebSocket from "../lib/Connection.js";
+import Socket from "../lib/Socket.js";
+import { EventEmitter } from "@xmpp/events";
+import xml from "@xmpp/xml";
 
 test("send() adds jabber:client xmlns", () => {
   const connection = new ConnectionWebSocket();

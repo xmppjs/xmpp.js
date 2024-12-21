@@ -6,7 +6,7 @@
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
   "version": "0.13.2",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "keywords": [
     "XMPP",
     "stream",
@@ -16,7 +16,7 @@
     "@xmpp/xml": "^0.13.2"
   },
   "engines": {
-    "node": ">= 14"
+    "node": ">= 14.13.1"
   },
   "publishConfig": {
     "access": "public"

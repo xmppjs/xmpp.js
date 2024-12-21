@@ -1,6 +1,4 @@
-"use strict";
-
-const jid = require("..");
+import jid from "../index.js";
 
 test("should parsed JIDs should be equal", () => {
   const j1 = jid("foo@bar/baz");

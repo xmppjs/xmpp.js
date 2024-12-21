@@ -7,9 +7,9 @@ Note, if you're using `@xmpp/client` or `@xmpp/component`, you don't need to ins
 `npm install @xmpp/xml`
 
 ```js
-const xml = require("@xmpp/xml");
-const { xml } = require("@xmpp/client");
-const { xml } = require("@xmpp/component");
+import xml from "@xmpp/xml";
+import { xml } from "@xmpp/client";
+import { xml } from "@xmpp/component";
 ```
 
 ## Writing
@@ -19,7 +19,7 @@ There's 2 methods for writing XML with xmpp.js
 ### factory
 
 ```js
-const xml = require("@xmpp/xml");
+import xml from "@xmpp/xml";
 
 const recipient = "user@example.com";
 const days = ["Monday", "Tuesday", "Wednesday"];
@@ -48,7 +48,7 @@ xml("time", { xmlns: "urn:xmpp:time" });
 ```js
 /** @jsx xml */
 
-const xml = require("@xmpp/xml");
+import xml from "@xmpp/xml";
 
 const recipient = "user@example.com";
 const days = ["Monday", "Tuesday"];
@@ -232,8 +232,8 @@ See also [JSON Containers](https://xmpp.org/extensions/xep-0335.html) and [Simpl
 ⚠ Use with care. Untrusted input or substitutions can result in invalid XML and side effects.
 
 ```js
-const { escapeXML, escapeXMLText };
-const parse = require("@xmpp/xml/lib/parse");
+import { escapeXML, escapeXMLText } from "@xmpp/xml";
+import parse from "@xmpp/xml/lib/parse.js";
 
 const ctx = parse("<message><body>hello world</body></message>");
 ctx.getChildText("body"); // hello world
@@ -242,9 +242,6 @@ ctx.getChildText("body"); // hello world
 If you must use with untrusted input, escape it with `escapeXML` and `escapeXMLText`.
 
 ```js
-const { escapeXML, escapeXMLText } = require("@xmpp/xml");
-const parse = require("@xmpp/xml/lib/parse");
-
 const message = parse(`
   <message to="${escapeXML(to)}">
     <body>${escapeXMLText(body)}</body>

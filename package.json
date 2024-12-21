@@ -1,6 +1,6 @@
 {
   "private": true,
-  "type": "commonjs",
+  "type": "module",
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.16.5",
@@ -26,6 +26,7 @@
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-unicorn": "^56.0.1",
     "exorcist": "^2.0.0",
+    "globals": "^15.14.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
     "jest-extended": "^4.0.2",
@@ -38,12 +39,10 @@
     "uglify-js": "^3.19.3"
   },
   "scripts": {
-    "test": "jest",
-    "lint": "eslint --cache .",
     "preversion": "make bundle"
   },
   "engines": {
-    "node": ">= 14",
+    "node": ">= 14.13.1",
     "npm": ">= 7"
   },
   "workspaces": [
@@ -52,7 +51,7 @@
   "bundlesize": [
     {
       "path": "./packages/client/dist/xmpp.min.js",
-      "maxSize": "16 KB"
+      "maxSize": "17 KB"
     }
   ],
   "lint-staged": {

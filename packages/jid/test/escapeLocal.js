@@ -1,6 +1,4 @@
-"use strict";
-
-const jid = require("..");
+import jid from "../index.js";
 
 test("Should not change string - issue 43", () => {
   const test = "test\u001A@example.com";

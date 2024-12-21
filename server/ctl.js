@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
-"use strict";
-
-const server = require(".");
+import server from "./index.js";
 
 const method = process.argv[2];
 
