@@ -2,7 +2,7 @@ import WS from "ws";
 import { EventEmitter } from "@xmpp/events";
 
 // eslint-disable-next-line n/no-unsupported-features/node-builtins
-const WebSocket = WS || globalThis.WebSocket;
+const WebSocket = globalThis.WebSocket || WS;
 
 const CODE = "ECONNERROR";
 
