@@ -19,7 +19,7 @@ test:
 
 ci:
 	npm install
-	npx jest
+	make unit
 	make lint
 	make restart
 	npx lerna run prepublish
@@ -27,8 +27,11 @@ ci:
 	make e2e
 	make bundlesize
 
+unit:
+	npx jest
+
 e2e:
-	NODE_TLS_REJECT_UNAUTHORIZED=0 npx jest --runInBand --config e2e.config.js
+	NODE_TLS_REJECT_UNAUTHORIZED=0 npx jest --runInBand --config e2e.config.cjs
 
 clean:
 	make stop

@@ -35,4 +35,4 @@ function component(options) {
   });
 }
 
-export default { xml, jid, component };
+export { xml, jid, component };

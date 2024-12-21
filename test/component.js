@@ -9,10 +9,10 @@ const options = { password, service, domain };
 
 let xmpp;
 
-beforeEach(() => {
+beforeEach(async () => {
   xmpp = component(options);
   debug(xmpp);
-  return server.restart();
+  await server.restart();
 });
 
 afterEach(async () => {

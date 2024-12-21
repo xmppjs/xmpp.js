@@ -39,8 +39,6 @@
     "uglify-js": "^3.19.3"
   },
   "scripts": {
-    "test": "npx jest",
-    "lint": "eslint --cache .",
     "preversion": "make bundle"
   },
   "engines": {

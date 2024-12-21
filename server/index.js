@@ -7,6 +7,8 @@ import net from "net";
 import { promise, delay } from "@xmpp/events";
 import selfsigned from "selfsigned";
 
+// const __dirname = import.meta.dirname;
+
 const readFile = promisify(fs.readFile);
 const exec = promisify(child_process.exec);
 const removeFile = promisify(fs.unlink);
@@ -116,7 +118,7 @@ async function restart(signal) {
   return _start();
 }
 
-export {
+export default {
   isPortOpen,
   waitPortClose,
   waitPortOpen,
