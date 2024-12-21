@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-module */
 import fs from "fs";
 import path from "path";
 

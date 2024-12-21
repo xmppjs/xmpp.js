@@ -1,4 +1,4 @@
-import { parseURI } from "@xmpp/connection/lib/util";
+import { parseURI } from "@xmpp/connection/lib/util.js";
 import ConnectionTCP from "@xmpp/connection-tcp";
 import Socket from "./Socket.js";
 

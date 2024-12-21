@@ -7,7 +7,7 @@ test("returns a non empty string", () => {
 
 test("duplicates", () => {
   const id = xid();
-  for (let i = 0; i < 10000; i++) {
+  for (let i = 0; i < 10_000; i++) {
     expect(id).not.toBe(xid());
   }
 });
