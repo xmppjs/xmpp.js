@@ -4,7 +4,9 @@
 
 local lfs = require "lfs";
 
-plugin_paths = { "modules" }
+-- plugin_paths = { "modules" }
+plugin_server = "https://modules.prosody.im/rocks/"
+installer_plugin_path = lfs.currentdir() .. "/modules";
 
 modules_enabled = {
   "roster";

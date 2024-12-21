@@ -195,7 +195,12 @@ test("with bind2", async () => {
     </authenticate>,
   );
 
-  entity.mockInput(<success xmlns="urn:xmpp:sasl:2" />);
+  entity.mockInput(
+    <success xmlns="urn:xmpp:sasl:2">
+      <authorization-identity>{entity.jid}</authorization-identity>
+      <bound xmlns="urn:xmpp:bind:0" />
+    </success>,
+  );
   entity.mockInput(<features xmlns="http://etherx.jabber.org/streams" />);
 
   await promise(entity, "online");
