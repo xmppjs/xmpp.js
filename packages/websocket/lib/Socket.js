@@ -12,10 +12,6 @@ export default class Socket extends EventEmitter {
     this.listeners = Object.create(null);
   }
 
-  secure() {
-    return this.url.startsWith("wss") || this.url.startsWith("ws://localhost");
-  }
-
   connect(url) {
     this.url = url;
     this._attachSocket(new WebSocket(url, ["xmpp"]));

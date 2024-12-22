@@ -256,15 +256,6 @@ class Connection extends EventEmitter {
 
     const headerElement = this.headerElement();
     headerElement.attrs.to = domain;
-    if (
-      this.socket.secure &&
-      this.socket.secure() &&
-      (this.streamFrom || this.jid)
-    ) {
-      // When the stream is secure there is no leak to setting the stream from
-      // This is recommended in general and required for FAST implementations
-      headerElement.attrs.from = (this.streamFrom || this.jid).toString();
-    }
     headerElement.attrs["xml:lang"] = lang;
     this.root = headerElement;
 
