@@ -24,7 +24,8 @@
     "@xmpp/stream-management": "^0.13.2",
     "@xmpp/tcp": "^0.13.2",
     "@xmpp/tls": "^0.13.2",
-    "@xmpp/websocket": "^0.13.2"
+    "@xmpp/websocket": "^0.13.2",
+    "saslmechanisms": "^0.1.1"
   },
   "browser": "./browser.js",
   "react-native": "./react-native.js",
