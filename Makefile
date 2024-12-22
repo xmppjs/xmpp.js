@@ -4,7 +4,7 @@ setup:
 	node packages/xmpp.js/script.js
 	npm install
 	cd packages/xmpp.js/ && npm run prepublish
-	node bundle.js
+	make bundle
 
 lint:
 	npx eslint --cache .
@@ -12,7 +12,7 @@ lint:
 test:
 	cd packages/xmpp.js/ && npm run prepublish
 	npm install
-	node bundle.js
+	make bundle
 	npx jest
 	make lint
 	make bundlesize
@@ -23,7 +23,7 @@ ci:
 	make lint
 	make restart
 	npx lerna run prepublish
-	node bundle.js
+	make bundle
 	make e2e
 	make bundlesize
 
@@ -58,7 +58,7 @@ bundlesize:
 	npx bundlesize
 
 bundle:
-	node bundle.js
+	npx rollup -c rollup.config.js
 
 size:
 	make bundle
