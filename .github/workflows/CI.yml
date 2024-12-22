@@ -27,7 +27,7 @@ jobs:
           echo deb http://packages.prosody.im/debian $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/prosody.list
           sudo wget https://prosody.im/files/prosody-debian-packages.key -O/etc/apt/trusted.gpg.d/prosody.gpg
           sudo apt update
-          sudo apt install lua5.4 prosody-trunk lua-bitop lua-sec luarocks
+          sudo apt install lua5.3 prosody-trunk lua-bitop lua-sec luarocks
           sudo service prosody stop
           prosodyctl --config server/prosody.cfg.lua install mod_sasl2
           prosodyctl --config server/prosody.cfg.lua install mod_sasl2_bind2

@@ -1,4 +1,4 @@
-# SASL
+# SASL2
 
 SASL2 Negotiation for `@xmpp/client` (including optional BIND2 and FAST).
 
@@ -11,14 +11,16 @@ Included and enabled in `@xmpp/client`.
 ### object
 
 ```js
-const {xmpp} = require('@xmpp/client')
-const client = xmpp({credentials: {
-  username: 'foo',
-  password: 'bar',
-  clientId: "Some UUID for this client/server pair (optional)",
-  software: "Name of this software (optional)",
-  device: "Description of this device (optional)",
-})
+import { xmpp } from "@xmpp/client";
+const client = xmpp({
+  credentials: {
+    username: "foo",
+    password: "bar",
+    clientId: "Some UUID for this client/server pair (optional)",
+    software: "Name of this software (optional)",
+    device: "Description of this device (optional)",
+  },
+});
 ```
 
 ### function
@@ -34,7 +36,7 @@ Uses cases:
 - Perform an asynchronous operation to get credentials
 
 ```js
-const { xmpp } = require("@xmpp/client");
+import { xmpp } from "@xmpp/client";
 const client = xmpp({
   credentials: authenticate,
   clientId: "Some UUID for this client/server pair (optional)",
@@ -74,6 +76,6 @@ async function authenticate(callback, mechanisms) {
 
 ## References
 
-[SASL2](https://xmpp.org/extensions/xep-0388.html)
-[BIND2](https://xmpp.org/extensions/xep-0386.html)
-[FAST](https://xmpp.org/extensions/inbox/xep-fast.html)
+- [SASL2](https://xmpp.org/extensions/xep-0388.html)
+- [BIND2](https://xmpp.org/extensions/xep-0386.html)
+- [FAST](https://xmpp.org/extensions/xep-0484.html)

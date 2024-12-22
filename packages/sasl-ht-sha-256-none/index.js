@@ -18,10 +18,10 @@ Mechanism.prototype.final = function final(data) {
   const hmac = createHmac("sha256", this.password);
   hmac.update("Responder");
   if (hmac.digest("latin1") !== data) {
-    throw "Responder message from server was wrong";
+    throw new Error("Responder message from server was wrong");
   }
 };
 
-export default function sasl2(sasl) {
+export default function saslHashedToken(sasl) {
   sasl.use(Mechanism);
 }

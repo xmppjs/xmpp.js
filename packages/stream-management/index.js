@@ -88,17 +88,17 @@ export default function streamManagement({
   // https://xmpp.org/extensions/xep-0198.html#enable
   // For client-to-server connections, the client MUST NOT attempt to enable stream management until after it has completed Resource Binding unless it is resuming a previous session
 
-  const resumeSuccess = () => {
+  function resumeSuccess() {
     sm.enabled = true;
     if (address) entity.jid = address;
     entity.status = "online";
-  };
+  }
 
-  const resumeFailed = () => {
+  function resumeFailed() {
     sm.id = "";
     sm.enabled = false;
     sm.outbound = 0;
-  };
+  }
 
   streamFeatures.use("sm", NS, async (context, next) => {
     // Resuming
@@ -161,7 +161,9 @@ export default function streamManagement({
     const enabled = bound?.getChild("enabled", NS);
     if (enabled) {
       if (sm.outbound_q.length > 0) {
-        throw "Stream Management assertion failure, queue should be empty after enable";
+        throw new Error(
+          "Stream Management assertion failure, queue should be empty after enable",
+        );
       }
       sm.outbound = 0;
       sm.enabled = true;
