@@ -42,7 +42,6 @@ export default function streamManagement({
   streamFeatures,
   entity,
   middleware,
-  sasl2,
 }) {
   let address = null;
 
@@ -127,49 +126,6 @@ export default function streamManagement({
       sm.id = response.attrs.id;
       sm.max = response.attrs.max;
     } catch {
-      sm.enabled = false;
-    }
-
-    sm.inbound = 0;
-  });
-
-  sasl2?.inline("sm", NS, async (_, addInline) => {
-    if (sm.id) {
-      const success = await addInline(
-        xml("resume", { xmlns: NS, h: sm.inbound, previd: sm.id }),
-      );
-      const resumed = success.getChild("resumed", NS);
-      if (resumed) {
-        resumeSuccess(resumed);
-      } else {
-        resumeFailed();
-      }
-    }
-  });
-
-  sasl2?.bindInline(NS, async (addInline) => {
-    const success = await addInline(
-      xml("enable", {
-        xmlns: NS,
-        max: sm.preferredMaximum,
-        resume: sm.allowResume ? "true" : undefined,
-      }),
-    );
-    const bound = success.getChild("bound", "urn:xmpp:bind:0");
-    if (!bound) return; // Did a resume or something, don't need this
-
-    const enabled = bound?.getChild("enabled", NS);
-    if (enabled) {
-      if (sm.outbound_q.length > 0) {
-        throw new Error(
-          "Stream Management assertion failure, queue should be empty after enable",
-        );
-      }
-      sm.outbound = 0;
-      sm.enabled = true;
-      sm.id = enabled.attrs.id;
-      sm.max = enabled.attrs.max;
-    } else {
       sm.enabled = false;
     }
 

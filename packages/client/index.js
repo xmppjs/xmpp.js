@@ -19,7 +19,6 @@ import _sessionEstablishment from "@xmpp/session-establishment";
 import _streamManagement from "@xmpp/stream-management";
 
 import scramsha1 from "@xmpp/sasl-scram-sha-1";
-import htsha256 from "@xmpp/sasl-ht-sha-256-none";
 import plain from "@xmpp/sasl-plain";
 import anonymous from "@xmpp/sasl-anonymous";
 
@@ -51,7 +50,6 @@ function client(options = {}) {
   // SASL mechanisms - order matters and define priority
   const mechanisms = Object.entries({
     scramsha1,
-    htsha256,
     plain,
     anonymous,
   }).map(([k, v]) => ({ [k]: v(saslFactory) }));
@@ -71,7 +69,6 @@ function client(options = {}) {
     streamFeatures,
     entity,
     middleware,
-    sasl2,
   });
   const resourceBinding = _resourceBinding(
     { iqCaller, streamFeatures },

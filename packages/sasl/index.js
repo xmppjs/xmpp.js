@@ -13,7 +13,7 @@ function getMechanismNames(features) {
     .map((el) => el.text());
 }
 
-async function authenticate(saslFactory, entity, mechname, credentials) {
+async function authenticate({ saslFactory, entity, mechname, credentials }) {
   const mech = saslFactory.create([mechname]);
   if (!mech) {
     throw new Error("No compatible mechanism");
@@ -81,19 +81,20 @@ export default function sasl({ streamFeatures, saslFactory }, credentials) {
     const intersection = supported.filter((mech) => {
       return offered.includes(mech);
     });
-    let mech = intersection[0];
+    let mechname = intersection[0];
 
     if (typeof credentials === "function") {
       await credentials(
-        (creds) => authenticate(saslFactory, entity, mech, creds, stanza),
-        mech,
+        (creds) =>
+          authenticate({ saslFactory, entity, mechname, credentials: creds }),
+        mechname,
       );
     } else {
       if (!credentials.username && !credentials.password) {
-        mech = "ANONYMOUS";
+        mechname = "ANONYMOUS";
       }
 
-      await authenticate(saslFactory, entity, mech, credentials, stanza);
+      await authenticate({ saslFactory, entity, mechname, credentials });
     }
 
     await entity.restart();

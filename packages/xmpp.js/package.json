@@ -36,7 +36,6 @@
     "@xmpp/resource-binding": "^0.13.2",
     "@xmpp/sasl": "^0.13.2",
     "@xmpp/sasl-anonymous": "^0.13.2",
-    "@xmpp/sasl-ht-sha-256-none": "^0.13.0",
     "@xmpp/sasl-plain": "^0.13.2",
     "@xmpp/sasl-scram-sha-1": "^0.13.2",
     "@xmpp/sasl2": "^0.13.0",

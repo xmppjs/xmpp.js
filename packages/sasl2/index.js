@@ -4,23 +4,16 @@ import jid from "@xmpp/jid";
 import xml from "@xmpp/xml";
 
 // https://xmpp.org/extensions/xep-0388.html
-// https://xmpp.org/extensions/xep-0386.html
-// https://xmpp.org/extensions/xep-0484.html
 
 const NS = "urn:xmpp:sasl:2";
-const BIND2_NS = "urn:xmpp:bind:0";
-const FAST_NS = "urn:xmpp:fast:0";
 
-async function authenticate(
+async function authenticate({
   saslFactory,
-  inlineHandlers,
-  bindInlineHandlers,
   entity,
   mechname,
   credentials,
   userAgent,
-  features,
-) {
+}) {
   const mech = saslFactory.create([mechname]);
   if (!mech) {
     throw new Error("No compatible mechanism");
@@ -38,7 +31,7 @@ async function authenticate(
     ...credentials,
   };
 
-  const promise = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const handler = (element) => {
       if (element.attrs.xmlns !== NS) {
         return;
@@ -57,108 +50,58 @@ async function authenticate(
         return;
       }
 
-      switch (element.name) {
-        case "failure": {
-          reject(SASLError.fromElement(element));
-          break;
+      if (element.name === "failure") {
+        reject(SASLError.fromElement(element));
+        return;
+      }
+
+      if (element.name === "continue") {
+        // No tasks supported yet
+        reject(new Error("continue is not supported yet"));
+        return;
+      }
+
+      if (element.name === "success") {
+        const additionalData = element.getChild("additional-data")?.text();
+        if (additionalData && mech.final) {
+          mech.final(decode(additionalData));
         }
-        case "continue": {
-          // No tasks supported yet
-          reject();
-          break;
+        // This jid will be bare unless we do inline bind2 then it will be the bound full jid
+        const aid = element.getChild("authorization-identifier")?.text();
+        if (aid) {
+          if (!entity.jid?.resource) {
+            // No jid or bare jid, so update it
+            entity._jid(aid);
+          } else if (jid(aid).resource) {
+            // We have a full jid so use it
+            entity._jid(aid);
+          }
         }
-        case "success": {
-          const additionalData = element.getChild("additional-data")?.text();
-          if (additionalData && mech.final) {
-            mech.final(decode(additionalData));
-          }
-          // This jid will be bare unless we do inline bind2 then it will be the bound full jid
-          const aid = element.getChild("authorization-identifier")?.text();
-          if (aid) {
-            if (!entity.jid?.resource) {
-              // No jid or bare jid, so update it
-              entity._jid(aid);
-            } else if (jid(aid).resource) {
-              // We have a full jid so use it
-              entity._jid(aid);
-            }
-          }
-          const token = element.getChild("token", FAST_NS);
-          if (token) {
-            entity.emit("fast-token", token);
-          }
-          resolve(element);
-          break;
-        }
+        resolve(element);
+        return;
       }
 
       entity.removeListener("nonza", handler);
     };
 
+    entity.send(
+      xml("authenticate", { xmlns: NS, mechanism: mech.name }, [
+        mech.clientFirst &&
+          xml("initial-response", {}, encode(mech.response(creds))),
+        (userAgent?.clientId || userAgent?.software || userAgent?.device) &&
+          xml(
+            "user-agent",
+            userAgent.clientId ? { id: userAgent.clientId } : {},
+            [
+              userAgent.software && xml("software", {}, userAgent.software),
+              userAgent.device && xml("device", {}, userAgent.device),
+            ],
+          ),
+      ]),
+    );
+
     entity.on("nonza", handler);
   });
-
-  const sendInline = [];
-  const hPromises = [];
-  const inline = features.getChild("authentication", NS).getChild("inline");
-  for (const el of inline?.children || []) {
-    const h = inlineHandlers["{" + el.attrs.xmlns + "}" + el.name];
-    if (h) {
-      hPromises.push(
-        h(el, (addEl) => {
-          sendInline.push(addEl);
-          return promise;
-        }),
-      );
-    }
-  }
-
-  const bindInline = [];
-  const bind2 = inline?.getChild("bind", BIND2_NS);
-  for (const el of bind2?.getChild("inline")?.getChildren("feature") || []) {
-    const h = bindInlineHandlers[el.attrs.var];
-    if (h) {
-      hPromises.push(
-        h((addEl) => {
-          bindInline.push(addEl);
-          return promise;
-        }),
-      );
-    }
-  }
-
-  entity.send(
-    xml("authenticate", { xmlns: NS, mechanism: mech.name }, [
-      mech.clientFirst &&
-        xml("initial-response", {}, encode(mech.response(creds))),
-      (userAgent?.clientId || userAgent?.software || userAgent?.device) &&
-        xml(
-          "user-agent",
-          userAgent.clientId ? { id: userAgent.clientId } : {},
-          [
-            userAgent.software && xml("software", {}, userAgent.software),
-            userAgent.device && xml("device", {}, userAgent.device),
-          ],
-        ),
-      bind2 != null &&
-        userAgent?.clientId &&
-        xml("bind", { xmlns: BIND2_NS }, [
-          userAgent?.software && xml("tag", {}, userAgent.software),
-          ...bindInline,
-        ]),
-      credentials.requestToken &&
-        xml(
-          "request-token",
-          { xmlns: FAST_NS, mechanism: credentials.requestToken },
-          [],
-        ),
-      (credentials.fastCount || credentials.fastCount === 0) &&
-        xml("fast", { xmlns: FAST_NS, count: credentials.fastCount }, []),
-      ...sendInline,
-    ]),
-  );
-
-  await Promise.all([promise, ...hPromises]);
 }
 
 export default function sasl2(
@@ -166,9 +109,6 @@ export default function sasl2(
   credentials,
   userAgent,
 ) {
-  const handlers = {};
-  const bindHandlers = {};
-
   streamFeatures.use("authentication", NS, async ({ stanza, entity }) => {
     const offered = new Set(
       stanza
@@ -176,64 +116,42 @@ export default function sasl2(
         .getChildren("mechanism", NS)
         .map((m) => m.text()),
     );
-    const fast = new Set(
-      stanza
-        .getChild("authentication", NS)
-        .getChild("inline")
-        ?.getChild("fast", FAST_NS)
-        ?.getChildren("mechanism", FAST_NS)
-        ?.map((m) => m.text()) || [],
-    );
     const supported = saslFactory._mechs.map(({ name }) => name);
 
     const intersection = supported
       .map((mech) => ({
         name: mech,
-        canFast: fast.has(mech),
         canOther: offered.has(mech),
       }))
-      .filter((mech) => mech.canFast || mech.canOther);
+      .filter((mech) => mech.canOther);
 
     if (typeof credentials === "function") {
-      await credentials((creds, mech) => {
-        authenticate(
+      await credentials((creds, mechname) => {
+        authenticate({
           saslFactory,
-          handlers,
-          bindHandlers,
           entity,
-          mech,
-          creds,
+          mechname,
+          credentials: creds,
           userAgent,
-          stanza,
-        );
+        });
       }, intersection);
     } else {
-      let mech = intersection[0]?.name;
+      let mechname = intersection[0]?.name;
       if (!credentials.username && !credentials.password) {
-        mech = "ANONYMOUS";
+        mechname = "ANONYMOUS";
       }
 
-      await authenticate(
+      await authenticate({
         saslFactory,
-        handlers,
-        bindHandlers,
         entity,
-        mech,
+        mechname,
         credentials,
         userAgent,
-        stanza,
-      );
+      });
     }
 
     return true; // Not online yet, wait for next features
   });
 
-  return {
-    inline(name, xmlns, handler) {
-      handlers["{" + xmlns + "}" + name] = handler;
-    },
-    bindInline(feature, handler) {
-      bindHandlers[feature] = handler;
-    },
-  };
+  return {};
 }
