@@ -20,6 +20,7 @@ test("fromElement", () => {
   const error = XMPPError.fromElement(nonza);
 
   expect(error instanceof Error).toBe(true);
+  expect(error instanceof XMPPError).toBe(true);
   expect(error.name).toBe("XMPPError");
   expect(error.condition).toBe("some-condition");
   expect(error.text).toBe("foo");
@@ -42,6 +43,7 @@ test("fromElement - whitespaces", () => {
   const error = XMPPError.fromElement(nonza);
 
   expect(error instanceof Error).toBe(true);
+  expect(error instanceof XMPPError).toBe(true);
   expect(error.name).toBe("XMPPError");
   expect(error.condition).toBe("some-condition");
   expect(error.text).toBe("\n        foo\n      ");
