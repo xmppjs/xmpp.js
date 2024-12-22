@@ -15,8 +15,7 @@
   "dependencies": {
     "@xmpp/base64": "^0.13.2",
     "@xmpp/error": "^0.13.2",
-    "@xmpp/xml": "^0.13.2",
-    "saslmechanisms": "^0.1.1"
+    "@xmpp/xml": "^0.13.2"
   },
   "engines": {
     "node": ">= 20"

@@ -17,6 +17,7 @@ import _resourceBinding from "@xmpp/resource-binding";
 import _sessionEstablishment from "@xmpp/session-establishment";
 import _streamManagement from "@xmpp/stream-management";
 
+import SASLFactory from "saslmechanisms";
 import scramsha1 from "@xmpp/sasl-scram-sha-1";
 import plain from "@xmpp/sasl-plain";
 import anonymous from "@xmpp/sasl-anonymous";
@@ -41,9 +42,21 @@ function client(options = {}) {
   const iqCaller = _iqCaller({ middleware, entity });
   const iqCallee = _iqCallee({ middleware, entity });
   const resolve = _resolve({ entity });
+
+  // SASL mechanisms - order matters and define priority
+  const saslFactory = new SASLFactory();
+  const mechanisms = Object.entries({
+    scramsha1,
+    plain,
+    anonymous,
+  }).map(([k, v]) => ({ [k]: v(saslFactory) }));
+
   // Stream features - order matters and define priority
   const starttls = _starttls({ streamFeatures });
-  const sasl = _sasl({ streamFeatures }, credentials || { username, password });
+  const sasl = _sasl(
+    { streamFeatures, saslFactory },
+    credentials || { username, password },
+  );
   const streamManagement = _streamManagement({
     streamFeatures,
     entity,
@@ -57,12 +70,6 @@ function client(options = {}) {
     iqCaller,
     streamFeatures,
   });
-  // SASL mechanisms - order matters and define priority
-  const mechanisms = Object.entries({
-    scramsha1,
-    plain,
-    anonymous,
-  }).map(([k, v]) => ({ [k]: v(sasl) }));
 
   return Object.assign(entity, {
     entity,
@@ -81,6 +88,7 @@ function client(options = {}) {
     sessionEstablishment,
     streamManagement,
     mechanisms,
+    saslFactory,
   });
 }
 
