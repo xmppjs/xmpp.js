@@ -29,22 +29,22 @@ Uses cases:
 - Do not ask for password before connection is made
 - Debug authentication
 - Using a SASL mechanism with specific requirements
-- Perform an asynchronous operation to get credentials
+- Fetch credentials from a secure database
 
 ```js
 import { xmpp } from "@xmpp/client";
 
-const client = xmpp({ credentials: authenticate });
+const client = xmpp({ credentials: onAuthenticate });
 
-async function authenticate(saslFactory, mechanism) {
-  console.debug("authenticate", mechanism);
+async function onAuthenticate(authenticate, mechanisms) {
+  console.debug("authenticate", mechanisms);
   const credentials = {
     username: await prompt("enter username"),
     password: await prompt("enter password"),
   };
   console.debug("authenticating");
   try {
-    await auth(credentials);
+    await authenticate(credentials, mechanisms[0]);
     console.debug("authenticated");
   } catch (err) {
     console.error(err);

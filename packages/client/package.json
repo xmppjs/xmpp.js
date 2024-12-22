@@ -15,6 +15,7 @@
     "@xmpp/resolve": "^0.13.2",
     "@xmpp/resource-binding": "^0.13.2",
     "@xmpp/sasl": "^0.13.2",
+    "@xmpp/sasl2": "^0.13.0",
     "@xmpp/sasl-anonymous": "^0.13.2",
     "@xmpp/sasl-plain": "^0.13.2",
     "@xmpp/sasl-scram-sha-1": "^0.13.2",
@@ -27,8 +28,8 @@
     "@xmpp/websocket": "^0.13.2",
     "saslmechanisms": "^0.1.1"
   },
-  "browser": "./browser.js",
-  "react-native": "./browser.js",
+  "browser": "browser.js",
+  "react-native": "browser.js",
   "engines": {
     "node": ">= 20"
   },

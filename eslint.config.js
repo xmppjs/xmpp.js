@@ -53,6 +53,7 @@ export default [
       ],
       "prefer-arrow-callback": ["error", { allowNamedFunctions: true }],
       "no-redeclare": ["error", { builtinGlobals: false }],
+      "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
 
       // node
       // https://github.com/eslint-community/eslint-plugin-n/
