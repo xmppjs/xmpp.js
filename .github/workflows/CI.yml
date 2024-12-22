@@ -29,11 +29,6 @@ jobs:
           sudo apt-get update
           sudo apt-get -y install lua5.3 liblua5.3-dev prosody-trunk lua-bitop lua-sec luarocks
           sudo service prosody stop
-          cd server
-          prosodyctl --config prosody.cfg.lua install mod_sasl2
-          prosodyctl --config prosody.cfg.lua install mod_sasl2_bind2
-          prosodyctl --config prosody.cfg.lua install mod_sasl2_fast
-          prosodyctl --config prosody.cfg.lua install mod_sasl2_sm
 
       # - run: npm install -g npm
       - run: make
