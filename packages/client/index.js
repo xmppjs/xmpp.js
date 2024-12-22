@@ -1,5 +1,6 @@
 import { xml, jid, Client } from "@xmpp/client-core";
 import getDomain from "./lib/getDomain.js";
+import createOnAuthenticate from "./lib/createOnAuthenticate.js";
 
 import _reconnect from "@xmpp/reconnect";
 import _websocket from "@xmpp/websocket";
@@ -11,7 +12,7 @@ import _iqCaller from "@xmpp/iq/caller.js";
 import _iqCallee from "@xmpp/iq/callee.js";
 import _resolve from "@xmpp/resolve";
 
-import _starttls from "@xmpp/starttls/client.js";
+import _starttls from "@xmpp/starttls";
 import _sasl from "@xmpp/sasl";
 import _resourceBinding from "@xmpp/resource-binding";
 import _sessionEstablishment from "@xmpp/session-establishment";
@@ -55,7 +56,7 @@ function client(options = {}) {
   const starttls = _starttls({ streamFeatures });
   const sasl = _sasl(
     { streamFeatures, saslFactory },
-    credentials || { username, password },
+    createOnAuthenticate(credentials ?? { username, password }),
   );
   const streamManagement = _streamManagement({
     streamFeatures,

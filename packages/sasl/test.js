@@ -5,7 +5,7 @@ const username = "foo";
 const password = "bar";
 const credentials = { username, password };
 
-test("no compatibles mechanisms", async () => {
+test("No compatible mechanism available", async () => {
   const { entity } = mockClient({ username, password });
 
   entity.mockInput(
@@ -18,7 +18,7 @@ test("no compatibles mechanisms", async () => {
 
   const error = await promise(entity, "error");
   expect(error instanceof Error).toBe(true);
-  expect(error.message).toBe("No compatible mechanism");
+  expect(error.message).toBe("SASL: No compatible mechanism available.");
 });
 
 test("with object credentials", async () => {
@@ -48,14 +48,16 @@ test("with object credentials", async () => {
 });
 
 test("with function credentials", async () => {
+  expect.assertions(2);
+
   const mech = "PLAIN";
 
-  function authenticate(auth, mechanism) {
-    expect(mechanism).toBe(mech);
-    return auth(credentials);
+  async function onAuthenticate(authenticate, mechanisms) {
+    expect(mechanisms).toEqual([mech]);
+    await authenticate(credentials, mech);
   }
 
-  const { entity } = mockClient({ credentials: authenticate });
+  const { entity } = mockClient({ credentials: onAuthenticate });
   entity.restart = () => {
     entity.emit("open");
     return Promise.resolve();
@@ -78,6 +80,53 @@ test("with function credentials", async () => {
   entity.mockInput(<success xmlns="urn:ietf:params:xml:ns:xmpp-sasl" />);
 
   await promise(entity, "online");
+});
+
+test("Mechanism not found", async () => {
+  const { entity } = mockClient({
+    async credentials(authenticate, _mechanisms) {
+      await authenticate({ username, password }, "foo");
+    },
+  });
+
+  entity.mockInput(
+    <features xmlns="http://etherx.jabber.org/streams">
+      <mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
+        <mechanism>FOO</mechanism>
+      </mechanisms>
+    </features>,
+  );
+
+  const error = await promise(entity, "error");
+  expect(error instanceof Error).toBe(true);
+  expect(error.message).toBe("SASL: No compatible mechanism available.");
+});
+
+test("with function credentials that rejects", (done) => {
+  expect.assertions(1);
+
+  const mech = "PLAIN";
+
+  const error = {};
+
+  async function onAuthenticate() {
+    throw error;
+  }
+
+  const { entity } = mockClient({ credentials: onAuthenticate });
+
+  entity.entity.mockInput(
+    <features xmlns="http://etherx.jabber.org/streams">
+      <mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
+        <mechanism>{mech}</mechanism>
+      </mechanisms>
+    </features>,
+  );
+
+  entity.on("error", (err) => {
+    expect(err).toBe(error);
+    done();
+  });
 });
 
 test("failure", async () => {
@@ -135,9 +184,9 @@ test("use ANONYMOUS if username and password are not provided", async () => {
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
       <mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
-        <mechanism>ANONYMOUS</mechanism>
         <mechanism>PLAIN</mechanism>
         <mechanism>SCRAM-SHA-1</mechanism>
+        <mechanism>ANONYMOUS</mechanism>
       </mechanisms>
     </features>,
   );
