@@ -112,8 +112,8 @@ test("prefers SCRAM-SHA-1", async () => {
     <features xmlns="http://etherx.jabber.org/streams">
       <authentication xmlns="urn:xmpp:sasl:2">
         <mechanism>ANONYMOUS</mechanism>
-        <mechanism>PLAIN</mechanism>
         <mechanism>SCRAM-SHA-1</mechanism>
+        <mechanism>PLAIN</mechanism>
       </authentication>
     </features>,
   );

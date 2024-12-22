@@ -1,5 +1,4 @@
 import { client, xml } from "@xmpp/client";
-
 // eslint-disable-next-line n/no-extraneous-import
 import debug from "@xmpp/debug";
 

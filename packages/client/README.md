@@ -63,6 +63,8 @@ xmpp.on("stanza", async (stanza) => {
 });
 
 xmpp.on("online", async (address) => {
+  console.log("online as", address.toString());
+
   // Makes itself available
   await xmpp.send(xml("presence"));
 
@@ -75,7 +77,7 @@ xmpp.on("online", async (address) => {
   await xmpp.send(message);
 });
 
-xmpp.start().catch(console.error);
+await xmpp.start();
 ```
 
 ## xml

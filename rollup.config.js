@@ -6,7 +6,7 @@ import terser from "@rollup/plugin-terser";
 
 export default [
   {
-    input: "packages/client/browser.js",
+    input: "packages/client/index.js",
     output: {
       file: "packages/client/dist/xmpp.js",
       format: "iife",
@@ -21,7 +21,7 @@ export default [
     ],
   },
   {
-    input: "packages/client/browser.js",
+    input: "packages/client/index.js",
     output: {
       file: "packages/client/dist/xmpp.min.js",
       format: "iife",

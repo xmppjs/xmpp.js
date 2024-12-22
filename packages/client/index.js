@@ -23,6 +23,17 @@ import scramsha1 from "@xmpp/sasl-scram-sha-1";
 import plain from "@xmpp/sasl-plain";
 import anonymous from "@xmpp/sasl-anonymous";
 
+// In browsers and react-native some packages are excluded
+// see package.json and https://metrobundler.dev/docs/configuration/#resolvermainfields
+// in which case the default import returns an empty object
+function setupIfAvailable(module, ...args) {
+  if (typeof module !== "function") {
+    return undefined;
+  }
+
+  return module(...args);
+}
+
 function client(options = {}) {
   const { resource, credentials, username, password, ...params } = options;
   const { clientId, software, device } = params;
@@ -36,8 +47,8 @@ function client(options = {}) {
 
   const reconnect = _reconnect({ entity });
   const websocket = _websocket({ entity });
-  const tcp = _tcp({ entity });
-  const tls = _tls({ entity });
+  const tcp = setupIfAvailable(_tcp, { entity });
+  const tls = setupIfAvailable(_tls, { entity });
 
   const middleware = _middleware({ entity });
   const streamFeatures = _streamFeatures({ middleware });
@@ -48,13 +59,13 @@ function client(options = {}) {
   // SASL mechanisms - order matters and define priority
   const saslFactory = new SASLFactory();
   const mechanisms = Object.entries({
-    scramsha1,
+    ...(typeof scramsha1 === "function" && { scramsha1 }),
     plain,
     anonymous,
   }).map(([k, v]) => ({ [k]: v(saslFactory) }));
 
   // Stream features - order matters and define priority
-  const starttls = _starttls({ streamFeatures });
+  const starttls = setupIfAvailable(_starttls, { streamFeatures });
   const sasl2 = _sasl2(
     { streamFeatures, saslFactory },
     createOnAuthenticate(credentials ?? { username, password }),

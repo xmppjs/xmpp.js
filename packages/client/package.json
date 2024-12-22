@@ -28,8 +28,12 @@
     "@xmpp/websocket": "^0.13.2",
     "saslmechanisms": "^0.1.1"
   },
-  "browser": "browser.js",
-  "react-native": "browser.js",
+  "browser": {
+    "@xmpp/tcp": false,
+    "@xmpp/tls": false,
+    "@xmpp/starttls": false,
+    "@xmpp/sasl-scram-sha-1": false
+  },
   "engines": {
     "node": ">= 20"
   },
