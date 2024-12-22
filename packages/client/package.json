@@ -27,8 +27,8 @@
     "@xmpp/websocket": "^0.13.2",
     "saslmechanisms": "^0.1.1"
   },
-  "browser": "./browser.js",
-  "react-native": "./react-native.js",
+  "browser": "browser.js",
+  "react-native": "browser.js",
   "engines": {
     "node": ">= 20"
   },

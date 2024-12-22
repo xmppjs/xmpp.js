@@ -1,5 +1,6 @@
 import { xml, jid, Client } from "@xmpp/client-core";
 import getDomain from "./lib/getDomain.js";
+import createOnAuthenticate from "./lib/createOnAuthenticate.js";
 
 import _reconnect from "@xmpp/reconnect";
 import _websocket from "@xmpp/websocket";
@@ -14,6 +15,7 @@ import _resourceBinding from "@xmpp/resource-binding";
 import _sessionEstablishment from "@xmpp/session-establishment";
 import _streamManagement from "@xmpp/stream-management";
 
+import SASLFactory from "saslmechanisms";
 import plain from "@xmpp/sasl-plain";
 import anonymous from "@xmpp/sasl-anonymous";
 
@@ -35,8 +37,19 @@ function client(options = {}) {
   const iqCaller = _iqCaller({ middleware, entity });
   const iqCallee = _iqCallee({ middleware, entity });
   const resolve = _resolve({ entity });
+
+  // SASL mechanisms - order matters and define priority
+  const saslFactory = new SASLFactory();
+  const mechanisms = Object.entries({
+    plain,
+    anonymous,
+  }).map(([k, v]) => ({ [k]: v(saslFactory) }));
+
   // Stream features - order matters and define priority
-  const sasl = _sasl({ streamFeatures }, credentials || { username, password });
+  const sasl = _sasl(
+    { streamFeatures, saslFactory },
+    createOnAuthenticate(credentials ?? { username, password }),
+  );
   const streamManagement = _streamManagement({
     streamFeatures,
     entity,
@@ -50,10 +63,6 @@ function client(options = {}) {
     iqCaller,
     streamFeatures,
   });
-  // SASL mechanisms - order matters and define priority
-  const mechanisms = Object.entries({ plain, anonymous }).map(([k, v]) => ({
-    [k]: v(sasl),
-  }));
 
   return Object.assign(entity, {
     entity,
@@ -69,6 +78,7 @@ function client(options = {}) {
     sessionEstablishment,
     streamManagement,
     mechanisms,
+    saslFactory,
   });
 }
 

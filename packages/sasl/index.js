@@ -13,10 +13,10 @@ function getMechanismNames(features) {
     .map((el) => el.text());
 }
 
-async function authenticate(SASL, entity, mechname, credentials) {
-  const mech = SASL.create([mechname]);
+async function authenticate({ saslFactory, entity, mechanism, credentials }) {
+  const mech = saslFactory.create([mechanism]);
   if (!mech) {
-    throw new Error("No compatible mechanism");
+    throw new Error(`SASL: Mechanism ${mechanism} not found.`);
   }
 
   const { domain } = entity.options;
@@ -73,28 +73,26 @@ async function authenticate(SASL, entity, mechname, credentials) {
   });
 }
 
-export default function sasl({ streamFeatures, saslFactory }, credentials) {
+export default function sasl({ streamFeatures, saslFactory }, onAuthenticate) {
   streamFeatures.use("mechanisms", NS, async ({ stanza, entity }) => {
     const offered = getMechanismNames(stanza);
     const supported = saslFactory._mechs.map(({ name }) => name);
-    // eslint-disable-next-line unicorn/prefer-array-find
-    const intersection = supported.filter((mech) => {
-      return offered.includes(mech);
-    });
-    let mech = intersection[0];
+    const intersection = supported.filter((mech) => offered.includes(mech));
 
-    if (typeof credentials === "function") {
-      await credentials(
-        (creds) => authenticate(saslFactory, entity, mech, creds, stanza),
-        mech,
-      );
-    } else {
-      if (!credentials.username && !credentials.password) {
-        mech = "ANONYMOUS";
-      }
-
-      await authenticate(saslFactory, entity, mech, credentials, stanza);
+    if (intersection.length === 0) {
+      throw new SASLError("SASL: No compatible mechanism available.");
     }
+
+    async function done(credentials, mechanism) {
+      await authenticate({
+        saslFactory,
+        entity,
+        mechanism,
+        credentials,
+      });
+    }
+
+    await onAuthenticate(done, intersection);
 
     await entity.restart();
   });
