@@ -12,7 +12,6 @@ import _iqCaller from "@xmpp/iq/caller.js";
 import _iqCallee from "@xmpp/iq/callee.js";
 import _resolve from "@xmpp/resolve";
 import _starttls from "@xmpp/starttls/client.js";
-import _sasl2 from "@xmpp/sasl2";
 import _sasl from "@xmpp/sasl";
 import _resourceBinding from "@xmpp/resource-binding";
 import _sessionEstablishment from "@xmpp/session-establishment";
@@ -24,7 +23,6 @@ import anonymous from "@xmpp/sasl-anonymous";
 
 function client(options = {}) {
   const { resource, credentials, username, password, ...params } = options;
-  const { clientId, software, device } = params;
 
   const { domain, service } = params;
   if (!domain && service) {
@@ -53,12 +51,6 @@ function client(options = {}) {
     plain,
     anonymous,
   }).map(([k, v]) => ({ [k]: v(saslFactory) }));
-
-  const sasl2 = _sasl2(
-    { streamFeatures, saslFactory },
-    credentials || { username, password },
-    { clientId, software, device },
-  );
 
   const sasl = _sasl(
     { streamFeatures, saslFactory },
@@ -92,7 +84,6 @@ function client(options = {}) {
     resolve,
     starttls,
     saslFactory,
-    sasl2,
     sasl,
     resourceBinding,
     sessionEstablishment,
