@@ -7,16 +7,23 @@ import xml from "@xmpp/xml";
 
 const NS = "urn:xmpp:sasl:2";
 
+function getMechanismNames(stanza) {
+  return stanza
+    .getChild("authentication", NS)
+    .getChildren("mechanism", NS)
+    .map((m) => m.text());
+}
+
 async function authenticate({
   saslFactory,
   entity,
-  mechname,
+  mechanism,
   credentials,
   userAgent,
 }) {
-  const mech = saslFactory.create([mechname]);
+  const mech = saslFactory.create([mechanism]);
   if (!mech) {
-    throw new Error("No compatible mechanism");
+    throw new Error(`SASL: Mechanism ${mechanism} not found.`);
   }
 
   const { domain } = entity.options;
@@ -106,52 +113,29 @@ async function authenticate({
 
 export default function sasl2(
   { streamFeatures, saslFactory },
-  credentials,
-  userAgent,
+  onAuthenticate,
+  // userAgent,
 ) {
   streamFeatures.use("authentication", NS, async ({ stanza, entity }) => {
-    const offered = new Set(
-      stanza
-        .getChild("authentication", NS)
-        .getChildren("mechanism", NS)
-        .map((m) => m.text()),
-    );
+    const offered = getMechanismNames(stanza);
     const supported = saslFactory._mechs.map(({ name }) => name);
+    const intersection = supported.filter((mech) => offered.includes(mech));
 
-    const intersection = supported
-      .map((mech) => ({
-        name: mech,
-        canOther: offered.has(mech),
-      }))
-      .filter((mech) => mech.canOther);
+    if (intersection.length === 0) {
+      throw new SASLError("SASL: No compatible mechanism available.");
+    }
 
-    if (typeof credentials === "function") {
-      await credentials((creds, mechname) => {
-        authenticate({
-          saslFactory,
-          entity,
-          mechname,
-          credentials: creds,
-          userAgent,
-        });
-      }, intersection);
-    } else {
-      let mechname = intersection[0]?.name;
-      if (!credentials.username && !credentials.password) {
-        mechname = "ANONYMOUS";
-      }
-
+    async function done(credentials, mechanism) {
       await authenticate({
         saslFactory,
         entity,
-        mechname,
+        mechanism,
         credentials,
-        userAgent,
       });
     }
 
+    await onAuthenticate(done, intersection);
+
     return true; // Not online yet, wait for next features
   });
-
-  return {};
 }

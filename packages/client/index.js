@@ -57,7 +57,7 @@ function client(options = {}) {
   const starttls = _starttls({ streamFeatures });
   const sasl2 = _sasl2(
     { streamFeatures, saslFactory },
-    credentials || { username, password },
+    createOnAuthenticate(credentials ?? { username, password }),
     { clientId, software, device },
   );
   const sasl = _sasl(

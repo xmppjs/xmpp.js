@@ -1,18 +1,11 @@
 import { mockClient, promise } from "@xmpp/test";
-import sasl2 from "./index";
 
 const username = "foo";
 const password = "bar";
 const credentials = { username, password };
 
-function makeClient({ credentials, ...args }) {
-  const entity = mockClient({ credentials, ...args });
-  sasl2(entity, (credentials = { username, password }));
-  return entity;
-}
-
-test("no compatibles mechanisms", async () => {
-  const { entity } = makeClient({ username, password });
+test("No compatible mechanism available", async () => {
+  const { entity } = mockClient({ username, password });
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -24,11 +17,11 @@ test("no compatibles mechanisms", async () => {
 
   const error = await promise(entity, "error");
   expect(error instanceof Error).toBe(true);
-  expect(error.message).toBe("No compatible mechanism");
+  expect(error.message).toBe("SASL: No compatible mechanism available.");
 });
 
 test("with object credentials", async () => {
-  const { entity } = makeClient({ credentials });
+  const { entity } = mockClient({ credentials });
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -54,11 +47,11 @@ test("with function credentials", async () => {
   const mech = "PLAIN";
 
   function authenticate(auth, mechanisms) {
-    expect(mechanisms).toEqual([{ name: mech, canOther: true }]);
+    expect(mechanisms).toEqual([mech]);
     return auth(credentials, mech);
   }
 
-  const { entity } = makeClient({ credentials: authenticate });
+  const { entity } = mockClient({ credentials: authenticate });
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -81,7 +74,7 @@ test("with function credentials", async () => {
 });
 
 test("failure", async () => {
-  const { entity } = makeClient({ credentials });
+  const { entity } = mockClient({ credentials });
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -113,7 +106,7 @@ test("failure", async () => {
 });
 
 test("prefers SCRAM-SHA-1", async () => {
-  const { entity } = makeClient({ credentials });
+  const { entity } = mockClient({ credentials });
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -130,7 +123,7 @@ test("prefers SCRAM-SHA-1", async () => {
 });
 
 test.skip("use ANONYMOUS if username and password are not provided", async () => {
-  const { entity } = makeClient();
+  const { entity } = mockClient();
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">

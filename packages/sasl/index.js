@@ -6,8 +6,8 @@ import xml from "@xmpp/xml";
 
 const NS = "urn:ietf:params:xml:ns:xmpp-sasl";
 
-function getMechanismNames(features) {
-  return features
+function getMechanismNames(stanza) {
+  return stanza
     .getChild("mechanisms", NS)
     .getChildElements()
     .map((el) => el.text());
