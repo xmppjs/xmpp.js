@@ -1,7 +1,6 @@
 import { encode, decode } from "@xmpp/base64";
 import SASLError from "./lib/SASLError.js";
 import xml from "@xmpp/xml";
-import SASLFactory from "saslmechanisms";
 
 // https://xmpp.org/rfcs/rfc6120.html#sasl
 
@@ -14,8 +13,8 @@ function getMechanismNames(features) {
     .map((el) => el.text());
 }
 
-async function authenticate(SASL, entity, mechname, credentials) {
-  const mech = SASL.create([mechname]);
+async function authenticate(saslFactory, entity, mechname, credentials) {
+  const mech = saslFactory.create([mechname]);
   if (!mech) {
     throw new Error("No compatible mechanism");
   }
@@ -74,12 +73,10 @@ async function authenticate(SASL, entity, mechname, credentials) {
   });
 }
 
-export default function sasl({ streamFeatures }, credentials) {
-  const SASL = new SASLFactory();
-
+export default function sasl({ streamFeatures, saslFactory }, credentials) {
   streamFeatures.use("mechanisms", NS, async ({ stanza, entity }) => {
     const offered = getMechanismNames(stanza);
-    const supported = SASL._mechs.map(({ name }) => name);
+    const supported = saslFactory._mechs.map(({ name }) => name);
     // eslint-disable-next-line unicorn/prefer-array-find
     const intersection = supported.filter((mech) => {
       return offered.includes(mech);
@@ -88,7 +85,7 @@ export default function sasl({ streamFeatures }, credentials) {
 
     if (typeof credentials === "function") {
       await credentials(
-        (creds) => authenticate(SASL, entity, mech, creds, stanza),
+        (creds) => authenticate(saslFactory, entity, mech, creds, stanza),
         mech,
       );
     } else {
@@ -96,15 +93,11 @@ export default function sasl({ streamFeatures }, credentials) {
         mech = "ANONYMOUS";
       }
 
-      await authenticate(SASL, entity, mech, credentials, stanza);
+      await authenticate(saslFactory, entity, mech, credentials, stanza);
     }
 
     await entity.restart();
   });
 
-  return {
-    use(...args) {
-      return SASL.use(...args);
-    },
-  };
+  return {};
 }

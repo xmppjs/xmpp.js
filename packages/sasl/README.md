@@ -36,7 +36,7 @@ import { xmpp } from "@xmpp/client";
 
 const client = xmpp({ credentials: authenticate });
 
-async function authenticate(auth, mechanism) {
+async function authenticate(saslFactory, mechanism) {
   console.debug("authenticate", mechanism);
   const credentials = {
     username: await prompt("enter username"),

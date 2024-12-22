@@ -1,5 +1,6 @@
 import { xml, jid, Client } from "@xmpp/client-core";
 import getDomain from "./lib/getDomain.js";
+import SASLFactory from "saslmechanisms";
 
 import _reconnect from "@xmpp/reconnect";
 import _websocket from "@xmpp/websocket";
@@ -8,7 +9,6 @@ import _streamFeatures from "@xmpp/stream-features";
 import _iqCaller from "@xmpp/iq/caller.js";
 import _iqCallee from "@xmpp/iq/callee.js";
 import _resolve from "@xmpp/resolve";
-
 import _sasl2 from "@xmpp/sasl2";
 import _sasl from "@xmpp/sasl";
 import _resourceBinding from "@xmpp/resource-binding";
@@ -19,16 +19,8 @@ import plain from "@xmpp/sasl-plain";
 import anonymous from "@xmpp/sasl-anonymous";
 
 function client(options = {}) {
-  const {
-    resource,
-    credentials,
-    username,
-    password,
-    clientId,
-    software,
-    device,
-    ...params
-  } = options;
+  const { resource, credentials, username, password, ...params } = options;
+  const { clientId, software, device } = params;
 
   const { domain, service } = params;
   if (!domain && service) {
@@ -46,12 +38,25 @@ function client(options = {}) {
   const iqCallee = _iqCallee({ middleware, entity });
   const resolve = _resolve({ entity });
   // Stream features - order matters and define priority
+
+  const saslFactory = new SASLFactory();
+  // SASL mechanisms - order matters and define priority
+  const mechanisms = Object.entries({
+    plain,
+    anonymous,
+  }).map(([k, v]) => ({ [k]: v(saslFactory) }));
+
   const sasl2 = _sasl2(
-    { streamFeatures },
+    { streamFeatures, saslFactory },
     credentials || { username, password },
     { clientId, software, device },
   );
-  const sasl = _sasl({ streamFeatures }, credentials || { username, password });
+
+  const sasl = _sasl(
+    { streamFeatures, saslFactory },
+    credentials || { username, password },
+  );
+
   const streamManagement = _streamManagement({
     streamFeatures,
     entity,
@@ -66,11 +71,6 @@ function client(options = {}) {
     iqCaller,
     streamFeatures,
   });
-  // SASL mechanisms - order matters and define priority
-  const mechanisms = Object.entries({
-    plain,
-    anonymous,
-  }).map(([k, v]) => ({ [k]: [v(sasl2), v(sasl)] }));
 
   return Object.assign(entity, {
     entity,
@@ -81,6 +81,7 @@ function client(options = {}) {
     iqCaller,
     iqCallee,
     resolve,
+    saslFactory,
     sasl2,
     sasl,
     resourceBinding,

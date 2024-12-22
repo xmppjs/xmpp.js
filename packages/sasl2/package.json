@@ -16,8 +16,7 @@
     "@xmpp/error": "^0.13.0",
     "@xmpp/sasl": "^0.13.2",
     "@xmpp/jid": "^0.13.0",
-    "@xmpp/xml": "^0.13.0",
-    "saslmechanisms": "^0.1.1"
+    "@xmpp/xml": "^0.13.0"
   },
   "engines": {
     "node": ">= 14"

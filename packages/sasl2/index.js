@@ -2,7 +2,6 @@ import { encode, decode } from "@xmpp/base64";
 import SASLError from "@xmpp/sasl/lib/SASLError.js";
 import jid from "@xmpp/jid";
 import xml from "@xmpp/xml";
-import SASLFactory from "saslmechanisms";
 
 // https://xmpp.org/extensions/xep-0388.html
 // https://xmpp.org/extensions/xep-0386.html
@@ -13,7 +12,7 @@ const BIND2_NS = "urn:xmpp:bind:0";
 const FAST_NS = "urn:xmpp:fast:0";
 
 async function authenticate(
-  SASL,
+  saslFactory,
   inlineHandlers,
   bindInlineHandlers,
   entity,
@@ -22,7 +21,7 @@ async function authenticate(
   userAgent,
   features,
 ) {
-  const mech = SASL.create([mechname]);
+  const mech = saslFactory.create([mechname]);
   if (!mech) {
     throw new Error("No compatible mechanism");
   }
@@ -162,8 +161,11 @@ async function authenticate(
   await Promise.all([promise, ...hPromises]);
 }
 
-export default function sasl2({ streamFeatures }, credentials, userAgent) {
-  const SASL = new SASLFactory();
+export default function sasl2(
+  { streamFeatures, saslFactory },
+  credentials,
+  userAgent,
+) {
   const handlers = {};
   const bindHandlers = {};
 
@@ -182,7 +184,7 @@ export default function sasl2({ streamFeatures }, credentials, userAgent) {
         ?.getChildren("mechanism", FAST_NS)
         ?.map((m) => m.text()) || [],
     );
-    const supported = SASL._mechs.map(({ name }) => name);
+    const supported = saslFactory._mechs.map(({ name }) => name);
 
     const intersection = supported
       .map((mech) => ({
@@ -195,7 +197,7 @@ export default function sasl2({ streamFeatures }, credentials, userAgent) {
     if (typeof credentials === "function") {
       await credentials((creds, mech) => {
         authenticate(
-          SASL,
+          saslFactory,
           handlers,
           bindHandlers,
           entity,
@@ -212,7 +214,7 @@ export default function sasl2({ streamFeatures }, credentials, userAgent) {
       }
 
       await authenticate(
-        SASL,
+        saslFactory,
         handlers,
         bindHandlers,
         entity,
@@ -227,9 +229,6 @@ export default function sasl2({ streamFeatures }, credentials, userAgent) {
   });
 
   return {
-    use(...args) {
-      return SASL.use(...args);
-    },
     inline(name, xmlns, handler) {
       handlers["{" + xmlns + "}" + name] = handler;
     },

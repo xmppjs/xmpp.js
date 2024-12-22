@@ -1,5 +1,6 @@
 import { xml, jid, Client } from "@xmpp/client-core";
 import getDomain from "./lib/getDomain.js";
+import SASLFactory from "saslmechanisms";
 
 import _reconnect from "@xmpp/reconnect";
 import _websocket from "@xmpp/websocket";
@@ -45,12 +46,27 @@ function client(options = {}) {
   const resolve = _resolve({ entity });
   // Stream features - order matters and define priority
   const starttls = _starttls({ streamFeatures });
+
+  const saslFactory = new SASLFactory();
+  // SASL mechanisms - order matters and define priority
+  const mechanisms = Object.entries({
+    scramsha1,
+    htsha256,
+    plain,
+    anonymous,
+  }).map(([k, v]) => ({ [k]: v(saslFactory) }));
+
   const sasl2 = _sasl2(
-    { streamFeatures },
+    { streamFeatures, saslFactory },
     credentials || { username, password },
     { clientId, software, device },
   );
-  const sasl = _sasl({ streamFeatures }, credentials || { username, password });
+
+  const sasl = _sasl(
+    { streamFeatures, saslFactory },
+    credentials || { username, password },
+  );
+
   const streamManagement = _streamManagement({
     streamFeatures,
     entity,
@@ -65,13 +81,6 @@ function client(options = {}) {
     iqCaller,
     streamFeatures,
   });
-  // SASL mechanisms - order matters and define priority
-  const mechanisms = Object.entries({
-    scramsha1,
-    htsha256,
-    plain,
-    anonymous,
-  }).map(([k, v]) => ({ [k]: [v(sasl2), v(sasl)] }));
 
   return Object.assign(entity, {
     entity,
@@ -85,6 +94,7 @@ function client(options = {}) {
     iqCallee,
     resolve,
     starttls,
+    saslFactory,
     sasl2,
     sasl,
     resourceBinding,
