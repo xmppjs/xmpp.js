@@ -53,7 +53,6 @@ export default function streamManagement({
     outbound: 0,
     inbound: 0,
     max: null,
-    outbound_q: [],
   };
 
   entity.on("online", (jid) => {
@@ -87,29 +86,23 @@ export default function streamManagement({
   // https://xmpp.org/extensions/xep-0198.html#enable
   // For client-to-server connections, the client MUST NOT attempt to enable stream management until after it has completed Resource Binding unless it is resuming a previous session
 
-  function resumeSuccess() {
-    sm.enabled = true;
-    if (address) entity.jid = address;
-    entity.status = "online";
-  }
-
-  function resumeFailed() {
-    sm.id = "";
-    sm.enabled = false;
-    sm.outbound = 0;
-  }
-
   streamFeatures.use("sm", NS, async (context, next) => {
     // Resuming
     if (sm.id) {
       try {
-        resumeSuccess(await resume(entity, sm.inbound, sm.id));
+        await resume(entity, sm.inbound, sm.id);
+        sm.enabled = true;
+        entity.jid = address;
+        entity.status = "online";
         return true;
         // If resumption fails, continue with session establishment
       } catch {
-        resumeFailed();
+        sm.id = "";
+        sm.enabled = false;
+        sm.outbound = 0;
       }
     }
+
     // Enabling
 
     // Resource binding first

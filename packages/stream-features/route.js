@@ -4,9 +4,6 @@ export default function route() {
       return next();
 
     const prevent = await next();
-    // BIND2 inline handler may have already set to online, eg inline SM resume
-    if (!prevent && entity.jid && entity.status !== "online") {
-      entity._status("online", entity.jid);
-    }
+    if (!prevent && entity.jid) entity._status("online", entity.jid);
   };
 }

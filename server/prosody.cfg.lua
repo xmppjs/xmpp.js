@@ -23,9 +23,10 @@ modules_enabled = {
   "version";
   "smacks";
   "sasl2";
-  "sasl2_bind2";
-  "sasl2_fast";
-  "sasl2_sm";
+  -- https://github.com/xmppjs/xmpp.js/pull/1006
+  -- "sasl2_bind2";
+  -- "sasl2_fast";
+  -- "sasl2_sm";
 };
 
 modules_disabled = {

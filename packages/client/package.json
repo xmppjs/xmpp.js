@@ -29,7 +29,7 @@
     "saslmechanisms": "^0.1.1"
   },
   "browser": "./browser.js",
-  "react-native": "./react-native.js",
+  "react-native": "./browser.js",
   "engines": {
     "node": ">= 20"
   },
