@@ -4,6 +4,10 @@
 
 local lfs = require "lfs";
 
+plugin_paths = { "modules" }
+plugin_server = "https://modules.prosody.im/rocks/"
+installer_plugin_path = lfs.currentdir() .. "/modules";
+
 modules_enabled = {
   "roster";
   "saslauth";
@@ -18,13 +22,17 @@ modules_enabled = {
   "time";
   "version";
   "smacks";
+  "sasl2";
+  -- https://github.com/xmppjs/xmpp.js/pull/1006
+  -- "sasl2_bind2";
+  -- "sasl2_fast";
+  -- "sasl2_sm";
 };
 
 modules_disabled = {
   "s2s";
 }
 
-daemonize = true;
 pidfile = lfs.currentdir() .. "/prosody.pid";
 
 allow_registration = true;

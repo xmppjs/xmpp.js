@@ -6,6 +6,8 @@ server/certs/
 server/prosody.err
 server/prosody.log
 server/prosody.pid
+server/modules
+server/.cache
 
 !.gitkeep
 !.editorconfig

@@ -87,7 +87,7 @@ async function _start() {
 
   makeCertificate();
 
-  await exec("prosody", {
+  await exec("prosody -D", {
     cwd: DATA_PATH,
     env: {
       ...process.env,

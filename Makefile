@@ -28,10 +28,16 @@ ci:
 	make bundlesize
 
 unit:
-	npx jest
+	npm run test
 
 e2e:
-	NODE_TLS_REJECT_UNAUTHORIZED=0 npx jest --runInBand --config e2e.config.cjs
+	$(warning e2e tests require prosody-trunk and luarocks)
+	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2 > /dev/null
+# https://github.com/xmppjs/xmpp.js/pull/1006
+# cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_bind2 > /dev/null
+# cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_fast > /dev/null
+# cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_sm > /dev/null
+	npm run e2e
 
 clean:
 	make stop
