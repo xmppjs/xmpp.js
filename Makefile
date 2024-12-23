@@ -33,8 +33,9 @@ unit:
 e2e:
 	$(warning e2e tests require prosody-trunk and luarocks)
 	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2 > /dev/null
+	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_bind2 > /dev/null
+
 # https://github.com/xmppjs/xmpp.js/pull/1006
-# cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_bind2 > /dev/null
 # cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_fast > /dev/null
 # cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_sm > /dev/null
 	npm run e2e
@@ -46,6 +47,8 @@ clean:
 	rm -f server/prosody.err
 	rm -f server/prosody.log
 	rm -f server/prosody.pid
+	rm -rf server/modules
+	rm -rf server/.cache
 	npx lerna clean --yes
 	rm -rf node_modules/
 	rm -f packages/*/dist/*.js

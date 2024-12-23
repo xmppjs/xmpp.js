@@ -61,10 +61,8 @@ test("with function resource", async () => {
   const jid = "foo@bar/" + resource;
 
   const { entity } = mockClient({
-    resource: async (bind) => {
-      await delay();
-      const result = await bind(resource);
-      expect(result.toString()).toBe(jid);
+    resource: async () => {
+      return resource;
     },
   });
 
