@@ -15,9 +15,6 @@ const client = xmpp({
   credentials: {
     username: "foo",
     password: "bar",
-    clientId: "Some UUID for this client/server pair (optional)",
-    software: "Name of this software (optional)",
-    device: "Description of this device (optional)",
   },
 });
 ```
@@ -31,30 +28,43 @@ Uses cases:
 - Have the user enter the password every time
 - Do not ask for password before connection is made
 - Debug authentication
-- Using a SASL mechanism with specific requirements (such as FAST)
-- Perform an asynchronous operation to get credentials
+- Using a SASL mechanism with specific requirements
+- Fetch credentials from a secure database
 
 ```js
 import { xmpp } from "@xmpp/client";
 
 const client = xmpp({
   credentials: authenticate,
-  clientId: "Some UUID for this client/server pair (optional)",
-  software: "Name of this software (optional)",
-  device: "Description of this device (optional)",
 });
 
-async function authenticate(callback, mechanisms) {
-  const fast = mechanisms.find((mech) => mech.canFast)?.name;
-  const mech = mechanisms.find((mech) => mech.canOther)?.name;
+async function onAuthenticate(authenticate, mechanisms) {
+  console.debug("authenticate", mechanisms);
+  const credentials = {
+    username: await prompt("enter username"),
+    password: await prompt("enter password"),
+  };
+  console.debug("authenticating");
 
-  return callback(
-    {
-      username: await prompt("enter username"),
-      password: await prompt("enter password"),
-      requestToken: fast,
-    },
-    mech,
+  // userAgent is optional
+  const userAgent = await getUserAgent();
+
+  await authenticate(credentials, mechanisms[0], userAgent);
+  console.debug("authenticated");
+}
+
+async function getUserAgent() {
+  let id = localStorage.get("user-agent-id");
+  if (!id) {
+    id = await crypto.randomUUID();
+    localStorage.set("user-agent-id", id);
+  }
+  return (
+    // https://xmpp.org/extensions/xep-0388.html#initiation
+    <user-agent id={id}>
+      <software>xmpp.js</software>
+      <device>Sonny's Laptop</device>
+    </user-agent>
   );
 }
 ```

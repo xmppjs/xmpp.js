@@ -45,13 +45,19 @@ test("with object credentials", async () => {
 
 test("with function credentials", async () => {
   const mech = "PLAIN";
+  const userAgent = (
+    <user-agent id="foo">
+      <software>xmpp.js</software>
+      <device>Sonny's Laptop</device>
+    </user-agent>
+  );
 
-  function authenticate(auth, mechanisms) {
+  function onAuthenticate(authenticate, mechanisms) {
     expect(mechanisms).toEqual([mech]);
-    return auth(credentials, mech);
+    return authenticate(credentials, mech, userAgent);
   }
 
-  const { entity } = mockClient({ credentials: authenticate });
+  const { entity } = mockClient({ credentials: onAuthenticate });
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -64,6 +70,7 @@ test("with function credentials", async () => {
   expect(await promise(entity, "send")).toEqual(
     <authenticate xmlns="urn:xmpp:sasl:2" mechanism={mech}>
       <initial-response>AGZvbwBiYXI=</initial-response>
+      {userAgent}
     </authenticate>,
   );
 

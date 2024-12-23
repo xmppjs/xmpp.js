@@ -23,20 +23,9 @@ import scramsha1 from "@xmpp/sasl-scram-sha-1";
 import plain from "@xmpp/sasl-plain";
 import anonymous from "@xmpp/sasl-anonymous";
 
-// In browsers and react-native some packages are excluded
-// see package.json and https://metrobundler.dev/docs/configuration/#resolvermainfields
-// in which case the default import returns an empty object
-function setupIfAvailable(module, ...args) {
-  if (typeof module !== "function") {
-    return undefined;
-  }
-
-  return module(...args);
-}
-
 function client(options = {}) {
-  const { resource, credentials, username, password, ...params } = options;
-  const { clientId, software, device } = params;
+  const { resource, credentials, username, password, userAgent, ...params } =
+    options;
 
   const { domain, service } = params;
   if (!domain && service) {
@@ -68,12 +57,12 @@ function client(options = {}) {
   const starttls = setupIfAvailable(_starttls, { streamFeatures });
   const sasl2 = _sasl2(
     { streamFeatures, saslFactory },
-    createOnAuthenticate(credentials ?? { username, password }),
-    { clientId, software, device },
+    createOnAuthenticate(credentials ?? { username, password }, userAgent),
   );
+  service;
   const sasl = _sasl(
     { streamFeatures, saslFactory },
-    createOnAuthenticate(credentials ?? { username, password }),
+    createOnAuthenticate(credentials ?? { username, password }, userAgent),
   );
   const streamManagement = _streamManagement({
     streamFeatures,
@@ -109,6 +98,17 @@ function client(options = {}) {
     streamManagement,
     mechanisms,
   });
+}
+
+// In browsers and react-native some packages are excluded
+// see package.json and https://metrobundler.dev/docs/configuration/#resolvermainfields
+// in which case the default import returns an empty object
+function setupIfAvailable(module, ...args) {
+  if (typeof module !== "function") {
+    return undefined;
+  }
+
+  return module(...args);
 }
 
 export { xml, jid, client };

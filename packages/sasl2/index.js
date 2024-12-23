@@ -95,15 +95,7 @@ async function authenticate({
       xml("authenticate", { xmlns: NS, mechanism: mech.name }, [
         mech.clientFirst &&
           xml("initial-response", {}, encode(mech.response(creds))),
-        (userAgent?.clientId || userAgent?.software || userAgent?.device) &&
-          xml(
-            "user-agent",
-            userAgent.clientId ? { id: userAgent.clientId } : {},
-            [
-              userAgent.software && xml("software", {}, userAgent.software),
-              userAgent.device && xml("device", {}, userAgent.device),
-            ],
-          ),
+        userAgent,
       ]),
     );
 
@@ -111,11 +103,7 @@ async function authenticate({
   });
 }
 
-export default function sasl2(
-  { streamFeatures, saslFactory },
-  onAuthenticate,
-  // userAgent,
-) {
+export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
   streamFeatures.use("authentication", NS, async ({ stanza, entity }) => {
     const offered = getMechanismNames(stanza);
     const supported = saslFactory._mechs.map(({ name }) => name);
@@ -125,12 +113,13 @@ export default function sasl2(
       throw new SASLError("SASL: No compatible mechanism available.");
     }
 
-    async function done(credentials, mechanism) {
+    async function done(credentials, mechanism, userAgent) {
       await authenticate({
         saslFactory,
         entity,
         mechanism,
         credentials,
+        userAgent,
       });
     }
 

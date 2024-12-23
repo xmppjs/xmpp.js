@@ -1,6 +1,6 @@
 const ANONYMOUS = "ANONYMOUS";
 
-export default function createOnAuthenticate(credentials) {
+export default function createOnAuthenticate(credentials, userAgent) {
   return async function onAuthenticate(authenticate, mechanisms) {
     if (typeof credentials === "function") {
       await credentials(authenticate, mechanisms);
@@ -12,10 +12,10 @@ export default function createOnAuthenticate(credentials) {
       !credentials?.password &&
       mechanisms.includes(ANONYMOUS)
     ) {
-      await authenticate(credentials, ANONYMOUS);
+      await authenticate(credentials, ANONYMOUS, userAgent);
       return;
     }
 
-    await authenticate(credentials, mechanisms[0]);
+    await authenticate(credentials, mechanisms[0], userAgent);
   };
 }

@@ -43,13 +43,8 @@ async function onAuthenticate(authenticate, mechanisms) {
     password: await prompt("enter password"),
   };
   console.debug("authenticating");
-  try {
-    await authenticate(credentials, mechanisms[0]);
-    console.debug("authenticated");
-  } catch (err) {
-    console.error(err);
-    throw err;
-  }
+  await authenticate(credentials, mechanisms[0]);
+  console.debug("authenticated");
 }
 ```
 

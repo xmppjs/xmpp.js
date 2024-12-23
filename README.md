@@ -1,8 +1,8 @@
 # xmpp.js
 
-> XMPP is an open technology for real-time communication, which powers a wide range of applications including instant messaging, presence, multi-party chat, voice and video calls, collaboration, lightweight middleware, content syndication, and generalized routing of XML data.
+> XMPP is the Extensible Messaging and Presence Protocol, a set of open technologies for instant messaging, presence, multi-party chat, voice and video calls, collaboration, lightweight middleware, content syndication, and generalized routing of XML data.
 
-> [xmpp.org/about-xmpp/technology-overview/](https://xmpp.org/about/technology-overview.html)
+[xmpp.org/about-xmpp/technology-overview/](https://xmpp.org/about/technology-overview.html)
 
 **xmpp.js** is a JavaScript library for [XMPP](http://xmpp.org/).
 
@@ -60,7 +60,7 @@ Do you need help with working with xmpp.js? Please reach out to our community by
 - [Logitech Harmony Hub library](https://github.com/AirBorne04/harmonyhub)
 - [gx-twilio: Bridge between Twilio SMS and XMPP](https://github.com/pesvut/sgx-twilio)
 
-<small> Feel free to send a PR to add your project or organization to this list.</small>
+<small>Feel free to send a PR to add your project or organization to this list.</small>
 
 ## credits
 
