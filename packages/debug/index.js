@@ -5,6 +5,7 @@ import clone from "ltx/lib/clone.js";
 /* eslint no-console: 0 */
 
 const NS_SASL = "urn:ietf:params:xml:ns:xmpp-sasl";
+const NS_SASL2 = "urn:xmpp:sasl:2";
 const NS_COMPONENT = "jabber:component:accept";
 
 const SENSITIVES = [
@@ -13,6 +14,8 @@ const SENSITIVES = [
   ["challenge", NS_SASL],
   ["response", NS_SASL],
   ["success", NS_SASL],
+  ["challenge", NS_SASL2],
+  ["response", NS_SASL2],
 ];
 
 function isSensitive(element) {
@@ -22,17 +25,27 @@ function isSensitive(element) {
   });
 }
 
-export function hideSensitive(element) {
-  if (isSensitive(element)) {
+function hide(element) {
+  if (element) {
     element.children = [];
     element.append(xml("hidden", { xmlns: "xmpp.js" }));
+  }
+}
+
+export function hideSensitive(element) {
+  if (isSensitive(element)) {
+    hide(element);
+  } else if (element.is("authenticate", NS_SASL2)) {
+    hide(element.getChild("initial-response"));
+  } else if (element.getNS() === NS_SASL2) {
+    hide(element.getChild("additional-data"));
   }
 
   return element;
 }
 
 function format(element) {
-  return stringify(hideSensitive(clone(element), 2));
+  return stringify(hideSensitive(clone(element)), 2);
 }
 
 export default function debug(entity, force) {
