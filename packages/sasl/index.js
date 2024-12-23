@@ -6,11 +6,8 @@ import xml from "@xmpp/xml";
 
 const NS = "urn:ietf:params:xml:ns:xmpp-sasl";
 
-function getMechanismNames(stanza) {
-  return stanza
-    .getChild("mechanisms", NS)
-    .getChildElements()
-    .map((el) => el.text());
+function getMechanismNames(element) {
+  return element.getChildElements().map((el) => el.text());
 }
 
 async function authenticate({ saslFactory, entity, mechanism, credentials }) {
@@ -74,8 +71,8 @@ async function authenticate({ saslFactory, entity, mechanism, credentials }) {
 }
 
 export default function sasl({ streamFeatures, saslFactory }, onAuthenticate) {
-  streamFeatures.use("mechanisms", NS, async ({ stanza, entity }) => {
-    const offered = getMechanismNames(stanza);
+  streamFeatures.use("mechanisms", NS, async ({ entity }, _next, element) => {
+    const offered = getMechanismNames(element);
     const supported = saslFactory._mechs.map(({ name }) => name);
     const intersection = supported.filter((mech) => offered.includes(mech));
 

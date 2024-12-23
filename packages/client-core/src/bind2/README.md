@@ -1,6 +1,6 @@
-# resource-binding
+# bind2
 
-Resource binding for `@xmpp/client`.
+bind2 for `@xmpp/client`.
 
 Included and enabled in `@xmpp/client`.
 
@@ -33,4 +33,4 @@ async function onBind(bind) {
 
 ## References
 
-[RFC 6120 Resource Binding](https://xmpp.org/rfcs/rfc6120.html#bind)
+[XEP-0386: Bind 2](https://xmpp.org/extensions/xep-0386.html)

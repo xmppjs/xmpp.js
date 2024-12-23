@@ -3,8 +3,19 @@ import xml from "@xmpp/xml";
 import jid from "@xmpp/jid";
 import mockClient from "./mockClient.js";
 import { delay, promise, timeout } from "@xmpp/events";
+import id from "@xmpp/id";
 
-export { context, xml, jid, jid as JID, mockClient, delay, promise, timeout };
+export {
+  context,
+  xml,
+  jid,
+  jid as JID,
+  mockClient,
+  delay,
+  promise,
+  timeout,
+  id,
+};
 
 export function mockInput(entity, el) {
   entity.emit("input", el.toString());

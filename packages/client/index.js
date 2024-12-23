@@ -17,7 +17,7 @@ import _sasl from "@xmpp/sasl";
 import _resourceBinding from "@xmpp/resource-binding";
 import _sessionEstablishment from "@xmpp/session-establishment";
 import _streamManagement from "@xmpp/stream-management";
-import _bind2 from "@xmpp/client-core/src/bind2.js";
+import _bind2 from "@xmpp/client-core/bind2";
 
 import SASLFactory from "saslmechanisms";
 import scramsha1 from "@xmpp/sasl-scram-sha-1";
@@ -79,7 +79,7 @@ function client(options = {}) {
   });
 
   // SASL2 inline features
-  const bind2 = _bind2({ entity, sasl2 });
+  const bind2 = _bind2({ sasl2 }, resource);
 
   return Object.assign(entity, {
     entity,

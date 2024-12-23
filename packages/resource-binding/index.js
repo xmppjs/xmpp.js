@@ -20,10 +20,8 @@ async function bind(entity, iqCaller, resource) {
 
 function route({ iqCaller }, resource) {
   return async ({ entity }, next) => {
-    await (typeof resource === "function"
-      ? resource((resource) => bind(entity, iqCaller, resource))
-      : bind(entity, iqCaller, resource));
-
+    resource = typeof resource === "function" ? await resource() : resource;
+    await bind(entity, iqCaller, resource);
     next();
   };
 }

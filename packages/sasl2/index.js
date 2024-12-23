@@ -8,10 +8,7 @@ import xml from "@xmpp/xml";
 const NS = "urn:xmpp:sasl:2";
 
 function getMechanismNames(stanza) {
-  return stanza
-    .getChild("authentication", NS)
-    .getChildren("mechanism", NS)
-    .map((m) => m.text());
+  return stanza.getChildren("mechanism", NS).map((m) => m.text());
 }
 
 async function authenticate({
@@ -20,8 +17,7 @@ async function authenticate({
   mechanism,
   credentials,
   userAgent,
-  features,
-  stanza,
+  sessionFeatures,
 }) {
   const mech = saslFactory.create([mechanism]);
   if (!mech) {
@@ -39,8 +35,6 @@ async function authenticate({
     serviceName: domain,
     ...credentials,
   };
-
-  console.log(stanza);
 
   return new Promise((resolve, reject) => {
     const handler = (element) => {
@@ -97,13 +91,16 @@ async function authenticate({
 
     entity.on("nonza", handler);
 
-    entity.send(
-      xml("authenticate", { xmlns: NS, mechanism: mech.name }, [
-        mech.clientFirst &&
-          xml("initial-response", {}, encode(mech.response(creds))),
-        userAgent,
-      ]),
-    );
+    entity
+      .send(
+        xml("authenticate", { xmlns: NS, mechanism: mech.name }, [
+          mech.clientFirst &&
+            xml("initial-response", {}, encode(mech.response(creds))),
+          userAgent,
+          ...sessionFeatures,
+        ]),
+      )
+      .catch(reject);
   });
 }
 
@@ -111,35 +108,56 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
   // inline
   const features = new Map();
 
-  streamFeatures.use("authentication", NS, async ({ stanza, entity }) => {
-    const offered = getMechanismNames(stanza);
-    const supported = saslFactory._mechs.map(({ name }) => name);
-    const intersection = supported.filter((mech) => offered.includes(mech));
+  streamFeatures.use(
+    "authentication",
+    NS,
+    async ({ entity }, _next, element) => {
+      const offered = getMechanismNames(element);
+      const supported = saslFactory._mechs.map(({ name }) => name);
+      const intersection = supported.filter((mech) => offered.includes(mech));
 
-    if (intersection.length === 0) {
-      throw new SASLError("SASL: No compatible mechanism available.");
-    }
+      if (intersection.length === 0) {
+        throw new SASLError("SASL: No compatible mechanism available.");
+      }
 
-    async function done(credentials, mechanism, userAgent) {
-      await authenticate({
-        saslFactory,
-        entity,
-        mechanism,
-        credentials,
-        userAgent,
-        features,
-        stanza,
-      });
-    }
+      const sessionFeatures = await getSessionFeatures({ element, features });
 
-    await onAuthenticate(done, intersection);
+      async function done(credentials, mechanism, userAgent) {
+        await authenticate({
+          saslFactory,
+          entity,
+          mechanism,
+          credentials,
+          userAgent,
+          sessionFeatures,
+        });
+      }
 
-    return true; // Not online yet, wait for next features
-  });
+      await onAuthenticate(done, intersection);
+
+      return true; // Not online yet, wait for next features
+    },
+  );
 
   return {
     use(ns, req, res) {
       features.set(ns, req, res);
     },
   };
+}
+
+function getSessionFeatures({ element, features }) {
+  const promises = [];
+
+  const inline = element.getChild("inline");
+  if (!inline) return promises;
+
+  for (const element of inline.getChildElements()) {
+    const xmlns = element.getNS();
+    const feature = features.get(xmlns);
+    if (!feature) continue;
+    promises.push(feature(element));
+  }
+
+  return Promise.all(promises);
 }
