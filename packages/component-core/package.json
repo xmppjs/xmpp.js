@@ -4,7 +4,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/component-core",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.13.2",
+  "version": "0.14.0",
   "license": "ISC",
   "type": "module",
   "main": "index.js",
@@ -14,9 +14,9 @@
     "core"
   ],
   "dependencies": {
-    "@xmpp/connection-tcp": "^0.13.3",
-    "@xmpp/jid": "^0.13.2",
-    "@xmpp/xml": "^0.13.3"
+    "@xmpp/connection-tcp": "^0.14.0",
+    "@xmpp/jid": "^0.14.0",
+    "@xmpp/xml": "^0.14.0"
   },
   "engines": {
     "node": ">= 20"

@@ -4,7 +4,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/debug",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.13.2",
+  "version": "0.14.0",
   "license": "ISC",
   "type": "module",
   "main": "index.js",
@@ -16,7 +16,7 @@
     "node": ">= 20"
   },
   "dependencies": {
-    "@xmpp/xml": "^0.13.3",
+    "@xmpp/xml": "^0.14.0",
     "ltx": "^3.1.1"
   },
   "publishConfig": {

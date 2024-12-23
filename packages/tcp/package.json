@@ -4,12 +4,12 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/tcp",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.13.2",
+  "version": "0.14.0",
   "license": "ISC",
   "type": "module",
   "main": "index.js",
   "dependencies": {
-    "@xmpp/connection-tcp": "^0.13.3"
+    "@xmpp/connection-tcp": "^0.14.0"
   },
   "keywords": [
     "XMPP",
