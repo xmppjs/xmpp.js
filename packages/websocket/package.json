@@ -4,14 +4,14 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/websocket",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.13.2",
+  "version": "0.14.0",
   "license": "ISC",
   "type": "module",
   "main": "index.js",
   "dependencies": {
-    "@xmpp/connection": "^0.13.2",
-    "@xmpp/events": "^0.13.2",
-    "@xmpp/xml": "^0.13.2",
+    "@xmpp/connection": "^0.14.0",
+    "@xmpp/events": "^0.14.0",
+    "@xmpp/xml": "^0.14.0",
     "ws": "^8.18.0"
   },
   "browser": {

@@ -4,7 +4,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/sasl2",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "license": "ISC",
   "type": "module",
   "main": "index.js",
@@ -13,11 +13,11 @@
     "sasl"
   ],
   "dependencies": {
-    "@xmpp/base64": "^0.13.0",
-    "@xmpp/error": "^0.13.0",
-    "@xmpp/sasl": "^0.13.2",
-    "@xmpp/jid": "^0.13.0",
-    "@xmpp/xml": "^0.13.0"
+    "@xmpp/base64": "^0.14.0",
+    "@xmpp/error": "^0.14.0",
+    "@xmpp/jid": "^0.14.0",
+    "@xmpp/sasl": "^0.14.0",
+    "@xmpp/xml": "^0.14.0"
   },
   "engines": {
     "node": ">= 14"
