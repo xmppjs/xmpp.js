@@ -17,6 +17,7 @@ import _sasl from "@xmpp/sasl";
 import _resourceBinding from "@xmpp/resource-binding";
 import _sessionEstablishment from "@xmpp/session-establishment";
 import _streamManagement from "@xmpp/stream-management";
+import _bind2 from "@xmpp/client-core/src/bind2.js";
 
 import SASLFactory from "saslmechanisms";
 import scramsha1 from "@xmpp/sasl-scram-sha-1";
@@ -59,7 +60,6 @@ function client(options = {}) {
     { streamFeatures, saslFactory },
     createOnAuthenticate(credentials ?? { username, password }, userAgent),
   );
-  service;
   const sasl = _sasl(
     { streamFeatures, saslFactory },
     createOnAuthenticate(credentials ?? { username, password }, userAgent),
@@ -77,6 +77,9 @@ function client(options = {}) {
     iqCaller,
     streamFeatures,
   });
+
+  // SASL2 inline features
+  const bind2 = _bind2({ entity, sasl2 });
 
   return Object.assign(entity, {
     entity,
@@ -97,6 +100,7 @@ function client(options = {}) {
     sessionEstablishment,
     streamManagement,
     mechanisms,
+    bind2,
   });
 }
 

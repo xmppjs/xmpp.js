@@ -14,9 +14,9 @@
     "core"
   ],
   "dependencies": {
-    "@xmpp/connection-tcp": "^0.13.2",
+    "@xmpp/connection-tcp": "^0.13.3",
     "@xmpp/jid": "^0.13.2",
-    "@xmpp/xml": "^0.13.2"
+    "@xmpp/xml": "^0.13.3"
   },
   "engines": {
     "node": ">= 20"

@@ -16,7 +16,7 @@
     "node": ">= 20"
   },
   "dependencies": {
-    "@xmpp/xml": "^0.13.2",
+    "@xmpp/xml": "^0.13.3",
     "ltx": "^3.1.1"
   },
   "publishConfig": {

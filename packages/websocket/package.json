@@ -9,9 +9,9 @@
   "type": "module",
   "main": "index.js",
   "dependencies": {
-    "@xmpp/connection": "^0.13.2",
+    "@xmpp/connection": "^0.13.3",
     "@xmpp/events": "^0.13.2",
-    "@xmpp/xml": "^0.13.2",
+    "@xmpp/xml": "^0.13.3",
     "ws": "^8.18.0"
   },
   "browser": {

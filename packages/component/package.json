@@ -13,9 +13,9 @@
     "component"
   ],
   "dependencies": {
-    "@xmpp/component-core": "^0.13.2",
-    "@xmpp/iq": "^0.13.2",
-    "@xmpp/middleware": "^0.13.2",
+    "@xmpp/component-core": "^0.13.3",
+    "@xmpp/iq": "^0.13.3",
+    "@xmpp/middleware": "^0.13.3",
     "@xmpp/reconnect": "^0.13.2"
   },
   "engines": {

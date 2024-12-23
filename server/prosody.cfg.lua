@@ -2,7 +2,7 @@
 -- DO NOT COPY BLINDLY
 -- see https://prosody.im/doc/configure
 
-local lfs = require "lfs";
+local lfs = Lua.require "lfs";
 
 plugin_paths = { "modules" }
 plugin_server = "https://modules.prosody.im/rocks/"
@@ -23,8 +23,8 @@ modules_enabled = {
   "version";
   "smacks";
   "sasl2";
+  "sasl2_bind2";
   -- https://github.com/xmppjs/xmpp.js/pull/1006
-  -- "sasl2_bind2";
   -- "sasl2_fast";
   -- "sasl2_sm";
 };

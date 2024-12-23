@@ -16,13 +16,13 @@
     "node": ">= 20"
   },
   "dependencies": {
-    "@xmpp/client-core": "^0.13.2",
-    "@xmpp/client": "^0.13.2",
-    "@xmpp/connection": "^0.13.2",
-    "@xmpp/debug": "^0.13.2",
+    "@xmpp/client-core": "^0.13.3",
+    "@xmpp/client": "^0.13.3",
+    "@xmpp/connection": "^0.13.3",
+    "@xmpp/debug": "^0.13.3",
     "@xmpp/events": "^0.13.2",
     "@xmpp/jid": "^0.13.2",
-    "@xmpp/xml": "^0.13.2",
+    "@xmpp/xml": "^0.13.3",
     "ltx": "^3.1.1"
   },
   "publishConfig": {

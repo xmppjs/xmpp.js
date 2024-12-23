@@ -13,11 +13,11 @@
     "sasl"
   ],
   "dependencies": {
-    "@xmpp/base64": "^0.13.0",
-    "@xmpp/error": "^0.13.0",
-    "@xmpp/sasl": "^0.13.2",
-    "@xmpp/jid": "^0.13.0",
-    "@xmpp/xml": "^0.13.0"
+    "@xmpp/base64": "^0.13.2",
+    "@xmpp/error": "^0.13.2",
+    "@xmpp/sasl": "^0.13.3",
+    "@xmpp/jid": "^0.13.2",
+    "@xmpp/xml": "^0.13.3"
   },
   "engines": {
     "node": ">= 14"

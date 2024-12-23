@@ -20,6 +20,8 @@ async function authenticate({
   mechanism,
   credentials,
   userAgent,
+  features,
+  stanza,
 }) {
   const mech = saslFactory.create([mechanism]);
   if (!mech) {
@@ -37,6 +39,8 @@ async function authenticate({
     serviceName: domain,
     ...credentials,
   };
+
+  console.log(stanza);
 
   return new Promise((resolve, reject) => {
     const handler = (element) => {
@@ -91,6 +95,8 @@ async function authenticate({
       entity.removeListener("nonza", handler);
     };
 
+    entity.on("nonza", handler);
+
     entity.send(
       xml("authenticate", { xmlns: NS, mechanism: mech.name }, [
         mech.clientFirst &&
@@ -98,12 +104,13 @@ async function authenticate({
         userAgent,
       ]),
     );
-
-    entity.on("nonza", handler);
   });
 }
 
 export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
+  // inline
+  const features = new Map();
+
   streamFeatures.use("authentication", NS, async ({ stanza, entity }) => {
     const offered = getMechanismNames(stanza);
     const supported = saslFactory._mechs.map(({ name }) => name);
@@ -120,6 +127,8 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
         mechanism,
         credentials,
         userAgent,
+        features,
+        stanza,
       });
     }
 
@@ -127,4 +136,10 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
 
     return true; // Not online yet, wait for next features
   });
+
+  return {
+    use(ns, req, res) {
+      features.set(ns, req, res);
+    },
+  };
 }

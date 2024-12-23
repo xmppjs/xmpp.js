@@ -15,7 +15,7 @@
   "dependencies": {
     "@xmpp/error": "^0.13.2",
     "@xmpp/jid": "^0.13.2",
-    "@xmpp/xml": "^0.13.2",
+    "@xmpp/xml": "^0.13.3",
     "koa-compose": "^4.1.0"
   },
   "engines": {
