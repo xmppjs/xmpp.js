@@ -2,15 +2,15 @@
 
 const test = require("ava");
 const xml = require("..");
-const createElement = require("ltx/lib/createElement");
-const Element = require("ltx/lib/Element");
-const Parser = require("../lib/Parser");
+const createElement = require("ltx/lib/createElement.js");
+const Element = require("ltx/lib/Element.js");
+const Parser = require("../lib/Parser.js");
 const {
   escapeXML,
   unescapeXML,
   escapeXMLText,
   unescapeXMLText,
-} = require("ltx/lib/escape");
+} = require("ltx/lib/escape.js");
 
 test("exports createElement", (t) => {
   t.is(xml.createElement, createElement);

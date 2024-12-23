@@ -2,9 +2,9 @@
 
 /* eslint no-console: 0 */
 
-const stringify = require("ltx/lib/stringify");
+const stringify = require("ltx/lib/stringify.js");
 const xml = require("@xmpp/xml");
-const clone = require("ltx/lib/clone");
+const clone = require("ltx/lib/clone.js");
 
 const NS_SASL = "urn:ietf:params:xml:ns:xmpp-sasl";
 const NS_COMPONENT = "jabber:component:accept";

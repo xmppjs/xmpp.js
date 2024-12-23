@@ -6,7 +6,7 @@ const xml = require("@xmpp/xml");
 const debug = require("@xmpp/debug");
 const JID = require("@xmpp/jid");
 const mockSocket = require("./mockSocket");
-const clone = require("ltx/lib/clone");
+const clone = require("ltx/lib/clone.js");
 
 module.exports = function context(entity = client()) {
   debug(entity);
