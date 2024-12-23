@@ -1,6 +1,5 @@
 import { encode, decode } from "@xmpp/base64";
 import SASLError from "@xmpp/sasl/lib/SASLError.js";
-import jid from "@xmpp/jid";
 import xml from "@xmpp/xml";
 
 // https://xmpp.org/extensions/xep-0388.html
@@ -17,7 +16,8 @@ async function authenticate({
   mechanism,
   credentials,
   userAgent,
-  sessionFeatures,
+  streamFeatures,
+  features,
 }) {
   const mech = saslFactory.create([mechanism]);
   if (!mech) {
@@ -38,7 +38,7 @@ async function authenticate({
 
   return new Promise((resolve, reject) => {
     const handler = (element) => {
-      if (element.attrs.xmlns !== NS) {
+      if (element.getNS() !== NS) {
         return;
       }
 
@@ -61,7 +61,6 @@ async function authenticate({
       }
 
       if (element.name === "continue") {
-        // No tasks supported yet
         reject(new Error("continue is not supported yet"));
         return;
       }
@@ -71,19 +70,14 @@ async function authenticate({
         if (additionalData && mech.final) {
           mech.final(decode(additionalData));
         }
-        // This jid will be bare unless we do inline bind2 then it will be the bound full jid
-        const aid = element.getChild("authorization-identifier")?.text();
-        if (aid) {
-          if (!entity.jid?.resource) {
-            // No jid or bare jid, so update it
-            entity._jid(aid);
-          } else if (jid(aid).resource) {
-            // We have a full jid so use it
-            entity._jid(aid);
-          }
+
+        for (const child of element.getChildElements()) {
+          const feature = features.get(child.getNS());
+          if (!feature?.[1]) continue;
+          feature?.[1](child);
         }
+
         resolve(element);
-        return;
       }
 
       entity.removeListener("nonza", handler);
@@ -97,7 +91,7 @@ async function authenticate({
           mech.clientFirst &&
             xml("initial-response", {}, encode(mech.response(creds))),
           userAgent,
-          ...sessionFeatures,
+          ...streamFeatures,
         ]),
       )
       .catch(reject);
@@ -105,7 +99,6 @@ async function authenticate({
 }
 
 export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
-  // inline
   const features = new Map();
 
   streamFeatures.use(
@@ -120,7 +113,7 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
         throw new SASLError("SASL: No compatible mechanism available.");
       }
 
-      const sessionFeatures = await getSessionFeatures({ element, features });
+      const streamFeatures = await getStreamFeatures({ element, features });
 
       async function done(credentials, mechanism, userAgent) {
         await authenticate({
@@ -129,7 +122,8 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
           mechanism,
           credentials,
           userAgent,
-          sessionFeatures,
+          streamFeatures,
+          features,
         });
       }
 
@@ -141,12 +135,12 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
 
   return {
     use(ns, req, res) {
-      features.set(ns, req, res);
+      features.set(ns, [req, res]);
     },
   };
 }
 
-function getSessionFeatures({ element, features }) {
+function getStreamFeatures({ element, features }) {
   const promises = [];
 
   const inline = element.getChild("inline");
@@ -156,7 +150,7 @@ function getSessionFeatures({ element, features }) {
     const xmlns = element.getNS();
     const feature = features.get(xmlns);
     if (!feature) continue;
-    promises.push(feature(element));
+    promises.push(feature[0](element));
   }
 
   return Promise.all(promises);

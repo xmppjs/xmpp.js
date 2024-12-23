@@ -2,16 +2,56 @@ import xml from "@xmpp/xml";
 
 const NS_BIND = "urn:xmpp:bind:0";
 
-export default function bind2({ sasl2 }, tag) {
-  sasl2.use(NS_BIND, async (element) => {
-    if (!element.is("bind", NS_BIND)) return;
+export default function bind2({ sasl2, entity }, tag) {
+  const features = new Map();
 
-    tag = typeof tag === "function" ? await tag() : tag;
+  sasl2.use(
+    NS_BIND,
+    async (element) => {
+      if (!element.is("bind", NS_BIND)) return;
 
-    return xml(
-      "bind",
-      { xmlns: "urn:xmpp:bind:0" },
-      tag && xml("tag", null, tag),
-    );
-  });
+      tag = typeof tag === "function" ? await tag() : tag;
+
+      const sessionFeatures = await getSessionFeatures({ element, features });
+
+      return xml(
+        "bind",
+        { xmlns: "urn:xmpp:bind:0" },
+        tag && xml("tag", null, tag),
+        ...sessionFeatures,
+      );
+    },
+    (element) => {
+      const aid = element.root().getChildText("authorization-identifier");
+      if (aid) entity._jid(aid);
+
+      for (const child of element.getChildElements()) {
+        const feature = features.get(child.getNS());
+        if (!feature?.[1]) continue;
+        feature?.[1](child);
+      }
+    },
+  );
+
+  return {
+    use(ns, req, res) {
+      features.set(ns, [req, res]);
+    },
+  };
+}
+
+function getSessionFeatures({ element, features }) {
+  const promises = [];
+
+  const inline = element.getChild("inline");
+  if (!inline) return promises;
+
+  for (const element of inline.getChildElements()) {
+    const xmlns = element.attrs.var;
+    const feature = features.get(xmlns);
+    if (!feature) continue;
+    promises.push(feature[0](element));
+  }
+
+  return Promise.all(promises);
 }
