@@ -4,7 +4,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/sasl",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.13.2",
+  "version": "0.13.3",
   "license": "ISC",
   "keywords": [
     "XMPP",
@@ -13,7 +13,7 @@
   "dependencies": {
     "@xmpp/base64": "^0.13.2",
     "@xmpp/error": "^0.13.2",
-    "@xmpp/xml": "^0.13.2",
+    "@xmpp/xml": "^0.13.3",
     "saslmechanisms": "^0.1.1"
   },
   "engines": {

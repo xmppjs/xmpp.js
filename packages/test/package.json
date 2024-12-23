@@ -4,7 +4,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/test",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.13.2",
+  "version": "0.13.3",
   "license": "ISC",
   "keywords": [
     "XMPP",
@@ -14,12 +14,12 @@
     "node": ">= 14"
   },
   "dependencies": {
-    "@xmpp/client": "^0.13.2",
-    "@xmpp/connection": "^0.13.2",
-    "@xmpp/debug": "^0.13.2",
+    "@xmpp/client": "^0.13.3",
+    "@xmpp/connection": "^0.13.3",
+    "@xmpp/debug": "^0.13.3",
     "@xmpp/events": "^0.13.2",
     "@xmpp/jid": "^0.13.2",
-    "@xmpp/xml": "^0.13.2",
+    "@xmpp/xml": "^0.13.3",
     "ltx": "3.0.0"
   },
   "publishConfig": {
