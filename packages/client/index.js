@@ -62,7 +62,7 @@ function client(options = {}) {
   );
 
   // SASL2 inline features
-  const bind2 = _bind2({ sasl2, entity }, resource);
+  const bind2 = _bind2({ sasl2 }, resource);
 
   // Stream features - order matters and define priority
   const sasl = _sasl(

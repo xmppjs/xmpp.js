@@ -2,7 +2,7 @@ import xml from "@xmpp/xml";
 
 const NS_BIND = "urn:xmpp:bind:0";
 
-export default function bind2({ sasl2, entity }, tag) {
+export default function bind2({ sasl2 }, tag) {
   const features = new Map();
 
   sasl2.use(
@@ -22,9 +22,6 @@ export default function bind2({ sasl2, entity }, tag) {
       );
     },
     (element) => {
-      const aid = element.parent.getChildText("authorization-identifier");
-      if (aid) entity._jid(aid);
-
       for (const child of element.getChildElements()) {
         const feature = features.get(child.getNS());
         if (!feature?.[1]) continue;

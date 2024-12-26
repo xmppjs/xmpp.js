@@ -71,6 +71,9 @@ async function authenticate({
           mech.final(decode(additionalData));
         }
 
+        const aid = element.getChildText("authorization-identifier");
+        if (aid) entity._jid(aid);
+
         for (const child of element.getChildElements()) {
           const feature = features.get(child.getNS());
           if (!feature?.[1]) continue;
