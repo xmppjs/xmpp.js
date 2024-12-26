@@ -22,7 +22,7 @@ export default function bind2({ sasl2, entity }, tag) {
       );
     },
     (element) => {
-      const aid = element.root().getChildText("authorization-identifier");
+      const aid = element.parent.getChildText("authorization-identifier");
       if (aid) entity._jid(aid);
 
       for (const child of element.getChildElements()) {

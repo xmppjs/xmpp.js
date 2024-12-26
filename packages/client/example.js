@@ -34,7 +34,6 @@ xmpp.on("stanza", async (stanza) => {
 xmpp.on("online", async (address) => {
   console.log("online as", address.toString());
 
-  // return;
   // Makes itself available
   await xmpp.send(xml("presence"));
 
