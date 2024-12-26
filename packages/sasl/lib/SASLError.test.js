@@ -1,3 +1,5 @@
+import xml from "@xmpp/xml";
+
 import XMPPError from "@xmpp/error";
 import SASLError from "./SASLError.js";
 

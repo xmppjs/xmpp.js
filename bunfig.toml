@@ -1,0 +1,3 @@
+"jsx" = "react"
+"jsxFactory" = "xml"
+"jsxImportSource" = "@xmpp/xml"
