@@ -71,6 +71,8 @@ async function authenticate({
           mech.final(decode(additionalData));
         }
 
+        // https://xmpp.org/extensions/xep-0388.html#success
+        // this is a bare JID, unless resource binding has occurred, in which case it is a full JID.
         const aid = element.getChildText("authorization-identifier");
         if (aid) entity._jid(aid);
 
@@ -131,8 +133,8 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
       }
 
       await onAuthenticate(done, intersection);
-
-      return true; // Not online yet, wait for next features
+      // Not online yet, wait for next features
+      return true;
     },
   );
 
