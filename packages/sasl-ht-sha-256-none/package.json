@@ -7,16 +7,16 @@
   "version": "0.14.0",
   "license": "ISC",
   "type": "module",
+  "main": "index.js",
   "keywords": [
     "XMPP",
-    "sasl",
-    "plain"
+    "sasl"
   ],
   "dependencies": {
     "create-hmac": "^1.1.7"
   },
   "engines": {
-    "node": ">= 14"
+    "node": ">= 20"
   },
   "publishConfig": {
     "access": "public"
