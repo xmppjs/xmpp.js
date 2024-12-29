@@ -10,8 +10,7 @@
   "main": "index.js",
   "keywords": [
     "XMPP",
-    "sasl",
-    "anonymous"
+    "sasl"
   ],
   "dependencies": {
     "sasl-anonymous": "^0.1.0"

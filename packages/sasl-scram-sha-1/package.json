@@ -10,8 +10,7 @@
   "main": "index.js",
   "keywords": [
     "XMPP",
-    "sasl",
-    "plain"
+    "sasl"
   ],
   "dependencies": {
     "sasl-scram-sha-1": "^1.3.0"

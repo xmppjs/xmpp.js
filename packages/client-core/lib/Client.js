@@ -47,8 +47,8 @@ class Client extends Connection {
     // after the confidentiality and integrity of the stream are protected via TLS
     // or an equivalent security layer.
     // https://xmpp.org/rfcs/rfc6120.html#rfc.section.4.7.1
-    headerElement.attrs.from =
-      (this.socket?.isSecure?.() && this.jid?.bare().toString()) || null;
+    const from = this.socket?.isSecure?.() && this.jid?.bare().toString();
+    if (from) headerElement.attrs.from = from;
     return this.Transport.prototype.header(headerElement, ...args);
   }
 
