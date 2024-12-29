@@ -112,10 +112,10 @@ export default function streamManagement({
   });
 
   if (bind2) {
-    setupBind2({ bind2, sm, resumed, failed, enabled });
+    setupBind2({ bind2, sm, failed, enabled });
   }
   if (sasl2) {
-    setupSasl2({ sasl2, sm });
+    setupSasl2({ sasl2, sm, failed, resumed });
   }
   if (streamFeatures) {
     setupStreamFeature({
@@ -175,33 +175,38 @@ function setupStreamFeature({
   });
 }
 
-function setupSasl2({ sasl2, sm }) {
-  sasl2.use("urn:xmpp:sm:3", (element) => {
-    if (!element.is("sm")) return;
-    if (sm.id) return makeResumeElement({ sm });
-  }),
-    (_element) => {
-      // FIXME handle errors
-    };
-}
-
-function setupBind2({ bind2, sm, resumed, failed, enabled }) {
-  bind2.use(
+function setupSasl2({ sasl2, sm, failed, resumed }) {
+  sasl2.use(
     "urn:xmpp:sm:3",
-    // https://xmpp.org/extensions/xep-0198.html#inline-examples
     (element) => {
-      if (!element.is("feature")) return;
-      return makeEnableElement({ sm });
+      if (!element.is("sm")) return;
+      if (sm.id) return makeResumeElement({ sm });
     },
     (element) => {
       if (element.is("resumed")) {
         resumed();
-      } else if (element.is("enabled")) {
-        enabled(element.attrs);
-      } else if (element.is("failed")) {
+      } else if (element.is(failed)) {
+        // const error = StreamError.fromElement(element)
         failed();
       }
-      // FIXME handle errors
+    },
+  );
+}
+
+function setupBind2({ bind2, sm, failed, enabled }) {
+  bind2.use(
+    "urn:xmpp:sm:3",
+    // https://xmpp.org/extensions/xep-0198.html#inline-examples
+    (_element) => {
+      return makeEnableElement({ sm });
+    },
+    (element) => {
+      if (element.is("enabled")) {
+        enabled(element.attrs);
+      } else if (element.is("failed")) {
+        // const error = StreamError.fromElement(element)
+        failed();
+      }
     },
   );
 }
