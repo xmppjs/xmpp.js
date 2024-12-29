@@ -60,6 +60,11 @@ function client(options = {}) {
     { streamFeatures, saslFactory },
     createOnAuthenticate(credentials ?? { username, password }, userAgent),
   );
+
+  // SASL2 inline features
+  const bind2 = _bind2({ sasl2 }, resource);
+
+  // Stream features - order matters and define priority
   const sasl = _sasl(
     { streamFeatures, saslFactory },
     createOnAuthenticate(credentials ?? { username, password }, userAgent),
@@ -68,6 +73,8 @@ function client(options = {}) {
     streamFeatures,
     entity,
     middleware,
+    bind2,
+    sasl2,
   });
   const resourceBinding = _resourceBinding(
     { iqCaller, streamFeatures },
@@ -77,9 +84,6 @@ function client(options = {}) {
     iqCaller,
     streamFeatures,
   });
-
-  // SASL2 inline features
-  const bind2 = _bind2({ sasl2 }, resource);
 
   return Object.assign(entity, {
     entity,

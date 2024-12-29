@@ -4,10 +4,20 @@ import xml from "@xmpp/xml";
 
 const NS = "urn:xmpp:sm:3";
 
-async function enable(entity, resume, max) {
-  await entity.send(
-    xml("enable", { xmlns: NS, max, resume: resume ? "true" : undefined }),
-  );
+function makeEnableElement({ sm }) {
+  return xml("enable", {
+    xmlns: NS,
+    max: sm.preferredMaximum,
+    resume: sm.allowResume ? "true" : undefined,
+  });
+}
+
+function makeResumeElement({ sm }) {
+  return xml("resume", { xmlns: NS, h: sm.inbound, previd: sm.id });
+}
+
+async function enable(entity, sm) {
+  await entity.send(makeEnableElement({ sm }));
 
   return new Promise((resolve, reject) => {
     function listener(nonza) {
@@ -26,10 +36,8 @@ async function enable(entity, resume, max) {
   });
 }
 
-async function resume(entity, h, previd) {
-  const response = await entity.sendReceive(
-    xml("resume", { xmlns: NS, h, previd }),
-  );
+async function resume(entity, sm) {
+  const response = await entity.sendReceive(makeResumeElement({ sm }));
 
   if (!response.is("resumed", NS)) {
     throw response;
@@ -42,9 +50,9 @@ export default function streamManagement({
   streamFeatures,
   entity,
   middleware,
+  bind2,
+  sasl2,
 }) {
-  let address = null;
-
   const sm = {
     allowResume: true,
     preferredMaximum: null,
@@ -54,6 +62,26 @@ export default function streamManagement({
     inbound: 0,
     max: null,
   };
+
+  let address = null;
+
+  function resumed() {
+    sm.enabled = true;
+    if (address) entity.jid = address;
+    entity.status = "online";
+  }
+
+  function failed() {
+    sm.enabled = false;
+    sm.id = "";
+    sm.outbound = 0;
+  }
+
+  function enabled({ id, max }) {
+    sm.enabled = true;
+    sm.id = id;
+    sm.max = max;
+  }
 
   entity.on("online", (jid) => {
     address = jid;
@@ -83,23 +111,46 @@ export default function streamManagement({
     return next();
   });
 
+  if (bind2) {
+    setupBind2({ bind2, sm, failed, enabled });
+  }
+  if (sasl2) {
+    setupSasl2({ sasl2, sm, failed, resumed });
+  }
+  if (streamFeatures) {
+    setupStreamFeature({
+      streamFeatures,
+      sm,
+      entity,
+      resumed,
+      failed,
+      enabled,
+    });
+  }
+
+  return sm;
+}
+
+function setupStreamFeature({
+  streamFeatures,
+  sm,
+  entity,
+  resumed,
+  failed,
+  enabled,
+}) {
   // https://xmpp.org/extensions/xep-0198.html#enable
   // For client-to-server connections, the client MUST NOT attempt to enable stream management until after it has completed Resource Binding unless it is resuming a previous session
-
   streamFeatures.use("sm", NS, async (context, next) => {
     // Resuming
     if (sm.id) {
       try {
-        await resume(entity, sm.inbound, sm.id);
-        sm.enabled = true;
-        entity.jid = address;
-        entity.status = "online";
+        await resume(entity, sm);
+        resumed();
         return true;
         // If resumption fails, continue with session establishment
       } catch {
-        sm.id = "";
-        sm.enabled = false;
-        sm.outbound = 0;
+        failed();
       }
     }
 
@@ -108,22 +159,54 @@ export default function streamManagement({
     // Resource binding first
     await next();
 
-    const promiseEnable = enable(entity, sm.allowResume, sm.preferredMaximum);
+    const promiseEnable = enable(entity, sm);
 
     // > The counter for an entity's own sent stanzas is set to zero and started after sending either <enable/> or <enabled/>.
     sm.outbound = 0;
 
     try {
       const response = await promiseEnable;
-      sm.enabled = true;
-      sm.id = response.attrs.id;
-      sm.max = response.attrs.max;
+      enabled(response.attrs);
     } catch {
       sm.enabled = false;
     }
 
     sm.inbound = 0;
   });
+}
 
-  return sm;
+function setupSasl2({ sasl2, sm, failed, resumed }) {
+  sasl2.use(
+    "urn:xmpp:sm:3",
+    (element) => {
+      if (!element.is("sm")) return;
+      if (sm.id) return makeResumeElement({ sm });
+    },
+    (element) => {
+      if (element.is("resumed")) {
+        resumed();
+      } else if (element.is(failed)) {
+        // const error = StreamError.fromElement(element)
+        failed();
+      }
+    },
+  );
+}
+
+function setupBind2({ bind2, sm, failed, enabled }) {
+  bind2.use(
+    "urn:xmpp:sm:3",
+    // https://xmpp.org/extensions/xep-0198.html#inline-examples
+    (_element) => {
+      return makeEnableElement({ sm });
+    },
+    (element) => {
+      if (element.is("enabled")) {
+        enabled(element.attrs);
+      } else if (element.is("failed")) {
+        // const error = StreamError.fromElement(element)
+        failed();
+      }
+    },
+  );
 }

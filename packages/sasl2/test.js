@@ -129,7 +129,7 @@ test("prefers SCRAM-SHA-1", async () => {
   expect(result.attrs.mechanism).toEqual("SCRAM-SHA-1");
 });
 
-test.skip("use ANONYMOUS if username and password are not provided", async () => {
+test("use ANONYMOUS if username and password are not provided", async () => {
   const { entity } = mockClient();
 
   entity.mockInput(
