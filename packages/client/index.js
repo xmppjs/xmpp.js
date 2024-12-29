@@ -23,6 +23,7 @@ import SASLFactory from "saslmechanisms";
 import scramsha1 from "@xmpp/sasl-scram-sha-1";
 import plain from "@xmpp/sasl-plain";
 import anonymous from "@xmpp/sasl-anonymous";
+import htsha256none from "@xmpp/sasl-ht-sha-256-none";
 
 function client(options = {}) {
   const { resource, credentials, username, password, userAgent, ...params } =
@@ -49,6 +50,7 @@ function client(options = {}) {
   // SASL mechanisms - order matters and define priority
   const saslFactory = new SASLFactory();
   const mechanisms = Object.entries({
+    ...(typeof htsha256none === "function" && { htsha256none }),
     ...(typeof scramsha1 === "function" && { scramsha1 }),
     plain,
     anonymous,
