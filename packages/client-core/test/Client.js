@@ -1,4 +1,5 @@
 import Client from "../lib/Client.js";
+import { JID } from "@xmpp/test";
 
 test("_findTransport", () => {
   class Transport {
@@ -20,4 +21,21 @@ test("_findTransport", () => {
   expect(entity._findTransport("a")).toBe(Transport);
   expect(entity._findTransport("b")).toBe(undefined);
   expect(entity._findTransport("c")).toBe(undefined);
+});
+
+test("header", () => {
+  class Transport {
+    header(el) {
+      return el;
+    }
+  }
+
+  const entity = new Client();
+  entity.Transport = Transport;
+
+  expect(entity.header(<foo />)).toEqual(<foo />);
+
+  entity.jid = new JID("foo@bar/example");
+
+  expect(entity.header(<foo />)).toEqual(<foo from="foo@bar" />);
 });

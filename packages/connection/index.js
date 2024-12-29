@@ -22,10 +22,11 @@ class Connection extends EventEmitter {
   }
 
   _reset() {
-    this.jid = null;
+    this.jid = this.jid?.bare() ?? null;
     this.status = "offline";
     this._detachSocket();
     this._detachParser();
+    this.root = null;
   }
 
   async _streamError(condition, children) {
@@ -272,6 +273,7 @@ class Connection extends EventEmitter {
    */
   async stop() {
     const el = await this._end();
+    this.jid = null;
     if (this.status !== "offline") this._status("offline", el);
     return el;
   }
