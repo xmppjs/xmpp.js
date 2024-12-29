@@ -34,7 +34,9 @@ function client(options = {}) {
   }
 
   const entity = new Client(params);
-  entity.jid = jid(username, params.domain);
+  if (username && params.domain) {
+    entity.jid = jid(username, params.domain);
+  }
 
   const reconnect = _reconnect({ entity });
   const websocket = _websocket({ entity });
