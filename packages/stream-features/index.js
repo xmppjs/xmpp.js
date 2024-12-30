@@ -1,5 +1,3 @@
-import route from "./route.js";
-
 /**
  * References
  * https://xmpp.org/rfcs/rfc6120.html#streams-negotiation Stream Negotiation
@@ -8,8 +6,6 @@ import route from "./route.js";
  */
 
 export default function streamFeatures({ middleware }) {
-  middleware.use(route());
-
   function use(name, xmlns, handler) {
     return middleware.use((ctx, next) => {
       const { stanza } = ctx;

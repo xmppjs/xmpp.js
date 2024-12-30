@@ -37,7 +37,7 @@ class Component extends Connection {
     }
 
     this._jid(this.options.domain);
-    this._status("online", this.jid);
+    this._ready(false);
   }
 }
 

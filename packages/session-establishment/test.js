@@ -1,7 +1,9 @@
 import { mockClient, promise, timeout } from "@xmpp/test";
+import sessionEstablishment from "./index.js";
 
 test("mandatory", async () => {
   const { entity } = mockClient();
+  sessionEstablishment(entity);
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -15,12 +17,11 @@ test("mandatory", async () => {
   expect(child).toEqual(
     <session xmlns="urn:ietf:params:xml:ns:xmpp-session" />,
   );
-
-  await promise(entity, "online");
 });
 
 test("optional", async () => {
   const { entity } = mockClient();
+  sessionEstablishment(entity);
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -31,8 +32,6 @@ test("optional", async () => {
   );
 
   const promiseSend = promise(entity, "send");
-
-  await promise(entity, "online");
 
   await timeout(promiseSend, 0).catch((err) => {
     expect(err.name).toBe("TimeoutError");

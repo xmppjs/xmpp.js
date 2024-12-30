@@ -43,14 +43,13 @@ test("with object credentials", async () => {
   );
 
   entity.mockInput(<success xmlns="urn:ietf:params:xml:ns:xmpp-sasl" />);
-
-  await promise(entity, "online");
 });
 
 test("with function credentials", async () => {
   expect.assertions(2);
 
   const mech = "PLAIN";
+  let promise_authenticate;
 
   async function onAuthenticate(authenticate, mechanisms) {
     expect(mechanisms).toEqual([mech]);
@@ -79,7 +78,7 @@ test("with function credentials", async () => {
 
   entity.mockInput(<success xmlns="urn:ietf:params:xml:ns:xmpp-sasl" />);
 
-  await promise(entity, "online");
+  await promise_authenticate;
 });
 
 test("Mechanism not found", async () => {

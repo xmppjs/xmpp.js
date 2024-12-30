@@ -42,8 +42,14 @@ class Client extends Connection {
     return this.Transport.prototype.socketParameters(...args);
   }
 
-  header(...args) {
-    return this.Transport.prototype.header(...args);
+  header(headerElement, ...args) {
+    // if the client knows the XMPP identity then it SHOULD include the 'from' attribute
+    // after the confidentiality and integrity of the stream are protected via TLS
+    // or an equivalent security layer.
+    // https://xmpp.org/rfcs/rfc6120.html#rfc.section.4.7.1
+    const from = this.socket?.isSecure() && this.jid?.bare().toString();
+    if (from) headerElement.attrs.from = from;
+    return this.Transport.prototype.header(headerElement, ...args);
   }
 
   headerElement(...args) {
