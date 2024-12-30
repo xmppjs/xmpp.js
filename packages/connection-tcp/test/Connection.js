@@ -1,7 +1,7 @@
 import _Connection from "@xmpp/connection";
 import Connection from "../index.js";
+import Socket from "../Socket.js";
 
-import net from "net";
 import xml from "@xmpp/xml";
 
 const NS_STREAM = "http://etherx.jabber.org/streams";
@@ -14,7 +14,7 @@ test("new Connection()", () => {
 
 test("Socket", () => {
   const conn = new Connection();
-  expect(conn.Socket).toBe(net.Socket);
+  expect(conn.Socket).toBe(Socket);
 });
 
 test("NS", () => {
