@@ -17,6 +17,7 @@ import _sasl from "@xmpp/sasl";
 import _resourceBinding from "@xmpp/resource-binding";
 import _streamManagement from "@xmpp/stream-management";
 import _bind2 from "@xmpp/client-core/src/bind2/bind2.js";
+import _fast from "@xmpp/client-core/src/fast/fast.js";
 
 import SASLFactory from "saslmechanisms";
 import scramsha1 from "@xmpp/sasl-scram-sha-1";
@@ -66,6 +67,7 @@ function client(options = {}) {
   );
 
   // SASL2 inline features
+  const fast = _fast({ sasl2 });
   const bind2 = _bind2({ sasl2, entity }, resource);
 
   // Stream features - order matters and define priority
@@ -104,6 +106,7 @@ function client(options = {}) {
     streamManagement,
     mechanisms,
     bind2,
+    fast,
   });
 }
 

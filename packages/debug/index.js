@@ -36,6 +36,7 @@ export function hideSensitive(element) {
   if (isSensitive(element)) {
     hide(element);
   } else if (element.is("authenticate", NS_SASL2)) {
+    console.log(element.toString());
     hide(element.getChild("initial-response"));
   } else if (element.getNS() === NS_SASL2) {
     hide(element.getChild("additional-data"));
