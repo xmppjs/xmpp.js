@@ -1,4 +1,5 @@
 import Connection from "../index.js";
+import { JID } from "@xmpp/test";
 
 test("resolves if socket property is undefined", async () => {
   const conn = new Connection();
@@ -37,4 +38,13 @@ test("does not throw if connection is not established", async () => {
   const conn = new Connection();
   await conn.stop();
   expect().pass();
+});
+
+test("resets jid", async () => {
+  const conn = new Connection();
+  conn.jid = new JID("foo@bar");
+
+  expect(conn.jid).not.toEqual(null);
+  await conn.stop();
+  expect(conn.jid).toEqual(null);
 });

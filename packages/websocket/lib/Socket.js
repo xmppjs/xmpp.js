@@ -1,5 +1,6 @@
 import WS from "ws";
 import { EventEmitter } from "@xmpp/events";
+import { parseURI } from "@xmpp/connection/lib/util.js";
 
 // eslint-disable-next-line n/no-unsupported-features/node-builtins
 const WebSocket = globalThis.WebSocket || WS;
@@ -10,6 +11,14 @@ export default class Socket extends EventEmitter {
   constructor() {
     super();
     this.listeners = Object.create(null);
+  }
+
+  isSecure() {
+    if (!this.url) return false;
+    const uri = parseURI(this.url);
+    if (uri.protocol === "wss:") return true;
+    if (["localhost", "127.0.0.1", "::1"].includes(uri.hostname)) return true;
+    return false;
   }
 
   connect(url) {

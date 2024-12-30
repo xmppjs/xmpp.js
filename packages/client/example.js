@@ -8,6 +8,7 @@ import debug from "@xmpp/debug";
 const xmpp = client({
   service: "ws://localhost:5280/xmpp-websocket",
   // service: "xmpps://localhost:5223",
+  // service: "xmpp://localhost:5222",
   domain: "localhost",
   resource: "example",
   username: "username",

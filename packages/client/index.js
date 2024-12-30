@@ -15,7 +15,6 @@ import _starttls from "@xmpp/starttls";
 import _sasl2 from "@xmpp/sasl2";
 import _sasl from "@xmpp/sasl";
 import _resourceBinding from "@xmpp/resource-binding";
-import _sessionEstablishment from "@xmpp/session-establishment";
 import _streamManagement from "@xmpp/stream-management";
 import _bind2 from "@xmpp/client-core/src/bind2/bind2.js";
 
@@ -34,6 +33,9 @@ function client(options = {}) {
   }
 
   const entity = new Client(params);
+  if (username && params.domain) {
+    entity.jid = jid(username, params.domain);
+  }
 
   const reconnect = _reconnect({ entity });
   const websocket = _websocket({ entity });
@@ -62,7 +64,7 @@ function client(options = {}) {
   );
 
   // SASL2 inline features
-  const bind2 = _bind2({ sasl2 }, resource);
+  const bind2 = _bind2({ sasl2, entity }, resource);
 
   // Stream features - order matters and define priority
   const sasl = _sasl(
@@ -80,10 +82,6 @@ function client(options = {}) {
     { iqCaller, streamFeatures },
     resource,
   );
-  const sessionEstablishment = _sessionEstablishment({
-    iqCaller,
-    streamFeatures,
-  });
 
   return Object.assign(entity, {
     entity,
@@ -101,7 +99,6 @@ function client(options = {}) {
     sasl2,
     sasl,
     resourceBinding,
-    sessionEstablishment,
     streamManagement,
     mechanisms,
     bind2,

@@ -2,7 +2,7 @@ import xml from "@xmpp/xml";
 
 const NS_BIND = "urn:xmpp:bind:0";
 
-export default function bind2({ sasl2 }, tag) {
+export default function bind2({ sasl2, entity }, tag) {
   const features = new Map();
 
   sasl2.use(
@@ -22,6 +22,8 @@ export default function bind2({ sasl2 }, tag) {
       );
     },
     (element) => {
+      if (!element.is("bound")) return;
+      entity._ready(false);
       for (const child of element.getChildElements()) {
         const feature = features.get(child.getNS());
         feature?.[1]?.(child);

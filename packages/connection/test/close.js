@@ -1,15 +1,13 @@
 import Connection from "../index.js";
 import { EventEmitter, promise, timeout, TimeoutError } from "@xmpp/events";
-import xml from "@xmpp/xml";
+import { xml } from "@xmpp/test";
 
 test("resets properties on socket close event", () => {
   const conn = new Connection();
   conn._attachSocket(new EventEmitter());
-  conn.jid = {};
   conn.status = "online";
   conn.socket.emit("connect");
   conn.socket.emit("close");
-  expect(conn.jid).toBe(null);
   expect(conn.status).toBe("disconnect");
 });
 

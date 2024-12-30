@@ -10,8 +10,7 @@
   "main": "index.js",
   "keywords": [
     "XMPP",
-    "sasl",
-    "plain"
+    "sasl"
   ],
   "dependencies": {
     "sasl-plain": "^0.1.0"

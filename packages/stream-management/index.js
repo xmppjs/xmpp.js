@@ -63,12 +63,9 @@ export default function streamManagement({
     max: null,
   };
 
-  let address = null;
-
   function resumed() {
     sm.enabled = true;
-    if (address) entity.jid = address;
-    entity.status = "online";
+    entity._ready(true);
   }
 
   function failed() {
@@ -83,8 +80,7 @@ export default function streamManagement({
     sm.max = max;
   }
 
-  entity.on("online", (jid) => {
-    address = jid;
+  entity.on("online", () => {
     sm.outbound = 0;
     sm.inbound = 0;
   });
@@ -147,7 +143,7 @@ function setupStreamFeature({
       try {
         await resume(entity, sm);
         resumed();
-        return true;
+        return;
         // If resumption fails, continue with session establishment
       } catch {
         failed();
