@@ -15,6 +15,7 @@ async function bind(entity, iqCaller, resource) {
   const result = await iqCaller.set(makeBindElement(resource));
   const jid = result.getChildText("jid");
   entity._jid(jid);
+  entity._ready(false);
   return jid;
 }
 

@@ -37,10 +37,17 @@ test("with object credentials", async () => {
     </authenticate>,
   );
 
-  entity.mockInput(<success xmlns="urn:xmpp:sasl:2" />);
-  entity.mockInput(<features xmlns="http://etherx.jabber.org/streams" />);
+  const jid = "username@localhost/example~Ln8YSSzsyK-b_3-vIFvOJNnE";
 
-  await promise(entity, "online");
+  expect(entity.jid?.toString()).not.toBe(jid);
+
+  entity.mockInput(
+    <success xmlns="urn:xmpp:sasl:2">
+      <authorization-identifier>{jid}</authorization-identifier>
+    </success>,
+  );
+
+  expect(entity.jid.toString()).toBe(jid);
 });
 
 test("with function credentials", async () => {
@@ -74,10 +81,17 @@ test("with function credentials", async () => {
     </authenticate>,
   );
 
-  entity.mockInput(<success xmlns="urn:xmpp:sasl:2" />);
-  entity.mockInput(<features xmlns="http://etherx.jabber.org/streams" />);
+  const jid = "username@localhost/example~Ln8YSSzsyK-b_3-vIFvOJNnE";
 
-  await promise(entity, "online");
+  expect(entity.jid?.toString()).not.toBe(jid);
+
+  entity.mockInput(
+    <success xmlns="urn:xmpp:sasl:2">
+      <authorization-identifier>{jid}</authorization-identifier>
+    </success>,
+  );
+
+  expect(entity.jid.toString()).toBe(jid);
 });
 
 test("failure", async () => {

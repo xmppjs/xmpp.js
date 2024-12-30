@@ -22,7 +22,6 @@ class Connection extends EventEmitter {
   }
 
   _reset() {
-    this.jid = this.jid?.bare() ?? null;
     this.status = "offline";
     this._detachSocket();
     this._detachParser();
@@ -183,6 +182,14 @@ class Connection extends EventEmitter {
     this.status = status;
     this.emit("status", status, ...args);
     this.emit(status, ...args);
+  }
+
+  _ready(resumed = false) {
+    if (resumed) {
+      this.status = "online";
+    } else {
+      this._status("online", this.jid);
+    }
   }
 
   async _end() {
