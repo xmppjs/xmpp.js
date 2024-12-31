@@ -1,7 +1,7 @@
 // https://datatracker.ietf.org/doc/draft-schmaus-kitten-sasl-ht/
 import createHmac from "create-hmac";
 
-function Mechanism() {}
+export function Mechanism() {}
 
 Mechanism.prototype.Mechanism = Mechanism;
 Mechanism.prototype.name = "HT-SHA-256-NONE";

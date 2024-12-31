@@ -11,12 +11,19 @@ function getMechanismNames(stanza) {
 }
 
 async function authenticate({
+  saslFactory,
   entity,
-  mech,
+  mechanism,
   credentials,
-  nonza_authenticate,
+  userAgent,
+  streamFeatures,
   features,
 }) {
+  const mech = saslFactory.create([mechanism]);
+  if (!mech) {
+    throw new Error(`SASL: Mechanism ${mechanism} not found.`);
+  }
+
   const { domain } = entity.options;
   const creds = {
     username: null,
@@ -67,7 +74,9 @@ async function authenticate({
         // https://xmpp.org/extensions/xep-0388.html#success
         // this is a bare JID, unless resource binding or stream resumption has occurred, in which case it is a full JID.
         const aid = element.getChildText("authorization-identifier");
-        if (aid) entity._jid(aid);
+        if (aid) {
+          entity._jid(aid);
+        }
 
         for (const child of element.getChildElements()) {
           const feature = features.get(child.getNS());
@@ -82,35 +91,17 @@ async function authenticate({
 
     entity.on("nonza", handler);
 
-    entity.send(nonza_authenticate).catch(reject);
+    entity
+      .send(
+        xml("authenticate", { xmlns: NS, mechanism: mech.name }, [
+          mech.clientFirst &&
+            xml("initial-response", {}, encode(mech.response(creds))),
+          userAgent,
+          ...streamFeatures,
+        ]),
+      )
+      .catch(reject);
   });
-}
-
-async function makeNonzaAuthenticate({
-  mech,
-  userAgent,
-  credentials,
-  element,
-  features,
-}) {
-  const nonza_authenticate = xml(
-    "authenticate",
-    { xmlns: NS, mechanism: mech.name },
-    [
-      mech.clientFirst &&
-        xml("initial-response", {}, encode(mech.response(credentials))),
-      userAgent,
-    ],
-  );
-
-  const streamFeatures = await getStreamFeatures({
-    element,
-    features,
-    nonza_authenticate,
-  });
-  nonza_authenticate.append(...streamFeatures);
-
-  return nonza_authenticate;
 }
 
 export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
@@ -128,25 +119,16 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
         throw new SASLError("SASL: No compatible mechanism available.");
       }
 
+      const streamFeatures = await getStreamFeatures({ element, features });
+
       async function done(credentials, mechanism, userAgent) {
-        const mech = saslFactory.create([mechanism]);
-        if (!mech) {
-          throw new Error(`SASL: Mechanism ${mechanism} not found.`);
-        }
-
-        const nonza_authenticate = await makeNonzaAuthenticate({
-          mech,
-          userAgent,
-          credentials,
-          element,
-          features,
-        });
-
         await authenticate({
+          saslFactory,
           entity,
-          mech,
+          mechanism,
           credentials,
-          nonza_authenticate,
+          userAgent,
+          streamFeatures,
           features,
         });
       }
@@ -162,7 +144,7 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
   };
 }
 
-async function getStreamFeatures({ element, features, nonza_authenticate }) {
+function getStreamFeatures({ element, features }) {
   const promises = [];
 
   const inline = element.getChild("inline");
@@ -172,9 +154,8 @@ async function getStreamFeatures({ element, features, nonza_authenticate }) {
     const xmlns = element.getNS();
     const feature = features.get(xmlns);
     if (!feature) continue;
-    promises.push(feature[0](element, nonza_authenticate));
+    promises.push(feature[0](element));
   }
 
-  const stream_features = await Promise.all(promises);
-  return stream_features.filter((stream_feature) => !!stream_feature);
+  return Promise.all(promises);
 }

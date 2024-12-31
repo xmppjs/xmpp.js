@@ -53,7 +53,6 @@ function client(options = {}) {
   // SASL mechanisms - order matters and define priority
   const saslFactory = new SASLFactory();
   const mechanisms = Object.entries({
-    ...(typeof htsha256none === "function" && { htsha256none }),
     ...(typeof scramsha1 === "function" && { scramsha1 }),
     plain,
     anonymous,
@@ -62,13 +61,33 @@ function client(options = {}) {
   // Stream features - order matters and define priority
   const starttls = setupIfAvailable(_starttls, { streamFeatures });
   const sasl2 = _sasl2(
-    { streamFeatures, saslFactory },
+    { saslFactory },
     createOnAuthenticate(credentials ?? { username, password }, userAgent),
   );
+  const fast = _fast(
+    {
+      sasl2,
+      streamFeatures,
+    },
+    async function onAuthenticate(authenticate, mechanisms) {
+      fast.count += 1;
+      await authenticate(
+        { ...credentials, password: fast.token },
+        mechanisms[0],
+        userAgent,
+      );
+      return;
+    },
+  );
+  sasl2.setup({ streamFeatures });
 
   // SASL2 inline features
-  const fast = _fast({ sasl2 });
   const bind2 = _bind2({ sasl2, entity }, resource);
+
+  // sasl2.setupFast(fast);
+
+  // FAST mechanisms - order matters and define priority
+  htsha256none(fast.saslFactory);
 
   // Stream features - order matters and define priority
   const sasl = _sasl(

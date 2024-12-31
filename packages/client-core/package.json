@@ -10,7 +10,10 @@
   "dependencies": {
     "@xmpp/connection": "^0.14.0",
     "@xmpp/jid": "^0.14.0",
-    "@xmpp/xml": "^0.14.0"
+    "@xmpp/sasl": "^0.14.0",
+    "@xmpp/sasl2": "^0.14.0",
+    "@xmpp/xml": "^0.14.0",
+    "saslmechanisms": "^0.1.1"
   },
   "engines": {
     "node": ">= 20"
