@@ -4,7 +4,7 @@ import SASLFactory from "saslmechanisms";
 
 const NS = "urn:xmpp:fast:0";
 
-export default function fast({ sasl2 }, onToken) {
+export default function fast({ sasl2 }) {
   const saslFactory = new SASLFactory();
 
   const fast = {
@@ -36,12 +36,11 @@ export default function fast({ sasl2 }, onToken) {
 
       return xml("fast", { xmlns: NS });
     },
-    (element) => {
+    async (element) => {
       if (element.is("token", NS)) {
         const { token, expiry } = element.attrs;
         fast.token = token;
         fast.expiry = expiry;
-        onToken?.({ token, expiry, mechanism: fast.mechanism });
       }
     },
   );
