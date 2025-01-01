@@ -4,15 +4,18 @@ import SASLFactory from "saslmechanisms";
 
 const NS = "urn:xmpp:fast:0";
 
-export default function fast({ sasl2 }) {
+export default function fast({ sasl2 }, onToken) {
   const saslFactory = new SASLFactory();
 
   const fast = {
     token: null,
     expiry: null,
-    count: 0,
     saslFactory,
     mechanisms: [],
+    mechanism: null,
+    available() {
+      return !!(this.token && this.mechanism);
+    },
   };
 
   sasl2.use(
@@ -20,23 +23,25 @@ export default function fast({ sasl2 }) {
     async (element) => {
       if (!element.is("fast", NS)) return;
       fast.mechanisms = getAvailableMechanisms(element, NS, saslFactory);
+      fast.mechanism = fast.mechanisms[0];
 
-      if (fast.mechanisms.length === 0) return;
+      if (!fast.mechanism) return;
 
       if (!fast.token) {
         return xml("request-token", {
           xmlns: NS,
-          mechanism: "HT-SHA-256-NONE",
+          mechanism: fast.mechanism,
         });
       }
 
-      return xml("fast", { xmlns: NS, count: fast.count++ });
+      return xml("fast", { xmlns: NS });
     },
     (element) => {
       if (element.is("token", NS)) {
-        fast.token = element.attrs.token;
-        fast.expiry = element.attrs.expiry;
-        fast.count = 0;
+        const { token, expiry } = element.attrs;
+        fast.token = token;
+        fast.expiry = expiry;
+        onToken?.({ token, expiry, mechanism: fast.mechanism });
       }
     },
   );

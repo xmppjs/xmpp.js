@@ -113,20 +113,23 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
       const is_fast = fastStreamFeature && fast;
 
       async function done(credentials, mechanism, userAgent) {
+        const params = {
+          entity,
+          credentials,
+          userAgent,
+          streamFeatures,
+          features,
+        };
+
         if (is_fast) {
           try {
             await authenticate({
               saslFactory: fast.saslFactory,
-              entity,
-              mechanism,
-              credentials,
-              userAgent,
-              streamFeatures,
-              features,
+              mechanism: fast.mechanisms[0],
+              ...params,
             });
             return;
           } catch {
-            return; // FIXME
             // If fast authentication fails, continue and try with sasl
             streamFeatures.delete(fastStreamFeature);
           }
@@ -134,18 +137,12 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
 
         await authenticate({
           saslFactory,
-          entity,
           mechanism,
-          credentials,
-          userAgent,
-          streamFeatures,
-          features,
+          ...params,
         });
       }
 
-      const mechanisms = is_fast
-        ? fast.mechanisms
-        : getAvailableMechanisms(element, NS, saslFactory);
+      const mechanisms = getAvailableMechanisms(element, NS, saslFactory);
       if (mechanisms.length === 0) {
         throw new SASLError("SASL: No compatible mechanism available.");
       }
