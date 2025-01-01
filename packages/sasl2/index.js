@@ -1,6 +1,7 @@
 import { encode, decode } from "@xmpp/base64";
 import SASLError from "@xmpp/sasl/lib/SASLError.js";
 import xml from "@xmpp/xml";
+import { procedure } from "@xmpp/events";
 
 // https://xmpp.org/extensions/xep-0388.html
 
@@ -36,16 +37,21 @@ async function authenticate({
     ...credentials,
   };
 
-  return new Promise((resolve, reject) => {
-    const handler = (element) => {
-      if (element.getNS() !== NS) {
-        return;
-      }
+  await procedure(
+    entity,
+    xml("authenticate", { xmlns: NS, mechanism: mech.name }, [
+      mech.clientFirst &&
+        xml("initial-response", {}, encode(mech.response(creds))),
+      userAgent,
+      ...streamFeatures,
+    ]),
+    async (element, done) => {
+      if (element.getNS() !== NS) return;
 
       if (element.name === "challenge") {
         mech.challenge(decode(element.text()));
         const resp = mech.response(creds);
-        entity.send(
+        await entity.send(
           xml(
             "response",
             { xmlns: NS, mechanism: mech.name },
@@ -56,13 +62,11 @@ async function authenticate({
       }
 
       if (element.name === "failure") {
-        reject(SASLError.fromElement(element));
-        return;
+        throw SASLError.fromElement(element);
       }
 
       if (element.name === "continue") {
-        reject(new Error("continue is not supported yet"));
-        return;
+        throw new Error("SASL continue is not supported yet");
       }
 
       if (element.name === "success") {
@@ -83,25 +87,10 @@ async function authenticate({
           feature?.[1]?.(child);
         }
 
-        resolve(element);
+        return done();
       }
-
-      entity.removeListener("nonza", handler);
-    };
-
-    entity.on("nonza", handler);
-
-    entity
-      .send(
-        xml("authenticate", { xmlns: NS, mechanism: mech.name }, [
-          mech.clientFirst &&
-            xml("initial-response", {}, encode(mech.response(creds))),
-          userAgent,
-          ...streamFeatures,
-        ]),
-      )
-      .catch(reject);
-  });
+    },
+  );
 }
 
 export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {

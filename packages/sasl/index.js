@@ -1,6 +1,7 @@
 import { encode, decode } from "@xmpp/base64";
 import SASLError from "./lib/SASLError.js";
 import xml from "@xmpp/xml";
+import { procedure } from "@xmpp/events";
 
 // https://xmpp.org/rfcs/rfc6120.html#sasl
 
@@ -28,16 +29,21 @@ async function authenticate({ saslFactory, entity, mechanism, credentials }) {
     ...credentials,
   };
 
-  return new Promise((resolve, reject) => {
-    const handler = (element) => {
-      if (element.attrs.xmlns !== NS) {
-        return;
-      }
+  await procedure(
+    entity,
+    mech.clientFirst &&
+      xml(
+        "auth",
+        { xmlns: NS, mechanism: mech.name },
+        encode(mech.response(creds)),
+      ),
+    async (element, done) => {
+      if (element.getNS() !== NS) return;
 
       if (element.name === "challenge") {
         mech.challenge(decode(element.text()));
         const resp = mech.response(creds);
-        entity.send(
+        await entity.send(
           xml(
             "response",
             { xmlns: NS, mechanism: mech.name },
@@ -48,26 +54,14 @@ async function authenticate({ saslFactory, entity, mechanism, credentials }) {
       }
 
       if (element.name === "failure") {
-        reject(SASLError.fromElement(element));
-      } else if (element.name === "success") {
-        resolve();
+        throw SASLError.fromElement(element);
       }
 
-      entity.removeListener("nonza", handler);
-    };
-
-    entity.on("nonza", handler);
-
-    if (mech.clientFirst) {
-      entity.send(
-        xml(
-          "auth",
-          { xmlns: NS, mechanism: mech.name },
-          encode(mech.response(creds)),
-        ),
-      );
-    }
-  });
+      if (element.name === "success") {
+        return done();
+      }
+    },
+  );
 }
 
 export default function sasl({ streamFeatures, saslFactory }, onAuthenticate) {
