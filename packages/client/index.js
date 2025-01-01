@@ -64,18 +64,17 @@ function client(options = {}) {
     { saslFactory, streamFeatures },
     createOnAuthenticate(credentials ?? { username, password }, userAgent),
   );
-  const fast = _fast({
+
+  const fast = setupIfAvailable(_fast, {
     sasl2,
   });
-  sasl2.setup({ fast });
+  fast && sasl2.setup({ fast });
 
   // SASL2 inline features
   const bind2 = _bind2({ sasl2, entity }, resource);
 
-  // sasl2.setupFast(fast);
-
   // FAST mechanisms - order matters and define priority
-  htsha256none(fast.saslFactory);
+  fast && htsha256none?.(fast.saslFactory);
 
   // Stream features - order matters and define priority
   const sasl = _sasl(
