@@ -1,4 +1,4 @@
-import { getAvailableMechanisms } from "@xmpp/sasl2";
+import { getAvailableMechanisms } from "@xmpp/sasl";
 import xml from "@xmpp/xml";
 import SASLFactory from "saslmechanisms";
 

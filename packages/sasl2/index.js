@@ -2,18 +2,11 @@ import { encode, decode } from "@xmpp/base64";
 import SASLError from "@xmpp/sasl/lib/SASLError.js";
 import xml from "@xmpp/xml";
 import { procedure } from "@xmpp/events";
+import { getAvailableMechanisms } from "@xmpp/sasl";
 
 // https://xmpp.org/extensions/xep-0388.html
 
 const NS = "urn:xmpp:sasl:2";
-
-export function getAvailableMechanisms(element, NS, saslFactory) {
-  const offered = new Set(
-    element.getChildren("mechanism", NS).map((m) => m.text()),
-  );
-  const supported = saslFactory._mechs.map(({ name }) => name);
-  return supported.filter((mech) => offered.has(mech));
-}
 
 async function authenticate({
   saslFactory,

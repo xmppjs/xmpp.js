@@ -7,8 +7,12 @@ import { procedure } from "@xmpp/events";
 
 const NS = "urn:ietf:params:xml:ns:xmpp-sasl";
 
-function getMechanismNames(element) {
-  return element.getChildElements().map((el) => el.text());
+export function getAvailableMechanisms(element, NS, saslFactory) {
+  const offered = new Set(
+    element.getChildren("mechanism", NS).map((m) => m.text()),
+  );
+  const supported = saslFactory._mechs.map(({ name }) => name);
+  return supported.filter((mech) => offered.has(mech));
 }
 
 async function authenticate({ saslFactory, entity, mechanism, credentials }) {
@@ -66,11 +70,8 @@ async function authenticate({ saslFactory, entity, mechanism, credentials }) {
 
 export default function sasl({ streamFeatures, saslFactory }, onAuthenticate) {
   streamFeatures.use("mechanisms", NS, async ({ entity }, _next, element) => {
-    const offered = getMechanismNames(element);
-    const supported = saslFactory._mechs.map(({ name }) => name);
-    const intersection = supported.filter((mech) => offered.includes(mech));
-
-    if (intersection.length === 0) {
+    const mechanisms = getAvailableMechanisms(element, NS, saslFactory);
+    if (mechanisms.length === 0) {
       throw new SASLError("SASL: No compatible mechanism available.");
     }
 
@@ -83,7 +84,7 @@ export default function sasl({ streamFeatures, saslFactory }, onAuthenticate) {
       });
     }
 
-    await onAuthenticate(done, intersection);
+    await onAuthenticate(done, mechanisms);
 
     await entity.restart();
   });
