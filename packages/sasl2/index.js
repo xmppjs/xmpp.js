@@ -7,8 +7,12 @@ import { procedure } from "@xmpp/events";
 
 const NS = "urn:xmpp:sasl:2";
 
-function getMechanismNames(stanza) {
-  return stanza.getChildren("mechanism", NS).map((m) => m.text());
+export function getAvailableMechanisms(element, NS, saslFactory) {
+  const offered = new Set(
+    element.getChildren("mechanism", NS).map((m) => m.text()),
+  );
+  const supported = saslFactory._mechs.map(({ name }) => name);
+  return supported.filter((mech) => offered.has(mech));
 }
 
 async function authenticate({
@@ -95,22 +99,39 @@ async function authenticate({
 
 export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
   const features = new Map();
+  let fast;
 
   streamFeatures.use(
     "authentication",
     NS,
     async ({ entity }, _next, element) => {
-      const offered = getMechanismNames(element);
-      const supported = saslFactory._mechs.map(({ name }) => name);
-      const intersection = supported.filter((mech) => offered.includes(mech));
-
-      if (intersection.length === 0) {
-        throw new SASLError("SASL: No compatible mechanism available.");
-      }
-
       const streamFeatures = await getStreamFeatures({ element, features });
 
+      const fastStreamFeature = [...streamFeatures].find((el) =>
+        el?.is("fast", "urn:xmpp:fast:0"),
+      );
+      const is_fast = fastStreamFeature && fast;
+
       async function done(credentials, mechanism, userAgent) {
+        if (is_fast) {
+          try {
+            await authenticate({
+              saslFactory: fast.saslFactory,
+              entity,
+              mechanism,
+              credentials,
+              userAgent,
+              streamFeatures,
+              features,
+            });
+            return;
+          } catch {
+            return; // FIXME
+            // If fast authentication fails, continue and try with sasl
+            streamFeatures.delete(fastStreamFeature);
+          }
+        }
+
         await authenticate({
           saslFactory,
           entity,
@@ -122,7 +143,14 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
         });
       }
 
-      await onAuthenticate(done, intersection);
+      const mechanisms = is_fast
+        ? fast.mechanisms
+        : getAvailableMechanisms(element, NS, saslFactory);
+      if (mechanisms.length === 0) {
+        throw new SASLError("SASL: No compatible mechanism available.");
+      }
+
+      await onAuthenticate(done, mechanisms, is_fast && fast);
     },
   );
 
@@ -130,10 +158,13 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
     use(ns, req, res) {
       features.set(ns, [req, res]);
     },
+    setup({ fast: _fast }) {
+      fast = _fast;
+    },
   };
 }
 
-function getStreamFeatures({ element, features }) {
+async function getStreamFeatures({ element, features }) {
   const promises = [];
 
   const inline = element.getChild("inline");
@@ -146,5 +177,5 @@ function getStreamFeatures({ element, features }) {
     promises.push(feature[0](element));
   }
 
-  return Promise.all(promises);
+  return new Set(await Promise.all(promises));
 }

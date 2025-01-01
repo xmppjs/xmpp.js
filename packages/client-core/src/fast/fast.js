@@ -1,10 +1,10 @@
+import { getAvailableMechanisms } from "@xmpp/sasl2";
 import xml from "@xmpp/xml";
 import SASLFactory from "saslmechanisms";
-import { getAvailableMechanisms } from "@xmpp/sasl2";
 
-const NS_FAST = "urn:xmpp:fast:0";
+const NS = "urn:xmpp:fast:0";
 
-export default function fast({ sasl2 }, onAuthenticate) {
+export default function fast({ sasl2 }) {
   const saslFactory = new SASLFactory();
 
   const fast = {
@@ -16,24 +16,24 @@ export default function fast({ sasl2 }, onAuthenticate) {
   };
 
   sasl2.use(
-    NS_FAST,
+    NS,
     async (element) => {
-      if (!element.is("fast", NS_FAST)) return;
-      fast.mechanisms = getAvailableMechanisms();
+      if (!element.is("fast", NS)) return;
+      fast.mechanisms = getAvailableMechanisms(element, NS, saslFactory);
 
       if (fast.mechanisms.length === 0) return;
 
       if (!fast.token) {
         return xml("request-token", {
-          xmlns: NS_FAST,
+          xmlns: NS,
           mechanism: "HT-SHA-256-NONE",
         });
       }
 
-      return xml("fast", { xmlns: "urn:xmpp:fast:0", count: ++fast.count });
+      return xml("fast", { xmlns: NS, count: fast.count++ });
     },
     (element) => {
-      if (element.is("token")) {
+      if (element.is("token", NS)) {
         fast.token = element.attrs.token;
         fast.expiry = element.attrs.expiry;
         fast.count = 0;
