@@ -13,10 +13,6 @@ const xmpp = client({
   resource: "example",
   username: "username",
   password: "password",
-  userAgent: xml("user-agent", { id: "foobar" }, [
-    xml("software", {}, "wow"),
-    xml("device", {}, "man"),
-  ]),
 });
 
 debug(xmpp, true);
@@ -39,14 +35,8 @@ xmpp.once("stanza", async (stanza) => {
 xmpp.on("online", async (address) => {
   console.log("online as", address.toString());
 
-  setTimeout(() => {
-    xmpp.disconnect();
-  }, 100);
-
-  return;
-
   // Makes itself available
-  // await xmpp.send(xml("presence"));
+  await xmpp.send(xml("presence"));
 
   // Sends a chat message to itself
   const message = xml(
