@@ -17,11 +17,13 @@ import _sasl from "@xmpp/sasl";
 import _resourceBinding from "@xmpp/resource-binding";
 import _streamManagement from "@xmpp/stream-management";
 import _bind2 from "@xmpp/client-core/src/bind2/bind2.js";
+import _fast from "@xmpp/client-core/src/fast/fast.js";
 
 import SASLFactory from "saslmechanisms";
 import scramsha1 from "@xmpp/sasl-scram-sha-1";
 import plain from "@xmpp/sasl-plain";
 import anonymous from "@xmpp/sasl-anonymous";
+import htsha256none from "@xmpp/sasl-ht-sha-256-none";
 
 function client(options = {}) {
   const { resource, credentials, username, password, userAgent, ...params } =
@@ -63,8 +65,16 @@ function client(options = {}) {
     createOnAuthenticate(credentials ?? { username, password }, userAgent),
   );
 
+  const fast = setupIfAvailable(_fast, {
+    sasl2,
+  });
+  fast && sasl2.setup({ fast });
+
   // SASL2 inline features
   const bind2 = _bind2({ sasl2, entity }, resource);
+
+  // FAST mechanisms - order matters and define priority
+  fast && setupIfAvailable(htsha256none, fast.saslFactory);
 
   // Stream features - order matters and define priority
   const sasl = _sasl(
@@ -102,6 +112,7 @@ function client(options = {}) {
     streamManagement,
     mechanisms,
     bind2,
+    fast,
   });
 }
 
