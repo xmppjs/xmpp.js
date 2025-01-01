@@ -114,7 +114,11 @@ test("enable - failed", async () => {
   expect(entity.streamManagement.outbound).toBe(0);
   entity.streamManagement.enabled = true;
 
-  entity.mockInput(<failed xmlns="urn:xmpp:sm:3" />);
+  entity.mockInput(
+    <failed xmlns="urn:xmpp:sm:3">
+      <unexpected-request xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
+    </failed>,
+  );
 
   await tick();
 
@@ -169,7 +173,11 @@ test("resume - failed", async () => {
     <resume xmlns="urn:xmpp:sm:3" previd="bar" h="0" />,
   );
 
-  entity.mockInput(<failed xmlns="urn:xmpp:sm:3" />);
+  entity.mockInput(
+    <failed xmlns="urn:xmpp:sm:3">
+      <unexpected-request xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
+    </failed>,
+  );
 
   await tick();
 

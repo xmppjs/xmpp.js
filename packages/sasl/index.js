@@ -37,7 +37,7 @@ async function authenticate({ saslFactory, entity, mechanism, credentials }) {
         { xmlns: NS, mechanism: mech.name },
         encode(mech.response(creds)),
       ),
-    async (element, stop) => {
+    async (element, done) => {
       if (element.getNS() !== NS) return;
 
       if (element.name === "challenge") {
@@ -58,7 +58,7 @@ async function authenticate({ saslFactory, entity, mechanism, credentials }) {
       }
 
       if (element.name === "success") {
-        return stop();
+        return done();
       }
     },
   );

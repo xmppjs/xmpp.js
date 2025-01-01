@@ -45,13 +45,13 @@ async function authenticate({
       userAgent,
       ...streamFeatures,
     ]),
-    async (element, stop) => {
+    async (element, done) => {
       if (element.getNS() !== NS) return;
 
       if (element.name === "challenge") {
         mech.challenge(decode(element.text()));
         const resp = mech.response(creds);
-        entity.send(
+        await entity.send(
           xml(
             "response",
             { xmlns: NS, mechanism: mech.name },
@@ -87,7 +87,7 @@ async function authenticate({
           feature?.[1]?.(child);
         }
 
-        return stop();
+        return done();
       }
     },
   );

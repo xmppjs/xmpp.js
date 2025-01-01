@@ -19,9 +19,9 @@ function makeResumeElement({ sm }) {
 }
 
 function enable(entity, sm) {
-  return procedure(entity, makeEnableElement({ sm }), (element, stop) => {
+  return procedure(entity, makeEnableElement({ sm }), (element, done) => {
     if (element.is("enabled", NS)) {
-      return stop(element);
+      return done(element);
     } else if (element.is("failed", NS)) {
       throw XMPPError.fromElement(element);
     }
@@ -29,9 +29,9 @@ function enable(entity, sm) {
 }
 
 async function resume(entity, sm) {
-  return procedure(entity, makeResumeElement({ sm }), (element, stop) => {
+  return procedure(entity, makeResumeElement({ sm }), (element, done) => {
     if (element.is("resumed", NS)) {
-      return stop(element);
+      return done(element);
     } else if (element.is("failed", NS)) {
       throw XMPPError.fromElement(element);
     }
