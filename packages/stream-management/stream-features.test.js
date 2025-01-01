@@ -21,8 +21,6 @@ test("enable - enabled", async () => {
     <enable xmlns="urn:xmpp:sm:3" resume="true" />,
   );
 
-  await tick();
-
   expect(entity.streamManagement.outbound).toBe(0);
   expect(entity.streamManagement.enabled).toBe(false);
   expect(entity.streamManagement.id).toBe("");
@@ -56,8 +54,6 @@ test("enable - send rejects", async () => {
     />,
   );
 
-  await tick();
-
   expect(entity.streamManagement.enabled).toBe(false);
 });
 
@@ -79,8 +75,6 @@ test("enable - message - enabled", async () => {
   expect(entity.streamManagement.outbound).toBe(0);
   expect(entity.streamManagement.enabled).toBe(false);
   expect(entity.streamManagement.id).toBe("");
-
-  await tick();
 
   entity.mockInput(<message />);
 
@@ -119,8 +113,6 @@ test("enable - failed", async () => {
 
   expect(entity.streamManagement.outbound).toBe(0);
   entity.streamManagement.enabled = true;
-
-  await tick();
 
   entity.mockInput(<failed xmlns="urn:xmpp:sm:3" />);
 

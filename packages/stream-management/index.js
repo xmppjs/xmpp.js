@@ -1,3 +1,5 @@
+import XMPPError from "@xmpp/error";
+import { procedure } from "@xmpp/events";
 import xml from "@xmpp/xml";
 
 // https://xmpp.org/extensions/xep-0198.html
@@ -16,34 +18,24 @@ function makeResumeElement({ sm }) {
   return xml("resume", { xmlns: NS, h: sm.inbound, previd: sm.id });
 }
 
-async function enable(entity, sm) {
-  await entity.send(makeEnableElement({ sm }));
-
-  return new Promise((resolve, reject) => {
-    function listener(nonza) {
-      if (nonza.is("enabled", NS)) {
-        resolve(nonza);
-      } else if (nonza.is("failed", NS)) {
-        reject(nonza);
-      } else {
-        return;
-      }
-
-      entity.removeListener("nonza", listener);
+function enable(entity, sm) {
+  return procedure(entity, makeEnableElement({ sm }), (element, stop) => {
+    if (element.is("enabled", NS)) {
+      return stop(element);
+    } else if (element.is("failed", NS)) {
+      throw XMPPError.fromElement(element);
     }
-
-    entity.on("nonza", listener);
   });
 }
 
 async function resume(entity, sm) {
-  const response = await entity.sendReceive(makeResumeElement({ sm }));
-
-  if (!response.is("resumed", NS)) {
-    throw response;
-  }
-
-  return response;
+  return procedure(entity, makeResumeElement({ sm }), (element, stop) => {
+    if (element.is("resumed", NS)) {
+      return stop(element);
+    } else if (element.is("failed", NS)) {
+      throw XMPPError.fromElement(element);
+    }
+  });
 }
 
 export default function streamManagement({
