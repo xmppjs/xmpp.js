@@ -59,13 +59,8 @@ async function getUserAgent() {
     id = await crypto.randomUUID();
     localStorage.set("user-agent-id", id);
   }
-  return (
-    // https://xmpp.org/extensions/xep-0388.html#initiation
-    <user-agent id={id}>
-      <software>xmpp.js</software>
-      <device>Sonny's Laptop</device>
-    </user-agent>
-  );
+  // https://xmpp.org/extensions/xep-0388.html#initiation
+  return { id, software: "xmpp.js", device: "Sonny's Laptop" }; // You can also pass an xml.Element
 }
 ```
 

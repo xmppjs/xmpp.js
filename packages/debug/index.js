@@ -7,6 +7,7 @@ import clone from "ltx/lib/clone.js";
 const NS_SASL = "urn:ietf:params:xml:ns:xmpp-sasl";
 const NS_SASL2 = "urn:xmpp:sasl:2";
 const NS_COMPONENT = "jabber:component:accept";
+const NS_FAST = "urn:xmpp:fast:0";
 
 const SENSITIVES = [
   ["handshake", NS_COMPONENT],
@@ -39,6 +40,8 @@ export function hideSensitive(element) {
     hide(element.getChild("initial-response"));
   } else if (element.getNS() === NS_SASL2) {
     hide(element.getChild("additional-data"));
+    const token = element.getChild("token", NS_FAST);
+    token && (token.attrs.token = "hidden by xmpp.js");
   }
 
   return element;

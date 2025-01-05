@@ -4,6 +4,13 @@ const username = "foo";
 const password = "bar";
 const credentials = { username, password };
 
+const userAgent = (
+  <user-agent id="id">
+    <software>software</software>
+    <device>device</device>
+  </user-agent>
+);
+
 test("No compatible mechanism available", async () => {
   const { entity } = mockClient({ username, password });
 
@@ -21,7 +28,7 @@ test("No compatible mechanism available", async () => {
 });
 
 test("with object credentials", async () => {
-  const { entity } = mockClient({ credentials });
+  const { entity } = mockClient({ credentials, userAgent });
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -34,6 +41,7 @@ test("with object credentials", async () => {
   expect(await promise(entity, "send")).toEqual(
     <authenticate xmlns="urn:xmpp:sasl:2" mechanism="PLAIN">
       <initial-response>AGZvbwBiYXI=</initial-response>
+      {userAgent}
     </authenticate>,
   );
 
@@ -95,7 +103,7 @@ test("with function credentials", async () => {
 });
 
 test("failure", async () => {
-  const { entity } = mockClient({ credentials });
+  const { entity } = mockClient({ credentials, userAgent });
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -108,6 +116,7 @@ test("failure", async () => {
   expect(await promise(entity, "send")).toEqual(
     <authenticate xmlns="urn:xmpp:sasl:2" mechanism="PLAIN">
       <initial-response>AGZvbwBiYXI=</initial-response>
+      {userAgent}
     </authenticate>,
   );
 

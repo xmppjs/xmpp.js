@@ -26,7 +26,7 @@ import anonymous from "@xmpp/sasl-anonymous";
 import htsha256none from "@xmpp/sasl-ht-sha-256-none";
 
 function client(options = {}) {
-  const { resource, credentials, username, password, userAgent, ...params } =
+  let { resource, credentials, username, password, userAgent, ...params } =
     options;
 
   const { domain, service } = params;
@@ -58,11 +58,22 @@ function client(options = {}) {
     anonymous,
   }).map(([k, v]) => ({ [k]: v(saslFactory) }));
 
+  // eslint-disable-next-line n/no-unsupported-features/node-builtins
+  const id = globalThis.crypto?.randomUUID?.();
+
+  let user_agent =
+    userAgent instanceof xml.Element
+      ? userAgent
+      : xml("user-agent", { id: userAgent?.id || id }, [
+          userAgent?.software && xml("software", {}, userAgent.software),
+          userAgent?.device && xml("device", {}, userAgent.device),
+        ]);
+
   // Stream features - order matters and define priority
   const starttls = setupIfAvailable(_starttls, { streamFeatures });
   const sasl2 = _sasl2(
     { streamFeatures, saslFactory },
-    createOnAuthenticate(credentials ?? { username, password }, userAgent),
+    createOnAuthenticate(credentials ?? { username, password }, user_agent),
   );
 
   const fast = setupIfAvailable(_fast, {

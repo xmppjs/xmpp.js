@@ -16,9 +16,7 @@ export default function createOnAuthenticate(credentials, userAgent) {
       return;
     }
 
-    if (fast?.token) {
-      credentials.password = fast.token;
-    }
+    credentials.token = await fast?.fetchToken?.();
 
     await authenticate(credentials, mechanisms[0], userAgent);
   };

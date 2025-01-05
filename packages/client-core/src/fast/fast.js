@@ -1,46 +1,113 @@
+import { EventEmitter } from "@xmpp/events";
 import { getAvailableMechanisms } from "@xmpp/sasl";
 import xml from "@xmpp/xml";
 import SASLFactory from "saslmechanisms";
 
 const NS = "urn:xmpp:fast:0";
 
-export default function fast({ sasl2 }) {
+export default function fast({ sasl2 }, { saveToken, fetchToken } = {}) {
   const saslFactory = new SASLFactory();
 
-  const fast = {
-    token: null,
-    expiry: null,
-    saslFactory,
-    mechanisms: [],
-    mechanism: null,
-    available() {
-      return !!(this.token && this.mechanism);
-    },
+  const fast = new EventEmitter();
+
+  let token;
+  saveToken ??= async function saveToken(t) {
+    token = t;
   };
+  fetchToken ??= async function fetchToken() {
+    return token;
+  };
+
+  Object.assign(fast, {
+    async saveToken() {
+      try {
+        await saveToken();
+      } catch (err) {
+        fast.emit("error", err);
+      }
+    },
+    async fetchToken() {
+      try {
+        return await fetchToken();
+      } catch (err) {
+        fast.emit("error", err);
+      }
+    },
+    saslFactory,
+    async auth({
+      authenticate,
+      entity,
+      userAgent,
+      token,
+      credentials,
+      streamFeatures,
+      features,
+    }) {
+      try {
+        await authenticate({
+          saslFactory: fast.saslFactory,
+          mechanism: token.mechanism,
+          credentials: {
+            ...credentials,
+            password: token.token,
+          },
+          streamFeatures: [
+            ...streamFeatures,
+            xml("fast", {
+              xmlns: NS,
+            }),
+          ],
+          entity,
+          userAgent,
+          features,
+        });
+        return true;
+      } catch (err) {
+        fast.emit("error", err);
+        return false;
+      }
+    },
+    _requestToken(streamFeatures) {
+      streamFeatures.push(
+        xml("request-token", {
+          xmlns: NS,
+          mechanism: fast.mechanism,
+        }),
+      );
+    },
+  });
+
+  function reset() {
+    fast.mechanism = null;
+  }
+  reset();
 
   sasl2.use(
     NS,
     async (element) => {
-      if (!element.is("fast", NS)) return;
-      fast.mechanisms = getAvailableMechanisms(element, NS, saslFactory);
-      fast.mechanism = fast.mechanisms[0];
+      if (!element.is("fast", NS)) return reset();
 
-      if (!fast.mechanism) return;
+      fast.available = true;
 
-      if (!fast.token) {
-        return xml("request-token", {
-          xmlns: NS,
-          mechanism: fast.mechanism,
-        });
-      }
+      const mechanisms = getAvailableMechanisms(element, NS, saslFactory);
+      const mechanism = mechanisms[0];
 
-      return xml("fast", { xmlns: NS });
+      if (!mechanism) return reset();
+      fast.mechanism = mechanism;
+
+      // The rest is handled by @xmpp/sasl2
     },
     async (element) => {
       if (element.is("token", NS)) {
-        const { token, expiry } = element.attrs;
-        fast.token = token;
-        fast.expiry = expiry;
+        try {
+          await saveToken({
+            mechanism: fast.mechanism,
+            token: element.attrs.token,
+            expiry: element.attrs.expiry,
+          });
+        } catch (err) {
+          fast.emit("error", err);
+        }
       }
     },
   );

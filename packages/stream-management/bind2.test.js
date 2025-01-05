@@ -20,14 +20,11 @@ test("enable", async () => {
   );
 
   const stanza_out = await entity.catchOutgoing();
-  expect(stanza_out).toEqual(
-    <authenticate xmlns="urn:xmpp:sasl:2" mechanism="PLAIN">
-      {stanza_out.getChild("initial-response")}
-      <bind xmlns="urn:xmpp:bind:0">
-        <enable xmlns="urn:xmpp:sm:3" resume="true" />
-      </bind>
-    </authenticate>,
-  );
+  const enable = stanza_out
+    .getChild("bind", "urn:xmpp:bind:0")
+    .getChild("enable");
+  enable.parent = null;
+  expect(enable).toEqual(<enable xmlns="urn:xmpp:sm:3" resume="true" />);
 
   expect(sm.enabled).toBe(false);
   expect(sm.id).toBe("");
@@ -67,14 +64,11 @@ test("Client failed to enable stream management", async () => {
   );
 
   const stanza_out = await entity.catchOutgoing();
-  expect(stanza_out).toEqual(
-    <authenticate xmlns="urn:xmpp:sasl:2" mechanism="PLAIN">
-      {stanza_out.getChild("initial-response")}
-      <bind xmlns="urn:xmpp:bind:0">
-        <enable xmlns="urn:xmpp:sm:3" resume="true" />
-      </bind>
-    </authenticate>,
-  );
+  const enable = stanza_out
+    .getChild("bind", "urn:xmpp:bind:0")
+    .getChild("enable");
+  enable.parent = null;
+  expect(enable).toEqual(<enable xmlns="urn:xmpp:sm:3" resume="true" />);
 
   expect(sm.enabled).toBe(false);
   expect(sm.id).toBe("");

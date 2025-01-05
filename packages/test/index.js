@@ -2,6 +2,7 @@ import context from "./context.js";
 import xml from "@xmpp/xml";
 import jid from "@xmpp/jid";
 import mockClient from "./mockClient.js";
+import mockClientCore from "./mockClientCore.js";
 import { delay, promise, timeout } from "@xmpp/events";
 import id from "@xmpp/id";
 
@@ -11,6 +12,7 @@ export {
   jid,
   jid as JID,
   mockClient,
+  mockClientCore,
   delay,
   promise,
   timeout,
