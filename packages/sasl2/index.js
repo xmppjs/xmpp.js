@@ -98,49 +98,46 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
     "authentication",
     NS,
     async ({ entity }, _next, element) => {
-      const streamFeatures = await getStreamFeatures({ element, features });
-
-      const fastStreamFeature = [...streamFeatures].find((el) =>
-        el?.is("fast", "urn:xmpp:fast:0"),
-      );
-      const is_fast = fastStreamFeature && fast;
-
-      async function done(credentials, mechanism, userAgent) {
-        const params = {
-          entity,
-          credentials,
-          userAgent,
-          streamFeatures,
-          features,
-        };
-
-        if (is_fast) {
-          try {
-            await authenticate({
-              saslFactory: fast.saslFactory,
-              mechanism: fast.mechanisms[0],
-              ...params,
-            });
-            return;
-          } catch {
-            // If fast authentication fails, continue and try with sasl
-            streamFeatures.delete(fastStreamFeature);
-          }
-        }
-
-        await authenticate({
-          saslFactory,
-          mechanism,
-          ...params,
-        });
-      }
-
       const mechanisms = getAvailableMechanisms(element, NS, saslFactory);
       if (mechanisms.length === 0) {
         throw new SASLError("SASL: No compatible mechanism available.");
       }
 
-      await onAuthenticate(done, mechanisms, is_fast && fast);
+      const streamFeatures = await getStreamFeatures({ element, features });
+      const fast_available = !!fast?.mechanism;
+      await onAuthenticate(done, mechanisms, fast_available && fast);
+
+      async function done(credentials, mechanism, userAgent) {
+        if (fast_available) {
+          const { token } = credentials;
+          // eslint-disable-next-line unicorn/no-negated-condition
+          if (!token) {
+            fast._requestToken(streamFeatures);
+          } else {
+            const success = await fast.auth({
+              authenticate,
+              entity,
+              userAgent,
+              token,
+              streamFeatures,
+              features,
+              credentials,
+            });
+            if (success) return;
+            // If fast authentication fails, continue and try with sasl
+          }
+        }
+
+        await authenticate({
+          entity,
+          userAgent,
+          streamFeatures,
+          features,
+          saslFactory,
+          mechanism,
+          credentials,
+        });
+      }
     },
   );
 
@@ -167,5 +164,5 @@ async function getStreamFeatures({ element, features }) {
     promises.push(feature[0](element));
   }
 
-  return new Set(await Promise.all(promises));
+  return Promise.all(promises);
 }

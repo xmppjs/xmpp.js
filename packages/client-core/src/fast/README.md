@@ -1,34 +1,35 @@
 # fast
 
-fast for `@xmpp/client`.
+fast for `@xmpp/client`. Included and enabled in `@xmpp/client`.
 
-Included and enabled in `@xmpp/client`.
+By default `@xmpp/fast` stores the token in memory and as such fast authentication will only be available starting with the first reconnect.
+
+You can supply your own functions to store and retrieve the token from a persistent database.
+
+If fast authentication fails, regular authentication with `credentials` will happen.
 
 ## Usage
 
-Resource is optional and will be chosen by the server if omitted.
-
-### string
-
 ```js
 import { xmpp } from "@xmpp/client";
 
-const client = xmpp({ resource: "laptop" });
-```
+const client = xmpp({
+  ...
+});
 
-### function
-
-Instead, you can provide a function that will be called every time resource binding occurs (every (re)connect).
-
-```js
-import { xmpp } from "@xmpp/client";
-
-const client = xmpp({ resource: onBind });
-
-async function onBind(bind) {
-  const resource = await fetchResource();
-  return resource;
+client.fast.fetchToken = async () => {
+  const value = await secureStorage.get("token")
+  return JSON.parse(value);
 }
+
+client.fast.saveToken = async (token) => {
+  await secureStorage.set("token", JSON.stringify(token));
+}
+
+// Debugging only
+client.fast.on("error", (error) => {
+  console.log("fast error", error);
+})
 ```
 
 ## References
