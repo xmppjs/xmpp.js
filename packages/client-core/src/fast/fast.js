@@ -45,7 +45,7 @@ export default function fast({ sasl2 }, { saveToken, fetchToken } = {}) {
       streamFeatures,
       features,
     }) {
-      if (isTokenValid({ token, mechanisms: fast.mechanisms })) {
+      if (!isTokenValid(token, fast.mechanisms)) {
         return false;
       }
 
@@ -125,7 +125,7 @@ export default function fast({ sasl2 }, { saveToken, fetchToken } = {}) {
   return fast;
 }
 
-export function isTokenValid({ token, mechanisms }) {
+export function isTokenValid(token, mechanisms) {
   // Avoid an error round trip if the server does not support the token mechanism anymore
   if (!mechanisms.includes(token.mechanism)) {
     return false;

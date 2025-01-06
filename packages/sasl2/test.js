@@ -1,6 +1,4 @@
 import { mockClient, promise } from "@xmpp/test";
-// eslint-disable-next-line n/no-extraneous-import
-import { datetime } from "@xmpp/time";
 
 const username = "foo";
 const password = "bar";
@@ -115,7 +113,6 @@ test("with FAST token only", async () => {
       {
         token: {
           token: "hai",
-          expiry: datetime(new Date()),
           mechanism: fast.mechanism,
         },
       },
