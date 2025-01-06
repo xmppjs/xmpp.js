@@ -32,9 +32,7 @@
     "@xmpp/tcp": false,
     "@xmpp/tls": false,
     "@xmpp/starttls": false,
-    "@xmpp/sasl-scram-sha-1": false,
-    "@xmpp/sasl-ht-sha-256-none": false,
-    "@xmpp/fast": false
+    "@xmpp/sasl-scram-sha-1": false
   },
   "engines": {
     "node": ">= 20"

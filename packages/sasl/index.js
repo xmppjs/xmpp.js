@@ -39,14 +39,14 @@ async function authenticate({ saslFactory, entity, mechanism, credentials }) {
       xml(
         "auth",
         { xmlns: NS, mechanism: mech.name },
-        encode(mech.response(creds)),
+        encode(await mech.response(creds)),
       ),
     async (element, done) => {
       if (element.getNS() !== NS) return;
 
       if (element.name === "challenge") {
-        mech.challenge(decode(element.text()));
-        const resp = mech.response(creds);
+        await mech.challenge(decode(element.text()));
+        const resp = await mech.response(creds);
         await entity.send(
           xml(
             "response",
