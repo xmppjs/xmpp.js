@@ -1,5 +1,5 @@
 import promise from "../lib/promise.js";
-import EventEmitter from "node:events";
+import { EventEmitter } from "../index.js";
 
 class Socket extends EventEmitter {
   constructor(fn) {

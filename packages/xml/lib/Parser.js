@@ -1,6 +1,6 @@
 import LtxParser from "ltx/lib/parsers/ltx.js";
 import Element from "ltx/lib/Element.js";
-import EventEmitter from "events";
+import { EventEmitter } from "@xmpp/events";
 import XMLError from "./XMLError.js";
 
 class Parser extends EventEmitter {

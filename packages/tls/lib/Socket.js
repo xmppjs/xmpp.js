@@ -1,5 +1,5 @@
 import tls from "tls";
-import { EventEmitter } from "events";
+import { EventEmitter } from "@xmpp/events";
 
 class Socket extends EventEmitter {
   constructor() {

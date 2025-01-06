@@ -18,7 +18,7 @@ xmpp.on("offline", () => {
   console.log("offline");
 });
 
-xmpp.once("stanza", async (stanza) => {
+xmpp.on("stanza", async (stanza) => {
   if (stanza.is("message")) {
     await xmpp.stop();
   }

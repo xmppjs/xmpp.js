@@ -1,4 +1,4 @@
-import EventEmitter from "events";
+import { EventEmitter } from "events";
 
 import timeout from "./lib/timeout.js";
 import delay from "./lib/delay.js";

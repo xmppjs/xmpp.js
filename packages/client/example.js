@@ -25,12 +25,14 @@ xmpp.on("offline", () => {
   console.log("offline");
 });
 
-xmpp.once("stanza", async (stanza) => {
+xmpp.on("stanza", onStanza);
+async function onStanza(stanza) {
   if (stanza.is("message")) {
+    xmpp.off("stanza", onStanza);
     await xmpp.send(xml("presence", { type: "unavailable" }));
     await xmpp.stop();
   }
-});
+}
 
 xmpp.on("online", async (address) => {
   console.log("online as", address.toString());
