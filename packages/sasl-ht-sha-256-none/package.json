@@ -12,7 +12,6 @@
     "XMPP",
     "sasl"
   ],
-  "dependencies": {},
   "engines": {
     "node": ">= 20"
   },
