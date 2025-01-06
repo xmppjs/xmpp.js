@@ -282,7 +282,6 @@ class Connection extends EventEmitter {
    */
   async stop() {
     const el = await this._end();
-    this.jid = null;
     this._status("offline", el);
     return el;
   }

@@ -1,14 +1,14 @@
 import xml from "@xmpp/xml";
 
-const NS_BIND = "urn:xmpp:bind:0";
+const NS = "urn:xmpp:bind:0";
 
 export default function bind2({ sasl2, entity }, tag) {
   const features = new Map();
 
   sasl2.use(
-    NS_BIND,
+    NS,
     async (element) => {
-      if (!element.is("bind", NS_BIND)) return;
+      if (!element.is("bind", NS)) return;
 
       tag = typeof tag === "function" ? await tag() : tag;
 

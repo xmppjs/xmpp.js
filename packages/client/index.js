@@ -59,21 +59,13 @@ function client(options = {}) {
   }).map(([k, v]) => ({ [k]: v(saslFactory) }));
 
   // eslint-disable-next-line n/no-unsupported-features/node-builtins
-  const id = globalThis.crypto?.randomUUID?.();
-
-  let user_agent =
-    userAgent instanceof xml.Element
-      ? userAgent
-      : xml("user-agent", { id: userAgent?.id || id }, [
-          userAgent?.software && xml("software", {}, userAgent.software),
-          userAgent?.device && xml("device", {}, userAgent.device),
-        ]);
+  userAgent ??= xml("user-agent", { id: globalThis.crypto.randomUUID() });
 
   // Stream features - order matters and define priority
   const starttls = setupIfAvailable(_starttls, { streamFeatures });
   const sasl2 = _sasl2(
     { streamFeatures, saslFactory },
-    createOnAuthenticate(credentials ?? { username, password }, user_agent),
+    createOnAuthenticate(credentials ?? { username, password }, userAgent),
   );
 
   const fast = setupIfAvailable(_fast, {

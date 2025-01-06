@@ -32,7 +32,7 @@ Uses cases:
 - Fetch credentials from a secure database
 
 ```js
-import { xmpp } from "@xmpp/client";
+import { xmpp, xml } from "@xmpp/client";
 
 const client = xmpp({
   credentials: authenticate,
@@ -60,7 +60,10 @@ async function getUserAgent() {
     localStorage.set("user-agent-id", id);
   }
   // https://xmpp.org/extensions/xep-0388.html#initiation
-  return { id, software: "xmpp.js", device: "Sonny's Laptop" }; // You can also pass an xml.Element
+  return xml("user-agent", { id }, [
+    xml("software", {}, "xmpp.js"),
+    xml("device", {}, "Sonny's laptop"),
+  ]);
 }
 ```
 

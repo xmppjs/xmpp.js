@@ -2,7 +2,8 @@
 
 import server from "./index.js";
 
-const method = process.argv[2];
+// eslint-disable-next-line unicorn/no-unreadable-array-destructuring
+const [, , method, ...args] = process.argv;
 
 const commands = {
   start() {
@@ -22,10 +23,18 @@ const commands = {
       console.log("stopped");
     }
   },
+  async enable(...args) {
+    await server.enableModules(...args);
+    await this.restart();
+  },
+  async disable(...args) {
+    await server.disableModules(...args);
+    await this.restart();
+  },
 };
 
 if (commands[method]) {
-  await commands[method]();
+  await commands[method](...args);
 } else {
-  console.error("Valid commands are start/stop/restart/status.");
+  console.error("Valid commands are start/stop/restart/status/enable/disable.");
 }
