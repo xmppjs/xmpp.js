@@ -1,6 +1,6 @@
 import { promisify } from "util";
 import path from "path";
-import fs, { writeFileSync } from "fs";
+import fs from "fs/promises";
 import child_process from "child_process";
 import net from "net";
 // eslint-disable-next-line n/no-extraneous-import
@@ -10,18 +10,17 @@ import selfsigned from "selfsigned";
 const __dirname = "./server";
 // const __dirname = import.meta.dirname;
 
-const readFile = promisify(fs.readFile);
 const exec = promisify(child_process.exec);
-const removeFile = promisify(fs.unlink);
 
 const DATA_PATH = path.join(__dirname);
 const PID_PATH = path.join(DATA_PATH, "prosody.pid");
 const PROSODY_PORT = 5347;
+const CFG_PATH = path.join(__dirname, "prosody.cfg.lua");
 
 function clean() {
   return Promise.all(
     ["prosody.err", "prosody.log", "prosody.pid"].map((file) =>
-      removeFile(path.join(__dirname, file)),
+      fs.unlink(path.join(__dirname, file)),
     ),
   ).catch(() => {});
 }
@@ -47,12 +46,14 @@ async function waitPortOpen() {
   return waitPortOpen();
 }
 
-function makeCertificate() {
+async function makeCertificate() {
   const attrs = [{ name: "commonName", value: "localhost" }];
   const pems = selfsigned.generate(attrs, { days: 365, keySize: 2048 });
 
-  writeFileSync(path.join(__dirname, "certs/localhost.crt"), pems.cert);
-  writeFileSync(path.join(__dirname, "certs/localhost.key"), pems.private);
+  await Promise.all([
+    fs.writeFile(path.join(__dirname, "certs/localhost.crt"), pems.cert),
+    fs.writeFile(path.join(__dirname, "certs/localhost.key"), pems.private),
+  ]);
 }
 
 async function waitPortClose() {
@@ -75,7 +76,7 @@ async function kill(signal = "SIGTERM") {
 
 async function getPid() {
   try {
-    return await readFile(PID_PATH, "utf8");
+    return await fs.readFile(PID_PATH, "utf8");
   } catch (err) {
     if (err.code !== "ENOENT") throw err;
     return "";
@@ -119,6 +120,34 @@ async function restart(signal) {
   return _start();
 }
 
+async function enableModules(mods) {
+  if (!Array.isArray(mods)) {
+    mods = [mods];
+  }
+
+  let prosody_cfg = await fs.readFile(CFG_PATH, "utf8");
+  for (const mod of mods) {
+    prosody_cfg = prosody_cfg.replace(`\n  -- "${mod}";`, `\n  "${mod}";`);
+  }
+  await fs.writeFile(CFG_PATH, prosody_cfg);
+}
+
+async function disableModules(mods) {
+  if (!Array.isArray(mods)) {
+    mods = [mods];
+  }
+
+  let prosody_cfg = await fs.readFile(CFG_PATH, "utf8");
+  for (const mod of mods) {
+    prosody_cfg = prosody_cfg.replace(`\n  "${mod}";`, `\n  -- "${mod}";`);
+  }
+  await fs.writeFile(CFG_PATH, prosody_cfg);
+}
+
+async function reset() {
+  await exec("git checkout server/prosody.cfg.lua");
+}
+
 export default {
   isPortOpen,
   waitPortClose,
@@ -128,4 +157,7 @@ export default {
   stop,
   restart,
   kill,
+  enableModules,
+  disableModules,
+  reset,
 };

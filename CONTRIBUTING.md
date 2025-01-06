@@ -18,7 +18,7 @@ If you want to disable either for some reason, pass `--no-verify` to `git push` 
 
 At that point you can make changes to the xmpp.js code and run tests with
 
-```
+```sh
 make test
 ```
 
@@ -31,7 +31,7 @@ See [Jest CLI](https://jestjs.io/docs/cli).
 When submitting a pull request, additional tests will be run on GitHub actions.
 In most cases it shouldn't be necessary but if they fail, you can run them locally after installing prosody >= 0.12 with
 
-```
+```sh
 make ci
 ```
 
