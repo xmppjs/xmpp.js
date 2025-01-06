@@ -99,12 +99,13 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
     NS,
     async ({ entity }, _next, element) => {
       const mechanisms = getAvailableMechanisms(element, NS, saslFactory);
-      if (mechanisms.length === 0) {
+      const streamFeatures = await getStreamFeatures({ element, features });
+      const fast_available = !!fast?.mechanism;
+
+      if (mechanisms.length === 0 && !fast_available) {
         throw new SASLError("SASL: No compatible mechanism available.");
       }
 
-      const streamFeatures = await getStreamFeatures({ element, features });
-      const fast_available = !!fast?.mechanism;
       await onAuthenticate(done, mechanisms, fast_available && fast);
 
       async function done(credentials, mechanism, userAgent) {
