@@ -1,10 +1,8 @@
-"use strict";
-
-const { EventEmitter, promise } = require("@xmpp/events");
-const jid = require("@xmpp/jid");
-const xml = require("@xmpp/xml");
-const StreamError = require("./lib/StreamError");
-const { parseHost, parseService } = require("./lib/util");
+import { EventEmitter, promise } from "@xmpp/events";
+import jid from "@xmpp/jid";
+import xml from "@xmpp/xml";
+import StreamError from "./lib/StreamError.js";
+import { parseHost, parseService } from "./lib/util.js";
 
 const NS_STREAM = "urn:ietf:params:xml:ns:xmpp-streams";
 const NS_JABBER_STREAM = "http://etherx.jabber.org/streams";
@@ -24,10 +22,10 @@ class Connection extends EventEmitter {
   }
 
   _reset() {
-    this.jid = null;
     this.status = "offline";
     this._detachSocket();
     this._detachParser();
+    this.root = null;
   }
 
   async _streamError(condition, children) {
@@ -186,6 +184,14 @@ class Connection extends EventEmitter {
     this.emit(status, ...args);
   }
 
+  _ready(resumed = false) {
+    if (resumed) {
+      this.status = "online";
+    } else {
+      this._status("online", this.jid);
+    }
+  }
+
   async _end() {
     let el;
     try {
@@ -274,6 +280,7 @@ class Connection extends EventEmitter {
    */
   async stop() {
     const el = await this._end();
+    this.jid = null;
     if (this.status !== "offline") this._status("offline", el);
     return el;
   }
@@ -375,9 +382,9 @@ class Connection extends EventEmitter {
   socketParameters() {}
 }
 
-// Overrirde
+// Override
 Connection.prototype.NS = "";
 Connection.prototype.Socket = null;
 Connection.prototype.Parser = null;
 
-module.exports = Connection;
+export default Connection;

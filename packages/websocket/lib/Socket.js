@@ -1,15 +1,24 @@
-"use strict";
+import WS from "ws";
+import { EventEmitter } from "@xmpp/events";
+import { parseURI } from "@xmpp/connection/lib/util.js";
 
-const WS = require("ws");
-const WebSocket = global.WebSocket || WS;
-const EventEmitter = require("events");
+// eslint-disable-next-line n/no-unsupported-features/node-builtins
+const WebSocket = globalThis.WebSocket || WS;
 
 const CODE = "ECONNERROR";
 
-class Socket extends EventEmitter {
+export default class Socket extends EventEmitter {
   constructor() {
     super();
     this.listeners = Object.create(null);
+  }
+
+  isSecure() {
+    if (!this.url) return false;
+    const uri = parseURI(this.url);
+    if (uri.protocol === "wss:") return true;
+    if (["localhost", "127.0.0.1", "::1"].includes(uri.hostname)) return true;
+    return false;
   }
 
   connect(url) {
@@ -75,5 +84,3 @@ class Socket extends EventEmitter {
     }
   }
 }
-
-module.exports = Socket;

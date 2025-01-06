@@ -1,11 +1,9 @@
-"use strict";
+import { Component, xml, jid } from "@xmpp/component-core";
 
-const { Component, xml, jid } = require("@xmpp/component-core");
-
-const _reconnect = require("@xmpp/reconnect");
-const _middleware = require("@xmpp/middleware");
-const _iqCaller = require("@xmpp/iq/caller");
-const _iqCallee = require("@xmpp/iq/callee");
+import _reconnect from "@xmpp/reconnect";
+import _middleware from "@xmpp/middleware";
+import _iqCaller from "@xmpp/iq/caller.js";
+import _iqCallee from "@xmpp/iq/callee.js";
 
 function component(options) {
   const { password, service, domain } = options;
@@ -37,6 +35,4 @@ function component(options) {
   });
 }
 
-module.exports.xml = xml;
-module.exports.jid = jid;
-module.exports.component = component;
+export { xml, jid, component };

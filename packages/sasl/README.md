@@ -9,11 +9,14 @@ Included and enabled in `@xmpp/client`.
 ### object
 
 ```js
-const {xmpp} = require('@xmpp/client')
-const client = xmpp({credentials: {
-  username: 'foo',
-  password: 'bar'
-})
+import { xmpp } from "@xmpp/client";
+
+const client = xmpp({
+  credentials: {
+    username: "foo",
+    password: "bar",
+  },
+});
 ```
 
 ### function
@@ -26,26 +29,22 @@ Uses cases:
 - Do not ask for password before connection is made
 - Debug authentication
 - Using a SASL mechanism with specific requirements
-- Perform an asynchronous operation to get credentials
+- Fetch credentials from a secure database
 
 ```js
-const { xmpp } = require("@xmpp/client");
-const client = xmpp({ credentials: authenticate });
+import { xmpp } from "@xmpp/client";
 
-async function authenticate(auth, mechanism) {
-  console.debug("authenticate", mechanism);
+const client = xmpp({ credentials: onAuthenticate });
+
+async function onAuthenticate(authenticate, mechanisms) {
+  console.debug("authenticate", mechanisms);
   const credentials = {
     username: await prompt("enter username"),
     password: await prompt("enter password"),
   };
   console.debug("authenticating");
-  try {
-    await auth(credentials);
-    console.debug("authenticated");
-  } catch (err) {
-    console.error(err);
-    throw err;
-  }
+  await authenticate(credentials, mechanisms[0]);
+  console.debug("authenticated");
 }
 ```
 

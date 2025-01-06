@@ -1,9 +1,5 @@
-"use strict";
+import Client from "./lib/Client.js";
+import xml from "@xmpp/xml";
+import jid from "@xmpp/jid";
 
-const Client = require("./lib/Client");
-const xml = require("@xmpp/xml");
-const jid = require("@xmpp/jid");
-
-module.exports.Client = Client;
-module.exports.xml = xml;
-module.exports.jid = jid;
+export { Client, xml, jid };

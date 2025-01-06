@@ -9,7 +9,7 @@ XMPP error abstraction for JavaScript.
 ## Usage
 
 ```js
-const XMPPError = require("@xmpp/error");
+import XMPPError from "@xmpp/error";
 
 const error = new XMPPError("service-unavailable", "optional text", element);
 error instanceof Error; // true

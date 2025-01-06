@@ -1,8 +1,5 @@
-"use strict";
-
-const test = require("ava");
-const { promise } = require("..");
-const EventEmitter = require("events");
+import promise from "../lib/promise.js";
+import EventEmitter from "node:events";
 
 class Socket extends EventEmitter {
   constructor(fn) {
@@ -17,39 +14,42 @@ class Socket extends EventEmitter {
   }
 }
 
-test('resolves if "event" is emitted', async (t) => {
+test('resolves if "event" is emitted', async () => {
   const value = {};
   // eslint-disable-next-line func-names
   const socket = new Socket(function () {
     this.emit("connect", value);
   });
-  t.is(socket.listenerCount("error"), 0);
-  t.is(socket.listenerCount("connect"), 0);
+  expect(socket.listenerCount("error")).toBe(0);
+  expect(socket.listenerCount("connect")).toBe(0);
   socket.connect();
   const p = promise(socket, "connect");
-  t.is(socket.listenerCount("error"), 1);
-  t.is(socket.listenerCount("connect"), 1);
+  expect(socket.listenerCount("error")).toBe(1);
+  expect(socket.listenerCount("connect")).toBe(1);
   const result = await p;
-  t.is(result, value);
-  t.is(socket.listenerCount("error"), 0);
-  t.is(socket.listenerCount("connect"), 0);
+  expect(result).toBe(value);
+  expect(socket.listenerCount("error")).toBe(0);
+  expect(socket.listenerCount("connect")).toBe(0);
 });
 
-test('rejects if "errorEvent" is emitted', (t) => {
+test('rejects if "errorEvent" is emitted', async () => {
   const error = new Error("foobar");
   // eslint-disable-next-line func-names
   const socket = new Socket(function () {
     this.emit("error", error);
   });
-  t.is(socket.listenerCount("error"), 0);
-  t.is(socket.listenerCount("connect"), 0);
   socket.connect();
+
+  expect(socket.listenerCount("error")).toBe(0);
+  expect(socket.listenerCount("connect")).toBe(0);
+
   const p = promise(socket, "connect", "error");
-  t.is(socket.listenerCount("error"), 1);
-  t.is(socket.listenerCount("connect"), 1);
-  return p.catch((err) => {
-    t.is(err, error);
-    t.is(socket.listenerCount("error"), 0);
-    t.is(socket.listenerCount("connect"), 0);
-  });
+
+  expect(socket.listenerCount("error")).toBe(1);
+  expect(socket.listenerCount("connect")).toBe(1);
+
+  await expect(p).rejects.toBe(error);
+
+  expect(socket.listenerCount("error")).toBe(0);
+  expect(socket.listenerCount("connect")).toBe(0);
 });

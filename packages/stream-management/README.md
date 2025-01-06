@@ -11,3 +11,7 @@ However `entity.status` is set to `online`.
 If the session fails to resume, entity will fallback to regular session establishment in which case `online` event will be emitted.
 
 Automatically responds to acks but does not support requesting acks yet.
+
+## References
+
+[XEP-0198: Stream Management](https://xmpp.org/extensions/xep-0198.html#inline-enable)

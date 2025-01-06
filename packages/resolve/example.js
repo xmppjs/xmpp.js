@@ -1,7 +1,4 @@
-"use strict";
+import { resolve } from "@xmpp/resolve";
 
-const resolve = require("./resolve");
-// For you
-// const resolve = require('@xmpp/resolve')
-
-resolve("jabberfr.org").then(console.log).catch(console.error);
+const result = await resolve("jabberfr.org");
+console.log(result);

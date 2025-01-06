@@ -1,68 +1,61 @@
-"use strict";
+import Connection from "../index.js";
 
-const test = require("ava");
-const Connection = require("..");
-
-test("#_end", (t) => {
-  t.plan(2);
+test("#_end", async () => {
   const conn = new Connection();
-  conn.close = () => {
-    t.pass();
-    return Promise.resolve();
-  };
 
-  conn.disconnect = () => {
-    t.pass();
-    return Promise.resolve();
-  };
+  const spy_close = jest.spyOn(conn, "close");
+  const spy_disconnect = jest.spyOn(conn, "disconnect");
 
-  return conn._end();
+  await conn._end();
+
+  expect(spy_close).toHaveBeenCalledTimes(1);
+  expect(spy_disconnect).toHaveBeenCalledTimes(1);
 });
 
-test("#_end with close rejection", (t) => {
-  t.plan(2);
+test("#_end with close rejection", async () => {
   const conn = new Connection();
-  conn.close = () => {
-    t.pass();
+
+  const spy_close = jest.spyOn(conn, "close").mockImplementation(() => {
     return Promise.reject();
-  };
+  });
+  const spy_disconnect = jest.spyOn(conn, "disconnect");
 
-  conn.disconnect = () => {
-    t.pass();
-    return Promise.resolve();
-  };
+  await conn._end();
 
-  return conn._end();
+  expect(spy_close).toHaveBeenCalledTimes(1);
+  expect(spy_disconnect).toHaveBeenCalledTimes(1);
 });
 
-test("#_end with disconnect rejection", (t) => {
-  t.plan(2);
+test("#_end with disconnect rejection", async () => {
   const conn = new Connection();
-  conn.close = () => {
-    t.pass();
-    return Promise.resolve();
-  };
 
-  conn.disconnect = () => {
-    t.pass();
-    return Promise.reject();
-  };
+  const spy_close = jest.spyOn(conn, "close");
+  const spy_disconnect = jest
+    .spyOn(conn, "disconnect")
+    .mockImplementation(() => {
+      return Promise.reject();
+    });
 
-  return conn._end();
+  await conn._end();
+
+  expect(spy_close).toHaveBeenCalledTimes(1);
+  expect(spy_disconnect).toHaveBeenCalledTimes(1);
 });
 
-test("#_end with close and disconnect rejection", (t) => {
-  t.plan(2);
+test("#_end with close and disconnect rejection", async () => {
   const conn = new Connection();
-  conn.close = () => {
-    t.pass();
-    return Promise.reject();
-  };
 
-  conn.disconnect = () => {
-    t.pass();
+  const spy_close = jest.spyOn(conn, "close").mockImplementation(() => {
     return Promise.reject();
-  };
+  });
+  const spy_disconnect = jest
+    .spyOn(conn, "disconnect")
+    .mockImplementation(() => {
+      return Promise.reject();
+    });
 
-  return conn._end();
+  await conn._end();
+
+  expect(spy_close).toHaveBeenCalledTimes(1);
+  expect(spy_disconnect).toHaveBeenCalledTimes(1);
 });

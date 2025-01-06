@@ -1,6 +1,4 @@
-"use strict";
-
-const XMPPError = require("@xmpp/error");
+import XMPPError from "@xmpp/error";
 
 // https://xmpp.org/rfcs/rfc6120.html#streams-error
 
@@ -11,4 +9,4 @@ class StreamError extends XMPPError {
   }
 }
 
-module.exports = StreamError;
+export default StreamError;

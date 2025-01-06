@@ -1,9 +1,8 @@
-"use strict";
-
-const test = require("ava");
+import { resolve } from "../lib/http.js";
 
 const domain = "example.com";
-global.fetch = (url) => {
+// eslint-disable-next-line n/no-unsupported-features/node-builtins
+globalThis.fetch = (url) => {
   if (url !== `https://${domain}/.well-known/host-meta`) {
     throw new Error("Fetch URL incorrect");
   }
@@ -20,10 +19,8 @@ global.fetch = (url) => {
   });
 };
 
-const { resolve } = require("../lib/http");
-
-test("parse", async (t) => {
-  t.deepEqual(await resolve(domain), [
+test("parse", async () => {
+  expect(await resolve(domain)).toEqual([
     {
       rel: "urn:xmpp:alt-connections:websocket",
       href: "wss://example.com/ws",

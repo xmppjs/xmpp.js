@@ -22,9 +22,9 @@ At that point you can make changes to the xmpp.js code and run tests with
 make test
 ```
 
-If you want to iterate faster, you can watch a test file with `npx ava --watch packages/debug/test.js`.
+If you want to iterate faster, you can watch a test file with `npx jest --watch packages/debug/test.js`.
 
-See [ava CLI](https://github.com/avajs/ava/blob/main/docs/05-command-line.md).
+See [Jest CLI](https://jestjs.io/docs/cli).
 
 ## Submitting
 
@@ -37,7 +37,13 @@ make ci
 
 Good luck and feel free to ask for help in https://github.com/xmppjs/xmpp.js/discussions
 
-# Maintenance
+## Design philosophy
+
+xmpp.js is a high level XMPP library. Learning about XMPP is required to use it. While it provides helpers for complex mechanisms such as authentication or transports, it doesn't attempt to abstract XMPP or XML.
+
+As such, simple XMPP semantics shouldn't be replaced with JavaScript APIs when a simple XML element can express them.
+
+## Maintenance
 
 ## Release a new version
 

@@ -3,15 +3,20 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "http://github.com/xmppjs/xmpp.js",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.13.1",
+  "version": "0.14.0",
   "license": "ISC",
+  "type": "module",
+  "main": "index.js",
   "dependencies": {
-    "@xmpp/connection": "^0.13.1",
-    "@xmpp/jid": "^0.13.1",
-    "@xmpp/xml": "^0.13.0"
+    "@xmpp/connection": "^0.14.0",
+    "@xmpp/events": "^0.14.0",
+    "@xmpp/jid": "^0.14.0",
+    "@xmpp/sasl": "^0.14.0",
+    "@xmpp/xml": "^0.14.0",
+    "saslmechanisms": "^0.1.1"
   },
   "engines": {
-    "node": ">= 14"
+    "node": ">= 20"
   },
   "publishConfig": {
     "access": "public"

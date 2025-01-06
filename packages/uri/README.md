@@ -6,16 +6,16 @@ Only parsing is supported at the moment.
 
 ## Install
 
-```
+```sh
 npm install @xmpp/uri
 ```
 
 ## Usage
 
 ```javascript
-const URI = require('@xmpp/uri')
+import { parse } from "@xmpp/uri";
 
-URI.parse('xmpp://guest@example.com/support@example.com/truc?message;subject=Hello%20World')
+parse('xmpp://guest@example.com/support@example.com/truc?message;subject=Hello%20World');
 
 {
   authority: jid('guest@example.com'), // see https://github.com/xmppjs/xmpp.js/tree/main/packages/jid

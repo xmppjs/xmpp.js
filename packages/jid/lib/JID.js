@@ -1,6 +1,4 @@
-"use strict";
-
-const escaping = require("./escaping");
+import * as escaping from "./escaping.js";
 
 /**
  * JID implements
@@ -23,7 +21,7 @@ class JID {
 
   [Symbol.toPrimitive](hint) {
     if (hint === "number") {
-      return NaN;
+      return Number.NaN;
     }
 
     return this.toString();
@@ -126,4 +124,4 @@ Object.defineProperty(JID.prototype, "resource", {
   set: JID.prototype.setResource,
 });
 
-module.exports = JID;
+export default JID;

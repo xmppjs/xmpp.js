@@ -1,8 +1,6 @@
-"use strict";
+import TimeoutError from "./TimeoutError.js";
 
-const TimeoutError = require("./TimeoutError");
-
-module.exports = function promise(EE, event, rejectEvent = "error", timeout) {
+export default function promise(EE, event, rejectEvent = "error", timeout) {
   return new Promise((resolve, reject) => {
     let timeoutId;
 
@@ -34,4 +32,4 @@ module.exports = function promise(EE, event, rejectEvent = "error", timeout) {
       }, timeout);
     }
   });
-};
+}

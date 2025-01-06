@@ -1,79 +1,76 @@
-"use strict";
+import Context from "../lib/Context.js";
 
-const test = require("ava");
-const Context = require("../lib/Context");
-
-test("sets the entity property", (t) => {
+test("sets the entity property", () => {
   const entity = {};
   const ctx = new Context(entity, { attrs: {} });
-  t.is(ctx.entity, entity);
+  expect(ctx.entity).toBe(entity);
 });
 
-test("sets the stanza property", (t) => {
+test("sets the stanza property", () => {
   const stanza = <presence />;
   const ctx = new Context({}, stanza);
-  t.is(ctx.stanza, stanza);
+  expect(ctx.stanza).toBe(stanza);
 });
 
-test("sets name, id and type properties", (t) => {
+test("sets name, id and type properties", () => {
   const stanza = <message id="foobar" type="whatever" />;
   const ctx = new Context({}, stanza);
-  t.is(ctx.name, "message");
-  t.is(ctx.id, "foobar");
-  t.is(ctx.type, "whatever");
+  expect(ctx.name).toBe("message");
+  expect(ctx.id).toBe("foobar");
+  expect(ctx.type).toBe("whatever");
 });
 
-test("id property defaults to empty string", (t) => {
+test("id property defaults to empty string", () => {
   const stanza = <message />;
   const ctx = new Context({}, stanza);
-  t.is(ctx.id, "");
+  expect(ctx.id).toBe("");
 });
 
-test("type property defaults to normal for message", (t) => {
+test("type property defaults to normal for message", () => {
   const stanza = <message />;
   const ctx = new Context({}, stanza);
-  t.is(ctx.type, "normal");
+  expect(ctx.type).toBe("normal");
 });
 
-test("type property defaults to available for presence", (t) => {
+test("type property defaults to available for presence", () => {
   const stanza = <presence />;
   const ctx = new Context({}, stanza);
-  t.is(ctx.type, "available");
+  expect(ctx.type).toBe("available");
 });
 
-test("type property defaults to empty string for iq", (t) => {
+test("type property defaults to empty string for iq", () => {
   const stanza = <iq />;
   const ctx = new Context({}, stanza);
-  t.is(ctx.type, "");
+  expect(ctx.type).toBe("");
 });
 
-test("type property defaults to empty string for nonzas", (t) => {
+test("type property defaults to empty string for nonzas", () => {
   const stanza = <foobar />;
   const ctx = new Context({}, stanza);
-  t.is(ctx.type, "");
+  expect(ctx.type).toBe("");
 });
 
-test("to property is null", (t) => {
+test("to property is null", () => {
   const ctx = new Context({}, <foobar />);
-  t.is(ctx.to, null);
+  expect(ctx.to).toBe(null);
 });
 
-test("from property is null", (t) => {
+test("from property is null", () => {
   const ctx = new Context({}, <foobar />);
-  t.is(ctx.from, null);
+  expect(ctx.from).toBe(null);
 });
 
-test("local property is an empty string", (t) => {
+test("local property is an empty string", () => {
   const ctx = new Context({}, <foobar />);
-  t.is(ctx.local, "");
+  expect(ctx.local).toBe("");
 });
 
-test("domain property is an empty string", (t) => {
+test("domain property is an empty string", () => {
   const ctx = new Context({}, <foobar />);
-  t.is(ctx.domain, "");
+  expect(ctx.domain).toBe("");
 });
 
-test("resource property is an empty string", (t) => {
+test("resource property is an empty string", () => {
   const ctx = new Context({}, <foobar />);
-  t.is(ctx.resource, "");
+  expect(ctx.resource).toBe("");
 });

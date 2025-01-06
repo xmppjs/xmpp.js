@@ -1,7 +1,10 @@
-export default {
-  babel: {
-    testOptions: {
-      babelrc: false,
+"use strict";
+
+module.exports = function config(api) {
+  const isTest = api.env("test");
+
+  if (isTest) {
+    return {
       plugins: [
         [
           "@babel/plugin-transform-react-jsx",
@@ -17,13 +20,13 @@ export default {
             import: "xml",
           },
         ],
+        "@babel/plugin-transform-modules-commonjs",
       ],
-    },
-  },
-  files: [
-    "packages/**/test.js",
-    "packages/**/test/*.js",
-    "packages/**/*.test.js",
-    "!packages/test/*.js",
-  ],
+    };
+  }
+
+  return {
+    presets: [["@babel/preset-env"]],
+    plugins: ["@babel/plugin-transform-runtime"],
+  };
 };

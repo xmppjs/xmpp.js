@@ -1,10 +1,8 @@
-"use strict";
-
 function isSecure(uri) {
   return uri.startsWith("https") || uri.startsWith("wss");
 }
 
-module.exports.compare = function compare(a, b) {
+export function compare(a, b) {
   let secure;
   if (isSecure(a.uri) && !isSecure(b.uri)) {
     secure = -1;
@@ -42,4 +40,4 @@ module.exports.compare = function compare(a, b) {
   }
 
   return 0;
-};
+}

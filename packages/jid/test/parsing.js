@@ -1,72 +1,69 @@
-"use strict";
+import parse from "../lib/parse.js";
 
-const test = require("ava");
-const parse = require("../lib/parse");
-
-test('should parse a "domain" JID', (t) => {
+test('should parse a "domain" JID', () => {
   const j = parse("d");
-  t.is(j.getLocal(), "");
-  t.is(j.getDomain(), "d");
-  t.is(j.getResource(), "");
+  expect(j.getLocal()).toBe("");
+  expect(j.getDomain()).toBe("d");
+  expect(j.getResource()).toBe("");
 });
 
-test('should parse a "user@domain" JID', (t) => {
+test('should parse a "user@domain" JID', () => {
   const j = parse("u@d");
-  t.is(j.getLocal(), "u");
-  t.is(j.getDomain(), "d");
-  t.is(j.getResource(), "");
+  expect(j.getLocal()).toBe("u");
+  expect(j.getDomain()).toBe("d");
+  expect(j.getResource()).toBe("");
 });
 
-test('should parse a "domain/resource" JID', (t) => {
+test('should parse a "domain/resource" JID', () => {
   const j = parse("d/r");
-  t.is(j.getLocal(), "");
-  t.is(j.getDomain(), "d");
-  t.is(j.getResource(), "r");
+  expect(j.getLocal()).toBe("");
+  expect(j.getDomain()).toBe("d");
+  expect(j.getResource()).toBe("r");
 });
 
-test('should parse a "user@domain/resource" JID', (t) => {
+test('should parse a "user@domain/resource" JID', () => {
   const j = parse("u@d/r");
-  t.is(j.getLocal(), "u");
-  t.is(j.getDomain(), "d");
-  t.is(j.getResource(), "r");
+  expect(j.getLocal()).toBe("u");
+  expect(j.getDomain()).toBe("d");
+  expect(j.getResource()).toBe("r");
 });
 
-test('should parse a "user@domain/resource@thing" JID', (t) => {
+test('should parse a "user@domain/resource@thing" JID', () => {
   const j = parse("u@d/r@foo");
-  t.is(j.getLocal(), "u");
-  t.is(j.getDomain(), "d");
-  t.is(j.getResource(), "r@foo");
+  expect(j.getLocal()).toBe("u");
+  expect(j.getDomain()).toBe("d");
+  expect(j.getResource()).toBe("r@foo");
 });
 
-test('should parse a "user@domain/resource/thing" JID', (t) => {
+test('should parse a "user@domain/resource/thing" JID', () => {
   const j = parse("u@d/r/foo");
-  t.is(j.getLocal(), "u");
-  t.is(j.getDomain(), "d");
-  t.is(j.getResource(), "r/foo");
+  expect(j.getLocal()).toBe("u");
+  expect(j.getDomain()).toBe("d");
+  expect(j.getResource()).toBe("r/foo");
 });
 
-test("should parse an internationalized domain name as unicode", (t) => {
+test("should parse an internationalized domain name as unicode", () => {
   const j = parse("öko.de");
-  t.is(j.getDomain(), "öko.de");
+  expect(j.getDomain()).toBe("öko.de");
 });
 
-test("should parse an empty domain JID (#109)", (t) => {
+test("should parse an empty domain JID (#109)", () => {
   const j = parse("u@d", "");
-  t.is(j.getLocal(), "u");
-  t.is(j.getDomain(), "d");
-  t.is(j.getResource(), "");
+  expect(j.getLocal()).toBe("u");
+  expect(j.getDomain()).toBe("d");
+  expect(j.getResource()).toBe("");
 });
 
-test("should allow access to jid parts using keys", (t) => {
+test("should allow access to jid parts using keys", () => {
   const j = parse("u@d/r", "");
-  t.is(j.local, "u");
-  t.is(j.domain, "d");
-  t.is(j.resource, "r");
+  expect(j.local).toBe("u");
+  expect(j.domain).toBe("d");
+  expect(j.resource).toBe("r");
 });
 
-test("shouldn't get U_STRINGPREP_PROHIBITED_ERROR (#93)", (t) => {
-  t.notThrows(() => {
+test("shouldn't get U_STRINGPREP_PROHIBITED_ERROR (#93)", () => {
+  expect(() => {
     const j = parse("f u@d");
     j.toString();
-  });
+  }).not.toThrow();
 });

@@ -1,30 +1,35 @@
-"use strict";
+import context from "./context.js";
+import xml from "@xmpp/xml";
+import jid from "@xmpp/jid";
+import mockClient from "./mockClient.js";
+import mockClientCore from "./mockClientCore.js";
+import { delay, promise, timeout } from "@xmpp/events";
+import id from "@xmpp/id";
 
-const context = require("./context");
-const xml = require("@xmpp/xml");
-const jid = require("@xmpp/jid");
-const mockClient = require("./mockClient");
-const { delay, promise, timeout } = require("@xmpp/events");
-
-module.exports.context = context;
-module.exports.xml = xml;
-module.exports.jid = jid;
-module.exports.JID = jid;
-module.exports.mockClient = mockClient;
-module.exports.delay = delay;
-module.exports.promise = promise;
-module.exports.timeout = timeout;
-module.exports.mockInput = (entity, el) => {
-  entity.emit("input", el.toString());
-  entity._onElement(el);
+export {
+  context,
+  xml,
+  jid,
+  jid as JID,
+  mockClient,
+  mockClientCore,
+  delay,
+  promise,
+  timeout,
+  id,
 };
 
-module.exports.promiseSend = async (entity) => {
+export function mockInput(entity, el) {
+  entity.emit("input", el.toString());
+  entity._onElement(el);
+}
+
+export async function promiseSend(entity) {
   const stanza = await promise(entity, "send", "");
   delete stanza.attrs.xmlns;
   return stanza;
-};
+}
 
-module.exports.promiseError = (entity) => {
+export function promiseError(entity) {
   return promise(entity, "error", "");
-};
+}

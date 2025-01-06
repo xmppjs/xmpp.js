@@ -1,5 +1,3 @@
-"use strict";
-
 // https://xmpp.org/rfcs/rfc6120.html#rfc.section.4.9.2
 
 class XMPPError extends Error {
@@ -36,4 +34,4 @@ class XMPPError extends Error {
   }
 }
 
-module.exports = XMPPError;
+export default XMPPError;

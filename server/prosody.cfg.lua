@@ -2,7 +2,11 @@
 -- DO NOT COPY BLINDLY
 -- see https://prosody.im/doc/configure
 
-local lfs = require "lfs";
+local lfs = Lua.require "lfs";
+
+plugin_paths = { "modules" }
+plugin_server = "https://modules.prosody.im/rocks/"
+installer_plugin_path = lfs.currentdir() .. "/modules";
 
 modules_enabled = {
   "roster";
@@ -18,13 +22,16 @@ modules_enabled = {
   "time";
   "version";
   "smacks";
+  "sasl2";
+  "sasl2_bind2";
+  "sasl2_sm";
+  "sasl2_fast";
 };
 
 modules_disabled = {
   "s2s";
 }
 
-daemonize = true;
 pidfile = lfs.currentdir() .. "/prosody.pid";
 
 allow_registration = true;

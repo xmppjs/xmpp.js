@@ -4,18 +4,20 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/uri",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.13.1",
+  "version": "0.14.0",
   "license": "ISC",
+  "type": "module",
+  "main": "index.js",
   "keywords": [
     "XMPP",
     "URI"
   ],
   "dependencies": {
-    "@xmpp/jid": "^0.13.1",
-    "iri": "^1.3.0"
+    "@xmpp/jid": "^0.14.0",
+    "iri": "^1.3.1"
   },
   "engines": {
-    "node": ">= 14"
+    "node": ">= 20"
   },
   "publishConfig": {
     "access": "public"

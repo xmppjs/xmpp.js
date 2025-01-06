@@ -1,14 +1,11 @@
-"use strict";
-
-const test = require("ava");
-const { mockClient, promise } = require("@xmpp/test");
-const parse = require("@xmpp/xml/lib/parse.js");
+import { mockClient, promise } from "@xmpp/test";
+import parse from "@xmpp/xml/lib/parse.js";
 
 const username = "foo";
 const password = "bar";
 const credentials = { username, password };
 
-test("no compatibles mechanisms", async (t) => {
+test("No compatible mechanism available", async () => {
   const { entity } = mockClient({ username, password });
 
   entity.mockInput(
@@ -20,11 +17,11 @@ test("no compatibles mechanisms", async (t) => {
   );
 
   const error = await promise(entity, "error");
-  t.true(error instanceof Error);
-  t.is(error.message, "No compatible mechanism");
+  expect(error instanceof Error).toBe(true);
+  expect(error.message).toBe("SASL: No compatible mechanism available.");
 });
 
-test("with object credentials", async (t) => {
+test("with object credentials", async () => {
   const { entity } = mockClient({ credentials });
   entity.restart = () => {
     entity.emit("open");
@@ -39,27 +36,27 @@ test("with object credentials", async (t) => {
     </features>,
   );
 
-  t.deepEqual(
-    await promise(entity, "send"),
+  expect(await promise(entity, "send")).toEqual(
     <auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl" mechanism="PLAIN">
       AGZvbwBiYXI=
     </auth>,
   );
 
   entity.mockInput(<success xmlns="urn:ietf:params:xml:ns:xmpp-sasl" />);
-
-  await promise(entity, "online");
 });
 
-test("with function credentials", async (t) => {
-  const mech = "PLAIN";
+test("with function credentials", async () => {
+  expect.assertions(2);
 
-  function authenticate(auth, mechanism) {
-    t.is(mechanism, mech);
-    return auth(credentials);
+  const mech = "PLAIN";
+  let promise_authenticate;
+
+  async function onAuthenticate(authenticate, mechanisms) {
+    expect(mechanisms).toEqual([mech]);
+    await authenticate(credentials, mech);
   }
 
-  const { entity } = mockClient({ credentials: authenticate });
+  const { entity } = mockClient({ credentials: onAuthenticate });
   entity.restart = () => {
     entity.emit("open");
     return Promise.resolve();
@@ -73,8 +70,7 @@ test("with function credentials", async (t) => {
     </features>,
   );
 
-  t.deepEqual(
-    await promise(entity, "send"),
+  expect(await promise(entity, "send")).toEqual(
     <auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl" mechanism={mech}>
       AGZvbwBiYXI=
     </auth>,
@@ -82,10 +78,57 @@ test("with function credentials", async (t) => {
 
   entity.mockInput(<success xmlns="urn:ietf:params:xml:ns:xmpp-sasl" />);
 
-  await promise(entity, "online");
+  await promise_authenticate;
 });
 
-test("failure", async (t) => {
+test("Mechanism not found", async () => {
+  const { entity } = mockClient({
+    async credentials(authenticate, _mechanisms) {
+      await authenticate({ username, password }, "foo");
+    },
+  });
+
+  entity.mockInput(
+    <features xmlns="http://etherx.jabber.org/streams">
+      <mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
+        <mechanism>FOO</mechanism>
+      </mechanisms>
+    </features>,
+  );
+
+  const error = await promise(entity, "error");
+  expect(error instanceof Error).toBe(true);
+  expect(error.message).toBe("SASL: No compatible mechanism available.");
+});
+
+test("with function credentials that rejects", (done) => {
+  expect.assertions(1);
+
+  const mech = "PLAIN";
+
+  const error = {};
+
+  async function onAuthenticate() {
+    throw error;
+  }
+
+  const { entity } = mockClient({ credentials: onAuthenticate });
+
+  entity.entity.mockInput(
+    <features xmlns="http://etherx.jabber.org/streams">
+      <mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
+        <mechanism>{mech}</mechanism>
+      </mechanisms>
+    </features>,
+  );
+
+  entity.on("error", (err) => {
+    expect(err).toBe(error);
+    done();
+  });
+});
+
+test("failure", async () => {
   const { entity } = mockClient({ credentials });
 
   entity.mockInput(
@@ -96,8 +139,7 @@ test("failure", async (t) => {
     </features>,
   );
 
-  t.deepEqual(
-    await promise(entity, "send"),
+  expect(await promise(entity, "send")).toEqual(
     <auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl" mechanism="PLAIN">
       AGZvbwBiYXI=
     </auth>,
@@ -112,47 +154,47 @@ test("failure", async (t) => {
   entity.mockInput(failure);
 
   const error = await promise(entity, "error");
-  t.true(error instanceof Error);
-  t.is(error.name, "SASLError");
-  t.is(error.condition, "some-condition");
-  t.is(error.element, failure);
+  expect(error instanceof Error).toBe(true);
+  expect(error.name).toBe("SASLError");
+  expect(error.condition).toBe("some-condition");
+  expect(error.element).toBe(failure);
 });
 
-test("prefers SCRAM-SHA-1", async (t) => {
+test("prefers SCRAM-SHA-1", async () => {
   const { entity } = mockClient({ credentials });
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
       <mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
         <mechanism>ANONYMOUS</mechanism>
-        <mechanism>PLAIN</mechanism>
         <mechanism>SCRAM-SHA-1</mechanism>
+        <mechanism>PLAIN</mechanism>
       </mechanisms>
     </features>,
   );
 
   const result = await promise(entity, "send");
-  t.deepEqual(result.attrs.mechanism, "SCRAM-SHA-1");
+  expect(result.attrs.mechanism).toEqual("SCRAM-SHA-1");
 });
 
-test("use ANONYMOUS if username and password are not provided", async (t) => {
+test("use ANONYMOUS if username and password are not provided", async () => {
   const { entity } = mockClient();
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
       <mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl">
-        <mechanism>ANONYMOUS</mechanism>
         <mechanism>PLAIN</mechanism>
         <mechanism>SCRAM-SHA-1</mechanism>
+        <mechanism>ANONYMOUS</mechanism>
       </mechanisms>
     </features>,
   );
 
   const result = await promise(entity, "send");
-  t.deepEqual(result.attrs.mechanism, "ANONYMOUS");
+  expect(result.attrs.mechanism).toEqual("ANONYMOUS");
 });
 
-test("with whitespaces", async (t) => {
+test("with whitespaces", async () => {
   const { entity } = mockClient();
 
   entity.mockInput(
@@ -170,5 +212,5 @@ test("with whitespaces", async (t) => {
   );
 
   const result = await promise(entity, "send");
-  t.deepEqual(result.attrs.mechanism, "ANONYMOUS");
+  expect(result.attrs.mechanism).toEqual("ANONYMOUS");
 });

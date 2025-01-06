@@ -1,13 +1,15 @@
-"use strict";
-
-const tls = require("tls");
-const EventEmitter = require("events");
+import tls from "tls";
+import { EventEmitter } from "events";
 
 class Socket extends EventEmitter {
   constructor() {
     super();
     this.listeners = Object.create(null);
     this.timeout = null;
+  }
+
+  isSecure() {
+    return true;
   }
 
   connect(...args) {
@@ -66,4 +68,4 @@ class Socket extends EventEmitter {
   }
 }
 
-module.exports = Socket;
+export default Socket;

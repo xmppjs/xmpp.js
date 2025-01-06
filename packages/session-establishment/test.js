@@ -1,10 +1,9 @@
-"use strict";
+import { mockClient, promise, timeout } from "@xmpp/test";
+import sessionEstablishment from "./index.js";
 
-const test = require("ava");
-const { mockClient, promise, timeout } = require("@xmpp/test");
-
-test("mandatory", async (t) => {
+test("mandatory", async () => {
   const { entity } = mockClient();
+  sessionEstablishment(entity);
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -15,13 +14,14 @@ test("mandatory", async (t) => {
   entity.scheduleIncomingResult();
 
   const child = await entity.catchOutgoingSet();
-  t.deepEqual(child, <session xmlns="urn:ietf:params:xml:ns:xmpp-session" />);
-
-  await promise(entity, "online");
+  expect(child).toEqual(
+    <session xmlns="urn:ietf:params:xml:ns:xmpp-session" />,
+  );
 });
 
-test("optional", async (t) => {
+test("optional", async () => {
   const { entity } = mockClient();
+  sessionEstablishment(entity);
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -33,9 +33,7 @@ test("optional", async (t) => {
 
   const promiseSend = promise(entity, "send");
 
-  await promise(entity, "online");
-
   await timeout(promiseSend, 0).catch((err) => {
-    t.is(err.name, "TimeoutError");
+    expect(err.name).toBe("TimeoutError");
   });
 });

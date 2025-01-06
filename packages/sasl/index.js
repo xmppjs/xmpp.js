@@ -1,25 +1,24 @@
-"use strict";
-
-const { encode, decode } = require("@xmpp/base64");
-const SASLError = require("./lib/SASLError");
-const xml = require("@xmpp/xml");
-const SASLFactory = require("saslmechanisms");
+import { encode, decode } from "@xmpp/base64";
+import SASLError from "./lib/SASLError.js";
+import xml from "@xmpp/xml";
+import { procedure } from "@xmpp/events";
 
 // https://xmpp.org/rfcs/rfc6120.html#sasl
 
 const NS = "urn:ietf:params:xml:ns:xmpp-sasl";
 
-function getMechanismNames(features) {
-  return features
-    .getChild("mechanisms", NS)
-    .getChildElements()
-    .map((el) => el.text());
+export function getAvailableMechanisms(element, NS, saslFactory) {
+  const offered = new Set(
+    element.getChildren("mechanism", NS).map((m) => m.text()),
+  );
+  const supported = saslFactory._mechs.map(({ name }) => name);
+  return supported.filter((mech) => offered.has(mech));
 }
 
-async function authenticate(SASL, entity, mechname, credentials) {
-  const mech = SASL.create([mechname]);
+async function authenticate({ saslFactory, entity, mechanism, credentials }) {
+  const mech = saslFactory.create([mechanism]);
   if (!mech) {
-    throw new Error("No compatible mechanism");
+    throw new Error(`SASL: Mechanism ${mechanism} not found.`);
   }
 
   const { domain } = entity.options;
@@ -34,16 +33,21 @@ async function authenticate(SASL, entity, mechname, credentials) {
     ...credentials,
   };
 
-  return new Promise((resolve, reject) => {
-    const handler = (element) => {
-      if (element.attrs.xmlns !== NS) {
-        return;
-      }
+  await procedure(
+    entity,
+    mech.clientFirst &&
+      xml(
+        "auth",
+        { xmlns: NS, mechanism: mech.name },
+        encode(mech.response(creds)),
+      ),
+    async (element, done) => {
+      if (element.getNS() !== NS) return;
 
       if (element.name === "challenge") {
         mech.challenge(decode(element.text()));
         const resp = mech.response(creds);
-        entity.send(
+        await entity.send(
           xml(
             "response",
             { xmlns: NS, mechanism: mech.name },
@@ -54,60 +58,34 @@ async function authenticate(SASL, entity, mechname, credentials) {
       }
 
       if (element.name === "failure") {
-        reject(SASLError.fromElement(element));
-      } else if (element.name === "success") {
-        resolve();
+        throw SASLError.fromElement(element);
       }
 
-      entity.removeListener("nonza", handler);
-    };
-
-    entity.on("nonza", handler);
-
-    if (mech.clientFirst) {
-      entity.send(
-        xml(
-          "auth",
-          { xmlns: NS, mechanism: mech.name },
-          encode(mech.response(creds)),
-        ),
-      );
-    }
-  });
+      if (element.name === "success") {
+        return done();
+      }
+    },
+  );
 }
 
-module.exports = function sasl({ streamFeatures }, credentials) {
-  const SASL = new SASLFactory();
-
-  streamFeatures.use("mechanisms", NS, async ({ stanza, entity }) => {
-    const offered = getMechanismNames(stanza);
-    const supported = SASL._mechs.map(({ name }) => name);
-    // eslint-disable-next-line unicorn/prefer-array-find
-    const intersection = supported.filter((mech) => {
-      return offered.includes(mech);
-    });
-    // eslint-disable-next-line prefer-destructuring
-    let mech = intersection[0];
-
-    if (typeof credentials === "function") {
-      await credentials(
-        (creds) => authenticate(SASL, entity, mech, creds, stanza),
-        mech,
-      );
-    } else {
-      if (!credentials.username && !credentials.password) {
-        mech = "ANONYMOUS";
-      }
-
-      await authenticate(SASL, entity, mech, credentials, stanza);
+export default function sasl({ streamFeatures, saslFactory }, onAuthenticate) {
+  streamFeatures.use("mechanisms", NS, async ({ entity }, _next, element) => {
+    const mechanisms = getAvailableMechanisms(element, NS, saslFactory);
+    if (mechanisms.length === 0) {
+      throw new SASLError("SASL: No compatible mechanism available.");
     }
+
+    async function done(credentials, mechanism) {
+      await authenticate({
+        saslFactory,
+        entity,
+        mechanism,
+        credentials,
+      });
+    }
+
+    await onAuthenticate(done, mechanisms);
 
     await entity.restart();
   });
-
-  return {
-    use(...args) {
-      return SASL.use(...args);
-    },
-  };
-};
+}

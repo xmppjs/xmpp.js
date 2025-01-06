@@ -1,34 +1,42 @@
-.PHONY: setup lint test ci clean start stop restart bundlesize bundle size cert ncu
+.PHONY: setup lint test ci clean start stop restart bundlesize bundle size ncu
 
 setup:
 	node packages/xmpp.js/script.js
 	npm install
-	./node_modules/.bin/lerna bootstrap
 	cd packages/xmpp.js/ && npm run prepublish
-	node bundle.js
+	make bundle
 
 lint:
-	./node_modules/.bin/eslint --cache .
+	npx eslint --cache .
 
 test:
 	cd packages/xmpp.js/ && npm run prepublish
 	npm install
-	./node_modules/.bin/lerna bootstrap
-	node bundle.js
-	./node_modules/.bin/ava
+	make bundle
+	npx jest
 	make lint
 	make bundlesize
 
 ci:
 	npm install
-	./node_modules/.bin/lerna bootstrap
-	./node_modules/.bin/ava
+	make unit
 	make lint
 	make restart
-	./node_modules/.bin/lerna run prepublish
-	node bundle.js
-	./node_modules/.bin/ava --tap --config e2e.config.js
+	npx lerna run prepublish
+	make bundle
+	make e2e
 	make bundlesize
+
+unit:
+	npm run test
+
+e2e:
+	$(warning e2e tests require prosody-trunk and luarocks)
+	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2 > /dev/null
+	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_bind2 > /dev/null
+	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_sm > /dev/null
+	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_fast > /dev/null
+	npm run e2e
 
 clean:
 	make stop
@@ -37,7 +45,9 @@ clean:
 	rm -f server/prosody.err
 	rm -f server/prosody.log
 	rm -f server/prosody.pid
-	./node_modules/.bin/lerna clean --yes
+	rm -rf server/modules
+	rm -rf server/.cache
+	npx lerna clean --yes
 	rm -rf node_modules/
 	rm -f packages/*/dist/*.js
 	rm -f lerna-debug.log
@@ -52,10 +62,10 @@ restart:
 	./server/ctl.js restart
 
 bundlesize:
-	./node_modules/.bin/bundlesize
+	npx bundlesize
 
 bundle:
-	node bundle.js
+	npx rollup -c rollup.config.js
 
 size:
 	make bundle

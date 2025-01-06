@@ -1,29 +1,26 @@
-"use strict";
+import Parser from "../lib/Parser.js";
 
-const test = require("ava");
-const Parser = require("../lib/Parser");
-
-test.cb("stream parser", (t) => {
+test("stream parser", (done) => {
   const parser = new Parser();
 
-  t.plan(5);
+  expect.assertions(5);
 
   let startElement;
 
   parser.on("start", (el) => {
-    t.is(el.toString(), "<foo/>");
+    expect(el.toString()).toBe("<foo/>");
     startElement = el;
   });
 
   parser.on("element", (el) => {
-    t.is(el.parent, startElement);
-    t.is(startElement.children.length, 0);
-    t.is(el.toString(), "<bar>hello</bar>");
+    expect(el.parent).toBe(startElement);
+    expect(startElement.children).toHaveLength(0);
+    expect(el.toString()).toBe("<bar>hello</bar>");
   });
 
   parser.on("end", (el) => {
-    t.is(el.toString(), "<foo/>");
-    t.end();
+    expect(el.toString()).toBe("<foo/>");
+    done();
   });
 
   parser.write("<foo><bar>hello</bar></foo>");

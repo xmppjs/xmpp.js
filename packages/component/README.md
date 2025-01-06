@@ -15,8 +15,8 @@ See [XEP-0114: Jabber Component Protocol](https://xmpp.org/extensions/xep-0114.h
 ## Example
 
 ```js
-const { component, xml, jid } = require("@xmpp/component");
-const debug = require("@xmpp/debug");
+import { component, xml, jid } from "@xmpp/component";
+import debug from "@xmpp/debug";
 
 const xmpp = component({
   service: "xmpp://localhost:5347",
@@ -34,7 +34,7 @@ xmpp.on("offline", () => {
   console.log("offline");
 });
 
-xmpp.on("stanza", async (stanza) => {
+xmpp.once("stanza", async (stanza) => {
   if (stanza.is("message")) {
     await xmpp.stop();
   }
@@ -52,7 +52,7 @@ xmpp.on("online", async (address) => {
   await xmpp.send(message);
 });
 
-xmpp.start().catch(console.error);
+await xmpp.start();
 ```
 
 ## xml

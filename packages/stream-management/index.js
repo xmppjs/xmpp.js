@@ -1,52 +1,50 @@
-"use strict";
-
-const xml = require("@xmpp/xml");
+import XMPPError from "@xmpp/error";
+import { procedure } from "@xmpp/events";
+import xml from "@xmpp/xml";
 
 // https://xmpp.org/extensions/xep-0198.html
 
 const NS = "urn:xmpp:sm:3";
 
-async function enable(entity, resume, max) {
-  await entity.send(
-    xml("enable", { xmlns: NS, max, resume: resume ? "true" : undefined }),
-  );
-
-  return new Promise((resolve, reject) => {
-    function listener(nonza) {
-      if (nonza.is("enabled", NS)) {
-        resolve(nonza);
-      } else if (nonza.is("failed", NS)) {
-        reject(nonza);
-      } else {
-        return;
-      }
-
-      entity.removeListener("nonza", listener);
-    }
-
-    entity.on("nonza", listener);
+function makeEnableElement({ sm }) {
+  return xml("enable", {
+    xmlns: NS,
+    max: sm.preferredMaximum,
+    resume: sm.allowResume ? "true" : undefined,
   });
 }
 
-async function resume(entity, h, previd) {
-  const response = await entity.sendReceive(
-    xml("resume", { xmlns: NS, h, previd }),
-  );
-
-  if (!response.is("resumed", NS)) {
-    throw response;
-  }
-
-  return response;
+function makeResumeElement({ sm }) {
+  return xml("resume", { xmlns: NS, h: sm.inbound, previd: sm.id });
 }
 
-module.exports = function streamManagement({
+function enable(entity, sm) {
+  return procedure(entity, makeEnableElement({ sm }), (element, done) => {
+    if (element.is("enabled", NS)) {
+      return done(element);
+    } else if (element.is("failed", NS)) {
+      throw XMPPError.fromElement(element);
+    }
+  });
+}
+
+async function resume(entity, sm) {
+  return procedure(entity, makeResumeElement({ sm }), (element, done) => {
+    if (element.is("resumed", NS)) {
+      return done(element);
+    } else if (element.is("failed", NS)) {
+      throw XMPPError.fromElement(element);
+    }
+  });
+}
+
+export default function streamManagement({
   streamFeatures,
   entity,
   middleware,
+  bind2,
+  sasl2,
 }) {
-  let address = null;
-
   const sm = {
     allowResume: true,
     preferredMaximum: null,
@@ -57,8 +55,24 @@ module.exports = function streamManagement({
     max: null,
   };
 
-  entity.on("online", (jid) => {
-    address = jid;
+  function resumed() {
+    sm.enabled = true;
+    entity._ready(true);
+  }
+
+  function failed() {
+    sm.enabled = false;
+    sm.id = "";
+    sm.outbound = 0;
+  }
+
+  function enabled({ id, max }) {
+    sm.enabled = true;
+    sm.id = id;
+    sm.max = max;
+  }
+
+  entity.on("online", () => {
     sm.outbound = 0;
     sm.inbound = 0;
   });
@@ -85,24 +99,46 @@ module.exports = function streamManagement({
     return next();
   });
 
+  if (bind2) {
+    setupBind2({ bind2, sm, failed, enabled });
+  }
+  if (sasl2) {
+    setupSasl2({ sasl2, sm, failed, resumed });
+  }
+  if (streamFeatures) {
+    setupStreamFeature({
+      streamFeatures,
+      sm,
+      entity,
+      resumed,
+      failed,
+      enabled,
+    });
+  }
+
+  return sm;
+}
+
+function setupStreamFeature({
+  streamFeatures,
+  sm,
+  entity,
+  resumed,
+  failed,
+  enabled,
+}) {
   // https://xmpp.org/extensions/xep-0198.html#enable
   // For client-to-server connections, the client MUST NOT attempt to enable stream management until after it has completed Resource Binding unless it is resuming a previous session
-
   streamFeatures.use("sm", NS, async (context, next) => {
     // Resuming
     if (sm.id) {
       try {
-        await resume(entity, sm.inbound, sm.id);
-        sm.enabled = true;
-        entity.jid = address;
-        entity.status = "online";
-        return true;
+        await resume(entity, sm);
+        resumed();
+        return;
         // If resumption fails, continue with session establishment
-        // eslint-disable-next-line no-unused-vars
       } catch {
-        sm.id = "";
-        sm.enabled = false;
-        sm.outbound = 0;
+        failed();
       }
     }
 
@@ -111,23 +147,54 @@ module.exports = function streamManagement({
     // Resource binding first
     await next();
 
-    const promiseEnable = enable(entity, sm.allowResume, sm.preferredMaximum);
+    const promiseEnable = enable(entity, sm);
 
     // > The counter for an entity's own sent stanzas is set to zero and started after sending either <enable/> or <enabled/>.
     sm.outbound = 0;
 
     try {
       const response = await promiseEnable;
-      sm.enabled = true;
-      sm.id = response.attrs.id;
-      sm.max = response.attrs.max;
-      // eslint-disable-next-line no-unused-vars
+      enabled(response.attrs);
     } catch {
       sm.enabled = false;
     }
 
     sm.inbound = 0;
   });
+}
 
-  return sm;
-};
+function setupSasl2({ sasl2, sm, failed, resumed }) {
+  sasl2.use(
+    "urn:xmpp:sm:3",
+    (element) => {
+      if (!element.is("sm")) return;
+      if (sm.id) return makeResumeElement({ sm });
+    },
+    (element) => {
+      if (element.is("resumed")) {
+        resumed();
+      } else if (element.is(failed)) {
+        // const error = StreamError.fromElement(element)
+        failed();
+      }
+    },
+  );
+}
+
+function setupBind2({ bind2, sm, failed, enabled }) {
+  bind2.use(
+    "urn:xmpp:sm:3",
+    // https://xmpp.org/extensions/xep-0198.html#inline-examples
+    (_element) => {
+      return makeEnableElement({ sm });
+    },
+    (element) => {
+      if (element.is("enabled")) {
+        enabled(element.attrs);
+      } else if (element.is("failed")) {
+        // const error = StreamError.fromElement(element)
+        failed();
+      }
+    },
+  );
+}

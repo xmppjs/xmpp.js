@@ -1,7 +1,5 @@
-"use strict";
-
-const xml = require("@xmpp/xml");
-const { canUpgrade, upgrade } = require("./starttls");
+import xml from "@xmpp/xml";
+import { canUpgrade, upgrade } from "./starttls.js";
 
 /*
  * References
@@ -19,7 +17,7 @@ async function negotiate(entity) {
   throw new Error("STARTTLS_FAILURE");
 }
 
-module.exports = function starttls({ streamFeatures }) {
+export default function starttls({ streamFeatures }) {
   return streamFeatures.use("starttls", NS, async ({ entity }, next) => {
     const { socket, options } = entity;
     if (!canUpgrade(socket)) {
@@ -32,4 +30,4 @@ module.exports = function starttls({ streamFeatures }) {
 
     await entity.restart();
   });
-};
+}

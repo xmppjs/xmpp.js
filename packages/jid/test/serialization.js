@@ -1,24 +1,21 @@
-"use strict";
+import JID from "../lib/JID.js";
 
-const test = require("ava");
-const JID = require("../lib/JID");
-
-test('should serialize a "domain" JID', (t) => {
+test('should serialize a "domain" JID', () => {
   const j = new JID(null, "d");
-  t.is(j.toString(), "d");
+  expect(j.toString()).toBe("d");
 });
 
-test('should serialize a "user@domain" JID', (t) => {
+test('should serialize a "user@domain" JID', () => {
   const j = new JID("u", "d");
-  t.is(j.toString(), "u@d");
+  expect(j.toString()).toBe("u@d");
 });
 
-test('should serialize a "domain/resource" JID', (t) => {
+test('should serialize a "domain/resource" JID', () => {
   const j = new JID(null, "d", "r");
-  t.is(j.toString(), "d/r");
+  expect(j.toString()).toBe("d/r");
 });
 
-test('should serialize a "user@domain/resource" JID', (t) => {
+test('should serialize a "user@domain/resource" JID', () => {
   const j = new JID("u", "d", "r");
-  t.is(j.toString(), "u@d/r");
+  expect(j.toString()).toBe("u@d/r");
 });

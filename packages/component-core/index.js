@@ -1,9 +1,5 @@
-"use strict";
+import Component from "./lib/Component.js";
+import xml from "@xmpp/xml";
+import jid from "@xmpp/jid";
 
-const Component = require("./lib/Component");
-const xml = require("@xmpp/xml");
-const jid = require("@xmpp/jid");
-
-module.exports.Component = Component;
-module.exports.xml = xml;
-module.exports.jid = jid;
+export { Component, xml, jid };

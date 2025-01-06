@@ -1,37 +1,31 @@
-"use strict";
+import jid, { equal, JID } from "../index.js";
 
-const test = require("ava");
-const { spy } = require("sinon");
-const jid = require("..");
-const JID = require("../lib/JID");
-
-test("equal calls equals on the first argument with the second argument", (t) => {
+test("equal calls equals on the first argument with the second argument", () => {
   const A = jid("foo");
   const B = jid("bar");
-  spy(A, "equals");
-  jid.equal(A, B);
-  t.true(A.equals.calledWith(B));
-  A.equals.restore();
+  const spy_equals = jest.spyOn(A, "equals");
+  equal(A, B);
+  expect(spy_equals).toHaveBeenCalledWith(B);
 });
 
-test("JID exports lib/JID", (t) => {
-  t.is(jid.JID, JID);
+test("JID exports lib/JID", () => {
+  expect(jid.JID).toBe(JID);
 });
 
-test("calls parse if only first argument provided", (t) => {
+test("calls parse if only first argument provided", () => {
   const addr = jid("foo@bar");
-  t.true(addr instanceof JID);
-  t.is(addr.toString(), "foo@bar");
+  expect(addr instanceof JID).toBe(true);
+  expect(addr.toString()).toBe("foo@bar");
 });
 
-test("calls JID with passed arguments", (t) => {
+test("calls JID with passed arguments", () => {
   const addr = jid("foo", "bar", "baz");
-  t.true(addr instanceof JID);
-  t.is(addr.toString(), "foo@bar/baz");
+  expect(addr instanceof JID).toBe(true);
+  expect(addr.toString()).toBe("foo@bar/baz");
 });
 
-test("works as expected with new operator", (t) => {
-  const addr = new jid("foo", "bar", "baz"); // eslint-disable-line new-cap
-  t.true(addr instanceof JID);
-  t.is(addr.toString(), "foo@bar/baz");
+test("works as expected with new operator", () => {
+  const addr = new jid("foo", "bar", "baz");
+  expect(addr instanceof JID).toBe(true);
+  expect(addr.toString()).toBe("foo@bar/baz");
 });

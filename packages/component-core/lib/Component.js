@@ -1,8 +1,6 @@
-"use strict";
-
-const Connection = require("@xmpp/connection-tcp");
-const crypto = require("crypto");
-const xml = require("@xmpp/xml");
+import Connection from "@xmpp/connection-tcp";
+import { createHash } from "crypto";
+import xml from "@xmpp/xml";
 
 /*
  * References
@@ -31,7 +29,7 @@ class Component extends Connection {
 
   // https://xmpp.org/extensions/xep-0114.html#example-3
   async authenticate(id, password) {
-    const hash = crypto.createHash("sha1");
+    const hash = createHash("sha1");
     hash.update(id + password, "binary");
     const el = await this.sendReceive(xml("handshake", {}, hash.digest("hex")));
     if (el.name !== "handshake") {
@@ -39,11 +37,11 @@ class Component extends Connection {
     }
 
     this._jid(this.options.domain);
-    this._status("online", this.jid);
+    this._ready(false);
   }
 }
 
 Component.NS = NS;
 Component.prototype.NS = NS;
 
-module.exports = Component;
+export default Component;

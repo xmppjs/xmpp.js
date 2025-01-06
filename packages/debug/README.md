@@ -2,7 +2,7 @@
 
 Prints logs and debug information to the console for an entity.
 
-Sensitive information (authentication) is replaced with `<hidden xmlns="xmpp.js"/>`
+⚠️ debug makes a best effort to replace sensitive information with `<hidden xmlns="xmpp.js"/>` but be careful not to share secrets when sharing logs.
 
 ## Install
 
@@ -11,13 +11,14 @@ Sensitive information (authentication) is replaced with `<hidden xmlns="xmpp.js"
 ## Example
 
 ```js
-const {client} = require('@xmpp/client') // or component, ...
-const debug = require('@xmpp/debug')
-const xmpp = client(...)
+import { client } from "@xmpp/client"; // or component, ...
+import debug from "@xmpp/debug";
 
-debug(xmpp) // requires process.env.XMPP_DEBUG
+const xmpp = client(...);
+
+debug(xmpp); // requires process.env.XMPP_DEBUG
 // or
-debug(xmpp, true) // always enabled
+debug(xmpp, true); // always enabled
 ```
 
 Here is an example output

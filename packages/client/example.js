@@ -1,9 +1,6 @@
-/* eslint-disable node/no-extraneous-require */
-
-"use strict";
-
-const { client, xml } = require("@xmpp/client");
-const debug = require("@xmpp/debug");
+import { client, xml } from "@xmpp/client";
+// eslint-disable-next-line n/no-extraneous-import
+import debug from "@xmpp/debug";
 
 // Insecure!
 // process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -11,6 +8,7 @@ const debug = require("@xmpp/debug");
 const xmpp = client({
   service: "ws://localhost:5280/xmpp-websocket",
   // service: "xmpps://localhost:5223",
+  // service: "xmpp://localhost:5222",
   domain: "localhost",
   resource: "example",
   username: "username",
@@ -27,7 +25,7 @@ xmpp.on("offline", () => {
   console.log("offline");
 });
 
-xmpp.on("stanza", async (stanza) => {
+xmpp.once("stanza", async (stanza) => {
   if (stanza.is("message")) {
     await xmpp.send(xml("presence", { type: "unavailable" }));
     await xmpp.stop();
@@ -49,4 +47,4 @@ xmpp.on("online", async (address) => {
   await xmpp.send(message);
 });
 
-xmpp.start().catch(console.error);
+await xmpp.start();

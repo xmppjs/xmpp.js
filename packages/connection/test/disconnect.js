@@ -1,42 +1,37 @@
-"use strict";
+import Connection from "../index.js";
+import { EventEmitter } from "@xmpp/events";
 
-const test = require("ava");
-const Connection = require("..");
-const { EventEmitter } = require("@xmpp/events");
-
-test.cb("rejects with TimeoutError if socket doesn't close", (t) => {
-  t.plan(2);
+test("rejects with TimeoutError if socket doesn't close", (done) => {
+  expect.assertions(2);
   const conn = new Connection();
   conn.socket = new EventEmitter();
   conn.socket.end = () => {};
   conn.disconnect().catch((err) => {
-    t.is(err.name, "TimeoutError");
-    t.end();
+    expect(err.name).toBe("TimeoutError");
+    done();
   });
-  t.is(conn.status, "disconnecting");
+  expect(conn.status).toBe("disconnecting");
 });
 
-test.cb("resolves", (t) => {
-  t.plan(3);
+test("resolves", (done) => {
+  expect.assertions(3);
   const conn = new Connection();
   const sock = new EventEmitter();
   conn._attachSocket(sock);
   sock.emit("connect");
   sock.end = () => {};
-  conn
-    .disconnect()
-    .then(() => {
-      t.is(conn.status, "disconnect");
-      return t.end();
-    })
-    .catch(t.fail);
-  t.is(conn.status, "disconnecting");
+  // eslint-disable-next-line promise/catch-or-return
+  conn.disconnect().then(() => {
+    expect(conn.status).toBe("disconnect");
+    return done();
+  });
+  expect(conn.status).toBe("disconnecting");
   sock.emit("close");
-  t.is(conn.status, "disconnect");
+  expect(conn.status).toBe("disconnect");
 });
 
-test.cb("rejects if socket.end throws", (t) => {
-  t.plan(1);
+test("rejects if socket.end throws", (done) => {
+  expect.assertions(1);
 
   const error = new Error("foobar");
 
@@ -47,7 +42,7 @@ test.cb("rejects if socket.end throws", (t) => {
   };
 
   conn.disconnect().catch((err) => {
-    t.is(err, error);
-    t.end();
+    expect(err).toBe(error);
+    done();
   });
 });

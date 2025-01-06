@@ -1,5 +1,3 @@
-"use strict";
-
 function date(d = new Date()) {
   if (typeof d === "string") {
     d = new Date(d);
@@ -42,7 +40,4 @@ function offset(d = new Date()) {
   return formatOffset(d.getTimezoneOffset());
 }
 
-module.exports.date = date;
-module.exports.time = time;
-module.exports.datetime = datetime;
-module.exports.offset = offset;
+export { date, time, datetime, offset };

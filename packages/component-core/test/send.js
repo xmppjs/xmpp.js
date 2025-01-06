@@ -1,9 +1,6 @@
-"use strict";
+import { Component, xml } from "../index.js";
 
-const test = require("ava");
-const { Component, xml } = require("..");
-
-test("from attribute", (t) => {
+test("from attribute", () => {
   const entity = new Component();
   entity.jid = "test.foobar";
   entity.write = () => Promise.resolve();
@@ -11,13 +8,13 @@ test("from attribute", (t) => {
 
   el = xml("el");
   entity.send(el);
-  t.is(el.attrs.from, undefined);
+  expect(el.attrs.from).toBe(undefined);
 
   el = xml("message");
   entity.send(el);
-  t.is(el.attrs.from, "test.foobar");
+  expect(el.attrs.from).toBe("test.foobar");
 
   el = xml("el", { from: "bar" });
   entity.send(el);
-  t.is(el.attrs.from, "bar");
+  expect(el.attrs.from).toBe("bar");
 });

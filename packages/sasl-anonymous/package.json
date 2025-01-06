@@ -4,18 +4,19 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "https://github.com/xmppjs/xmpp.js/tree/main/packages/sasl-anonymous",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "license": "ISC",
+  "type": "module",
+  "main": "index.js",
   "keywords": [
     "XMPP",
-    "sasl",
-    "anonymous"
+    "sasl"
   ],
   "dependencies": {
     "sasl-anonymous": "^0.1.0"
   },
   "engines": {
-    "node": ">= 14"
+    "node": ">= 20"
   },
   "publishConfig": {
     "access": "public"

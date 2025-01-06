@@ -1,7 +1,4 @@
-"use strict";
-
-const test = require("ava");
-const { mockClient } = require("@xmpp/test");
+import { mockClient } from "@xmpp/test";
 
 function tick() {
   return new Promise((resolve) => {
@@ -9,7 +6,7 @@ function tick() {
   });
 }
 
-test("enable - enabled", async (t) => {
+test("enable - enabled", async () => {
   const { entity } = mockClient();
 
   entity.mockInput(
@@ -20,16 +17,13 @@ test("enable - enabled", async (t) => {
 
   entity.streamManagement.outbound = 45;
 
-  t.deepEqual(
-    await entity.catchOutgoing(),
+  expect(await entity.catchOutgoing()).toEqual(
     <enable xmlns="urn:xmpp:sm:3" resume="true" />,
   );
 
-  await tick();
-
-  t.is(entity.streamManagement.outbound, 0);
-  t.is(entity.streamManagement.enabled, false);
-  t.is(entity.streamManagement.id, "");
+  expect(entity.streamManagement.outbound).toBe(0);
+  expect(entity.streamManagement.enabled).toBe(false);
+  expect(entity.streamManagement.id).toBe("");
 
   entity.mockInput(
     <enabled
@@ -42,11 +36,11 @@ test("enable - enabled", async (t) => {
 
   await tick();
 
-  t.is(entity.streamManagement.id, "some-long-sm-id");
-  t.is(entity.streamManagement.enabled, true);
+  expect(entity.streamManagement.id).toBe("some-long-sm-id");
+  expect(entity.streamManagement.enabled).toBe(true);
 });
 
-test("enable - send rejects", async (t) => {
+test("enable - send rejects", async () => {
   const { entity } = mockClient();
 
   entity.send = () => Promise.reject(new Error("nope"));
@@ -60,12 +54,10 @@ test("enable - send rejects", async (t) => {
     />,
   );
 
-  await tick();
-
-  t.is(entity.streamManagement.enabled, false);
+  expect(entity.streamManagement.enabled).toBe(false);
 });
 
-test("enable - message - enabled", async (t) => {
+test("enable - message - enabled", async () => {
   const { entity } = mockClient();
 
   entity.mockInput(
@@ -76,21 +68,18 @@ test("enable - message - enabled", async (t) => {
 
   entity.streamManagement.outbound = 45;
 
-  t.deepEqual(
-    await entity.catchOutgoing(),
+  expect(await entity.catchOutgoing()).toEqual(
     <enable xmlns="urn:xmpp:sm:3" resume="true" />,
   );
 
-  t.is(entity.streamManagement.outbound, 0);
-  t.is(entity.streamManagement.enabled, false);
-  t.is(entity.streamManagement.id, "");
-
-  await tick();
+  expect(entity.streamManagement.outbound).toBe(0);
+  expect(entity.streamManagement.enabled).toBe(false);
+  expect(entity.streamManagement.id).toBe("");
 
   entity.mockInput(<message />);
 
-  t.is(entity.streamManagement.enabled, false);
-  t.is(entity.streamManagement.inbound, 1);
+  expect(entity.streamManagement.enabled).toBe(false);
+  expect(entity.streamManagement.inbound).toBe(1);
 
   entity.mockInput(
     <enabled
@@ -103,11 +92,11 @@ test("enable - message - enabled", async (t) => {
 
   await tick();
 
-  t.is(entity.streamManagement.id, "some-long-sm-id");
-  t.is(entity.streamManagement.enabled, true);
+  expect(entity.streamManagement.id).toBe("some-long-sm-id");
+  expect(entity.streamManagement.enabled).toBe(true);
 });
 
-test("enable - failed", async (t) => {
+test("enable - failed", async () => {
   const { entity } = mockClient();
 
   entity.mockInput(
@@ -118,24 +107,25 @@ test("enable - failed", async (t) => {
 
   entity.streamManagement.outbound = 45;
 
-  t.deepEqual(
-    await entity.catchOutgoing(),
+  expect(await entity.catchOutgoing()).toEqual(
     <enable xmlns="urn:xmpp:sm:3" resume="true" />,
   );
 
-  t.is(entity.streamManagement.outbound, 0);
+  expect(entity.streamManagement.outbound).toBe(0);
   entity.streamManagement.enabled = true;
 
+  entity.mockInput(
+    <failed xmlns="urn:xmpp:sm:3">
+      <unexpected-request xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
+    </failed>,
+  );
+
   await tick();
 
-  entity.mockInput(<failed xmlns="urn:xmpp:sm:3" />);
-
-  await tick();
-
-  t.is(entity.streamManagement.enabled, false);
+  expect(entity.streamManagement.enabled).toBe(false);
 });
 
-test("resume - resumed", async (t) => {
+test("resume - resumed", async () => {
   const { entity } = mockClient();
 
   entity.status = "offline";
@@ -149,24 +139,23 @@ test("resume - resumed", async (t) => {
 
   entity.streamManagement.outbound = 45;
 
-  t.deepEqual(
-    await entity.catchOutgoing(),
+  expect(await entity.catchOutgoing()).toEqual(
     <resume xmlns="urn:xmpp:sm:3" previd="bar" h="0" />,
   );
 
-  t.is(entity.streamManagement.enabled, false);
+  expect(entity.streamManagement.enabled).toBe(false);
 
-  t.is(entity.status, "offline");
+  expect(entity.status).toBe("offline");
 
   entity.mockInput(<resumed xmlns="urn:xmpp:sm:3" />);
 
   await tick();
 
-  t.is(entity.streamManagement.outbound, 45);
-  t.is(entity.status, "online");
+  expect(entity.streamManagement.outbound).toBe(45);
+  expect(entity.status).toBe("online");
 });
 
-test("resume - failed", async (t) => {
+test("resume - failed", async () => {
   const { entity } = mockClient();
 
   entity.status = "bar";
@@ -180,17 +169,20 @@ test("resume - failed", async (t) => {
     </features>,
   );
 
-  t.deepEqual(
-    await entity.catchOutgoing(),
+  expect(await entity.catchOutgoing()).toEqual(
     <resume xmlns="urn:xmpp:sm:3" previd="bar" h="0" />,
   );
 
-  entity.mockInput(<failed xmlns="urn:xmpp:sm:3" />);
+  entity.mockInput(
+    <failed xmlns="urn:xmpp:sm:3">
+      <unexpected-request xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
+    </failed>,
+  );
 
   await tick();
 
-  t.is(entity.status, "bar");
-  t.is(entity.streamManagement.id, "");
-  t.is(entity.streamManagement.enabled, false);
-  t.is(entity.streamManagement.outbound, 0);
+  expect(entity.status).toBe("bar");
+  expect(entity.streamManagement.id).toBe("");
+  expect(entity.streamManagement.enabled).toBe(false);
+  expect(entity.streamManagement.outbound).toBe(0);
 });

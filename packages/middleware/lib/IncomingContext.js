@@ -1,9 +1,7 @@
-"use strict";
+import Context from "./Context.js";
+import JID from "@xmpp/jid";
 
-const Context = require("./Context");
-const JID = require("@xmpp/jid");
-
-module.exports = class IncomingContext extends Context {
+export default class IncomingContext extends Context {
   constructor(entity, stanza) {
     super(entity, stanza);
 
@@ -22,4 +20,4 @@ module.exports = class IncomingContext extends Context {
       this.resource = this.from.resource;
     }
   }
-};
+}

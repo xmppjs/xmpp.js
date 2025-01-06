@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * References
  * https://xmpp.org/rfcs/rfc6120.html#streams-negotiation Stream Negotiation
@@ -7,11 +5,7 @@
  * https://xmpp.org/registrar/stream-features.html XML Stream Features
  */
 
-const route = require("./route");
-
-module.exports = function streamFeatures({ middleware }) {
-  middleware.use(route());
-
+export default function streamFeatures({ middleware }) {
   function use(name, xmlns, handler) {
     return middleware.use((ctx, next) => {
       const { stanza } = ctx;
@@ -26,4 +20,4 @@ module.exports = function streamFeatures({ middleware }) {
   return {
     use,
   };
-};
+}

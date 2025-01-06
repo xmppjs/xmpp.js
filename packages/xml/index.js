@@ -1,23 +1,19 @@
-"use strict";
-
-const Element = require("ltx/lib/Element");
-const createElement = require("ltx/lib/createElement");
-const Parser = require("./lib/Parser");
-const {
+import Element from "ltx/lib/Element.js";
+import createElement from "ltx/lib/createElement.js";
+import Parser from "./lib/Parser.js";
+import {
   escapeXML,
   unescapeXML,
   escapeXMLText,
   unescapeXMLText,
-} = require("ltx/lib/escape");
-const XMLError = require("./lib/XMLError");
+} from "ltx/lib/escape.js";
+import XMLError from "./lib/XMLError.js";
 
-function xml(...args) {
+export default function xml(...args) {
   return createElement(...args);
 }
 
-module.exports = xml;
-
-Object.assign(module.exports, {
+Object.assign(xml, {
   Element,
   createElement,
   Parser,
@@ -26,4 +22,17 @@ Object.assign(module.exports, {
   escapeXMLText,
   unescapeXMLText,
   XMLError,
+  xml,
 });
+
+export {
+  Element,
+  createElement,
+  Parser,
+  escapeXML,
+  unescapeXML,
+  escapeXMLText,
+  unescapeXMLText,
+  XMLError,
+  xml,
+};
