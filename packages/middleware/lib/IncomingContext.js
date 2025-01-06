@@ -6,9 +6,9 @@ export default class IncomingContext extends Context {
     super(entity, stanza);
 
     const { jid } = entity;
-    const { domain } = entity.options;
+    const { domain } = entity.options ?? {};
 
-    const to = stanza.attrs.to || (jid && jid.toString());
+    const to = stanza.attrs.to || jid?.toString();
     const from = stanza.attrs.from || domain;
 
     if (to) this.to = new JID(to);

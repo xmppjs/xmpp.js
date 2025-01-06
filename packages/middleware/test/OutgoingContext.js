@@ -3,37 +3,49 @@ import { JID } from "@xmpp/test";
 import _Context from "../lib/Context.js";
 
 test("is instance of Context", () => {
-  const entity = { jid: new JID("foo@bar"), domain: "bar" };
+  const entity = { jid: new JID("foo@bar"), options: { domain: "bar" } };
   const ctx = new Context(entity, { attrs: {} });
   expect(ctx instanceof _Context).toBe(true);
 });
 
 test("sets the from property", () => {
-  const entity = { jid: new JID("foo@bar"), domain: "bar" };
+  const entity = { jid: new JID("foo@bar"), options: { domain: "bar" } };
   const ctx = new Context(entity, { attrs: { from: "foo@bar" } });
   expect(ctx.from).toEqual(new JID("foo@bar"));
 });
 
-test("from property default to entity jid", () => {
-  const entity = { jid: new JID("foo@bar"), domain: "bar" };
+test("from property default to stanza from attribute", () => {
+  const entity = { jid: new JID("foo@bar"), options: { domain: "bar" } };
+  const ctx = new Context(entity, { attrs: { from: "foo" } });
+  expect(ctx.from).toEqual(new JID("foo"));
+});
+
+test("from property falls back to entity jid", () => {
+  const entity = { jid: new JID("foo@bar"), options: { domain: "bar" } };
   const ctx = new Context(entity, { attrs: {} });
   expect(ctx.from).toEqual(new JID("foo@bar"));
 });
 
 test("sets the to property", () => {
-  const entity = { jid: new JID("foo@bar"), domain: "bar" };
+  const entity = { jid: new JID("foo@bar"), options: { domain: "bar" } };
   const ctx = new Context(entity, { attrs: { to: "foo@bar" } });
   expect(ctx.to).toEqual(new JID("foo@bar"));
 });
 
-test("to property default to entity jid domain", () => {
-  const entity = { jid: new JID("foo@bar"), domain: "bar" };
+test("to property default to stanza to attribute", () => {
+  const entity = { jid: new JID("foo@bar"), options: { domain: "bar" } };
+  const ctx = new Context(entity, { attrs: { to: "baz" } });
+  expect(ctx.to).toEqual(new JID("baz"));
+});
+
+test("to property falls back to entity domain", () => {
+  const entity = { jid: new JID("foo@bar"), options: { domain: "baz" } };
   const ctx = new Context(entity, { attrs: {} });
-  expect(ctx.to).toEqual(new JID("bar"));
+  expect(ctx.to).toEqual(new JID("baz"));
 });
 
 test("sets the local property to to.local", () => {
-  const entity = { jid: new JID("foo@bar"), domain: "bar" };
+  const entity = { jid: new JID("foo@bar"), options: { domain: "bar" } };
   const ctx = new Context(entity, { attrs: { to: "foo@bar" } });
   expect(ctx.local).toEqual("foo");
 });
