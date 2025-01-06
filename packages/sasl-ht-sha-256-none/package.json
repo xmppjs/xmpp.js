@@ -12,9 +12,7 @@
     "XMPP",
     "sasl"
   ],
-  "dependencies": {
-    "create-hmac": "^1.1.7"
-  },
+  "dependencies": {},
   "engines": {
     "node": ">= 20"
   },
