@@ -179,6 +179,7 @@ class Connection extends EventEmitter {
   }
 
   _status(status, ...args) {
+    if (this.status === status) return;
     this.status = status;
     this.emit("status", status, ...args);
     this.emit(status, ...args);
@@ -242,8 +243,9 @@ class Connection extends EventEmitter {
    * https://tools.ietf.org/html/rfc7395#section-3.6
    */
   async disconnect(timeout = this.timeout) {
-    if (this.socket) this._status("disconnecting");
+    if (!this.socket) return;
 
+    this._status("disconnecting");
     this.socket.end();
 
     // The 'disconnect' status is set by the socket 'close' listener
@@ -281,7 +283,7 @@ class Connection extends EventEmitter {
   async stop() {
     const el = await this._end();
     this.jid = null;
-    if (this.status !== "offline") this._status("offline", el);
+    this._status("offline", el);
     return el;
   }
 
