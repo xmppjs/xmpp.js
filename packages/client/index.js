@@ -104,6 +104,10 @@ function client(options = {}) {
     resource,
   );
 
+  iqCallee?.get("urn:xmpp:ping", "ping", () => {
+    return {};
+  });
+
   return Object.assign(entity, {
     entity,
     reconnect,
