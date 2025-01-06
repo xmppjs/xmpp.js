@@ -38,7 +38,7 @@ async function authenticate({
     entity,
     xml("authenticate", { xmlns: NS, mechanism: mech.name }, [
       mech.clientFirst &&
-        xml("initial-response", {}, encode(mech.response(creds))),
+        xml("initial-response", {}, encode(await mech.response(creds))),
       userAgent,
       ...streamFeatures,
     ]),
@@ -46,8 +46,8 @@ async function authenticate({
       if (element.getNS() !== NS) return;
 
       if (element.name === "challenge") {
-        mech.challenge(decode(element.text()));
-        const resp = mech.response(creds);
+        await mech.challenge(decode(element.text()));
+        const resp = await mech.response(creds);
         await entity.send(
           xml(
             "response",
@@ -69,7 +69,7 @@ async function authenticate({
       if (element.name === "success") {
         const additionalData = element.getChild("additional-data")?.text();
         if (additionalData && mech.final) {
-          mech.final(decode(additionalData));
+          await mech.final(decode(additionalData));
         }
 
         // https://xmpp.org/extensions/xep-0388.html#success
