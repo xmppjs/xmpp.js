@@ -1,5 +1,4 @@
 // https://datatracker.ietf.org/doc/draft-schmaus-kitten-sasl-ht/
-import createHmac from "create-hmac";
 
 export function Mechanism() {}
 
@@ -7,17 +6,35 @@ Mechanism.prototype.Mechanism = Mechanism;
 Mechanism.prototype.name = "HT-SHA-256-NONE";
 Mechanism.prototype.clientFirst = true;
 
-Mechanism.prototype.response = function response(cred) {
+Mechanism.prototype.response = async function response(cred) {
   this.password = cred.password;
-  const hmac = createHmac("sha256", this.password);
-  hmac.update("Initiator");
-  return cred.username + "\0" + hmac.digest("latin1");
+  // eslint-disable-next-line n/no-unsupported-features/node-builtins
+  const hmac = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(this.password),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign", "verify"]
+  );
+  // eslint-disable-next-line n/no-unsupported-features/node-builtins
+  const digest = await crypto.subtle.sign("HMAC", hmac, new TextEncoder().encode("Initiator"));
+  const digestS = String.fromCharCode.apply(null, new Uint8Array(digest));
+  return cred.username + "\0" + digestS;
 };
 
-Mechanism.prototype.final = function final(data) {
-  const hmac = createHmac("sha256", this.password);
-  hmac.update("Responder");
-  if (hmac.digest("latin1") !== data) {
+Mechanism.prototype.final = async function final(data) {
+  // eslint-disable-next-line n/no-unsupported-features/node-builtins
+  const hmac = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(this.password),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign", "verify"]
+  );
+  // eslint-disable-next-line n/no-unsupported-features/node-builtins
+  const digest = await crypto.subtle.sign("HMAC", hmac, new TextEncoder().encode("Responder"));
+  const digestS = String.fromCharCode.apply(null, new Uint8Array(digest));
+  if (digestS !== data) {
     throw new Error("Responder message from server was wrong");
   }
 };
