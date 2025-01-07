@@ -102,12 +102,23 @@ test("with function credentials", async () => {
   expect(entity.jid.toString()).toBe(jid);
 });
 
-test("with FAST token", async () => {
+// https://github.com/xmppjs/xmpp.js/pull/1045#discussion_r1904611099
+test("with FAST token only", async () => {
   const mech = "HT-SHA-256-NONE";
+
   function onAuthenticate(authenticate, mechanisms, fast) {
     expect(mechanisms).toEqual([]);
     expect(fast.mechanism).toEqual(mech);
-    return authenticate({ token: { token: "hai", mechanism: fast.mechanism } }, null, userAgent);
+    return authenticate(
+      {
+        token: {
+          token: "hai",
+          mechanism: fast.mechanism,
+        },
+      },
+      null,
+      userAgent,
+    );
   }
 
   const { entity } = mockClient({ credentials: onAuthenticate });
@@ -126,7 +137,9 @@ test("with FAST token", async () => {
 
   expect(await promise(entity, "send")).toEqual(
     <authenticate xmlns="urn:xmpp:sasl:2" mechanism={mech}>
-      <initial-response>bnVsbACNMNimsTBnxS04m8x7wgKjBHdDUL/nXPU4J4vqxqjBIg==</initial-response>
+      <initial-response>
+        bnVsbACNMNimsTBnxS04m8x7wgKjBHdDUL/nXPU4J4vqxqjBIg==
+      </initial-response>
       {userAgent}
       <fast xmlns="urn:xmpp:fast:0" />
     </authenticate>,

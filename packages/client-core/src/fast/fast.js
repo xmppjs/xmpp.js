@@ -19,6 +19,8 @@ export default function fast({ sasl2 }, { saveToken, fetchToken } = {}) {
   };
 
   Object.assign(fast, {
+    mechanism: null,
+    mechanisms: [],
     async saveToken() {
       try {
         await saveToken();
@@ -43,6 +45,10 @@ export default function fast({ sasl2 }, { saveToken, fetchToken } = {}) {
       streamFeatures,
       features,
     }) {
+      if (!isTokenValid(token, fast.mechanisms)) {
+        return false;
+      }
+
       try {
         await authenticate({
           saslFactory: fast.saslFactory,
@@ -79,6 +85,7 @@ export default function fast({ sasl2 }, { saveToken, fetchToken } = {}) {
 
   function reset() {
     fast.mechanism = null;
+    fast.mechanisms = [];
   }
   reset();
 
@@ -93,6 +100,7 @@ export default function fast({ sasl2 }, { saveToken, fetchToken } = {}) {
       const mechanism = mechanisms[0];
 
       if (!mechanism) return reset();
+      fast.mechanisms = mechanisms;
       fast.mechanism = mechanism;
 
       // The rest is handled by @xmpp/sasl2
@@ -101,6 +109,8 @@ export default function fast({ sasl2 }, { saveToken, fetchToken } = {}) {
       if (element.is("token", NS)) {
         try {
           await saveToken({
+            // The token is bound by the mechanism
+            // > Servers MUST bind tokens to the mechanism selected by the client in its original request, and reject attempts to use them with other mechanisms.
             mechanism: fast.mechanism,
             token: element.attrs.token,
             expiry: element.attrs.expiry,
@@ -113,4 +123,16 @@ export default function fast({ sasl2 }, { saveToken, fetchToken } = {}) {
   );
 
   return fast;
+}
+
+export function isTokenValid(token, mechanisms) {
+  // Avoid an error round trip if the server does not support the token mechanism anymore
+  if (!mechanisms.includes(token.mechanism)) {
+    return false;
+  }
+  // Avoid an error round trip if the token is already expired
+  if (new Date(token.expiry) <= new Date()) {
+    return false;
+  }
+  return true;
 }
