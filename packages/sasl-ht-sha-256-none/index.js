@@ -15,26 +15,27 @@ Mechanism.prototype.response = async function response({ username, password }) {
     new TextEncoder().encode(password),
     // https://developer.mozilla.org/en-US/docs/Web/API/HmacImportParams
     { name: "HMAC", hash: "SHA-256" },
-    false, //extractable
+    false, // extractable
     ["sign", "verify"],
   );
-  const digest = await crypto.subtle.sign(
+  const signature = await crypto.subtle.sign(
     "HMAC",
     this.key,
     new TextEncoder().encode("Initiator"),
   );
-  const digestS = String.fromCodePoint(...new Uint8Array(digest));
-  return username + "\0" + digestS;
+  return `${username}\0${String.fromCodePoint(...new Uint8Array(signature))}`;
 };
 
 Mechanism.prototype.final = async function final(data) {
-  const digest = await crypto.subtle.sign(
+  const signature = Uint8Array.from(data, (c) => c.codePointAt(0));
+  // https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/verify
+  const result = await crypto.subtle.verify(
     "HMAC",
     this.key,
+    signature,
     new TextEncoder().encode("Responder"),
   );
-  const digestS = String.fromCodePoint(...new Uint8Array(digest));
-  if (digestS !== data) {
+  if (result !== true) {
     throw new Error("Responder message from server was wrong");
   }
 };
