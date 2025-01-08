@@ -17,6 +17,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
+  xmpp?.removeAllListeners();
   await xmpp?.stop();
 });
 
@@ -89,7 +90,6 @@ test("reconnects when server restarts gracefully", (done) => {
     c++;
     expect().pass();
     if (c === 2) {
-      await xmpp.stop();
       done();
     } else {
       await server.restart();
@@ -112,7 +112,6 @@ test("reconnects when server restarts non-gracefully", (done) => {
     c++;
     expect().pass();
     if (c === 2) {
-      await xmpp.stop();
       done();
     } else {
       await server.restart("SIGKILL");
@@ -130,7 +129,7 @@ test("does not reconnect when stop is called", (done) => {
 
   xmpp.on("online", async () => {
     await xmpp.stop();
-    server.stop();
+    await server.stop();
     done();
   });
 

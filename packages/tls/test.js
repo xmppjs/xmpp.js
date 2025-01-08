@@ -90,7 +90,7 @@ NebQHyTBqa5P7vjSioiWiSRCNOIL4HywMWtN/nZVk0cl8zwlLtMaGt9Tz7ty2OgL
   const error = await promise(conn, "error");
   expect(error.message).toBe("certificate has expired");
 
-  await conn._closeSocket().catch(() => {});
+  await conn.disconnect();
   server.close();
 });
 
@@ -111,7 +111,7 @@ test("rejects self signed certificates", async () => {
   const error = await promise(conn, "error");
   expect(error.code).toBe("DEPTH_ZERO_SELF_SIGNED_CERT");
 
-  await conn._closeSocket().catch(() => {});
+  await conn.disconnect();
   server.close();
 });
 
@@ -213,6 +213,6 @@ yA==
   // which is what we want as it delays the sending of the stream header (conn.open)
   expect(connect_emitted_on_conn_socket).toBe(true);
 
-  await conn._closeSocket().catch(() => {});
+  await conn.disconnect();
   server.close();
 });

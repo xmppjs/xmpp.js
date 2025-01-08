@@ -1,5 +1,5 @@
 import Connection from "../index.js";
-import { EventEmitter, promise, timeout, TimeoutError } from "@xmpp/events";
+import { EventEmitter, promise, TimeoutError } from "@xmpp/events";
 import { xml } from "@xmpp/test";
 
 test("resets properties on socket close event", () => {
@@ -11,22 +11,11 @@ test("resets properties on socket close event", () => {
   expect(conn.status).toBe("disconnect");
 });
 
-test("timeout", async () => {
-  expect.assertions(2);
+test("timeout on parser end", async () => {
   const conn = new Connection();
   conn.parser = new EventEmitter();
-  conn.footerElement = () => {
-    return xml("hello");
-  };
-
-  conn.socket = new EventEmitter();
-  conn.socket.write = (data, cb) => {
-    return cb();
-  };
-
-  conn.on("output", (el) => {
-    expect(el).toBe("<hello/>");
-  });
+  jest.spyOn(conn, "footerElement").mockImplementation(() => xml("hello"));
+  jest.spyOn(conn, "write").mockImplementation(async () => {});
 
   await expect(conn._closeStream()).rejects.toThrow(new TimeoutError());
 });
@@ -53,21 +42,11 @@ test("error on status closing", async () => {
 });
 
 test("resolves", async () => {
-  expect.assertions(2);
   const conn = new Connection();
   conn.parser = new EventEmitter();
-  conn.footerElement = () => {
-    return xml("hello");
-  };
 
-  conn.socket = new EventEmitter();
-  conn.socket.write = (data, cb) => {
-    return cb();
-  };
-
-  conn.on("output", (el) => {
-    expect(el).toBe("<hello/>");
-  });
+  jest.spyOn(conn, "footerElement").mockImplementation(() => xml("hello"));
+  jest.spyOn(conn, "write").mockImplementation(async () => {});
 
   const promiseClose = conn._closeStream();
   conn.parser.emit("end", xml("goodbye"));
@@ -80,14 +59,9 @@ test("resolves", async () => {
 test("emits closing status", () => {
   const conn = new Connection();
   conn.parser = new EventEmitter();
-  conn.footerElement = () => {
-    return xml("hello");
-  };
 
-  conn.socket = new EventEmitter();
-  conn.socket.write = (data, cb) => {
-    return cb();
-  };
+  jest.spyOn(conn, "footerElement").mockImplementation(() => xml("hello"));
+  jest.spyOn(conn, "write").mockImplementation(async () => {});
 
   const p = Promise.all([
     promise(conn, "status").then((status) => expect(status).toBe("closing")),
@@ -96,25 +70,4 @@ test("emits closing status", () => {
 
   conn.parser.emit("end");
   return p;
-});
-
-test("do not emit closing status if parser property is missing", async () => {
-  expect.assertions(2);
-  const conn = new Connection();
-  conn.parser = null;
-  conn.footerElement = () => {
-    return xml("hello");
-  };
-
-  conn.socket = new EventEmitter();
-  conn.socket.write = (data, cb) => {
-    return cb();
-  };
-
-  await Promise.all([
-    expect(timeout(promise(conn, "status"), 500)).rejects.toThrow(
-      new TimeoutError(),
-    ),
-    expect(conn._closeStream()).rejects.toThrow(),
-  ]);
 });

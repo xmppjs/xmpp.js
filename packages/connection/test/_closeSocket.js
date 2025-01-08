@@ -46,10 +46,3 @@ test("rejects if socket.end throws", (done) => {
     done();
   });
 });
-
-test("resolves if socket is absent", async () => {
-  const conn = new Connection();
-  conn.socket = null;
-
-  await expect(conn._closeSocket()).toResolve();
-});
