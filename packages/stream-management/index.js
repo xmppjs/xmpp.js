@@ -216,7 +216,8 @@ function setupStreamFeature({
     // Resuming
     if (sm.id) {
       try {
-        await resumed(await resume(entity, sm));
+        const element = await resume(entity, sm);
+        await resumed(element);
         return;
         // If resumption fails, continue with session establishment
       } catch {
