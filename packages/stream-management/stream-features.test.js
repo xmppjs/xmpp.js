@@ -242,6 +242,40 @@ test("resume - failed", async () => {
   entity.streamManagement.id = "bar";
   entity.streamManagement.enabled = true;
   entity.streamManagement.outbound = 45;
+  entity.streamManagement.outbound_q = [];
+
+  entity.mockInput(
+    <features xmlns="http://etherx.jabber.org/streams">
+      <sm xmlns="urn:xmpp:sm:3" />
+    </features>,
+  );
+
+  expect(await entity.catchOutgoing()).toEqual(
+    <resume xmlns="urn:xmpp:sm:3" previd="bar" h="0" />,
+  );
+
+  entity.mockInput(
+    <failed xmlns="urn:xmpp:sm:3">
+      <unexpected-request xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
+    </failed>,
+  );
+
+  await tick();
+
+  expect(entity.status).toBe("bar");
+  expect(entity.streamManagement.id).toBe("");
+  expect(entity.streamManagement.enabled).toBe(false);
+  expect(entity.streamManagement.outbound).toBe(0);
+  expect(entity.streamManagement.outbound_q).toBeEmpty();
+});
+
+test("resume - failed with something in queue", async () => {
+  const { entity } = mockClient();
+
+  entity.status = "bar";
+  entity.streamManagement.id = "bar";
+  entity.streamManagement.enabled = true;
+  entity.streamManagement.outbound = 45;
   entity.streamManagement.outbound_q = [{ stanza: "hai" }];
 
   entity.mockInput(
