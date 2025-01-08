@@ -115,7 +115,9 @@ export default function streamManagement({
 
   entity.on("online", () => {
     if (sm.outbound_q.length > 0) {
-      throw "Stream Management assertion failure, queue should be empty during online";
+      throw new Error(
+        "Stream Management assertion failure, queue should be empty during online",
+      );
     }
     sm.outbound = 0;
     sm.inbound = 0;
@@ -228,7 +230,9 @@ function setupStreamFeature({
 
     // > The counter for an entity's own sent stanzas is set to zero and started after sending either <enable/> or <enabled/>.
     if (sm.outbound_q.length > 0) {
-      throw "Stream Management assertion failure, queue should be empty after enable";
+      throw new Error(
+        "Stream Management assertion failure, queue should be empty after enable",
+      );
     }
     sm.outbound = 0;
 
