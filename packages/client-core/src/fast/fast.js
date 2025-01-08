@@ -5,32 +5,31 @@ import SASLFactory from "saslmechanisms";
 
 const NS = "urn:xmpp:fast:0";
 
-export default function fast({ sasl2 }, { saveToken, fetchToken } = {}) {
+export default function fast({ sasl2 }) {
   const saslFactory = new SASLFactory();
 
-  const fast = new EventEmitter();
-
   let token;
-  saveToken ??= async function saveToken(t) {
-    token = t;
-  };
-  fetchToken ??= async function fetchToken() {
-    return token;
-  };
 
+  const fast = new EventEmitter();
   Object.assign(fast, {
     mechanism: null,
     mechanisms: [],
-    async saveToken() {
+    async saveToken(t) {
+      token = t;
+    },
+    async fetchToken() {
+      return token;
+    },
+    async save(token) {
       try {
-        await saveToken();
+        await this.saveToken(token);
       } catch (err) {
         fast.emit("error", err);
       }
     },
-    async fetchToken() {
+    async fetch() {
       try {
-        return await fetchToken();
+        return this.fetchToken();
       } catch (err) {
         fast.emit("error", err);
       }
@@ -107,17 +106,13 @@ export default function fast({ sasl2 }, { saveToken, fetchToken } = {}) {
     },
     async (element) => {
       if (element.is("token", NS)) {
-        try {
-          await saveToken({
-            // The token is bound by the mechanism
-            // > Servers MUST bind tokens to the mechanism selected by the client in its original request, and reject attempts to use them with other mechanisms.
-            mechanism: fast.mechanism,
-            token: element.attrs.token,
-            expiry: element.attrs.expiry,
-          });
-        } catch (err) {
-          fast.emit("error", err);
-        }
+        await fast.save({
+          // The token is bound by the mechanism
+          // > Servers MUST bind tokens to the mechanism selected by the client in its original request, and reject attempts to use them with other mechanisms.
+          mechanism: fast.mechanism,
+          token: element.attrs.token,
+          expiry: element.attrs.expiry,
+        });
       }
     },
   );
