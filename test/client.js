@@ -1,3 +1,5 @@
+// eslint-disable-next-line n/no-extraneous-import
+import { promise } from "@xmpp/events";
 import { client, xml, jid } from "../packages/client/index.js";
 import debug from "../packages/debug/index.js";
 import server from "../server/index.js";
@@ -141,6 +143,44 @@ test("does not reconnect when stop is called", (done) => {
   });
 
   xmpp.start();
+});
+
+test("statuses", async () => {
+  xmpp = client({ credentials, service: domain });
+  debug(xmpp);
+
+  let statuses = [xmpp.status];
+
+  xmpp.on("status", (status) => {
+    statuses.push(status);
+  });
+
+  xmpp.on("error", () => {});
+
+  await xmpp.start();
+
+  expect(statuses).toEqual([
+    "offline",
+    "connecting",
+    "connect",
+    "opening",
+    "open",
+    "online",
+  ]);
+
+  // trigger reconnect
+  await xmpp.disconnect();
+
+  statuses = [xmpp.status];
+  await promise(xmpp, "open");
+
+  expect(statuses).toEqual([
+    "disconnect",
+    "connecting",
+    "connect",
+    "opening",
+    "open",
+  ]);
 });
 
 test("anonymous authentication", (done) => {
