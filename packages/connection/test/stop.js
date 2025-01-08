@@ -9,18 +9,18 @@ test("resolves if socket property is undefined", async () => {
   expect().pass();
 });
 
-test("resolves if close rejects", async () => {
+test("resolves if _closeStream rejects", async () => {
   const conn = new Connection();
-  conn.close = () => Promise.reject();
-  conn.disconnect = () => Promise.resolve();
+  conn._closeStream = () => Promise.reject();
+  conn._closeSocket = () => Promise.resolve();
   await conn.stop();
   expect().pass();
 });
 
-test("resolves if disconnect rejects", async () => {
+test("resolves if _closeSocket rejects", async () => {
   const conn = new Connection();
-  conn.disconnect = () => Promise.reject();
-  conn.close = () => Promise.resolve();
+  conn._closeStream = () => Promise.resolve();
+  conn._closeSocket = () => Promise.reject();
   await conn.stop();
   expect().pass();
 });
@@ -29,8 +29,8 @@ test("resolves with the result of close", async () => {
   const conn = new Connection();
   conn.socket = {};
   const el = {};
-  conn.close = () => Promise.resolve(el);
-  conn.disconnect = () => Promise.resolve();
+  conn._closeStream = () => Promise.resolve(el);
+  conn._closeSocket = () => Promise.resolve();
   expect(await conn.stop()).toBe(el);
 });
 

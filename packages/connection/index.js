@@ -214,7 +214,7 @@ class Connection extends EventEmitter {
   async _end() {
     let el;
     try {
-      el = await this.close();
+      el = await this._closeStream();
     } catch {}
 
     try {
@@ -326,7 +326,7 @@ class Connection extends EventEmitter {
    * https://xmpp.org/rfcs/rfc6120.html#streams-close
    * https://tools.ietf.org/html/rfc7395#section-3.6
    */
-  async close(timeout = this.timeout) {
+  async _closeStream(timeout = this.timeout) {
     const fragment = this.footer(this.footerElement());
 
     const p = Promise.all([

@@ -28,7 +28,7 @@ test("timeout", async () => {
     expect(el).toBe("<hello/>");
   });
 
-  await expect(conn.close()).rejects.toThrow(new TimeoutError());
+  await expect(conn._closeStream()).rejects.toThrow(new TimeoutError());
 });
 
 test("error on status closing", async () => {
@@ -47,7 +47,7 @@ test("error on status closing", async () => {
 
   conn.parser.emit("end");
 
-  await expect(conn.close()).rejects.toThrow(
+  await expect(conn._closeStream()).rejects.toThrow(
     new Error("Connection is closing"),
   );
 });
@@ -69,7 +69,7 @@ test("resolves", async () => {
     expect(el).toBe("<hello/>");
   });
 
-  const promiseClose = conn.close();
+  const promiseClose = conn._closeStream();
   conn.parser.emit("end", xml("goodbye"));
 
   const el = await promiseClose;
@@ -91,7 +91,7 @@ test("emits closing status", () => {
 
   const p = Promise.all([
     promise(conn, "status").then((status) => expect(status).toBe("closing")),
-    conn.close(),
+    conn._closeStream(),
   ]);
 
   conn.parser.emit("end");
@@ -115,6 +115,6 @@ test("do not emit closing status if parser property is missing", async () => {
     expect(timeout(promise(conn, "status"), 500)).rejects.toThrow(
       new TimeoutError(),
     ),
-    expect(conn.close()).rejects.toThrow(),
+    expect(conn._closeStream()).rejects.toThrow(),
   ]);
 });
