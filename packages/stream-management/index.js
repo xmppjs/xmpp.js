@@ -61,8 +61,8 @@ export default function streamManagement({
     max: null,
     timeout: 60_000,
     _teardown: () => {
-      if (timeoutTimeout) clearTimeout(timeoutTimeout);
-      if (requestAckTimeout) clearTimeout(requestAckTimeout);
+      clearTimeout(timeoutTimeout);
+      clearTimeout(requestAckTimeout);
     },
   });
 
@@ -120,7 +120,7 @@ export default function streamManagement({
 
   middleware.use((context, next) => {
     const { stanza } = context;
-    if (timeoutTimeout) clearTimeout(timeoutTimeout);
+    clearTimeout(timeoutTimeout);
     if (["presence", "message", "iq"].includes(stanza.name)) {
       sm.inbound += 1;
     } else if (stanza.is("r", NS)) {
@@ -147,7 +147,7 @@ export default function streamManagement({
   }
 
   function requestAck() {
-    if (timeoutTimeout) clearTimeout(timeoutTimeout);
+    clearTimeout(timeoutTimeout);
     if (sm.timeout) {
       timeoutTimeout = setTimeout(() => entity.disconnect(), sm.timeout);
     }
@@ -174,7 +174,7 @@ export default function streamManagement({
       }
       sm.outbound_q.push(qStanza);
       // Debounce requests so we send only one after a big run of stanza together
-      if (requestAckTimeout) clearTimeout(requestAckTimeout);
+      clearTimeout(requestAckTimeout);
       requestAckTimeout = setTimeout(requestAck, 100);
     }
     return next();
