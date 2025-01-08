@@ -189,7 +189,10 @@ test("resume - resumed", async () => {
   );
 
   entity.streamManagement.outbound = 45;
-  entity.streamManagement.outbound_q = [<message id="a" />, <message id="b" />];
+  entity.streamManagement.outbound_q = [
+    { stanza: <message id="a" />, stamp: "1990-01-01T00:00:00Z" },
+    { stanza: <message id="b" />, stamp: "1990-01-01T00:00:00Z" },
+  ];
 
   expect(await entity.catchOutgoing()).toEqual(
     <resume xmlns="urn:xmpp:sm:3" previd="bar" h="0" />,
@@ -207,7 +210,15 @@ test("resume - resumed", async () => {
     acks++;
   });
 
-  expect(await entity.catchOutgoing()).toEqual(<message id="b" />);
+  expect(await entity.catchOutgoing()).toEqual(
+    <message id="b">
+      <delay
+        xmlns="urn:xmpp:delay"
+        from="foo@bar/test"
+        stamp="1990-01-01T00:00:00Z"
+      />
+    </message>,
+  );
 
   let resumed = false;
   entity.streamManagement.on("resumed", () => {
@@ -221,9 +232,6 @@ test("resume - resumed", async () => {
   expect(acks).toBe(1);
   expect(entity.streamManagement.outbound).toBe(46);
   expect(entity.streamManagement.outbound_q).toHaveLength(1);
-  expect(
-    entity.streamManagement.outbound_q[0].getChild("delay", "urn:xmpp:delay"),
-  ).not.toBeUndefined();
   expect(entity.status).toBe("online");
 });
 
@@ -234,7 +242,7 @@ test("resume - failed", async () => {
   entity.streamManagement.id = "bar";
   entity.streamManagement.enabled = true;
   entity.streamManagement.outbound = 45;
-  entity.streamManagement.outbound_q = ["hai"];
+  entity.streamManagement.outbound_q = [{ stanza: "hai" }];
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">

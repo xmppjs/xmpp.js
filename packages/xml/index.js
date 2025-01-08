@@ -1,5 +1,4 @@
 import Element from "ltx/lib/Element.js";
-import clone from "ltx/lib/clone.js";
 import createElement from "ltx/lib/createElement.js";
 import Parser from "./lib/Parser.js";
 import {
@@ -18,7 +17,6 @@ Object.assign(xml, {
   Element,
   createElement,
   Parser,
-  clone,
   escapeXML,
   unescapeXML,
   escapeXMLText,
@@ -31,7 +29,6 @@ export {
   Element,
   createElement,
   Parser,
-  clone,
   escapeXML,
   unescapeXML,
   escapeXMLText,

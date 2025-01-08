@@ -66,18 +66,32 @@ export default function streamManagement({
     },
   });
 
+  async function sendQueueItem({ stanza, stamp }) {
+    if (
+      stanza.name === "message" &&
+      !stanza.getChild("delay", "urn:xmpp:delay")
+    ) {
+      stanza.append(xml("delay", {
+        xmlns: "urn:xmpp:delay",
+        from: entity.jid.toString(),
+        stamp: stamp,
+      }));
+    }
+    await entity.send(stanza);
+  }
+
   async function resumed(resumed) {
     sm.enabled = true;
     const oldOutbound = sm.outbound;
     for (let i = 0; i < resumed.attrs.h - oldOutbound; i++) {
-      let stanza = sm.outbound_q.shift();
+      let item = sm.outbound_q.shift();
       sm.outbound++;
-      sm.emit("ack", stanza);
+      sm.emit("ack", item.stanza);
     }
     let q = sm.outbound_q;
     sm.outbound_q = [];
     for (const item of q) {
-      await entity.send(item); // This will trigger the middleware and re-add to the queue
+      await sendQueueItem(item); // This will trigger the middleware and re-add to the queue
     }
     sm.emit("resumed");
     entity._ready(true);
@@ -86,9 +100,9 @@ export default function streamManagement({
   function failed() {
     sm.enabled = false;
     sm.id = "";
-    let stanza;
-    while ((stanza = sm.outbound_q.shift())) {
-      sm.emit("fail", stanza);
+    let item;
+    while ((item = sm.outbound_q.shift())) {
+      sm.emit("fail", item.stanza);
     }
     sm.outbound = 0;
   }
@@ -130,9 +144,9 @@ export default function streamManagement({
       // > When a party receives an <a/> element, it SHOULD keep a record of the 'h' value returned as the sequence number of the last handled outbound stanza for the current stream (and discard the previous value).
       const oldOutbound = sm.outbound;
       for (let i = 0; i < stanza.attrs.h - oldOutbound; i++) {
-        let stanza = sm.outbound_q.shift();
+        let item = sm.outbound_q.shift();
         sm.outbound++;
-        sm.emit("ack", stanza);
+        sm.emit("ack", item.stanza);
       }
     }
 
@@ -162,19 +176,7 @@ export default function streamManagement({
     const { stanza } = context;
     if (!["presence", "message", "iq"].includes(stanza.name)) return next();
 
-    let qStanza = stanza;
-    if (
-      qStanza.name === "message" &&
-      !qStanza.getChild("delay", "urn:xmpp:delay")
-    ) {
-      qStanza = xml.clone(qStanza);
-      qStanza.c("delay", {
-        xmlns: "urn:xmpp:delay",
-        from: entity.jid.toString(),
-        stamp: datetime(),
-      });
-    }
-    sm.outbound_q.push(qStanza);
+    sm.outbound_q.push({ stanza, stamp: datetime() });
     // Debounce requests so we send only one after a big run of stanza together
     clearTimeout(requestAckTimeout);
     requestAckTimeout = setTimeout(requestAck, 100);
