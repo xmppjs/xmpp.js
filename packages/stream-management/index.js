@@ -60,6 +60,8 @@ export default function streamManagement({
     inbound: 0,
     max: null,
     timeout: 60_000,
+    requestAckInterval: 300_000,
+    debounceAckRequest: 100,
     _teardown: () => {
       clearTimeout(timeoutTimeout);
       clearTimeout(requestAckTimeout);
@@ -173,7 +175,7 @@ export default function streamManagement({
     entity.send(xml("r", { xmlns: NS })).catch(() => {});
     // Periodically send r to check the connection
     // If a stanza goes out it will cancel this and set a sooner timer
-    requestAckTimeout = setTimeout(requestAck, 300_000);
+    requestAckTimeout = setTimeout(requestAck, sm.requestAckInterval);
   }
 
   middleware.filter((context, next) => {
@@ -184,7 +186,7 @@ export default function streamManagement({
     sm.outbound_q.push({ stanza, stamp: datetime() });
     // Debounce requests so we send only one after a big run of stanza together
     clearTimeout(requestAckTimeout);
-    requestAckTimeout = setTimeout(requestAck, 100);
+    requestAckTimeout = setTimeout(requestAck, sm.debounceAckRequest);
     return next();
   });
 
