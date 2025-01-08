@@ -163,7 +163,7 @@ test("enable - enabled - message", async () => {
   expect(entity.streamManagement.outbound_q).toHaveLength(1);
 
   let acks = 0;
-  entity.on("stream-management/ack", (stanza) => {
+  entity.streamManagement.on("ack", (stanza) => {
     expect(stanza.attrs.id).toBe("a");
     acks++;
   });
@@ -202,7 +202,7 @@ test("resume - resumed", async () => {
   entity.mockInput(<resumed xmlns="urn:xmpp:sm:3" h="46" />);
 
   let acks = 0;
-  entity.on("stream-management/ack", (stanza) => {
+  entity.streamManagement.on("ack", (stanza) => {
     expect(stanza.attrs.id).toBe("a");
     acks++;
   });
@@ -210,7 +210,7 @@ test("resume - resumed", async () => {
   expect(await entity.catchOutgoing()).toEqual(<message id="b" />);
 
   let resumed = false;
-  entity.on("stream-management/resumed", () => {
+  entity.streamManagement.on("resumed", () => {
     resumed = true;
   });
 
@@ -253,7 +253,7 @@ test("resume - failed", async () => {
   );
 
   let failures = 0;
-  entity.on("stream-management/fail", (failed) => {
+  entity.streamManagement.on("fail", (failed) => {
     failures++;
     expect(failed).toBe("hai");
   });

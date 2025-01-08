@@ -1,5 +1,5 @@
 import XMPPError from "@xmpp/error";
-import { procedure } from "@xmpp/events";
+import { EventEmitter, procedure } from "@xmpp/events";
 import xml from "@xmpp/xml";
 import { datetime } from "@xmpp/time";
 
@@ -49,7 +49,8 @@ export default function streamManagement({
   let timeoutTimeout = null;
   let requestAckTimeout = null;
 
-  const sm = {
+  const sm = new EventEmitter();
+  Object.assign(sm, {
     allowResume: true,
     preferredMaximum: null,
     enabled: false,
@@ -63,7 +64,7 @@ export default function streamManagement({
       if (timeoutTimeout) clearTimeout(timeoutTimeout);
       if (requestAckTimeout) clearTimeout(requestAckTimeout);
     },
-  };
+  });
 
   async function resumed(resumed) {
     sm.enabled = true;
@@ -71,14 +72,14 @@ export default function streamManagement({
     for (let i = 0; i < resumed.attrs.h - oldOutbound; i++) {
       let stanza = sm.outbound_q.shift();
       sm.outbound++;
-      entity.emit("stream-management/ack", stanza);
+      sm.emit("ack", stanza);
     }
     let q = sm.outbound_q;
     sm.outbound_q = [];
     for (const item of q) {
       await entity.send(item); // This will trigger the middleware and re-add to the queue
     }
-    entity.emit("stream-management/resumed");
+    sm.emit("resumed");
     entity._ready(true);
   }
 
@@ -87,7 +88,7 @@ export default function streamManagement({
     sm.id = "";
     let stanza;
     while ((stanza = sm.outbound_q.shift())) {
-      entity.emit("stream-management/fail", stanza);
+      sm.emit("fail", stanza);
     }
     sm.outbound = 0;
   }
@@ -109,7 +110,7 @@ export default function streamManagement({
   entity.on("offline", () => {
     let stanza;
     while ((stanza = sm.outbound_q.shift())) {
-      entity.emit("stream-management/fail", stanza);
+      sm.emit("fail", stanza);
     }
     sm.outbound = 0;
     sm.inbound = 0;
@@ -131,7 +132,7 @@ export default function streamManagement({
       for (let i = 0; i < stanza.attrs.h - oldOutbound; i++) {
         let stanza = sm.outbound_q.shift();
         sm.outbound++;
-        entity.emit("stream-management/ack", stanza);
+        sm.emit("ack", stanza);
       }
     }
 
