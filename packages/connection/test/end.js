@@ -4,12 +4,12 @@ test("#_end", async () => {
   const conn = new Connection();
 
   const spy_close = jest.spyOn(conn, "close");
-  const spy_disconnect = jest.spyOn(conn, "disconnect");
+  const spy_closeSocket = jest.spyOn(conn, "_closeSocket");
 
   await conn._end();
 
   expect(spy_close).toHaveBeenCalledTimes(1);
-  expect(spy_disconnect).toHaveBeenCalledTimes(1);
+  expect(spy_closeSocket).toHaveBeenCalledTimes(1);
 });
 
 test("#_end with close rejection", async () => {
@@ -18,20 +18,20 @@ test("#_end with close rejection", async () => {
   const spy_close = jest.spyOn(conn, "close").mockImplementation(() => {
     return Promise.reject();
   });
-  const spy_disconnect = jest.spyOn(conn, "disconnect");
+  const spy_closeSocket = jest.spyOn(conn, "_closeSocket");
 
   await conn._end();
 
   expect(spy_close).toHaveBeenCalledTimes(1);
-  expect(spy_disconnect).toHaveBeenCalledTimes(1);
+  expect(spy_closeSocket).toHaveBeenCalledTimes(1);
 });
 
 test("#_end with disconnect rejection", async () => {
   const conn = new Connection();
 
   const spy_close = jest.spyOn(conn, "close");
-  const spy_disconnect = jest
-    .spyOn(conn, "disconnect")
+  const spy_closeSocket = jest
+    .spyOn(conn, "_closeSocket")
     .mockImplementation(() => {
       return Promise.reject();
     });
@@ -39,7 +39,7 @@ test("#_end with disconnect rejection", async () => {
   await conn._end();
 
   expect(spy_close).toHaveBeenCalledTimes(1);
-  expect(spy_disconnect).toHaveBeenCalledTimes(1);
+  expect(spy_closeSocket).toHaveBeenCalledTimes(1);
 });
 
 test("#_end with close and disconnect rejection", async () => {
@@ -48,8 +48,8 @@ test("#_end with close and disconnect rejection", async () => {
   const spy_close = jest.spyOn(conn, "close").mockImplementation(() => {
     return Promise.reject();
   });
-  const spy_disconnect = jest
-    .spyOn(conn, "disconnect")
+  const spy_closeSocket = jest
+    .spyOn(conn, "_closeSocket")
     .mockImplementation(() => {
       return Promise.reject();
     });
@@ -57,5 +57,5 @@ test("#_end with close and disconnect rejection", async () => {
   await conn._end();
 
   expect(spy_close).toHaveBeenCalledTimes(1);
-  expect(spy_disconnect).toHaveBeenCalledTimes(1);
+  expect(spy_closeSocket).toHaveBeenCalledTimes(1);
 });
