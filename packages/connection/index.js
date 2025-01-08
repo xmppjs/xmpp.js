@@ -57,16 +57,18 @@ class Connection extends EventEmitter {
     this.emit("error", error);
   }
 
+  #onSocketClosed(dirty, event) {
+    this._reset();
+    this._status("disconnect", { clean: !dirty, event });
+  }
+
   _attachSocket(socket) {
     this.socket = socket;
     const listeners = this.socketListeners;
 
     listeners.data = this._onData.bind(this);
 
-    listeners.close = (dirty, event) => {
-      this._reset();
-      this._status("disconnect", { clean: !dirty, event });
-    };
+    listeners.close = this.#onSocketClosed.bind(this);
 
     listeners.connect = () => {
       this._status("connect");
@@ -178,6 +180,22 @@ class Connection extends EventEmitter {
     return this.jid;
   }
 
+  /*
+  [
+    "offline",
+    // "disconnect",
+    "connecting",
+    "connected",
+    "opening",
+    "open",
+    "online",
+    "closing",
+    "close",
+    "disconnecting",
+    "disconnect",
+    "offline",
+  ];
+  */
   _status(status, ...args) {
     if (this.status === status) return;
     this.status = status;
@@ -201,7 +219,9 @@ class Connection extends EventEmitter {
 
     try {
       await this.disconnect();
-    } catch {}
+    } catch (err) {
+      this.#onSocketClosed(true, err);
+    }
 
     return el;
   }
