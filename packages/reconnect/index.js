@@ -9,6 +9,10 @@ class Reconnect extends EventEmitter {
     this._timeout = null;
   }
 
+  #onDisconnect = () => {
+    this.scheduleReconnect();
+  };
+
   scheduleReconnect() {
     const { entity, delay, _timeout } = this;
     clearTimeout(_timeout);
@@ -38,18 +42,12 @@ class Reconnect extends EventEmitter {
 
   start() {
     const { entity } = this;
-    const listeners = {};
-    listeners.disconnect = () => {
-      this.scheduleReconnect();
-    };
-
-    this.listeners = listeners;
-    entity.on("disconnect", listeners.disconnect);
+    entity.on("disconnect", this.#onDisconnect);
   }
 
   stop() {
-    const { entity, listeners, _timeout } = this;
-    entity.removeListener("disconnect", listeners.disconnect);
+    const { entity, _timeout } = this;
+    entity.removeListener("disconnect", this.#onDisconnect);
     clearTimeout(_timeout);
   }
 }

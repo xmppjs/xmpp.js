@@ -1,38 +1,37 @@
 import _reconnect from "./index.js";
-import { EventEmitter } from "@xmpp/events";
+// eslint-disable-next-line n/no-extraneous-import
+import Connection from "@xmpp/connection";
 
-test("it schedule a reconnect when disconnect is emitted", (done) => {
-  const entity = new EventEmitter();
+test("schedules a reconnect when disconnect is emitted", () => {
+  const entity = new Connection();
   const reconnect = _reconnect({ entity });
+  const spy_scheduleReconnect = jest.spyOn(reconnect, "scheduleReconnect");
 
-  reconnect.scheduleReconnect = () => {
-    expect.pass();
-    done();
-  };
-
+  expect(spy_scheduleReconnect).toHaveBeenCalledTimes(0);
   entity.emit("disconnect");
+  expect(spy_scheduleReconnect).toHaveBeenCalledTimes(1);
 });
 
 test("#reconnect", async () => {
-  expect.assertions(3);
+  const service = "service";
+  const lang = "lang";
+  const domain = "domain";
 
-  const entity = new EventEmitter();
+  const entity = new Connection({
+    service,
+    lang,
+    domain,
+  });
   const reconnect = _reconnect({ entity });
 
-  entity.options = {
-    service: "service",
-    lang: "lang",
-    domain: "domain",
-  };
-
-  entity.connect = (service) => {
-    expect(service).toBe(entity.options.service);
-  };
-
-  entity.open = ({ domain, lang }) => {
-    expect(domain).toBe(entity.options.domain);
-    expect(lang).toBe(entity.options.lang);
-  };
+  const spy_connect = jest.spyOn(entity, "connect").mockResolvedValue();
+  const spy_open = jest.spyOn(entity, "open").mockResolvedValue();
 
   await reconnect.reconnect();
+
+  expect(spy_connect).toHaveBeenCalledWith(service);
+  expect(spy_open).toHaveBeenCalledWith({
+    domain,
+    lang,
+  });
 });
