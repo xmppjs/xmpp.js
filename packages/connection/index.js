@@ -218,7 +218,7 @@ class Connection extends EventEmitter {
     } catch {}
 
     try {
-      await this.disconnect();
+      await this._closeSocket();
     } catch (err) {
       this.#onSocketClosed(true, err);
     }
@@ -262,7 +262,7 @@ class Connection extends EventEmitter {
    * https://xmpp.org/rfcs/rfc6120.html#streams-close
    * https://tools.ietf.org/html/rfc7395#section-3.6
    */
-  async disconnect(timeout = this.timeout) {
+  async _closeSocket(timeout = this.timeout) {
     if (!this.socket) return;
 
     this._status("disconnecting");

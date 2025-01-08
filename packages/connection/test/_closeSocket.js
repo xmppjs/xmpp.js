@@ -6,7 +6,7 @@ test("rejects with TimeoutError if socket doesn't close", (done) => {
   const conn = new Connection();
   conn.socket = new EventEmitter();
   conn.socket.end = () => {};
-  conn.disconnect().catch((err) => {
+  conn._closeSocket().catch((err) => {
     expect(err.name).toBe("TimeoutError");
     done();
   });
@@ -21,7 +21,7 @@ test("resolves", (done) => {
   sock.emit("connect");
   sock.end = () => {};
   // eslint-disable-next-line promise/catch-or-return
-  conn.disconnect().then(() => {
+  conn._closeSocket().then(() => {
     expect(conn.status).toBe("disconnect");
     return done();
   });
@@ -41,7 +41,7 @@ test("rejects if socket.end throws", (done) => {
     throw error;
   };
 
-  conn.disconnect().catch((err) => {
+  conn._closeSocket().catch((err) => {
     expect(err).toBe(error);
     done();
   });
@@ -51,5 +51,5 @@ test("resolves if socket is absent", async () => {
   const conn = new Connection();
   conn.socket = null;
 
-  await expect(conn.disconnect()).toResolve();
+  await expect(conn._closeSocket()).toResolve();
 });
