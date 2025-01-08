@@ -165,7 +165,10 @@ export default function streamManagement({
   function requestAck() {
     clearTimeout(timeoutTimeout);
     if (sm.timeout) {
-      timeoutTimeout = setTimeout(() => entity.disconnect(), sm.timeout);
+      timeoutTimeout = setTimeout(
+        () => entity.disconnect().catch(),
+        sm.timeout,
+      );
     }
     entity.send(xml("r", { xmlns: NS })).catch(() => {});
     // Periodically send r to check the connection
