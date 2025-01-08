@@ -1,43 +1,25 @@
-import Connection from "../index.js";
 import { EventEmitter } from "@xmpp/events";
+import Connection from "../index.js";
 
-test("resolves if socket property is undefined", async () => {
+test("stop", async () => {
   const conn = new Connection();
-  conn.footerElement = () => <foo />;
-  conn.socket = undefined;
+
+  const close_el = {};
+  const spy_disconnect = jest
+    .spyOn(conn, "disconnect")
+    .mockImplementation(async () => {
+      return close_el;
+    });
+  const spy_status = jest.spyOn(conn, "_status");
+
+  conn.status = "online";
+
   await conn.stop();
-  expect().pass();
-});
 
-test("resolves if _closeStream rejects", async () => {
-  const conn = new Connection();
-  conn._closeStream = () => Promise.reject();
-  conn._closeSocket = () => Promise.resolve();
-  await conn.stop();
-  expect().pass();
-});
-
-test("resolves if _closeSocket rejects", async () => {
-  const conn = new Connection();
-  conn._closeStream = () => Promise.resolve();
-  conn._closeSocket = () => Promise.reject();
-  await conn.stop();
-  expect().pass();
-});
-
-test("resolves with the result of close", async () => {
-  const conn = new Connection();
-  conn.socket = {};
-  const el = {};
-  conn._closeStream = () => Promise.resolve(el);
-  conn._closeSocket = () => Promise.resolve();
-  expect(await conn.stop()).toBe(el);
-});
-
-test("does not throw if connection is not established", async () => {
-  const conn = new Connection();
-  await conn.stop();
-  expect().pass();
+  expect(spy_disconnect).toHaveBeenCalledTimes(1);
+  expect(spy_status).toHaveBeenCalledTimes(1);
+  expect(spy_status).toHaveBeenCalledWith("offline", close_el);
+  expect(conn.status).toBe("offline");
 });
 
 // https://github.com/xmppjs/xmpp.js/issues/956

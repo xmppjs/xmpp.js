@@ -169,7 +169,7 @@ test("statuses", async () => {
   ]);
 
   // trigger reconnect
-  await xmpp._closeSocket();
+  await xmpp.disconnect();
 
   statuses = [xmpp.status];
   await promise(xmpp, "open");

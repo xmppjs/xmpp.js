@@ -27,10 +27,10 @@ test("#_onElement stream:error", (done) => {
     application,
   ]);
   const conn = new Connection();
-  conn._end = () => {
+  jest.spyOn(conn, "disconnect").mockImplementation(() => {
     done();
     return Promise.resolve();
-  };
+  });
 
   conn.on("element", (el) => {
     expect(el).toBe(foo);

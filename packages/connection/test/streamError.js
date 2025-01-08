@@ -4,12 +4,12 @@ import xml from "@xmpp/xml";
 test("#_streamError", async () => {
   const conn = new Connection();
 
-  const spy_end = jest.spyOn(conn, "_end");
+  const spy_disconnect = jest.spyOn(conn, "disconnect");
   const spy_send = jest.spyOn(conn, "send");
 
   await conn._streamError("foo-bar");
 
-  expect(spy_end).toHaveBeenCalled();
+  expect(spy_disconnect).toHaveBeenCalled();
 
   expect(spy_send).toHaveBeenCalledWith(
     xml("stream:error", {}, [

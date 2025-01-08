@@ -38,7 +38,7 @@ class Connection extends EventEmitter {
       );
     } catch {}
 
-    return this._end();
+    return this.disconnect();
   }
 
   _onData(data) {
@@ -107,7 +107,7 @@ class Connection extends EventEmitter {
     if (isStreamError) {
       // "Stream Errors Are Unrecoverable"
       // "The entity that receives the stream error then SHALL close the stream"
-      this._end();
+      this.disconnect();
     }
   }
 
@@ -211,15 +211,18 @@ class Connection extends EventEmitter {
     }
   }
 
-  async _end() {
+  async disconnect() {
     let el;
     try {
       el = await this._closeStream();
-    } catch {}
+    } catch (err) {
+      console.log(err);
+    }
 
     try {
       await this._closeSocket();
     } catch (err) {
+      console.log(err);
       this.#onSocketClosed(true, err);
     }
 
@@ -301,7 +304,7 @@ class Connection extends EventEmitter {
    * https://tools.ietf.org/html/rfc7395#section-3.6
    */
   async stop() {
-    const el = await this._end();
+    const el = await this.disconnect();
     this._status("offline", el);
     return el;
   }
