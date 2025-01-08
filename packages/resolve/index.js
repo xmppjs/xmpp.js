@@ -71,7 +71,7 @@ export default function resolve({ entity }) {
     try {
       await fallbackConnect(entity, uris);
     } catch (err) {
-      entity._reset();
+      await entity.disconnect();
       entity._status("disconnect");
       throw err;
     }

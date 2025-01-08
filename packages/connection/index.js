@@ -21,13 +21,6 @@ class Connection extends EventEmitter {
     this.root = null;
   }
 
-  _reset() {
-    this.status = "offline";
-    this._detachSocket();
-    this._detachParser();
-    this.root = null;
-  }
-
   async _streamError(condition, children) {
     try {
       await this.send(
@@ -57,9 +50,14 @@ class Connection extends EventEmitter {
     this.emit("error", error);
   }
 
-  #onSocketClosed(dirty, event) {
-    this._reset();
-    this._status("disconnect", { clean: !dirty, event });
+  #onSocketClosed(dirty, reason) {
+    this._detachSocket();
+    this._status("disconnect", { clean: !dirty, reason });
+  }
+
+  #onStreamClosed(dirty, reason) {
+    this._detachParser();
+    this._status("close", { clean: !dirty, reason });
   }
 
   _attachSocket(socket) {
@@ -91,7 +89,6 @@ class Connection extends EventEmitter {
       delete socketListeners[k];
     }
     this.socket = null;
-    return socket;
   }
 
   _onElement(element) {
@@ -151,10 +148,7 @@ class Connection extends EventEmitter {
     listeners.element = this._onElement.bind(this);
     listeners.error = this._onParserError.bind(this);
 
-    listeners.end = (element) => {
-      this._detachParser();
-      this._status("close", element);
-    };
+    listeners.end = this.#onStreamClosed.bind(this);
 
     listeners.start = (element) => {
       this._status("open", element);
@@ -173,6 +167,7 @@ class Connection extends EventEmitter {
       delete listeners[k];
     }
     this.parser = null;
+    this.root = null;
   }
 
   _jid(id) {
@@ -213,16 +208,16 @@ class Connection extends EventEmitter {
 
   async disconnect() {
     let el;
+
     try {
       el = await this._closeStream();
     } catch (err) {
-      console.log(err);
+      this.#onStreamClosed(err);
     }
 
     try {
       await this._closeSocket();
     } catch (err) {
-      console.log(err);
       this.#onSocketClosed(true, err);
     }
 
@@ -266,8 +261,6 @@ class Connection extends EventEmitter {
    * https://tools.ietf.org/html/rfc7395#section-3.6
    */
   async _closeSocket(timeout = this.timeout) {
-    if (!this.socket) return;
-
     this._status("disconnecting");
     this.socket.end();
 
@@ -337,9 +330,9 @@ class Connection extends EventEmitter {
       this.write(fragment),
     ]);
 
-    if (this.parser && this.socket) this._status("closing");
+    this._status("closing");
+
     const [el] = await p;
-    this.root = null;
     return el;
     // The 'close' status is set by the parser 'end' listener
   }

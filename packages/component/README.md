@@ -170,23 +170,34 @@ xmpp.on("offline", () => {
 Starts the connection. Attempts to reconnect will automatically happen if it cannot connect or gets disconnected.
 
 ```js
-xmpp.start().catch(console.error);
 xmpp.on("online", (address) => {
   console.log("online", address.toString());
 });
+await xmpp.start();
 ```
 
 Returns a promise that resolves if the first attempt succeed or rejects if the first attempt fails.
 
 ### stop
 
-Stops the connection and prevent any further auto reconnect/retry.
+Stops the connection and prevent any further auto reconnect.
 
 ```js
-xmpp.stop().catch(console.error);
 xmpp.on("offline", () => {
   console.log("offline");
 });
+await xmpp.stop();
+```
+
+### disconnect
+
+Like [`stop`](#stop) but will not prevent auto reconnect.
+
+```js
+xmpp.on("disconnect", () => {
+  console.log("disconnect");
+});
+await xmpp.disconnect();
 ```
 
 Returns a promise that resolves once the stream closes and the socket disconnects.
@@ -196,7 +207,7 @@ Returns a promise that resolves once the stream closes and the socket disconnect
 Sends a stanza.
 
 ```js
-xmpp.send(xml("presence")).catch(console.error);
+await xmpp.send(xml("presence"));
 ```
 
 Returns a promise that resolves once the stanza is serialized and written to the socket or rejects if any of those fails.
@@ -213,7 +224,7 @@ const recipients = ["romeo@example.com", "juliet@example.com"];
 const stanzas = recipients.map((address) =>
   xml("message", { to: address, type: "chat" }, xml("body", null, message)),
 );
-xmpp.sendMany(stanzas).catch(console.error);
+await xmpp.sendMany(stanzas);
 ```
 
 Returns a promise that resolves once all the stanzas have been sent.

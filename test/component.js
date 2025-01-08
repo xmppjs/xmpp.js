@@ -16,6 +16,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
+  xmpp?.removeAllListeners();
   await xmpp?.stop();
 });
 
@@ -39,7 +40,6 @@ test("component", async () => {
 
   expect(id instanceof jid.JID).toBe(true);
   expect(id.toString()).toBe("component.localhost");
-  await xmpp.stop;
 });
 
 test("reconnects when server restarts", (done) => {
@@ -52,10 +52,9 @@ test("reconnects when server restarts", (done) => {
     c++;
     expect().pass();
     if (c === 2) {
-      await xmpp.stop();
       done();
     } else {
-      server.restart();
+      await server.restart();
     }
   });
 
@@ -63,11 +62,12 @@ test("reconnects when server restarts", (done) => {
 });
 
 test("does not reconnect when stop is called", (done) => {
-  expect.assertions(2);
+  expect.assertions(3);
 
   xmpp.on("online", async () => {
     await xmpp.stop();
     await server.stop();
+    expect(xmpp.status).toBe("offline");
     done();
   });
 
