@@ -158,25 +158,26 @@ export default function streamManagement({
   }
 
   middleware.filter((context, next) => {
+    if (!sm.enabled) return next();
     const { stanza } = context;
-    if (sm.enabled && ["presence", "message", "iq"].includes(stanza.name)) {
-      let qStanza = stanza;
-      if (
-        qStanza.name === "message" &&
-        !qStanza.getChild("delay", "urn:xmpp:delay")
-      ) {
-        qStanza = xml.clone(qStanza);
-        qStanza.c("delay", {
-          xmlns: "urn:xmpp:delay",
-          from: entity.jid.toString(),
-          stamp: datetime(),
-        });
-      }
-      sm.outbound_q.push(qStanza);
-      // Debounce requests so we send only one after a big run of stanza together
-      clearTimeout(requestAckTimeout);
-      requestAckTimeout = setTimeout(requestAck, 100);
+    if (!["presence", "message", "iq"].includes(stanza.name)) return next();
+
+    let qStanza = stanza;
+    if (
+      qStanza.name === "message" &&
+      !qStanza.getChild("delay", "urn:xmpp:delay")
+    ) {
+      qStanza = xml.clone(qStanza);
+      qStanza.c("delay", {
+        xmlns: "urn:xmpp:delay",
+        from: entity.jid.toString(),
+        stamp: datetime(),
+      });
     }
+    sm.outbound_q.push(qStanza);
+    // Debounce requests so we send only one after a big run of stanza together
+    clearTimeout(requestAckTimeout);
+    requestAckTimeout = setTimeout(requestAck, 100);
     return next();
   });
 
