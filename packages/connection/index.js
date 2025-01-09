@@ -1,4 +1,4 @@
-import { EventEmitter, promise } from "@xmpp/events";
+import { EventEmitter, promise, listeners } from "@xmpp/events";
 import jid from "@xmpp/jid";
 import xml from "@xmpp/xml";
 import StreamError from "./lib/StreamError.js";
@@ -8,13 +8,14 @@ const NS_STREAM = "urn:ietf:params:xml:ns:xmpp-streams";
 const NS_JABBER_STREAM = "http://etherx.jabber.org/streams";
 
 class Connection extends EventEmitter {
+  #socketListeners = null;
+  #parserListeners = null;
+
   constructor(options = {}) {
     super();
     this.jid = null;
     this.timeout = 2000;
     this.options = options;
-    this.socketListeners = Object.create(null);
-    this.parserListeners = Object.create(null);
     this.status = "offline";
     this.socket = null;
     this.parser = null;
@@ -40,7 +41,7 @@ class Connection extends EventEmitter {
     this.parser.write(str);
   }
 
-  _onParserError(error) {
+  #onParserError(error) {
     // https://xmpp.org/rfcs/rfc6120.html#streams-error-conditions-bad-format
     // "This error can be used instead of the more specific XML-related errors,
     // such as <bad-namespace-prefix/>, <invalid-xml/>, <not-well-formed/>, <restricted-xml/>,
@@ -62,32 +63,17 @@ class Connection extends EventEmitter {
 
   _attachSocket(socket) {
     this.socket = socket;
-    const listeners = this.socketListeners;
-
-    listeners.data = this._onData.bind(this);
-
-    listeners.close = this.#onSocketClosed.bind(this);
-
-    listeners.connect = () => {
-      this._status("connect");
-    };
-
-    listeners.error = (error) => {
-      this.emit("error", error);
-    };
-
-    this.socket.on("close", listeners.close);
-    this.socket.on("data", listeners.data);
-    this.socket.on("error", listeners.error);
-    this.socket.on("connect", listeners.connect);
+    this.#socketListeners ??= listeners({
+      data: this._onData.bind(this),
+      close: this.#onSocketClosed.bind(this),
+      connect: () => this._status("connect"),
+      error: (error) => this.emit("error", error),
+    });
+    this.#socketListeners.subscribe(this.socket);
   }
 
   _detachSocket() {
-    const { socketListeners, socket } = this;
-    for (const k of Object.getOwnPropertyNames(socketListeners)) {
-      socket.removeListener(k, socketListeners[k]);
-      delete socketListeners[k];
-    }
+    this.#socketListeners?.unsubscribe(this.socket);
     this.socket = null;
   }
 
@@ -143,29 +129,17 @@ class Connection extends EventEmitter {
 
   _attachParser(parser) {
     this.parser = parser;
-    const listeners = this.parserListeners;
-
-    listeners.element = this._onElement.bind(this);
-    listeners.error = this._onParserError.bind(this);
-
-    listeners.end = this.#onStreamClosed.bind(this);
-
-    listeners.start = (element) => {
-      this._status("open", element);
-    };
-
-    this.parser.on("error", listeners.error);
-    this.parser.on("element", listeners.element);
-    this.parser.on("end", listeners.end);
-    this.parser.on("start", listeners.start);
+    this.#parserListeners ??= listeners({
+      element: this._onElement.bind(this),
+      error: this.#onParserError.bind(this),
+      end: this.#onStreamClosed.bind(this),
+      start: (element) => this._status("open", element),
+    });
+    this.#parserListeners.subscribe(this.parser);
   }
 
   _detachParser() {
-    const listeners = this.parserListeners;
-    for (const k of Object.getOwnPropertyNames(listeners)) {
-      this.parser.removeListener(k, listeners[k]);
-      delete listeners[k];
-    }
+    this.#parserListeners?.unsubscribe(this.parser);
     this.parser = null;
     this.root = null;
   }
