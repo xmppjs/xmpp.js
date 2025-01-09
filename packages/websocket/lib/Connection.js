@@ -13,16 +13,16 @@ const NS_FRAMING = "urn:ietf:params:xml:ns:xmpp-framing";
 
 class ConnectionWebSocket extends Connection {
   send(element, ...args) {
-    if (!element.attrs.xmlns && super.isStanza(element)) {
-      element.attrs.xmlns = "jabber:client";
-    }
-
+    element.attrs.xmlns ??= this.NS;
     return super.send(element, ...args);
   }
 
   async sendMany(elements) {
     for (const element of elements) {
-      await this.send(element);
+      element.attrs.xmlns ??= this.NS;
+      element.parent = this.root;
+      this.socket.write(element.toString());
+      this.emit("send", element);
     }
   }
 
