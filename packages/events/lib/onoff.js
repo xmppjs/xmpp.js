@@ -4,8 +4,8 @@ export default function onoff(target) {
   let m = map.get(target);
 
   if (!m) {
-    const on = (target.addListener ?? target.addEventListener).bind(target);
-    const off = (target.removeListener ?? target.removeEventListener).bind(
+    const on = (target.addEventListener ?? target.addListener).bind(target);
+    const off = (target.removeEventListener ?? target.removeListener).bind(
       target,
     );
     const once = (
