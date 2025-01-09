@@ -14,7 +14,7 @@
     "component"
   ],
   "engines": {
-    "node": ">= 20"
+    "node": ">= 20.10"
   },
   "dependencies": {
     "@xmpp/base64": "^0.14.0",

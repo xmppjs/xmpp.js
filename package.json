@@ -35,12 +35,12 @@
     "selfsigned": "^2.4.1"
   },
   "scripts": {
-    "test": "npx jest",
-    "e2e": "NODE_TLS_REJECT_UNAUTHORIZED=0 npx jest --runInBand --config e2e.config.cjs",
+    "test": "node --experimental-websocket ./node_modules/.bin/jest",
+    "e2e": "NODE_TLS_REJECT_UNAUTHORIZED=0 node --experimental-websocket ./node_modules/.bin/jest --runInBand --config e2e.config.cjs",
     "preversion": "make bundle"
   },
   "engines": {
-    "node": ">= 20"
+    "node": ">= 20.10"
   },
   "workspaces": [
     "packages/*"

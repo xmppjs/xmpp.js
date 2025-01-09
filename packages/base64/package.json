@@ -13,7 +13,7 @@
     "base64"
   ],
   "engines": {
-    "node": ">= 20"
+    "node": ">= 20.10"
   },
   "publishConfig": {
     "access": "public"

@@ -11,18 +11,14 @@
   "dependencies": {
     "@xmpp/connection": "^0.14.0",
     "@xmpp/events": "^0.14.0",
-    "@xmpp/xml": "^0.14.0",
-    "ws": "^8.18.0"
-  },
-  "browser": {
-    "ws": false
+    "@xmpp/xml": "^0.14.0"
   },
   "keywords": [
     "XMPP",
     "websocket"
   ],
   "engines": {
-    "node": ">= 20"
+    "node": ">= 20.10"
   },
   "publishConfig": {
     "access": "public"

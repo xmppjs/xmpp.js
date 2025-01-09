@@ -1,9 +1,5 @@
-import WS from "ws";
 import { EventEmitter, listeners } from "@xmpp/events";
 import { parseURI } from "@xmpp/connection/lib/util.js";
-
-// eslint-disable-next-line n/no-unsupported-features/node-builtins
-const WebSocket = globalThis.WebSocket || WS;
 
 const CODE = "ECONNERROR";
 
@@ -22,6 +18,7 @@ export default class Socket extends EventEmitter {
 
   connect(url) {
     this.url = url;
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     this._attachSocket(new WebSocket(url, ["xmpp"]));
   }
 
@@ -64,16 +61,12 @@ export default class Socket extends EventEmitter {
   }
 
   write(data, fn) {
-    if (WebSocket === WS) {
-      this.socket.send(data, fn);
-    } else {
-      try {
-        this.socket.send(data);
-      } catch (err) {
-        fn(err);
-        return;
-      }
-      fn();
+    try {
+      this.socket.send(data);
+    } catch (err) {
+      fn(err);
+      return;
     }
+    fn();
   }
 }

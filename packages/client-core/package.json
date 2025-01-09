@@ -16,7 +16,7 @@
     "saslmechanisms": "^0.1.1"
   },
   "engines": {
-    "node": ">= 20"
+    "node": ">= 20.10"
   },
   "publishConfig": {
     "access": "public"

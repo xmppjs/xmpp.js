@@ -16,7 +16,7 @@
     "sasl-scram-sha-1": "^1.3.0"
   },
   "engines": {
-    "node": ">= 20"
+    "node": ">= 20.10"
   },
   "publishConfig": {
     "access": "public"
