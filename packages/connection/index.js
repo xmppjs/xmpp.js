@@ -73,7 +73,7 @@ class Connection extends EventEmitter {
   }
 
   _detachSocket() {
-    this.#socketListeners?.unsubscribe(this.socket);
+    this.socket && this.#socketListeners?.unsubscribe(this.socket);
     this.socket = null;
   }
 
@@ -139,7 +139,7 @@ class Connection extends EventEmitter {
   }
 
   _detachParser() {
-    this.#parserListeners?.unsubscribe(this.parser);
+    this.parser && this.#parserListeners?.unsubscribe(this.parser);
     this.parser = null;
     this.root = null;
   }

@@ -50,12 +50,12 @@ export default class Socket extends EventEmitter {
         this.emit("close", !event.wasClean, event);
       },
     });
-    this.#listeners.subscribe(socket);
+    this.#listeners.subscribe(this.socket);
   }
 
   _detachSocket() {
     this.url = null;
-    this.#listeners?.unsubscribe(this.socket);
+    this.socket && this.#listeners?.unsubscribe(this.socket);
     this.socket = null;
   }
 
