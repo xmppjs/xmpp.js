@@ -6,6 +6,8 @@ import TimeoutError from "./lib/TimeoutError.js";
 import promise from "./lib/promise.js";
 import Deferred from "./lib/Deferred.js";
 import procedure from "./lib/procedure.js";
+import listeners from "./lib/listeners.js";
+import onoff from "./lib/onoff.js";
 
 export {
   EventEmitter,
@@ -15,4 +17,6 @@ export {
   promise,
   Deferred,
   procedure,
+  listeners,
+  onoff,
 };

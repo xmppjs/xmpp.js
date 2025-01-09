@@ -1,5 +1,5 @@
 import WS from "ws";
-import { EventEmitter } from "@xmpp/events";
+import { EventEmitter, listeners } from "@xmpp/events";
 import { parseURI } from "@xmpp/connection/lib/util.js";
 
 // eslint-disable-next-line n/no-unsupported-features/node-builtins
@@ -8,10 +8,9 @@ const WebSocket = globalThis.WebSocket || WS;
 const CODE = "ECONNERROR";
 
 export default class Socket extends EventEmitter {
-  constructor() {
-    super();
-    this.listeners = Object.create(null);
-  }
+  #listeners = null;
+  socket = null;
+  url = null;
 
   isSecure() {
     if (!this.url) return false;
@@ -28,47 +27,36 @@ export default class Socket extends EventEmitter {
 
   _attachSocket(socket) {
     this.socket = socket;
-    const { listeners } = this;
-    listeners.open = () => {
-      this.emit("connect");
-    };
+    this.#listeners ??= listeners({
+      open: () => this.emit("connect"),
+      message: ({ data }) => this.emit("data", data),
+      error: (event) => {
+        const { url } = this;
+        // WS
+        let { error } = event;
+        // DOM
+        if (!error) {
+          error = new Error(event.message || `WebSocket ${CODE} ${url}`);
+          error.errno = CODE;
+          error.code = CODE;
+        }
 
-    listeners.message = ({ data }) => this.emit("data", data);
-    listeners.error = (event) => {
-      const { url } = this;
-      // WS
-      let { error } = event;
-      // DOM
-      if (!error) {
-        error = new Error(`WebSocket ${CODE} ${url}`);
-        error.errno = CODE;
-        error.code = CODE;
-      }
-
-      error.event = event;
-      error.url = url;
-      this.emit("error", error);
-    };
-
-    listeners.close = (event) => {
-      this._detachSocket();
-      this.emit("close", !event.wasClean, event);
-    };
-
-    this.socket.addEventListener("open", listeners.open);
-    this.socket.addEventListener("message", listeners.message);
-    this.socket.addEventListener("error", listeners.error);
-    this.socket.addEventListener("close", listeners.close);
+        error.event = event;
+        error.url = url;
+        this.emit("error", error);
+      },
+      close: (event) => {
+        this._detachSocket();
+        this.emit("close", !event.wasClean, event);
+      },
+    });
+    this.#listeners.subscribe(this.socket);
   }
 
   _detachSocket() {
-    delete this.url;
-    const { socket, listeners } = this;
-    for (const k of Object.getOwnPropertyNames(listeners)) {
-      socket.removeEventListener(k, listeners[k]);
-      delete listeners[k];
-    }
-    delete this.socket;
+    this.url = null;
+    this.socket && this.#listeners?.unsubscribe(this.socket);
+    this.socket = null;
   }
 
   end() {
