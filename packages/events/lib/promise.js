@@ -1,13 +1,17 @@
+import onoff from "./onoff.js";
+
 import TimeoutError from "./TimeoutError.js";
 
-export default function promise(EE, event, rejectEvent = "error", timeout) {
+export default function promise(target, event, rejectEvent = "error", timeout) {
   return new Promise((resolve, reject) => {
     let timeoutId;
 
+    const { off, once } = onoff(target);
+
     const cleanup = () => {
       clearTimeout(timeoutId);
-      EE.removeListener(event, onEvent);
-      EE.removeListener(rejectEvent, onError);
+      off(event, onEvent);
+      off(rejectEvent, onError);
     };
 
     function onError(reason) {
@@ -20,9 +24,9 @@ export default function promise(EE, event, rejectEvent = "error", timeout) {
       cleanup();
     }
 
-    EE.once(event, onEvent);
+    once(event, onEvent);
     if (rejectEvent) {
-      EE.once(rejectEvent, onError);
+      once(rejectEvent, onError);
     }
 
     if (timeout) {
