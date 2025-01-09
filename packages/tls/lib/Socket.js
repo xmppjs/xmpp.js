@@ -1,12 +1,10 @@
 import tls from "tls";
-import { EventEmitter } from "@xmpp/events";
+import { EventEmitter, listeners } from "@xmpp/events";
 
 class Socket extends EventEmitter {
-  constructor() {
-    super();
-    this.listeners = Object.create(null);
-    this.timeout = null;
-  }
+  timeout = null;
+  #listeners = null;
+  socket = null;
 
   isSecure() {
     return true;
@@ -18,45 +16,37 @@ class Socket extends EventEmitter {
 
   _attachSocket(socket) {
     this.socket = socket;
-    const { listeners } = this;
+    this.#listeners ??= listeners({
+      close: () => {
+        this._detachSocket();
+        this.emit("close");
+      },
+      data: (data) => {
+        this.emit("data", data);
+      },
+      error: (err) => {
+        this.emit("error", err);
+      },
+      secureConnect: () => {
+        if (this.socket.getProtocol() !== "TLSv1.3") {
+          return this.emit("connect");
+        }
 
-    listeners.close = () => {
-      this._detachSocket();
-      this.emit("close");
-    };
-    listeners.data = (data) => {
-      this.emit("data", data);
-    };
-    listeners.error = (err) => {
-      this.emit("error", err);
-    };
-    listeners.secureConnect = () => {
-      if (this.socket.getProtocol() !== "TLSv1.3") {
-        return this.emit("connect");
-      }
-
-      // Waiting before sending the stream header improves compatibility
-      // with Openfire TLSv1.3 implementation. For more info, see:
-      // https://github.com/xmppjs/xmpp.js/issues/889#issuecomment-902686879
-      // https://github.com/xmppjs/xmpp.js/pull/912
-      this.timeout = setTimeout(() => {
-        this.emit("connect");
-      }, 1);
-    };
-
-    for (const [event, listener] of Object.entries(listeners)) {
-      socket.on(event, listener);
-    }
+        // Waiting before sending the stream header improves compatibility
+        // with Openfire TLSv1.3 implementation. For more info, see:
+        // https://github.com/xmppjs/xmpp.js/issues/889#issuecomment-902686879
+        // https://github.com/xmppjs/xmpp.js/pull/912
+        this.timeout = setTimeout(() => {
+          this.emit("connect");
+        }, 1);
+      },
+    });
+    this.#listeners.subscribe(this.socket);
   }
 
   _detachSocket() {
-    clearTimeout(this.timeout);
-    const { socket, listeners } = this;
-    for (const [event, listener] of Object.entries(listeners)) {
-      socket.removeListener(event, listener);
-      delete listeners[event];
-    }
-    delete this.socket;
+    this.#listeners.unsubscribe(this.socket);
+    this.socket = null;
   }
 
   end() {
