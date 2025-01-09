@@ -3,15 +3,18 @@ import Socket from "../lib/Socket.js";
 import { EventEmitter } from "@xmpp/events";
 import xml from "@xmpp/xml";
 
-test("send() adds jabber:client xmlns", () => {
+test("send()", () => {
   const connection = new ConnectionWebSocket();
   connection.write = () => {};
+  connection.root = xml("root");
 
   const element = xml("presence");
 
   expect(element.attrs.xmlns).toBe(undefined);
+  expect(element.parent).toBe(null);
   connection.send(element);
   expect(element.attrs.xmlns).toBe("jabber:client");
+  expect(element.parent).toBe(connection.root);
 });
 
 test("socketParameters()", () => {
@@ -27,7 +30,7 @@ test("socketParameters()", () => {
   expect(params).toBe(undefined);
 });
 
-test("DOM WebSocket error", () => {
+test("WebSocket error", () => {
   const socket = new Socket();
   const sock = new EventEmitter();
   sock.addEventListener = sock.addListener;
@@ -40,22 +43,6 @@ test("DOM WebSocket error", () => {
     expect(err.code).toBe("ECONNERROR");
     expect(err.url).toBe("ws://foobar");
     expect(err.event).toBe(evt);
-  });
-  socket.socket.emit("error", evt);
-});
-
-test("WS WebSocket error", () => {
-  const socket = new Socket();
-  const sock = new EventEmitter();
-  sock.addEventListener = sock.addListener;
-  socket._attachSocket(sock);
-  socket.url = "ws://foobar";
-  const error = {};
-  const evt = { error };
-  socket.on("error", (err) => {
-    expect(err).toBe(error);
-    expect(err.event).toBe(evt);
-    expect(err.url).toBe("ws://foobar");
   });
   socket.socket.emit("error", evt);
 });
@@ -81,15 +68,27 @@ test("socket close", () => {
 
 test("sendMany", async () => {
   const conn = new ConnectionWebSocket();
+  conn.socket = new Socket();
+  const spy_write = jest.spyOn(conn.socket, "write");
+  conn.root = xml("root");
 
-  const foo = xml("foo");
-  const bar = xml("bar");
+  const foo = xml("presence");
+  const bar = xml("presence");
+  const elements = [foo, bar];
 
-  const spy_send = (conn.send = jest.fn());
+  for (const element of elements) {
+    expect(element.attrs.xmlns).toBe(undefined);
+    expect(element.parent).toBe(null);
+  }
 
-  await conn.sendMany([foo, bar]);
+  conn.sendMany(elements);
 
-  expect(spy_send).toHaveBeenCalledWith(foo);
-  expect(spy_send).toHaveBeenCalledWith(bar);
-  expect(spy_send).toHaveBeenCalledTimes(2);
+  for (const element of elements) {
+    expect(element.attrs.xmlns).toBe("jabber:client");
+    expect(element.parent).toBe(conn.root);
+  }
+
+  expect(spy_write).toHaveBeenCalledWith(foo.toString());
+  expect(spy_write).toHaveBeenCalledWith(bar.toString());
+  expect(spy_write).toHaveBeenCalledTimes(2);
 });

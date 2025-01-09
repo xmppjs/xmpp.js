@@ -64,9 +64,9 @@ export default class Socket extends EventEmitter {
     try {
       this.socket.send(data);
     } catch (err) {
-      fn(err);
+      fn?.(err);
       return;
     }
-    fn();
+    fn?.();
   }
 }
