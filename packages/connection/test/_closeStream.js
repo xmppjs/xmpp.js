@@ -48,26 +48,28 @@ test("resolves", async () => {
   jest.spyOn(conn, "footerElement").mockImplementation(() => xml("hello"));
   jest.spyOn(conn, "write").mockImplementation(async () => {});
 
-  const promiseClose = conn._closeStream();
-  conn.parser.emit("end", xml("goodbye"));
-
-  const el = await promiseClose;
+  process.nextTick(() => {
+    conn.parser.emit("end", xml("goodbye"));
+  });
+  const el = await conn._closeStream();
 
   expect(el.toString()).toBe(`<goodbye/>`);
 });
 
-test("emits closing status", () => {
+test("emits closing status", async () => {
   const conn = new Connection();
   conn.parser = new EventEmitter();
 
   jest.spyOn(conn, "footerElement").mockImplementation(() => xml("hello"));
   jest.spyOn(conn, "write").mockImplementation(async () => {});
 
-  const p = Promise.all([
-    promise(conn, "status").then((status) => expect(status).toBe("closing")),
+  process.nextTick(() => {
+    conn.parser.emit("end");
+  });
+
+  const [status] = await Promise.all([
+    promise(conn, "status"),
     conn._closeStream(),
   ]);
-
-  conn.parser.emit("end");
-  return p;
+  expect(status).toBe("closing");
 });

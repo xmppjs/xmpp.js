@@ -37,7 +37,6 @@ class Connection extends EventEmitter {
 
   _onData(data) {
     const str = data.toString("utf8");
-    this.emit("input", str);
     this.parser.write(str);
   }
 
@@ -299,15 +298,9 @@ class Connection extends EventEmitter {
   async _closeStream(timeout = this.timeout) {
     const fragment = this.footer(this.footerElement());
 
-    const p = Promise.all([
-      promise(this.parser, "end", "error", timeout),
-      this.write(fragment),
-    ]);
-
+    await this.write(fragment);
     this._status("closing");
-
-    const [el] = await p;
-    return el;
+    return promise(this.parser, "end", "error", timeout);
     // The 'close' status is set by the parser 'end' listener
   }
 
@@ -334,23 +327,15 @@ class Connection extends EventEmitter {
     ]).then(([, el]) => el);
   }
 
-  write(string) {
+  async write(string) {
+    // https://xmpp.org/rfcs/rfc6120.html#streams-close
+    // "Refrain from sending any further data over its outbound stream to the other entity"
+    if (this.status === "closing") {
+      throw new Error("Connection is closing");
+    }
+
     return new Promise((resolve, reject) => {
-      // https://xmpp.org/rfcs/rfc6120.html#streams-close
-      // "Refrain from sending any further data over its outbound stream to the other entity"
-      if (this.status === "closing") {
-        reject(new Error("Connection is closing"));
-        return;
-      }
-
-      this.socket.write(string, (err) => {
-        if (err) {
-          return reject(err);
-        }
-
-        this.emit("output", string);
-        resolve();
-      });
+      this.socket.write(string, (err) => (err ? reject(err) : resolve()));
     });
   }
 
