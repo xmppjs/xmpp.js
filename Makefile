@@ -62,7 +62,7 @@ restart:
 	./server/ctl.js restart
 
 bundlesize:
-	npx bundlesize
+	node test/bundlesize.js
 
 bundle:
 	npx rollup -c rollup.config.js
