@@ -1,15 +1,8 @@
 jest.mock("tls");
 
-import { mockClient, promise, delay } from "@xmpp/test";
+import { mockClient, promise, delay, mockSocket } from "@xmpp/test";
 import tls from "tls";
-import net from "net";
 import { EventEmitter } from "@xmpp/events";
-
-function mockSocket() {
-  const socket = new net.Socket();
-  socket.write = (data, cb) => cb();
-  return socket;
-}
 
 test("success", async () => {
   const { entity } = mockClient();

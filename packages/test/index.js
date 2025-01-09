@@ -5,6 +5,7 @@ import mockClient from "./mockClient.js";
 import mockClientCore from "./mockClientCore.js";
 import { delay, promise, timeout } from "@xmpp/events";
 import id from "@xmpp/id";
+import mockSocket from "./mockSocket.js";
 
 export {
   context,
@@ -17,6 +18,7 @@ export {
   promise,
   timeout,
   id,
+  mockSocket,
 };
 
 export function mockInput(entity, el) {
