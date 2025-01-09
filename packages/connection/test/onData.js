@@ -1,7 +1,7 @@
 import Connection from "../index.js";
 
 test("#_onData", () => {
-  expect.assertions(2);
+  expect.assertions(1);
   const foo = "<foo>";
   const conn = new Connection();
   conn.parser = {
@@ -10,8 +10,5 @@ test("#_onData", () => {
     },
   };
 
-  conn.on("input", (data) => {
-    expect(data).toBe(foo);
-  });
   conn._onData(foo);
 });

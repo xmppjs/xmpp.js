@@ -1,8 +1,10 @@
-import { EventEmitter } from "@xmpp/events";
+import net from "node:net";
 
-class MockSocket extends EventEmitter {
+class MockSocket extends net.Socket {
   write(data, cb) {
-    cb();
+    process.nextTick(() => {
+      cb?.();
+    });
   }
 }
 
