@@ -22,6 +22,10 @@ class Connection extends EventEmitter {
     this.root = null;
   }
 
+  isSecure() {
+    return !!this.socket?.isSecure();
+  }
+
   async _streamError(condition, children) {
     try {
       await this.send(

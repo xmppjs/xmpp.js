@@ -6,6 +6,9 @@ class MockSocket extends net.Socket {
       cb?.();
     });
   }
+  isSecure() {
+    return true;
+  }
 }
 
 export default function mockSocket() {

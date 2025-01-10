@@ -1,23 +1,31 @@
 const ANONYMOUS = "ANONYMOUS";
+const PLAIN = "PLAIN";
 
 export default function createOnAuthenticate(credentials, userAgent) {
-  return async function onAuthenticate(authenticate, mechanisms, fast) {
+  return async function onAuthenticate(authenticate, mechanisms, fast, entity) {
     if (typeof credentials === "function") {
       await credentials(authenticate, mechanisms, fast);
       return;
     }
 
-    if (
-      !credentials?.username &&
-      !credentials?.password &&
-      mechanisms.includes(ANONYMOUS)
-    ) {
-      await authenticate(credentials, ANONYMOUS, userAgent);
-      return;
-    }
+    credentials.token ??= await fast?.fetch();
 
-    credentials.token = await fast?.fetch?.();
-
-    await authenticate(credentials, mechanisms[0], userAgent);
+    const mechanism = getMechanism({ mechanisms, entity, credentials });
+    await authenticate(credentials, mechanism, userAgent);
   };
+}
+
+export function getMechanism({ mechanisms, entity, credentials }) {
+  if (
+    !credentials?.username &&
+    !credentials?.password &&
+    !credentials?.token &&
+    mechanisms.includes(ANONYMOUS)
+  ) {
+    return ANONYMOUS;
+  }
+
+  if (entity.isSecure()) return mechanisms[0];
+
+  return mechanisms.find((mechanism) => mechanism !== PLAIN);
 }

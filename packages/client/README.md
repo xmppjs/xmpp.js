@@ -265,6 +265,21 @@ Returns a promise that resolves once all the stanzas have been sent.
 
 If you need to send a stanza to multiple recipients we recommend using [Extended Stanza Addressing](https://xmpp.org/extensions/xep-0033.html) instead.
 
+### isSecure
+
+Returns whether the connection is considered secured.
+
+```js
+console.log(xmpp.isSecure());
+```
+
+Considered secure:
+
+- localhost, 127.0.0.1, ::1
+- encrypted channels (wss, xmpps, starttls)
+
+This method returns false if there is no connection.
+
 ### xmpp.reconnect
 
 See [@xmpp/reconnect](/packages/reconnect).

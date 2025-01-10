@@ -84,7 +84,7 @@ export default function sasl({ streamFeatures, saslFactory }, onAuthenticate) {
       });
     }
 
-    await onAuthenticate(done, mechanisms);
+    await onAuthenticate(done, mechanisms, null, entity);
 
     await entity.restart();
   });
