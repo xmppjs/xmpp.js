@@ -6,9 +6,9 @@ test("isSecure()", () => {
   conn.socket = null;
   expect(conn.isSecure()).toBe(false);
 
-  conn.socket = { isSecure: () => false };
+  conn.socket = { secure: false };
   expect(conn.isSecure()).toBe(false);
 
-  conn.socket = { isSecure: () => true };
+  conn.socket = { secure: true };
   expect(conn.isSecure()).toBe(true);
 });

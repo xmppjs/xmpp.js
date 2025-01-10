@@ -23,7 +23,7 @@ class Connection extends EventEmitter {
   }
 
   isSecure() {
-    return !!this.socket?.isSecure();
+    return this.socket?.secure === true;
   }
 
   async _streamError(condition, children) {
