@@ -3,21 +3,22 @@ import { parseURI } from "@xmpp/connection/lib/util.js";
 
 const CODE = "ECONNERROR";
 
+export function isSecure(url) {
+  const uri = parseURI(url);
+  if (uri.protocol === "wss:") return true;
+  if (["localhost", "127.0.0.1", "::1"].includes(uri.hostname)) return true;
+  return false;
+}
+
 export default class Socket extends EventEmitter {
   #listeners = null;
   socket = null;
   url = null;
-
-  isSecure() {
-    if (!this.url) return false;
-    const uri = parseURI(this.url);
-    if (uri.protocol === "wss:") return true;
-    if (["localhost", "127.0.0.1", "::1"].includes(uri.hostname)) return true;
-    return false;
-  }
+  secure = false;
 
   connect(url) {
     this.url = url;
+    this.secure = isSecure(url);
     // eslint-disable-next-line n/no-unsupported-features/node-builtins
     this._attachSocket(new WebSocket(url, ["xmpp"]));
   }
@@ -52,6 +53,7 @@ export default class Socket extends EventEmitter {
 
   _detachSocket() {
     this.url = null;
+    this.secure = false;
     this.socket && this.#listeners?.unsubscribe(this.socket);
     this.socket = null;
   }
@@ -61,12 +63,18 @@ export default class Socket extends EventEmitter {
   }
 
   write(data, fn) {
+    function done(err) {
+      if (!fn) return;
+      // eslint-disable-next-line promise/catch-or-return, promise/no-promise-in-callback
+      Promise.resolve().then(() => fn(err));
+    }
+
     try {
       this.socket.send(data);
     } catch (err) {
-      fn?.(err);
+      done(err);
       return;
     }
-    fn?.();
+    done();
   }
 }

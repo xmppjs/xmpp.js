@@ -1,13 +1,12 @@
 import net from "node:net";
 
 class MockSocket extends net.Socket {
+  secure = true;
+
   write(data, cb) {
     process.nextTick(() => {
       cb?.();
     });
-  }
-  isSecure() {
-    return true;
   }
 }
 

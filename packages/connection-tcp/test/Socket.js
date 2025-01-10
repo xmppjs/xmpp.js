@@ -1,9 +1,9 @@
 import net from "node:net";
 import Socket from "../Socket.js";
 
-test("isSecure()", () => {
+test("secure", () => {
   const socket = new Socket();
-  expect(socket.isSecure()).toBe(false);
+  expect(socket.secure).toBe(false);
 });
 
 test("instance of net.Socket", () => {
