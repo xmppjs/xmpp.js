@@ -32,21 +32,20 @@ test("header", () => {
 
   const entity = new Client();
   entity.Transport = Transport;
-  entity.socket = {};
 
   entity.jid = null;
-  entity.socket.isSecure = () => false;
+  entity.isSecure = () => false;
   expect(entity.header(<foo />)).toEqual(<foo />);
 
   entity.jid = null;
-  entity.socket.isSecure = () => true;
+  entity.isSecure = () => true;
   expect(entity.header(<foo />)).toEqual(<foo />);
 
   entity.jid = new JID("foo@bar/example");
-  entity.socket.isSecure = () => false;
+  entity.isSecure = () => false;
   expect(entity.header(<foo />)).toEqual(<foo />);
 
   entity.jid = new JID("foo@bar/example");
-  entity.socket.isSecure = () => true;
+  entity.isSecure = () => true;
   expect(entity.header(<foo />)).toEqual(<foo from="foo@bar" />);
 });

@@ -14,6 +14,7 @@ export default [
       name: "XMPP",
     },
     plugins: [
+      terser(),
       babel({ babelHelpers: "runtime" }),
       nodePolyfills(),
       nodeResolve({ preferBuiltins: false, browser: true }),
