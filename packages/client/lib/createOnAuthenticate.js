@@ -2,11 +2,13 @@ const ANONYMOUS = "ANONYMOUS";
 const PLAIN = "PLAIN";
 
 export default function createOnAuthenticate(credentials, userAgent) {
-  return async function onAuthenticate(authenticate, mechanisms, fast, entity) {
+  return async function onAuthenticate(...args) {
     if (typeof credentials === "function") {
-      await credentials(authenticate, mechanisms, fast);
+      await credentials(...args);
       return;
     }
+
+    const [authenticate, mechanisms, fast, entity] = args;
 
     credentials.token ??= await fast?.fetch();
 
