@@ -5,7 +5,7 @@ import SASLFactory from "saslmechanisms";
 
 const NS = "urn:xmpp:fast:0";
 
-export default function fast({ sasl2 }) {
+export default function fast({ sasl2, entity }) {
   const saslFactory = new SASLFactory();
 
   let token;
@@ -24,14 +24,14 @@ export default function fast({ sasl2 }) {
       try {
         await this.saveToken(token);
       } catch (err) {
-        fast.emit("error", err);
+        entity.emit("error", err);
       }
     },
     async fetch() {
       try {
         return this.fetchToken();
       } catch (err) {
-        fast.emit("error", err);
+        entity.emit("error", err);
       }
     },
     saslFactory,
@@ -68,7 +68,7 @@ export default function fast({ sasl2 }) {
         });
         return true;
       } catch (err) {
-        fast.emit("error", err);
+        entity.emit("error", err);
         return false;
       }
     },
