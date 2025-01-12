@@ -70,6 +70,7 @@ function client(options = {}) {
 
   const fast = _fast({
     sasl2,
+    entity,
   });
   sasl2.setup({ fast });
 
