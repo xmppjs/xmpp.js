@@ -56,3 +56,25 @@ test("client fail stanzas", async () => {
   const el = await elP;
   expect(el.attrs.id).toEqual("ping");
 });
+
+test("client retry stanzas", async () => {
+  await server.enableModules(["smacks"]);
+  await server.restart();
+
+  xmpp = client({ credentials, service: domain });
+  debug(xmpp);
+
+  const elP = promise(xmpp.streamManagement, "ack");
+  await xmpp.start();
+  // Add to queue but don't actually send so it can retry after disconnect
+  await xmpp.streamManagement.outbound_q.push({
+    stanza: <iq to={domain} id="ping">
+      <ping xmlns="urn:xmppp:ping" />
+    </iq>,
+    stamp: datetime()
+  });
+  await xmpp.disconnect();
+
+  const el = await elP;
+  expect(el.attrs.id).toEqual("ping");
+});
