@@ -170,7 +170,7 @@ export default function streamManagement({
     clearTimeout(timeoutTimeout);
     if (sm.timeout) {
       timeoutTimeout = setTimeout(
-        () => entity.disconnect().catch(),
+        () => entity.forceDisconnect().catch(),
         sm.timeout,
       );
     }

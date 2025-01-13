@@ -75,6 +75,10 @@ export default class Socket extends EventEmitter {
     this.socket.close();
   }
 
+  destroy() {
+    this.socket.close();
+  }
+
   write(data, fn) {
     if (WebSocket === WS) {
       this.socket.send(data, fn);

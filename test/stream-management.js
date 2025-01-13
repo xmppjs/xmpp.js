@@ -78,3 +78,25 @@ test("client retry stanzas", async () => {
   const el = await elP;
   expect(el.attrs.id).toEqual("ping");
 });
+
+test("client reconnect automatically", async () => {
+  await server.enableModules(["smacks"]);
+  await server.restart();
+
+  xmpp = client({ credentials, service: domain });
+  xmpp.streamManagement.timeout = 10;
+  xmpp.streamManagement.debounceAckRequest = 1;
+  debug(xmpp);
+
+  const resumedP = promise(xmpp.streamManagement, "resumed");
+  await xmpp.start();
+  await xmpp.send(
+    <iq to={domain} id="ping">
+      <ping xmlns="urn:xmppp:ping" />
+    </iq>,
+  );
+  xmpp.socket.socket.pause();
+
+  await resumedP;
+  expect().pass();
+});
