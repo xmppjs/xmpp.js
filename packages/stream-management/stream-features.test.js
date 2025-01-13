@@ -157,7 +157,6 @@ test("stanza ack", async () => {
   expect(entity.streamManagement.enabled).toBe(true);
 
   await entity.send(<message id="a" />);
-  entity.streamManagement._teardown();
 
   expect(entity.streamManagement.outbound).toBe(0);
   expect(entity.streamManagement.outbound_q).toHaveLength(1);
@@ -221,7 +220,6 @@ test("resume - resumed", async () => {
   );
 
   await tick();
-  entity.streamManagement._teardown();
 
   expect(acks).toBe(1);
   expect(entity.streamManagement.outbound).toBe(46);
@@ -279,7 +277,6 @@ test("resumed event", async () => {
   });
 
   await tick();
-  entity.streamManagement._teardown();
 
   expect(resumed).toBe(true);
   expect(acks).toBe(1);

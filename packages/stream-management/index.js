@@ -62,10 +62,11 @@ export default function streamManagement({
     timeout: 60_000,
     requestAckInterval: 300_000,
     debounceAckRequest: 100,
-    _teardown: () => {
-      clearTimeout(timeoutTimeout);
-      clearTimeout(requestAckTimeout);
-    },
+  });
+
+  entity.on("disconnect", () => {
+    clearTimeout(timeoutTimeout);
+    clearTimeout(requestAckTimeout);
   });
 
   function queueToStanza({ stanza, stamp }) {

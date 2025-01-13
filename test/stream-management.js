@@ -25,7 +25,6 @@ test("client ack stanzas", async () => {
 
   xmpp.streamManagement.on("ack", (el) => {
     expect(el.attrs.id).toEqual("ping");
-    xmpp.streamManagement._teardown();
   });
 
   await xmpp.start();
