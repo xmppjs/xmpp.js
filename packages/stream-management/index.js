@@ -68,18 +68,20 @@ export default function streamManagement({
     },
   });
 
-  async function sendQueueItem({ stanza, stamp }) {
+  function queueToStanza({ stanza, stamp }) {
     if (
       stanza.name === "message" &&
       !stanza.getChild("delay", "urn:xmpp:delay")
     ) {
-      stanza.append(xml("delay", {
-        xmlns: "urn:xmpp:delay",
-        from: entity.jid.toString(),
-        stamp: stamp,
-      }));
+      stanza.append(
+        xml("delay", {
+          xmlns: "urn:xmpp:delay",
+          from: entity.jid.toString(),
+          stamp: stamp,
+        }),
+      );
     }
-    await entity.send(stanza);
+    return stanza;
   }
 
   async function resumed(resumed) {
@@ -92,9 +94,8 @@ export default function streamManagement({
     }
     let q = sm.outbound_q;
     sm.outbound_q = [];
-    for (const item of q) {
-      await sendQueueItem(item); // This will trigger the middleware and re-add to the queue
-    }
+    // This will trigger the middleware and re-add to the queue
+    await entity.sendMany(q.map((item) => queueToStanza(item)));
     sm.emit("resumed");
     entity._ready(true);
   }
