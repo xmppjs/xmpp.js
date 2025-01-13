@@ -128,9 +128,9 @@ export default function streamManagement({
   });
 
   entity.on("offline", () => {
-    let stanza;
-    while ((stanza = sm.outbound_q.shift())) {
-      sm.emit("fail", stanza);
+    let item;
+    while ((item = sm.outbound_q.shift())) {
+      sm.emit("fail", item.stanza);
     }
     sm.outbound = 0;
     sm.inbound = 0;
