@@ -234,12 +234,13 @@ function setupStreamFeature({
 
     const promiseEnable = enable(entity, sm);
 
-    // > The counter for an entity's own sent stanzas is set to zero and started after sending either <enable/> or <enabled/>.
     if (sm.outbound_q.length > 0) {
       throw new Error(
         "Stream Management assertion failure, queue should be empty after enable",
       );
     }
+
+    // > The counter for an entity's own sent stanzas is set to zero and started after sending either <enable/> or <enabled/>.
     sm.outbound = 0;
 
     try {
