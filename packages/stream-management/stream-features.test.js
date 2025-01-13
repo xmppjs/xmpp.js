@@ -128,7 +128,7 @@ test("enable - failed", async () => {
   expect(entity.streamManagement.enabled).toBe(false);
 });
 
-test("enable - enabled - message", async () => {
+test("stanza ack", async () => {
   const { entity } = mockClient();
 
   entity.mockInput(
