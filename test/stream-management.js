@@ -1,4 +1,5 @@
 import { client } from "../packages/client/index.js";
+import { promise } from "../packages/events/index.js";
 import debug from "../packages/debug/index.js";
 import server from "../server/index.js";
 
@@ -15,22 +16,20 @@ afterEach(async () => {
 });
 
 test("client ack stanzas", async () => {
-  expect.assertions(1);
-
   await server.enableModules(["smacks"]);
   await server.restart();
 
   xmpp = client({ credentials, service: domain });
   debug(xmpp);
 
-  xmpp.streamManagement.on("ack", (el) => {
-    expect(el.attrs.id).toEqual("ping");
-  });
-
+  const elP = promise(xmpp.streamManagement, "ack");
   await xmpp.start();
   await xmpp.send(
     <iq to={domain} id="ping">
       <ping xmlns="urn:xmppp:ping" />
     </iq>,
   );
+
+  const el = await elP;
+  expect(el.attrs.id).toEqual("ping");
 });
