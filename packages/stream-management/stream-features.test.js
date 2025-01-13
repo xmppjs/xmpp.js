@@ -220,6 +220,59 @@ test("resume - resumed", async () => {
     </message>,
   );
 
+  await tick();
+  entity.streamManagement._teardown();
+
+  expect(acks).toBe(1);
+  expect(entity.streamManagement.outbound).toBe(46);
+  expect(entity.streamManagement.outbound_q).toHaveLength(1);
+  expect(entity.status).toBe("online");
+});
+
+test("resumed event", async () => {
+  const { entity } = mockClient();
+
+  entity.status = "offline";
+  entity.streamManagement.id = "bar";
+
+  entity.mockInput(
+    <features xmlns="http://etherx.jabber.org/streams">
+      <sm xmlns="urn:xmpp:sm:3" />
+    </features>,
+  );
+
+  entity.streamManagement.outbound = 45;
+  entity.streamManagement.outbound_q = [
+    { stanza: <message id="a" />, stamp: "1990-01-01T00:00:00Z" },
+    { stanza: <message id="b" />, stamp: "1990-01-01T00:00:00Z" },
+  ];
+
+  expect(await entity.catchOutgoing()).toEqual(
+    <resume xmlns="urn:xmpp:sm:3" previd="bar" h="0" />,
+  );
+
+  expect(entity.streamManagement.enabled).toBe(false);
+
+  expect(entity.status).toBe("offline");
+
+  entity.mockInput(<resumed xmlns="urn:xmpp:sm:3" h="46" />);
+
+  let acks = 0;
+  entity.streamManagement.on("ack", (stanza) => {
+    expect(stanza.attrs.id).toBe("a");
+    acks++;
+  });
+
+  expect(await entity.catchOutgoing()).toEqual(
+    <message id="b">
+      <delay
+        xmlns="urn:xmpp:delay"
+        from="foo@bar/test"
+        stamp="1990-01-01T00:00:00Z"
+      />
+    </message>,
+  );
+
   let resumed = false;
   entity.streamManagement.on("resumed", () => {
     resumed = true;
