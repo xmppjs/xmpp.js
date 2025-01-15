@@ -10,13 +10,50 @@ When the session is resumed the `online` event is not emitted as session resumpt
 However `entity.status` is set to `online`.
 If the session fails to resume, entity will fallback to regular session establishment in which case `online` event will be emitted.
 
-Automatically responds to acks and requests them. Also requests periodically even if you haven't sent anything. If server fails to respond to a request, the module triggers a reconnect.
+- Automatically responds to acks.
+- Periodically request acks.
+- If server fails to respond, triggers a reconnect.
 
 ## Events
 
-**resumed**: Indicates that the connection was resumed (so online with no online event)
-**fail**: Indicates that a stanza failed to send to the server and will not be retried
-**ack**: Indicates that a stanza has been acknowledged by the server
+### resumed
+
+Indicates that the connection was resumed. When that happens the `online` event is not emitted but `xmpp.status` will be `online`.
+
+```js
+const xmpp = client(...);
+const {streamManagement} = xmpp;
+
+streamManagement.on('resumed', ()) => {
+  console.log("session resumed");
+}
+```
+
+### fail
+
+Indicates that a stanza failed to send to the server and will not be retried.
+
+```js
+const xmpp = client(...);
+const {streamManagement} = xmpp;
+
+streamManagement.on('fail', (stanza)) => {
+  console.log("fail to send", stanza.toString());
+}
+```
+
+### ack
+
+Indicates that a stanza has been acknowledged by the server.
+
+```js
+const xmpp = client(...);
+const {streamManagement} = xmpp;
+
+streamManagement.on('ack', (stanza)) => {
+  console.log("stanza acknowledge by the server", stanza.toString());
+}
+```
 
 ## References
 
