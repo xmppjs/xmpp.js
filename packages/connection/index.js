@@ -246,21 +246,6 @@ class Connection extends EventEmitter {
   }
 
   /**
-   * Forcibly disconnects the socket
-   * https://xmpp.org/rfcs/rfc6120.html#streams-close
-   * https://tools.ietf.org/html/rfc7395#section-3.6
-   */
-  async forceDisconnect(timeout = this.timeout) {
-    if (!this.socket) return;
-
-    this._status("disconnecting");
-    this.socket.destroy();
-
-    // The 'disconnect' status is set by the socket 'close' listener
-    await promise(this.socket, "close", "error", timeout);
-  }
-
-  /**
    * Opens the stream
    */
   async open(options) {

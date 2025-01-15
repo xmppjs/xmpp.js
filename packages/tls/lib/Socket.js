@@ -50,10 +50,6 @@ class Socket extends EventEmitter {
     this.socket.end();
   }
 
-  destroy() {
-    this.socket.destroy();
-  }
-
   write(data, fn) {
     this.socket.write(data, fn);
   }

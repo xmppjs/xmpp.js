@@ -62,10 +62,6 @@ export default class Socket extends EventEmitter {
     this.socket.close();
   }
 
-  destroy() {
-    this.socket.close();
-  }
-
   write(data, fn) {
     function done(err) {
       if (!fn) return;

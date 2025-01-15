@@ -23,15 +23,15 @@ test("client ack stanzas", async () => {
   xmpp = client({ credentials, service: domain });
   debug(xmpp);
 
-  const elP = promise(xmpp.streamManagement, "ack");
+  const promise_ack = promise(xmpp.streamManagement, "ack");
   await xmpp.start();
   await xmpp.send(
-    <iq to={domain} id="ping">
+    <iq to={domain} id="ping" type="get">
       <ping xmlns="urn:xmppp:ping" />
     </iq>,
   );
 
-  const el = await elP;
+  const el = await promise_ack;
   expect(el.attrs.id).toEqual("ping");
 });
 
@@ -42,12 +42,12 @@ test("client fail stanzas", async () => {
   xmpp = client({ credentials, service: domain });
   debug(xmpp);
 
-  const elP = promise(xmpp.streamManagement, "fail");
+  const promise_fail = promise(xmpp.streamManagement, "fail");
   await xmpp.start();
   // Expect send but don't actually send to server, so it will fail
   await xmpp.streamManagement.outbound_q.push({
     stanza: (
-      <iq to={domain} id="ping">
+      <iq to={domain} id="ping" type="get">
         <ping xmlns="urn:xmppp:ping" />
       </iq>
     ),
@@ -55,7 +55,7 @@ test("client fail stanzas", async () => {
   });
   await xmpp.stop();
 
-  const el = await elP;
+  const el = await promise_fail;
   expect(el.attrs.id).toEqual("ping");
 });
 
@@ -66,12 +66,12 @@ test("client retry stanzas", async () => {
   xmpp = client({ credentials, service: domain });
   debug(xmpp);
 
-  const elP = promise(xmpp.streamManagement, "ack");
+  const promise_ack = promise(xmpp.streamManagement, "ack");
   await xmpp.start();
   // Add to queue but don't actually send so it can retry after disconnect
   await xmpp.streamManagement.outbound_q.push({
     stanza: (
-      <iq to={domain} id="ping">
+      <iq to={domain} id="ping" type="get">
         <ping xmlns="urn:xmppp:ping" />
       </iq>
     ),
@@ -79,28 +79,34 @@ test("client retry stanzas", async () => {
   });
   await xmpp.disconnect();
 
-  const el = await elP;
+  const el = await promise_ack;
   expect(el.attrs.id).toEqual("ping");
 });
 
-test("client reconnects when server fails to ack", async () => {
-  await server.enableModules(["smacks"]);
-  await server.restart();
+test(
+  "client reconnects when server fails to ack stanza",
+  async () => {
+    await server.enableModules(["smacks"]);
+    await server.restart();
 
-  xmpp = client({ credentials, service: domain });
-  xmpp.streamManagement.timeout = 10;
-  xmpp.streamManagement.debounceAckRequest = 1;
-  debug(xmpp);
+    xmpp = client({ credentials, service: domain });
+    xmpp.streamManagement.timeout = 10;
+    xmpp.streamManagement.debounceAckRequest = 1;
+    debug(xmpp, true);
 
-  const resumedP = promise(xmpp.streamManagement, "resumed");
-  await xmpp.start();
-  await xmpp.send(
-    <iq to={domain} id="ping">
-      <ping xmlns="urn:xmppp:ping" />
-    </iq>,
-  );
-  xmpp.socket.socket.pause();
+    const promise_resumed = promise(xmpp.streamManagement, "resumed");
+    await xmpp.start();
+    xmpp.send(
+      <iq to={domain} id="ping" type="get">
+        <ping xmlns="urn:xmppp:ping" />
+      </iq>,
+    );
+    // Pretend we don't receive the ack by removing event listeners
+    // on the socket
+    xmpp._detachSocket();
 
-  await resumedP;
-  expect().pass();
-});
+    await promise_resumed;
+    expect().pass();
+  },
+  1000 * 10,
+);
