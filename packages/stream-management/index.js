@@ -77,6 +77,7 @@ export default function streamManagement({
     await entity.sendMany(q.map((item) => queueToStanza({ entity, item })));
     sm.emit("resumed");
     entity._ready(true);
+    scheduleRequestAck();
   }
 
   function failed() {
@@ -178,7 +179,7 @@ export default function streamManagement({
     scheduleRequestAck();
   }
 
-  middleware.filter(async (context, next) => {
+  middleware.filter((context, next) => {
     if (!sm.enabled) return next();
     const { stanza } = context;
     if (!["presence", "message", "iq"].includes(stanza.name)) return next();
