@@ -61,7 +61,6 @@ export default function streamManagement({
     max: null,
     timeout: 60_000,
     requestAckInterval: 30_000,
-    debounceAckRequest: 100,
   });
 
   entity.on("disconnect", () => {
@@ -131,7 +130,6 @@ export default function streamManagement({
 
   middleware.use((context, next) => {
     clearTimeout(timeoutTimeout);
-    if (!sm.enabled) return;
     const { stanza } = context;
     if (["presence", "message", "iq"].includes(stanza.name)) {
       sm.inbound += 1;
@@ -167,6 +165,7 @@ export default function streamManagement({
 
   function requestAck() {
     clearTimeout(timeoutTimeout);
+    clearTimeout(requestAckTimeout);
 
     if (!sm.enabled) return;
 
@@ -181,15 +180,15 @@ export default function streamManagement({
     scheduleRequestAck();
   }
 
-  middleware.filter((context, next) => {
+  middleware.filter(async (context, next) => {
     if (!sm.enabled) return next();
     const { stanza } = context;
     if (!["presence", "message", "iq"].includes(stanza.name)) return next();
 
     sm.outbound_q.push({ stanza, stamp: datetime() });
-    queueMicrotask(scheduleRequestAck);
     // Debounce requests so we send only one after a big run of stanza together
-    // scheduleRequestAck(sm.debounceAckRequest);
+    queueMicrotask(requestAck);
+
     return next();
   });
 
