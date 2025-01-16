@@ -66,7 +66,7 @@ export default function streamManagement({
   entity.on("disconnect", () => {
     clearTimeout(timeoutTimeout);
     clearTimeout(requestAckTimeout);
-    sm.off("stanza", scheduleRequestAck);
+    sm.removeListener("stanza", scheduleRequestAck);
   });
 
   async function resumed(resumed) {

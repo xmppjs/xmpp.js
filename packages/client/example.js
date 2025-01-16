@@ -28,7 +28,7 @@ xmpp.on("offline", () => {
 xmpp.on("stanza", onStanza);
 async function onStanza(stanza) {
   if (stanza.is("message")) {
-    xmpp.off("stanza", onStanza);
+    xmpp.removeListener("stanza", onStanza);
     await xmpp.send(xml("presence", { type: "unavailable" }));
     await xmpp.stop();
   }
