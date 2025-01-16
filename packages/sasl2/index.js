@@ -114,26 +114,20 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
       );
 
       async function done(credentials, mechanism, userAgent) {
-        if (fast_available) {
-          const { token } = credentials;
-          // eslint-disable-next-line unicorn/no-negated-condition
-          if (!token) {
-            fast._requestToken(streamFeatures);
-          } else {
-            const success = await fast.auth({
-              authenticate,
-              entity,
-              userAgent,
-              token,
-              streamFeatures,
-              features,
-              credentials,
-            });
-            if (success) return;
-            // If fast authentication fails, continue and try with sasl
-          }
-        }
+        // Try fast
+        const success = await fast.auth({
+          authenticate,
+          entity,
+          userAgent,
+          streamFeatures,
+          features,
+          credentials,
+        });
+        if (success) return;
 
+        // fast.auth may mutate streamFeatures to request a token
+
+        // If fast authentication fails, continue and try without
         await authenticate({
           entity,
           userAgent,

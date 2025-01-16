@@ -58,8 +58,6 @@ export default [
       // node
       // https://github.com/eslint-community/eslint-plugin-n/
       "n/no-unpublished-require": "off", // doesn't play nice with monorepo
-      "n/no-extraneous-require": ["error", { allowModules: ["@xmpp/test"] }],
-      "n/no-extraneous-import": ["error", { allowModules: ["@xmpp/test"] }],
       "n/hashbang": "off",
 
       // promise
@@ -109,6 +107,21 @@ export default [
       //   },
       // ],
       "promise/no-callback-in-promise": "off",
+      // "n/no-extraneous-require": ["error", { allowModules: ["@xmpp/test"] }],
+      "n/no-extraneous-import": [
+        "error",
+        {
+          allowModules: [
+            "@xmpp/test",
+            "@xmpp/time",
+            "@xmpp/xml",
+            "@xmpp/connection",
+            "@xmpp/websocket",
+            "selfsigned",
+            "@xmpp/events",
+          ],
+        },
+      ],
     },
   },
 ];

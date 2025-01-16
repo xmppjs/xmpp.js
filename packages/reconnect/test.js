@@ -1,5 +1,4 @@
 import _reconnect from "./index.js";
-// eslint-disable-next-line n/no-extraneous-import
 import Connection from "@xmpp/connection";
 
 test("schedules a reconnect when disconnect is emitted", () => {
