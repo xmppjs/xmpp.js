@@ -60,23 +60,19 @@ export default function streamManagement({
     inbound: 0,
     max: null,
     timeout: 60_000,
-    requestAckInterval: 300_000,
+    requestAckInterval: 30_000,
     debounceAckRequest: 100,
   });
 
   entity.on("disconnect", () => {
     clearTimeout(timeoutTimeout);
     clearTimeout(requestAckTimeout);
+    sm.off("stanza", scheduleRequestAck);
   });
 
   async function resumed(resumed) {
     sm.enabled = true;
-    const oldOutbound = sm.outbound;
-    for (let i = 0; i < resumed.attrs.h - oldOutbound; i++) {
-      let item = sm.outbound_q.shift();
-      sm.outbound++;
-      sm.emit("ack", item.stanza);
-    }
+    ackQueue(+resumed.attrs.h);
     let q = sm.outbound_q;
     sm.outbound_q = [];
     // This will trigger the middleware and re-add to the queue
@@ -85,7 +81,16 @@ export default function streamManagement({
     entity._ready(true);
   }
 
-  function discardQueue() {
+  function ackQueue(n) {
+    const oldOutbound = sm.outbound;
+    for (let i = 0; i < +n - oldOutbound; i++) {
+      const item = sm.outbound_q.shift();
+      sm.outbound++;
+      sm.emit("ack", item.stanza);
+    }
+  }
+
+  function failQueue() {
     let item;
     while ((item = sm.outbound_q.shift())) {
       sm.emit("fail", item.stanza);
@@ -96,13 +101,15 @@ export default function streamManagement({
   function failed() {
     sm.enabled = false;
     sm.id = "";
-    discardQueue();
+    failQueue();
   }
 
   function enabled({ id, max }) {
     sm.enabled = true;
     sm.id = id;
     sm.max = max;
+    scheduleRequestAck();
+    sm.on("stanza", scheduleRequestAck);
   }
 
   entity.on("online", () => {
@@ -116,15 +123,16 @@ export default function streamManagement({
   });
 
   entity.on("offline", () => {
-    discardQueue();
+    failQueue();
     sm.inbound = 0;
     sm.enabled = false;
     sm.id = "";
   });
 
   middleware.use((context, next) => {
-    const { stanza } = context;
     clearTimeout(timeoutTimeout);
+    if (!sm.enabled) return;
+    const { stanza } = context;
     if (["presence", "message", "iq"].includes(stanza.name)) {
       sm.inbound += 1;
     } else if (stanza.is("r", NS)) {
@@ -132,13 +140,10 @@ export default function streamManagement({
       entity.send(xml("a", { xmlns: NS, h: sm.inbound })).catch(() => {});
     } else if (stanza.is("a", NS)) {
       // > When a party receives an <a/> element, it SHOULD keep a record of the 'h' value returned as the sequence number of the last handled outbound stanza for the current stream (and discard the previous value).
-      const oldOutbound = sm.outbound;
-      for (let i = 0; i < stanza.attrs.h - oldOutbound; i++) {
-        let item = sm.outbound_q.shift();
-        sm.outbound++;
-        sm.emit("ack", item.stanza);
-      }
+      ackQueue(+stanza.attrs.h);
     }
+
+    scheduleRequestAck();
 
     return next();
   });
@@ -150,8 +155,21 @@ export default function streamManagement({
     setupSasl2({ sasl2, sm, failed, resumed });
   }
 
+  // Periodically send r to check the connection
+  // If a stanza goes out it will cancel this and set a sooner timer
+  function scheduleRequestAck(timeout = sm.requestAckInterval) {
+    clearTimeout(requestAckTimeout);
+
+    if (!sm.enabled) return;
+
+    requestAckTimeout = setTimeout(requestAck, timeout);
+  }
+
   function requestAck() {
     clearTimeout(timeoutTimeout);
+
+    if (!sm.enabled) return;
+
     if (sm.timeout) {
       timeoutTimeout = setTimeout(
         () => entity.disconnect().catch(() => {}),
@@ -159,9 +177,8 @@ export default function streamManagement({
       );
     }
     entity.send(xml("r", { xmlns: NS })).catch(() => {});
-    // Periodically send r to check the connection
-    // If a stanza goes out it will cancel this and set a sooner timer
-    requestAckTimeout = setTimeout(requestAck, sm.requestAckInterval);
+
+    scheduleRequestAck();
   }
 
   middleware.filter((context, next) => {
@@ -170,9 +187,9 @@ export default function streamManagement({
     if (!["presence", "message", "iq"].includes(stanza.name)) return next();
 
     sm.outbound_q.push({ stanza, stamp: datetime() });
+    queueMicrotask(scheduleRequestAck);
     // Debounce requests so we send only one after a big run of stanza together
-    clearTimeout(requestAckTimeout);
-    requestAckTimeout = setTimeout(requestAck, sm.debounceAckRequest);
+    // scheduleRequestAck(sm.debounceAckRequest);
     return next();
   });
 

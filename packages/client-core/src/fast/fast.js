@@ -60,10 +60,8 @@ export default function fast({ sasl2, entity }) {
       }
 
       const { token } = credentials;
-      // Invalid or unavailable token
       if (!isTokenValid(token, fast.mechanisms)) {
-        requestToken(streamFeatures);
-        return false;
+        return onInvalidToken();
       }
 
       try {
@@ -90,11 +88,15 @@ export default function fast({ sasl2, entity }) {
           err instanceof SASLError &&
           ["not-authorized", "credentials-expired"].includes(err.condition)
         ) {
-          await this.delete();
-          requestToken(streamFeatures);
-          return false;
+          return onInvalidToken();
         }
         entity.emit("error", err);
+        return false;
+      }
+
+      async function onInvalidToken() {
+        await fast.delete();
+        requestToken(streamFeatures);
         return false;
       }
     },

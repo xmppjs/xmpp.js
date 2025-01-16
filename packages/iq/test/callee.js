@@ -1,8 +1,10 @@
 import { mockClient, promiseSend, mockInput, promiseError } from "@xmpp/test";
+import debug from "@xmpp/debug";
 
-test("empty result when the handler returns true", async () => {
+test.only("empty result when the handler returns true", async () => {
   const xmpp = mockClient();
   const { iqCallee } = xmpp;
+  debug(xmpp, true);
 
   iqCallee.get("bar", "foo", () => true);
 
