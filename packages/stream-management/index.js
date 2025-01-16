@@ -85,14 +85,18 @@ export default function streamManagement({
     entity._ready(true);
   }
 
-  function failed() {
-    sm.enabled = false;
-    sm.id = "";
+  function discardQueue() {
     let item;
     while ((item = sm.outbound_q.shift())) {
       sm.emit("fail", item.stanza);
     }
     sm.outbound = 0;
+  }
+
+  function failed() {
+    sm.enabled = false;
+    sm.id = "";
+    discardQueue();
   }
 
   function enabled({ id, max }) {
@@ -112,11 +116,7 @@ export default function streamManagement({
   });
 
   entity.on("offline", () => {
-    let item;
-    while ((item = sm.outbound_q.shift())) {
-      sm.emit("fail", item.stanza);
-    }
-    sm.outbound = 0;
+    discardQueue();
     sm.inbound = 0;
     sm.enabled = false;
     sm.id = "";
