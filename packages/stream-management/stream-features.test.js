@@ -1,10 +1,6 @@
 import { mockClient } from "@xmpp/test";
 
-function tick() {
-  return new Promise((resolve) => {
-    process.nextTick(resolve);
-  });
-}
+import { tick } from "@xmpp/events";
 
 test("enable - enabled", async () => {
   const { entity } = mockClient();

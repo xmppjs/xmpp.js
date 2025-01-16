@@ -6,7 +6,7 @@ By default `@xmpp/fast` stores the token in memory and as such fast authenticati
 
 You can supply your own functions to store and retrieve the token from a persistent database.
 
-If fast authentication fails, regular authentication with `credentials` will happen.
+If fast authentication fails, regular authentication will happen.
 
 ## Usage
 
@@ -26,10 +26,9 @@ client.fast.saveToken = async (token) => {
   await secureStorage.set("token", JSON.stringify(token));
 }
 
-// Debugging only
-client.fast.on("error", (error) => {
-  console.log("fast error", error);
-})
+client.fast.removeToken = async () => {
+  await secureStorage.del("token");
+}
 ```
 
 ## References

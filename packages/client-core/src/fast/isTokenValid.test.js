@@ -1,5 +1,4 @@
 import { isTokenValid } from "./fast.js";
-// eslint-disable-next-line n/no-extraneous-import
 import { datetime } from "@xmpp/time";
 
 const tomorrow = new Date();

@@ -1,4 +1,3 @@
-// eslint-disable-next-line n/no-extraneous-import
 import { promise } from "@xmpp/events";
 import { client, xml, jid } from "../packages/client/index.js";
 import debug from "../packages/debug/index.js";

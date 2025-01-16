@@ -1,5 +1,6 @@
 import { EventEmitter } from "@xmpp/events";
 import { getAvailableMechanisms } from "@xmpp/sasl";
+import SASLError from "@xmpp/sasl/lib/SASLError.js";
 import xml from "@xmpp/xml";
 import SASLFactory from "saslmechanisms";
 
@@ -20,6 +21,9 @@ export default function fast({ sasl2, entity }) {
     async fetchToken() {
       return token;
     },
+    async deleteToken() {
+      token = null;
+    },
     async save(token) {
       try {
         await this.saveToken(token);
@@ -30,6 +34,13 @@ export default function fast({ sasl2, entity }) {
     async fetch() {
       try {
         return this.fetchToken();
+      } catch (err) {
+        entity.emit("error", err);
+      }
+    },
+    async delete() {
+      try {
+        await this.deleteToken();
       } catch (err) {
         entity.emit("error", err);
       }
@@ -68,6 +79,13 @@ export default function fast({ sasl2, entity }) {
         });
         return true;
       } catch (err) {
+        if (
+          err instanceof SASLError &&
+          ["not-authorized", "credentials-expired"].includes(err.condition)
+        ) {
+          this.delete();
+          return false;
+        }
         entity.emit("error", err);
         return false;
       }
