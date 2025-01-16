@@ -22,6 +22,7 @@ test("enable - enabled", async () => {
   );
 
   expect(entity.streamManagement.outbound).toBe(0);
+  expect(entity.streamManagement.outbound_q).toBeEmpty();
   expect(entity.streamManagement.enabled).toBe(false);
   expect(entity.streamManagement.id).toBe("");
 
@@ -73,6 +74,7 @@ test("enable - message - enabled", async () => {
   );
 
   expect(entity.streamManagement.outbound).toBe(0);
+  expect(entity.streamManagement.outbound_q).toBeEmpty();
   expect(entity.streamManagement.enabled).toBe(false);
   expect(entity.streamManagement.id).toBe("");
 
@@ -112,6 +114,7 @@ test("enable - failed", async () => {
   );
 
   expect(entity.streamManagement.outbound).toBe(0);
+  expect(entity.streamManagement.outbound_q).toBeEmpty();
   entity.streamManagement.enabled = true;
 
   entity.mockInput(
@@ -123,6 +126,34 @@ test("enable - failed", async () => {
   await tick();
 
   expect(entity.streamManagement.enabled).toBe(false);
+});
+
+test("stanza ack", async () => {
+  const { entity } = mockClient();
+
+  entity.streamManagement.enabled = true;
+
+  expect(entity.streamManagement.outbound).toBe(0);
+  expect(entity.streamManagement.outbound_q).toBeEmpty();
+  // expect(entity.streamManagement.enabled).toBe(true);
+
+  await entity.send(<message id="a" />);
+
+  expect(entity.streamManagement.outbound).toBe(0);
+  expect(entity.streamManagement.outbound_q).toHaveLength(1);
+
+  let acks = 0;
+  entity.streamManagement.on("ack", (stanza) => {
+    expect(stanza.attrs.id).toBe("a");
+    acks++;
+  });
+
+  entity.mockInput(<a xmlns="urn:xmpp:sm:3" h="1" />);
+  await tick();
+
+  expect(acks).toBe(1);
+  expect(entity.streamManagement.outbound).toBe(1);
+  expect(entity.streamManagement.outbound_q).toHaveLength(0);
 });
 
 test("resume - resumed", async () => {
@@ -138,6 +169,10 @@ test("resume - resumed", async () => {
   );
 
   entity.streamManagement.outbound = 45;
+  entity.streamManagement.outbound_q = [
+    { stanza: <message id="a" />, stamp: "1990-01-01T00:00:00Z" },
+    { stanza: <message id="b" />, stamp: "1990-01-01T00:00:00Z" },
+  ];
 
   expect(await entity.catchOutgoing()).toEqual(
     <resume xmlns="urn:xmpp:sm:3" previd="bar" h="0" />,
@@ -147,11 +182,87 @@ test("resume - resumed", async () => {
 
   expect(entity.status).toBe("offline");
 
-  entity.mockInput(<resumed xmlns="urn:xmpp:sm:3" />);
+  entity.mockInput(<resumed xmlns="urn:xmpp:sm:3" h="46" />);
+
+  let acks = 0;
+  entity.streamManagement.on("ack", (stanza) => {
+    expect(stanza.attrs.id).toBe("a");
+    acks++;
+  });
+
+  expect(await entity.catchOutgoing()).toEqual(
+    <message id="b">
+      <delay
+        xmlns="urn:xmpp:delay"
+        from="foo@bar/test"
+        stamp="1990-01-01T00:00:00Z"
+      />
+    </message>,
+  );
 
   await tick();
 
-  expect(entity.streamManagement.outbound).toBe(45);
+  expect(acks).toBe(1);
+  expect(entity.streamManagement.outbound).toBe(46);
+  expect(entity.streamManagement.outbound_q).toHaveLength(1);
+  expect(entity.status).toBe("online");
+});
+
+test("resumed event", async () => {
+  const { entity } = mockClient();
+
+  entity.status = "offline";
+  entity.streamManagement.id = "bar";
+
+  entity.mockInput(
+    <features xmlns="http://etherx.jabber.org/streams">
+      <sm xmlns="urn:xmpp:sm:3" />
+    </features>,
+  );
+
+  entity.streamManagement.outbound = 45;
+  entity.streamManagement.outbound_q = [
+    { stanza: <message id="a" />, stamp: "1990-01-01T00:00:00Z" },
+    { stanza: <message id="b" />, stamp: "1990-01-01T00:00:00Z" },
+  ];
+
+  expect(await entity.catchOutgoing()).toEqual(
+    <resume xmlns="urn:xmpp:sm:3" previd="bar" h="0" />,
+  );
+
+  expect(entity.streamManagement.enabled).toBe(false);
+
+  expect(entity.status).toBe("offline");
+
+  entity.mockInput(<resumed xmlns="urn:xmpp:sm:3" h="46" />);
+
+  let acks = 0;
+  entity.streamManagement.on("ack", (stanza) => {
+    expect(stanza.attrs.id).toBe("a");
+    acks++;
+  });
+
+  expect(await entity.catchOutgoing()).toEqual(
+    <message id="b">
+      <delay
+        xmlns="urn:xmpp:delay"
+        from="foo@bar/test"
+        stamp="1990-01-01T00:00:00Z"
+      />
+    </message>,
+  );
+
+  let resumed = false;
+  entity.streamManagement.on("resumed", () => {
+    resumed = true;
+  });
+
+  await tick();
+
+  expect(resumed).toBe(true);
+  expect(acks).toBe(1);
+  expect(entity.streamManagement.outbound).toBe(46);
+  expect(entity.streamManagement.outbound_q).toHaveLength(1);
   expect(entity.status).toBe("online");
 });
 
@@ -162,6 +273,7 @@ test("resume - failed", async () => {
   entity.streamManagement.id = "bar";
   entity.streamManagement.enabled = true;
   entity.streamManagement.outbound = 45;
+  entity.streamManagement.outbound_q = [];
 
   entity.mockInput(
     <features xmlns="http://etherx.jabber.org/streams">
@@ -185,4 +297,46 @@ test("resume - failed", async () => {
   expect(entity.streamManagement.id).toBe("");
   expect(entity.streamManagement.enabled).toBe(false);
   expect(entity.streamManagement.outbound).toBe(0);
+  expect(entity.streamManagement.outbound_q).toBeEmpty();
+});
+
+test("resume - failed with something in queue", async () => {
+  const { entity } = mockClient();
+
+  entity.status = "bar";
+  entity.streamManagement.id = "bar";
+  entity.streamManagement.enabled = true;
+  entity.streamManagement.outbound = 45;
+  entity.streamManagement.outbound_q = [{ stanza: "hai" }];
+
+  entity.mockInput(
+    <features xmlns="http://etherx.jabber.org/streams">
+      <sm xmlns="urn:xmpp:sm:3" />
+    </features>,
+  );
+
+  expect(await entity.catchOutgoing()).toEqual(
+    <resume xmlns="urn:xmpp:sm:3" previd="bar" h="0" />,
+  );
+
+  entity.mockInput(
+    <failed xmlns="urn:xmpp:sm:3">
+      <unexpected-request xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
+    </failed>,
+  );
+
+  let failures = 0;
+  entity.streamManagement.on("fail", (failed) => {
+    failures++;
+    expect(failed).toBe("hai");
+  });
+
+  await tick();
+
+  expect(failures).toBe(1);
+  expect(entity.status).toBe("bar");
+  expect(entity.streamManagement.id).toBe("");
+  expect(entity.streamManagement.enabled).toBe(false);
+  expect(entity.streamManagement.outbound).toBe(0);
+  expect(entity.streamManagement.outbound_q).toBeEmpty();
 });

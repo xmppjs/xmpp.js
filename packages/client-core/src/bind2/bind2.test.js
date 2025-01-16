@@ -66,7 +66,6 @@ test("with function resource returning string", async () => {
 test("with function resource throwing", async () => {
   const error = new Error("foo");
 
-   
   function resource() {
     throw error;
   }
@@ -102,7 +101,6 @@ test("with function resource returning resolved promise", async () => {
 test("with function resource returning rejected promise", async () => {
   const error = new Error("foo");
 
-   
   async function resource() {
     throw error;
   }
