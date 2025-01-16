@@ -131,30 +131,11 @@ test("enable - failed", async () => {
 test("stanza ack", async () => {
   const { entity } = mockClient();
 
-  entity.mockInput(
-    <features xmlns="http://etherx.jabber.org/streams">
-      <sm xmlns="urn:xmpp:sm:3" />
-    </features>,
-  );
-
-  expect(await entity.catchOutgoing()).toEqual(
-    <enable xmlns="urn:xmpp:sm:3" resume="true" />,
-  );
-
-  entity.mockInput(
-    <enabled
-      xmlns="urn:xmpp:sm:3"
-      id="some-long-sm-id"
-      location="[2001:41D0:1:A49b::1]:9222"
-      resume="true"
-    />,
-  );
-
-  await tick();
+  entity.streamManagement.enabled = true;
 
   expect(entity.streamManagement.outbound).toBe(0);
   expect(entity.streamManagement.outbound_q).toBeEmpty();
-  expect(entity.streamManagement.enabled).toBe(true);
+  // expect(entity.streamManagement.enabled).toBe(true);
 
   await entity.send(<message id="a" />);
 

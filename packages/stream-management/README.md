@@ -24,9 +24,9 @@ Indicates that the connection was resumed. When that happens the `online` event 
 const xmpp = client(...);
 const {streamManagement} = xmpp;
 
-streamManagement.on('resumed', ()) => {
+streamManagement.on('resumed', () => {
   console.log("session resumed");
-}
+});
 ```
 
 ### fail
@@ -37,9 +37,9 @@ Indicates that a stanza failed to send to the server and will not be retried.
 const xmpp = client(...);
 const {streamManagement} = xmpp;
 
-streamManagement.on('fail', (stanza)) => {
+streamManagement.on('fail', (stanza) => {
   console.log("fail to send", stanza.toString());
-}
+});
 ```
 
 ### ack
@@ -50,9 +50,9 @@ Indicates that a stanza has been acknowledged by the server.
 const xmpp = client(...);
 const {streamManagement} = xmpp;
 
-streamManagement.on('ack', (stanza)) => {
+streamManagement.on('ack', (stanza) => {
   console.log("stanza acknowledge by the server", stanza.toString());
-}
+});
 ```
 
 ## References

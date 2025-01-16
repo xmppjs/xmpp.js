@@ -77,6 +77,8 @@ test("client retry stanzas", async () => {
     ),
     stamp: datetime(),
   });
+  // Do not close the stream so that stream resumption can happen
+  await xmpp._closeSocket();
   await xmpp.disconnect();
 
   const el = await promise_ack;
@@ -101,6 +103,7 @@ test(
         <ping xmlns="urn:xmppp:ping" />
       </iq>,
     );
+
     // Pretend we don't receive the ack by removing event listeners
     // on the socket
     xmpp._detachSocket();
