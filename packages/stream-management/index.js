@@ -66,7 +66,6 @@ export default function streamManagement({
   entity.on("disconnect", () => {
     clearTimeout(timeoutTimeout);
     clearTimeout(requestAckTimeout);
-    sm.removeListener("stanza", scheduleRequestAck);
   });
 
   async function resumed(resumed) {
@@ -78,6 +77,12 @@ export default function streamManagement({
     await entity.sendMany(q.map((item) => queueToStanza({ entity, item })));
     sm.emit("resumed");
     entity._ready(true);
+  }
+
+  function failed() {
+    sm.enabled = false;
+    sm.id = "";
+    failQueue();
   }
 
   function ackQueue(n) {
@@ -97,18 +102,11 @@ export default function streamManagement({
     sm.outbound = 0;
   }
 
-  function failed() {
-    sm.enabled = false;
-    sm.id = "";
-    failQueue();
-  }
-
   function enabled({ id, max }) {
     sm.enabled = true;
     sm.id = id;
     sm.max = max;
     scheduleRequestAck();
-    sm.on("stanza", scheduleRequestAck);
   }
 
   entity.on("online", () => {
@@ -129,8 +127,8 @@ export default function streamManagement({
   });
 
   middleware.use((context, next) => {
-    clearTimeout(timeoutTimeout);
     const { stanza } = context;
+    clearTimeout(timeoutTimeout);
     if (["presence", "message", "iq"].includes(stanza.name)) {
       sm.inbound += 1;
     } else if (stanza.is("r", NS)) {

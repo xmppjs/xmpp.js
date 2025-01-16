@@ -94,7 +94,7 @@ test(
     xmpp = client({ credentials, service: domain });
     xmpp.streamManagement.timeout = 10;
     xmpp.streamManagement.debounceAckRequest = 1;
-    debug(xmpp, true);
+    debug(xmpp);
 
     const promise_resumed = promise(xmpp.streamManagement, "resumed");
     await xmpp.start();
