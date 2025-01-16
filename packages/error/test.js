@@ -1,5 +1,4 @@
 import XMPPError from "./index.js";
-// eslint-disable-next-line n/no-extraneous-import
 import parse from "@xmpp/xml/lib/parse.js";
 
 test("fromElement", () => {

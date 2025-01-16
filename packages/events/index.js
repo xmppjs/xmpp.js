@@ -9,6 +9,12 @@ import procedure from "./lib/procedure.js";
 import listeners from "./lib/listeners.js";
 import onoff from "./lib/onoff.js";
 
+function tick() {
+  return new Promise((resolve) => {
+    process.nextTick(resolve);
+  });
+}
+
 export {
   EventEmitter,
   timeout,
@@ -19,4 +25,5 @@ export {
   procedure,
   listeners,
   onoff,
+  tick,
 };

@@ -2,7 +2,6 @@ import ConnectionTLS from "./lib/Connection.js";
 
 import tls from "tls";
 import { promise } from "@xmpp/test";
-// eslint-disable-next-line n/no-extraneous-import
 import selfsigned from "selfsigned";
 
 test("socketParameters()", () => {

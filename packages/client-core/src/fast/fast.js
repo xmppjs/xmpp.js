@@ -1,5 +1,6 @@
 import { EventEmitter } from "@xmpp/events";
 import { getAvailableMechanisms } from "@xmpp/sasl";
+import SASLError from "@xmpp/sasl/lib/SASLError.js";
 import xml from "@xmpp/xml";
 import SASLFactory from "saslmechanisms";
 
@@ -20,6 +21,9 @@ export default function fast({ sasl2, entity }) {
     async fetchToken() {
       return token;
     },
+    async deleteToken() {
+      token = null;
+    },
     async save(token) {
       try {
         await this.saveToken(token);
@@ -34,17 +38,31 @@ export default function fast({ sasl2, entity }) {
         entity.emit("error", err);
       }
     },
+    async delete() {
+      try {
+        await this.deleteToken();
+      } catch (err) {
+        entity.emit("error", err);
+      }
+    },
     saslFactory,
     async auth({
       authenticate,
       entity,
       userAgent,
-      token,
       credentials,
       streamFeatures,
       features,
     }) {
+      // Unavailable
+      if (!fast.mechanism) {
+        return false;
+      }
+
+      const { token } = credentials;
+      // Invalid or unavailable token
       if (!isTokenValid(token, fast.mechanisms)) {
+        requestToken(streamFeatures);
         return false;
       }
 
@@ -68,19 +86,28 @@ export default function fast({ sasl2, entity }) {
         });
         return true;
       } catch (err) {
+        if (
+          err instanceof SASLError &&
+          ["not-authorized", "credentials-expired"].includes(err.condition)
+        ) {
+          await this.delete();
+          requestToken(streamFeatures);
+          return false;
+        }
         entity.emit("error", err);
         return false;
       }
     },
-    _requestToken(streamFeatures) {
-      streamFeatures.push(
-        xml("request-token", {
-          xmlns: NS,
-          mechanism: fast.mechanism,
-        }),
-      );
-    },
   });
+
+  function requestToken(streamFeatures) {
+    streamFeatures.push(
+      xml("request-token", {
+        xmlns: NS,
+        mechanism: fast.mechanism,
+      }),
+    );
+  }
 
   function reset() {
     fast.mechanism = null;
@@ -121,13 +148,17 @@ export default function fast({ sasl2, entity }) {
 }
 
 export function isTokenValid(token, mechanisms) {
+  if (!token) return false;
+
   // Avoid an error round trip if the server does not support the token mechanism anymore
   if (!mechanisms.includes(token.mechanism)) {
     return false;
   }
+
   // Avoid an error round trip if the token is already expired
   if (new Date(token.expiry) <= new Date()) {
     return false;
   }
+
   return true;
 }
