@@ -72,6 +72,7 @@ export default function streamManagement({
   entity.on("disconnect", () => {
     clearTimeout(timeoutTimeout);
     clearTimeout(requestAckTimeout);
+    sm.enabled = false;
   });
 
   // It is RECOMMENDED that initiating entities (usually clients) send an element right before they gracefully close the stream, in order to inform the peer about received stanzas
