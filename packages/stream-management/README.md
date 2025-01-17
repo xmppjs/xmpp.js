@@ -13,6 +13,19 @@ If the session fails to resume, entity will fallback to regular session establis
 - Automatically responds to acks.
 - Periodically request acks.
 - If server fails to respond, triggers a reconnect.
+- On reconnect retry sending the queue
+
+When a stanza is re-sent, a [delay element](https://xmpp.org/extensions/xep-0203.html) will be added to it.
+
+- `from` client jid
+- `stamp` [date/time](https://xmpp.org/extensions/xep-0082.html) at which the stanza was meant to be sent
+
+```xml
+<delay xmlns="urn:xmpp:delay"
+  from="username@example.net/resource"
+  stamp="1990-01-01T00:00:00Z"
+/>
+```
 
 ## Events
 

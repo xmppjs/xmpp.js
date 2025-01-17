@@ -285,6 +285,8 @@ class Connection extends EventEmitter {
    * https://tools.ietf.org/html/rfc7395#section-3.6
    */
   async _closeStream(timeout = this.timeout) {
+    await this.#runHooks("close");
+
     const fragment = this.footer(this.footerElement());
 
     await this.write(fragment);
@@ -360,6 +362,49 @@ class Connection extends EventEmitter {
 
   // Override
   socketParameters() {}
+
+  /* Experimental hooks */
+  #hooks = new Map();
+  #hook_events = new Set(["close"]);
+  hook(event, handler /*priority = 0 TODO */) {
+    this.#assertHookEventName(event);
+
+    if (!this.#hooks.has(event)) {
+      this.#hooks.set(event, new Set());
+    }
+
+    this.#hooks.get(event).add([handler]);
+  }
+  #assertHookEventName(event) {
+    if (!this.#hook_events.has(event)) {
+      throw new Error(`Hook event name "${event}" is unknown.`);
+    }
+  }
+  unhook(event, handler) {
+    this.#assertHookEventName(event);
+    const handlers = this.#hooks.get("event");
+    const item = [...handlers].find((item) => item.handler === handler);
+    handlers.remove(item);
+  }
+  async #runHooks(event, ...args) {
+    this.#assertHookEventName(event);
+
+    const hooks = this.#hooks.get(event);
+    if (!hooks) return;
+
+    // TODO run hooks by priority
+    // run hooks with the same priority in parallel
+
+    await Promise.all(
+      [...hooks].map(async ([handler]) => {
+        try {
+          await handler(...args);
+        } catch (err) {
+          this.emit("error", err);
+        }
+      }),
+    );
+  }
 }
 
 // Override

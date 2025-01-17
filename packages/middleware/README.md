@@ -6,7 +6,7 @@ Supports Node.js and browsers.
 
 ## Install
 
-```
+```sh
 npm install @xmpp/middleware
 ```
 
