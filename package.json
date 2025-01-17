@@ -35,8 +35,8 @@
     "selfsigned": "^2.4.1"
   },
   "scripts": {
-    "test": "node --experimental-websocket ./node_modules/.bin/jest",
-    "e2e": "NODE_TLS_REJECT_UNAUTHORIZED=0 node --experimental-websocket ./node_modules/.bin/jest --runInBand --config e2e.config.cjs",
+    "test": "node --experimental-websocket ./node_modules/.bin/jest --forceExit",
+    "e2e": "NODE_TLS_REJECT_UNAUTHORIZED=0 node --experimental-websocket ./node_modules/.bin/jest --forceExit --runInBand --config e2e.config.cjs",
     "preversion": "make bundle"
   },
   "engines": {
