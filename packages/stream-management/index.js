@@ -63,9 +63,22 @@ export default function streamManagement({
     requestAckInterval: 30_000,
   });
 
+  async function sendAck() {
+    try {
+      await entity.send(xml("a", { xmlns: NS, h: sm.inbound }));
+    } catch {}
+  }
+
   entity.on("disconnect", () => {
     clearTimeout(timeoutTimeout);
     clearTimeout(requestAckTimeout);
+    sm.enabled = false;
+  });
+
+  // It is RECOMMENDED that initiating entities (usually clients) send an element right before they gracefully close the stream, in order to inform the peer about received stanzas
+  entity.hook("close", async () => {
+    if (!sm.enabled) return;
+    await sendAck();
   });
 
   async function resumed(resumed) {
@@ -127,14 +140,14 @@ export default function streamManagement({
     sm.id = "";
   });
 
-  middleware.use((context, next) => {
+  middleware.use(async (context, next) => {
     const { stanza } = context;
     clearTimeout(timeoutTimeout);
     if (["presence", "message", "iq"].includes(stanza.name)) {
       sm.inbound += 1;
     } else if (stanza.is("r", NS)) {
       // > When an <r/> element ("request") is received, the recipient MUST acknowledge it by sending an <a/> element to the sender containing a value of 'h' that is equal to the number of stanzas handled by the recipient of the <r/> element.
-      entity.send(xml("a", { xmlns: NS, h: sm.inbound })).catch(() => {});
+      await sendAck();
     } else if (stanza.is("a", NS)) {
       // > When a party receives an <a/> element, it SHOULD keep a record of the 'h' value returned as the sequence number of the last handled outbound stanza for the current stream (and discard the previous value).
       ackQueue(+stanza.attrs.h);
