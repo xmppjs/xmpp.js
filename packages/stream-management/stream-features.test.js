@@ -308,3 +308,18 @@ test("resume - failed with something in queue", async () => {
   expect(entity.streamManagement.outbound).toBe(0);
   expect(entity.streamManagement.outbound_q).toBeEmpty();
 });
+
+test("sends an <a/> element before closing", async () => {
+  const { entity, streamManagement } = mockClient();
+  streamManagement.enabled = true;
+  streamManagement.inbound = 42;
+  entity.status = "online";
+
+  const promise_disconnect = entity.disconnect();
+
+  expect(await entity.catchOutgoing()).toEqual(
+    <a xmlns="urn:xmpp:sm:3" h={streamManagement.inbound} />,
+  );
+
+  await promise_disconnect;
+});
