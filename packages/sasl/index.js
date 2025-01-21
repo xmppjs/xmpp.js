@@ -9,9 +9,7 @@ const SASLFactory = require("saslmechanisms");
 
 const NS = "urn:ietf:params:xml:ns:xmpp-sasl";
 
-console.log("foobar");
 function getMechanismNames(features) {
-  console.log("lol");
   return features
     .getChild("mechanisms", NS)
     .getChildElements()
