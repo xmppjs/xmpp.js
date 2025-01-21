@@ -3,7 +3,7 @@
   "repository": "github:xmppjs/xmpp.js",
   "homepage": "http://github.com/xmppjs/xmpp.js",
   "bugs": "http://github.com/xmppjs/xmpp.js/issues",
-  "version": "0.13.3",
+  "version": "0.13.4",
   "license": "ISC",
   "dependencies": {
     "@babel/cli": "^7.26.4",
@@ -16,7 +16,7 @@
     "@xmpp/reconnect": "^0.13.2",
     "@xmpp/resolve": "^0.13.3",
     "@xmpp/resource-binding": "^0.13.3",
-    "@xmpp/sasl": "^0.13.3",
+    "@xmpp/sasl": "^0.13.4",
     "@xmpp/sasl-anonymous": "^0.13.2",
     "@xmpp/sasl-plain": "^0.13.2",
     "@xmpp/sasl-scram-sha-1": "^0.13.2",
