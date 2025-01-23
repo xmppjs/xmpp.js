@@ -46,7 +46,7 @@ Do you need help with working with xmpp.js? Please reach out to our community by
 ## Built with xmpp.js
 
 - [WorkAdventure](https://workadventu.re/)
-- [Simplo](https://simplo.app/?lang=en)
+- [Mustang](https://www.mustang.im/)
 - [Crypho](https://www.crypho.com/)
 - [MeshCentral](https://meshcentral.com/)
 - [openHAB](https://www.openhab.org/)
