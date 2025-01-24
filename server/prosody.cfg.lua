@@ -26,6 +26,7 @@ modules_enabled = {
   "sasl2_bind2";
   "sasl2_sm";
   "sasl2_fast";
+  "csi_simple";
 };
 
 modules_disabled = {

@@ -1,42 +1,24 @@
-import XMPPError from "@xmpp/error";
-import { EventEmitter, procedure } from "@xmpp/events";
+import { EventEmitter } from "@xmpp/events";
 import xml from "@xmpp/xml";
 import { datetime } from "@xmpp/time";
+import { setupBind2 } from "./bind2.js";
+import { setupSasl2 } from "./sasl2.js";
+import { setupStreamFeature } from "./stream-feature.js";
 
 // https://xmpp.org/extensions/xep-0198.html
 
-const NS = "urn:xmpp:sm:3";
+export const NS = "urn:xmpp:sm:3";
 
-function makeEnableElement({ sm }) {
+export function makeEnableElement({ sm }) {
   return xml("enable", {
     xmlns: NS,
     max: sm.preferredMaximum,
-    resume: sm.allowResume ? "true" : undefined,
+    resume: "true",
   });
 }
 
-function makeResumeElement({ sm }) {
+export function makeResumeElement({ sm }) {
   return xml("resume", { xmlns: NS, h: sm.inbound, previd: sm.id });
-}
-
-function enable(entity, sm) {
-  return procedure(entity, makeEnableElement({ sm }), (element, done) => {
-    if (element.is("enabled", NS)) {
-      return done(element);
-    } else if (element.is("failed", NS)) {
-      throw XMPPError.fromElement(element);
-    }
-  });
-}
-
-async function resume(entity, sm) {
-  return procedure(entity, makeResumeElement({ sm }), (element, done) => {
-    if (element.is("resumed", NS)) {
-      return done(element);
-    } else if (element.is("failed", NS)) {
-      throw XMPPError.fromElement(element);
-    }
-  });
 }
 
 export default function streamManagement({
@@ -51,7 +33,6 @@ export default function streamManagement({
 
   const sm = new EventEmitter();
   Object.assign(sm, {
-    allowResume: true,
     preferredMaximum: null,
     enabled: false,
     id: "",
@@ -171,6 +152,7 @@ export default function streamManagement({
     clearTimeout(requestAckTimeout);
 
     if (!sm.enabled) return;
+    if (!timeout) return;
 
     requestAckTimeout = setTimeout(requestAck, timeout);
   }
@@ -216,92 +198,6 @@ export default function streamManagement({
   }
 
   return sm;
-}
-
-function setupStreamFeature({
-  streamFeatures,
-  sm,
-  entity,
-  resumed,
-  failed,
-  enabled,
-}) {
-  // https://xmpp.org/extensions/xep-0198.html#enable
-  // For client-to-server connections, the client MUST NOT attempt to enable stream management until after it has completed Resource Binding unless it is resuming a previous session
-  streamFeatures.use("sm", NS, async (context, next) => {
-    // Resuming
-    if (sm.id) {
-      try {
-        const element = await resume(entity, sm);
-        await resumed(element);
-        return;
-        // If resumption fails, continue with session establishment
-      } catch {
-        failed();
-      }
-    }
-
-    // Enabling
-
-    // Resource binding first
-    await next();
-
-    const promiseEnable = enable(entity, sm);
-
-    if (sm.outbound_q.length > 0) {
-      throw new Error(
-        "Stream Management assertion failure, queue should be empty after enable",
-      );
-    }
-
-    // > The counter for an entity's own sent stanzas is set to zero and started after sending either <enable/> or <enabled/>.
-    sm.outbound = 0;
-
-    try {
-      const response = await promiseEnable;
-      enabled(response.attrs);
-    } catch {
-      sm.enabled = false;
-    }
-
-    sm.inbound = 0;
-  });
-}
-
-function setupSasl2({ sasl2, sm, failed, resumed }) {
-  sasl2.use(
-    "urn:xmpp:sm:3",
-    (element) => {
-      if (!element.is("sm")) return;
-      if (sm.id) return makeResumeElement({ sm });
-    },
-    (element) => {
-      if (element.is("resumed")) {
-        resumed(element);
-      } else if (element.is(failed)) {
-        // const error = StreamError.fromElement(element)
-        failed();
-      }
-    },
-  );
-}
-
-function setupBind2({ bind2, sm, failed, enabled }) {
-  bind2.use(
-    "urn:xmpp:sm:3",
-    // https://xmpp.org/extensions/xep-0198.html#inline-examples
-    (_element) => {
-      return makeEnableElement({ sm });
-    },
-    (element) => {
-      if (element.is("enabled")) {
-        enabled(element.attrs);
-      } else if (element.is("failed")) {
-        // const error = StreamError.fromElement(element)
-        failed();
-      }
-    },
-  );
 }
 
 function queueToStanza({ entity, item }) {
