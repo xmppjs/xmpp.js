@@ -1,5 +1,6 @@
+/* eslint-disable no-console, n/no-extraneous-import*/
+
 import { component, xml } from "@xmpp/component";
-// eslint-disable-next-line n/no-extraneous-import
 import debug from "@xmpp/debug";
 
 const xmpp = component({

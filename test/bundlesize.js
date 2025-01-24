@@ -1,5 +1,4 @@
-/* eslint-disable unicorn/no-process-exit */
-/* eslint-disable n/no-process-exit */
+/* eslint-disable no-console, unicorn/no-process-exit, n/no-process-exit */
 
 import zlib from "node:zlib";
 import { readFile } from "node:fs/promises";
