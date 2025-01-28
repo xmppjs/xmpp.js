@@ -309,6 +309,39 @@ test("resume - failed with something in queue", async () => {
   expect(entity.streamManagement.outbound_q).toBeEmpty();
 });
 
+test("sends an <r/> after stanzas, debounced", async () => {
+  const { entity } = mockClient();
+
+  entity.streamManagement.enabled = true;
+
+  let r = 0;
+  const onSend = (stanza) => {
+    if (stanza.name === "r") r++;
+  };
+  entity.on("send", onSend);
+
+  jest.useFakeTimers();
+
+  let promise = entity.send(<message id="a" />);
+  jest.advanceTimersByTime(50);
+  await promise;
+  expect(r).toBe(0);
+
+  promise = entity.send(<message id="b" />);
+  jest.advanceTimersByTime(50);
+  await promise;
+  expect(r).toBe(0);
+
+  jest.advanceTimersByTime(1000);
+  jest.useRealTimers();
+  await tick();
+
+  expect(r).toBe(1);
+
+  entity.removeListener("send", onSend);
+  await entity.disconnect();
+});
+
 test("sends an <a/> element before closing", async () => {
   const { entity, streamManagement } = mockClient();
   streamManagement.enabled = true;
