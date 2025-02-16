@@ -122,9 +122,9 @@ class Connection extends EventEmitter {
 
     try {
       await promise(this, "disconnect");
-      const { domain, lang } = this.options;
+      const { domain, lang, timeout } = this.options;
       await this.connect(service);
-      await this.open({ domain, lang });
+      await this.open({ domain, lang, timeout });
     } catch (err) {
       this.emit("error", err);
     }
@@ -209,13 +209,13 @@ class Connection extends EventEmitter {
       throw new Error("Connection is not offline");
     }
 
-    const { service, domain, lang } = this.options;
+    const { service, domain, lang, timeout } = this.options;
 
     await this.connect(service);
 
     const promiseOnline = promise(this, "online");
 
-    await this.open({ domain, lang });
+    await this.open({ domain, lang, timeout });
 
     return promiseOnline;
   }
@@ -301,8 +301,8 @@ class Connection extends EventEmitter {
    */
   async restart() {
     this._detachParser();
-    const { domain, lang } = this.options;
-    return this.open({ domain, lang });
+    const { domain, lang, timeout } = this.options;
+    return this.open({ domain, lang, timeout });
   }
 
   async send(element) {
