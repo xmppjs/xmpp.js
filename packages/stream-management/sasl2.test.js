@@ -72,7 +72,7 @@ test("Client failed to resume stream", async () => {
     </success>,
   );
 
-  expect(entity.streamManagement.outbound).toBe(45);
+  expect(entity.streamManagement.outbound).toBe(0);
   expect(entity.streamManagement.inbound).toBe(54);
   expect(entity.streamManagement.enabled).toBe(false);
 });
