@@ -13,8 +13,13 @@ class Connection extends EventEmitter {
 
   constructor(options = {}) {
     super();
+
+    if (typeof options === "string") {
+      options = { domain: options };
+    }
+
     this.jid = null;
-    this.timeout = 2000;
+    this.timeout = options.timeout || 2000;
     this.options = options;
     this.status = "offline";
     this.socket = null;
@@ -122,9 +127,9 @@ class Connection extends EventEmitter {
 
     try {
       await promise(this, "disconnect");
-      const { domain, lang, timeout } = this.options;
+      const { domain, lang } = this.options;
       await this.connect(service);
-      await this.open({ domain, lang, timeout });
+      await this.open({ domain, lang });
     } catch (err) {
       this.emit("error", err);
     }
@@ -209,13 +214,13 @@ class Connection extends EventEmitter {
       throw new Error("Connection is not offline");
     }
 
-    const { service, domain, lang, timeout } = this.options;
+    const { service, domain, lang } = this.options;
 
     await this.connect(service);
 
     const promiseOnline = promise(this, "online");
 
-    await this.open({ domain, lang, timeout });
+    await this.open({ domain, lang });
 
     return promiseOnline;
   }
@@ -251,11 +256,7 @@ class Connection extends EventEmitter {
   async open(options) {
     this._status("opening");
 
-    if (typeof options === "string") {
-      options = { domain: options };
-    }
-
-    const { domain, lang, timeout = this.timeout } = options;
+    const { domain, lang } = options;
 
     const headerElement = this.headerElement();
     headerElement.attrs.to = domain;
@@ -265,7 +266,7 @@ class Connection extends EventEmitter {
     this._attachParser(new this.Parser());
 
     await this.write(this.header(headerElement));
-    return promise(this, "open", "error", timeout);
+    return promise(this, "open", "error", this.timeout);
   }
 
   /**
@@ -301,8 +302,8 @@ class Connection extends EventEmitter {
    */
   async restart() {
     this._detachParser();
-    const { domain, lang, timeout } = this.options;
-    return this.open({ domain, lang, timeout });
+    const { domain, lang } = this.options;
+    return this.open({ domain, lang });
   }
 
   async send(element) {
