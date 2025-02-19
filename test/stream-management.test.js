@@ -93,6 +93,7 @@ test(
 
     xmpp = client({ credentials, service: domain });
     xmpp.streamManagement.timeout = 10;
+    xmpp.streamManagement.requestAckInterval = 5;
     xmpp.streamManagement.debounceAckRequest = 1;
     debug(xmpp);
 

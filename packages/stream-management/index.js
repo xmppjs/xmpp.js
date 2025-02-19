@@ -124,6 +124,7 @@ export default function streamManagement({
   middleware.use(async (context, next) => {
     const { stanza } = context;
     clearTimeout(timeoutTimeout);
+    timeoutTimeout = null;
     if (["presence", "message", "iq"].includes(stanza.name)) {
       sm.inbound += 1;
     } else if (stanza.is("r", NS)) {
@@ -158,16 +159,15 @@ export default function streamManagement({
   }
 
   function requestAck() {
-    clearTimeout(timeoutTimeout);
     clearTimeout(requestAckTimeout);
 
     if (!sm.enabled) return;
 
-    if (sm.timeout) {
-      timeoutTimeout = setTimeout(
-        () => entity.disconnect().catch(() => {}),
-        sm.timeout,
-      );
+    if (sm.timeout && !timeoutTimeout) {
+      timeoutTimeout = setTimeout(() => {
+        clearTimeout(requestAckTimeout);
+        entity.disconnect().catch(() => {});
+      }, sm.timeout);
     }
     entity.send(xml("r", { xmlns: NS })).catch(() => {});
 
