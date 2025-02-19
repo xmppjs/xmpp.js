@@ -30,6 +30,7 @@ export default function streamManagement({
 }) {
   let timeoutTimeout = null;
   let requestAckTimeout = null;
+  let requestAckDebounce = null;
 
   const sm = new EventEmitter();
   Object.assign(sm, {
@@ -42,6 +43,7 @@ export default function streamManagement({
     max: null,
     timeout: 60_000,
     requestAckInterval: 30_000,
+    requestAckDebounce: 250,
   });
 
   async function sendAck() {
@@ -53,6 +55,7 @@ export default function streamManagement({
   entity.on("disconnect", () => {
     clearTimeout(timeoutTimeout);
     clearTimeout(requestAckTimeout);
+    clearTimeout(requestAckDebounce);
     sm.enabled = false;
   });
 
@@ -160,6 +163,7 @@ export default function streamManagement({
   function requestAck() {
     clearTimeout(timeoutTimeout);
     clearTimeout(requestAckTimeout);
+    clearTimeout(requestAckDebounce);
 
     if (!sm.enabled) return;
 
@@ -181,7 +185,9 @@ export default function streamManagement({
 
     sm.outbound_q.push({ stanza, stamp: datetime() });
     // Debounce requests so we send only one after a big run of stanza together
-    queueMicrotask(requestAck);
+    clearTimeout(requestAckTimeout);
+    clearTimeout(requestAckDebounce);
+    requestAckDebounce = setTimeout(requestAck, sm.requestAckDebounce);
 
     return next();
   });
