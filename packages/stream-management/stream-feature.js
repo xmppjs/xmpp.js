@@ -47,9 +47,8 @@ export function setupStreamFeature({
       enabled(response.attrs);
     } catch {
       sm.enabled = false;
+      sm.enableSent = false;
     }
-
-    sm.inbound = 0;
   });
 }
 
