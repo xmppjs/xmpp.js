@@ -14,7 +14,6 @@ function getMechanismNames(features) {
     .getChild("mechanisms", NS)
     .getChildElements()
     .map((el) => {
-      console.log(el, typeof el);
       return el.text();
     });
 }
