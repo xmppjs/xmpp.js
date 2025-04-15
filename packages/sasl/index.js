@@ -13,10 +13,7 @@ function getMechanismNames(features) {
   return features
     .getChild("mechanisms", NS)
     .getChildElements()
-    .map((el) => {
-      console.log(el, typeof el);
-      return el.text();
-    });
+    .map((el) => el.text());
 }
 
 async function authenticate(SASL, entity, mechname, credentials) {
