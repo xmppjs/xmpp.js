@@ -46,6 +46,9 @@ async function authenticate({
       if (element.getNS() !== NS) return;
 
       if (element.name === "challenge") {
+        if (!mech.challenge) {
+          throw new Error("${mech.name} does not support SASL challenges");
+        }
         await mech.challenge(decode(element.text()));
         const resp = await mech.response(creds);
         await entity.send(
