@@ -30,9 +30,10 @@ export default function promise(target, event, rejectEvent = "error", timeout) {
     }
 
     if (timeout) {
+      const error = new TimeoutError();
       timeoutId = setTimeout(() => {
         cleanup();
-        reject(new TimeoutError());
+        reject(error);
       }, timeout);
     }
   });
