@@ -31,7 +31,7 @@ unit:
 	npm run test
 
 e2e:
-	$(warning e2e tests require prosody-trunk and luarocks)
+	$(warning e2e tests require prosody >= 0.13 and luarocks)
 	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2 > /dev/null
 	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_bind2 > /dev/null
 	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_sm > /dev/null

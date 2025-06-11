@@ -5,6 +5,7 @@ function readJSON(path) {
   return JSON.parse(fs.readFileSync(path, "utf8"));
 }
 
+// eslint-disable-next-line n/no-unsupported-features/node-builtins
 const __dirname = import.meta.dirname;
 
 // Makes xmpp.js package require and exports all other packages
