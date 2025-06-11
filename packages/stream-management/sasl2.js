@@ -10,7 +10,7 @@ export function setupSasl2({ sasl2, sm, failed, resumed }) {
     (element) => {
       if (element.is("resumed")) {
         resumed(element);
-      } else if (element.is(failed)) {
+      } else if (element.is("failed")) {
         // const error = StreamError.fromElement(element)
         failed();
       }
