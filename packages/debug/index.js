@@ -34,7 +34,7 @@ function hideSensitive(element) {
 }
 
 function format(element) {
-  return stringify(hideSensitive(clone(element), 2));
+  return stringify(hideSensitive(clone(element)), 2);
 }
 
 module.exports = function debug(entity, force) {
