@@ -9,6 +9,20 @@ test("new Connection()", () => {
   expect(conn instanceof EventEmitter).toBe(true);
 });
 
+test("new Connection() with custom timeout", () => {
+  const conn = new Connection({timeout:1234});
+  expect(conn.jid).toBe(null);
+  expect(conn.timeout).toBe(1234);
+  expect(conn instanceof EventEmitter).toBe(true);
+});
+
+test("new Connection() with unexpected input", () => {
+  const conn = new Connection(1234);
+  expect(conn.jid).toBe(null);
+  expect(conn.timeout).toBe(2000);
+  expect(conn instanceof EventEmitter).toBe(true);
+});
+
 test("isStanza()", () => {
   const conn = new Connection();
 

@@ -29,7 +29,7 @@ See [Jest CLI](https://jestjs.io/docs/cli).
 ## Submitting
 
 When submitting a pull request, additional tests will be run on GitHub actions.
-In most cases it shouldn't be necessary but if they fail, you can run them locally after installing prosody >= 0.12 with
+In most cases it shouldn't be necessary but if they fail, you can run them locally after installing prosody >= 0.13 with
 
 ```sh
 make ci

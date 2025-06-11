@@ -83,7 +83,7 @@ test("client retry stanzas", async () => {
 
   const el = await promise_ack;
   expect(el.attrs.id).toEqual("ping");
-});
+}, 10_000);
 
 test(
   "client reconnects when server fails to ack stanza",

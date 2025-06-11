@@ -70,6 +70,7 @@ See [jid package](/packages/jid)
   - `service` `<string>` The service to connect to, accepts an URI. eg. `xmpp://localhost:5347`
   - `domain` `<string>` Domain of the component. eg. `component.localhost`
   - `password` `<string>` Password to use to authenticate with the service.
+  - `timeout` `<number` Number of miliseconds to wait before timing out (default is `2000`)
 
 Returns an [xmpp](#xmpp) object.
 
