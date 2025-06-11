@@ -36,6 +36,7 @@ export default function streamManagement({
   Object.assign(sm, {
     preferredMaximum: null,
     enabled: false,
+    enableSent: false,
     id: "",
     outbound_q: [],
     outbound: 0,
@@ -57,6 +58,7 @@ export default function streamManagement({
     clearTimeout(requestAckTimeout);
     clearTimeout(requestAckDebounce);
     sm.enabled = false;
+    sm.enableSent = false;
   });
 
   // It is RECOMMENDED that initiating entities (usually clients) send an element right before they gracefully close the stream, in order to inform the peer about received stanzas
@@ -79,6 +81,7 @@ export default function streamManagement({
 
   function failed() {
     sm.enabled = false;
+    sm.enableSent = false;
     sm.id = "";
     failQueue();
   }
@@ -104,23 +107,17 @@ export default function streamManagement({
     sm.enabled = true;
     sm.id = id;
     sm.max = max;
+    // > The counter for the received stanzas ('h') is set to zero and started after receiving either <enable/> or <enabled/>.
+    // https://xmpp.org/extensions/xep-0198.html#example-7
+    sm.inbound = 0;
     scheduleRequestAck();
   }
-
-  entity.on("online", () => {
-    if (sm.outbound_q.length > 0) {
-      throw new Error(
-        "Stream Management assertion failure, queue should be empty during online",
-      );
-    }
-    sm.outbound = 0;
-    sm.inbound = 0;
-  });
 
   entity.on("offline", () => {
     failQueue();
     sm.inbound = 0;
     sm.enabled = false;
+    sm.enableSent = false;
     sm.id = "";
   });
 
@@ -179,8 +176,11 @@ export default function streamManagement({
   }
 
   middleware.filter((context, next) => {
-    if (!sm.enabled) return next();
     const { stanza } = context;
+    if (stanza.is("enable", NS)) {
+      sm.enableSent = true;
+    }
+    if (!sm.enabled && !sm.enableSent) return next();
     if (!["presence", "message", "iq"].includes(stanza.name)) return next();
 
     sm.outbound_q.push({ stanza, stamp: datetime() });

@@ -356,3 +356,40 @@ test("sends an <a/> element before closing", async () => {
 
   await promise_disconnect;
 });
+
+test("enable - outbound stanza - enabled", async () => {
+  const { entity } = mockClient();
+
+  entity.mockInput(
+    <features xmlns="http://etherx.jabber.org/streams">
+      <sm xmlns="urn:xmpp:sm:3" />
+    </features>,
+  );
+
+  expect(await entity.catchOutgoing()).toEqual(
+    <enable xmlns="urn:xmpp:sm:3" resume="true" />,
+  );
+
+  expect(entity.streamManagement.outbound).toBe(0);
+  expect(entity.streamManagement.outbound_q).toBeEmpty();
+  expect(entity.streamManagement.enabled).toBe(false);
+
+  await entity.send(<message />);
+
+  expect(entity.streamManagement.enabled).toBe(false);
+  expect(entity.streamManagement.outbound_q).toHaveLength(1);
+
+  entity.mockInput(
+    <enabled
+      xmlns="urn:xmpp:sm:3"
+      id="some-long-sm-id"
+      location="[2001:41D0:1:A49b::1]:9222"
+      resume="true"
+    />,
+  );
+
+  await tick();
+
+  expect(entity.streamManagement.outbound_q).toHaveLength(1);
+  expect(entity.streamManagement.enabled).toBe(true);
+});
