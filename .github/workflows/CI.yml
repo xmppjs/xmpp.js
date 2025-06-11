@@ -26,9 +26,9 @@ jobs:
         run: |
           echo deb http://packages.prosody.im/debian $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/prosody.list
           sudo wget https://prosody.im/files/prosody-debian-packages.key -O/etc/apt/trusted.gpg.d/prosody.gpg
-          # FIXME
+          # FIXME https://issues.prosody.im/1936
           sudo apt-get update --allow-insecure-repositories
-          sudo apt-get -y install lua5.3 liblua5.3-dev prosody-trunk lua-bitop lua-sec luarocks
+          sudo apt-get -y install lua5.3 liblua5.3-dev prosody lua-bitop lua-sec luarocks
           sudo service prosody stop
 
       - run: make
