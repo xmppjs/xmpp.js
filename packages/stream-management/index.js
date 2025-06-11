@@ -107,8 +107,9 @@ export default function streamManagement({
     sm.enabled = true;
     sm.id = id;
     sm.max = max;
+    // > The counter for the received stanzas ('h') is set to zero and started after receiving either <enable/> or <enabled/>.
+    // https://xmpp.org/extensions/xep-0198.html#example-7
     sm.inbound = 0;
-    if (!sm.enableSent) sm.outbound = 0;
     scheduleRequestAck();
   }
 
@@ -176,7 +177,7 @@ export default function streamManagement({
 
   middleware.filter((context, next) => {
     const { stanza } = context;
-    if (stanza.name === "enable" && stanza.attrs.xmlns == "urn:xmpp:sm:3") {
+    if (stanza.is("enable", NS)) {
       sm.enableSent = true;
     }
     if (!sm.enabled && !sm.enableSent) return next();

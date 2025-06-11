@@ -40,6 +40,7 @@ export function setupStreamFeature({
     }
 
     // > The counter for an entity's own sent stanzas is set to zero and started after sending either <enable/> or <enabled/>.
+    // https://xmpp.org/extensions/xep-0198.html#example-7
     sm.outbound = 0;
 
     try {
