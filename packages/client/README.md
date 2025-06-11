@@ -104,6 +104,7 @@ See [jid package](/packages/jid)
   - `resource` `<string`> Optional resource for [resource binding](/packages/resource-binding)
   - `username` `<string>` Optional username for [sasl](/packages/sasl)
   - `password` `<string>` Optional password for [sasl](/packages/sasl)
+  - `timeout` `<number` Number of miliseconds to wait before timing out (default is `2000`)
 
 Returns an [xmpp](#xmpp) object.
 
