@@ -13,8 +13,13 @@ class Connection extends EventEmitter {
 
   constructor(options = {}) {
     super();
+
+    if (typeof options === "string") {
+      options = { domain: options };
+    }
+
     this.jid = null;
-    this.timeout = 2000;
+    this.timeout = options.timeout || 2000;
     this.options = options;
     this.status = "offline";
     this.socket = null;
@@ -251,11 +256,7 @@ class Connection extends EventEmitter {
   async open(options) {
     this._status("opening");
 
-    if (typeof options === "string") {
-      options = { domain: options };
-    }
-
-    const { domain, lang, timeout = this.timeout } = options;
+    const { domain, lang } = options;
 
     const headerElement = this.headerElement();
     headerElement.attrs.to = domain;
@@ -265,7 +266,7 @@ class Connection extends EventEmitter {
     this._attachParser(new this.Parser());
 
     await this.write(this.header(headerElement));
-    return promise(this, "open", "error", timeout);
+    return promise(this, "open", "error", this.timeout);
   }
 
   /**
