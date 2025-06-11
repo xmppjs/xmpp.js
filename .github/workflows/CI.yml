@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 22, 23]
+        node: [20, 22, 23, 24]
     steps:
       - uses: actions/checkout@v4
 
@@ -26,11 +26,11 @@ jobs:
         run: |
           echo deb http://packages.prosody.im/debian $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/prosody.list
           sudo wget https://prosody.im/files/prosody-debian-packages.key -O/etc/apt/trusted.gpg.d/prosody.gpg
-          sudo apt-get update
-          sudo apt-get -y install lua5.3 liblua5.3-dev prosody-trunk lua-bitop lua-sec luarocks
+          # FIXME https://issues.prosody.im/1936
+          sudo apt-get update --allow-insecure-repositories
+          sudo apt-get -y --allow-unauthenticated install lua5.3 liblua5.3-dev prosody lua-bitop lua-sec luarocks
           sudo service prosody stop
 
-      # - run: npm install -g npm
       - run: make
       - run: make ci
 
