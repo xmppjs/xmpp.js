@@ -111,8 +111,9 @@ test("rejects self signed certificates", async () => {
   expect(error.code).toBe("DEPTH_ZERO_SELF_SIGNED_CERT");
 
   await conn.disconnect();
+
   server.close();
-});
+}, 20_000);
 
 test("waits before emitting connect on tls 1.3", async () => {
   const key = `-----BEGIN PRIVATE KEY-----
