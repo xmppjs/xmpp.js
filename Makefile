@@ -1,4 +1,4 @@
-.PHONY: setup lint test ci clean start stop restart bundlesize bundle size ncu
+.PHONY: setup lint test ci unit e2e clean start stop restart bundlesize bundle size ncu
 
 setup:
 	node packages/xmpp.js/script.js
