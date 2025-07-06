@@ -1,5 +1,6 @@
 import { Client } from "@xmpp/client-core";
 import JID from "@xmpp/jid";
+
 import mockSocket from "./mockSocket";
 
 export default function client(entity = new Client()) {

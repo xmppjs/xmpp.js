@@ -1,5 +1,6 @@
-import { parse } from "./index.js";
 import jid from "@xmpp/jid";
+
+import { parse } from "./index.js";
 
 test("parse", () => {
   expect(

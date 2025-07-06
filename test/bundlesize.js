@@ -2,9 +2,10 @@
 
 import zlib from "node:zlib";
 import { readFile } from "node:fs/promises";
+import { promisify } from "node:util";
+
 import bytes from "bytes";
 
-import { promisify } from "node:util";
 
 const brotliCompress = promisify(zlib.brotliCompress);
 

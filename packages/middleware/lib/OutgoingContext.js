@@ -1,5 +1,6 @@
-import Context from "./Context.js";
 import JID from "@xmpp/jid";
+
+import Context from "./Context.js";
 
 export default class OutgoingContext extends Context {
   constructor(entity, stanza) {

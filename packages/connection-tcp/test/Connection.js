@@ -1,8 +1,9 @@
 import _Connection from "@xmpp/connection";
+import xml from "@xmpp/xml";
+
 import Connection from "../index.js";
 import Socket from "../Socket.js";
 
-import xml from "@xmpp/xml";
 
 const NS_STREAM = "http://etherx.jabber.org/streams";
 

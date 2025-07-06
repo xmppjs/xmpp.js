@@ -1,6 +1,6 @@
 /* eslint-disable promise/no-nesting */
 
-import dns from "dns";
+import dns from "node:dns";
 
 // eslint-disable-next-line unicorn/prefer-set-has
 const IGNORE_CODES = ["ENOTFOUND", "ENODATA"];

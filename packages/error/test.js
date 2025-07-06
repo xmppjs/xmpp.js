@@ -1,5 +1,6 @@
-import XMPPError from "./index.js";
 import parse from "@xmpp/xml/lib/parse.js";
+
+import XMPPError from "./index.js";
 
 test("fromElement", () => {
   const application_element = (

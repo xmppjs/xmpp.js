@@ -1,6 +1,7 @@
+import querystring from "node:querystring";
+
 import jid from "@xmpp/jid";
 import { IRI } from "iri";
-import querystring from "querystring";
 
 function findQueryType(params) {
   return Object.getOwnPropertyNames(params).find((k) => {

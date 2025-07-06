@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 function readJSON(path) {
   return JSON.parse(fs.readFileSync(path, "utf8"));

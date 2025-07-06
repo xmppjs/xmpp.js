@@ -1,4 +1,5 @@
 import parse from "@xmpp/xml/lib/parse.js";
+
 import { compare as compareAltConnections } from "./alt-connections.js";
 
 export function resolve(domain) {

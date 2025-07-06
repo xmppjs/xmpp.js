@@ -1,5 +1,4 @@
 import onoff from "./onoff.js";
-
 import TimeoutError from "./TimeoutError.js";
 
 export default function promise(target, event, rejectEvent = "error", timeout) {

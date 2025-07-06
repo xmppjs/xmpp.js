@@ -1,8 +1,9 @@
-import { promisify } from "util";
-import path from "path";
-import fs from "fs/promises";
-import child_process from "child_process";
-import net from "net";
+import { promisify } from "node:util";
+import path from "node:path";
+import fs from "node:fs/promises";
+import child_process from "node:child_process";
+import net from "node:net";
+
 // eslint-disable-next-line n/no-extraneous-import
 import { promise, delay } from "@xmpp/events";
 import selfsigned from "selfsigned";

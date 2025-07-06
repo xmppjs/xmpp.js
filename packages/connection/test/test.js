@@ -1,6 +1,7 @@
-import Connection from "../index.js";
 import { EventEmitter } from "@xmpp/events";
 import xml from "@xmpp/xml";
+
+import Connection from "../index.js";
 
 test("new Connection()", () => {
   const conn = new Connection();

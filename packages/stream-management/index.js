@@ -1,6 +1,7 @@
 import { EventEmitter } from "@xmpp/events";
 import xml from "@xmpp/xml";
 import { datetime } from "@xmpp/time";
+
 import { setupBind2 } from "./bind2.js";
 import { setupSasl2 } from "./sasl2.js";
 import { setupStreamFeature } from "./stream-feature.js";

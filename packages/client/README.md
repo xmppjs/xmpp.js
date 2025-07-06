@@ -93,7 +93,6 @@ See [jid package](/packages/jid)
 ## client
 
 - `options` <`Object`>
-
   - `service` `<string>` The service to connect to, accepts an URI or a domain.
     - `domain` lookup and connect to the most secure endpoint using [@xmpp/resolve](/packages/resolve)
     - `xmpp://hostname:port` plain TCP, may be upgraded to TLS by [@xmpp/starttls](/packages/starttls)
@@ -289,22 +288,22 @@ See [@xmpp/reconnect](/packages/reconnect).
 
 XMPP supports multiple transports, this table list `@xmpp/client` supported and unsupported transport for each environment.
 
-|            transport             | protocols  | Node.js | Browser | React Native |
-| :------------------------------: | :--------: | :-----: | :-----: | :----------: |
-| [WebSocket](/packages/websocket) | `ws(s)://` |   ✔    |   ✔    |      ✔      |
-|       [TCP](/packages/tcp)       | `xmpp://`  |   ✔    |    ✗    |      ✗       |
-|       [TLS](/packages/tls)       | `xmpps://` |   ✔    |    ✗    |      ✗       |
+|            transport             | protocols  | Node.js | Browser | React Native | Bun | Deno |
+| :------------------------------: | :--------: | :-----: | :-----: | :----------: | :-: | :--: |
+| [WebSocket](/packages/websocket) | `ws(s)://` |   ✔    |   ✔    |      ✔      | ✔  |  ✔  |
+|       [TCP](/packages/tcp)       | `xmpp://`  |   ✔    |    ✗    |      ✗       | ✔  |  ✔  |
+|       [TLS](/packages/tls)       | `xmpps://` |   ✔    |    ✗    |      ✗       | ✔  |  ✔  |
 
 ## Authentication
 
 Multiple authentication mechanisms are supported.
 PLAIN should only be used over secure WebSocket (`wss://)`, direct TLS (`xmpps:`) or a TCP (`xmpp:`) connection upgraded to TLS via [STARTTLS](/packages/starttls)
 
-|                   SASL                    | Node.js | Browser | React Native |
-| :---------------------------------------: | :-----: | :-----: | :----------: |
-|   [ANONYMOUS](/packages/sasl-anonymous)   |   ✔    |   ✔    |      ✔      |
-|       [PLAIN](/packages/sasl-plain)       |   ✔    |   ✔    |      ✔      |
-| [SCRAM-SHA-1](/packages/sasl-scram-sha-1) |   ✔    |    ☐    |      ✗       |
+|                   SASL                    | Node.js | Browser | React Native | Bun | Deno |
+| :---------------------------------------: | :-----: | :-----: | :----------: | --- | ---- |
+|   [ANONYMOUS](/packages/sasl-anonymous)   |   ✔    |   ✔    |      ✔      | ✔  | ✔   |
+|       [PLAIN](/packages/sasl-plain)       |   ✔    |   ✔    |      ✔      | ✔  | ✔   |
+| [SCRAM-SHA-1](/packages/sasl-scram-sha-1) |   ✔    |    ☐    |      ✗       | ✔  | ✔   |
 
 - ☐ : Optional
 - ✗ : Unavailable

@@ -1,8 +1,10 @@
-import ConnectionTLS from "./lib/Connection.js";
 
-import tls from "tls";
+import tls from "node:tls";
+
 import { promise } from "@xmpp/test";
 import selfsigned from "selfsigned";
+
+import ConnectionTLS from "./lib/Connection.js";
 
 test("socketParameters()", () => {
   expect(ConnectionTLS.prototype.socketParameters("xmpps://foo")).toEqual({

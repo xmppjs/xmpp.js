@@ -1,5 +1,6 @@
-import Connection from "../index.js";
 import xml from "@xmpp/xml";
+
+import Connection from "../index.js";
 
 test("#_streamError", async () => {
   const conn = new Connection();

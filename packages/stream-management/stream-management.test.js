@@ -1,5 +1,4 @@
 import { mockClient } from "@xmpp/test";
-
 import { tick } from "@xmpp/events";
 
 test("emits ack when the server ackownledge stanzas", async () => {

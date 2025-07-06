@@ -1,4 +1,5 @@
-import tls from "tls";
+import tls from "node:tls";
+
 import { EventEmitter, listeners } from "@xmpp/events";
 
 class Socket extends EventEmitter {

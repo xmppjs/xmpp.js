@@ -1,4 +1,5 @@
 import { promise } from "@xmpp/events";
+
 import { client, xml, jid } from "../packages/client/index.js";
 import debug from "../packages/debug/index.js";
 import server from "../server/index.js";

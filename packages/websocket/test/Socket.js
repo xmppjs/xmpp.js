@@ -1,4 +1,5 @@
 import { EventEmitter } from "@xmpp/events";
+
 import Socket from "../lib/Socket.js";
 
 // eslint-disable-next-line n/no-unsupported-features/node-builtins

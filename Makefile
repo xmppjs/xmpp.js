@@ -9,6 +9,9 @@ setup:
 lint:
 	npx eslint --cache .
 
+format:
+	npx eslint --cache --fix .
+
 test:
 	cd packages/xmpp.js/ && npm run prepublish
 	npm install
