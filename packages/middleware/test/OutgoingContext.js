@@ -1,5 +1,6 @@
-import Context from "../lib/OutgoingContext.js";
 import { JID } from "@xmpp/test";
+
+import Context from "../lib/OutgoingContext.js";
 import _Context from "../lib/Context.js";
 
 test("is instance of Context", () => {

@@ -1,6 +1,7 @@
+import { context, mockClient, mockInput, promiseError } from "@xmpp/test";
+
 import IncomingContext from "../lib/IncomingContext.js";
 import OutgoingContext from "../lib/OutgoingContext.js";
-import { context, mockClient, mockInput, promiseError } from "@xmpp/test";
 import _middleware from "../index.js";
 
 let ctx;

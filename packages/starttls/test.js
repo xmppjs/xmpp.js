@@ -1,7 +1,8 @@
 jest.mock("tls");
 
+import tls from "node:tls";
+
 import { mockClient, promise, delay, mockSocket } from "@xmpp/test";
-import tls from "tls";
 import { EventEmitter } from "@xmpp/events";
 
 test("success", async () => {

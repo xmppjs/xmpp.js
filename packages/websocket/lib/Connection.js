@@ -1,6 +1,7 @@
-import Socket from "./Socket.js";
 import Connection from "@xmpp/connection";
 import xml from "@xmpp/xml";
+
+import Socket from "./Socket.js";
 import FramedParser from "./FramedParser.js";
 
 const NS_FRAMING = "urn:ietf:params:xml:ns:xmpp-framing";

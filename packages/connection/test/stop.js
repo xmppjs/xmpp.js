@@ -1,4 +1,5 @@
 import { EventEmitter } from "@xmpp/events";
+
 import Connection from "../index.js";
 
 test("stop", async () => {

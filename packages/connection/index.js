@@ -1,6 +1,7 @@
 import { EventEmitter, promise, listeners } from "@xmpp/events";
 import jid from "@xmpp/jid";
 import xml from "@xmpp/xml";
+
 import StreamError from "./lib/StreamError.js";
 import { parseHost, parseService } from "./lib/util.js";
 

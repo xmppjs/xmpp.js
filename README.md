@@ -19,9 +19,9 @@
 
 ### universal
 
-It aims to run everywhere JavaScript runs and make use of the best network transport available.
+Runs everywhere JavaScript runs and makes use of the best network transport available.
 
-xmpp.js is known to be used with Node.js, browsers, WebWorker, React Native, Bun, GJS and Duktape.
+xmpp.js is known to be used with browsers, [Node.js](https://nodejs.org/), [WebWorker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers), [React Native](https://reactnative.dev/), [Bun](https://bun.sh/), [Deno](https://deno.com/), [GJS](https://gitlab.gnome.org/GNOME/gjs/) and [Duktape](https://duktape.org/).
 
 ### reliable
 

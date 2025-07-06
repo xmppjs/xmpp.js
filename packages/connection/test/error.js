@@ -1,5 +1,6 @@
-import Connection from "../index.js";
 import { EventEmitter } from "@xmpp/events";
+
+import Connection from "../index.js";
 
 test("emit error on socket error", () => {
   const conn = new Connection();

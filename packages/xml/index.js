@@ -1,12 +1,13 @@
 import Element from "ltx/lib/Element.js";
 import createElement from "ltx/lib/createElement.js";
-import Parser from "./lib/Parser.js";
 import {
   escapeXML,
   unescapeXML,
   escapeXMLText,
   unescapeXMLText,
 } from "ltx/lib/escape.js";
+
+import Parser from "./lib/Parser.js";
 import XMLError from "./lib/XMLError.js";
 
 export default function xml(...args) {

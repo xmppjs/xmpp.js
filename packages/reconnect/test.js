@@ -1,5 +1,6 @@
-import _reconnect from "./index.js";
 import Connection from "@xmpp/connection";
+
+import _reconnect from "./index.js";
 
 test("schedules a reconnect when disconnect is emitted", () => {
   const entity = new Connection();

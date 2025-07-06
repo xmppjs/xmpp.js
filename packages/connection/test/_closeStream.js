@@ -1,6 +1,7 @@
-import Connection from "../index.js";
 import { EventEmitter, promise, TimeoutError } from "@xmpp/events";
 import { xml } from "@xmpp/test";
+
+import Connection from "../index.js";
 
 test("resets properties on socket close event", () => {
   const conn = new Connection();

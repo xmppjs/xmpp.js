@@ -1,5 +1,6 @@
-import _resolve from "./resolve.js";
 import { promise } from "@xmpp/events";
+
+import _resolve from "./resolve.js";
 
 async function fetchURIs(domain) {
   const result = await _resolve(domain, {

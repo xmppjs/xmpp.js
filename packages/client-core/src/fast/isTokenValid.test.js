@@ -1,5 +1,6 @@
-import { isTokenValid } from "./fast.js";
 import { datetime } from "@xmpp/time";
+
+import { isTokenValid } from "./fast.js";
 
 const tomorrow = new Date();
 tomorrow.setDate(tomorrow.getDate() + 1);

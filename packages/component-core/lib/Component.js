@@ -1,5 +1,6 @@
+import { createHash } from "node:crypto";
+
 import Connection from "@xmpp/connection-tcp";
-import { createHash } from "crypto";
 import xml from "@xmpp/xml";
 
 /*

@@ -1,10 +1,11 @@
-import client from "./client.js";
 import { promise } from "@xmpp/events";
 import { xml } from "@xmpp/xml";
 import debug from "@xmpp/debug";
 import JID from "@xmpp/jid";
-import mockSocket from "./mockSocket.js";
 import clone from "ltx/lib/clone.js";
+
+import mockSocket from "./mockSocket.js";
+import client from "./client.js";
 
 export default function context(entity = client()) {
   debug(entity);

@@ -1,4 +1,5 @@
 import XMPPError from "@xmpp/error";
+
 import SASLError from "./SASLError.js";
 
 // https://xmpp.org/rfcs/rfc6120.html#rfc.section.6.4.5

@@ -1,7 +1,8 @@
-import ConnectionWebSocket from "../lib/Connection.js";
-import Socket from "../lib/Socket.js";
 import { EventEmitter } from "@xmpp/events";
 import xml from "@xmpp/xml";
+
+import ConnectionWebSocket from "../lib/Connection.js";
+import Socket from "../lib/Socket.js";
 
 test("send()", () => {
   const connection = new ConnectionWebSocket();

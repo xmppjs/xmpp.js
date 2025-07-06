@@ -1,5 +1,4 @@
 import { mockClient } from "@xmpp/test";
-
 import { tick } from "@xmpp/events";
 
 test("enable - enabled", async () => {

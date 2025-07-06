@@ -1,14 +1,15 @@
-import xml from "../index.js";
 
 import createElement from "ltx/lib/createElement.js";
 import Element from "ltx/lib/Element.js";
-import Parser from "../lib/Parser.js";
 import {
   escapeXML,
   unescapeXML,
   escapeXMLText,
   unescapeXMLText,
 } from "ltx/lib/escape.js";
+
+import Parser from "../lib/Parser.js";
+import xml from "../index.js";
 
 test("exports createElement", () => {
   expect(xml.createElement).toBe(createElement);
