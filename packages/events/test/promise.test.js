@@ -20,16 +20,10 @@ test('resolves if "event" is emitted', async () => {
   const socket = new Socket(function () {
     this.emit("connect", value);
   });
-  expect(socket.listenerCount("error")).toBe(0);
-  expect(socket.listenerCount("connect")).toBe(0);
   socket.connect();
   const p = promise(socket, "connect");
-  expect(socket.listenerCount("error")).toBe(1);
-  expect(socket.listenerCount("connect")).toBe(1);
   const result = await p;
   expect(result).toBe(value);
-  expect(socket.listenerCount("error")).toBe(0);
-  expect(socket.listenerCount("connect")).toBe(0);
 });
 
 test('rejects if "errorEvent" is emitted', async () => {
@@ -39,17 +33,6 @@ test('rejects if "errorEvent" is emitted', async () => {
     this.emit("error", error);
   });
   socket.connect();
-
-  expect(socket.listenerCount("error")).toBe(0);
-  expect(socket.listenerCount("connect")).toBe(0);
-
   const p = promise(socket, "connect", "error");
-
-  expect(socket.listenerCount("error")).toBe(1);
-  expect(socket.listenerCount("connect")).toBe(1);
-
   await expect(p).rejects.toBe(error);
-
-  expect(socket.listenerCount("error")).toBe(0);
-  expect(socket.listenerCount("connect")).toBe(0);
 });

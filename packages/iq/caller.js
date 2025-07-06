@@ -3,6 +3,9 @@ import StanzaError from "@xmpp/middleware/lib/StanzaError.js";
 import { Deferred, timeout as timeoutPromise } from "@xmpp/events";
 import xml from "@xmpp/xml";
 
+// TODO: remove Deferred and use Promise.withResolvers
+// or something lighter
+
 function isReply({ name, type }) {
   if (name !== "iq") return false;
   if (type !== "error" && type !== "result") return false;
