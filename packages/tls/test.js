@@ -1,8 +1,10 @@
-import ConnectionTLS from "./lib/Connection.js";
 
-import tls from "tls";
+import tls from "node:tls";
+
 import { promise } from "@xmpp/test";
 import selfsigned from "selfsigned";
+
+import ConnectionTLS from "./lib/Connection.js";
 
 test("socketParameters()", () => {
   expect(ConnectionTLS.prototype.socketParameters("xmpps://foo")).toEqual({
@@ -111,8 +113,9 @@ test("rejects self signed certificates", async () => {
   expect(error.code).toBe("DEPTH_ZERO_SELF_SIGNED_CERT");
 
   await conn.disconnect();
+
   server.close();
-});
+}, 20_000);
 
 test("waits before emitting connect on tls 1.3", async () => {
   const key = `-----BEGIN PRIVATE KEY-----

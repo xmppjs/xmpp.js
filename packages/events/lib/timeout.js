@@ -8,10 +8,11 @@ export default function timeout(promise, ms) {
     clearTimeout(promiseDelay.timeout);
   }
 
+  const error = new TimeoutError();
   return Promise.race([
     promise.finally(cancelDelay),
     promiseDelay.then(() => {
-      throw new TimeoutError();
+      throw error;
     }),
   ]);
 }

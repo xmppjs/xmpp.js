@@ -1,5 +1,6 @@
-import Connection from "../index.js";
 import { EventEmitter } from "@xmpp/events";
+
+import Connection from "../index.js";
 
 test("calls _detachSocket and _status", () => {
   expect.assertions(3);

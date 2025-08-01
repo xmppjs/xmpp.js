@@ -6,15 +6,18 @@ import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import eslintNodePlugin from "eslint-plugin-n";
 import pluginPromise from "eslint-plugin-promise";
 import pluginJest from "eslint-plugin-jest";
+import importPlugin from "eslint-plugin-import";
 
 export default [
   {
     ignores: ["**/dist/*.js", "eslint.config.mjs"],
   },
   js.configs.recommended,
-  eslintPluginUnicorn.configs["flat/recommended"],
+  eslintPluginUnicorn.configs["recommended"],
   eslintNodePlugin.configs["flat/recommended-script"],
   pluginPromise.configs["flat/recommended"],
+  importPlugin.flatConfigs.errors,
+  //  importPlugin.flatConfigs.recommended,
   eslintConfigPrettier,
   {
     languageOptions: {
@@ -77,6 +80,11 @@ export default [
       // "unicorn/prefer-top-level-await": "off",
       "unicorn/prefer-node-protocol": "off",
       "unicorn/prefer-export-from": "off",
+
+      // import
+      // https://github.com/import-js/eslint-plugin-import/
+      "import/enforce-node-protocol-usage": ["error", "always"],
+      "import/order": ["error", { "newlines-between": "always" }],
     },
   },
   {

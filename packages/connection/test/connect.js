@@ -1,5 +1,6 @@
-import Connection from "../index.js";
 import { EventEmitter, promise } from "@xmpp/events";
+
+import Connection from "../index.js";
 
 function socket(fn) {
   return class Socket extends EventEmitter {

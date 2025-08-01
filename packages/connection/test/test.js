@@ -1,9 +1,24 @@
-import Connection from "../index.js";
 import { EventEmitter } from "@xmpp/events";
 import xml from "@xmpp/xml";
 
+import Connection from "../index.js";
+
 test("new Connection()", () => {
   const conn = new Connection();
+  expect(conn.jid).toBe(null);
+  expect(conn.timeout).toBe(2000);
+  expect(conn instanceof EventEmitter).toBe(true);
+});
+
+test("new Connection() with custom timeout", () => {
+  const conn = new Connection({timeout:1234});
+  expect(conn.jid).toBe(null);
+  expect(conn.timeout).toBe(1234);
+  expect(conn instanceof EventEmitter).toBe(true);
+});
+
+test("new Connection() with unexpected input", () => {
+  const conn = new Connection(1234);
   expect(conn.jid).toBe(null);
   expect(conn.timeout).toBe(2000);
   expect(conn instanceof EventEmitter).toBe(true);

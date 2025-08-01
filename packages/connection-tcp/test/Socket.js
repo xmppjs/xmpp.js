@@ -1,4 +1,5 @@
 import net from "node:net";
+
 import Socket from "../Socket.js";
 
 test("secure", () => {

@@ -1,5 +1,4 @@
 import { Component, xml, jid } from "@xmpp/component-core";
-
 import _reconnect from "@xmpp/reconnect";
 import _middleware from "@xmpp/middleware";
 import _iqCaller from "@xmpp/iq/caller.js";

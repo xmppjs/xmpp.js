@@ -1,5 +1,4 @@
 import onoff from "./onoff.js";
-
 import TimeoutError from "./TimeoutError.js";
 
 export default function promise(target, event, rejectEvent = "error", timeout) {
@@ -30,9 +29,10 @@ export default function promise(target, event, rejectEvent = "error", timeout) {
     }
 
     if (timeout) {
+      const error = new TimeoutError();
       timeoutId = setTimeout(() => {
         cleanup();
-        reject(new TimeoutError());
+        reject(error);
       }, timeout);
     }
   });

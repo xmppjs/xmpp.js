@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/enforce-node-protocol-usage
 import { EventEmitter } from "events";
 
 import timeout from "./lib/timeout.js";

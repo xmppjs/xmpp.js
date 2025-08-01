@@ -1,8 +1,8 @@
+import net from "node:net";
+
 import { client, jid } from "../packages/client/index.js";
 import debug from "../packages/debug/index.js";
 import server from "../server/index.js";
-
-import net from "net";
 import Connection from "../packages/connection-tcp/index.js";
 import { promise } from "../packages/events/index.js";
 

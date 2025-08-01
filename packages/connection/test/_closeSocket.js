@@ -1,5 +1,6 @@
-import Connection from "../index.js";
 import { EventEmitter } from "@xmpp/events";
+
+import Connection from "../index.js";
 
 test("rejects with TimeoutError if socket doesn't close", (done) => {
   expect.assertions(2);

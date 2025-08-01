@@ -1,5 +1,6 @@
-import Connection from "../index.js";
 import { EventEmitter } from "@xmpp/events";
+
+import Connection from "../index.js";
 
 test("calls _detachParser, sends a bad-format stream error and emit an error", async () => {
   expect.assertions(4);

@@ -1,5 +1,6 @@
-import tls from "tls";
-import net from "net";
+import tls from "node:tls";
+import net from "node:net";
+
 import { promise } from "@xmpp/events";
 import Socket from "@xmpp/tls/lib/Socket.js";
 

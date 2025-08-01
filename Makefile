@@ -1,4 +1,4 @@
-.PHONY: setup lint test ci clean start stop restart bundlesize bundle size ncu
+.PHONY: setup lint test ci unit e2e clean start stop restart bundlesize bundle size ncu
 
 setup:
 	node packages/xmpp.js/script.js
@@ -8,6 +8,9 @@ setup:
 
 lint:
 	npx eslint --cache .
+
+format:
+	npx eslint --cache --fix .
 
 test:
 	cd packages/xmpp.js/ && npm run prepublish
@@ -31,7 +34,7 @@ unit:
 	npm run test
 
 e2e:
-	$(warning e2e tests require prosody-trunk and luarocks)
+	$(warning e2e tests require prosody >= 0.13 and luarocks)
 	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2 > /dev/null
 	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_bind2 > /dev/null
 	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_sm > /dev/null

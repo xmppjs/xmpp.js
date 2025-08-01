@@ -1,5 +1,4 @@
 import { mockClient } from "@xmpp/test";
-
 import { tick } from "@xmpp/events";
 
 test("enable - enabled", async () => {
@@ -309,6 +308,39 @@ test("resume - failed with something in queue", async () => {
   expect(entity.streamManagement.outbound_q).toBeEmpty();
 });
 
+test("sends an <r/> after stanzas, debounced", async () => {
+  const { entity } = mockClient();
+
+  entity.streamManagement.enabled = true;
+
+  let r = 0;
+  const onSend = (stanza) => {
+    if (stanza.name === "r") r++;
+  };
+  entity.on("send", onSend);
+
+  jest.useFakeTimers();
+
+  let promise = entity.send(<message id="a" />);
+  jest.advanceTimersByTime(50);
+  await promise;
+  expect(r).toBe(0);
+
+  promise = entity.send(<message id="b" />);
+  jest.advanceTimersByTime(50);
+  await promise;
+  expect(r).toBe(0);
+
+  jest.advanceTimersByTime(1000);
+  jest.useRealTimers();
+  await tick();
+
+  expect(r).toBe(1);
+
+  entity.removeListener("send", onSend);
+  await entity.disconnect();
+});
+
 test("sends an <a/> element before closing", async () => {
   const { entity, streamManagement } = mockClient();
   streamManagement.enabled = true;
@@ -322,4 +354,41 @@ test("sends an <a/> element before closing", async () => {
   );
 
   await promise_disconnect;
+});
+
+test("enable - outbound stanza - enabled", async () => {
+  const { entity } = mockClient();
+
+  entity.mockInput(
+    <features xmlns="http://etherx.jabber.org/streams">
+      <sm xmlns="urn:xmpp:sm:3" />
+    </features>,
+  );
+
+  expect(await entity.catchOutgoing()).toEqual(
+    <enable xmlns="urn:xmpp:sm:3" resume="true" />,
+  );
+
+  expect(entity.streamManagement.outbound).toBe(0);
+  expect(entity.streamManagement.outbound_q).toBeEmpty();
+  expect(entity.streamManagement.enabled).toBe(false);
+
+  await entity.send(<message />);
+
+  expect(entity.streamManagement.enabled).toBe(false);
+  expect(entity.streamManagement.outbound_q).toHaveLength(1);
+
+  entity.mockInput(
+    <enabled
+      xmlns="urn:xmpp:sm:3"
+      id="some-long-sm-id"
+      location="[2001:41D0:1:A49b::1]:9222"
+      resume="true"
+    />,
+  );
+
+  await tick();
+
+  expect(entity.streamManagement.outbound_q).toHaveLength(1);
+  expect(entity.streamManagement.enabled).toBe(true);
 });

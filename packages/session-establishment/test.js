@@ -1,4 +1,5 @@
 import { mockClient, promise, timeout } from "@xmpp/test";
+
 import sessionEstablishment from "./index.js";
 
 test("mandatory", async () => {

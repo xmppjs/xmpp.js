@@ -1,5 +1,6 @@
-import Client from "../lib/Client.js";
 import { JID } from "@xmpp/test";
+
+import Client from "../lib/Client.js";
 
 test("_findTransport", () => {
   class Transport {

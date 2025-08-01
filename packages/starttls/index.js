@@ -1,4 +1,5 @@
 import xml from "@xmpp/xml";
+
 import { canUpgrade, upgrade } from "./starttls.js";
 
 /*

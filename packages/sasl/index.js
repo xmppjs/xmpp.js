@@ -1,7 +1,8 @@
 import { encode, decode } from "@xmpp/base64";
-import SASLError from "./lib/SASLError.js";
 import xml from "@xmpp/xml";
 import { procedure } from "@xmpp/events";
+
+import SASLError from "./lib/SASLError.js";
 
 // https://xmpp.org/rfcs/rfc6120.html#sasl
 
