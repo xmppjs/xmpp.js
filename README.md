@@ -59,6 +59,7 @@ Do you need help with working with xmpp.js? Please reach out to our community by
 - [WordPress Telegram Bot](https://github.com/Automattic/wp-telegram-bot)
 - [Logitech Harmony Hub library](https://github.com/AirBorne04/harmonyhub)
 - [gx-twilio: Bridge between Twilio SMS and XMPP](https://github.com/pesvut/sgx-twilio)
+- [FACEIT Chatbot Service](https://github.com/areimx/faceit-ext-chatbot-service)
 
 <small>Feel free to send a PR to add your project or organization to this list.</small>
 
