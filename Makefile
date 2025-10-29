@@ -75,4 +75,4 @@ size:
 	make bundlesize
 
 ncu:
-	ncu && npx lerna exec ncu
+	ncu -u && npx lerna exec ncu -u

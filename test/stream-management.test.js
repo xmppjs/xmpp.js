@@ -83,74 +83,66 @@ test("client retry stanzas", async () => {
 
   const el = await promise_ack;
   expect(el.attrs.id).toEqual("ping");
-}, 10_000);
+});
 
-test(
-  "client reconnects when server fails to ack stanza",
-  async () => {
-    await server.enableModules(["smacks"]);
-    await server.restart();
+test("client reconnects when server fails to ack stanza", async () => {
+  await server.enableModules(["smacks"]);
+  await server.restart();
 
-    xmpp = client({ credentials, service: domain });
-    xmpp.streamManagement.timeout = 10;
-    xmpp.streamManagement.requestAckInterval = 5;
-    xmpp.streamManagement.debounceAckRequest = 1;
-    debug(xmpp);
+  xmpp = client({ credentials, service: domain });
+  xmpp.streamManagement.timeout = 10;
+  xmpp.streamManagement.requestAckInterval = 5;
+  xmpp.streamManagement.debounceAckRequest = 1;
+  debug(xmpp);
 
-    const promise_resumed = promise(xmpp.streamManagement, "resumed");
-    await xmpp.start();
-    xmpp.send(
-      <iq to={domain} id="ping" type="get">
-        <ping xmlns="urn:xmppp:ping" />
-      </iq>,
-    );
+  const promise_resumed = promise(xmpp.streamManagement, "resumed");
+  await xmpp.start();
+  xmpp.send(
+    <iq to={domain} id="ping" type="get">
+      <ping xmlns="urn:xmppp:ping" />
+    </iq>,
+  );
 
-    // Pretend we don't receive the ack by removing event listeners
-    // on the socket
-    xmpp._detachSocket();
+  // Pretend we don't receive the ack by removing event listeners
+  // on the socket
+  xmpp._detachSocket();
 
-    await promise_resumed;
-    expect().pass();
-  },
-  1000 * 10,
-);
+  await promise_resumed;
+  expect().pass();
+});
 
-test(
-  "pings do not prevent timeout",
-  async () => {
-    await server.enableModules(["smacks"]);
-    await server.restart();
+test("pings do not prevent timeout", async () => {
+  await server.enableModules(["smacks"]);
+  await server.restart();
 
-    xmpp = client({ credentials, service: domain });
-    xmpp.streamManagement.timeout = 10;
-    xmpp.streamManagement.requestAckInterval = 5;
+  xmpp = client({ credentials, service: domain });
+  xmpp.streamManagement.timeout = 10;
+  xmpp.streamManagement.requestAckInterval = 5;
 
-    // Make sure an ack request is sent right away after a stanza
-    xmpp.streamManagement.debounceAckRequest = 1;
-    debug(xmpp);
+  // Make sure an ack request is sent right away after a stanza
+  xmpp.streamManagement.debounceAckRequest = 1;
+  debug(xmpp);
 
-    let promise_disconnect = new Promise(resolve => {
-        xmpp.disconnect = () => {
-            resolve();
-            return Promise.resolve(null);
-        };
-    });
-    await xmpp.start();
+  let promise_disconnect = new Promise((resolve) => {
+    xmpp.disconnect = () => {
+      resolve();
+      return Promise.resolve(null);
+    };
+  });
+  await xmpp.start();
 
-    // Send just any stanza to trigger the act request send
-    xmpp.send(
-      <iq to={domain} id="ping" type="get">
-        <ping xmlns="urn:xmppp:ping" />
-      </iq>,
-    );
+  // Send just any stanza to trigger the act request send
+  xmpp.send(
+    <iq to={domain} id="ping" type="get">
+      <ping xmlns="urn:xmppp:ping" />
+    </iq>,
+  );
 
-    // Pretend we don't receive the ack by removing event listeners
-    // on the socket, so that the timeout can fire
-    xmpp._detachSocket();
+  // Pretend we don't receive the ack by removing event listeners
+  // on the socket, so that the timeout can fire
+  xmpp._detachSocket();
 
-    // Timeout fires, and disconnect happens
-    await promise_disconnect;
-    expect().pass();
-  },
-  1000 * 10,
-);
+  // Timeout fires, and disconnect happens
+  await promise_disconnect;
+  expect().pass();
+});

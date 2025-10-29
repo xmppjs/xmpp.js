@@ -22,7 +22,7 @@ export function resolve(domain) {
           method: attrs.rel.split(":").pop(),
           uri: attrs.href,
         }))
-        .sort(compareAltConnections);
+        .toSorted(compareAltConnections);
     })
     .catch(() => {
       return [];

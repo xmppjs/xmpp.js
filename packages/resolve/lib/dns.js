@@ -53,7 +53,7 @@ function resolveSrv(domain, { service, protocol }) {
 }
 
 function sortSrv(records) {
-  return records.sort((a, b) => {
+  return records.toSorted((a, b) => {
     const priority = a.priority - b.priority;
     if (priority !== 0) {
       return priority;
