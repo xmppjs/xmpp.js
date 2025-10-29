@@ -45,6 +45,7 @@ Do you need help with working with xmpp.js? Please reach out to our community by
 
 ## Built with xmpp.js
 
+- [xmpp-web](https://github.com/nioc/xmpp-web/)
 - [WorkAdventure](https://workadventu.re/)
 - [Mustang](https://www.mustang.im/)
 - [Crypho](https://www.crypho.com/)

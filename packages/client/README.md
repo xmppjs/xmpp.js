@@ -267,7 +267,7 @@ If you need to send a stanza to multiple recipients we recommend using [Extended
 
 ### isSecure
 
-Returns whether the connection is considered secured.
+Returns whether the connection is considered secure.
 
 ```js
 console.log(xmpp.isSecure());
