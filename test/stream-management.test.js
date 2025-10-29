@@ -83,33 +83,29 @@ test("client retry stanzas", async () => {
 
   const el = await promise_ack;
   expect(el.attrs.id).toEqual("ping");
-}, 10_000);
+});
 
-test(
-  "client reconnects when server fails to ack stanza",
-  async () => {
-    await server.enableModules(["smacks"]);
-    await server.restart();
+test("client reconnects when server fails to ack stanza", async () => {
+  await server.enableModules(["smacks"]);
+  await server.restart();
 
-    xmpp = client({ credentials, service: domain });
-    xmpp.streamManagement.timeout = 10;
-    xmpp.streamManagement.debounceAckRequest = 1;
-    debug(xmpp);
+  xmpp = client({ credentials, service: domain });
+  xmpp.streamManagement.timeout = 10;
+  xmpp.streamManagement.debounceAckRequest = 1;
+  debug(xmpp);
 
-    const promise_resumed = promise(xmpp.streamManagement, "resumed");
-    await xmpp.start();
-    xmpp.send(
-      <iq to={domain} id="ping" type="get">
-        <ping xmlns="urn:xmppp:ping" />
-      </iq>,
-    );
+  const promise_resumed = promise(xmpp.streamManagement, "resumed");
+  await xmpp.start();
+  xmpp.send(
+    <iq to={domain} id="ping" type="get">
+      <ping xmlns="urn:xmppp:ping" />
+    </iq>,
+  );
 
-    // Pretend we don't receive the ack by removing event listeners
-    // on the socket
-    xmpp._detachSocket();
+  // Pretend we don't receive the ack by removing event listeners
+  // on the socket
+  xmpp._detachSocket();
 
-    await promise_resumed;
-    expect().pass();
-  },
-  1000 * 10,
-);
+  await promise_resumed;
+  expect().pass();
+});
