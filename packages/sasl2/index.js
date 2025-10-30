@@ -115,6 +115,11 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
 
       async function done(credentials, mechanism, userAgent) {
         // Try fast
+        let err;
+        entity.on("error", (_err) => {
+          // catch internal/protocol errors in fast.auth()
+          err = _err;
+        })
         const success = await fast.auth({
           authenticate,
           entity,
@@ -123,7 +128,7 @@ export default function sasl2({ streamFeatures, saslFactory }, onAuthenticate) {
           features,
           credentials,
         });
-        if (success) return;
+        if (success || err) return;
 
         // fast.auth may mutate streamFeatures to request a token
 

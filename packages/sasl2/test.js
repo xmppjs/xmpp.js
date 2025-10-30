@@ -224,3 +224,56 @@ test("use ANONYMOUS if username and password are not provided", async () => {
   const result = await promise(entity, "send");
   expect(result.attrs.mechanism).toEqual("ANONYMOUS");
 });
+
+test("fail if server sends a challenge during FAST login", async () => {
+  const mech = "HT-SHA-256-NONE";
+
+  function onAuthenticate(authenticate, mechanisms, fast) {
+    expect(mechanisms).toEqual([]);
+    expect(fast.mechanism).toEqual(mech);
+    return authenticate(
+      {
+        token: {
+          token: "hai",
+          mechanism: fast.mechanism,
+        },
+      },
+      null,
+      userAgent,
+    );
+  }
+
+  const { entity } = mockClient({ credentials: onAuthenticate });
+
+  entity.mockInput(
+    <features xmlns="http://etherx.jabber.org/streams">
+      <authentication xmlns="urn:xmpp:sasl:2">
+        <inline>
+          <fast xmlns="urn:xmpp:fast:0">
+            <mechanism>{mech}</mechanism>
+          </fast>
+        </inline>
+      </authentication>
+    </features>,
+  );
+
+  expect(await promise(entity, "send")).toEqual(
+    <authenticate xmlns="urn:xmpp:sasl:2" mechanism={mech}>
+      <initial-response>
+        bnVsbACNMNimsTBnxS04m8x7wgKjBHdDUL/nXPU4J4vqxqjBIg==
+      </initial-response>
+      {userAgent}
+      <fast xmlns="urn:xmpp:fast:0" />
+    </authenticate>,
+  );
+
+  entity.mockInput(
+    <challenge xmlns="urn:xmpp:sasl:2">
+      aGVyZXNhYnVuY2hvZmJhZGNoYWxsZW5nZWRhdGEK
+    </challenge>,
+  );
+
+  const error = await promise(entity, "error");
+  expect(error instanceof Error).toBe(true);
+  expect(error.message).toBe("HT-SHA-256-NONE does not support SASL challenges");
+});

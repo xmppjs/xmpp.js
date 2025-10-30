@@ -9,6 +9,10 @@ Mechanism.prototype.Mechanism = Mechanism;
 Mechanism.prototype.name = "HT-SHA-256-NONE";
 Mechanism.prototype.clientFirst = true;
 
+Mechanism.prototype.challenge = async function challenge(_) {
+  throw new Error(`${this.name} does not support SASL challenges`);
+}
+
 Mechanism.prototype.response = async function response({ username, password }) {
   this.key = await crypto.subtle.importKey(
     "raw",
