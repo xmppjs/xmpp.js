@@ -3,7 +3,7 @@ import * as http from "./lib/http.js";
 
 export default function resolve(...args) {
   return Promise.all([
-    dns.resolve ? dns.resolve(...args) : Promise.resolve([]),
+    dns?.resolve?.(...args) ?? [],
     http.resolve(...args),
   ]).then(([records, endpoints]) => [...records, ...endpoints]);
 }
