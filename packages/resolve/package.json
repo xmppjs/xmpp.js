@@ -18,7 +18,6 @@
     "resolve"
   ],
   "browser": {
-    "node:dns": false,
     "./lib/dns.js": false
   },
   "dependencies": {
