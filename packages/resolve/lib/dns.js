@@ -1,54 +1,41 @@
-/* eslint-disable promise/no-nesting */
+import dns from "node:dns/promises";
 
-import dns from "node:dns";
-
-// eslint-disable-next-line unicorn/prefer-set-has
-const IGNORE_CODES = ["ENOTFOUND", "ENODATA"];
-
-function lookup(domain, options = {}) {
+async function lookup(domain, options = {}) {
   options.all = true;
-  return new Promise((resolve, reject) => {
-    dns.lookup(domain, options, (err, addresses) => {
-      if (err) {
-        return reject(err);
-      }
+  const addresses = await dns.lookup(domain, options);
 
-      const result = [];
-      for (const { family, address } of addresses) {
-        const uri = `://${family === 4 ? address : "[" + address + "]"}:`;
-        result.push(
-          {
-            family,
-            address,
-            uri: "xmpps" + uri + "5223",
-          },
-          {
-            family,
-            address,
-            uri: "xmpp" + uri + "5222",
-          },
-        );
-      }
-      resolve(result);
-    });
-  });
+  const result = [];
+  for (const { family, address } of addresses) {
+    const uri = `://${family === 4 ? address : "[" + address + "]"}:`;
+    result.push(
+      {
+        family,
+        address,
+        uri: "xmpps" + uri + "5223",
+      },
+      {
+        family,
+        address,
+        uri: "xmpp" + uri + "5222",
+      },
+    );
+  }
+
+  return result;
 }
 
-function resolveSrv(domain, { service, protocol }) {
-  return new Promise((resolve, reject) => {
-    dns.resolveSrv(`_${service}._${protocol}.${domain}`, (err, records) => {
-      if (err && IGNORE_CODES.includes(err.code)) {
-        resolve([]);
-      } else if (err) {
-        reject(err);
-      } else {
-        resolve(
-          records.map((record) => {
-            return Object.assign(record, { service, protocol });
-          }),
-        );
-      }
-    });
+const IGNORE_CODES = new Set(["ENOTFOUND", "ENODATA"]);
+async function resolveSrv(domain, { service, protocol }) {
+  let records;
+
+  try {
+    records = await dns.resolveSrv(`_${service}._${protocol}.${domain}`);
+  } catch (err) {
+    if (IGNORE_CODES.has(err.code)) return [];
+  }
+
+  return records.map((record) => {
+    return Object.assign(record, { service, protocol });
   });
 }
 
@@ -68,9 +55,10 @@ function sortSrv(records) {
   });
 }
 
-function lookupSrvs(srvs, options) {
+async function lookupSrvs(srvs, options) {
   const addresses = [];
-  return Promise.all(
+
+  await Promise.all(
     srvs.map(async (srv) => {
       const srvAddresses = await lookup(srv.name, options);
       for (const address of srvAddresses) {
@@ -85,10 +73,12 @@ function lookupSrvs(srvs, options) {
         });
       }
     }),
-  ).then(() => addresses);
+  );
+
+  return addresses;
 }
 
-function resolve(domain, options = {}) {
+async function resolve(domain, options = {}) {
   if (!options.srv) {
     options.srv = [
       {
@@ -116,7 +106,7 @@ function resolve(domain, options = {}) {
         protocol: "udp",
       },
       {
-        service: "stuns ",
+        service: "stuns",
         protcol: "tcp",
       },
       {
@@ -135,15 +125,17 @@ function resolve(domain, options = {}) {
   }
 
   const family = { options };
-  return lookup(domain, options).then((addresses) => {
-    return Promise.all(
-      options.srv.map((srv) => {
-        return resolveSrv(domain, { ...srv, family }).then((records) => {
-          return lookupSrvs(records, options);
-        });
-      }),
-    ).then((srvs) => [...sortSrv(srvs.flat()), ...addresses]);
-  });
+
+  const addresses = await lookup(domain, options);
+
+  const srvs = await Promise.all(
+    options.srv.map(async (srv) => {
+      const records = await resolveSrv(domain, { ...srv, family });
+      return lookupSrvs(records, options);
+    }),
+  );
+
+  return [...sortSrv(srvs.flat()), ...addresses];
 }
 
 export { lookup, resolveSrv, resolve, lookupSrvs, sortSrv };
