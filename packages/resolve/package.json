@@ -18,7 +18,7 @@
     "resolve"
   ],
   "browser": {
-    "./lib/dns.js": "./lib/dns-stub.js"
+    "./lib/dns.js": false
   },
   "dependencies": {
     "@xmpp/events": "^0.14.0",
