@@ -6,11 +6,11 @@ class Client extends Connection {
     this.transports = [];
   }
 
-  send(element, ...args) {
+  async send(element, ...args) {
     return this.Transport.prototype.send.call(this, element, ...args);
   }
 
-  sendMany(...args) {
+  async sendMany(...args) {
     return this.Transport.prototype.sendMany.call(this, ...args);
   }
 
@@ -24,7 +24,7 @@ class Client extends Connection {
     });
   }
 
-  connect(service) {
+  async connect(service) {
     const Transport = this._findTransport(service);
 
     if (!Transport) {
