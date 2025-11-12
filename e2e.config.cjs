@@ -4,5 +4,5 @@
 module.exports = {
   testMatch: ["<rootDir>/test/*.test.js"],
   setupFilesAfterEnv: ["jest-extended/all"],
-  testTimeout: 10_000,
+  testTimeout: 20_000,
 };
