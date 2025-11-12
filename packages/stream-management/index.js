@@ -54,7 +54,7 @@ export default function streamManagement({
     } catch {}
   }
 
-  entity.on("disconnect", () => {
+  entity.on("close", () => {
     clearTimeout(timeoutTimeout);
     clearTimeout(requestAckTimeout);
     clearTimeout(requestAckDebounce);
