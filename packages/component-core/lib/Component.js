@@ -19,7 +19,7 @@ class Component extends Connection {
   }
 
   // https://xmpp.org/extensions/xep-0114.html#example-4
-  send(el) {
+  async send(el) {
     // All stanzas sent to the server MUST possess a 'from' attribute and a 'to' attribute, as in the 'jabber:server' namespace
     if (this.isStanza(el) && !el.attrs.from) {
       el.attrs.from = this.jid.toString();

@@ -313,11 +313,12 @@ class Connection extends EventEmitter {
     this.emit("send", element);
   }
 
-  sendReceive(element, timeout = this.timeout) {
-    return Promise.all([
+  async sendReceive(element, timeout = this.timeout) {
+    const [, el] = await Promise.all([
       this.send(element),
       promise(this, "element", "error", timeout),
-    ]).then(([, el]) => el);
+    ]);
+    return el;
   }
 
   async write(string) {
