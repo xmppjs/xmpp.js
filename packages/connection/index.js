@@ -47,7 +47,7 @@ class Connection extends EventEmitter {
 
   _onData(data) {
     const str = data.toString("utf8");
-    this.parser.write(str);
+    this.parser?.write(str);
   }
 
   #onParserError(error) {
@@ -329,7 +329,7 @@ class Connection extends EventEmitter {
     }
 
     return new Promise((resolve, reject) => {
-      this.socket.write(string, (err) => (err ? reject(err) : resolve()));
+      this.socket?.write(string, (err) => (err ? reject(err) : resolve()));
     });
   }
 
