@@ -329,7 +329,7 @@ class Connection extends EventEmitter {
     }
 
     return new Promise((resolve, reject) => {
-      this.socket.write(string, (err) => (err ? reject(err) : resolve()));
+      this.socket?.write(string, (err) => (err ? reject(err) : resolve()));
     });
   }
 
