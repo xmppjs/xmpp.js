@@ -6,8 +6,8 @@ import net from "node:net";
 
 // eslint-disable-next-line n/no-extraneous-import
 import { promise, delay } from "@xmpp/events";
-import selfsigned from "selfsigned";
-import { makeSelfSignedCertificate } from "../test/helpers";
+
+import { makeSelfSignedCertificate } from "../test/helpers.js";
 
 const __dirname = "./server";
 // const __dirname = import.meta.dirname;

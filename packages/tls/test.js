@@ -1,10 +1,11 @@
 import tls from "node:tls";
 
 import { promise } from "@xmpp/test";
-import selfsigned from "selfsigned";
+
+// eslint-disable-next-line n/no-unpublished-import
+import { makeSelfSignedCertificate } from "../../test/helpers.js";
 
 import ConnectionTLS from "./lib/Connection.js";
-import { makeSelfSignedCertificate } from "../../test/helpers.js";
 
 test("socketParameters()", () => {
   expect(ConnectionTLS.prototype.socketParameters("xmpps://foo")).toEqual({
