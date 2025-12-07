@@ -35,7 +35,7 @@
     "@xmpp/sasl-scram-sha-1": false
   },
   "engines": {
-    "node": ">= 20.10"
+    "node": ">= 22.11"
   },
   "publishConfig": {
     "access": "public"

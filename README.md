@@ -35,7 +35,7 @@ Each feature is implemented as a module that can be added or removed easily. Inc
 
 ### small
 
-There are no third party dependencies.
+We avoid third party dependencies.
 
 For the web, we make the sure the default [client](/packages/client) doesn't exceed 13 kb (gzipped), for reference, that's less than half the size of [React](https://reactjs.org/blog/2017/09/26/react-v16.0.html#reduced-file-size).
 

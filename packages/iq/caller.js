@@ -1,6 +1,6 @@
 import xid from "@xmpp/id";
 import StanzaError from "@xmpp/middleware/lib/StanzaError.js";
-import { Deferred, timeout as timeoutPromise } from "@xmpp/events";
+import { timeout as timeoutPromise } from "@xmpp/events";
 import xml from "@xmpp/xml";
 
 function isReply({ name, type }) {
@@ -43,7 +43,7 @@ class IQCaller {
       stanza.attrs.id = xid();
     }
 
-    const deferred = new Deferred();
+    const deferred = Promise.withResolvers();
     this.handlers.set(stanza.attrs.id, deferred);
 
     try {

@@ -18,7 +18,7 @@
     "@xmpp/xml": "^0.14.0"
   },
   "engines": {
-    "node": ">= 20.10"
+    "node": ">= 22.11"
   },
   "publishConfig": {
     "access": "public"
