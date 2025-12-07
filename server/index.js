@@ -7,6 +7,7 @@ import net from "node:net";
 // eslint-disable-next-line n/no-extraneous-import
 import { promise, delay } from "@xmpp/events";
 import selfsigned from "selfsigned";
+import { makeSelfSignedCertificate } from "../test/helpers";
 
 const __dirname = "./server";
 // const __dirname = import.meta.dirname;
@@ -48,12 +49,10 @@ async function waitPortOpen() {
 }
 
 async function makeCertificate() {
-  const attrs = [{ name: "commonName", value: "localhost" }];
-  const pems = selfsigned.generate(attrs, { days: 365, keySize: 2048 });
-
+  const pem = await makeSelfSignedCertificate();
   await Promise.all([
-    fs.writeFile(path.join(__dirname, "certs/localhost.crt"), pems.cert),
-    fs.writeFile(path.join(__dirname, "certs/localhost.key"), pems.private),
+    fs.writeFile(path.join(__dirname, "certs/localhost.crt"), pem.cert),
+    fs.writeFile(path.join(__dirname, "certs/localhost.key"), pem.private),
   ]);
 }
 

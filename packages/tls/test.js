@@ -4,6 +4,7 @@ import { promise } from "@xmpp/test";
 import selfsigned from "selfsigned";
 
 import ConnectionTLS from "./lib/Connection.js";
+import { makeSelfSignedCertificate } from "../../test/helpers.js";
 
 test("socketParameters()", () => {
   expect(ConnectionTLS.prototype.socketParameters("xmpps://foo")).toEqual({
@@ -95,13 +96,7 @@ NebQHyTBqa5P7vjSioiWiSRCNOIL4HywMWtN/nZVk0cl8zwlLtMaGt9Tz7ty2OgL
 });
 
 test("rejects self signed certificates", async () => {
-  const attrs = [{ name: "commonName", value: "localhost" }];
-  const pem = await selfsigned.generate(attrs, {
-    algorithm: "sha256",
-    days: 365,
-    keySize: 2048,
-  });
-
+  const pem = await makeSelfSignedCertificate();
   const server = tls.createServer({ key: pem.private, cert: pem.cert });
   server.listen(0);
   await promise(server, "listening");
