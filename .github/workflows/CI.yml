@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [22, 23, 24, 25, 26]
+        node: [22, 24, 25]
     steps:
       - uses: actions/checkout@v5
 
