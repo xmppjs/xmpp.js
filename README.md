@@ -35,9 +35,9 @@ Each feature is implemented as a module that can be added or removed easily. Inc
 
 ### small
 
-We avoid third party dependencies.
+There are no third party dependencies.
 
-For the web, we make the sure the default [client](/packages/client) doesn't exceed 15 kb (gzipped), for reference, that's less than half the size of [React](https://reactjs.org/blog/2017/09/26/react-v16.0.html#reduced-file-size).
+For the web, we make the sure the default [client](/packages/client) doesn't exceed 13 kb (gzipped), for reference, that's less than half the size of [React](https://reactjs.org/blog/2017/09/26/react-v16.0.html#reduced-file-size).
 
 ## Getting help
 
@@ -45,6 +45,7 @@ Do you need help with working with xmpp.js? Please reach out to our community by
 
 ## Built with xmpp.js
 
+- [Snikket](https://snikket.org/)
 - [xmpp-web](https://github.com/nioc/xmpp-web/)
 - [WorkAdventure](https://workadventu.re/)
 - [Mustang](https://www.mustang.im/)

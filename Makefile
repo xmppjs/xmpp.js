@@ -40,6 +40,7 @@ e2e:
 	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_sm > /dev/null
 	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_fast > /dev/null
 	npm run e2e
+	node --test browser.test.js
 
 clean:
 	make stop
