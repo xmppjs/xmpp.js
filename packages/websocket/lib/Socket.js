@@ -19,7 +19,6 @@ export default class Socket extends EventEmitter {
   connect(url) {
     this.url = url;
     this.secure = isSecure(url);
-    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     this._attachSocket(new WebSocket(url, ["xmpp"]));
   }
 

@@ -4,7 +4,6 @@ import { compare as compareAltConnections } from "./alt-connections.js";
 
 export async function resolve(domain) {
   try {
-    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     const res = await fetch(`https://${domain}/.well-known/host-meta`);
     const text = await res.text();
     return parse(text)

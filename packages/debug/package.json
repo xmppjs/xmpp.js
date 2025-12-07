@@ -13,7 +13,7 @@
     "debug"
   ],
   "engines": {
-    "node": ">= 20.10"
+    "node": ">= 22.11"
   },
   "dependencies": {
     "@xmpp/xml": "^0.14.0",
