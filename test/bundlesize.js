@@ -6,14 +6,13 @@ import { promisify } from "node:util";
 
 import bytes from "bytes";
 
-
 const brotliCompress = promisify(zlib.brotliCompress);
 
 const path = "packages/client/dist/xmpp.min.js";
 const buffer = await readFile(path);
 const compressed = await brotliCompress(buffer);
 
-const max_size = "15 KB";
+const max_size = "13 KB";
 
 console.log(`${path}:`);
 if (compressed.length > bytes(max_size)) {

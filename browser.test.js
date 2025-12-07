@@ -1,11 +1,11 @@
+import { test, beforeEach, afterEach } from "node:test";
 import { readFileSync } from "node:fs";
 
 import { JSDOM } from "jsdom";
 
-import { jid } from "../packages/client/index.js";
-import debug from "../packages/debug/index.js";
-import server from "../server/index.js";
-
+import { jid } from "./packages/client/index.js";
+import debug from "./packages/debug/index.js";
+import server from "./server/index.js";
 
 const username = "client";
 const password = "foobar";
@@ -34,7 +34,7 @@ afterEach(async () => {
   await xmpp?.stop();
 });
 
-test("client ws://", async () => {
+test("client ws://", async (t) => {
   xmpp = window.XMPP.client({
     credentials,
     service,
@@ -42,5 +42,5 @@ test("client ws://", async () => {
   debug(xmpp);
 
   const address = await xmpp.start();
-  expect(address.bare().toString()).toBe(JID);
+  t.assert.strictEqual(address.bare().toString(), JID);
 });

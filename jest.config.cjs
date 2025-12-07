@@ -5,7 +5,7 @@ const { defaults } = require("jest-config");
 
 /** @type {import('jest').Config} */
 module.exports = {
-  testMatch: [...defaults.testMatch, "**/test/*.js"],
+  testMatch: ["**/test/*.js"],
   testPathIgnorePatterns: [
     ...defaults.testPathIgnorePatterns,
     "<rootDir>/test/",

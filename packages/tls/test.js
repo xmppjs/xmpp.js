@@ -1,8 +1,9 @@
-
 import tls from "node:tls";
 
 import { promise } from "@xmpp/test";
-import selfsigned from "selfsigned";
+
+// eslint-disable-next-line n/no-unpublished-import
+import { makeSelfSignedCertificate } from "../../test/helpers.js";
 
 import ConnectionTLS from "./lib/Connection.js";
 
@@ -96,12 +97,7 @@ NebQHyTBqa5P7vjSioiWiSRCNOIL4HywMWtN/nZVk0cl8zwlLtMaGt9Tz7ty2OgL
 });
 
 test("rejects self signed certificates", async () => {
-  const attrs = [{ name: "commonName", value: "localhost" }];
-  const pem = selfsigned.generate(attrs, {
-    days: 365,
-    keySize: 2048,
-  });
-
+  const pem = await makeSelfSignedCertificate();
   const server = tls.createServer({ key: pem.private, cert: pem.cert });
   server.listen(0);
   await promise(server, "listening");
