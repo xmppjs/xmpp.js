@@ -1,4 +1,3 @@
-
 import tls from "node:tls";
 
 import { promise } from "@xmpp/test";
@@ -97,7 +96,8 @@ NebQHyTBqa5P7vjSioiWiSRCNOIL4HywMWtN/nZVk0cl8zwlLtMaGt9Tz7ty2OgL
 
 test("rejects self signed certificates", async () => {
   const attrs = [{ name: "commonName", value: "localhost" }];
-  const pem = selfsigned.generate(attrs, {
+  const pem = await selfsigned.generate(attrs, {
+    algorithm: "sha256",
     days: 365,
     keySize: 2048,
   });
