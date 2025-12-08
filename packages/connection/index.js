@@ -46,6 +46,10 @@ class Connection extends EventEmitter {
   }
 
   _onData(data) {
+    // In some case it is possible for the socket to still have buffered data (therefor emit data events)
+    // even after _detachParser has been called.
+    // This is intentional so we just drop the data in that case; for example stream restart or stream error.
+    if (!this.parser) return;
     const str = data.toString("utf8");
     this.parser.write(str);
   }
