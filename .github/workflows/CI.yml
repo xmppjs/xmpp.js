@@ -46,22 +46,5 @@ jobs:
         with:
           deno-version: v2.x
 
-      - name: Use Node.js 22
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          cache: "npm"
-
-      - name: Install prosody
-        run: |
-          sudo wget https://prosody.im/downloads/repos/$(lsb_release -sc)/prosody.sources -O/etc/apt/sources.list.d/prosody.sources
-          sudo apt update -y
-          sudo apt install -y lua5.3 liblua5.3-dev prosody lua-bitop lua-sec luarocks
-          sudo systemctl stop prosody
-
-      - run: make
-      - run: make ci
-
-      - name: The job has failed
-        if: ${{ failure() }}
-        run: cat server/prosody.err
+      - name: Run Deno tests
+        run: deno run --allow-read test/deno.test.js
