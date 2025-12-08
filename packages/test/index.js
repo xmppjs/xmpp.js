@@ -1,4 +1,5 @@
 import xml from "@xmpp/xml";
+import clone from "ltx/lib/clone.js";
 import jid from "@xmpp/jid";
 import { delay, promise, timeout } from "@xmpp/events";
 import id from "@xmpp/id";
@@ -20,6 +21,7 @@ export {
   timeout,
   id,
   mockSocket,
+  clone,
 };
 
 export function mockInput(entity, el) {
