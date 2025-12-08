@@ -20,8 +20,11 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-  await xmpp?.stop();
-  await server.reset();
+  try {
+    await xmpp?.stop();
+  } finally {
+    await server.reset();
+  }
 });
 
 test("client ack stanzas", async () => {
