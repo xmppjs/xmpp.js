@@ -4,16 +4,19 @@ import xml from "@xmpp/xml";
 import ConnectionWebSocket from "../lib/Connection.js";
 import Socket from "../lib/Socket.js";
 
-test("send()", () => {
+test("send()", async () => {
   const connection = new ConnectionWebSocket();
-  connection.write = () => {};
+  connection.socket = new Socket();
+  connection.socket.socket = {
+    send: jest.fn(),
+  };
   connection.root = xml("root");
 
   const element = xml("presence");
 
   expect(element.attrs.xmlns).toBe(undefined);
   expect(element.parent).toBe(null);
-  connection.send(element);
+  await connection.send(element);
   expect(element.attrs.xmlns).toBe("jabber:client");
   expect(element.parent).toBe(connection.root);
 });
@@ -70,6 +73,9 @@ test("socket close", () => {
 test("sendMany", async () => {
   const conn = new ConnectionWebSocket();
   conn.socket = new Socket();
+  conn.socket.socket = {
+    send: jest.fn(),
+  };
   const spy_write = jest.spyOn(conn.socket, "write");
   conn.root = xml("root");
 
@@ -82,7 +88,7 @@ test("sendMany", async () => {
     expect(element.parent).toBe(null);
   }
 
-  conn.sendMany(elements);
+  await conn.sendMany(elements);
 
   for (const element of elements) {
     expect(element.attrs.xmlns).toBe("jabber:client");

@@ -332,8 +332,8 @@ class Connection extends EventEmitter {
       throw new Error("Connection is closing");
     }
 
-    return new Promise((resolve, reject) => {
-      this.socket.write(string, (err) => (err ? reject(err) : resolve()));
+    return new Promise((resolve) => {
+      this.socket.write(string, resolve);
     });
   }
 
