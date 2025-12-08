@@ -47,7 +47,9 @@ class Connection extends EventEmitter {
 
   _onData(data) {
     const str = data.toString("utf8");
-    this.parser.write(str);
+    if (this.parser) {
+      this.parser.write(str);
+    }
   }
 
   #onParserError(error) {

@@ -12,3 +12,13 @@ test("#_onData", () => {
 
   conn._onData(foo);
 });
+
+test("#_onData with null parser", () => {
+  const conn = new Connection();
+  conn.parser = null;
+
+  // Should not throw when parser is null
+  expect(() => {
+    conn._onData(Buffer.from("<foo>"));
+  }).not.toThrow();
+});
