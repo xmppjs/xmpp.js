@@ -328,6 +328,10 @@ class Connection extends EventEmitter {
       throw new Error("Connection is closing");
     }
 
+    if (!this.socket) {
+      throw new Error("Socket is not connected");
+    }
+
     return new Promise((resolve, reject) => {
       this.socket.write(string, (err) => (err ? reject(err) : resolve()));
     });
