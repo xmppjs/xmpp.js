@@ -62,18 +62,7 @@ export default class Socket extends EventEmitter {
   }
 
   write(data, fn) {
-    function done(err) {
-      if (!fn) return;
-      // eslint-disable-next-line promise/catch-or-return, promise/no-promise-in-callback
-      Promise.resolve().then(() => fn(err));
-    }
-
-    try {
-      this.socket.send(data);
-    } catch (err) {
-      done(err);
-      return;
-    }
+    this.socket.send(data);
     done();
   }
 }
