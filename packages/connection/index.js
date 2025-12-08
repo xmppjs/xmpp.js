@@ -332,14 +332,9 @@ class Connection extends EventEmitter {
       throw new Error("Connection is closing");
     }
 
-    const deferred = Promise.withResolvers();
-    try {
-      this.socket.write(string, deferred.resolve);
-    } catch (err) {
-      deferred.reject(err);
-    }
-
-    return deferred.promise;
+    return new Promise((resolve, reject) => {
+      this.socket.write(string, (err) => (err ? reject(err) : resolve()));
+    });
   }
 
   isStanza(element) {
