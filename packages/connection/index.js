@@ -51,7 +51,7 @@ class Connection extends EventEmitter {
     // This is intentional so we just drop the data in that case; for example stream restart or stream error.
     if (!this.parser) return;
     const str = data.toString("utf8");
-    this.parser?.write(str);
+    this.parser.write(str);
   }
 
   #onParserError(error) {
