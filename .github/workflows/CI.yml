@@ -47,4 +47,4 @@ jobs:
           deno-version: v2.x
 
       - name: Run Deno tests
-        run: deno run --allow-read test/deno.test.js
+        run: deno test --allow-read test/deno.test.js

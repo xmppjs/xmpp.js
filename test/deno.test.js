@@ -2,32 +2,48 @@
 import { jid } from "../packages/jid/index.js";
 import id from "../packages/id/index.js";
 
-// Test JID package - core XMPP address handling
-const addr = jid("foo@bar/baz");
-console.assert(addr.toString() === "foo@bar/baz", "JID toString failed");
-console.assert(addr.local === "foo", "JID local failed");
-console.assert(addr.domain === "bar", "JID domain failed");
-console.assert(addr.resource === "baz", "JID resource failed");
+function assertEquals(actual, expected, message) {
+  if (actual !== expected) {
+    throw new Error(message || `Expected ${expected}, got ${actual}`);
+  }
+}
 
-const parsed = jid("user@example.com");
-console.assert(parsed.local === "user", "JID parse local failed");
-console.assert(parsed.domain === "example.com", "JID parse domain failed");
+function assertNotEquals(actual, expected, message) {
+  if (actual === expected) {
+    throw new Error(message || `Expected values to be different, but both were ${actual}`);
+  }
+}
 
-// Test JID equality
-const addr1 = jid("user@example.com/resource");
-const addr2 = jid("user@example.com/resource");
-console.assert(addr1.equals(addr2), "JID equality failed");
+Deno.test("JID - basic address handling", () => {
+  const addr = jid("foo@bar/baz");
+  assertEquals(addr.toString(), "foo@bar/baz");
+  assertEquals(addr.local, "foo");
+  assertEquals(addr.domain, "bar");
+  assertEquals(addr.resource, "baz");
+});
 
-// Test JID bare
-const withResource = jid("user@example.com/mobile");
-const bare = withResource.bare();
-console.assert(bare.toString() === "user@example.com", "JID bare failed");
+Deno.test("JID - parsing", () => {
+  const parsed = jid("user@example.com");
+  assertEquals(parsed.local, "user");
+  assertEquals(parsed.domain, "example.com");
+});
 
-// Test ID package - unique ID generation
-const id1 = id();
-const id2 = id();
-console.assert(typeof id1 === "string", "ID generation failed");
-console.assert(id1.length > 0, "ID length failed");
-console.assert(id1 !== id2, "ID uniqueness failed");
+Deno.test("JID - equality", () => {
+  const addr1 = jid("user@example.com/resource");
+  const addr2 = jid("user@example.com/resource");
+  assertEquals(addr1.equals(addr2), true);
+});
 
-console.log("✓ All Deno smoke tests passed");
+Deno.test("JID - bare address", () => {
+  const withResource = jid("user@example.com/mobile");
+  const bare = withResource.bare();
+  assertEquals(bare.toString(), "user@example.com");
+});
+
+Deno.test("ID - unique generation", () => {
+  const id1 = id();
+  const id2 = id();
+  assertEquals(typeof id1, "string");
+  assertEquals(id1.length > 0, true);
+  assertNotEquals(id1, id2);
+});
