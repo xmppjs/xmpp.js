@@ -63,6 +63,6 @@ export default class Socket extends EventEmitter {
 
   write(data, fn) {
     this.socket.send(data);
-    done();
+    Promise.resolve().then(fn);
   }
 }
