@@ -1,4 +1,4 @@
-import { JID } from "@xmpp/test";
+import { JID, xml } from "@xmpp/test";
 
 import Client from "../lib/Client.js";
 
@@ -36,17 +36,17 @@ test("header", () => {
 
   entity.jid = null;
   entity.isSecure = () => false;
-  expect(entity.header(<foo />)).toEqual(<foo />);
+  expect(entity.header(xml("foo"))).toEqual(xml("foo"));
 
   entity.jid = null;
   entity.isSecure = () => true;
-  expect(entity.header(<foo />)).toEqual(<foo />);
+  expect(entity.header(xml("foo"))).toEqual(xml("foo"));
 
   entity.jid = new JID("foo@bar/example");
   entity.isSecure = () => false;
-  expect(entity.header(<foo />)).toEqual(<foo />);
+  expect(entity.header(xml("foo"))).toEqual(xml("foo"));
 
   entity.jid = new JID("foo@bar/example");
   entity.isSecure = () => true;
-  expect(entity.header(<foo />)).toEqual(<foo from="foo@bar" />);
+  expect(entity.header(xml("foo"))).toEqual(xml("foo", { from: "foo@bar" }));
 });

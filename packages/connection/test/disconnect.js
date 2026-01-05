@@ -1,3 +1,6 @@
+import { jest } from "@jest/globals";
+import { xml } from "@xmpp/test";
+
 import Connection from "../index.js";
 
 test("disconnect", async () => {
@@ -69,7 +72,7 @@ test("disconnect with _closeStream and _closeSocket rejections", async () => {
 
 test("resolves if socket property is undefined", async () => {
   const conn = new Connection();
-  conn.footerElement = () => <foo />;
+  conn.footerElement = () => xml("foo");
   conn.socket = undefined;
   await conn.disconnect();
   expect().pass();
