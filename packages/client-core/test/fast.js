@@ -1,5 +1,6 @@
+import { jest } from "@jest/globals";
 import { tick } from "@xmpp/events";
-import { mockClient } from "@xmpp/test";
+import { mockClient, xml } from "@xmpp/test";
 import { datetime } from "@xmpp/time";
 import { Element } from "@xmpp/xml";
 
@@ -11,16 +12,17 @@ test("requests and saves token if server advertises fast", async () => {
   const spy_saveToken = jest.spyOn(fast, "saveToken");
 
   entity.mockInput(
-    <features xmlns="http://etherx.jabber.org/streams">
-      <authentication xmlns="urn:xmpp:sasl:2">
-        <mechanism>PLAIN</mechanism>
-        <inline>
-          <fast xmlns="urn:xmpp:fast:0">
-            <mechanism>{mechanism}</mechanism>
-          </fast>
-        </inline>
-      </authentication>
-    </features>,
+    // prettier-ignore
+    xml('features', { xmlns: "http://etherx.jabber.org/streams" },
+      xml('authentication', { xmlns: "urn:xmpp:sasl:2" },
+        xml('mechanism', {}, "PLAIN"),
+        xml('inline', {},
+          xml('fast', { xmlns: "urn:xmpp:fast:0" },
+            xml('mechanism', {}, mechanism)
+          )
+        )
+      )
+    ),
   );
 
   const authenticate = await entity.catchOutgoing();
@@ -37,12 +39,11 @@ test("requests and saves token if server advertises fast", async () => {
   expect(spy_saveToken).not.toHaveBeenCalled();
 
   entity.mockInput(
-    <success xmlns="urn:xmpp:sasl:2">
-      <token expiry={expiry} xmlns="urn:xmpp:fast:0" token={token} />
-      <authorization-identifier>
-        username@localhost/rOYwkWIywtnF
-      </authorization-identifier>
-    </success>,
+    // prettier-ignore
+    xml('success', { xmlns: "urn:xmpp:sasl:2" },
+      xml('token', { expiry, xmlns: "urn:xmpp:fast:0" , token}),
+      xml('authorization-identifier', {}, "username@localhost/rOYwkWIywtnF")
+    ),
   );
 
   expect(spy_saveToken).toHaveBeenCalledWith({ token, expiry, mechanism });
@@ -64,16 +65,17 @@ async function setupFast() {
   };
 
   entity.mockInput(
-    <features xmlns="http://etherx.jabber.org/streams">
-      <authentication xmlns="urn:xmpp:sasl:2">
-        <mechanism>PLAIN</mechanism>
-        <inline>
-          <fast xmlns="urn:xmpp:fast:0">
-            <mechanism>{mechanism}</mechanism>
-          </fast>
-        </inline>
-      </authentication>
-    </features>,
+    // prettier-ignore
+    xml('features', { xmlns: "http://etherx.jabber.org/streams" },
+      xml('authentication', { xmlns: "urn:xmpp:sasl:2" },
+        xml('mechanism', {}, "PLAIN"),
+        xml('inline', {},
+          xml('fast', { xmlns: "urn:xmpp:fast:0" },
+            xml('mechanism', {}, mechanism)
+          )
+        )
+      )
+    ),
   );
 
   expect(fast.mechanism).toBe(mechanism);
@@ -94,9 +96,10 @@ test("deletes the token if server replies with not-authorized", async () => {
 
   expect(spy_deleteToken).not.toHaveBeenCalled();
   entity.mockInput(
-    <failure xmlns="urn:xmpp:sasl:2">
-      <not-authorized xmlns="urn:ietf:params:xml:ns:xmpp-sasl" />
-    </failure>,
+    // prettier-ignore
+    xml("failure", { xmlns: "urn:xmpp:sasl:2" },
+      xml("not-authorized", { xmlns: "urn:ietf:params:xml:ns:xmpp-sasl" }),
+    ),
   );
   await tick();
   expect(spy_deleteToken).toHaveBeenCalled();
@@ -109,9 +112,10 @@ test("deletes the token if server replies with credentials-expired", async () =>
   // credentials-expired
   expect(spy_deleteToken).not.toHaveBeenCalled();
   entity.mockInput(
-    <failure xmlns="urn:xmpp:sasl:2">
-      <credentials-expired xmlns="urn:ietf:params:xml:ns:xmpp-sasl" />
-    </failure>,
+    // prettier-ignore
+    xml("failure", { xmlns: "urn:xmpp:sasl:2" },
+      xml("credentials-expired", { xmlns: "urn:ietf:params:xml:ns:xmpp-sasl" }),
+    ),
   );
   await tick();
   expect(spy_deleteToken).toHaveBeenCalled();

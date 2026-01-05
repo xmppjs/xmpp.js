@@ -1,10 +1,11 @@
-import xml from "@xmpp/xml";
+import { jest } from "@jest/globals";
+import { xml } from "@xmpp/test";
 
 import Connection from "../index.js";
 
 test("#_onElement", (done) => {
   expect.assertions(2);
-  const foo = <foo />;
+  const foo = xml("foo");
   const conn = new Connection();
   conn.on("element", (el) => {
     expect(el).toBe(foo);

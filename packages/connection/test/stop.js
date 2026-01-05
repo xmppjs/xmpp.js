@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import { EventEmitter } from "@xmpp/events";
 
 import Connection from "../index.js";
