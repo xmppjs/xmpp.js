@@ -40,6 +40,7 @@ import debug from "@xmpp/debug";
 const xmpp = client({
   service: "ws://localhost:5280/xmpp-websocket",
   domain: "localhost",
+  lang: "en",
   resource: "example",
   username: "username",
   password: "password",
@@ -100,6 +101,7 @@ See [jid package](/packages/jid)
     - `ws://hostname:port/path` plain WebSocket
     - `wss://hostname:port/path` secure WebSocket
   - `domain` `<string>` Optional domain of the service, if omitted will use the hostname from `service`. Useful when the service domain is different than the service hostname.
+  - `lang` `<string>` Optional language tag for the stream, sets the `xml:lang` attribute on the stream per [RFC 6120 Section 4.7.4](https://xmpp.org/rfcs/rfc6120.html#streams-attr-xmllang). Useful for servers that use this attribute to determine the language for error messages.
   - `resource` `<string`> Optional resource for [resource binding](/packages/resource-binding)
   - `username` `<string>` Optional username for [sasl](/packages/sasl)
   - `password` `<string>` Optional password for [sasl](/packages/sasl)
