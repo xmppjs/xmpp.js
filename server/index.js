@@ -2,10 +2,8 @@ import { promisify } from "node:util";
 import path from "node:path";
 import fs from "node:fs/promises";
 import child_process from "node:child_process";
-import net from "node:net";
 
-// eslint-disable-next-line n/no-extraneous-import
-import { promise, delay } from "@xmpp/events";
+import { isPortOpen, promisePortOpen, promisePortClose } from "promise-port";
 
 import { makeSelfSignedCertificate } from "../test/helpers.js";
 
@@ -19,33 +17,14 @@ const PID_PATH = path.join(DATA_PATH, "prosody.pid");
 const PROSODY_PORT = 5347;
 const CFG_PATH = path.join(__dirname, "prosody.cfg.lua");
 
-function clean() {
-  return Promise.all(
-    ["prosody.err", "prosody.log", "prosody.pid"].map((file) =>
-      fs.unlink(path.join(__dirname, file)),
-    ),
-  ).catch(() => {});
-}
-
-function isPortOpen() {
-  const sock = new net.Socket();
-  sock.connect({ port: PROSODY_PORT });
-  return promise(sock, "connect")
-    .then(() => {
-      sock.end();
-      sock.destroy();
-      return true;
-    })
-    .catch(() => false);
-}
-
-async function waitPortOpen() {
-  if (await isPortOpen()) {
-    return;
-  }
-
-  await delay(1000);
-  return waitPortOpen();
+async function clean() {
+  try {
+    await Promise.all(
+      ["prosody.err", "prosody.log", "prosody.pid"].map((file) =>
+        fs.unlink(path.join(__dirname, file)),
+      ),
+    );
+  } catch {}
 }
 
 async function makeCertificate() {
@@ -54,15 +33,6 @@ async function makeCertificate() {
     fs.writeFile(path.join(__dirname, "certs/localhost.crt"), pem.cert),
     fs.writeFile(path.join(__dirname, "certs/localhost.key"), pem.private),
   ]);
-}
-
-async function waitPortClose() {
-  if (!(await isPortOpen())) {
-    return;
-  }
-
-  await delay(1000);
-  return waitPortClose();
 }
 
 async function kill(signal = "SIGTERM") {
@@ -84,7 +54,7 @@ async function getPid() {
 }
 
 async function _start() {
-  const opening = waitPortOpen();
+  const opening = promisePortOpen(PROSODY_PORT);
 
   makeCertificate();
 
@@ -100,17 +70,17 @@ async function _start() {
 }
 
 async function start() {
-  if (await isPortOpen()) return;
+  if (await isPortOpen(PROSODY_PORT)) return;
   await clean();
   return _start();
 }
 
 async function stop(signal) {
-  if (!(await isPortOpen())) {
+  if (!(await isPortOpen(PROSODY_PORT))) {
     return clean();
   }
 
-  const closing = waitPortClose();
+  const closing = promisePortClose(PROSODY_PORT);
   await kill(signal);
   return closing;
 }
@@ -149,9 +119,6 @@ async function reset() {
 }
 
 export default {
-  isPortOpen,
-  waitPortClose,
-  waitPortOpen,
   getPid,
   start,
   stop,

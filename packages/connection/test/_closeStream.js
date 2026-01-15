@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import { EventEmitter, promise, TimeoutError } from "@xmpp/events";
 import { xml } from "@xmpp/test";
 

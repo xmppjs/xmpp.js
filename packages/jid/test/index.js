@@ -1,3 +1,5 @@
+import { jest } from "@jest/globals";
+
 import jid, { equal, JID } from "../index.js";
 
 test("equal calls equals on the first argument with the second argument", () => {

@@ -3,9 +3,9 @@ import { readFileSync } from "node:fs";
 
 import { JSDOM } from "jsdom";
 
-import { jid } from "./packages/client/index.js";
-import debug from "./packages/debug/index.js";
-import server from "./server/index.js";
+import { jid } from "../packages/client/index.js";
+import debug from "../packages/debug/index.js";
+import server from "../server/index.js";
 
 const username = "client";
 const password = "foobar";

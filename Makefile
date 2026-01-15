@@ -16,7 +16,7 @@ test:
 	cd packages/xmpp.js/ && npm run prepublish
 	npm install
 	make bundle
-	npx jest
+	npm run test
 	make lint
 	make bundlesize
 
@@ -40,7 +40,7 @@ e2e:
 	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_sm > /dev/null
 	cd server && prosodyctl --config prosody.cfg.lua install mod_sasl2_fast > /dev/null
 	npm run e2e
-	node --test browser.test.js
+	node --test test/browser.js
 
 clean:
 	make stop

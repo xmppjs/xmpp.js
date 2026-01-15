@@ -1,4 +1,4 @@
-import { context, mockClient, mockInput, promiseError } from "@xmpp/test";
+import { context, mockClient, mockInput, promiseError, xml } from "@xmpp/test";
 
 import IncomingContext from "../lib/IncomingContext.js";
 import OutgoingContext from "../lib/OutgoingContext.js";
@@ -14,7 +14,7 @@ beforeEach(() => {
 
 test("use", (done) => {
   expect.assertions(4);
-  const stanza = <presence />;
+  const stanza = xml("presence");
   ctx.middleware.use((ctx, next) => {
     expect(ctx instanceof IncomingContext).toBe(true);
     expect(ctx.stanza).toEqual(stanza);
@@ -27,7 +27,7 @@ test("use", (done) => {
 
 test("filter", (done) => {
   expect.assertions(3);
-  const stanza = <presence />;
+  const stanza = xml("presence");
   ctx.middleware.filter((ctx, next) => {
     expect(ctx instanceof OutgoingContext).toBe(true);
     expect(ctx.stanza).toEqual(stanza);
@@ -49,7 +49,7 @@ test("emits an error event if a middleware throws", async () => {
     throw error;
   });
 
-  mockInput(xmpp, <presence id="hello" />);
+  mockInput(xmpp, xml("presence", { id: "hello" }));
 
   const err = await willError;
   expect(err).toEqual(error);

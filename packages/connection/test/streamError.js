@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import xml from "@xmpp/xml";
 
 import Connection from "../index.js";
