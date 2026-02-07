@@ -91,6 +91,20 @@ export default function streamManagement({
     const oldOutbound = sm.outbound;
     for (let i = 0; i < +n - oldOutbound; i++) {
       const item = sm.outbound_q.shift();
+      if (!item) {
+        // Queue is empty but server reports higher h value.
+        // This can happen after page/app reload when the queue wasn't persisted:
+        // - Client sends stanzas, server acks them (h increases)
+        // - Page reloads: outbound_q is lost, outbound resets to 0
+        // - On resume, server sends <resumed h="N"/> with the real counter
+        // - We try to remove N items from an empty queue
+        //
+        // Resync outbound to server's value to prevent future desyncs.
+        // Note: Any stanzas that were in-flight (sent but unacked) at reload
+        // time are lost - the queue is not persisted across reloads.
+        sm.outbound = +n;
+        break;
+      }
       sm.outbound++;
       sm.emit("ack", item.stanza);
     }
