@@ -63,10 +63,19 @@ export default function resolve({ entity }) {
       return _connect.call(this, service);
     }
 
-    const uris = filterSupportedURIs(entity, await fetchURIs(service));
+    let uris;
+    try {
+      uris = filterSupportedURIs(entity, await fetchURIs(service));
 
-    if (uris.length === 0) {
-      throw new Error("No compatible transport found.");
+      if (uris.length === 0) {
+        throw new Error("No compatible transport found.");
+      }
+    } catch (err) {
+      if (entity.status === "disconnect") {
+        await entity.disconnect();
+        entity._status("disconnect");
+      }
+      throw err;
     }
 
     try {

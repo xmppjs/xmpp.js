@@ -1,6 +1,7 @@
 import Connection from "@xmpp/connection";
+import resolve from "@xmpp/resolve";
 
-import _reconnect from "./index.js";
+import _reconnect from "../index.js";
 
 test("schedules a reconnect when disconnect is emitted", () => {
   const entity = new Connection();
@@ -10,6 +11,23 @@ test("schedules a reconnect when disconnect is emitted", () => {
   expect(spy_scheduleReconnect).toHaveBeenCalledTimes(0);
   entity.emit("disconnect");
   expect(spy_scheduleReconnect).toHaveBeenCalledTimes(1);
+});
+
+test("reconnect repeats on resolve fail", async () => {
+  jest.useFakeTimers();
+  const entity = new Connection();
+  entity.status = "disconnect";
+  entity.options.service = "xmpp.example.com";
+  resolve({ entity });
+  const reconnect = _reconnect({ entity });
+  const spy_scheduleReconnect = jest.spyOn(reconnect, "scheduleReconnect");
+
+  expect(spy_scheduleReconnect).toHaveBeenCalledTimes(0);
+  entity.emit("disconnect");
+  await jest.runOnlyPendingTimersAsync();
+  await jest.runOnlyPendingTimersAsync();
+  await jest.runOnlyPendingTimersAsync();
+  expect(spy_scheduleReconnect).toHaveBeenCalledTimes(2);
 });
 
 test("#reconnect", async () => {

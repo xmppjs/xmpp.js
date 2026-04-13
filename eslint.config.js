@@ -125,6 +125,7 @@ export default [
             "@xmpp/time",
             "@xmpp/xml",
             "@xmpp/connection",
+            "@xmpp/resolve",
             "@xmpp/websocket",
             "selfsigned",
             "@xmpp/events",
