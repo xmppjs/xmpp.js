@@ -111,6 +111,7 @@ export default function streamManagement({
     // > The counter for the received stanzas ('h') is set to zero and started after receiving either <enable/> or <enabled/>.
     // https://xmpp.org/extensions/xep-0198.html#example-7
     sm.inbound = 0;
+    sm.emit("enabled")
     scheduleRequestAck();
   }
 
