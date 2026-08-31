@@ -2,8 +2,6 @@
 
 ## Setup
 
-npm >= 7 is required for development - update with `npm install -g npm`
-
 ```sh
 git clone git@github.com:xmppjs/xmpp.js.git # Replace with your fork
 cd xmpp.js

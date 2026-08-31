@@ -13,7 +13,7 @@
     "sasl"
   ],
   "dependencies": {
-    "sasl-scram-sha-1": "^1.3.0"
+    "sasl-scram-sha-1": "^1.4.0"
   },
   "engines": {
     "node": ">= 22.11"
