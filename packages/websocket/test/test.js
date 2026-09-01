@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import { EventEmitter } from "@xmpp/events";
 import xml from "@xmpp/xml";
 

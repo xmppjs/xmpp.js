@@ -1,4 +1,10 @@
-import { mockClient, promiseSend, mockInput, promiseError } from "@xmpp/test";
+import {
+  mockClient,
+  promiseSend,
+  mockInput,
+  promiseError,
+  xml,
+} from "@xmpp/test";
 
 test("empty result when the handler returns true", async () => {
   const xmpp = mockClient();
@@ -8,12 +14,15 @@ test("empty result when the handler returns true", async () => {
 
   mockInput(
     xmpp,
-    <iq type="get" id="123">
-      <foo xmlns="bar" />
-    </iq>,
+    // prettier-ignore
+    xml('iq', {type: "get", id: "123"},
+      xml('foo', { xmlns: "bar" })
+    ),
   );
 
-  expect(await promiseSend(xmpp)).toEqual(<iq id="123" type="result" />);
+  expect(await promiseSend(xmpp)).toEqual(
+    xml("iq", { id: "123", type: "result" }),
+  );
 });
 
 test("iqs with text children are valid", async () => {
@@ -24,14 +33,17 @@ test("iqs with text children are valid", async () => {
 
   mockInput(
     xmpp,
-    <iq type="get" id="123">
-      {"\n"}
-      <foo xmlns="bar" />
-      {"foo"}
-    </iq>,
+    // prettier-ignore
+    xml('iq', { type: "get", id: "123" },
+      "\n",
+      xml("foo", { xmlns: "bar" }),
+      "foo",
+    ),
   );
 
-  expect(await promiseSend(xmpp)).toEqual(<iq id="123" type="result" />);
+  expect(await promiseSend(xmpp)).toEqual(
+    xml("iq", { id: "123", type: "result" }),
+  );
 });
 
 test("iqs with multiple element children are invalid", async () => {
@@ -42,19 +54,21 @@ test("iqs with multiple element children are invalid", async () => {
 
   mockInput(
     xmpp,
-    <iq type="get" id="123">
-      <foo xmlns="bar" />
-      <foo xmlns="bar" />
-    </iq>,
+    // prettier-ignore
+    xml('iq', {type: "get", id: "123"},
+      xml("foo", {xmlns: "bar"}),
+      xml("foo", {xmlns: "bar"})
+    ),
   );
 
   expect(await promiseSend(xmpp)).toEqual(
-    <iq id="123" type="error">
-      <foo xmlns="bar" />
-      <error type="modify">
-        <bad-request xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
-      </error>
-    </iq>,
+    // prettier-ignore
+    xml('iq', {id: "123", type: "error"},
+      xml("foo", {xmlns: "bar"}),
+      xml("error", {type: "modify"},
+        xml("bad-request", {xmlns: "urn:ietf:params:xml:ns:xmpp-stanzas"})
+      )
+    ),
   );
 });
 
@@ -63,20 +77,22 @@ test("non empty result when the handler returns an xml.Element", async () => {
   const { iqCallee } = xmpp;
 
   iqCallee.get("bar", "foo", () => {
-    return <hello />;
+    return xml("hello");
   });
 
   mockInput(
     xmpp,
-    <iq type="get" id="123">
-      <foo xmlns="bar" />
-    </iq>,
+    // prettier-ignore
+    xml('iq', {type: "get", id: "123"},
+      xml("foo", { xmlns: "bar" })
+    ),
   );
 
   expect(await promiseSend(xmpp)).toEqual(
-    <iq id="123" type="result">
-      <hello />
-    </iq>,
+    // prettier-ignore
+    xml('iq', { id: "123", type: "result" },
+      xml('hello')
+    ),
   );
 });
 
@@ -84,18 +100,20 @@ test("service unavailable error reply when there are no handler", async () => {
   const xmpp = mockClient();
 
   xmpp.mockInput(
-    <iq type="get" id="123">
-      <foo xmlns="bar" />
-    </iq>,
+    // prettier-ignore
+    xml('iq', { type: "get", id: "123" },
+      xml('foo', {xmlns: "bar"})
+    ),
   );
 
   expect(await promiseSend(xmpp)).toEqual(
-    <iq id="123" type="error">
-      <foo xmlns="bar" />
-      <error type="cancel">
-        <service-unavailable xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
-      </error>
-    </iq>,
+    // prettier-ignore
+    xml('iq', {id: "123", type: "error"},
+      xml('foo', {xmlns: "bar"}),
+      xml("error", {type: "cancel"},
+        xml('service-unavailable', {xmlns: "urn:ietf:params:xml:ns:xmpp-stanzas"})
+      )
+    ),
   );
 });
 
@@ -113,19 +131,21 @@ test("internal server error reply when handler throws an error", async () => {
 
   mockInput(
     xmpp,
-    <iq type="get" id="123">
-      <foo xmlns="bar" />
-    </iq>,
+    // prettier-ignore
+    xml('iq', { type: "get", id: "123" },
+      xml('foo', {xmlns: "bar"})
+    ),
   );
 
   expect(await errorPromise).toBe(error);
   expect(await outputPromise).toEqual(
-    <iq id="123" type="error">
-      <foo xmlns="bar" />
-      <error type="cancel">
-        <internal-server-error xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
-      </error>
-    </iq>,
+    // prettier-ignore
+    xml('iq', {id: "123", type: "error"},
+      xml('foo', {xmlns: "bar"}),
+      xml('error', {type: "cancel"},
+        xml('internal-server-error', {xmlns: "urn:ietf:params:xml:ns:xmpp-stanzas"})
+      )
+    ),
   );
 });
 
@@ -143,19 +163,26 @@ test("internal server error reply when handler rejects with an error", async () 
 
   mockInput(
     xmpp,
-    <iq type="set" id="123">
-      <foo xmlns="bar" />
-    </iq>,
+    // prettier-ignore
+    xml('iq', { type: "set", id: "123" },
+      xml('foo', {xmlns: "bar"})
+    ),
   );
 
   expect(await errorPromise).toBe(error);
   expect(await outputPromise).toEqual(
-    <iq id="123" type="error">
-      <foo xmlns="bar" />
-      <error type="cancel">
-        <internal-server-error xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
-      </error>
-    </iq>,
+    xml(
+      "iq",
+      { id: "123", type: "error" },
+      xml("foo", { xmlns: "bar" }),
+      xml(
+        "error",
+        { type: "cancel" },
+        xml("internal-server-error", {
+          xmlns: "urn:ietf:params:xml:ns:xmpp-stanzas",
+        }),
+      ),
+    ),
   );
 });
 
@@ -165,11 +192,11 @@ test("stanza error reply when handler returns an error element", async () => {
 
   const outputPromise = promiseSend(xmpp);
 
-  const errorElement = (
-    <error type="foo">
-      <bar xmlns="urn:ietf:params:xml:ns:xmpp-stanzas" />
-    </error>
-  );
+  const errorElement =
+    // prettier-ignore
+    xml('error', {type: "foo"},
+      xml('bar', {xmlns: "urn:ietf:params:xml:ns:xmpp-stanzas"})
+    );
 
   iqCallee.set("bar", "foo", () => {
     return errorElement;
@@ -177,15 +204,17 @@ test("stanza error reply when handler returns an error element", async () => {
 
   mockInput(
     xmpp,
-    <iq type="set" id="123">
-      <foo xmlns="bar" />
-    </iq>,
+    // prettier-ignore
+    xml('iq', {type: "set", id: "123"},
+      xml('foo', {xmlns: "bar"})
+    ),
   );
 
   expect(await outputPromise).toEqual(
-    <iq id="123" type="error">
-      <foo xmlns="bar" />
-      {errorElement}
-    </iq>,
+    // prettier-ignore
+    xml('iq', {id: "123", type: "error"},
+      xml("foo", {xmlns: "bar"}),
+      errorElement
+    ),
   );
 });

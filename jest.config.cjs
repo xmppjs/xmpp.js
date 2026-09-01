@@ -12,4 +12,5 @@ module.exports = {
     "<rootDir>/packages/test/",
   ],
   setupFilesAfterEnv: ["jest-extended/all"],
+  transform: {},
 };

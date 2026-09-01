@@ -25,11 +25,11 @@ export default [
         ...globals.builtin,
         ...globals["shared-node-browser"],
       },
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
+      // parserOptions: {
+      //   ecmaFeatures: {
+      //     jsx: false,
+      //   },
+      // },
       sourceType: "module",
     },
 
@@ -128,6 +128,7 @@ export default [
             "@xmpp/websocket",
             "selfsigned",
             "@xmpp/events",
+            "@jest/globals",
           ],
         },
       ],

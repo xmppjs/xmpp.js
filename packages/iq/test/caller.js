@@ -1,4 +1,4 @@
-import { mockClient, mockInput } from "@xmpp/test";
+import { mockClient, mockInput, xml } from "@xmpp/test";
 import StanzaError from "@xmpp/middleware/lib/StanzaError.js";
 
 test("#request", (done) => {
@@ -6,20 +6,12 @@ test("#request", (done) => {
   const { iqCaller } = xmpp;
 
   xmpp.send = (el) => {
-    expect(el).toEqual(
-      <iq type="get" id="foobar">
-        <foo />
-      </iq>,
-    );
+    expect(el).toEqual(xml("iq", { type: "get", id: "foobar" }, xml("foo")));
     done();
     return Promise.resolve();
   };
 
-  iqCaller.request(
-    <iq type="get" id="foobar">
-      <foo />
-    </iq>,
-  );
+  iqCaller.request(xml("iq", { type: "get", id: "foobar" }, xml("foo")));
 });
 
 test("removes the handler if sending failed", async () => {
@@ -32,11 +24,7 @@ test("removes the handler if sending failed", async () => {
     return Promise.reject(error);
   };
 
-  const promise = iqCaller.request(
-    <iq type="get">
-      <foo />
-    </iq>,
-  );
+  const promise = iqCaller.request(xml("iq", { type: "get" }, xml("foo")));
 
   expect(iqCaller.handlers.size).toBe(1);
 
@@ -54,9 +42,9 @@ test("resolves with with the stanza for result reply", async () => {
 
   const id = "foo";
 
-  const promiseRequest = iqCaller.request(<iq type="get" id={id} />);
+  const promiseRequest = iqCaller.request(xml("iq", { type: "get", id }));
 
-  const reply = <iq type="result" id={id} />;
+  const reply = xml("iq", { type: "result", id });
   mockInput(xmpp, reply);
 
   expect(await promiseRequest).toEqual(reply);
@@ -69,18 +57,14 @@ test("rejects with a StanzaError for error reply", async () => {
 
   const id = "foo";
 
-  const promiseRequest = iqCaller.request(<iq type="get" id={id} />);
+  const promiseRequest = iqCaller.request(xml("iq", { type: "get", id }));
 
-  const errorElement = (
-    <error type="modify">
-      <service-unavailable />
-    </error>
+  const errorElement = xml(
+    "error",
+    { type: "modify" },
+    xml("service-unavailable"),
   );
-  const stanzaElement = (
-    <iq type="error" id={id}>
-      {errorElement}
-    </iq>
-  );
+  const stanzaElement = xml("iq", { type: "error", id }, errorElement);
   mockInput(xmpp, stanzaElement);
 
   try {
@@ -94,12 +78,7 @@ test("rejects with a TimeoutError if no answer is received within timeout", asyn
   const xmpp = mockClient();
   const { iqCaller } = xmpp;
 
-  const promise = iqCaller.request(
-    <iq type="get">
-      <foo />
-    </iq>,
-    1,
-  );
+  const promise = iqCaller.request(xml("iq", { type: "get" }, xml("foo")), 1);
 
   expect(iqCaller.handlers.size).toBe(1);
 
@@ -115,16 +94,16 @@ test("#get", async () => {
   const xmpp = mockClient();
   const { iqCaller } = xmpp;
 
-  const requestChild = <foo xmlns="foo:bar" />;
+  const requestChild = xml("foo", { xmlns: "foo:bar" });
   const promiseGet = iqCaller.get(requestChild, "hello@there");
   const { id } = requestChild.parent.attrs;
 
-  const replyChild = <foo xmlns="foo:bar" />;
-  const reply = (
-    <iq type="result" id={id} from="hello@there">
-      {replyChild}
-    </iq>
-  );
+  const replyChild = xml("foo", { xmlns: "foo:bar" });
+  const reply =
+    // prettier-ignore
+    xml('iq', {type: "result", id, from: "hello@there"},
+      replyChild
+    );
   mockInput(xmpp, reply);
 
   expect(await promiseGet).toEqual(replyChild);
@@ -134,16 +113,16 @@ test("#set", async () => {
   const xmpp = mockClient();
   const { iqCaller } = xmpp;
 
-  const requestChild = <foo xmlns="foo:bar" />;
+  const requestChild = xml("foo", { xmlns: "foo:bar" });
   const promiseSet = iqCaller.set(requestChild, "hello@there");
   const { id } = requestChild.parent.attrs;
 
-  const replyChild = <foo xmlns="foo:bar" />;
-  const reply = (
-    <iq type="result" id={id} from="hello@there">
-      {replyChild}
-    </iq>
-  );
+  const replyChild = xml("foo", { xmlns: "foo:bar" });
+  const reply =
+    // prettier-ignore
+    xml("iq", { type: "result", id, from: "hello@there" },
+      replyChild,
+    );
   mockInput(xmpp, reply);
 
   expect(await promiseSet).toEqual(replyChild);

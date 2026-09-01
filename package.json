@@ -3,17 +3,14 @@
   "type": "module",
   "devDependencies": {
     "@babel/core": "^7.28.5",
-    "@babel/plugin-transform-modules-commonjs": "^7.27.1",
-    "@babel/plugin-transform-react-jsx": "^7.27.1",
     "@babel/plugin-transform-runtime": "^7.28.5",
     "@babel/preset-env": "^7.28.5",
     "@babel/runtime": "^7.28.4",
+    "@jest/globals": "^30.2.0",
     "@rollup/plugin-babel": "^6.1.0",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^0.4.4",
-    "babel-jest": "^30.2.0",
-    "babel-plugin-jsx-pragmatic": "^1.0.2",
     "bytes": "^3.1.2",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
@@ -31,12 +28,13 @@
     "lerna": "^9.0.3",
     "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
+    "promise-port": "^1.0.1",
     "rollup": "^4.53.3",
     "selfsigned": "^5.2.0"
   },
   "scripts": {
-    "test": "node ./node_modules/.bin/jest --forceExit",
-    "e2e": "NODE_TLS_REJECT_UNAUTHORIZED=0 node ./node_modules/.bin/jest --forceExit --runInBand --config e2e.config.cjs",
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest --forceExit",
+    "e2e": "NODE_TLS_REJECT_UNAUTHORIZED=0 node --experimental-vm-modules ./node_modules/.bin/jest --forceExit --runInBand --config e2e.config.cjs",
     "preversion": "make bundle"
   },
   "engines": {
