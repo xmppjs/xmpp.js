@@ -26,7 +26,8 @@ export default function starttls({ streamFeatures }) {
     }
 
     await negotiate(entity);
-    const tlsSocket = await upgrade(socket, { host: options.domain });
+    entity._detachSocket(socket)
+    const tlsSocket = await upgrade(socket, { host: options.domain }, entity);
     entity._attachSocket(tlsSocket);
 
     await entity.restart();
