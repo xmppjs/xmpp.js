@@ -40,6 +40,17 @@ async function fallbackConnect(entity, uris) {
 
   entity._status("connecting", uri);
   const params = Transport.prototype.socketParameters(uri);
+  if (
+    params &&
+    typeof params === "object" &&
+    entity.options &&
+    entity.options.domain
+  ) {
+    // XEP-0368 §6: since the resolver hands us IP-based URIs (so it can cycle
+    // through every address), set SNI to the JID's domain here. Without it the
+    // TLS certificate is checked against the bare IP and direct TLS fails.
+    params.servername = entity.options.domain;
+  }
   const socket = new Transport.prototype.Socket();
 
   try {
@@ -79,4 +90,4 @@ export default function resolve({ entity }) {
   };
 }
 
-export { _resolve as resolve };
+export { _resolve as resolve, fallbackConnect };

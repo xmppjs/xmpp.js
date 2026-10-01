@@ -39,7 +39,18 @@ class Client extends Connection {
   }
 
   socketParameters(...args) {
-    return this.Transport.prototype.socketParameters(...args);
+    const params = this.Transport.prototype.socketParameters(...args);
+    if (
+      params &&
+      typeof params === "object" &&
+      this.options &&
+      this.options.domain
+    ) {
+      // XEP-0368 §6: use the JID's domain for SNI and certificate
+      // verification, rather than whatever host the URI happens to contain.
+      params.servername = this.options.domain;
+    }
+    return params;
   }
 
   header(headerElement, ...args) {
