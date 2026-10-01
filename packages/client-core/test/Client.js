@@ -50,3 +50,32 @@ test("header", () => {
   entity.isSecure = () => true;
   expect(entity.header(<foo />)).toEqual(<foo from="foo@bar" />);
 });
+
+test("socketParameters sets the TLS SNI to the JID domain", () => {
+  class Transport {}
+  Transport.prototype.socketParameters = () => ({
+    port: 5223,
+    host: "203.0.113.1",
+  });
+
+  const entity = new Client({ domain: "example.org" });
+  entity.Transport = Transport;
+
+  expect(entity.socketParameters("xmpps://203.0.113.1:5223")).toEqual({
+    port: 5223,
+    host: "203.0.113.1",
+    servername: "example.org",
+  });
+});
+
+test("socketParameters leaves non-object (websocket) params untouched", () => {
+  class Transport {}
+  Transport.prototype.socketParameters = () => "wss://example.org/ws";
+
+  const entity = new Client({ domain: "example.org" });
+  entity.Transport = Transport;
+
+  expect(entity.socketParameters("wss://example.org/ws")).toBe(
+    "wss://example.org/ws",
+  );
+});
