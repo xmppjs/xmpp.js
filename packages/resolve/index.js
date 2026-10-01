@@ -46,9 +46,10 @@ async function fallbackConnect(entity, uris) {
     entity.options &&
     entity.options.domain
   ) {
-    // XEP-0368 §6: since the resolver hands us IP-based URIs (so it can cycle
-    // through every address), set SNI to the JID's domain here. Without it the
-    // TLS certificate is checked against the bare IP and direct TLS fails.
+    // XEP-0368 §3 (Requirements), rule 6: since the resolver hands us
+    // IP-based URIs (so it can cycle through every address), set SNI to the
+    // JID's domain here. Without it the TLS certificate is checked against
+    // the bare IP and direct TLS fails.
     params.servername = entity.options.domain;
   }
   const socket = new Transport.prototype.Socket();
