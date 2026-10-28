@@ -29,6 +29,27 @@ test("emits ack when the server ackownledge stanzas", async () => {
   expect(entity.streamManagement.outbound_q).toHaveLength(0);
 });
 
+test("does not throw when the server acknowledges more stanzas than were sent", async () => {
+  const { entity } = mockClient();
+  entity.streamManagement.enabled = true;
+
+  await entity.send(<message id="a" />);
+  expect(entity.streamManagement.outbound_q).toHaveLength(1);
+
+  const acks = [];
+  entity.streamManagement.on("ack", (stanza) => acks.push(stanza));
+
+  // The server acknowledges 5 stanzas although only one was queued, for
+  // instance when its 'h' counter is desynchronised after resuming a stream.
+  entity.mockInput(<a xmlns="urn:xmpp:sm:3" h="5" />);
+  await tick();
+
+  expect(acks).toHaveLength(1);
+  expect(acks[0].attrs.id).toBe("a");
+  expect(entity.streamManagement.outbound).toBe(1);
+  expect(entity.streamManagement.outbound_q).toHaveLength(0);
+});
+
 test("sends an <a/> element before closing", async () => {
   const { entity, streamManagement } = mockClient();
   streamManagement.enabled = true;

@@ -91,6 +91,11 @@ export default function streamManagement({
     const oldOutbound = sm.outbound;
     for (let i = 0; i < +n - oldOutbound; i++) {
       const item = sm.outbound_q.shift();
+      // A server can acknowledge more stanzas than are still queued, for
+      // instance when its 'h' counter is desynchronised after resuming a
+      // stream. Stop at the end of the queue instead of dereferencing
+      // undefined.
+      if (!item) break;
       sm.outbound++;
       sm.emit("ack", item.stanza);
     }
